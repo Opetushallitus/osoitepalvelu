@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fi.vm.sade.osoitepalvelu</groupId>
+    <artifactId>osoitepalvelu</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>Osoitepalvelu</name>
+
+    <parent>
+        <groupId>fi.vm.sade.generic</groupId>
+        <artifactId>build-parent</artifactId>
+        <version>6.3-SNAPSHOT</version>
+    </parent>
+
+	<dependencies>
+		<!-- Commons-Logging on loggaus jarjestelma siina missa SLF4J 
+        jos halutaan logitus SLF4J:lla niin taytyy kayttaa JCL-OVER-SLF4J:ta 
+        eli java commons logging over slf4j !!! -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+	</dependencies>
+
+    <modules>
+        <module>osoitepalvelu-ui</module>
+        <module>osoitekoostepalvelu</module>
+    </modules>
+
+    <properties>
+    	<camel.version>2.12.1</camel.version>
+    	<kela.version>7.0-SNAPSHOT</kela.version>
+        <generic.version>7.0-SNAPSHOT</generic.version>
+        <koodisto.api.version>7.0-SNAPSHOT</koodisto.api.version>
+        <organisaatio.api.version>7.0-SNAPSHOT</organisaatio.api.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- SADE -->
+            <dependency>
+                <groupId>fi.vm.sade.generic</groupId>
+                <artifactId>generic-common</artifactId>
+                <version>${generic.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fi.vm.sade.koodisto</groupId>
+                <artifactId>koodisto-api</artifactId>
+                <version>${koodisto.api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fi.vm.sade.organisaatio</groupId>
+                <artifactId>organisaatio-api</artifactId>
+                <version>${organisaatio.api.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

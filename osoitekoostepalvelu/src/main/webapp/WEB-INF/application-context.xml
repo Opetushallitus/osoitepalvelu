@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ctx="http://www.springframework.org/schema/context"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xmlns:camel="http://camel.apache.org/schema/spring" 
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		     http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+           http://camel.apache.org/schema/spring-security http://camel.apache.org/schema/spring-security/camel-spring-security.xsd
+           http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+           http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+           http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+
+    <ctx:annotation-config/>
+
+    <ctx:component-scan base-package="fi.vm.sade.osoitepalvelu.kooste" />
+
+    <ctx:property-placeholder
+            location="classpath:META-INF/osoitekoostepalvelu.properties, classpath:META-INF/hakuparametrit.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/valinta.properties, file:///${user.home:''}/oph-configuration/valintalaskentakoostepalvelu.properties, file:///${user.home:''}/oph-configuration/hakuparametrit.properties, file:///${user.home:''}/oph-configuration/override.properties"
+            ignore-resource-not-found="true" properties-ref="defaultProps"/>
+	
+    <bean id="defaultProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <util:properties local-override="true">
+                <prop key="cas_mode">front</prop>
+                <prop key="cas_key">valintalaskentakoostepalvelu</prop>
+                <prop key="cas_service">${cas.service.valintalaskentakoostepalvelu}</prop>
+                <prop key="spring_security_default_access">isAuthenticated()</prop>
+            </util:properties>
+        </property>
+    </bean>
+    <import resource="file:///${user.home:''}/oph-configuration/security-context-backend.xml"/>
+
+    <!-- AUTHENTICATION / AUTHORIZATION SUPPORT -->
+    <!--<import resource="classpath:authentication-client.xml"/>-->
+    <bean id="ticketInterceptor" class="fi.vm.sade.generic.ui.portlet.security.SecurityTicketOutInterceptor"/>
+    <bean id="ticketInterceptorRest" class="fi.vm.sade.generic.ui.portlet.security.SecurityTicketOutInterceptorRest"/>
+    <!-- Tarvitaankohan? 
+    <bean id="securityPreprocessor" class="fi.vm.sade.valinta.kooste.security.SecurityPreprocessor"/>
+      -->
+    <authorizationPolicy id="admin" access="isAuthenticated()"
+                         authenticationManager="authenticationManager"
+                         accessDecisionManager="accessDecisionManager"
+                         xmlns="http://camel.apache.org/schema/spring-security"/>
+
+    
+    <!--fetching valintatieto takes ages, consider removing this once valinnan tulokset service has been optimized-->
+    <http:conduit name="*.http-conduit">
+        <!-- AllowChunking="false" Nginx fails without this -->
+        <http:client Connection="Keep-Alive" ConnectionTimeout="0" ReceiveTimeout="0" AllowChunking="false"/>
+    </http:conduit>
+
+    <bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
+    
+    <jaxrs:client id="OrganisaatioResourceClient"
+                  address="${valintalaskentakoostepalvelu.organisaatioService.rest.url}"
+                  serviceClass="fi.vm.sade.osoitepalvelu.kooste.OrganisaatioResource"
+                  inheritHeaders="true">
+        <jaxrs:outInterceptors>
+            <ref bean="ticketInterceptorRest"/>
+        </jaxrs:outInterceptors>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+            <bean class="fi.vm.sade.valinta.kooste.ObjectMapperProvider" />
+        </jaxrs:providers>
+    </jaxrs:client>
+    <jaxrs:client id="KoodistoResourceClient"
+                  address="${valintalaskentakoostepalvelu.koodiService.rest.url}"
+                  serviceClass="fi.vm.sade.osoitepalvelu.kooste.KoodistoResource"
+                  inheritHeaders="true">
+        <jaxrs:outInterceptors>
+            <ref bean="ticketInterceptorRest"/>
+        </jaxrs:outInterceptors>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+            <bean class="fi.vm.sade.valinta.kooste.ObjectMapperProvider" />
+        </jaxrs:providers>
+    </jaxrs:client>
+	
+	<!--  konffataan jatkossa Javassa
+	<bean id="redeliveryPolicy" class="org.apache.camel.processor.RedeliveryPolicy">
+		<property name="maximumRedeliveries" value="5" />
+		<property name="redeliveryDelay" value="25" />
+		<property name="retryAttemptedLogLevel" value="ERROR" />
+	</bean>
+	-->
+	
+	<!--  
+	<beans:import resource="classpath:META-INF/spring/context/valintatieto-context.xml"/>
+   -->
+	
+</beans>
