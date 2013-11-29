@@ -1,5 +1,0 @@
-
-function SearchController($scope) {
-	$scope.results = [] /*Results*/;
-}
-
