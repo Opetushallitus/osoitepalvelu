@@ -512,7 +512,6 @@
     </dependencies>
 
     <profiles>
-
         <profile>
             <id>startstack</id>
             <build>
@@ -527,7 +526,6 @@
                 </plugins>
             </build>
         </profile>
-
     </profiles>
 
 </project>

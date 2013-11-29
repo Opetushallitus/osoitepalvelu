@@ -10,7 +10,7 @@
     </parent>
 
 	<groupId>fi.vm.sade.valintaperusteet</groupId>
-	<artifactId>Osoitepalvelut-ui</artifactId>
+	<artifactId>osoitepalvelu-ui</artifactId>
 	<name>Osoitepalvelu :: UI</name>
 	<packaging>war</packaging>
 
@@ -97,7 +97,20 @@
 	</build>
 
 	<profiles>
+        <profile>
+            <id>startstack</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>maven-jetty-plugin</artifactId>
+                        <configuration>
 
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 	</profiles>
 
 </project>
