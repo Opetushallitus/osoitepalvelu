@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="OsoiteKoostepalvelu">
+	<head>
+		<!-- AngularJS -->
+		<script src="jslib/angular-1.2.3/angular.min.js"></script>
+		<script src="jslib/angular-1.2.3/angular-route.min.js"></script>
+		
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="jslib/bootstrap-3.0.2/css/bootstrap.min.css">
+		<script src="jslib/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+		
+		<script src="css/style.css"></script>
+		<script src="js/project.js"></script>
+		<script src="js/search.js"></script>
+	</head>
+	<body>
+		<h1>Osoitekoostepalvelu</h1>
+		<div id="wrapper" ng-controller="SearchController">
+			
+			<h2>Tulokset</h2>
+			<table class="searchResults">	
+				<thead>
+					<tr>
+						<th>Etunimi</th>
+						<th>Sukunimi</th>					
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="result" ng-repeat="result in results">
+						<td>{{result.firstName}}</td>
+						<td>{{result.lastName}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
