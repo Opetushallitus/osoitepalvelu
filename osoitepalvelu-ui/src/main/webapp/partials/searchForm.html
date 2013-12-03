@@ -1,0 +1,75 @@
+<div ng-controller="SearchController">
+    <div class="form" role="form">
+        <h2>{{msg.search_title}}</h2>
+
+        <div class="form-row row">
+            <div class="label-cell col-md-3">
+                <label for="savedSearch">{{msg.saved_searches}}</label>
+            </div>
+            <div class="field-cell col-md-6">
+                <select ui-select2 id="savedSearch" class="form-control" ng-model="selectedSavedSearch"
+                        ng-options="save.id as save.name for save in saves"
+                        ng-change="handleSaveSelected()">
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn" ng-click="showSaveSearchPopup()">
+                    <i class="fa fa-cog fa-1x"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-row row">
+            <div class="label-cell col-md-3">
+                <label for="searchType">{{msg.search_type}}</label>
+            </div>
+            <div class="field-cell col-md-6">
+                <select id="searchType" class="form-control" ng-model="searchType"
+                        ng-options="opt.type as opt.name for opt in searchTypes">
+                    <option class="placeholder" value="">{{msg.search_type_placeholder}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row row" ng-show="isShowTargetGroup()">
+            <div class="label-cell col-md-3">
+                <label for="targetGroup">{{msg.target_group}}</label>
+            </div>
+            <div class="field-cell col-md-6">
+                <div ng-repeat="tg in visibleTargetGroups" class="row selectedCriterion">
+                    <div class="col-md-2 selectedCriterionName">
+                        {{tg.name}}
+                    </div>
+                    <div class="col-md-9 row">
+                        <div class="col-md-3" ng-repeat="opt in tg.options">
+                            <input id="optionChecked_{{$index}}" type="checkbox" ng-model="opt.selected" /> <label for="optionChecked_{{$index}}">{{opt.name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-danger" ng-click="removeTargetGroup($index)">
+                            <i class="fa fa-ban fa-1x"></i>
+                        </button>
+                    </div>
+                </div>
+                <select id="targetGroup" class="form-control"
+                        ng-model="selectedTargetGroup"
+                        ng-options="tg.type as tg.name for tg in targetGroups | filter:nonSelectedByField(selectedTargetGroupTypes, 'type')"
+                        ng-change="handleTargetGroupSelected()"
+                        ng-show="(targetGroups | filter:nonSelectedByField(selectedTargetGroupTypes, 'type')).length > 0">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row row">
+            <div class="label-cell col-md-3"></div>
+            <div class="field-cell col-md-6">
+                <div class="form-action" ng-if="isSearchAllowed()">
+                    <button class="btn btn-lg btn-primary" ng-click="search()">{{msg.search_action}}</button>
+                    <button class="btn btn-lg" ng-click="saveSearch()">{{msg.save_search_action}}</button>
+                    <button class="btn btn-lg" ng-click="clear()">{{msg.clear_action}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

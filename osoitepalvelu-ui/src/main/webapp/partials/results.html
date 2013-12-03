@@ -1,0 +1,19 @@
+<div ng-controller="ResultsController">
+    <div id="results" ng-if="hasResults()">
+        <h2>{{msg.results_title}}</h2>
+        <table class="searchResults">
+            <thead>
+            <tr>
+                <th>{{msg.first_name}}</th>
+                <th>{{msg.last_name}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="result" ng-repeat="result in results">
+                <td>{{result.firstName}}</td>
+                <td>{{result.lastName}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

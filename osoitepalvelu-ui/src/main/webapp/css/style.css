@@ -2,3 +2,55 @@
 body {
 	padding: 20px;
 }
+
+.form h2 {
+    margin-left: 250px;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+.form {
+    margin-top: 20px;
+}
+.form .form-row {
+    padding-top: 10px;
+}
+.form-row .form-row-clear {
+    clear: both;
+}
+.form-row .form-actions {
+    margin-left: 250px;
+}
+.form-actions .form-action {
+    margin-right: 10px;
+}
+.form-row .label-cell {
+    width: 250px;
+    float: left;
+    padding-top: 5px;
+}
+.form-row .field-cell {
+    float: left;
+}
+.form-row .field-cell select {
+    min-width: 400px;
+}
+option.placeholder {
+    color:gray;
+}
+.form-clear {
+    clear: both;
+    margin-bottom: 20px;
+}
+.selectedCriterion {
+    background-color: lightgrey;
+    border-radius: 4px 4px 4px 4px;
+    margin-bottom:5px;
+}
+.selectedCriterion label {
+    font-weight: normal;
+}
+.selectedCriterionName {
+    padding-top: 4px;
+    font-size: 1.2em;
+    font-weight: bold;
+}

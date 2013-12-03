@@ -1,39 +1,42 @@
 <!DOCTYPE html>
 <html ng-app="OsoiteKoostepalvelu">
 	<head>
-		<!-- AngularJS -->
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+
+        <!-- jQuery -->
+        <script src="jslib/jquery-1.10.1/jquery-1.10.1.min.js"></script>
+
+        <!-- AngularJS -->
 		<script src="jslib/angular-1.2.3/angular.min.js"></script>
 		<script src="jslib/angular-1.2.3/angular-route.min.js"></script>
 		
 		<!-- Bootstrap -->
-		<link rel="stylesheet" href="jslib/bootstrap-3.0.2/css/bootstrap.min.css"/>
-		<script src="jslib/angular-bootstrap/ui-bootstrap-tpls-0.7.0.min.js"></script>
-		
-		<!-- REMOVE --><link rel="stylesheet" href="css/style.css"/><!-- END -->
+        <link rel="stylesheet" href="jslib/font-awesome-4.0.3/css/font-awesome.min.css">
+        <link rel="stylesheet" href="jslib/bootstrap-3.0.2/css/bootstrap.min.css"/>
+        <script src="jslib/angular-bootstrap/ui-bootstrap-tpls-0.7.0.min.js"></script>
+
+        <!-- Select2 -->
+        <link rel="stylesheet" href="jslib/select2-3.4.5/select2.css"/>
+        <link rel="stylesheet" href="jslib/select2-3.4.5/select2-bootstrap.css"/>
+        <script src="jslib/select2-3.4.5/select2.min.js"></script>
+        <script src="jslib/select2-3.4.5/select2_locale_fi.js"></script>
+        <script src="jslib/angular-select2/select2.js"></script>
+
+
+        <!-- REMOVE --><link rel="stylesheet" href="css/style.css"/><!-- END -->
 		<!-- REMOVE --><script src="js/project.js"></script><!-- END -->
 		<!-- REMOVE --><script src="js/search.js"></script><!-- END -->
+        <!-- REMOVE --><script src="js/results.js"></script><!-- END -->
+        <!-- REMOVE --><script src="js/i18n/i18n-fi.js"></script><!-- END -->
 		<!-- PRODUCTION:<link rel="stylesheet" href="css/style.min.css"/>  -->
 		<!-- PRODUCTION:<script src="js/script.min.js"></script>  -->
-	</head>
+
+        <!-- Popup template -->
+        <script type="text/ng-template" src="partials/searchForm.html"></script>
+        <script type="text/ng-template" src="partials/savesPopup.html"></script>
+        <script type="text/ng-template" src="partials/results.html"></script>
+    </head>
 	<body>
-		<h1>Osoitekoostepalvelu</h1>
-		<div id="wrapper" ng-controller="SearchController">
-			
-			<h2>Tulokset</h2>
-			<table class="searchResults">	
-				<thead>
-					<tr>
-						<th>Etunimi</th>
-						<th>Sukunimi</th>					
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="result" ng-repeat="result in results">
-						<td>{{result.firstName}}</td>
-						<td>{{result.lastName}}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+        <div ng-view></div>
 	</body>
 </html>
