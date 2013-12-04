@@ -58,6 +58,17 @@ angular.module("I18n", [], ["$provide", function($provider) {
         target_gorup_option_jasenet: 'jäsenet',
         target_group_option_tunnuksenhaltijat: 'tunnuksenhaltijat',
 
+        search_terms: 'Rajaus',
+        search_term_avi: 'AVI',
+        search_term_maakunta: 'maakunta',
+        search_term_kunta: 'kunta',
+        search_term_oppilaitostyyppi: 'oppilaitostyyppi',
+        search_term_omistajatyyppi: 'omistajatyyppi',
+        search_term_vuosiluokka: 'vuosiluokka',
+        search_term_koultuksenjarjestaja: 'koulutuksen järjestäjä',
+
+        show_more_terms: 'enemmän rajaushetoja',
+        hide_extra_terms: 'vähemmän rajaushetoja',
 
         first_name : 'Etunimi',
         last_name : 'Sukunimi'

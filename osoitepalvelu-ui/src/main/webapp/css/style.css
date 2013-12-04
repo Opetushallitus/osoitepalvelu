@@ -104,9 +104,23 @@ option.placeholder {
 .select2-container {
     min-width: 400px;
 }
+
+.select2-search-field:only-child input {
+    min-width: 380px;
+}
+
 .field-cell {
     min-width: 500px;
 }
 a {
     cursor: pointer;
+}
+
+.term {
+    float: left;
+    width: 50%;
+    margin-bottom: 10px;
+}
+.term.term-full-width {
+    clear: right;
 }

@@ -1,6 +1,5 @@
 
-var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu', ['ngRoute', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2'])
-.config(function($routeProvider) {
+OsoiteKoostepalvelu.config(function($routeProvider) {
         $routeProvider.when('/results', {
                 controller:'ResultsController',
                 templateUrl:'partials/results.html'

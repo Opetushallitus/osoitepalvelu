@@ -76,6 +76,58 @@
             </div>
         </div>
 
+        <div class="form-row" ng-show="isTermsShown()">
+            <div class="label-cell">
+                {{msg.search_terms}}
+            </div>
+            <div class="field-cell">
+                <div class="trem term-full-width">
+                    <select ui-select2 multiple id="avi" class="form-control" ng-model="terms.avis" data-placeholder="{{msg.search_term_avi}}">
+                        <option ng-repeat="opt in options.avis" value="{{opt.id}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="trem term">
+                    <select ui-select2 multiple id="maakunta" class="form-control" ng-model="terms.maakuntas" data-placeholder="{{msg.search_term_maakunta}}">
+                        <option ng-repeat="opt in options.maakuntas" value="{{opt.id}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="trem term">
+                    <select ui-select2 multiple id="kunta" class="form-control" ng-model="terms.kuntas" data-placeholder="{{msg.search_term_kunta}}">
+                        <option ng-repeat="opt in options.kuntas" value="{{opt.id}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="trem term">
+                    <select ui-select2 multiple id="oppilaitostyyppi" class="form-control" ng-model="terms.oppilaitostyyppis" data-placeholder="{{msg.search_term_oppilaitostyyppi}}">
+                        <option ng-repeat="opt in options.oppilaitostyyppis" value="{{opt.id}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="trem term">
+                    <select ui-select2 multiple id="omistajatyyppi" class="form-control" ng-model="terms.omistajatyyppis" data-placeholder="{{msg.search_term_omistajatyyppi}}">
+                        <option ng-repeat="opt in options.omistajatyyppis" value="{{opt.id}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="trem term">
+                    <select ui-select2 multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas" data-placeholder="{{msg.search_term_vuosiluokka}}">
+                        <option ng-repeat="opt in options.vuosiluokkas" value="{{opt.id}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="trem term">
+                    <select ui-select2 multiple id="koultuksenjarjestaja" class="form-control" ng-model="terms.koultuksenjarjestajas" data-placeholder="{{msg.search_term_koultuksenjarjestaja}}">
+                        <option ng-repeat="opt in options.koultuksenjarjestajas" value="{{opt.id}}">{{opt.name}}</option>
+                    </select>
+                </div>
+
+                <div style="clear:both;">
+                    <a ng-click="toggleShowMore()">
+                        {{ showExtraTerms ? "" : msg.show_more_terms }}
+                    </a>
+                </div>
+                <div ng-show="showExtraTerms">
+                    TODO
+                </div>
+            </div>
+        </div>
+
         <div class="form-row">
             <div class="label-cell"></div>
             <div class="field-cell">

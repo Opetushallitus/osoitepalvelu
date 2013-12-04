@@ -11,5 +11,6 @@ OsoiteKoostepalvelu.service('SavesService', function($log) {
     this.deleteSave = function(id, success) {
         // TODO!
         success();
-    }
+    };
+
 });

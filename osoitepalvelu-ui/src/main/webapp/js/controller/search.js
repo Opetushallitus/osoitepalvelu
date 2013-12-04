@@ -3,7 +3,7 @@
  */
 var SearchController = function($scope, i18n, $log, $modal, $location, $filter, SearchService,
                                 SearchTypes, AddressFields, TargetGroups,
-                                FilterHelper, SavesService) {
+                                FilterHelper, SavesService, OptionsService) {
     $scope.msg = i18n;
 
     var updateSaves = function() {
@@ -27,14 +27,41 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         $scope.selectedTargetGroup = null;
         $scope.selectedTargetGroupTypes = [];
         $scope.visibleTargetGroups = [];
+        $scope.showExtraTerms = false;
+
+        $scope.options = {
+            avis: [],
+            maakuntas : [],
+            kuntas : [],
+            oppilaitostyyppis: [],
+            omistajatyyppis: [],
+            vuosiluokkas: [],
+            koultuksenjarjestajas: []
+        };
+        OptionsService.listAvis(function(data) { $scope.options.avis = data; });
+        OptionsService.listMaakuntas(function(data) { $scope.options.maakuntas = data; });
+        OptionsService.listKuntas(function(data) { $scope.options.kuntas = data; });
+        OptionsService.listOppilaitostyyppis(function(data) { $scope.options.oppilaitostyyppis = data; });
+        OptionsService.listOmistajatyyppis(function(data) { $scope.options.omistajatyyppis = data; });
+        OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
+        OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
 
         $scope.terms = {
-            foo: "bar"
-            /// TODO
+            avis: [],
+            maakuntas : [],
+            kuntas : [],
+            oppilaitostyyppis: [],
+            omistajatyyppis: [],
+            vuosiluokkas: [],
+            koultuksenjarjestajas: []
         };
     };
 
     $scope.clear();
+
+    $scope.toggleShowMore = function() {
+        $scope.showExtraTerms = !$scope.showExtraTerms;
+    };
 
     $scope.handleSaveSelected = function() {
         $log.info("Selected save: " + $scope.selectedSavedSearch);
@@ -82,6 +109,8 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     };
 
     $scope.search = function() {
+        SearchService.updateSearchType($scope.searchType, $scope.addressFields);
+        SearchService.updateTargetGroups($scope.visibleTargetGroups);
         SearchService.updateTerms($scope.terms);
         $location.path("/results");
     };
