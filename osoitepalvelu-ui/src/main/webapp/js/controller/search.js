@@ -1,10 +1,20 @@
-
+/**
+ * Created by ratamaa on 12/3/13.
+ */
 var SearchController = function($scope, i18n, $log, $modal, $location, $filter, SearchService,
-                                SearchTypes, TargetGroups, Saves) {
+                                SearchTypes, TargetGroups, FilterHelper, SavesService) {
     $scope.msg = i18n;
 
+    var updateSaves = function() {
+        SavesService.list(function(data) {
+            $scope.saves = data;
+        });
+    };
+
     $scope.clear = function() {
-        $scope.saves = Saves;
+        $scope.saves = [];
+        updateSaves();
+
         $scope.selectedSavedSearch = null;
 
         $scope.searchTypes = SearchTypes;
@@ -28,12 +38,8 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         // TODO: REST call an update search terms
     };
 
-    $scope.nonSelectedByField = function(arr, field) {
-        return function(val) {
-            if( !arr ) return true;
-            return arr.indexOf(val[field]) == -1;
-        }
-    };
+    $scope.nonSelectedByField = FilterHelper.extractedFieldNotInArray;
+
     $scope.handleTargetGroupSelected = function() {
         $log.info("Target gorup selection changed to: "+$scope.selectedTargetGroup);
         if( $scope.selectedTargetGroup ) {
@@ -57,7 +63,7 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     };
 
     $scope.isTermsShown = function() {
-        return $scope.searchType != null;
+        return !!$scope.searchType;
     };
 
     $scope.isShowTargetGroup = function() {
@@ -81,7 +87,7 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         $log.info("Show save search popup.");
         var modalInstance = $modal.open({
             templateUrl: 'partials/savesPopup.html',
-            controller: SavesPopup,
+            controller: SavesPopupController,
             resolve: {
                 saves: function () {
                     return $scope.saves;
@@ -90,17 +96,11 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         });
         modalInstance.result.then(function () {
             $log.info("Closed.");
+            updateSaves();
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
+            updateSaves();
         });
     };
 }
-
-var SavesPopup = function ($scope, $modalInstance, saves) {
-    $scope.saves = saves;
-    $scope.ok = function() {
-        $modalInstance.close();
-        // $modalInstance.dismiss('cancel');
-    };
-};
 

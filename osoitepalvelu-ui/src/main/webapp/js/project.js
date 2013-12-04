@@ -1,5 +1,5 @@
 
-angular.module('OsoiteKoostepalvelu', ['ngRoute', 'I18n', 'ui.bootstrap', 'ui.select2'])
+var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu', ['ngRoute', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2'])
 .config(function($routeProvider) {
         $routeProvider.when('/results', {
                 controller:'ResultsController',
@@ -12,45 +12,50 @@ angular.module('OsoiteKoostepalvelu', ['ngRoute', 'I18n', 'ui.bootstrap', 'ui.se
                 redirectTo:'/'
         });
 })
-.service('SearchService', function($log) {
-    var _terms = {};
-
-    this.updateTerms = function(terms) {
-        _terms = terms;
-    };
-
-    this.search = function() {
-        $log.info("Search called. Terms:");
-        $log.info(_terms);
-        return [
-            {firstName: "Dummy", lastName: "Result"}
-        ];
-    };
-})
 .factory('SearchTypes', function(i18n) {
     return [
-        {type: 'EMAIL', name: i18n.email_search_type},
-        {type: 'LETTER', name: i18n.letter_search_type},
-        {type: 'CONTACT', name: i18n.contact_search_type}
+        {type: 'EMAIL',     name: i18n.email_search_type},
+        {type: 'LETTER',    name: i18n.letter_search_type},
+        {type: 'CONTACT',   name: i18n.contact_search_type}
     ];
 })
 .factory('TargetGroups', function(i18n) {
     return [
-        {type: 'OPPILAITOKSET', name: i18n.target_group_oppilaitos,
+        {type: 'JARJESTAJAT_YLLAPITAJAT',   name: i18n.target_group_jarjestajat_yllapitajat,
             options: [
-                {type: "ORGANISAATIO",  name: i18n.target_group_oppilaitos_organisaatio},
-                {type: "REHTORI",       name: i18n.target_group_oppilaitos_rehtori},
-                {type: "KOULUTUSNEVONTA",  name: i18n.target_group_oppilaitos_koulutusneuvonta}
+                {type: "ORGANISAATIO",      name: i18n.target_group_option_organisaatio},
+                {type: "YHTEYSHENKILO",     name: i18n.target_group_option_yhteyshenkilo},
+                {type: "KRIISITIEDOTUS",    name: i18n.target_group_option_kriisitiedotus}
             ]
         },
-        {type: 'MUU', name: 'Muu testi', options: []}
-    ];
-})
-.factory('Saves', function() {
-    return [
-        {id: 12345, name: 'Ruotsinkielisten lukioiden opot'},
-        {id: 12346, name: 'Kaikkien oppilaitosten rehtorit paitsi ahvenanmaalta'},
-        {id: 789148, name: 'Varsinais-suomen ammattioppilaitokset'},
-        {id: 885415, name: 'AIPAL ja KOULUTA -vastuukäyttäjät'}
+        {type: 'OPPILAITOKSET',             name: i18n.target_group_oppilaitos,
+            options: [
+                {type: "ORGANISAATIO",      name: i18n.target_group_option_organisaatio},
+                {type: "REHTORI",           name: i18n.target_group_option_rehtori},
+                {type: "KOULUTUSNEVONTA",   name: i18n.target_group_option_koulutusneuvonta}
+            ]
+        },
+        {type: 'OPETUSPISTEET',             name: i18n.target_group_opetuspisteet,
+            options: [
+                {type: "ORGANISAATIO",      name: i18n.target_group_option_organisaatio},
+                {type: "YHTEYSHENKILO",     name: i18n.target_group_option_yhteyshenkilo},
+                {type: "KOULUTUSNEVONTA",   name: i18n.target_group_option_koulutusneuvonta}
+            ]
+        },
+        {type: 'OPPISOPIMUSTOIMPISTEET',    name: i18n.target_group_oppisopimustoimipisteet,
+            options: [
+                {type: "ORGANISAATIO",      name: i18n.target_group_option_organisaatio},
+                {type: "YHTEYSHENKILO",     name: i18n.target_group_option_yhteyshenkilo}
+            ]
+        },
+        {type: 'MUUT_ORGANISAATIOT',        name: i18n.target_group_muut_organisaatiot,
+            options: []
+        },
+        {type: 'KOULUTA_KAYTTAJAT',         name: i18n.target_group_kouluta_kayttajat,
+            options: []
+        },
+        {type: 'AIPAL_KAYTTAJAT',           name: i18n.target_group_aipal_kayttajat,
+            options: []
+        }
     ];
 });

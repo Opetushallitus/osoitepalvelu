@@ -1,8 +1,18 @@
 <div class="modal-header">
-    <h3>I'm a modal!</h3>
+    <h3>{{msg.saves_popup_title}}</h3>
 </div>
 <div class="modal-body">
+    <table class="saveList">
+        <tr class="save" ng-repeat="save in saves">
+            <td class="saveName">
+                {{save.name}}
+            </td>
+            <td>
+                <a ng-click="deleteSave(save.id)">{{msg.saves_popup_delete}}</a>
+            </td>
+        </tr>
+    </table>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="close()">Close</button>
+    <button class="btn btn-primary" ng-click="close()">{{msg.saves_popup_close}}</button>
 </div>
