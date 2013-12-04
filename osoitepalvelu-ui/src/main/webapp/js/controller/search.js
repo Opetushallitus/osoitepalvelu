@@ -2,7 +2,8 @@
  * Created by ratamaa on 12/3/13.
  */
 var SearchController = function($scope, i18n, $log, $modal, $location, $filter, SearchService,
-                                SearchTypes, TargetGroups, FilterHelper, SavesService) {
+                                SearchTypes, AddressFields, TargetGroups,
+                                FilterHelper, SavesService) {
     $scope.msg = i18n;
 
     var updateSaves = function() {
@@ -19,6 +20,8 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
 
         $scope.searchTypes = SearchTypes;
         $scope.searchType = null;
+
+        $scope.addressFields = angular.copy(AddressFields);
 
         $scope.targetGroups = TargetGroups;
         $scope.selectedTargetGroup = null;

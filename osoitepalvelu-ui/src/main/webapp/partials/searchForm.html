@@ -31,6 +31,20 @@
             </div>
         </div>
 
+        <div class="form-row" ng-show="searchType == 'CONTACT'">
+            <div class="label-cell">
+                {{msg.address_fields}}
+            </div>
+            <div class="field-cell">
+                <div class="criterionOptions addressTypes">
+                    <div class="criterionOption" ng-repeat="opt in addressFields">
+                        <input id="address_field_{{$index}}" type="checkbox" ng-model="opt.selected" />
+                        <label for="address_field_{{$index}}">{{opt.name}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="form-row" ng-show="isShowTargetGroup()">
             <div class="label-cell">
                 <label for="targetGroup">{{msg.target_group}}</label>

@@ -19,6 +19,24 @@ var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu', ['ngRoute', 'Hel
         {type: 'CONTACT',   name: i18n.contact_search_type}
     ];
 })
+.factory('AddressFields', function(i18n) {
+    return [
+        {type: 'ORGANIAATIO_NIMI',          name: i18n.address_field_organisaatio_nimi},
+        {type: 'ORGANIAATIO_TUNNISTE',      name: i18n.address_field_organisaatio_tunniste},
+        {type: 'YHTEYSHENKILO',             name: i18n.address_field_yhteyshenkilo},
+        {type: 'POSTIOSOITE',               name: i18n.address_field_postiosoite},
+        {type: 'KATU_POSTINUMERO',          name: i18n.address_field_katu_postinumero},
+        {type: 'PL_POSTINUMERO',            name: i18n.address_field_pl_postinumero},
+        {type: 'PUHELINNUMERO',             name: i18n.address_field_puhelinnumero},
+        {type: 'FAXINUMERO',                name: i18n.address_field_faxinumero},
+        {type: 'INTERNET_OSOITE',           name: i18n.address_field_internet_osoite},
+        {type: 'VIRANOMAISTIEDOTUS_EMAIL',  name: i18n.address_field_viranomaistiedotus_email},
+        {type: 'KOULUTUSNEUVONNAN_EMAIL',   name: i18n.address_field_koulutusneuvonnan_email},
+        {type: 'KRIISITIEDOTUKSEN_EMAIL',   name: i18n.address_field_kriisitiedotuksen_email},
+        {type: 'ORGANISAATIO_SIJAINTIKUNTA',name: i18n.address_field_organisaatio_sijaintikunta},
+        {type: 'OPASJAKELUMAARAT',          name: i18n.address_field_opasjakelumaarat}
+    ];
+})
 .factory('TargetGroups', function(i18n) {
     return [
         {type: 'JARJESTAJAT_YLLAPITAJAT',   name: i18n.target_group_jarjestajat_yllapitajat,
