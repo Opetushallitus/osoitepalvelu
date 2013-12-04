@@ -1,5 +1,6 @@
-<div ng-controller="ResultsController">
-    <div id="results" ng-if="hasResults()">
+<div ng-controller="SearchController">
+    {{results}}
+    <div id="results" ng-show="results.length()">
         <h2>{{msg.results_title}}</h2>
         <table class="searchResults">
             <thead>

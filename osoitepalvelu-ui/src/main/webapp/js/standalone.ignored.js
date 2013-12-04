@@ -78,7 +78,30 @@ OsoiteKoostepalvelu.factory('DummyKoulutuksenjarjestajas', function() {
 
 OsoiteKoostepalvelu.factory('DummyResults', function() {
     return [
-        {firstName: "Dummy", lastName: "Result"}
+        {identifier: 56121, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56122, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56110, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56121, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56122, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56110, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56121, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56122, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56110, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56121, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56122, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56110, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56121, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56122, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56110, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56121, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56122, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56110, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56121, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56122, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56110, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56121, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56122, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56110, targetGroup: "Aalto-yliopiston urheiluseura"}
     ];
 });
 

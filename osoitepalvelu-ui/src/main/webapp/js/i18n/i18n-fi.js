@@ -4,13 +4,16 @@
 angular.module("I18n", [], ["$provide", function($provider) {
     $provider.value("i18n", {
         search_title : 'Osoitehaku',
-        results_title : 'Tulokset',
+        results_title : 'Osoitteet',
         saved_searches : 'Tallennetut haut',
 
         // Saves popup:
         saves_popup_title: 'Tallennetut haut',
         saves_popup_delete: 'poista',
         saves_popup_close: 'Sulje',
+
+        select_all: 'Kaikki',
+        select_none: 'Ei mitään',
 
         search_type: 'Haku',
         search_type_placeholder: 'Valitse mihin tarkoitukseen tarvitset yhteystietoja',
@@ -70,7 +73,10 @@ angular.module("I18n", [], ["$provide", function($provider) {
         show_more_terms: 'enemmän rajaushetoja',
         hide_extra_terms: 'vähemmän rajaushetoja',
 
-        first_name : 'Etunimi',
-        last_name : 'Sukunimi'
+        total_results: 'osoitetta',
+        column_identifier: 'Tunniste',
+        column_targetGroup: 'Kohderyhmä',
+
+        no_results: 'Ei lötynyt osoitteita.'
     });
 }]);

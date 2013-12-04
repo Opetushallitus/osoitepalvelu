@@ -53,7 +53,10 @@ option.placeholder {
 .criterionOptions label {
     font-weight: normal;
 }
-.criterionOptions .criterionActions {
+.targetGroups.selectedCriterion {
+    width: 100%;
+}
+.criterionTable .criterionActions {
     vertical-align: top;
     padding: 2px;
     padding-right: 5px;
@@ -90,6 +93,7 @@ option.placeholder {
 
 .selectedCriterion .criterionTable {
     width: 100%;
+    max-width: 800px;
 }
 .criterionActions {
     width: 15px;
@@ -104,7 +108,6 @@ option.placeholder {
 .select2-container {
     min-width: 400px;
 }
-
 .select2-search-field:only-child input {
     min-width: 380px;
 }
@@ -115,12 +118,37 @@ option.placeholder {
 a {
     cursor: pointer;
 }
-
 .term {
     float: left;
-    width: 50%;
+    width: 45%;
     margin-bottom: 10px;
+    margin-right: 5%;
 }
 .term.term-full-width {
     clear: right;
+    width: 100%;
+    margin-right: 0px;
+}
+.term .select2-container {
+    max-width: 400px;
+}
+.term-separator {
+    clear:both;
+}
+
+#results {
+    position: relative;
+}
+#results h2 {
+    font-size: 22px;
+}
+#results .gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 700px;
+    height: 300px
+}
+.resultInfo {
+    position: absolute;
+    left: 120px;
+    top: 13px;
 }

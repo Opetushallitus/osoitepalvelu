@@ -6,9 +6,17 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
                                 FilterHelper, SavesService, OptionsService) {
     $scope.msg = i18n;
 
+
     var updateSaves = function() {
         SavesService.list(function(data) {
             $scope.saves = data;
+        });
+    };
+
+    var updateResults = function() {
+        SearchService.search(function(data) {
+            $scope.results = data;
+            $scope.searchDone = true;
         });
     };
 
@@ -16,6 +24,7 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         $scope.saves = [];
         updateSaves();
 
+        $scope.searchDone = false;
         $scope.selectedSavedSearch = null;
 
         $scope.searchTypes = SearchTypes;
@@ -28,6 +37,7 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         $scope.selectedTargetGroupTypes = [];
         $scope.visibleTargetGroups = [];
         $scope.showExtraTerms = false;
+        $scope.results = [];
 
         $scope.options = {
             avis: [],
@@ -112,7 +122,8 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         SearchService.updateSearchType($scope.searchType, $scope.addressFields);
         SearchService.updateTargetGroups($scope.visibleTargetGroups);
         SearchService.updateTerms($scope.terms);
-        $location.path("/results");
+        updateResults();
+        //$location.path("/results");
     };
 
     $scope.showSaveSearchPopup = function() {
@@ -134,5 +145,30 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
             updateSaves();
         });
     };
+
+    $scope.resultGridOptions = {
+        data: 'results',
+        enablePaging: true,
+        selectedItems: [],
+        columnDefs: [],
+        enableRowSelection: true,
+        enableColumnResize: true,
+        enableCellEdit: false,
+        showSelectionCheckbox: true,
+        afterSelectionChange: function( rowItem, event ) {
+            $log.info(rowItem); // TODO
+        }
+    };
+    var colOverrides = {
+    }
+    angular.forEach([
+            'identifier',
+            'targetGroup'
+    ], function(c) {
+       $scope.resultGridOptions.columnDefs.push( angular.extend( {
+           field: c,
+           displayName: i18n['column_'+c]
+       }, (colOverrides[c] || {}) ) );
+    });
 }
 
