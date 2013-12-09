@@ -6,38 +6,32 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
                                 FilterHelper, SavesService, OptionsService) {
     $scope.msg = i18n;
 
-
     var updateSaves = function() {
         SavesService.list(function(data) {
             $scope.saves = data;
         });
     };
 
-    var updateResults = function() {
-        SearchService.search(function(data) {
-            $scope.results = data;
-            $scope.searchDone = true;
-        });
-    };
-
-    $scope.clear = function() {
+    $scope.updateTerms = function() {
+        $log.info("CLEAR");
         $scope.saves = [];
         updateSaves();
 
-        $scope.searchDone = false;
         $scope.selectedSavedSearch = null;
 
         $scope.searchTypes = SearchTypes;
-        $scope.searchType = null;
+        $scope.searchType = SearchService.getSearchType();
 
-        $scope.addressFields = angular.copy(AddressFields);
+        $scope.addressFields = SearchService.getAddressFields();
 
         $scope.targetGroups = TargetGroups;
         $scope.selectedTargetGroup = null;
+        $scope.visibleTargetGroups = SearchService.getTargetGroups();
         $scope.selectedTargetGroupTypes = [];
-        $scope.visibleTargetGroups = [];
+        angular.forEach($scope.visibleTargetGroups, function(v) {
+            $scope.selectedTargetGroupTypes.push(v.type);
+        } );
         $scope.showExtraTerms = false;
-        $scope.results = [];
 
         $scope.options = {
             avis: [],
@@ -56,18 +50,16 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
         OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
 
-        $scope.terms = {
-            avis: [],
-            maakuntas : [],
-            kuntas : [],
-            oppilaitostyyppis: [],
-            omistajatyyppis: [],
-            vuosiluokkas: [],
-            koultuksenjarjestajas: []
-        };
+        $scope.terms = SearchService.getTerms();
+        $log.info($scope.terms);
     };
 
-    $scope.clear();
+    $scope.updateTerms();
+
+    $scope.clear = function() {
+        SearchService.clear();
+        $scope.updateTerms();
+    }
 
     $scope.toggleShowMore = function() {
         $scope.showExtraTerms = !$scope.showExtraTerms;
@@ -122,8 +114,7 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         SearchService.updateSearchType($scope.searchType, $scope.addressFields);
         SearchService.updateTargetGroups($scope.visibleTargetGroups);
         SearchService.updateTerms($scope.terms);
-        updateResults();
-        //$location.path("/results");
+        $location.path("/results");
     };
 
     $scope.showSaveSearchPopup = function() {
@@ -145,30 +136,5 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
             updateSaves();
         });
     };
-
-    $scope.resultGridOptions = {
-        data: 'results',
-        enablePaging: true,
-        selectedItems: [],
-        columnDefs: [],
-        enableRowSelection: true,
-        enableColumnResize: true,
-        enableCellEdit: false,
-        showSelectionCheckbox: true,
-        afterSelectionChange: function( rowItem, event ) {
-            $log.info(rowItem); // TODO
-        }
-    };
-    var colOverrides = {
-    }
-    angular.forEach([
-            'identifier',
-            'targetGroup'
-    ], function(c) {
-       $scope.resultGridOptions.columnDefs.push( angular.extend( {
-           field: c,
-           displayName: i18n['column_'+c]
-       }, (colOverrides[c] || {}) ) );
-    });
 }
 

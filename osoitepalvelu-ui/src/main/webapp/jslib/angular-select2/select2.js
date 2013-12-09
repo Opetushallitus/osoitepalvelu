@@ -69,12 +69,12 @@ angular.module('ui.select2', ['I18n']).value('uiSelect2Config', {}).directive('u
                   .css("max-height", "15px").css("overflow", "hidden");
               $selectAllEl.on("click", function(e) {
                   e.preventDefault();
-                  $field.select2('destroy').find('option').prop('selected', 'selected').end().select2();
+                  $field.select2('destroy').find('option').prop('selected', 'selected').end().select2().change();
                   return false;
               });
               $selectNoneEl.on("click", function(e) {
                   e.preventDefault();
-                  $field.select2('destroy').find('option').prop('selected', false).end().select2()
+                  $field.select2('destroy').find('option').prop('selected', false).end().select2().change();
                   return false;
               });
           }

@@ -3,3 +3,9 @@
  */
 var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu',
     ['ngRoute', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2', 'ngGrid']);
+
+OsoiteKoostepalvelu.factory('SearchResultProvider', function() {
+    return function(details) {
+        details.callback( [] );
+    }
+});

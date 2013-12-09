@@ -1,4 +1,4 @@
-<div ng-controller="SearchController">
+<div>
     <div class="form" role="form">
         <h2>{{msg.search_title}}</h2>
 
@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <div class="form-row" ng-show="isTermsShown()">
+        <div class="form-row" ng-show="isTermsShown()" ng-animate="'animate'">
             <div class="label-cell">
                 {{msg.search_terms}}
             </div>
@@ -142,16 +142,5 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div id="no-results" ng-show="searchDone && results.length < 1">
-        {{msg.no_results}}
-    </div>
-    <div id="results" ng-show="searchDone && results.length">
-        <div class="resultInfo">
-            {{results.length}} {{msg.total_results}}
-        </div>
-        <h2>{{msg.results_title}}</h2>
-        <div class="gridStyle" ng-grid="resultGridOptions"></div>
     </div>
 </div>
