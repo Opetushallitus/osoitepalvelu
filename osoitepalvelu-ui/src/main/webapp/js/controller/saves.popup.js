@@ -12,7 +12,7 @@ var SavesPopupController = function ($scope, $modalInstance, saves, i18n, SavesS
     };
 
     $scope.deleteSave = function(id) {
-        SavesService.deleteSave(id, function() {
+        SavesService.deleteSearch(id, function() {
             SavesService.list(function(data) {
                 $scope.saves = data;
             });

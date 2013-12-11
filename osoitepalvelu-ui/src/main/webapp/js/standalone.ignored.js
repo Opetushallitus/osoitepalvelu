@@ -10,7 +10,6 @@ OsoiteKoostepalvelu.factory('DummySaves', function() {
         {id: 885415,    name: 'AIPAL ja KOULUTA -vastuukäyttäjät'}
     ];
 });
-
 OsoiteKoostepalvelu.factory('DummyAVIs', function() {
     return [
         {id: 232323, name: 'Kaikki alueet paitsi Ahvenanmaa'},
@@ -120,7 +119,19 @@ OsoiteKoostepalvelu.service('SavesService', function($log, DummySaves, $filter, 
         success( $filter('filter')(DummySaves, FilterHelper.extractedFieldNotInArray(deletedIds, "id") ) );
     };
 
-    this.deleteSave = function(id, success) {
+    this.saveSearch = function(save, success) {
+        success(1234);
+    };
+
+    this.updateSearch = function(save, success, error) {
+        success([]);
+    };
+
+    this.getSearch = function(id, success) {
+        success({});
+    };
+
+    this.deleteSearch = function(id, success) {
         deletedIds.push(id);
         success();
     };

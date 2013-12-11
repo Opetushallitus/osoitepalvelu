@@ -2,7 +2,7 @@
  * Created by ratamaa on 12/3/13.
  */
 angular.module("I18n", [], ["$provide", function($provider) {
-    $provider.value("i18n", {
+    var values = {
         search_title : 'Osoitehaku',
         results_title : 'Osoitteet',
         saved_searches : 'Tallennetut haut',
@@ -82,6 +82,21 @@ angular.module("I18n", [], ["$provide", function($provider) {
         no_results: 'Ei lötynyt osoitteita.',
         remove_selected: 'Poista valitut',
         save_excel: 'Tallenna excel',
-        send_message: 'Lähetä viesti'
-    });
+        send_message: 'Lähetä viesti',
+
+        new_save_popup_title: 'Tallenna haku',
+        new_save_popup_save_as: 'Tallenteen nimi',
+        new_save_popup_save: 'Tallenna',
+        new_save_popup_cancel: 'Peruuta'
+    };
+    values.format = function( key ) {
+        var val = values[key];
+        for( var i = 1; i < arguments.length; ++i ) {
+            var pattern = "\\{"+i+"\\}",
+                re = new RegExp(pattern, "g");
+            val = val.replace(re, arguments[i]);
+        }
+        return val;
+    };
+    $provider.value("i18n", values);
 }]);

@@ -1,7 +1,6 @@
 /**
  * Created by ratamaa on 12/9/13.
  */
-
 var ResultsController = function($scope, i18n, $log, $location, $filter, $timeout, SearchService, ArrayHelper) {
     $scope.msg = i18n;
     $scope.results = [];

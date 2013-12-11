@@ -12,6 +12,15 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         });
     };
 
+    var getCurrentSaveDetails = function() {
+        return {
+            terms: $scope.terms,
+            targetGroup: $scope.visibleTargetGroups,
+            type: $scope.searchType,
+            addressFields: $scope.addressFields
+        };
+    };
+
     $scope.updateTerms = function() {
         $log.info("CLEAR");
         $scope.saves = [];
@@ -107,7 +116,18 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     };
 
     $scope.saveSearch = function() {
-        /// TODO
+        $log.info("Show new save search popup.");
+        var modalInstance = $modal.open({
+            templateUrl: 'partials/newSavePopup.html',
+            controller: NewSavePopupController,
+            resolve: {
+                save: getCurrentSaveDetails
+            }
+        });
+        modalInstance.result.then(function () {
+            updateSaves();
+        }, function () {
+        });
     };
 
     $scope.search = function() {
@@ -118,7 +138,7 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     };
 
     $scope.showSaveSearchPopup = function() {
-        $log.info("Show save search popup.");
+        $log.info("Show saved searches popup.");
         var modalInstance = $modal.open({
             templateUrl: 'partials/savesPopup.html',
             controller: SavesPopupController,
