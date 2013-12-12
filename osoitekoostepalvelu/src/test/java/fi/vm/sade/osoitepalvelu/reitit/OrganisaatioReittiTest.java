@@ -9,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import fi.vm.sade.osoitepalvelu.kooste.SpringApp;
 import fi.vm.sade.osoitepalvelu.service.dto.OrganisaatioDto;
 import fi.vm.sade.osoitepalvelu.service.dto.OrganisaatioOid;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/spring/test-application-context.xml")
+@ContextConfiguration(classes=SpringApp.class)
 public class OrganisaatioReittiTest {
 	
 	@Autowired

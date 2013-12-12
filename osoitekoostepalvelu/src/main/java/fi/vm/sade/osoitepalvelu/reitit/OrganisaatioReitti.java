@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import fi.vm.sade.osoitepalvelu.service.OrganisaatioService;
+import fi.vm.sade.osoitepalvelu.service.DefaultOrganisaatioService;
 import fi.vm.sade.osoitepalvelu.service.dto.OrganisaatioDto;
 import fi.vm.sade.osoitepalvelu.service.dto.OrganisaatioOid;
 
@@ -19,7 +19,7 @@ import fi.vm.sade.osoitepalvelu.service.dto.OrganisaatioOid;
 @Component
 public class OrganisaatioReitti extends AbstractJsonToDtoRouteBuilder {
 	
-	private static final Logger logger = LoggerFactory.getLogger(OrganisaatioService.class);
+	private static final Logger logger = LoggerFactory.getLogger(DefaultOrganisaatioService.class);
 
 	public static final String REITI_HAE_ORGANISAATIO_OIDT = "direct:haeOrganisaatioOidt";
 	public static final String RETTI_HAE_ORGANISAATIO = "direct:haeOrganisaatio";

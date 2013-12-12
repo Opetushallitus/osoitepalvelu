@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
+import fi.vm.sade.osoitepalvelu.konfiguraatio.OsoitepalveluCamelConfig;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ratamaa
@@ -15,6 +17,6 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration
 @ComponentScan(basePackageClasses = SpringApp.class)
 @ImportResource("classpath:spring/application-context.xml")
-@Import(MongoConfig.class)
+@Import(value={MongoConfig.class, OsoitepalveluCamelConfig.class})
 public class SpringApp {
 }
