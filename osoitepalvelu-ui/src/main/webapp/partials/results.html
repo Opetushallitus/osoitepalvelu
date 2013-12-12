@@ -1,19 +1,26 @@
-<div ng-controller="ResultsController">
-    <div id="results" ng-if="hasResults()">
+<div>
+    <button class="btn btn-lg" ng-click="back()"><i class="fa fa-arrow-up"></i> {{msg.back_to_search_terms}}</button>
+
+    <div id="no-results" ng-show="searchDone && results.length < 1">
+        {{msg.no_results}}
+    </div>
+    <div id="results" ng-show="searchDone && results.length">
+        <div class="resultInfo">
+            {{results.length}} {{msg.total_results}}
+        </div>
         <h2>{{msg.results_title}}</h2>
-        <table class="searchResults">
-            <thead>
-            <tr>
-                <th>{{msg.first_name}}</th>
-                <th>{{msg.last_name}}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="result" ng-repeat="result in results">
-                <td>{{result.firstName}}</td>
-                <td>{{result.lastName}}</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="gridStyle" ng-grid="resultGridOptions"
+             full-size-grid data-width-padding="40"
+             data-height-padding="200"></div>
+    </div>
+    <div class="searchActions">
+        <div class="leftPosition">
+            <button class="btn btn-lg" ng-click="deleteSelected()"
+                    ng-disabled="!resultGridOptions.selectedItems.length">{{msg.remove_selected}}</button>
+        </div>
+        <div class="rightPosition">
+            <button class="btn btn-lg" ng-disabled="!resultGridOptions.selectedItems.length">{{msg.save_excel}}</button>
+            <button class="btn btn-lg btn-primary" ng-disabled="!resultGridOptions.selectedItems.length">{{msg.send_message}}</button>
+        </div>
     </div>
 </div>

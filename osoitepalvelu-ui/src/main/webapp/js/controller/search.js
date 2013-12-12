@@ -12,21 +12,34 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         });
     };
 
-    $scope.clear = function() {
+    var getCurrentSaveDetails = function() {
+        return {
+            terms: $scope.terms,
+            targetGroup: $scope.visibleTargetGroups,
+            type: $scope.searchType,
+            addressFields: $scope.addressFields
+        };
+    };
+
+    $scope.updateTerms = function() {
+        $log.info("CLEAR");
         $scope.saves = [];
         updateSaves();
 
         $scope.selectedSavedSearch = null;
 
         $scope.searchTypes = SearchTypes;
-        $scope.searchType = null;
+        $scope.searchType = SearchService.getSearchType();
 
-        $scope.addressFields = angular.copy(AddressFields);
+        $scope.addressFields = SearchService.getAddressFields();
 
         $scope.targetGroups = TargetGroups;
         $scope.selectedTargetGroup = null;
+        $scope.visibleTargetGroups = SearchService.getTargetGroups();
         $scope.selectedTargetGroupTypes = [];
-        $scope.visibleTargetGroups = [];
+        angular.forEach($scope.visibleTargetGroups, function(v) {
+            $scope.selectedTargetGroupTypes.push(v.type);
+        } );
         $scope.showExtraTerms = false;
 
         $scope.options = {
@@ -46,18 +59,16 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
         OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
 
-        $scope.terms = {
-            avis: [],
-            maakuntas : [],
-            kuntas : [],
-            oppilaitostyyppis: [],
-            omistajatyyppis: [],
-            vuosiluokkas: [],
-            koultuksenjarjestajas: []
-        };
+        $scope.terms = SearchService.getTerms();
+        $log.info($scope.terms);
     };
 
-    $scope.clear();
+    $scope.updateTerms();
+
+    $scope.clear = function() {
+        SearchService.clear();
+        $scope.updateTerms();
+    }
 
     $scope.toggleShowMore = function() {
         $scope.showExtraTerms = !$scope.showExtraTerms;
@@ -105,7 +116,18 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     };
 
     $scope.saveSearch = function() {
-        /// TODO
+        $log.info("Show new save search popup.");
+        var modalInstance = $modal.open({
+            templateUrl: 'partials/newSavePopup.html',
+            controller: NewSavePopupController,
+            resolve: {
+                save: getCurrentSaveDetails
+            }
+        });
+        modalInstance.result.then(function () {
+            updateSaves();
+        }, function () {
+        });
     };
 
     $scope.search = function() {
@@ -116,7 +138,7 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     };
 
     $scope.showSaveSearchPopup = function() {
-        $log.info("Show save search popup.");
+        $log.info("Show saved searches popup.");
         var modalInstance = $modal.open({
             templateUrl: 'partials/savesPopup.html',
             controller: SavesPopupController,

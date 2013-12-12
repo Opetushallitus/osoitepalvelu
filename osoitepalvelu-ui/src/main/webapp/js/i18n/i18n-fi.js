@@ -2,15 +2,18 @@
  * Created by ratamaa on 12/3/13.
  */
 angular.module("I18n", [], ["$provide", function($provider) {
-    $provider.value("i18n", {
+    var values = {
         search_title : 'Osoitehaku',
-        results_title : 'Tulokset',
+        results_title : 'Osoitteet',
         saved_searches : 'Tallennetut haut',
 
         // Saves popup:
         saves_popup_title: 'Tallennetut haut',
         saves_popup_delete: 'poista',
         saves_popup_close: 'Sulje',
+
+        select_all: 'Kaikki',
+        select_none: 'Tyhjennä',
 
         search_type: 'Haku',
         search_type_placeholder: 'Valitse mihin tarkoitukseen tarvitset yhteystietoja',
@@ -70,7 +73,30 @@ angular.module("I18n", [], ["$provide", function($provider) {
         show_more_terms: 'enemmän rajaushetoja',
         hide_extra_terms: 'vähemmän rajaushetoja',
 
-        first_name : 'Etunimi',
-        last_name : 'Sukunimi'
-    });
+        back_to_search_terms: 'hakuehdot',
+
+        total_results: 'osoitetta',
+        column_identifier: 'Tunniste',
+        column_targetGroup: 'Kohderyhmä',
+
+        no_results: 'Ei lötynyt osoitteita.',
+        remove_selected: 'Poista valitut',
+        save_excel: 'Tallenna excel',
+        send_message: 'Lähetä viesti',
+
+        new_save_popup_title: 'Tallenna haku',
+        new_save_popup_save_as: 'Tallenteen nimi',
+        new_save_popup_save: 'Tallenna',
+        new_save_popup_cancel: 'Peruuta'
+    };
+    values.format = function( key ) {
+        var val = values[key];
+        for( var i = 1; i < arguments.length; ++i ) {
+            var pattern = "\\{"+i+"\\}",
+                re = new RegExp(pattern, "g");
+            val = val.replace(re, arguments[i]);
+        }
+        return val;
+    };
+    $provider.value("i18n", values);
 }]);

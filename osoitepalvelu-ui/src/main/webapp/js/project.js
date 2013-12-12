@@ -1,15 +1,15 @@
 
 OsoiteKoostepalvelu.config(function($routeProvider) {
-        $routeProvider.when('/results', {
-                controller:'ResultsController',
-                templateUrl:'partials/results.html'
-        }).when('/', {
-                controller:'SearchController',
-                templateUrl:'partials/searchForm.html'
-        })
-        .otherwise({
-                redirectTo:'/'
-        });
+    $routeProvider.when('/results', {
+            controller:'ResultsController',
+            templateUrl:'partials/results.html'
+    }).when('/', {
+            controller:'SearchController',
+            templateUrl:'partials/searchForm.html'
+    })
+    .otherwise({
+            redirectTo:'/'
+    });
 })
 .factory('SearchTypes', function(i18n) {
     return [
@@ -17,6 +17,17 @@ OsoiteKoostepalvelu.config(function($routeProvider) {
         {type: 'LETTER',    name: i18n.letter_search_type},
         {type: 'CONTACT',   name: i18n.contact_search_type}
     ];
+})
+.factory('EmptyTerms', function() {
+    return {
+        avis: [],
+        maakuntas : [],
+        kuntas : [],
+        oppilaitostyyppis: [],
+        omistajatyyppis: [],
+        vuosiluokkas: [],
+        koultuksenjarjestajas: []
+    };
 })
 .factory('AddressFields', function(i18n) {
     return [
@@ -76,3 +87,4 @@ OsoiteKoostepalvelu.config(function($routeProvider) {
         }
     ];
 });
+

@@ -1,4 +1,4 @@
-<div ng-controller="SearchController">
+<div>
     <div class="form" role="form">
         <h2>{{msg.search_title}}</h2>
 
@@ -50,7 +50,7 @@
                 <label for="targetGroup">{{msg.target_group}}</label>
             </div>
             <div class="field-cell">
-                <div ng-repeat="tg in visibleTargetGroups" class="selectedCriterion">
+                <div ng-repeat="tg in visibleTargetGroups" class="selectedCriterion targetGroups">
                     <table class="criterionTable">
                         <th class="selectedCriterionName">
                             {{tg.name}}
@@ -76,36 +76,39 @@
             </div>
         </div>
 
-        <div class="form-row" ng-show="isTermsShown()">
+        <div class="form-row" ng-show="isTermsShown()" ng-animate="'animate'">
             <div class="label-cell">
                 {{msg.search_terms}}
             </div>
             <div class="field-cell">
-                <div class="trem term-full-width">
+                <div class="term term-full-width">
                     <select ui-select2 multiple id="avi" class="form-control" ng-model="terms.avis" data-placeholder="{{msg.search_term_avi}}">
                         <option ng-repeat="opt in options.avis" value="{{opt.id}}">{{opt.name}}</option>
                     </select>
                 </div>
-                <div class="trem term">
+                <div class="term-separator"></div>
+                <div class="term">
                     <select ui-select2 multiple id="maakunta" class="form-control" ng-model="terms.maakuntas" data-placeholder="{{msg.search_term_maakunta}}">
                         <option ng-repeat="opt in options.maakuntas" value="{{opt.id}}">{{opt.name}}</option>
                     </select>
                 </div>
-                <div class="trem term">
+                <div class="term">
                     <select ui-select2 multiple id="kunta" class="form-control" ng-model="terms.kuntas" data-placeholder="{{msg.search_term_kunta}}">
                         <option ng-repeat="opt in options.kuntas" value="{{opt.id}}">{{opt.name}}</option>
                     </select>
                 </div>
-                <div class="trem term">
+                <div class="term-separator"></div>
+                <div class="term">
                     <select ui-select2 multiple id="oppilaitostyyppi" class="form-control" ng-model="terms.oppilaitostyyppis" data-placeholder="{{msg.search_term_oppilaitostyyppi}}">
                         <option ng-repeat="opt in options.oppilaitostyyppis" value="{{opt.id}}">{{opt.name}}</option>
                     </select>
                 </div>
-                <div class="trem term">
+                <div class="term">
                     <select ui-select2 multiple id="omistajatyyppi" class="form-control" ng-model="terms.omistajatyyppis" data-placeholder="{{msg.search_term_omistajatyyppi}}">
                         <option ng-repeat="opt in options.omistajatyyppis" value="{{opt.id}}">{{opt.name}}</option>
                     </select>
                 </div>
+                <div class="term-separator"></div>
                 <div class="trem term">
                     <select ui-select2 multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas" data-placeholder="{{msg.search_term_vuosiluokka}}">
                         <option ng-repeat="opt in options.vuosiluokkas" value="{{opt.id}}">{{opt.name}}</option>
@@ -116,6 +119,7 @@
                         <option ng-repeat="opt in options.koultuksenjarjestajas" value="{{opt.id}}">{{opt.name}}</option>
                     </select>
                 </div>
+                <div class="term-separator"></div>
 
                 <div style="clear:both;">
                     <a ng-click="toggleShowMore()">

@@ -10,7 +10,6 @@ OsoiteKoostepalvelu.factory('DummySaves', function() {
         {id: 885415,    name: 'AIPAL ja KOULUTA -vastuukäyttäjät'}
     ];
 });
-
 OsoiteKoostepalvelu.factory('DummyAVIs', function() {
     return [
         {id: 232323, name: 'Kaikki alueet paitsi Ahvenanmaa'},
@@ -78,7 +77,38 @@ OsoiteKoostepalvelu.factory('DummyKoulutuksenjarjestajas', function() {
 
 OsoiteKoostepalvelu.factory('DummyResults', function() {
     return [
-        {firstName: "Dummy", lastName: "Result"}
+        {identifier: 56121, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56122, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56110, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56124, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56125, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56116, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56127, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56128, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56119, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56131, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56132, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56150, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56141, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56142, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56160, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56161, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56172, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56170, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56181, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56182, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56190, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56191, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56183, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56184, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56192, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56194, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56155, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56156, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56163, targetGroup: "Aalto-yliopiston urheiluseura"},
+        {identifier: 56164, targetGroup: "Aalto-yliopistokiinteistöt Oy"},
+        {identifier: 56175, targetGroup: "Aalto-yliopiston Sähköinsinöörikilta"},
+        {identifier: 56176, targetGroup: "Aalto-yliopiston urheiluseura"}
     ];
 });
 
@@ -89,38 +119,28 @@ OsoiteKoostepalvelu.service('SavesService', function($log, DummySaves, $filter, 
         success( $filter('filter')(DummySaves, FilterHelper.extractedFieldNotInArray(deletedIds, "id") ) );
     };
 
-    this.deleteSave = function(id, success) {
+    this.saveSearch = function(save, success) {
+        success(1234);
+    };
+
+    this.updateSearch = function(save, success, error) {
+        success([]);
+    };
+
+    this.getSearch = function(id, success) {
+        success({});
+    };
+
+    this.deleteSearch = function(id, success) {
         deletedIds.push(id);
         success();
     };
 });
 
-OsoiteKoostepalvelu.service('SearchService', function($log, DummyResults) {
-    var _terms = {},
-        _targetGroups = [],
-        _searchType = null,
-        _addressFields = [];
-
-    this.updateSearchType = function(type, addressFields) {
-        _searchType = type;
-        _addressFields = addressFields;
-    };
-
-    this.updateTargetGroups = function(targetGroups) {
-        _targetGroups = targetGroups;
-    };
-
-    this.updateTerms = function(terms) {
-        _terms = terms;
-    };
-
-    this.search = function(success) {
-        $log.info(_searchType);
-        $log.info(_addressFields);
-        $log.info(_targetGroups);
-        $log.info(_terms);
-        success( DummyResults );
-    };
+OsoiteKoostepalvelu.factory('SearchResultProvider', function(DummyResults) {
+    return function(details) {
+        details.callback( DummyResults );
+    }
 });
 
 OsoiteKoostepalvelu.service('OptionsService', function($log,
