@@ -18,7 +18,16 @@
     <build>
         <finalName>${project.artifactId}</finalName>
     </build>
-
+    
+    <repositories>
+        <repository>
+            <id>ryh.dy.fi</id>
+            <name>Ryh.dy.fi</name>
+            <url>http://ryh.dy.fi/mvn2/public/</url>
+            <releases><enabled>true</enabled> </releases>
+        </repository>
+    </repositories>
+    
     <dependencies>
         <!--
         XML Kalenteri ei toimi ilman!
@@ -165,7 +174,6 @@
             <artifactId>jackson-xc</artifactId>
             <version>1.9.11</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.apache.cxf</groupId>
@@ -413,10 +421,11 @@
             <artifactId>spring-tx</artifactId>
             <!--<scope>test</scope>-->
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
+        <!-- Maven varoitus: Poistettu, jotta ei tule duplikaattia riippuvuutta -->
+<!--         <dependency> -->
+<!--             <groupId>org.springframework</groupId> -->
+<!--             <artifactId>spring-web</artifactId> -->
+<!--         </dependency> -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
@@ -431,6 +440,13 @@
             <artifactId>camel-test</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <!-- Logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.13</version>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -444,21 +460,25 @@
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-        </dependency>
+        
+        <!-- Seuraava sisältyy jo ch.qos.logback kirjastoon -->
+<!--         <dependency> -->
+<!--             <groupId>org.slf4j</groupId> -->
+<!--             <artifactId>slf4j-log4j12</artifactId> -->
+<!--         </dependency> -->
+
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>2.2.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-        	<groupId>commons-io</groupId>
-        	<artifactId>commons-io</artifactId>
-        	<version>2.4</version>
-        </dependency>
+        <!-- Maven varoitus: Poistettu, jotta ei tule duplikaattia riippuvuutta -->
+<!--         <dependency> -->
+<!--         	<groupId>commons-io</groupId> -->
+<!--         	<artifactId>commons-io</artifactId> -->
+<!--         	<version>2.4</version> -->
+<!--         </dependency> -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-gson</artifactId>
@@ -518,7 +538,7 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-security</artifactId>
             <version>${camel.version}</version>
-        </dependency>
+        </dependency>        
 
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -548,8 +568,8 @@
                         <groupId>org.mortbay.jetty</groupId>
                         <artifactId>maven-jetty-plugin</artifactId>
                         <configuration>
-
                         </configuration>
+                        <version>6.1.24</version>
                     </plugin>
                 </plugins>
             </build>

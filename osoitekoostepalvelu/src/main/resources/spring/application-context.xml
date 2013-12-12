@@ -10,7 +10,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		     http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+		   http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
            http://camel.apache.org/schema/spring-security http://camel.apache.org/schema/spring-security/camel-spring-security.xsd
            http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
            http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
@@ -18,7 +18,11 @@
 
     <ctx:annotation-config/>
 
+    <!-- Osoitepalvelun Spring-beanien pakettien skannaukset -->
+    <ctx:component-scan base-package="fi.vm.sade.osoitepalvelu.konfiguraatio" />
+    <ctx:component-scan base-package="fi.vm.sade.osoitepalvelu.reitit" />
     <ctx:component-scan base-package="fi.vm.sade.osoitepalvelu.kooste" />
+    <ctx:component-scan base-package="fi.vm.sade.osoitepalvelu.service" />
 
     <ctx:property-placeholder
             location="classpath:osoitekoostepalvelu.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/valinta.properties, file:///${user.home:''}/oph-configuration/valintalaskentakoostepalvelu.properties, file:///${user.home:''}/oph-configuration/hakuparametrit.properties, file:///${user.home:''}/oph-configuration/override.properties"
@@ -69,6 +73,7 @@
             <bean class="fi.vm.sade.osoitepalvelu.kooste.ObjectMapperProvider" />
         </jaxrs:providers>
     </jaxrs:client>
+    
     <!--  
     <jaxrs:client id="KoodistoResourceClient"
                   address="${valintalaskentakoostepalvelu.koodiService.rest.url}"
@@ -91,7 +96,7 @@
 	</bean>
 	-->
 	
-	<!--  
+	<!--
 	<beans:import resource="classpath:META-INF/spring/context/valintatieto-context.xml"/>
    -->
 	
