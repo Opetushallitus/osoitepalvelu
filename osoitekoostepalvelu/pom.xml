@@ -155,7 +155,11 @@
             <artifactId>jackson-xc</artifactId>
             <version>1.9.11</version>
         </dependency>
-
+<!--         <dependency> -->
+<!--             <groupId>org.apache.camel</groupId> -->
+<!--             <artifactId>camel-jackson</artifactId> -->
+<!--             <version>2.9.2</version> -->
+<!--         </dependency> -->
 
         <dependency>
             <groupId>org.apache.cxf</groupId>
@@ -421,6 +425,13 @@
             <artifactId>camel-test</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <!-- Logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.13</version>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -434,10 +445,13 @@
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-        </dependency>
+        
+        <!-- Seuraava sisältyy jo ch.qos.logback kirjastoon -->
+<!--         <dependency> -->
+<!--             <groupId>org.slf4j</groupId> -->
+<!--             <artifactId>slf4j-log4j12</artifactId> -->
+<!--         </dependency> -->
+
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
@@ -508,7 +522,7 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-security</artifactId>
             <version>${camel.version}</version>
-        </dependency>
+        </dependency>        
     </dependencies>
 
     <profiles>
