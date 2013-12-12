@@ -2,7 +2,31 @@
  * Created by ratamaa on 12/4/13.
  */
 
-OsoiteKoostepalvelu.service('OptionsService', function($log) {
+OsoiteKoostepalvelu.service('OptionsService', function($log, TutkintotoimikuntaRoolis) {
+
+    this.listTutkintotoimikuntas = function(success) {
+        // TODO:
+        success( [] );
+    };
+
+    this.listTutkintotoimikuntaRoolis = function(success) {
+        success( TutkintotoimikuntaRoolis );
+    };
+
+    this.listKoulutaRoolis = function(success) {
+        // TODO:
+        success( [] );
+    };
+
+    this.listAipalRoolis = function(success) {
+        // TODO:
+        success( [] );
+    };
+
+    this.listOrganisaationKielis = function(success) {
+        // TODO:
+        success( [] );
+    };
 
     this.listAvis = function(success) {
         // TODO:

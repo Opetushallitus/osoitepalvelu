@@ -1,5 +1,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.dao.save;
 
+import fi.vm.sade.osoitepalvelu.kooste.dao.sequence.SequenceRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -22,6 +23,8 @@ import java.util.List;
  */
 @Repository
 public class DefaultSaveSearchRepository extends SimpleMongoRepository<SavedSearch, Long> implements SavedSearchRepository {
+    @Autowired
+    private SequenceRepository sequenceRepository;
 
     public DefaultSaveSearchRepository(MongoEntityInformation<SavedSearch, Long> metadata, MongoOperations mongoOperations) {
         super(metadata, mongoOperations);
@@ -36,5 +39,11 @@ public class DefaultSaveSearchRepository extends SimpleMongoRepository<SavedSear
     public List<SavedSearch> findByOwnerUsername(String ownerUsername, Sort order) {
         Criteria criteria = new Criteria().where("ownerUsername").is(ownerUsername);
         return getMongoOperations().find(Query.query(criteria).with(order), SavedSearch.class);
+    }
+
+    @Override
+    public SavedSearch saveNew(SavedSearch savedSearch) {
+        savedSearch.setId(sequenceRepository.getNextSavedSearchIdSequence());
+        return super.save(savedSearch);
     }
 }

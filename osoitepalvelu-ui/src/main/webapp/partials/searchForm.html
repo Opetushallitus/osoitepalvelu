@@ -9,6 +9,7 @@
             <div class="field-cell">
                 <select ui-select2 id="savedSearch" class="form-control" ng-model="selectedSavedSearch"
                         ng-change="handleSaveSelected()">
+                   <option class="placeholder" value=""></option>
                    <option ng-repeat="save in saves" value="{{save.id}}">{{save.name}}</option>
                 </select>
             </div>
@@ -28,6 +29,20 @@
                     <option class="placeholder" value="">{{msg.search_type_placeholder}}</option>
                     <option ng-repeat="opt in searchTypes" value="{{opt.type}}">{{opt.name}}</option>
                 </select>
+            </div>
+        </div>
+
+        <div class="form-row" ng-show="searchType == 'SEND_LETTER'">
+            <div class="label-cell">
+                {{msg.receiver_fields}}
+            </div>
+            <div class="field-cell">
+                <div class="criterionOptions receiverTypes">
+                    <div class="criterionOption" ng-repeat="opt in receiverFields">
+                        <input id="receiver_field_{{$index}}" type="checkbox" ng-model="opt.selected" />
+                        <label for="receiver_field_{{$index}}">{{opt.name}}</label>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -81,6 +96,34 @@
                 {{msg.search_terms}}
             </div>
             <div class="field-cell">
+                <div class="term" ng-show="isShowTutkintotoimikuntaTerm()">
+                    <select ui-select2 multiple id="tutkintotoimikuntas" class="form-control" ng-model="terms.tutkintotoimikuntas" data-placeholder="{{msg.search_term_tutkintotoimikunta}}">
+                        <option ng-repeat="opt in options.tutkintotoimikuntas" value="{{opt.id}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="term" ng-show="isShowTutkintotoimikuntaRooliTerm()">
+                    <select ui-select2 multiple id="tutkintotoimikuntaRoolis" class="form-control" ng-model="terms.tutkintotoimikuntaRoolis" data-placeholder="{{msg.search_term_tutkintotoimikunta_rooli}}">
+                        <option ng-repeat="opt in options.tutkintotoimikuntaRoolis" value="{{opt.type}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm()"></div>
+                <div class="term" ng-show="isShowKoulutaTerm()">
+                    <select ui-select2 multiple id="koulutaRoolis" class="form-control" ng-model="terms.koulutaRoolis" data-placeholder="{{msg.search_term_kouluta_rooli}}">
+                        <option ng-repeat="opt in options.koulutaRoolis" value="{{opt.id}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="term" ng-show="isShowAipalTerm()">
+                    <select ui-select2 multiple id="aipalRoolis" class="form-control" ng-model="terms.aipalRoolis" data-placeholder="{{msg.search_term_aipal_rooli}}">
+                        <option ng-repeat="opt in options.aipalRoolis" value="{{opt.id}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="term-separator" ng-show="isShowKoulutaTerm() || isShowAipalTerm()"></div>
+                <div class="term term-full-width">
+                    <select ui-select2 multiple id="organisaationKielis" class="form-control" ng-model="terms.organisaationKielis" data-placeholder="{{msg.search_term_organisaation_kieli}}">
+                        <option ng-repeat="opt in options.organisaationKielis" value="{{opt.code}}">{{opt.name}}</option>
+                    </select>
+                </div>
+                <div class="term-separator"></div>
                 <div class="term term-full-width">
                     <select ui-select2 multiple id="avi" class="form-control" ng-model="terms.avis" data-placeholder="{{msg.search_term_avi}}">
                         <option ng-repeat="opt in options.avis" value="{{opt.id}}">{{opt.name}}</option>

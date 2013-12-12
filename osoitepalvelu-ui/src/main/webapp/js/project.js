@@ -13,13 +13,19 @@ OsoiteKoostepalvelu.config(function($routeProvider) {
 })
 .factory('SearchTypes', function(i18n) {
     return [
-        {type: 'EMAIL',     name: i18n.email_search_type},
-        {type: 'LETTER',    name: i18n.letter_search_type},
-        {type: 'CONTACT',   name: i18n.contact_search_type}
+        {type: 'EMAIL',         name: i18n.email_search_type},
+        {type: 'SEND_LETTER',   name: i18n.send_letter_search_type},
+        {type: 'LETTER',        name: i18n.letter_search_type},
+        {type: 'CONTACT',       name: i18n.contact_search_type}
     ];
 })
 .factory('EmptyTerms', function() {
     return {
+        tutkintotoimikuntas: [],
+        tutkintotoimikuntaRoolis: [],
+        koulutaRoolis: [],
+        aipalRoolis: [],
+        organisaationKielis: [],
         avis: [],
         maakuntas : [],
         kuntas : [],
@@ -47,7 +53,20 @@ OsoiteKoostepalvelu.config(function($routeProvider) {
         {type: 'OPASJAKELUMAARAT',          name: i18n.address_field_opasjakelumaarat}
     ];
 })
-.factory('TargetGroups', function(i18n) {
+.factory("ReceiverTypes", function(i18n) {
+    return [
+        {type: 'ORGANISAATIO',              name: i18n.receiver_field_organisaatio},
+        {type: 'YHTEYSHENKILO',             name: i18n.receiver_field_yhteyshenkilo}
+    ];
+})
+.factory("TutkintotoimikuntaRoolis", function(i18n) {
+    return [
+        {type: 'PUHEENJOHTAJA', name: i18n.target_group_option_puheenjohtaja},
+        {type: 'SIHTEERI',      name: i18n.target_group_option_sihteeri},
+        {type: 'JASENET',       name: i18n.target_gorup_option_jasenet}
+    ];
+})
+.factory('TargetGroups', function(i18n, TutkintotoimikuntaRoolis) {
     return [
         {type: 'JARJESTAJAT_YLLAPITAJAT',   name: i18n.target_group_jarjestajat_yllapitajat,
             options: [
@@ -77,13 +96,22 @@ OsoiteKoostepalvelu.config(function($routeProvider) {
             ]
         },
         {type: 'MUUT_ORGANISAATIOT',        name: i18n.target_group_muut_organisaatiot,
-            options: []
+            options: [
+                {type: 'TUNNUKSENHALTIJAT', name: i18n.target_group_option_tunnuksenhaltijat}
+            ]
+        },
+        {type: 'TUTKINTOTOIMIKUNNAT',       name: i18n.target_group_tutkintotoimikunnat,
+            options: angular.copy(TutkintotoimikuntaRoolis)
         },
         {type: 'KOULUTA_KAYTTAJAT',         name: i18n.target_group_kouluta_kayttajat,
-            options: []
+            options: [
+                {type: 'TUNNUKSENHALTIJAT', name: i18n.target_group_option_tunnuksenhaltijat}
+            ]
         },
         {type: 'AIPAL_KAYTTAJAT',           name: i18n.target_group_aipal_kayttajat,
-            options: []
+            options: [
+                {type: 'TUNNUKSENHALTIJAT', name: i18n.target_group_option_tunnuksenhaltijat}
+            ]
         }
     ];
 });

@@ -10,6 +10,32 @@ OsoiteKoostepalvelu.factory('DummySaves', function() {
         {id: 885415,    name: 'AIPAL ja KOULUTA -vastuukäyttäjät'}
     ];
 });
+
+OsoiteKoostepalvelu.factory("DummyTutkintotoimikuntas", function() {
+    return [
+        {id: 1544854, name:'Ajoneuvonosturinkuljettajan tutkintotoimikunta'},
+        {id: 1544855, name:'Examenskommissionen inom företagarbranschen och töretagsekonomi'}
+    ];
+});
+
+OsoiteKoostepalvelu.factory("DummyKoulutaRoolis", function() {
+    return [
+        {id: 1, name:'ARVOSANAPAIV'},
+        {id: 2, name:'HAKEMUSTIETALLENTAJA'}
+    ];
+});
+OsoiteKoostepalvelu.factory("DummyAipalRoolis", function() {
+    return [
+        {id: 1, name:'AIPAL-koulutuksen/tutkinnon järjestäjän käyttäjä'}
+    ];
+});
+OsoiteKoostepalvelu.factory("DummyOrganisaatioKielis", function() {
+    return [
+        {code: 'fi', name:'suomi'},
+        {code: 'sv', name:'ruotsi'},
+        {code: 'en', name:'englanti'}
+    ];
+});
 OsoiteKoostepalvelu.factory('DummyAVIs', function() {
     return [
         {id: 232323, name: 'Kaikki alueet paitsi Ahvenanmaa'},
@@ -112,7 +138,7 @@ OsoiteKoostepalvelu.factory('DummyResults', function() {
     ];
 });
 
-OsoiteKoostepalvelu.service('SavesService', function($log, DummySaves, $filter, FilterHelper) {
+OsoiteKoostepalvelu.service('SavesService', function($log, DummySaves, $filter, FilterHelper, SaveConverter) {
     var deletedIds = [];
 
     this.list = function(success) {
@@ -128,7 +154,9 @@ OsoiteKoostepalvelu.service('SavesService', function($log, DummySaves, $filter, 
     };
 
     this.getSearch = function(id, success) {
-        success({});
+        success(SaveConverter.fromDomain(
+            {"id":5,"searchType":"CONTACT","createdAt":1386869725347,"addressFields":["ORGANIAATIO_NIMI","POSTIOSOITE","VIRANOMAISTIEDOTUS_EMAIL"],"targetGroups":[{"type":"OPPISOPIMUSTOIMPISTEET","options":[]},{"type":"MUUT_ORGANISAATIOT","options":["TUNNUKSENHALTIJAT"]},{"type":"TUTKINTOTOIMIKUNNAT","options":["PUHEENJOHTAJA","JASENET"]},{"type":"KOULUTA_KAYTTAJAT","options":["TUNNUKSENHALTIJAT"]},{"type":"AIPAL_KAYTTAJAT","options":["TUNNUKSENHALTIJAT"]}],"terms":[{"type":"tutkintotoimikuntas","values":[]},{"type":"tutkintotoimikuntaRoolis","values":["PUHEENJOHTAJA","JASENET"]},{"type":"koulutaRoolis","values":[]},{"type":"aipalRoolis","values":[]},{"type":"organisaationKielis","values":[]},{"type":"avis","values":[]},{"type":"maakuntas","values":[]},{"type":"kuntas","values":[]},{"type":"oppilaitostyyppis","values":[]},{"type":"omistajatyyppis","values":[]},{"type":"vuosiluokkas","values":[]},{"type":"koultuksenjarjestajas","values":[]}]}
+        ));
     };
 
     this.deleteSearch = function(id, success) {
@@ -146,7 +174,31 @@ OsoiteKoostepalvelu.factory('SearchResultProvider', function(DummyResults) {
 OsoiteKoostepalvelu.service('OptionsService', function($log,
                                DummyAVIs, DummyMaakuntas, DummyKuntas,
                                DummyOppilaitostyyppis, DummyOmistajatyyppis,
-                               DummyVuosiluokkas, DummyKoulutuksenjarjestajas ) {
+                               DummyVuosiluokkas, DummyKoulutuksenjarjestajas,
+                               DummyTutkintotoimikuntas, TutkintotoimikuntaRoolis,
+                               DummyKoulutaRoolis, DummyAipalRoolis,
+                               DummyOrganisaatioKielis ) {
+
+    this.listTutkintotoimikuntas = function(success) {
+        success( DummyTutkintotoimikuntas );
+    };
+
+    this.listTutkintotoimikuntaRoolis = function(success) {
+        success( TutkintotoimikuntaRoolis );
+    };
+
+    this.listKoulutaRoolis = function(success) {
+        success( DummyKoulutaRoolis );
+    };
+
+    this.listAipalRoolis = function(success) {
+        success( DummyAipalRoolis );
+    };
+
+    this.listOrganisaationKielis = function(success) {
+        success( DummyOrganisaatioKielis );
+    };
+
     this.listAvis = function(success) {
         success( DummyAVIs );
     };

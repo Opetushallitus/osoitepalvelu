@@ -2,7 +2,10 @@
     <h3>{{msg.saves_popup_title}}</h3>
 </div>
 <div class="modal-body">
-    <table class="saveList">
+    <div class="noResults" ng-show="!saves.length">
+        {{msg.saves_popup_no_saves}}
+    </div>
+    <table class="saveList" ng-show="saves.length">
         <tr class="save" ng-repeat="save in saves">
             <td class="saveName">
                 {{save.name}}

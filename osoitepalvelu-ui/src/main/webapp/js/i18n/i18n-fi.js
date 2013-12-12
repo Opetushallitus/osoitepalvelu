@@ -7,9 +7,16 @@ angular.module("I18n", [], ["$provide", function($provider) {
         results_title : 'Osoitteet',
         saved_searches : 'Tallennetut haut',
 
+        confirm_yes: 'Kyllä',
+        confirm_no: 'Ei',
+
         // Saves popup:
         saves_popup_title: 'Tallennetut haut',
+        saves_popup_no_saves: 'Ei tallennettuja hakuja.',
         saves_popup_delete: 'poista',
+        saves_popup_delete_confirm_title: 'Haluatko varmasti poistaa tallenteen {0}?',
+        saves_popup_delete_confirm_yes: 'Poista',
+        saves_popup_delete_confirm_no: 'Peruuta',
         saves_popup_close: 'Sulje',
 
         select_all: 'Kaikki',
@@ -17,7 +24,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
 
         search_type: 'Haku',
         search_type_placeholder: 'Valitse mihin tarkoitukseen tarvitset yhteystietoja',
-        address_fields: 'Osoitteet',
+        address_fields: 'Esitettävät tiedot',
         address_field_organisaatio_nimi: 'Organisaation nimi',
         address_field_organisaatio_tunniste: 'Organisaatiotunniste',
         address_field_yhteyshenkilo: 'Yhteyshenkilö',
@@ -32,8 +39,12 @@ angular.module("I18n", [], ["$provide", function($provider) {
         address_field_kriisitiedotuksen_email: 'Kriisitiedotuksen sähköpostiosoite',
         address_field_organisaatio_sijaintikunta: 'Organisaation sijaintikunta',
         address_field_opasjakelumaarat: 'Opasjakelumäärät',
+        receiver_fields: 'Vastaanottaja',
+        receiver_field_organisaatio: 'Organisaatio',
+        receiver_field_yhteyshenkilo: 'Yhteyshenkilö',
 
         email_search_type: 'Sähköpostin lähetys',
+        send_letter_search_type: 'Kirjepostin lähetys',
         letter_search_type: 'Etsi kirjeosoitteet',
         contact_search_type: 'Hae yhteystietoja',
         search_action: 'Hae',
@@ -62,6 +73,11 @@ angular.module("I18n", [], ["$provide", function($provider) {
         target_group_option_tunnuksenhaltijat: 'tunnuksenhaltijat',
 
         search_terms: 'Rajaus',
+        search_term_organisaation_kieli: 'organisaation kieli',
+        search_term_tutkintotoimikunta: 'tutkintotoimikunta',
+        search_term_tutkintotoimikunta_rooli: 'rooli tutkintotoimikunnassa',
+        search_term_kouluta_rooli: 'KOULUTA-rooli',
+        search_term_aipal_rooli: 'AIPAL-rooli',
         search_term_avi: 'AVI',
         search_term_maakunta: 'maakunta',
         search_term_kunta: 'kunta',
@@ -87,12 +103,17 @@ angular.module("I18n", [], ["$provide", function($provider) {
         new_save_popup_title: 'Tallenna haku',
         new_save_popup_save_as: 'Tallenteen nimi',
         new_save_popup_save: 'Tallenna',
-        new_save_popup_cancel: 'Peruuta'
+        new_save_popup_cancel: 'Peruuta',
+        save_name_copy_ending: ' - Kopio',
+
+        overwrite_save_popup_title: 'Ylikirjoita haku {0}',
+        overwrite_save_popup_save: 'Ylikirjoita',
+        overwrite_save_popup_save_as: 'Tallenna nimellä'
     };
     values.format = function( key ) {
         var val = values[key];
         for( var i = 1; i < arguments.length; ++i ) {
-            var pattern = "\\{"+i+"\\}",
+            var pattern = "\\{"+(i-1)+"\\}",
                 re = new RegExp(pattern, "g");
             val = val.replace(re, arguments[i]);
         }

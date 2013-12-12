@@ -18,6 +18,7 @@ public class SearchTargetGroup implements Serializable {
         OPETUSPISTEET,
         OPPISOPIMUSTOIMPISTEET,
         MUUT_ORGANISAATIOT,
+        TUTKINTOTOIMIKUNNAT,
         KOULUTA_KAYTTAJAT,
         AIPAL_KAYTTAJAT;
     };
@@ -27,27 +28,22 @@ public class SearchTargetGroup implements Serializable {
         REHTORI,
         YHTEYSHENKILO,
         KRIISITIEDOTUS,
-        KOULUTUSNEVONTA;
-    }
+        KOULUTUSNEVONTA,
+        PUHEENJOHTAJA,
+        SIHTEERI,
+        JASENET,
+        TUNNUKSENHALTIJAT;
+    };
 
-    private GroupType group;
-    private boolean selected;
+    private GroupType type;
     private List<TargetType> options = new ArrayList<TargetType>();
 
-    public GroupType getGroup() {
-        return group;
+    public GroupType getType() {
+        return type;
     }
 
-    public void setGroup(GroupType group) {
-        this.group = group;
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
+    public void setType(GroupType type) {
+        this.type = type;
     }
 
     public List<TargetType> getOptions() {

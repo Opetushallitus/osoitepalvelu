@@ -1,8 +1,8 @@
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
-import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -20,6 +20,7 @@ import java.util.List;
 public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     public enum SaveType {
         EMAIL,
+        SEND_LETTER,
         LETTER,
         CONTACT;
     }
@@ -27,10 +28,12 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     @Id
     private Long id;
     private String name;
+    @Indexed
     private String ownerUsername;
-    private SaveType type;
+    private SaveType searchType;
     private DateTime createdAt=new DateTime();
     private List<String> addressFields = new ArrayList<String>();
+    private List<String> receiverFields = new ArrayList<String>();
     private List<SearchTargetGroup> targetGroups = new ArrayList<SearchTargetGroup>();
     private List<SearchTerm> terms = new ArrayList<SearchTerm>();
 
@@ -48,14 +51,6 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
 
     public void setOwnerUsername(String ownerUsername) {
         this.ownerUsername = ownerUsername;
-    }
-
-    public SaveType getType() {
-        return type;
-    }
-
-    public void setType(SaveType type) {
-        this.type = type;
     }
 
     public List<String> getAddressFields() {
@@ -96,6 +91,22 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
 
     public void setCreatedAt(DateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public SaveType getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(SaveType searchType) {
+        this.searchType = searchType;
+    }
+
+    public List<String> getReceiverFields() {
+        return receiverFields;
+    }
+
+    public void setReceiverFields(List<String> receiverFields) {
+        this.receiverFields = receiverFields;
     }
 
     @Override

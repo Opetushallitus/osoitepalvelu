@@ -63,7 +63,7 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     public long saveSearch(SavedSearchSaveDto dto) {
         SavedSearch search = dtoConverter.convert(dto, new SavedSearch());
         search.setOwnerUsername(getLoggedInUserUsername());
-        return savedSearchRepository.save(search).getId();
+        return savedSearchRepository.saveNew(search).getId();
     }
 
     @Override
@@ -71,5 +71,6 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     public void updateSavedSearch(SavedSearchEditDto dto) throws NotFoundException, AuthorizationException {
         SavedSearch save = found(savedSearchRepository.findOne(dto.getId()));
         dtoConverter.convert(dto, save);
+        savedSearchRepository.save(save);
     }
 }

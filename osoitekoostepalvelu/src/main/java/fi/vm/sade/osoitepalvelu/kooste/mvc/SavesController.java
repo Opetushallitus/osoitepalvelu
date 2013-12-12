@@ -35,9 +35,10 @@ public class SavesController extends AbstractMvcController {
         return savedSearchService.getSaveById(id);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
-    public void delete(@RequestParam long id) throws NotFoundException {
+    @RequestMapping(value="{id}", method = RequestMethod.DELETE)
+    public @ResponseBody String delete(@PathVariable("id") long id) throws NotFoundException {
         savedSearchService.deleteSavedSearch(id);
+        return "OK";
     }
 
     @RequestMapping(method = RequestMethod.PUT)
@@ -46,7 +47,8 @@ public class SavesController extends AbstractMvcController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void edit( @RequestBody SavedSearchEditDto dto ) throws NotFoundException {
+    public @ResponseBody String edit( @RequestBody SavedSearchEditDto dto ) throws NotFoundException {
         savedSearchService.updateSavedSearch(dto);
+        return "OK";
     }
 }

@@ -17,4 +17,6 @@ public interface SavedSearchRepository extends MongoRepository<SavedSearch, Long
 
     public List<SavedSearch> findByOwnerUsername(String ownerUsername, Sort order);
 
+    public SavedSearch saveNew(SavedSearch savedSearch);
+
 }

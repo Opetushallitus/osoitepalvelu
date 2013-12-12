@@ -1,5 +1,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
  * Time: 1:30 PM
  * To change this template use File | Settings | File Templates.
  */
+@DtoConversion
 public class SearchTermDto implements Serializable {
     private String type;
     private List<String> values = new ArrayList<String>();

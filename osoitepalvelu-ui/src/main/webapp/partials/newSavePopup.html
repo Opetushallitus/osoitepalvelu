@@ -1,10 +1,11 @@
 <div class="modal-header">
-    <h3>{{msg.format("new_save_popup_title",name)}}</h3>
+    <h3>{{msg.format("new_save_popup_title",save.name)}}</h3>
 </div>
 <div class="modal-body">
-    {{msg.new_save_popup_save_as}} <input ng-model="name" ng-required class="form-input" />
+    {{msg.new_save_popup_save_as}} <input ng-model="save.name" ng-required class="form-input" focus-on="dialogOpened"
+                                          select-all-on="dialogOpened" style="min-width:500px" />
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="save()" ng-disabled="!name">{{msg.new_save_popup_save}}</button>
-    <button class="btn btn-danger" ng-click="cancel()">{{msg.new_save_popup_cancel}}</button>
+    <button class="btn btn-primary" ng-click="saveAction()" ng-disabled="!save.name">{{msg.new_save_popup_save}}</button>
+    <button class="btn btn-lg" ng-click="cancel()">{{msg.new_save_popup_cancel}}</button>
 </div>

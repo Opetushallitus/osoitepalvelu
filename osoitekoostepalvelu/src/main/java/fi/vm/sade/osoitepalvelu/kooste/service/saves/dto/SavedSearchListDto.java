@@ -1,5 +1,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.ratamaa.dtoconverter.annotation.DtoNotExported;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * Time: 1:48 PM
  * To change this template use File | Settings | File Templates.
  */
+@DtoConversion
 @DtoNotExported
 public class SavedSearchListDto implements Serializable{
     private Long id;

@@ -25,6 +25,12 @@ angular.module('Helpers', [])
             return arr.indexOf(val[field]) == -1;
         }
     };
+    this.extractedFieldInArray = function(arr, field) {
+        return function(val) {
+            if( !arr ) return true;
+            return arr.indexOf(val[field]) != -1;
+        }
+    };
 })
 .directive('fullSizeGrid', ['$timeout', '$log', function ($timeout, $log) {
     $log.info("Directive called.");
@@ -49,5 +55,23 @@ angular.module('Helpers', [])
             $scope.$on('resultsloaded', resizeAction);
             $(window).resize( function() { return resizeAction(false); });
         }
+    };
+}])
+.directive('focusOn', ['$timeout', function($timeout) {
+    return function(scope, elem, attr) {
+        scope.$on(attr.focusOn, function(e) {
+            $timeout(function() {
+                elem[0].focus();
+            });
+        });
+    };
+}])
+.directive('selectAllOn', ['$timeout', function($timeout) {
+    return function(scope, elem, attr) {
+        scope.$on(attr.selectAllOn, function(e) {
+            $timeout(function() {
+                elem[0].select();
+            });
+        });
     };
 }]);

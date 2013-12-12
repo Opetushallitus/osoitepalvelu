@@ -2,7 +2,7 @@
  * Created by ratamaa on 12/3/13.
  */
 var SearchController = function($scope, i18n, $log, $modal, $location, $filter, SearchService,
-                                SearchTypes, AddressFields, TargetGroups,
+                                SearchTypes, TargetGroups, EmptyTerms,
                                 FilterHelper, SavesService, OptionsService) {
     $scope.msg = i18n;
 
@@ -13,25 +13,31 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     };
 
     var getCurrentSaveDetails = function() {
+        var selectedSave = $filter('filter')($scope.saves, {id: $scope.selectedSavedSearch})[0];
         return {
+            id: selectedSave ? selectedSave.id : null,
+            name: selectedSave ? selectedSave.name : null,
             terms: $scope.terms,
-            targetGroup: $scope.visibleTargetGroups,
-            type: $scope.searchType,
-            addressFields: $scope.addressFields
+            targetGroups: $scope.visibleTargetGroups,
+            searchType: $scope.searchType,
+            addressFields: $scope.addressFields,
+            receiverFields: $scope.receiverFields
         };
     };
 
-    $scope.updateTerms = function() {
-        $log.info("CLEAR");
-        $scope.saves = [];
-        updateSaves();
+    $scope.saves = [];
+    updateSaves();
+    $scope.selectedSavedSearch = null;
 
-        $scope.selectedSavedSearch = null;
+    $scope.updateTerms = function() {
+        $log.info("Update search terms");
 
         $scope.searchTypes = SearchTypes;
         $scope.searchType = SearchService.getSearchType();
 
         $scope.addressFields = SearchService.getAddressFields();
+
+        $scope.receiverFields = SearchService.getReceiverFields();
 
         $scope.targetGroups = TargetGroups;
         $scope.selectedTargetGroup = null;
@@ -42,15 +48,12 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         } );
         $scope.showExtraTerms = false;
 
-        $scope.options = {
-            avis: [],
-            maakuntas : [],
-            kuntas : [],
-            oppilaitostyyppis: [],
-            omistajatyyppis: [],
-            vuosiluokkas: [],
-            koultuksenjarjestajas: []
-        };
+        $scope.options = angular.copy(EmptyTerms);
+        OptionsService.listTutkintotoimikuntas(function(data) { $scope.options.tutkintotoimikuntas = data; });
+        OptionsService.listTutkintotoimikuntaRoolis(function(data) { $scope.options.tutkintotoimikuntaRoolis = data; });
+        OptionsService.listKoulutaRoolis(function(data) { $scope.options.koulutaRoolis = data; });
+        OptionsService.listAipalRoolis(function(data) { $scope.options.aipalRoolis = data; });
+        OptionsService.listOrganisaationKielis(function(data) { $scope.options.organisaationKielis = data; });
         OptionsService.listAvis(function(data) { $scope.options.avis = data; });
         OptionsService.listMaakuntas(function(data) { $scope.options.maakuntas = data; });
         OptionsService.listKuntas(function(data) { $scope.options.kuntas = data; });
@@ -66,17 +69,44 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     $scope.updateTerms();
 
     $scope.clear = function() {
+        $log.info("CLEAR");
         SearchService.clear();
         $scope.updateTerms();
-    }
+        $scope.selectedSavedSearch = null;
+    };
 
     $scope.toggleShowMore = function() {
         $scope.showExtraTerms = !$scope.showExtraTerms;
     };
 
+    $scope.isShowTutkintotoimikuntaTerm = function() {
+        return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1;
+    };
+
+    $scope.isShowTutkintotoimikuntaRooliTerm = function() {
+        return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1;
+    };
+
+    $scope.isShowKoulutaTerm = function() {
+        return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') != -1;
+    };
+
+    $scope.isShowAipalTerm = function() {
+        return $scope.selectedTargetGroupTypes.indexOf('AIPAL_KAYTTAJAT') != -1;
+    };
+
     $scope.handleSaveSelected = function() {
-        $log.info("Selected save: " + $scope.selectedSavedSearch);
-        // TODO: REST call an update search terms
+        if( $scope.selectedSavedSearch ) {
+            var selected = angular.copy($scope.selectedSavedSearch);
+            $log.info("Selected save: " + selected);
+            SavesService.getSearch($scope.selectedSavedSearch, function(save) {
+                SearchService.updateSearchType(save.searchType, save.addressFields, save.receiverFields);
+                SearchService.updateTargetGroups(save.targetGroups);
+                SearchService.updateTerms(save.terms);
+                $scope.updateTerms();
+                $scope.selectedSavedSearch = selected;
+            });
+        }
     };
 
     $scope.nonSelectedByField = FilterHelper.extractedFieldNotInArray;
@@ -85,8 +115,12 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         $log.info("Target gorup selection changed to: "+$scope.selectedTargetGroup);
         if( $scope.selectedTargetGroup ) {
             $scope.selectedTargetGroupTypes.push($scope.selectedTargetGroup);
-            $scope.visibleTargetGroups.push( angular.copy(
-                $filter('filter')($scope.targetGroups, {type: $scope.selectedTargetGroup})[0]) );
+            var newGroup = angular.copy(
+                $filter('filter')($scope.targetGroups, {type: $scope.selectedTargetGroup})[0]);
+            if( newGroup.options.length == 1 ) {
+                newGroup.options[0].selected=true;
+            }
+            $scope.visibleTargetGroups.push( newGroup );
         }
     };
     $scope.removeTargetGroup = function(i) {
@@ -116,22 +150,29 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     };
 
     $scope.saveSearch = function() {
-        $log.info("Show new save search popup.");
-        var modalInstance = $modal.open({
-            templateUrl: 'partials/newSavePopup.html',
-            controller: NewSavePopupController,
-            resolve: {
-                save: getCurrentSaveDetails
-            }
-        });
+        $log.info("Show save popup.");
+
+        var modalInstance = null;
+        if( $scope.selectedSavedSearch ) {
+            modalInstance = $modal.open({
+                templateUrl: 'partials/overwriteSavePopup.html',
+                controller: NewSavePopupController,
+                resolve: {save: getCurrentSaveDetails}
+            });
+        } else {
+            modalInstance = $modal.open({
+                templateUrl: 'partials/newSavePopup.html',
+                controller: NewSavePopupController,
+                resolve: {save: getCurrentSaveDetails}
+            });
+        }
         modalInstance.result.then(function () {
             updateSaves();
-        }, function () {
-        });
+        }, function () {});
     };
 
     $scope.search = function() {
-        SearchService.updateSearchType($scope.searchType, $scope.addressFields);
+        SearchService.updateSearchType($scope.searchType, $scope.addressFields, $scope.receiverFields);
         SearchService.updateTargetGroups($scope.visibleTargetGroups);
         SearchService.updateTerms($scope.terms);
         $location.path("/results");

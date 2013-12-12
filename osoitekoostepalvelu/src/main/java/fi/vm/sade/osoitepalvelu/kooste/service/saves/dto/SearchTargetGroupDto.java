@@ -1,6 +1,8 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.ratamaa.dtoconverter.annotation.DtoConverted;
+import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,51 +15,24 @@ import java.util.List;
  * Time: 1:34 PM
  * To change this template use File | Settings | File Templates.
  */
-@DtoConverted
+@DtoConversion
 public class SearchTargetGroupDto implements Serializable {
-    public enum GroupType {
-        JARJESTAJAT_YLLAPITAJAT,
-        OPPILAITOKSET,
-        OPETUSPISTEET,
-        OPPISOPIMUSTOIMPISTEET,
-        MUUT_ORGANISAATIOT,
-        KOULUTA_KAYTTAJAT,
-        AIPAL_KAYTTAJAT;
-    };
+    private SearchTargetGroup.GroupType type;
+    private List<SearchTargetGroup.TargetType> options = new ArrayList<SearchTargetGroup.TargetType>();
 
-    public enum TargetType {
-        ORGANISAATIO,
-        REHTORI,
-        YHTEYSHENKILO,
-        KRIISITIEDOTUS,
-        KOULUTUSNEVONTA;
+    public SearchTargetGroup.GroupType getType() {
+        return type;
     }
 
-    private GroupType group;
-    private boolean selected;
-    private List<TargetType> options = new ArrayList<TargetType>();
-
-    public GroupType getGroup() {
-        return group;
+    public void setType(SearchTargetGroup.GroupType type) {
+        this.type = type;
     }
 
-    public void setGroup(GroupType group) {
-        this.group = group;
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-
-    public List<TargetType> getOptions() {
+    public List<SearchTargetGroup.TargetType> getOptions() {
         return options;
     }
 
-    public void setOptions(List<TargetType> options) {
+    public void setOptions(List<SearchTargetGroup.TargetType> options) {
         this.options = options;
     }
 }
