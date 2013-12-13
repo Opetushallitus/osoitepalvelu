@@ -1,7 +1,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
-import fi.ratamaa.dtoconverter.annotation.DtoConverted;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 
 import java.io.Serializable;

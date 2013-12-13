@@ -3,12 +3,21 @@ package fi.vm.sade.osoitepalvelu.service.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.LocalDate;
+
+import fi.vm.sade.osoitepalvelu.helpers.KoodistoDateHelper;
+
 public class KoodiDto {
 	private String koodiUri;
-	private long versio;
+	private long versio;				// Koodin versio
 	private String koodiArvo;
 	// Koodiston tyyppi
-	private KoodistoDto koodisto;	
+	private KoodistoDto koodisto;
+	
+	private LocalDate voimassaAlkuPvm;
+	private LocalDate voimassaLoppuPvm;	
+	private KoodistoTila tila;
+	
 	// Todellinen koodin data: Sisältää useita arvoja eri lokaaleille
 	private List<KoodiArvoDto> metadata = new ArrayList<KoodiArvoDto>();
 
@@ -59,5 +68,33 @@ public class KoodiDto {
 			}
 		}
 		return null;
+	}
+
+	public LocalDate getVoimassaAlkuPvm() {
+		return voimassaAlkuPvm;
+	}
+
+	public void setVoimassaAlkuPvm(LocalDate voimassaAlkuPvm) {
+		this.voimassaAlkuPvm = voimassaAlkuPvm;
+	}
+
+	public LocalDate getVoimassaLoppuPvm() {
+		return voimassaLoppuPvm;
+	}
+
+	public void setVoimassaLoppuPvm(LocalDate voimassaLoppuPvm) {
+		this.voimassaLoppuPvm = voimassaLoppuPvm;
+	}
+
+	public KoodistoTila getTila() {
+		return tila;
+	}
+
+	public void setTila(KoodistoTila tila) {
+		this.tila = tila;
+	}
+	
+	public boolean isVoimassaPvm(LocalDate pvm) {
+		return KoodistoDateHelper.isPaivaVoimassaValilla(pvm, voimassaAlkuPvm, voimassaLoppuPvm);
 	}
 }

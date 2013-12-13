@@ -24,7 +24,7 @@ OsoiteKoostepalvelu.service('OptionsService', function($log, TutkintotoimikuntaR
     };
 
     this.listOrganisaationKielis = function(success) {
-        // TODO:
+    	// TODO:
         success( [] );
     };
 

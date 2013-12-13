@@ -10,7 +10,7 @@ import fi.vm.sade.osoitepalvelu.service.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.service.dto.UiKoodiItemDto;
 
 @Component
-public class KoodistoDtoConverter {		
+public class KoodistoDtoConverter {
 	
 	public UiKoodiItemDto convert(KoodiDto koodi, Locale lokaali, UiKoodiItemDto uiKoodi) {
 		uiKoodi.setKoodiId(koodi.getKoodiArvo());

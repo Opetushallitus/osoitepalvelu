@@ -13,7 +13,6 @@ import fi.vm.sade.osoitepalvelu.service.dto.OrganisaatioOid;
 
 /**
  * Service, jonka kautta haetaan organisaatioita.
- * Komponentti, koska transaktionaalisuutta ei tarvita Camel-toteutuksen ansiosta.
  */
 @Service
 public class DefaultOrganisaatioService implements OrganisaatioService {
