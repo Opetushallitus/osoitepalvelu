@@ -2,7 +2,7 @@
  * Created by ratamaa on 12/4/13.
  */
 
-OsoiteKoostepalvelu.service('OptionsService', function($log, TutkintotoimikuntaRoolis) {
+OsoiteKoostepalvelu.service('OptionsService', function($log, $http, TutkintotoimikuntaRoolis) {
 
     this.listTutkintotoimikuntas = function(success) {
         // TODO:
@@ -24,42 +24,34 @@ OsoiteKoostepalvelu.service('OptionsService', function($log, TutkintotoimikuntaR
     };
 
     this.listOrganisaationKielis = function(success) {
-    	// TODO:
-        success( [] );
+    	 $http.get('api/koodisto/opetuskieli').success(success);
     };
 
     this.listAvis = function(success) {
-        // TODO:
-        success( [] );
+    	$http.get('api/koodisto/avi').success(success);
     };
 
     this.listMaakuntas = function(success) {
-        // TODO:
-        success( [] );
+    	$http.get('api/koodisto/maakunta').success(success);
     };
 
     this.listKuntas = function(success) {
-        // TODO:
-        success( [] );
+    	$http.get('api/koodisto/kunta').success(success);
     };
 
     this.listOppilaitostyyppis = function(success) {
-        // TODO:
-        success( [] );
+    	$http.get('api/koodisto/oppilaitostyyppi').success(success);
     };
 
     this.listOmistajatyyppis = function(success) {
-        // TODO:
-        success( [] );
+    	$http.get('api/koodisto/omistajatyyppi').success(success);
     };
 
     this.listVuosiluokkas = function(success) {
-        // TODO:
-        success( [] );
+    	$http.get('api/koodisto/vuosiluokka').success(success);
     };
 
     this.listKoultuksenjarjestajas = function(success) {
-        // TODO:
-        success( [] );
+    	$http.get('api/koodisto/koulutuksenjarjestaja').success(success);
     };
 });
