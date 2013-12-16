@@ -1,7 +1,6 @@
 package fi.vm.sade.osoitepalvelu.kooste;
 
 import fi.vm.sade.osoitepalvelu.kooste.mvc.SavesController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

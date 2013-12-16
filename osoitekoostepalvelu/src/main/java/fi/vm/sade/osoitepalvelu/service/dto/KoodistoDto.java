@@ -14,9 +14,15 @@ public class KoodistoDto {
 		MAAKUNTA("maakunta"),
 		KUNTA("kunta"),
 		TUTKINTOTYYPPI("tutkintotyyppi"),
-		TUTKINTO("tutkinto");
+		TUTKINTO("tutkinto"),
+		OPPILAITOKSEN_OPETUSKIELI("oppilaitoksenopetuskieli"),
+		KOULUTUS_KIELIVALIKOIMA("kielivalikoima"),	// Koulutuksen kieli
+		KOULUTUSASTEKELA("koulutusastekela"),		// Koulutusaste		
+		KOULUTUSTOIMIJA("koulutustoimija"),			// Koulutuksen järjestäjä 
+		OPINTOALAOPH2002("opintoalaoph2002"),		// Koulutus ja Opintoala
+		ALUEHALLINTOVIRASTO("aluehallintovirasto");	// AluehallintoVIrasto (AVI)
 		
-		private String uri;
+		private String uri;							// Koodiston URI
 		
 		// Cache, jolla merkkijonot voidaan nopeasti mapata KoodistoTyypeiksi
 		private static Map<String, KoodistoTyyppi> uriToTypeMapper = new HashMap<String, KoodistoTyyppi>() {
@@ -29,6 +35,12 @@ public class KoodistoDto {
 				put(KUNTA.getUri(), KUNTA);
 				put(TUTKINTOTYYPPI.getUri(), TUTKINTOTYYPPI);
 				put(TUTKINTO.getUri(), TUTKINTO);
+				put(OPPILAITOKSEN_OPETUSKIELI.getUri(), OPPILAITOKSEN_OPETUSKIELI);
+				put(KOULUTUS_KIELIVALIKOIMA.getUri(), KOULUTUS_KIELIVALIKOIMA);
+				put(KOULUTUSASTEKELA.getUri(), KOULUTUSASTEKELA);
+				put(KOULUTUSTOIMIJA.getUri(), KOULUTUSTOIMIJA);
+				put(OPINTOALAOPH2002.getUri(), OPINTOALAOPH2002);
+				put(ALUEHALLINTOVIRASTO.getUri(), ALUEHALLINTOVIRASTO);
 			}
 		};
 		
@@ -43,7 +55,7 @@ public class KoodistoDto {
 		public static KoodistoTyyppi parseTyyppi(String koodistoTyyppi) {
 			KoodistoTyyppi tyyppi = uriToTypeMapper.get(koodistoTyyppi);
 			if (tyyppi == null) {
-				throw new IllegalStateException("Virhe: Tuntematon koodistotyyppi: " + koodistoTyyppi);
+				throw new IllegalStateException("Virhe: Merkkijono->Enum mappaus: Tuntematon koodistotyyppi: " + koodistoTyyppi);
 			}
 			return tyyppi;
 		}

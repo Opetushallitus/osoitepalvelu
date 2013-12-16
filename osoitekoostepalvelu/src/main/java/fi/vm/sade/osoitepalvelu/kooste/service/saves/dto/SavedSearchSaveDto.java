@@ -1,11 +1,8 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
-import fi.ratamaa.dtoconverter.annotation.DtoConverted;
-import fi.ratamaa.dtoconverter.annotation.DtoExported;
 import fi.ratamaa.dtoconverter.annotation.DtoNotImported;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
-import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;

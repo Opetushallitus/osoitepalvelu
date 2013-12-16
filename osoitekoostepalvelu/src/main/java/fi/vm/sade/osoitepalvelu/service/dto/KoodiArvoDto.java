@@ -1,15 +1,11 @@
 package fi.vm.sade.osoitepalvelu.service.dto;
 
-import org.joda.time.LocalDate;
-
 public class KoodiArvoDto {
 	private String nimi;
 	private String kuvaus;
 	private String lyhytNimi;
 	private String kieli;
-	private LocalDate voimassaAlkuPvm;
-	private LocalDate voimassaLoppuPvm;
-
+	
 	public String getNimi() {
 		return nimi;
 	}
@@ -40,22 +36,6 @@ public class KoodiArvoDto {
 
 	public void setKieli(String kieli) {
 		this.kieli = kieli;
-	}
-
-	public LocalDate getVoimassaAlkuPvm() {
-		return voimassaAlkuPvm;
-	}
-
-	public void setVoimassaAlkuPvm(LocalDate voimassaAlkuPvm) {
-		this.voimassaAlkuPvm = voimassaAlkuPvm;
-	}
-
-	public LocalDate getVoimassaLoppuPvm() {
-		return voimassaLoppuPvm;
-	}
-
-	public void setVoimassaLoppuPvm(LocalDate voimassaLoppuPvm) {
-		this.voimassaLoppuPvm = voimassaLoppuPvm;
 	}
 	
 	@Override
