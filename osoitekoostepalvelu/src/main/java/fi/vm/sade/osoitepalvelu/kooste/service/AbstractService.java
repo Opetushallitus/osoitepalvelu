@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public abstract class AbstractService {
 
-    protected String getLoggedInUserUsername() {
+    protected String getLoggedInUserOid() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth.getName();
     }
@@ -28,7 +28,7 @@ public abstract class AbstractService {
     }
 
     protected void ensureLoggedInUser(String ownerUsername) {
-        if( !EqualsHelper.equals(ownerUsername, getLoggedInUserUsername())) {
+        if( !EqualsHelper.equals(ownerUsername, getLoggedInUserOid())) {
             throw new AuthorizationException("Authenticated user does not have access right to given entity.");
         }
     }

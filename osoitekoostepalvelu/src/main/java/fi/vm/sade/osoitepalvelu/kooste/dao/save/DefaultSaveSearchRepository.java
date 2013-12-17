@@ -37,7 +37,7 @@ public class DefaultSaveSearchRepository extends SimpleMongoRepository<SavedSear
 
     @Override
     public List<SavedSearch> findByOwnerUsername(String ownerUsername, Sort order) {
-        Criteria criteria = new Criteria().where("ownerUsername").is(ownerUsername);
+        Criteria criteria = new Criteria().where("ownerUserOid").is(ownerUsername);
         return getMongoOperations().find(Query.query(criteria).with(order), SavedSearch.class);
     }
 

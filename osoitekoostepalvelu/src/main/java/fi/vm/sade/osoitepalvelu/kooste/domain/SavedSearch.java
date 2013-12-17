@@ -29,7 +29,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     private Long id;
     private String name;
     @Indexed
-    private String ownerUsername;
+    private String ownerUserOid;
     private SaveType searchType;
     private DateTime createdAt=new DateTime();
     private List<String> addressFields = new ArrayList<String>();
@@ -45,12 +45,12 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
         this.id = id;
     }
 
-    public String getOwnerUsername() {
-        return ownerUsername;
+    public String getOwnerUserOid() {
+        return ownerUserOid;
     }
 
-    public void setOwnerUsername(String ownerUsername) {
-        this.ownerUsername = ownerUsername;
+    public void setOwnerUserOid(String ownerUserOid) {
+        this.ownerUserOid = ownerUserOid;
     }
 
     public List<String> getAddressFields() {

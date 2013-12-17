@@ -2,6 +2,7 @@ package fi.vm.sade.osoitepalvelu.reitit;
 
 import java.util.List;
 
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.route.KoodistoReitti;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,9 +11,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import fi.vm.sade.osoitepalvelu.kooste.SpringApp;
-import fi.vm.sade.osoitepalvelu.service.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.service.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.service.dto.KoodistoVersioDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoVersioDto;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=SpringApp.class)

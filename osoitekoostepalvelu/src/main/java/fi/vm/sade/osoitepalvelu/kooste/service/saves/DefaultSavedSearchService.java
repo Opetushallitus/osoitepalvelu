@@ -37,7 +37,7 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     @Override
     @Transactional(readOnly = true)
     public List<SavedSearchListDto> findSavedSearchesForLoggedInUser() {
-        return dtoConverter.convert(savedSearchRepository.findByOwnerUsername(getLoggedInUserUsername(),
+        return dtoConverter.convert(savedSearchRepository.findByOwnerUsername(getLoggedInUserOid(),
                         new Sort(Sort.Direction.ASC, "name")),
                 new ArrayList<SavedSearchListDto>(), SavedSearchListDto.class);
     }
@@ -46,7 +46,7 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     @Transactional(readOnly = true)
     public SavedSearchViewDto getSaveById(long id) throws NotFoundException, AuthorizationException {
         SavedSearch save = found(savedSearchRepository.findOne(id));
-        ensureLoggedInUser(save.getOwnerUsername());
+        ensureLoggedInUser(save.getOwnerUserOid());
         return dtoConverter.convert(save, new SavedSearchViewDto());
     }
 
@@ -54,7 +54,7 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     @Transactional
     public void deleteSavedSearch(long id) throws NotFoundException, AuthorizationException {
         SavedSearch save = found(savedSearchRepository.findOne(id));
-        ensureLoggedInUser(save.getOwnerUsername());
+        ensureLoggedInUser(save.getOwnerUserOid());
         savedSearchRepository.delete(id);
     }
 
@@ -62,7 +62,7 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     @Transactional
     public long saveSearch(SavedSearchSaveDto dto) {
         SavedSearch search = dtoConverter.convert(dto, new SavedSearch());
-        search.setOwnerUsername(getLoggedInUserUsername());
+        search.setOwnerUserOid(getLoggedInUserOid());
         return savedSearchRepository.saveNew(search).getId();
     }
 

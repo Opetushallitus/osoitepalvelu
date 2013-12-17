@@ -60,44 +60,5 @@
     </http:conduit>
 
     <bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
-    
-    <jaxrs:client id="OrganisaatioResourceClient"
-                  address="${valintalaskentakoostepalvelu.organisaatioService.rest.url}"
-                  serviceClass="fi.vm.sade.osoitepalvelu.kooste.organisaatio.OrganisaatioResource"
-                  inheritHeaders="true">
-        <jaxrs:outInterceptors>
-            <ref bean="ticketInterceptorRest"/>
-        </jaxrs:outInterceptors>
-        <jaxrs:providers>
-            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
-            <bean class="fi.vm.sade.osoitepalvelu.kooste.ObjectMapperProvider" />
-        </jaxrs:providers>
-    </jaxrs:client>
-    
-    <!--  
-    <jaxrs:client id="KoodistoResourceClient"
-                  address="${valintalaskentakoostepalvelu.koodiService.rest.url}"
-                  serviceClass="fi.vm.sade.osoitepalvelu.kooste.KoodistoResource"
-                  inheritHeaders="true">
-        <jaxrs:outInterceptors>
-            <ref bean="ticketInterceptorRest"/>
-        </jaxrs:outInterceptors>
-        <jaxrs:providers>
-            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
-            <bean class="fi.vm.sade.valinta.kooste.ObjectMapperProvider" />
-        </jaxrs:providers>
-    </jaxrs:client>
-	-->
-	<!--  konffataan jatkossa Javassa
-	<bean id="redeliveryPolicy" class="org.apache.camel.processor.RedeliveryPolicy">
-		<property name="maximumRedeliveries" value="5" />
-		<property name="redeliveryDelay" value="25" />
-		<property name="retryAttemptedLogLevel" value="ERROR" />
-	</bean>
-	-->
-	
-	<!--
-	<beans:import resource="classpath:META-INF/spring/context/valintatieto-context.xml"/>
-   -->
-	
+
 </beans>

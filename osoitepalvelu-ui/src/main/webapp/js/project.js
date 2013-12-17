@@ -14,7 +14,7 @@ OsoiteKoostepalvelu.config(function($routeProvider) {
 .factory('SearchTypes', function(i18n) {
     return [
         {type: 'EMAIL',         name: i18n.email_search_type},
-        {type: 'SEND_LETTER',   name: i18n.send_letter_search_type},
+        /*{type: 'SEND_LETTER',   name: i18n.send_letter_search_type},*/
         {type: 'LETTER',        name: i18n.letter_search_type},
         {type: 'CONTACT',       name: i18n.contact_search_type}
     ];

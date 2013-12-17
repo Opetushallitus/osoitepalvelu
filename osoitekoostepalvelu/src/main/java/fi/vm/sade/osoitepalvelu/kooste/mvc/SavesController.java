@@ -1,5 +1,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
+import com.wordnik.swagger.annotations.Api;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.SavedSearchService;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SavedSearchEditDto;
@@ -19,6 +20,7 @@ import java.util.List;
  * Time: 2:32 PM
  * To change this template use File | Settings | File Templates.
  */
+@Api("Tallennetut haut")
 @Controller
 @RequestMapping(value = "/saves")
 public class SavesController extends AbstractMvcController {
