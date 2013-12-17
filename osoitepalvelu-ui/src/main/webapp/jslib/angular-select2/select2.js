@@ -43,7 +43,7 @@ angular.module('ui.select2', ['I18n']).value('uiSelect2Config', {}).directive('u
               selectAllText = i18n.select_all,
               selectNoneText = i18n.select_none;
           if( $field.attr("multiple") !== undefined
-                    && $field.attr("data-disable-selectall") === undefined
+                    && !( $field.attr("data-disable-selectall") !== undefined && $field.attr("data-disable-selectnone") !== undefined )
                     && optionsCount >= showBtnsTresshold ) {
               var selectAllEl = document.createElement("a"),
                   selectAllElContainer = contained(selectAllEl),
@@ -58,8 +58,12 @@ angular.module('ui.select2', ['I18n']).value('uiSelect2Config', {}).directive('u
                   $selectNoneElContainer = $(selectNoneElContainer);
               $selectNoneElContainer.addClass("ui-select2-selectNoneBtnContainer");
               $selectAllElContainer.addClass("ui-select2-selectAllBtnContainer");
-              $dropdown.prepend(selectNoneElContainer);
-              $dropdown.prepend(selectAllElContainer);
+              if( $field.attr("data-disable-selectnone") === undefined ) {
+                  $dropdown.prepend(selectNoneElContainer);
+              }
+              if( $field.attr("data-disable-selectall") === undefined ) {
+                  $dropdown.prepend(selectAllElContainer);
+              }
               var reservedSpacePerComp = (width - 25) / 2;
               $selectNoneElContainer.css("float", "right").css("padding", "5px 8px 5px 0px")
                   .css("max-width", reservedSpacePerComp+"px")

@@ -13,91 +13,91 @@ OsoiteKoostepalvelu.factory('DummySaves', function() {
 
 OsoiteKoostepalvelu.factory("DummyTutkintotoimikuntas", function() {
     return [
-        {id: 1544854, name:'Ajoneuvonosturinkuljettajan tutkintotoimikunta'},
-        {id: 1544855, name:'Examenskommissionen inom företagarbranschen och töretagsekonomi'}
+        {koodiId: 1544854, nimi:'Ajoneuvonosturinkuljettajan tutkintotoimikunta'},
+        {koodiId: 1544855, nimi:'Examenskommissionen inom företagarbranschen och töretagsekonomi'}
     ];
 });
 
 OsoiteKoostepalvelu.factory("DummyKoulutaRoolis", function() {
     return [
-        {id: 1, name:'ARVOSANAPAIV'},
-        {id: 2, name:'HAKEMUSTIETALLENTAJA'}
+        {koodiId: 1, nimi:'ARVOSANAPAIV'},
+        {koodiId: 2, nimi:'HAKEMUSTIETALLENTAJA'}
     ];
 });
 OsoiteKoostepalvelu.factory("DummyAipalRoolis", function() {
     return [
-        {id: 1, name:'AIPAL-koulutuksen/tutkinnon järjestäjän käyttäjä'}
+        {koodiId: 1, nimi:'AIPAL-koulutuksen/tutkinnon järjestäjän käyttäjä'}
     ];
 });
 OsoiteKoostepalvelu.factory("DummyOrganisaatioKielis", function() {
     return [
-        {code: 'fi', name:'suomi'},
-        {code: 'sv', name:'ruotsi'},
-        {code: 'en', name:'englanti'}
+        {code: 'fi', nimi:'suomi'},
+        {code: 'sv', nimi:'ruotsi'},
+        {code: 'en', nimi:'englanti'}
     ];
 });
 OsoiteKoostepalvelu.factory('DummyAVIs', function() {
     return [
-        {id: 232323, name: 'Kaikki alueet paitsi Ahvenanmaa'},
-        {id: 123154, name: 'Etelä-Suomen AVI'},
-        {id: 123155, name: 'Lapin AVI'}
+        {koodiId: 232323, nimi: 'Kaikki alueet paitsi Ahvenanmaa'},
+        {koodiId: 123154, nimi: 'Etelä-Suomen AVI'},
+        {koodiId: 123155, nimi: 'Lapin AVI'}
     ];
 });
 OsoiteKoostepalvelu.factory('DummyMaakuntas', function() {
     return [
-        {id: 123153, name: 'Ahvenanmaa'},
-        {id: 123155, name: 'Pirkanmaa'},
-        {id: 123154, name: 'Pohjois-Karjala'},
-        {id: 232323, name: 'Uusimaa'}
+        {koodiId: 123153, nimi: 'Ahvenanmaa'},
+        {koodiId: 123155, nimi: 'Pirkanmaa'},
+        {koodiId: 123154, nimi: 'Pohjois-Karjala'},
+        {koodiId: 232323, nimi: 'Uusimaa'}
     ];
 });
 OsoiteKoostepalvelu.factory('DummyKuntas', function() {
     return [
-        {id: 456, name: 'Espoo'},
-        {id: 123, name: 'Helsinki'},
-        {id: 485, name: 'Jyväskylä'},
-        {id: 789, name: 'Tampere'},
-        {id: 789, name: 'Turku'},
-        {id: 790, name: 'Seinäjöki'},
-        {id: 484, name: 'Oulu'}
+        {koodiId: 456, nimi: 'Espoo'},
+        {koodiId: 123, nimi: 'Helsinki'},
+        {koodiId: 485, nimi: 'Jyväskylä'},
+        {koodiId: 789, nimi: 'Tampere'},
+        {koodiId: 789, nimi: 'Turku'},
+        {koodiId: 790, nimi: 'Seinäjöki'},
+        {koodiId: 484, nimi: 'Oulu'}
     ];
 });
 OsoiteKoostepalvelu.factory('DummyOppilaitostyyppis', function() {
     return [
-        {id: 1, name: 'Ammattikorkeakoulut'},
-        {id: 2, name: 'Kesäyliopistot'},
-        {id: 3, name: 'Lukiot'}
+        {koodiId: 1, nimi: 'Ammattikorkeakoulut'},
+        {koodiId: 2, nimi: 'Kesäyliopistot'},
+        {koodiId: 3, nimi: 'Lukiot'}
     ];
 });
 OsoiteKoostepalvelu.factory('DummyOmistajatyyppis', function() {
     return [
-        {id: 1, name: 'Ahvenanmaa'},
-        {id: 2, name: 'Kunta'},
-        {id: 3, name: 'Kuntaryhmä'},
-        {id: 4, name: 'Ohjeistajatyyppi tuntematon'},
-        {id: 5, name: 'Valtio'},
-        {id: 6, name: 'Yksityinen'}
+        {koodiId: 1, nimi: 'Ahvenanmaa'},
+        {koodiId: 2, nimi: 'Kunta'},
+        {koodiId: 3, nimi: 'Kuntaryhmä'},
+        {koodiId: 4, nimi: 'Ohjeistajatyyppi tuntematon'},
+        {koodiId: 5, nimi: 'Valtio'},
+        {koodiId: 6, nimi: 'Yksityinen'}
     ];
 });
 OsoiteKoostepalvelu.factory('DummyVuosiluokkas', function() {
     return [
-        {id: 1, name: 'esiopetus'},
-        {id: 2, name: 'vuosiluokka 1'},
-        {id: 3, name: 'vuosiluokka 2'},
-        {id: 4, name: 'vuosiluokka 3'},
-        {id: 5, name: 'vuosiluokka 4'},
-        {id: 6, name: 'vuosiluokka 5'},
-        {id: 7, name: 'vuosiluokka 6'},
-        {id: 8, name: 'vuosiluokka 7'},
-        {id: 9, name: 'vuosiluokka 8'},
-        {id: 10, name: 'vuosiluokka 9'}
+        {koodiId: 1, nimi: 'esiopetus'},
+        {koodiId: 2, nimi: 'vuosiluokka 1'},
+        {koodiId: 3, nimi: 'vuosiluokka 2'},
+        {koodiId: 4, nimi: 'vuosiluokka 3'},
+        {koodiId: 5, nimi: 'vuosiluokka 4'},
+        {koodiId: 6, nimi: 'vuosiluokka 5'},
+        {koodiId: 7, nimi: 'vuosiluokka 6'},
+        {koodiId: 8, nimi: 'vuosiluokka 7'},
+        {koodiId: 9, nimi: 'vuosiluokka 8'},
+        {koodiId: 10, nimi: 'vuosiluokka 9'}
     ];
 });
 OsoiteKoostepalvelu.factory('DummyKoulutuksenjarjestajas', function() {
     return [
-        {id: 1, name: 'Helsingin kaupunki'},
-        {id: 2, name: 'Helsingin Konservatorion Säätiö'},
-        {id: 3, name: 'Helsingin normaalilyseo'}
+        {koodiId: 1, nimi: 'Helsingin kaupunki'},
+        {koodiId: 2, nimi: 'Helsingin Konservatorion Säätiö'},
+        {koodiId: 3, nimi: 'Helsingin normaalilyseo'}
     ];
 });
 

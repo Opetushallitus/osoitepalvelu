@@ -136,7 +136,7 @@
                     </select>
                 </div>
                 <div class="term">
-                    <select ui-select2 multiple id="kunta" class="form-control" ng-model="terms.kuntas" data-placeholder="{{msg.search_term_kunta}}">
+                    <select ui-select2 multiple data-disable-selectall id="kunta" class="form-control" ng-model="terms.kuntas" data-placeholder="{{msg.search_term_kunta}}">
                         <option ng-repeat="opt in options.kuntas" value="{{opt.koodiId}}">{{opt.nimi}}</option>
                     </select>
                 </div>
