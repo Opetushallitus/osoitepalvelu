@@ -2,7 +2,7 @@ package fi.vm.sade.osoitepalvelu.kooste.search.api;
 
 import java.io.Serializable;
 
-public class OrganisaatioSearchKeyDto implements Serializable, Comparable<OrganisaatioSearchKeyDto> {
+public class SearchKeyDto implements Serializable, Comparable<SearchKeyDto> {
 
     private static final long serialVersionUID = -7866357718772030725L;
     
@@ -10,10 +10,10 @@ public class OrganisaatioSearchKeyDto implements Serializable, Comparable<Organi
     
     private String operaattori;
     
-    public OrganisaatioSearchKeyDto() {
+    public SearchKeyDto() {
     }
     
-    public OrganisaatioSearchKeyDto(String koodistoUri, String operaattori) {
+    public SearchKeyDto(String koodistoUri, String operaattori) {
         this.koodistoUri = koodistoUri;
         this.operaattori = operaattori;
     }
@@ -35,16 +35,16 @@ public class OrganisaatioSearchKeyDto implements Serializable, Comparable<Organi
     }
 
     @Override
-    public int compareTo(OrganisaatioSearchKeyDto o) {
+    public int compareTo(SearchKeyDto o) {
         return koodistoUri.compareTo(o.getKoodistoUri());
     }
     
     @Override
     public boolean equals(Object obj) {
-        if( obj != null && obj instanceof OrganisaatioSearchKeyDto ) {
+        if( obj != null && obj instanceof SearchKeyDto ) {
             return (this.koodistoUri+this.operaattori).equals(
-                    ((OrganisaatioSearchKeyDto)obj).getKoodistoUri()
-                    + ((OrganisaatioSearchKeyDto)obj).getOperaattori());
+                    ((SearchKeyDto)obj).getKoodistoUri()
+                    + ((SearchKeyDto)obj).getOperaattori());
         } else {
             return false;
         }

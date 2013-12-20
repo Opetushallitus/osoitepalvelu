@@ -9,10 +9,10 @@ public class ConditionDto implements Serializable {
 
     private String operaattori;
     
-    private TreeSet<OrganisaatioSearchValueDto> ehdot;
+    private TreeSet<SearchValueDto> ehdot;
 
     public ConditionDto() {
-        this.ehdot = new TreeSet<OrganisaatioSearchValueDto>();
+        this.ehdot = new TreeSet<SearchValueDto>();
     }
     
     public String getOperaattori() {
@@ -23,11 +23,11 @@ public class ConditionDto implements Serializable {
         this.operaattori = operaattori;
     }
 
-    public TreeSet<OrganisaatioSearchValueDto> getEhdot() {
+    public TreeSet<SearchValueDto> getEhdot() {
         return ehdot;
     }
     
-    public void addEhto(OrganisaatioSearchValueDto ehto) {
+    public void addEhto(SearchValueDto ehto) {
         this.ehdot.add(ehto);
     }
     

@@ -3,9 +3,8 @@ package fi.vm.sade.osoitepalvelu.kooste.search.api;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeSet;
 
-public class OrganisaatioSearchQueryDto implements Serializable {
+public class SearchQueryDto implements Serializable {
 
     private static final long serialVersionUID = 1078154058705560606L;
     
@@ -13,7 +12,7 @@ public class OrganisaatioSearchQueryDto implements Serializable {
     
     private Map<String, ConditionDto> jaEhdot;
     
-    public OrganisaatioSearchQueryDto() {
+    public SearchQueryDto() {
         taiEhdot = new HashMap<String, ConditionDto>();
         jaEhdot = new HashMap<String, ConditionDto>();
     }
@@ -27,7 +26,7 @@ public class OrganisaatioSearchQueryDto implements Serializable {
         return jaEhdot;
     }
     
-    public void addAndCriteria(OrganisaatioSearchKeyDto keyDto, OrganisaatioSearchValueDto value) {
+    public void addAndCriteria(SearchKeyDto keyDto, SearchValueDto value) {
         
         if( !jaEhdot.containsKey(keyDto.getKoodistoUri()) ) {
             ConditionDto dto = new ConditionDto();
@@ -38,7 +37,7 @@ public class OrganisaatioSearchQueryDto implements Serializable {
         jaEhdot.get(keyDto.getKoodistoUri()).addEhto(value);
     }
     
-    public void addOrCriteria(OrganisaatioSearchKeyDto keyDto, OrganisaatioSearchValueDto value) {
+    public void addOrCriteria(SearchKeyDto keyDto, SearchValueDto value) {
         
         if( !taiEhdot.containsKey(keyDto.getKoodistoUri()) ) {
             ConditionDto dto = new ConditionDto();

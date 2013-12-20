@@ -5,8 +5,8 @@ import java.util.List;
 
 public class OrganisaatioResultDto {
 
-    private String oid; // Organisaation oid (Yksikäsitteinen tunniste)
-    private String kotipaikkaUri;
+    private String oid; // Yksikäsitteinen tunniste
+    private String kotikunta;
     private String toimipistekoodi;
     private String wwwOsoite;
     private HashMap<String, String> nimi; // Organisaation nimi lokaalin mukaan
@@ -15,6 +15,8 @@ public class OrganisaatioResultDto {
     private String emailOsoite;
     private List<String> tyypit;
     private OsoisteDto postiosoite;
+    private OsoisteDto kayntiosoite;
+
 
     public String getOid() {
         return oid;
@@ -24,12 +26,12 @@ public class OrganisaatioResultDto {
         this.oid = oid;
     }
 
-    public String getKotipaikkaUri() {
-        return kotipaikkaUri;
+    public String getKotikunta() {
+        return kotikunta;
     }
 
-    public void setKotipaikkaUri(String kotipaikkaUri) {
-        this.kotipaikkaUri = kotipaikkaUri;
+    public void setKotikunta(String kotikunta) {
+        this.kotikunta = kotikunta;
     }
 
     public String getToimipistekoodi() {
@@ -94,6 +96,14 @@ public class OrganisaatioResultDto {
 
     public void setPostiosoite(OsoisteDto postiosoite) {
         this.postiosoite = postiosoite;
+    }
+    
+    public OsoisteDto getKayntiosoite() {
+        return kayntiosoite;
+    }
+    
+    public void setKayntiosoite(OsoisteDto kaytiosoite) {
+        this.kayntiosoite = kaytiosoite;
     }
 
 }

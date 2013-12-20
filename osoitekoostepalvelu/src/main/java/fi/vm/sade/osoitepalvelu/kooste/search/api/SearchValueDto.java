@@ -2,17 +2,17 @@ package fi.vm.sade.osoitepalvelu.kooste.search.api;
 
 import java.io.Serializable;
 
-public class OrganisaatioSearchValueDto implements Comparable<OrganisaatioSearchValueDto>, Serializable{
+public class SearchValueDto implements Comparable<SearchValueDto>, Serializable{
 
     private static final long serialVersionUID = -5123398206835328711L;
     
     private String koodiArvo;
     
 
-    public OrganisaatioSearchValueDto() {
+    public SearchValueDto() {
     }
     
-    public OrganisaatioSearchValueDto(String koodiArvo) {
+    public SearchValueDto(String koodiArvo) {
         this.koodiArvo = koodiArvo;
     }
     
@@ -25,9 +25,9 @@ public class OrganisaatioSearchValueDto implements Comparable<OrganisaatioSearch
     }
 
     @Override
-    public int compareTo(OrganisaatioSearchValueDto o) {
+    public int compareTo(SearchValueDto o) {
         if( o != null ) {
-            return ((OrganisaatioSearchValueDto)o).getKoodiArvo().compareTo(this.getKoodiArvo());
+            return ((SearchValueDto)o).getKoodiArvo().compareTo(this.getKoodiArvo());
         } else {
             return -1;
         }
