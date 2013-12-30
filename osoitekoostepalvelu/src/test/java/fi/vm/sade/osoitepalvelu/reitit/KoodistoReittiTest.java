@@ -1,9 +1,9 @@
 package fi.vm.sade.osoitepalvelu.reitit;
 
-import java.util.List;
-
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoVersioDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.route.KoodistoReitti;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,13 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import fi.vm.sade.osoitepalvelu.kooste.SpringApp;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoVersioDto;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={SpringTestAppConfig.class, OsoitepalveluCamelConfig.class})
+@ContextConfiguration(classes={SpringTestAppConfig.class})
 public class KoodistoReittiTest {
 
 	@Autowired

@@ -1,7 +1,7 @@
 package fi.vm.sade.osoitepalvelu;
 
-import fi.vm.sade.osoitepalvelu.kooste.SpringApp;
 import fi.vm.sade.osoitepalvelu.kooste.config.Config;
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.config.OsoitepalveluCamelConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
@@ -14,9 +14,14 @@ import org.springframework.core.env.Environment;
  * To change this template use File | Settings | File Templates.
  */
 @Configuration
-@ComponentScan(basePackageClasses = SpringApp.class)
+@ComponentScan(basePackages = {
+        "fi.vm.sade.osoitepalvelu.kooste.common",
+        "fi.vm.sade.osoitepalvelu.kooste.domain",
+        "fi.vm.sade.osoitepalvelu.kooste.dao",
+        "fi.vm.sade.osoitepalvelu.kooste.service"
+})
 @ImportResource("classpath:spring/test-application-context.xml")
-@Import(value={MongoTestConfig.class})
+@Import(value={MongoTestConfig.class, OsoitepalveluCamelConfig.class})
 @PropertySource({"classpath:/osoitekoostepalvelu.properties", "classpath:/test.properties"})
 public class SpringTestAppConfig {
     @Autowired

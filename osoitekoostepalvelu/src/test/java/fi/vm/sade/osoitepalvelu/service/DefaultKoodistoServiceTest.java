@@ -2,12 +2,9 @@ package fi.vm.sade.osoitepalvelu.service;
 
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.DefaultKoodistoService;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.KoodistoService;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.route.KoodistoReitti;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +17,7 @@ import java.util.Locale;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={SpringTestAppConfig.class, OsoitepalveluCamelConfig.class})
+@ContextConfiguration(classes={SpringTestAppConfig.class})
 public class DefaultKoodistoServiceTest {
 
 	private static final Locale LOCALE_FI = new Locale("fi", "FI");

@@ -1,30 +1,19 @@
 package fi.vm.sade.osoitepalvelu.search.api;
 
-import java.io.IOException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import fi.vm.sade.osoitepalvelu.kooste.search.api.*;
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto.KoodistoTyyppi;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.junit.Test;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
-import fi.vm.sade.osoitepalvelu.kooste.search.api.KayttajahakuResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.search.api.KayttajahakuResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.search.api.OrganisaatioResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.search.api.OrganisaatioResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.search.api.OsoisteDto;
-import fi.vm.sade.osoitepalvelu.kooste.search.api.SearchKeyDto;
-import fi.vm.sade.osoitepalvelu.kooste.search.api.SearchQueryDto;
-import fi.vm.sade.osoitepalvelu.kooste.search.api.SearchValueDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto.KoodistoTyyppi;
-
+@RunWith(JUnit4.class)
 public class ApiToJsonTest {
 
     @Test

@@ -5,7 +5,7 @@ import org.apache.camel.Processor;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
-import fi.vm.sade.osoitepalvelu.kooste.config.ObjectMapperProvider;
+import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
 
 /**
  * Camel-viestiketjun prosessori, jonka avulla voi helposti tehdä JSON konversion 
