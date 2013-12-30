@@ -2,6 +2,8 @@ package fi.vm.sade.osoitepalvelu.reitit;
 
 import java.util.List;
 
+import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.route.KoodistoReitti;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +18,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto.KoodistoTy
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoVersioDto;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes=SpringApp.class)
+@ContextConfiguration(classes={SpringTestAppConfig.class, OsoitepalveluCamelConfig.class})
 public class KoodistoReittiTest {
 
 	@Autowired

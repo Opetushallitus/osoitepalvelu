@@ -1,5 +1,6 @@
 package fi.vm.sade.osoitepalvelu.kooste;
 
+import fi.vm.sade.osoitepalvelu.kooste.config.MongoConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.config.OsoitepalveluCamelConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;

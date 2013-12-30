@@ -3,6 +3,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.kooste.route;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.camel.Exchange;
 import org.codehaus.jackson.type.TypeReference;
@@ -25,6 +26,9 @@ public class KoodistoReitti extends AbstractJsonToDtoRouteBuilder {
 
 	@Value("${valintalaskentakoostepalvelu.koodiService.rest.url}")
 	private String koodistoUri;
+
+    private boolean findCounterUsed=false;
+    private AtomicLong findCounter = new AtomicLong(0l);
 	
 	@Override
 	public void configure() throws Exception {
@@ -71,6 +75,7 @@ public class KoodistoReitti extends AbstractJsonToDtoRouteBuilder {
 		List<KoodiDto> koodit =
 				getCamelTemplate().requestBodyAndHeaders(REITTI_HAE_KOODISTO_VERSION_KOODIT, "",
 						parameters, List.class);
+        if(isFindCounterUsed()) findCounter.incrementAndGet();
 		return koodit;
 	}
 	
@@ -87,4 +92,17 @@ public class KoodistoReitti extends AbstractJsonToDtoRouteBuilder {
 						"koodistoTyyppi", koodistoTyyppi.getUri(), List.class);
 		return versiot;
 	}
+
+    public boolean isFindCounterUsed() {
+        return findCounterUsed;
+    }
+
+    public void setFindCounterUsed(boolean findCounterUsed) {
+        this.findCounterUsed = findCounterUsed;
+    }
+
+    public long getFindCounterValue() {
+        return findCounter.longValue();
+    }
+
 }

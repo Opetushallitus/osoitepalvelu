@@ -38,6 +38,14 @@ public class SearchTargetGroup implements Serializable {
     private GroupType type;
     private List<TargetType> options = new ArrayList<TargetType>();
 
+    public SearchTargetGroup() {
+    }
+
+    public SearchTargetGroup(GroupType type, List<TargetType> options) {
+        this.type = type;
+        this.options = options;
+    }
+
     public GroupType getType() {
         return type;
     }

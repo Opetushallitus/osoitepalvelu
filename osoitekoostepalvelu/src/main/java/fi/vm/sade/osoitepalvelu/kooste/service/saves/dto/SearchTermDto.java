@@ -18,6 +18,14 @@ public class SearchTermDto implements Serializable {
     private String type;
     private List<String> values = new ArrayList<String>();
 
+    public SearchTermDto() {
+    }
+
+    public SearchTermDto(String type, List<String> values) {
+        this.type = type;
+        this.values = values;
+    }
+
     public String getType() {
         return type;
     }

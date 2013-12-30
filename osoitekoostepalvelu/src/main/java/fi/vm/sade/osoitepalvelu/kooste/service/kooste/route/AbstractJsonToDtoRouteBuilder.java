@@ -11,7 +11,7 @@ import org.apache.camel.spring.SpringRouteBuilder;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import fi.vm.sade.osoitepalvelu.kooste.ObjectMapperProvider;
+import fi.vm.sade.osoitepalvelu.kooste.config.ObjectMapperProvider;
 
 /**
  * Abstrakti kantaluokka, joka tarjoaa peruspalvelut Camel-reittien luomiseen,

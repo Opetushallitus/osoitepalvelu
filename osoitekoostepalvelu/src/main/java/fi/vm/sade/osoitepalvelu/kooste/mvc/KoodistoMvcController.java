@@ -26,8 +26,8 @@ public class KoodistoMvcController {
 	private KoodistoService koodistoService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public @ResponseBody Map<KoodistoTyyppi, List<UiKoodiItemDto>> haeKaikkiValintalistojenArvot() {
-		return koodistoService.haeKaikkiTuetutKoodistot(UI_LOCALE);
+	public @ResponseBody Map<KoodistoTyyppi, List<UiKoodiItemDto>> findAllOptions() {
+		return koodistoService.findAllKoodistos(UI_LOCALE);
 	}
 		
 	@RequestMapping(method = RequestMethod.GET, value="/oppilaitostyyppi")

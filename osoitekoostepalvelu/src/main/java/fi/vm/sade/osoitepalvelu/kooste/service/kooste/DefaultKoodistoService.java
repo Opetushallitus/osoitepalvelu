@@ -34,11 +34,11 @@ public class DefaultKoodistoService implements KoodistoService {
 	@Autowired
 	private KoodistoDtoConverter dtoConverter;
 
-    @Autowired
+    @Autowired(required = false)
     private KoodistoCacheRepository koodistoCacheRepository;
 
     @Value("#{config.cacheTimeoutMillis}")
-    private int cacheTimeoutMillis;
+    private long cacheTimeoutMillis;
 	
 	@Override
 	public List<UiKoodiItemDto> findOppilaitosTyyppiOptions(Locale locale) {
@@ -111,8 +111,13 @@ public class DefaultKoodistoService implements KoodistoService {
 
     protected List<UiKoodiItemDto> cached( Cacheable<List<UiKoodiItemDto>> provider, KoodistoTyyppi tyyppi, Locale locale ) {
         KoodistoCache.KoodistoTyyppi cacheType = KoodistoCache.KoodistoTyyppi.valueOf(tyyppi.name());
-        KoodistoCache cache = koodistoCacheRepository.findCacheByTypeAndLocale(cacheType, locale);
         long cacheLiveTime = cacheTimeoutMillis;
+        boolean cacheUsed = koodistoCacheRepository != null && cacheLiveTime >= 0;
+        if( !cacheUsed ) {
+            logger.info("CACHE DISABLED.");
+            return provider.get();
+        }
+        KoodistoCache cache = koodistoCacheRepository.findCacheByTypeAndLocale(cacheType, locale);
         boolean refresh = cache == null || cache.getUpdatedAt().plus(cacheLiveTime).compareTo(new DateTime()) < 0;
         if( cache == null ) {
             cache = new KoodistoCache();
@@ -126,7 +131,7 @@ public class DefaultKoodistoService implements KoodistoService {
             koodistoCacheRepository.save(cache);
             logger.info("SAVED CACHED ITEMS FOR KoodistoTyyppi: " + tyyppi);
         } else {
-            items = dtoConverter.convert( cache.getItems(), new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class );
+            items = dtoConverter.convert(cache.getItems(), new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class);
             logger.info("GOT CACHED RESULT FOR KoodistoTyyppi: " + tyyppi + " updated at " + cache.getUpdatedAt());
         }
         return items;
@@ -173,25 +178,25 @@ public class DefaultKoodistoService implements KoodistoService {
 	
 	/**
 	 * Järjestää koodiston arvot nimen perusteella nousevasti.
-	 * @param arvot Koodiston arvot, jotka tulisi järjestää.
+	 * @param values Koodiston arvot, jotka tulisi järjestää.
 	 * @return
 	 */
-	private List<UiKoodiItemDto> jarjestaNimetNousevasti(List<UiKoodiItemDto> arvot) {
-		Collections.sort(arvot, new Comparator<UiKoodiItemDto>() {
+	private List<UiKoodiItemDto> jarjestaNimetNousevasti(List<UiKoodiItemDto> values) {
+		Collections.sort(values, new Comparator<UiKoodiItemDto>() {
 			@Override
 			public int compare(UiKoodiItemDto koodiA, UiKoodiItemDto koodiB) {
 				return koodiA.getNimi().compareTo(koodiB.getNimi());
 			}
 		});
-		return arvot;
+		return values;
 	}
 
 	@Override
-	public Map<KoodistoTyyppi, List<UiKoodiItemDto>> haeKaikkiTuetutKoodistot(Locale lokaali) {
+	public Map<KoodistoTyyppi, List<UiKoodiItemDto>> findAllKoodistos(Locale locale) {
 		Map<KoodistoTyyppi, List<UiKoodiItemDto>> koodistotMap = new HashMap<KoodistoTyyppi, List<UiKoodiItemDto>>();
 		KoodistoTyyppi[] tuetutKoodistot = KoodistoTyyppi.values();
 		for (KoodistoTyyppi tyyppi : tuetutKoodistot) {
-			List<UiKoodiItemDto> koodistonArvojoukko = findKoodistoByTyyppi(lokaali, tyyppi);
+			List<UiKoodiItemDto> koodistonArvojoukko = findKoodistoByTyyppi(locale, tyyppi);
 			koodistotMap.put(tyyppi, koodistonArvojoukko);
 		}
 		return koodistotMap;
@@ -221,4 +226,12 @@ public class DefaultKoodistoService implements KoodistoService {
 		}
 		return versioVoimassa;
 	}
+
+    public long getCacheTimeoutMillis() {
+        return cacheTimeoutMillis;
+    }
+
+    public void setCacheTimeoutMillis(long cacheTimeoutMillis) {
+        this.cacheTimeoutMillis = cacheTimeoutMillis;
+    }
 }

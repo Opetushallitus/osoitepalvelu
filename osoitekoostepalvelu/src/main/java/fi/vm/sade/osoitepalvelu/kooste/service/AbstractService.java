@@ -29,7 +29,7 @@ public abstract class AbstractService {
 
     protected void ensureLoggedInUser(String ownerUsername) {
         if( !EqualsHelper.equals(ownerUsername, getLoggedInUserOid())) {
-            throw new AuthorizationException("Authenticated user does not have access right to given entity.");
+            throw new AuthorizationException("Authenticated user "+getLoggedInUserOid()+" does not have access right to given entity.");
         }
     }
 }

@@ -1,4 +1,4 @@
-package fi.vm.sade.osoitepalvelu.kooste;
+package fi.vm.sade.osoitepalvelu.kooste.config;
 
 /**
  * User: jukais
