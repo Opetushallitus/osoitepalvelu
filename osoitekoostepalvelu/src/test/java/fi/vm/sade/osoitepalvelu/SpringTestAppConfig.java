@@ -21,7 +21,7 @@ import org.springframework.core.env.Environment;
         "fi.vm.sade.osoitepalvelu.kooste.service"
 })
 @ImportResource("classpath:spring/test-application-context.xml")
-@Import(value={MongoTestConfig.class, OsoitepalveluCamelConfig.class})
+@Import(value={MongoTestConfig.class})
 @PropertySource({"classpath:/osoitekoostepalvelu.properties", "classpath:/test.properties"})
 public class SpringTestAppConfig {
     @Autowired
