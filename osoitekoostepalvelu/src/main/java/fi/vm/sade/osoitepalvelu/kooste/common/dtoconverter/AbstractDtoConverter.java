@@ -17,10 +17,9 @@ import fi.ratamaa.dtoconverter.mapper.implementations.proxy.ProxyObjectDtoConver
 public abstract class AbstractDtoConverter extends AbstractBaseDtoConverter {
     protected void registerMappers(fi.ratamaa.dtoconverter.mapper.resolver.MappersContainer mappers) {
         mappers
-                .add( new ProxyObjectDtoConversionMapper(getProxyMappers()))
-                .add( new AnnotationResolvingDtoConversionMapper() )
-                .add( new CamelCaseResolvingDtoConversionMapper())
-                .add( new MapDtoconversionMapper() )
-                .add( new ValidatorFeatureDtoConverterMapper( configuration().getValidationFactory() ) );
+            .add(new ProxyObjectDtoConversionMapper(getProxyMappers()))
+            .add(new AnnotationResolvingDtoConversionMapper()).add(new CamelCaseResolvingDtoConversionMapper())
+            .add(new MapDtoconversionMapper())
+            .add(new ValidatorFeatureDtoConverterMapper(configuration().getValidationFactory()));
     }
 }

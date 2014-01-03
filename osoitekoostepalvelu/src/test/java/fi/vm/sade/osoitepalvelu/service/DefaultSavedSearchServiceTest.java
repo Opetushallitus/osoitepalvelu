@@ -8,6 +8,7 @@ import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.DefaultSavedSearchService;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.converter.SavedSearchDtoConverter;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
@@ -54,7 +56,7 @@ public class DefaultSavedSearchServiceTest {
     @After
     public void cleanup() throws NotFoundException {
         loginAs("testUser");
-        for( Long id : cleanupSaveIds) {
+        for (Long id : cleanupSaveIds) {
             savedSearchService.deleteSavedSearch(id);
         }
     }
@@ -69,7 +71,7 @@ public class DefaultSavedSearchServiceTest {
         SavedSearchSaveDto dto = createSavedSearch("Test", SavedSearch.SaveType.CONTACT);
         long id = savedSearchService.saveSearch(dto);
         cleanupSaveIds.add(id);
-        assertTrue( id > 0l );
+        assertTrue(id > 0L);
     }
 
     @Test
@@ -90,7 +92,7 @@ public class DefaultSavedSearchServiceTest {
         long saveId = savedSearchService.saveSearch(createSavedSearch("Test save", SavedSearch.SaveType.EMAIL));
         try {
             savedSearchService.deleteSavedSearch(saveId);
-        } catch( NotFoundException e ) {
+        } catch (NotFoundException e) {
             throw new IllegalStateException(e);
         }
         SavedSearchViewDto dto = savedSearchService.getSaveById(saveId);
@@ -139,16 +141,17 @@ public class DefaultSavedSearchServiceTest {
         cleanupSaveIds.add(savedSearchService.saveSearch(createSavedSearch("B", SavedSearch.SaveType.CONTACT)));
 
         List<SavedSearchListDto> dtos = savedSearchService.findSavedSearchesForLoggedInUser();
-        assertEquals( 2, dtos.size() );
+        assertEquals(2, dtos.size());
         assertEquals("A", dtos.get(0).getName());
         assertEquals("B", dtos.get(1).getName());
-        assertTrue( !dtos.get(0).getId().equals(dtos.get(1).getId()) );
+        assertTrue(!dtos.get(0).getId().equals(dtos.get(1).getId()));
 
         loginAs("otherUser");
         dtos = savedSearchService.findSavedSearchesForLoggedInUser();
-        assertEquals( 0, dtos.size() );
+        assertEquals(0, dtos.size());
     }
 
+    @SuppressWarnings("unchecked")
     private SavedSearchSaveDto createSavedSearch(String name, SavedSearch.SaveType saveType) {
         SavedSearchSaveDto dto = new SavedSearchSaveDto();
         dto.setName(name);

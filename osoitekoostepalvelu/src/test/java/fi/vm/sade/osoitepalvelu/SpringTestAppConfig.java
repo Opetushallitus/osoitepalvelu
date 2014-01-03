@@ -1,7 +1,6 @@
 package fi.vm.sade.osoitepalvelu;
 
 import fi.vm.sade.osoitepalvelu.kooste.config.Config;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.config.OsoitepalveluCamelConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
@@ -24,14 +23,15 @@ import org.springframework.core.env.Environment;
 @Import(value={MongoTestConfig.class})
 @PropertySource({"classpath:/osoitekoostepalvelu.properties", "classpath:/test.properties"})
 public class SpringTestAppConfig {
+    private static final int SECONDS_TO_MS_FACTOR = 1000;
+    
     @Autowired
     private Environment env;
 
     @Bean
     public Config config() {
         Config config = new Config();
-        config.setCacheTimeoutMillis(Integer.parseInt(env.getProperty("koodisto.cache.livetime.seconds"))*1000);
+        config.setCacheTimeoutMillis(Integer.parseInt(env.getProperty("koodisto.cache.livetime.seconds")) * SECONDS_TO_MS_FACTOR);
         return config;
     }
-
 }

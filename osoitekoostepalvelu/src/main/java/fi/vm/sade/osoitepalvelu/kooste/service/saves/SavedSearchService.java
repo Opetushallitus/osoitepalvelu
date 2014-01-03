@@ -29,7 +29,7 @@ public interface SavedSearchService {
      * @throws NotFoundException if search was not found by given id
      * @throws AuthorizationException if user does not own the saved search in question
      */
-    SavedSearchViewDto getSaveById( long id ) throws NotFoundException, AuthorizationException;
+    SavedSearchViewDto getSaveById(long id) throws NotFoundException, AuthorizationException;
 
     /**
      * Deletes the given saved search owned by the logged in user

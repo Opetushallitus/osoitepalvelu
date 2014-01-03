@@ -14,39 +14,41 @@ import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.UiKoodiItemDto;
  */
 public interface KoodistoService {
 
-	List<UiKoodiItemDto> findOppilaitosTyyppiOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findOmistajaTyyppiOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findVuosiluokkaOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findMaakuntaOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findKuntaOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findTutkintoTyyppiOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findTutkintoOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findOppilaitoksenOpetuskieliOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findKoulutuksenKieliOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findKoulutusAsteOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findKoulutuksenJarjestejaOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findOpintoAlaOptions(Locale locale);
-	
-	List<UiKoodiItemDto> findAlueHallintoVirastoOptions(Locale locale);
-	
-	/**
-	 * Hakee kaikkien koodistojen arvot yhdellä kertaa ja paulattaa näistä mapin.
-	 * Mapista halutun koodiston voi hakea KoodistoTyyppi enumin arvon
-	 * perustella. Huom: Metodi suorittaa useita kutsuja ulkoiseen koodistopalveluun.
-	 * 
-	 * @param locale Koodistojen arvojen nimien ja kuvauksen lokalisoinnin locale.
-	 * @return Mappi, joka sisältää kaikkien tuettujen koodistojen arvot.
-	 */
-	Map<KoodistoTyyppi, List<UiKoodiItemDto>> findAllKoodistos(Locale locale);
+    List<UiKoodiItemDto> findOppilaitosTyyppiOptions(Locale locale);
+
+    List<UiKoodiItemDto> findOmistajaTyyppiOptions(Locale locale);
+
+    List<UiKoodiItemDto> findVuosiluokkaOptions(Locale locale);
+
+    List<UiKoodiItemDto> findMaakuntaOptions(Locale locale);
+
+    List<UiKoodiItemDto> findKuntaOptions(Locale locale);
+
+    List<UiKoodiItemDto> findTutkintoTyyppiOptions(Locale locale);
+
+    List<UiKoodiItemDto> findTutkintoOptions(Locale locale);
+
+    List<UiKoodiItemDto> findOppilaitoksenOpetuskieliOptions(Locale locale);
+
+    List<UiKoodiItemDto> findKoulutuksenKieliOptions(Locale locale);
+
+    List<UiKoodiItemDto> findKoulutusAsteOptions(Locale locale);
+
+    List<UiKoodiItemDto> findKoulutuksenJarjestejaOptions(Locale locale);
+
+    List<UiKoodiItemDto> findOpintoAlaOptions(Locale locale);
+
+    List<UiKoodiItemDto> findAlueHallintoVirastoOptions(Locale locale);
+
+    /**
+     * Hakee kaikkien koodistojen arvot yhdellä kertaa ja paulattaa näistä
+     * mapin. Mapista halutun koodiston voi hakea KoodistoTyyppi enumin arvon
+     * perustella. Huom: Metodi suorittaa useita kutsuja ulkoiseen
+     * koodistopalveluun.
+     * 
+     * @param locale
+     *            Koodistojen arvojen nimien ja kuvauksen lokalisoinnin locale.
+     * @return Mappi, joka sisältää kaikkien tuettujen koodistojen arvot.
+     */
+    Map<KoodistoTyyppi, List<UiKoodiItemDto>> findAllKoodistos(Locale locale);
 }

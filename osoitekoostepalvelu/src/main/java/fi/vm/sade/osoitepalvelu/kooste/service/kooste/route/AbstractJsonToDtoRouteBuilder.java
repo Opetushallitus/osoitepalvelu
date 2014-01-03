@@ -22,51 +22,48 @@ import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
  * rakentamista osoitepalvelussa.
  */
 public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
+    private static final int DEFAULT_RETRY_LIMIT = 10;
 
-	@Autowired
-	protected ObjectMapperProvider mapperProvider;
-	
-	protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, TypeReference<T> targetDtoType) {
-		JacksonJsonProcessor jsonToDtoConverter = new JacksonJsonProcessor(mapperProvider, targetDtoType);
-		return from(routeId)					
-					.setHeader(Exchange.HTTP_METHOD, constant("GET"))						
-						.to(url)							
-							.process(jsonToDtoConverter);
-	}
-	
-	protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, String headerName, Expression headerValue, TypeReference<T> targetDtoType) {
-		JacksonJsonProcessor jsonToDtoConverter = new JacksonJsonProcessor(mapperProvider, targetDtoType);
-		return from(routeId)					
-					.setHeader(Exchange.HTTP_METHOD, constant("GET"))
-					.setHeader(headerName, headerValue)
-						.to(url)							
-							.process(jsonToDtoConverter);	
-	}
-	
-	protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, HeaderBuilder headers, TypeReference<T> targetDtoType) {
-		JacksonJsonProcessor jsonToDtoConverter = new JacksonJsonProcessor(mapperProvider, targetDtoType);		
-		RouteDefinition route = from(routeId).setHeader(Exchange.HTTP_METHOD, constant("GET"));
-		// Asetetaan tässä käyttäjän antamat headereiden arvot
-		for (Entry<String, Expression> header : headers.getHeaders().entrySet()) {
-			route.setHeader(header.getKey(), header.getValue());
-		}
-		return route.to(url).process(jsonToDtoConverter);
-	}
-	
-	protected LoadBalanceDefinition addRouteErrorHandlers(RouteDefinition route) {
-		boolean roundRobin = true;
-		boolean inheritErrorHandler = true;		
-		return route.loadBalance().failover(10, inheritErrorHandler, roundRobin);
-	}
+    @Autowired
+    protected ObjectMapperProvider mapperProvider;
 
-	protected ProducerTemplate getCamelTemplate() {
-		return this.getApplicationContext().getBean(ProducerTemplate.class);
-	}
-	
-	protected String trim(String value) {
-		if (value != null) {
-			return value.trim();
-		}
-		return null;
-	}
+    protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, TypeReference<T> targetDtoType) {
+        JacksonJsonProcessor jsonToDtoConverter = new JacksonJsonProcessor(mapperProvider, targetDtoType);
+        return from(routeId).setHeader(Exchange.HTTP_METHOD, constant("GET")).to(url).process(jsonToDtoConverter);
+    }
+
+    protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, String headerName,
+            Expression headerValue, TypeReference<T> targetDtoType) {
+        JacksonJsonProcessor jsonToDtoConverter = new JacksonJsonProcessor(mapperProvider, targetDtoType);
+        return from(routeId).setHeader(Exchange.HTTP_METHOD, constant("GET")).setHeader(headerName, headerValue)
+                .to(url).process(jsonToDtoConverter);
+    }
+
+    protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, HeaderBuilder headers,
+            TypeReference<T> targetDtoType) {
+        JacksonJsonProcessor jsonToDtoConverter = new JacksonJsonProcessor(mapperProvider, targetDtoType);
+        RouteDefinition route = from(routeId).setHeader(Exchange.HTTP_METHOD, constant("GET"));
+        // Asetetaan tässä käyttäjän antamat headereiden arvot
+        for (Entry<String, Expression> header : headers.getHeaders().entrySet()) {
+            route.setHeader(header.getKey(), header.getValue());
+        }
+        return route.to(url).process(jsonToDtoConverter);
+    }
+
+    protected LoadBalanceDefinition addRouteErrorHandlers(RouteDefinition route) {
+        boolean roundRobin = true;
+        boolean inheritErrorHandler = true;
+        return route.loadBalance().failover(DEFAULT_RETRY_LIMIT, inheritErrorHandler, roundRobin);
+    }
+
+    protected ProducerTemplate getCamelTemplate() {
+        return this.getApplicationContext().getBean(ProducerTemplate.class);
+    }
+
+    protected String trim(String value) {
+        if (value != null) {
+            return value.trim();
+        }
+        return null;
+    }
 }

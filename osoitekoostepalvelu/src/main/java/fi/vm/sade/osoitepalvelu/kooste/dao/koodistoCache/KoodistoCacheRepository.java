@@ -14,6 +14,6 @@ import java.util.Locale;
  */
 public interface KoodistoCacheRepository extends MongoRepository<KoodistoCache, KoodistoCache.CacheKey> {
 
-    KoodistoCache findCacheByTypeAndLocale( KoodistoCache.KoodistoTyyppi tyyppi, Locale locale );
+    KoodistoCache findCacheByTypeAndLocale(KoodistoCache.KoodistoTyyppi tyyppi, Locale locale);
 
 }

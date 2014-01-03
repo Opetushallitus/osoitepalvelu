@@ -16,31 +16,32 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={SpringTestAppConfig.class, OsoitepalveluCamelConfig.class})
+@ContextConfiguration(classes = { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
 public class KoodistoReittiTest {
 
-	@Autowired
-	private KoodistoReitti koodistoReitti;
-	
-	@Test
-	public void testHaeKaikkiOppilaitosTyypit() {
-		KoodistoTyyppi tyyppi = KoodistoTyyppi.OPPILAITOSTYYPPI;
-		List<KoodiDto> oppilaitosTyypit = koodistoReitti.haeKooditKoodistonTyyppilla(tyyppi);
-		Assert.assertNotNull(oppilaitosTyypit);
-		Assert.assertTrue(oppilaitosTyypit.size() > 0);
-	}
-	
-	@Test
-	public void testHaeOppilaitosTyypitKoodistonVersiotJaKooditVersiolla() {
-		KoodistoTyyppi tyyppi = KoodistoTyyppi.OPPILAITOSTYYPPI;
-		List<KoodistoVersioDto> versiot = koodistoReitti.haeKoodistonVersiot(tyyppi);
-		Assert.assertNotNull(versiot);
-		Assert.assertTrue(versiot.size() > 0);
-		
-		// Testataan, toimiiko tässä haku tietylle koodiston versiolle
-		KoodistoVersioDto versio = versiot.get(0);
-		List<KoodiDto> oppilaitosTyypit = koodistoReitti.haeKooditKoodistonVersiolleTyyppilla(tyyppi, versio.getVersio());
-		Assert.assertNotNull(oppilaitosTyypit);
-		Assert.assertTrue(oppilaitosTyypit.size() > 0);
-	}
+    @Autowired
+    private KoodistoReitti koodistoReitti;
+
+    @Test
+    public void testHaeKaikkiOppilaitosTyypit() {
+        KoodistoTyyppi tyyppi = KoodistoTyyppi.OPPILAITOSTYYPPI;
+        List<KoodiDto> oppilaitosTyypit = koodistoReitti.haeKooditKoodistonTyyppilla(tyyppi);
+        Assert.assertNotNull(oppilaitosTyypit);
+        Assert.assertTrue(oppilaitosTyypit.size() > 0);
+    }
+
+    @Test
+    public void testHaeOppilaitosTyypitKoodistonVersiotJaKooditVersiolla() {
+        KoodistoTyyppi tyyppi = KoodistoTyyppi.OPPILAITOSTYYPPI;
+        List<KoodistoVersioDto> versiot = koodistoReitti.haeKoodistonVersiot(tyyppi);
+        Assert.assertNotNull(versiot);
+        Assert.assertTrue(versiot.size() > 0);
+
+        // Testataan, toimiiko tässä haku tietylle koodiston versiolle
+        KoodistoVersioDto versio = versiot.get(0);
+        List<KoodiDto> oppilaitosTyypit = koodistoReitti.haeKooditKoodistonVersiolleTyyppilla(tyyppi,
+                versio.getVersio());
+        Assert.assertNotNull(oppilaitosTyypit);
+        Assert.assertTrue(oppilaitosTyypit.size() > 0);
+    }
 }

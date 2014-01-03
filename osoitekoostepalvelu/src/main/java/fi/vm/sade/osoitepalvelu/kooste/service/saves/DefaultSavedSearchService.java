@@ -37,7 +37,7 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     public List<SavedSearchListDto> findSavedSearchesForLoggedInUser() {
         return dtoConverter.convert(savedSearchRepository.findByOwnerUsername(getLoggedInUserOid(),
                         new Sort(Sort.Direction.ASC, "name")),
-                new ArrayList<SavedSearchListDto>(), SavedSearchListDto.class);
+                        new ArrayList<SavedSearchListDto>(), SavedSearchListDto.class);
     }
 
     @Override

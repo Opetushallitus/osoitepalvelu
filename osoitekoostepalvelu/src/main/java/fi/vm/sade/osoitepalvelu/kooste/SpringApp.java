@@ -19,6 +19,7 @@ import org.springframework.core.env.Environment;
 @Import(value={MongoConfig.class, OsoitepalveluCamelConfig.class})
 @PropertySource({"classpath:/osoitekoostepalvelu.properties", "file://${user.home}/oph-configuration/common.properties"})
 public class SpringApp {
+    private static final int SECONDS_TO_MS_FACTOR = 1000;
     @Autowired
     private Environment env;
 
@@ -37,8 +38,7 @@ public class SpringApp {
     @Bean
     public Config config() {
         Config config = new Config();
-        config.setCacheTimeoutMillis(Integer.parseInt(env.getProperty("koodisto.cache.livetime.seconds"))*1000);
+        config.setCacheTimeoutMillis(Integer.parseInt(env.getProperty("koodisto.cache.livetime.seconds")) * SECONDS_TO_MS_FACTOR);
         return config;
     }
-
 }

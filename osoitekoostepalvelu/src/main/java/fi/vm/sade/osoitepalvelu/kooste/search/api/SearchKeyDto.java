@@ -41,10 +41,9 @@ public class SearchKeyDto implements Serializable, Comparable<SearchKeyDto> {
     
     @Override
     public boolean equals(Object obj) {
-        if( obj != null && obj instanceof SearchKeyDto ) {
-            return (this.koodistoUri+this.operaattori).equals(
-                    ((SearchKeyDto)obj).getKoodistoUri()
-                    + ((SearchKeyDto)obj).getOperaattori());
+        if (obj != null && obj instanceof SearchKeyDto) {
+            return (this.koodistoUri + this.operaattori).equals(((SearchKeyDto) obj).getKoodistoUri()
+                    + ((SearchKeyDto) obj).getOperaattori());
         } else {
             return false;
         }
@@ -53,6 +52,5 @@ public class SearchKeyDto implements Serializable, Comparable<SearchKeyDto> {
     @Override
     public int hashCode() {
         return (this.koodistoUri+this.operaattori).hashCode();
-    }
-    
+    }    
 }

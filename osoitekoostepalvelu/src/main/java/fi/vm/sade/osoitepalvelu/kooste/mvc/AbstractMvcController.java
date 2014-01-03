@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 public abstract class AbstractMvcController {
 
-    @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="Entity not found by primary key")  // 404
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Entity not found by primary key") // 404
     @ExceptionHandler(NotFoundException.class)
     public void notFound() {
     }
-
 }

@@ -49,8 +49,8 @@ public class ApiToJsonTest {
         HashMap<String, String> nimi = new HashMap<String, String>();
         nimi.put("sv", "Svenska text");
         nimi.put("fi", "Suomeksi nimi");
-        result.setNimi(nimi );
-        result.setTyypit(tyypit );
+        result.setNimi(nimi);
+        result.setTyypit(tyypit);
         result.setEmailOsoite("organisaatio2@email.com");
         result.setFaksinumero("09123123");
         result.setKotikunta("Helsinki");
@@ -59,7 +59,7 @@ public class ApiToJsonTest {
         result.setToimipistekoodi("0032901");
         result.setWwwOsoite("http://www.kimitoon.fi/barn-och-utbildning/skolor/svenskaskolor/kimitoonsgymnasi");
         
-        OsoisteDto kayntiosoite = new OsoisteDto();
+        OsoitteistoDto kayntiosoite = new OsoitteistoDto();
         kayntiosoite.setOsoite("Mannerheiminkatu 48B");
         kayntiosoite.setOsoiteTyyppi("kaynti");
         kayntiosoite.setPostinumero("00100");
@@ -67,7 +67,7 @@ public class ApiToJsonTest {
         kayntiosoite.setYhteystietoOid("1.2.246.562.5.95913959722");
         result.setKayntiosoite(kayntiosoite);
         
-        OsoisteDto postiosoite = new OsoisteDto();
+        OsoitteistoDto postiosoite = new OsoitteistoDto();
         postiosoite.setOsoite("PL 231");
         postiosoite.setOsoiteTyyppi("posti");
         postiosoite.setPostinumero("00101");
@@ -81,11 +81,11 @@ public class ApiToJsonTest {
         result = new OrganisaatioResultDto();
         tyypit = new ArrayList<String>();
         tyypit.add("Toimipiste");
-        result.setTyypit(tyypit );
+        result.setTyypit(tyypit);
         nimi = new HashMap<String, String>();
         nimi.put("sv", "Högskola");
         nimi.put("fi", "Tre Korkeakoulu");
-        result.setNimi(nimi );
+        result.setNimi(nimi);
         result.setEmailOsoite("esimerkki@email.com");
         result.setFaksinumero("03123123");
         result.setKotikunta("Tampere");
@@ -94,7 +94,7 @@ public class ApiToJsonTest {
         result.setToimipistekoodi("0032902");
         result.setWwwOsoite("http://www.organisaatio.ab");
         
-        kayntiosoite = new OsoisteDto();
+        kayntiosoite = new OsoitteistoDto();
         kayntiosoite.setOsoite("Yliopistonkatu 58 B");
         kayntiosoite.setOsoiteTyyppi("kaynti");
         kayntiosoite.setPostinumero("33100");
@@ -102,7 +102,7 @@ public class ApiToJsonTest {
         kayntiosoite.setYhteystietoOid("1.2.246.562.5.95913959724");
         result.setKayntiosoite(kayntiosoite);
         
-        postiosoite = new OsoisteDto();
+        postiosoite = new OsoitteistoDto();
         postiosoite.setOsoite("PL 231");
         postiosoite.setOsoiteTyyppi("posti");
         postiosoite.setPostinumero("33101");
@@ -155,6 +155,4 @@ public class ApiToJsonTest {
             e.printStackTrace();
         }
     }
-
-
 }

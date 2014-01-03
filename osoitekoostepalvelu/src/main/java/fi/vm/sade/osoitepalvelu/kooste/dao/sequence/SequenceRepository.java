@@ -9,6 +9,6 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.sequence;
  */
 public interface SequenceRepository {
 
-    public long getNextSavedSearchIdSequence();
+    long getNextSavedSearchIdSequence();
 
 }

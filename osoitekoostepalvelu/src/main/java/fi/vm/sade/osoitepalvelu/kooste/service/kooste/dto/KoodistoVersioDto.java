@@ -9,66 +9,66 @@ import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto.KoodistoTy
  * Koodiston versiotietojen mallintaminen.
  */
 public class KoodistoVersioDto {
-	private String koodistoUri;
-	private KoodistoTyyppi koodistoTyyppi;
-	private long versio;
-	private LocalDate voimassaAlkuPvm;
-	private LocalDate voimassaLoppuPvm;
-	
-	private KoodistoTila tila;
+    private String koodistoUri;
+    private KoodistoTyyppi koodistoTyyppi;
+    private long versio;
+    private LocalDate voimassaAlkuPvm;
+    private LocalDate voimassaLoppuPvm;
 
-	public String getKoodistoUri() {
-		return koodistoUri;
-	}
+    private KoodistoTila tila;
 
-	public void setKoodistoUri(String koodistoUri) {
-		this.koodistoUri = koodistoUri;
-		if (koodistoUri != null) {
-			this.koodistoTyyppi = KoodistoTyyppi.parseTyyppi(koodistoUri);
-		}
-	}
+    public String getKoodistoUri() {
+        return koodistoUri;
+    }
 
-	public KoodistoTyyppi getKoodistoTyyppi() {
-		return koodistoTyyppi;
-	}
+    public void setKoodistoUri(String koodistoUri) {
+        this.koodistoUri = koodistoUri;
+        if (koodistoUri != null) {
+            this.koodistoTyyppi = KoodistoTyyppi.parseTyyppi(koodistoUri);
+        }
+    }
 
-	public void setKoodistoTyyppi(KoodistoTyyppi koodistoTyyppi) {
-		this.koodistoTyyppi = koodistoTyyppi;
-	}
+    public KoodistoTyyppi getKoodistoTyyppi() {
+        return koodistoTyyppi;
+    }
 
-	public long getVersio() {
-		return versio;
-	}
+    public void setKoodistoTyyppi(KoodistoTyyppi koodistoTyyppi) {
+        this.koodistoTyyppi = koodistoTyyppi;
+    }
 
-	public void setVersio(long versio) {
-		this.versio = versio;
-	}
+    public long getVersio() {
+        return versio;
+    }
 
-	public LocalDate getVoimassaAlkuPvm() {
-		return voimassaAlkuPvm;
-	}
+    public void setVersio(long versio) {
+        this.versio = versio;
+    }
 
-	public void setVoimassaAlkuPvm(LocalDate voimassaAlkuPvm) {
-		this.voimassaAlkuPvm = voimassaAlkuPvm;
-	}
+    public LocalDate getVoimassaAlkuPvm() {
+        return voimassaAlkuPvm;
+    }
 
-	public LocalDate getVoimassaLoppuPvm() {
-		return voimassaLoppuPvm;
-	}
+    public void setVoimassaAlkuPvm(LocalDate voimassaAlkuPvm) {
+        this.voimassaAlkuPvm = voimassaAlkuPvm;
+    }
 
-	public void setVoimassaLoppuPvm(LocalDate voimassaLoppuPvm) {
-		this.voimassaLoppuPvm = voimassaLoppuPvm;
-	}
+    public LocalDate getVoimassaLoppuPvm() {
+        return voimassaLoppuPvm;
+    }
 
-	public KoodistoTila getTila() {
-		return tila;
-	}
+    public void setVoimassaLoppuPvm(LocalDate voimassaLoppuPvm) {
+        this.voimassaLoppuPvm = voimassaLoppuPvm;
+    }
 
-	public void setTila(KoodistoTila tila) {
-		this.tila = tila;
-	}
-	
-	public boolean isVoimassaPvm(LocalDate pvm) {
-		return KoodistoDateHelper.isPaivaVoimassaValilla(pvm, voimassaAlkuPvm, voimassaLoppuPvm);
-	}
+    public KoodistoTila getTila() {
+        return tila;
+    }
+
+    public void setTila(KoodistoTila tila) {
+        this.tila = tila;
+    }
+
+    public boolean isVoimassaPvm(LocalDate pvm) {
+        return KoodistoDateHelper.isPaivaVoimassaValilla(pvm, voimassaAlkuPvm, voimassaLoppuPvm);
+    }
 }

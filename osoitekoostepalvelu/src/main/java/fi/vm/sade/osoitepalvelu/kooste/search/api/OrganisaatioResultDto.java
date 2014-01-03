@@ -14,8 +14,8 @@ public class OrganisaatioResultDto {
     private String faksinumero;
     private String emailOsoite;
     private List<String> tyypit;
-    private OsoisteDto postiosoite;
-    private OsoisteDto kayntiosoite;
+    private OsoitteistoDto postiosoite;
+    private OsoitteistoDto kayntiosoite;
 
 
     public String getOid() {
@@ -90,19 +90,19 @@ public class OrganisaatioResultDto {
         this.tyypit = tyypit;
     }
 
-    public OsoisteDto getPostiosoite() {
+    public OsoitteistoDto getPostiosoite() {
         return postiosoite;
     }
 
-    public void setPostiosoite(OsoisteDto postiosoite) {
+    public void setPostiosoite(OsoitteistoDto postiosoite) {
         this.postiosoite = postiosoite;
     }
     
-    public OsoisteDto getKayntiosoite() {
+    public OsoitteistoDto getKayntiosoite() {
         return kayntiosoite;
     }
     
-    public void setKayntiosoite(OsoisteDto kaytiosoite) {
+    public void setKayntiosoite(OsoitteistoDto kaytiosoite) {
         this.kayntiosoite = kaytiosoite;
     }
 

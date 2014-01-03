@@ -2,11 +2,8 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.koodistoCache;
 
 import fi.vm.sade.osoitepalvelu.kooste.dao.sequence.SequenceRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
-import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
@@ -27,7 +24,8 @@ public class DefaultKoodistoCacheRepository extends SimpleMongoRepository<Koodis
     @Autowired
     private SequenceRepository sequenceRepository;
 
-    public DefaultKoodistoCacheRepository(MongoEntityInformation<KoodistoCache, KoodistoCache.CacheKey> metadata, MongoOperations mongoOperations) {
+    public DefaultKoodistoCacheRepository(MongoEntityInformation<KoodistoCache, KoodistoCache.CacheKey> metadata,
+            MongoOperations mongoOperations) {
         super(metadata, mongoOperations);
     }
 

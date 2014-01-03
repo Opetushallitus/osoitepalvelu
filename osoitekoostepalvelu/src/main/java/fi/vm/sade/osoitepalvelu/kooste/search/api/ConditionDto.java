@@ -29,6 +29,5 @@ public class ConditionDto implements Serializable {
     
     public void addEhto(SearchValueDto ehto) {
         this.ehdot.add(ehto);
-    }
-    
+    }   
 }

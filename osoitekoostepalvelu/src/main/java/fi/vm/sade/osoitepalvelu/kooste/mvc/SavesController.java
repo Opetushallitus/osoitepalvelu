@@ -28,28 +28,33 @@ public class SavesController extends AbstractMvcController {
     private SavedSearchService savedSearchService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public @ResponseBody List<SavedSearchListDto> list() {
+    @ResponseBody
+    public List<SavedSearchListDto> list() {
         return savedSearchService.findSavedSearchesForLoggedInUser();
     }
 
-    @RequestMapping(value="{id}", method = RequestMethod.GET)
-    public @ResponseBody SavedSearchViewDto get(@PathVariable("id") long id) throws NotFoundException {
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public SavedSearchViewDto get(@PathVariable("id") long id) throws NotFoundException {
         return savedSearchService.getSaveById(id);
     }
 
-    @RequestMapping(value="{id}", method = RequestMethod.DELETE)
-    public @ResponseBody String delete(@PathVariable("id") long id) throws NotFoundException {
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public String delete(@PathVariable("id") long id) throws NotFoundException {
         savedSearchService.deleteSavedSearch(id);
         return "OK";
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public @ResponseBody long save( @RequestBody SavedSearchSaveDto dto ) throws NotFoundException {
+    @ResponseBody
+    public long save(@RequestBody SavedSearchSaveDto dto) throws NotFoundException {
         return savedSearchService.saveSearch(dto);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public @ResponseBody String edit( @RequestBody SavedSearchEditDto dto ) throws NotFoundException {
+    @ResponseBody
+    public String edit(@RequestBody SavedSearchEditDto dto) throws NotFoundException {
         savedSearchService.updateSavedSearch(dto);
         return "OK";
     }

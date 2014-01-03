@@ -27,25 +27,24 @@ public class SearchQueryDto implements Serializable {
     }
     
     public void addAndCriteria(SearchKeyDto keyDto, SearchValueDto value) {
-        
-        if( !jaEhdot.containsKey(keyDto.getKoodistoUri()) ) {
+
+        if (!jaEhdot.containsKey(keyDto.getKoodistoUri())) {
             ConditionDto dto = new ConditionDto();
             dto.setOperaattori(keyDto.getOperaattori());
             jaEhdot.put(keyDto.getKoodistoUri(), dto);
         }
-        
+
         jaEhdot.get(keyDto.getKoodistoUri()).addEhto(value);
     }
     
     public void addOrCriteria(SearchKeyDto keyDto, SearchValueDto value) {
-        
-        if( !taiEhdot.containsKey(keyDto.getKoodistoUri()) ) {
+
+        if (!taiEhdot.containsKey(keyDto.getKoodistoUri())) {
             ConditionDto dto = new ConditionDto();
             dto.setOperaattori(keyDto.getOperaattori());
             taiEhdot.put(keyDto.getKoodistoUri(), dto);
         }
-        
+
         taiEhdot.get(keyDto.getKoodistoUri()).addEhto(value);
-    }
-    
+    }    
 }

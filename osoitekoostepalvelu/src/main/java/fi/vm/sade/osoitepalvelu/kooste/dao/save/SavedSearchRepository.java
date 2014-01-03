@@ -15,8 +15,8 @@ import java.util.List;
  */
 public interface SavedSearchRepository extends MongoRepository<SavedSearch, Long> {
 
-    public List<SavedSearch> findByOwnerUsername(String ownerUsername, Sort order);
+    List<SavedSearch> findByOwnerUsername(String ownerUsername, Sort order);
 
-    public SavedSearch saveNew(SavedSearch savedSearch);
+    SavedSearch saveNew(SavedSearch savedSearch);
 
 }

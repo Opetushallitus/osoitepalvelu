@@ -20,8 +20,7 @@ public class OrganisaatioResultsDto {
         this.tulos = results;
     }
     
-    public void addResult( OrganisaatioResultDto result ) {
+    public void addResult(OrganisaatioResultDto result) {
         this.tulos.add(result);
     }
-    
 }

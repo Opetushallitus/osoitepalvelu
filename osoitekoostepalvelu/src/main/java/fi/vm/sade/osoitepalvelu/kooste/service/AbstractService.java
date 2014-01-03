@@ -20,16 +20,17 @@ public abstract class AbstractService {
         return auth.getName();
     }
 
-    protected<T> T found( T obj ) throws NotFoundException {
-        if( obj == null ) {
-           throw new NotFoundException("Entity not found by primary key.");
+    protected <T> T found(T obj) throws NotFoundException {
+        if (obj == null) {
+            throw new NotFoundException("Entity not found by primary key.");
         }
         return obj;
     }
 
     protected void ensureLoggedInUser(String ownerUsername) {
-        if( !EqualsHelper.equals(ownerUsername, getLoggedInUserOid())) {
-            throw new AuthorizationException("Authenticated user "+getLoggedInUserOid()+" does not have access right to given entity.");
+        if (!EqualsHelper.equals(ownerUsername, getLoggedInUserOid())) {
+            throw new AuthorizationException("Authenticated user " + getLoggedInUserOid()
+                    + " does not have access right to given entity.");
         }
     }
 }
