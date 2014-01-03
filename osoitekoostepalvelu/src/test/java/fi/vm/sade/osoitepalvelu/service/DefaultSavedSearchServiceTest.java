@@ -1,6 +1,6 @@
 package fi.vm.sade.osoitepalvelu.service;
 
-import fi.vm.sade.osoitepalvelu.AbstractMongoAwareTest;
+import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
@@ -11,10 +11,13 @@ import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.converter.SavedSearchDt
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.intercept.RunAsUserToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
@@ -30,7 +33,9 @@ import static org.junit.Assert.assertTrue;
  * Date: 12/30/13
  * Time: 10:32 AM
  */
-public class DefaultSavedSearchServiceTest extends AbstractMongoAwareTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes=SpringTestAppConfig.class)
+public class DefaultSavedSearchServiceTest {
 
     @Autowired
     private DefaultSavedSearchService savedSearchService;
@@ -57,17 +62,6 @@ public class DefaultSavedSearchServiceTest extends AbstractMongoAwareTest {
     private void loginAs(String user) {
         SecurityContextHolder.getContext().setAuthentication(new RunAsUserToken("1234"+user, user, "1234",
                 Collections.<GrantedAuthority>emptyList(), null));
-    }
-
-    @Test
-    public void cleanupTest() throws NotFoundException {
-        for( SavedSearchListDto dto : savedSearchService.findSavedSearchesForLoggedInUser()) {
-            savedSearchService.deleteSavedSearch(dto.getId());
-        }
-        loginAs("otherUser");
-        for( SavedSearchListDto dto : savedSearchService.findSavedSearchesForLoggedInUser()) {
-            savedSearchService.deleteSavedSearch(dto.getId());
-        }
     }
 
     @Test

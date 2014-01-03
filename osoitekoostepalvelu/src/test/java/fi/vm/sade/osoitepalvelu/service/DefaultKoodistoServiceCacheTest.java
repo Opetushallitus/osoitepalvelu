@@ -1,12 +1,16 @@
 package fi.vm.sade.osoitepalvelu.service;
 
-import fi.vm.sade.osoitepalvelu.AbstractMongoAwareTest;
+import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.DefaultKoodistoService;
+import fi.vm.sade.osoitepalvelu.kooste.service.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.route.KoodistoReitti;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 import java.util.Locale;
@@ -20,7 +24,9 @@ import static org.junit.Assert.assertEquals;
  * Time: 12:40 PM
  * To change this template use File | Settings | File Templates.
  */
-public class DefaultKoodistoServiceCacheTest extends AbstractMongoAwareTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes={SpringTestAppConfig.class, OsoitepalveluCamelConfig.class})
+public class DefaultKoodistoServiceCacheTest {
     private static final Locale LOCALE_FI = new Locale("fi", "FI");
 
     @Autowired
@@ -48,8 +54,8 @@ public class DefaultKoodistoServiceCacheTest extends AbstractMongoAwareTest {
         koodistoService.setCacheTimeoutMillis(1000l*3600l);
 
         List<UiKoodiItemDto> optiot2 = koodistoService.findAlueHallintoVirastoOptions(LOCALE_FI);
-        // Ensure cache not used:
-        assertEquals(orignalSearchCount + 1l, koodistoReitti.getFindCounterValue());
+        // Ensure cache used:
+        assertEquals(orignalSearchCount + 2l, koodistoReitti.getFindCounterValue());
 
         // And that results match the original:
         DefaultKoodistoServiceTest.assertListNonEmptyAndItemsOfType(optiot2, KoodistoDto.KoodistoTyyppi.ALUEHALLINTOVIRASTO);

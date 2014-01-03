@@ -5,7 +5,6 @@ import fi.vm.sade.osoitepalvelu.kooste.service.kooste.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.route.KoodistoReitti;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 import java.util.Locale;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={SpringTestAppConfig.class, OsoitepalveluCamelConfig.class})

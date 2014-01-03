@@ -33,17 +33,21 @@ public class MongoConfig extends AbstractMongoConfiguration {
         return mongoTemplate;
     }
 
+    protected String hostAndPort() {
+        String port = env.getProperty("mongodb.port");
+        return env.getProperty("mongodb.host") + (port != null && port.length() > 0 ? ":"+port : "");
+    }
+
     @Bean
     @Override
     public SimpleMongoDbFactory mongoDbFactory() throws Exception {
-        return new SimpleMongoDbFactory(new MongoClient(), getDatabaseName());
+        return new SimpleMongoDbFactory(new MongoClient(hostAndPort()), getDatabaseName());
     }
 
     @Bean
     @Override
     public Mongo mongo() throws Exception {
-        String port = env.getProperty("mongodb.port");
-        return new Mongo(env.getProperty("mongodb.host") + (port != null && port.length() > 0 ? ":"+port : ""));
+        return new Mongo(hostAndPort());
     }
 
     @Override
