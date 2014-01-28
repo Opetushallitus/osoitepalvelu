@@ -21,7 +21,7 @@
 
 
 body {
-	padding: 20px;
+/*    padding: 20px; */
 }
 
 .form h2 {
@@ -194,4 +194,3 @@ a {
 .rightPosition button {
     margin-left: 10px;
 }
-

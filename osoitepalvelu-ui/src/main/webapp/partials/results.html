@@ -4,23 +4,26 @@
     <div id="no-results" ng-show="searchDone && results.length < 1">
         {{msg.no_results}}
     </div>
-    <div id="results" ng-show="searchDone && results.length">
-        <div class="resultInfo">
-            {{results.length}} {{msg.total_results}}
-        </div>
-        <h2>{{msg.results_title}}</h2>
-        <div class="gridStyle" ng-grid="resultGridOptions"
-             full-size-grid data-width-padding="40"
-             data-height-padding="200"></div>
-    </div>
-    <div class="searchActions">
-        <div class="leftPosition">
-            <button class="btn btn-lg" ng-click="deleteSelected()"
-                    ng-disabled="!resultGridOptions.selectedItems.length">{{msg.remove_selected}}</button>
-        </div>
-        <div class="rightPosition">
-            <button class="btn btn-lg" ng-disabled="!resultGridOptions.selectedItems.length">{{msg.save_excel}}</button>
-            <button class="btn btn-lg btn-primary" ng-disabled="!resultGridOptions.selectedItems.length">{{msg.send_message}}</button>
-        </div>
+    <div style="position:relative;" full-size-grid data-height-padding="119" data-width-padding="20">
+       <div id="results" ng-show="searchDone && results.length">
+           <div class="resultInfo">
+               {{results.length}} {{msg.total_results}}
+           </div>
+           <h2>{{msg.results_title}}</h2>
+           <div class="gridStyle" ng-grid="resultGridOptions"
+                full-size-grid data-width-padding="40"
+                data-height-padding="319"></div>
+       </div>
+       <div class="searchActions">
+           <div class="leftPosition">
+               <button class="btn btn-lg" ng-click="deleteSelected()"
+                       ng-disabled="!resultGridOptions.selectedItems.length">{{msg.remove_selected}}</button>
+           </div>
+           <div class="rightPosition">
+               <button class="btn btn-lg" ng-disabled="!resultGridOptions.selectedItems.length">{{msg.save_excel}}</button>
+               <button class="btn btn-lg btn-primary" ng-disabled="!resultGridOptions.selectedItems.length">{{msg.send_message}}</button>
+           </div>
+       </div>
+       <div style="clear:both;"></div>
     </div>
 </div>
