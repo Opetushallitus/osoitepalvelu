@@ -1,5 +1,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.search.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,9 +15,9 @@ public class OrganisaatioResultDto {
     private String faksinumero;
     private String emailOsoite;
     private List<String> tyypit;
-    private OsoitteistoDto postiosoite;
-    private OsoitteistoDto kayntiosoite;
-
+    private List<OsoitteistoDto> postiosoite = new ArrayList<OsoitteistoDto>();
+    private List<OsoitteistoDto> kayntiosoite = new ArrayList<OsoitteistoDto>();
+    private List<KayttajahakuResultDto> yhteyshenkilöt = new ArrayList<KayttajahakuResultDto>();;
 
     public String getOid() {
         return oid;
@@ -90,20 +91,33 @@ public class OrganisaatioResultDto {
         this.tyypit = tyypit;
     }
 
-    public OsoitteistoDto getPostiosoite() {
+    public List<OsoitteistoDto> getPostiosoite() {
         return postiosoite;
     }
-
-    public void setPostiosoite(OsoitteistoDto postiosoite) {
-        this.postiosoite = postiosoite;
+    
+    public void addPostiosoite(OsoitteistoDto postiosoite) {
+        this.postiosoite.add(postiosoite);
     }
     
-    public OsoitteistoDto getKayntiosoite() {
+    public List<OsoitteistoDto> getKayntiosoite() {
         return kayntiosoite;
     }
+
     
-    public void setKayntiosoite(OsoitteistoDto kaytiosoite) {
-        this.kayntiosoite = kaytiosoite;
+    public void addKayntiosoite(OsoitteistoDto kayntiosoite) {
+        this.kayntiosoite.add(kayntiosoite);
+    }
+    
+    public List<KayttajahakuResultDto> getYhteyshenkilöt() {
+        return yhteyshenkilöt;
+    }
+    
+    public void setYhteyshenkilöt(List<KayttajahakuResultDto> yhteyshenkilöt) {
+        this.yhteyshenkilöt = yhteyshenkilöt;
+    }
+    
+    public void addYhteyshenkilö(KayttajahakuResultDto yhteyshenkilo) {
+        this.yhteyshenkilöt.add(yhteyshenkilo);
     }
 
 }

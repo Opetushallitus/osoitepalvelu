@@ -60,21 +60,32 @@ public class ApiToJsonTest {
         result.setWwwOsoite("http://www.kimitoon.fi/barn-och-utbildning/skolor/svenskaskolor/kimitoonsgymnasi");
         
         OsoitteistoDto kayntiosoite = new OsoitteistoDto();
+        kayntiosoite.setKieli("fi");
         kayntiosoite.setOsoite("Mannerheiminkatu 48B");
         kayntiosoite.setOsoiteTyyppi("kaynti");
         kayntiosoite.setPostinumero("00100");
         kayntiosoite.setPostitoimipaikka("Helsinki");
         kayntiosoite.setYhteystietoOid("1.2.246.562.5.95913959722");
-        result.setKayntiosoite(kayntiosoite);
+        result.addKayntiosoite(kayntiosoite);
         
         OsoitteistoDto postiosoite = new OsoitteistoDto();
+        postiosoite.setKieli("fi");
         postiosoite.setOsoite("PL 231");
         postiosoite.setOsoiteTyyppi("posti");
         postiosoite.setPostinumero("00101");
         postiosoite.setPostitoimipaikka("Helsinki");
         postiosoite.setExtraRivi("Ostolaskut");
         postiosoite.setYhteystietoOid("1.2.246.562.5.140081871810");
-        result.setPostiosoite(postiosoite);
+        result.addPostiosoite(postiosoite);
+        
+        KayttajahakuResultDto yhteyshenkilo = new KayttajahakuResultDto();
+        yhteyshenkilo.setEmail("ylli.yhteyshenkilo@email.fi");
+        yhteyshenkilo.setEtunimi("Ylli");
+        yhteyshenkilo.setSukunimi("Yhteyshenkilö");
+        yhteyshenkilo.setOrganisaatioOid(result.getOid());
+        yhteyshenkilo.addRooli("Yhteyshenkilö");
+        yhteyshenkilo.setOid("1.2.3.4.1.4.3");
+        result.addYhteyshenkilö(yhteyshenkilo);
         
         results.addResult(result);
         
@@ -95,26 +106,45 @@ public class ApiToJsonTest {
         result.setWwwOsoite("http://www.organisaatio.ab");
         
         kayntiosoite = new OsoitteistoDto();
+        kayntiosoite.setKieli("fi");
         kayntiosoite.setOsoite("Yliopistonkatu 58 B");
         kayntiosoite.setOsoiteTyyppi("kaynti");
         kayntiosoite.setPostinumero("33100");
         kayntiosoite.setPostitoimipaikka("Tampere");
         kayntiosoite.setYhteystietoOid("1.2.246.562.5.95913959724");
-        result.setKayntiosoite(kayntiosoite);
+        result.addKayntiosoite(kayntiosoite);
         
         postiosoite = new OsoitteistoDto();
+        postiosoite.setKieli("fi");
         postiosoite.setOsoite("PL 231");
         postiosoite.setOsoiteTyyppi("posti");
         postiosoite.setPostinumero("33101");
         postiosoite.setPostitoimipaikka("Tampere");
         postiosoite.setExtraRivi("Postit paperiset");
         postiosoite.setYhteystietoOid("1.2.246.562.5.140081871815");
-        result.setPostiosoite(postiosoite);
+        result.addPostiosoite(postiosoite);
+        
+        yhteyshenkilo = new KayttajahakuResultDto();
+        yhteyshenkilo.setEmail("rehtori.reijo@opetus.fi");
+        yhteyshenkilo.setEtunimi("Reijo");
+        yhteyshenkilo.setSukunimi("Rehtori");
+        yhteyshenkilo.setOrganisaatioOid(result.getOid());
+        yhteyshenkilo.addRooli("Rehtori");
+        yhteyshenkilo.setOid("1.2.3.4.1.4.2");
+        result.addYhteyshenkilö(yhteyshenkilo);
+        
+        yhteyshenkilo = new KayttajahakuResultDto();
+        yhteyshenkilo.setEmail("apuri.pertti@opetus.fi");
+        yhteyshenkilo.setEtunimi("Pertti");
+        yhteyshenkilo.setSukunimi("Apuri");
+        yhteyshenkilo.setOrganisaatioOid(result.getOid());
+        yhteyshenkilo.addRooli("Apulaisrehtori");
+        yhteyshenkilo.setOid("1.2.3.4.1.4.5");
+        result.addYhteyshenkilö(yhteyshenkilo);
         
         results.addResult(result);
         
         printJson(results);
-        
     }
 
     
@@ -123,6 +153,8 @@ public class ApiToJsonTest {
         KayttajahakuResultsDto results = new KayttajahakuResultsDto();
         
         KayttajahakuResultDto result = new KayttajahakuResultDto();
+        result.addRooli("Opettaja");
+        result.addRooli("Opo");
         result.setEmail("olli.opettaja@opetus.fi");
         result.setEtunimi("Olli");
         result.setSukunimi("Opettaja");
@@ -132,6 +164,7 @@ public class ApiToJsonTest {
         results.addResult(result);
         
         result = new KayttajahakuResultDto();
+        result.addRooli("Lehtori");
         result.setEmail("pertti.pera@koulu.fi");
         result.setEtunimi("pertti");
         result.setSukunimi("pera");

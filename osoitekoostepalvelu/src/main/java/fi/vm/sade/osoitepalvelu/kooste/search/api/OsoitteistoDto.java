@@ -6,6 +6,7 @@ public class OsoitteistoDto implements Serializable {
 
     private static final long serialVersionUID = 6985560274560979066L;
     
+    private String kieli;
     private String osoiteTyyppi;
     private String yhteystietoOid;
     private String osoite;
@@ -60,4 +61,13 @@ public class OsoitteistoDto implements Serializable {
     public void setExtraRivi(String extraRivi) {
         this.extraRivi = extraRivi;
     }
+    
+    public String getKieli() {
+        return kieli;
+    }
+    
+    public void setKieli(String kieli) {
+        this.kieli = kieli;
+    }
+    
 }
