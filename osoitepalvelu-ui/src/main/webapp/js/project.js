@@ -49,8 +49,7 @@ OsoiteKoostepalvelu.config(function($routeProvider) {
         {type: 'VIRANOMAISTIEDOTUS_EMAIL',  name: i18n.address_field_viranomaistiedotus_email},
         {type: 'KOULUTUSNEUVONNAN_EMAIL',   name: i18n.address_field_koulutusneuvonnan_email},
         {type: 'KRIISITIEDOTUKSEN_EMAIL',   name: i18n.address_field_kriisitiedotuksen_email},
-        {type: 'ORGANISAATIO_SIJAINTIKUNTA',name: i18n.address_field_organisaatio_sijaintikunta},
-        {type: 'OPASJAKELUMAARAT',          name: i18n.address_field_opasjakelumaarat}
+        {type: 'ORGANISAATIO_SIJAINTIKUNTA',name: i18n.address_field_organisaatio_sijaintikunta}
     ];
 })
 .factory("ReceiverTypes", function(i18n) {

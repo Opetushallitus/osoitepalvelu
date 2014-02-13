@@ -2,10 +2,12 @@
 <html ng-app="OsoiteKoostepalvelu">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
-        <script type="text/javascript" src="/virkailija-raamit/apply-raamit.js"></script>
 
         <!-- jQuery -->
         <script src="jslib/jquery-1.10.1/jquery-1.10.1.min.js"></script>
+
+        <!-- Use 1.10.1 jQuery -->
+        <script type="text/javascript" src="/virkailija-raamit/apply-raamit.js"></script>
 
         <!-- AngularJS -->
         <script src="jslib/angular-1.2.3/angular.min.js"></script>
@@ -40,7 +42,8 @@
         <!-- REMOVE --><script src="js/controller/search.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/controller/results.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/i18n/i18n-fi.js"></script><!-- END -->
-        <!-- REMOVE --><script src="js/standalone.ignored.js"></script><!-- END -->
+        <!-- Since the project is apparently not compiled using Maven (as should) in production, only overlaid as is, default to production settings: -->
+        <!-- REMOVE --><!--<script src="js/standalone.ignored.js"></script>--><!-- END -->
         <!-- PRODUCTION:<link rel="stylesheet" href="css/style.min.css"/>  -->
         <!-- PRODUCTION:<script src="js/script.min.js"></script>  -->
     </head>
