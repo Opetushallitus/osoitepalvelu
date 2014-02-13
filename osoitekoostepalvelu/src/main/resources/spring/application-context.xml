@@ -29,7 +29,7 @@
                 <prop key="cas_key">osoitepalvelu-ui</prop>
                 <prop key="cas_service">${cas.service.osoitepalvelu-ui}</prop>
                 <prop key="cas_callback_url">${cas.callback.osoitepalvelu-ui}</prop>
-                <prop key="spring_security_default_access">hasAnyRole('ROLE_APP_OSOITEPALVELU_UI')</prop>
+                <prop key="spring_security_default_access">hasAnyRole('ROLE_APP_OSOITE_CRUD')</prop>
             </util:properties>
         </property>
     </bean>
