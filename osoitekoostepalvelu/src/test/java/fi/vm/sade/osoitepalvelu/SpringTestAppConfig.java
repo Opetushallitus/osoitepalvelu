@@ -17,7 +17,8 @@ import org.springframework.core.env.Environment;
         "fi.vm.sade.osoitepalvelu.kooste.common",
         "fi.vm.sade.osoitepalvelu.kooste.domain",
         "fi.vm.sade.osoitepalvelu.kooste.dao",
-        "fi.vm.sade.osoitepalvelu.kooste.service"
+        "fi.vm.sade.osoitepalvelu.kooste.service",
+        "fi.vm.sade.osoitepalvelu.kooste.search"
 })
 @ImportResource("classpath:spring/test-application-context.xml")
 @Import(value={MongoTestConfig.class})

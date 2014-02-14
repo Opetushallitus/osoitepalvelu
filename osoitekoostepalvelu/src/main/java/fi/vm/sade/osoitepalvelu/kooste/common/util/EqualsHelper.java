@@ -11,6 +11,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class EqualsHelper {
 
+    public static boolean differentNulls(Object x, Object y) {
+        return (x == null && y != null) || (y == null && x != null);
+    }
+
+    public static boolean notNulls(Object x, Object y) {
+        return (x != null && y != null);
+    }
+
     public static boolean equals(Object x, Object y) {
         return x == y || (x != null && y != null && x.equals(y));
     }
