@@ -40,7 +40,7 @@
     <bean id="ticketInterceptor" class="fi.vm.sade.generic.ui.portlet.security.SecurityTicketOutInterceptor"/>
     <bean id="ticketInterceptorRest" class="fi.vm.sade.generic.ui.portlet.security.SecurityTicketOutInterceptorRest"/>
     <!-- Tarvitaankohan? 
-    <bean id="securityPreprocessor" class="fi.vm.sade.valinta.kooste.security.SecurityPreprocessor"/>
+    <bean id="securityPreprocessor" class="fi.vm.sade.valinta.koodisto.security.SecurityPreprocessor"/>
       -->
     <authorizationPolicy id="admin" access="isAuthenticated()"
                          authenticationManager="authenticationManager"

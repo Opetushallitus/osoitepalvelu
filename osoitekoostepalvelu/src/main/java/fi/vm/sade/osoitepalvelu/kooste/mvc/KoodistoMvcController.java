@@ -1,5 +1,22 @@
+/*
+ * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
+ *
+ * This program is free software: Licensed under the EUPL, Version 1.1 or - as
+ * soon as they will be approved by the European Commission - subsequent versions
+ * of the EUPL (the "Licence");
+ *
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at: http://www.osor.eu/eupl/
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * European Union Public Licence for more details.
+ */
+
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -11,16 +28,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.KoodistoService;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.kooste.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
 
 
 @Api("Koodiston valintakriteerit")
 @Controller
 @RequestMapping(value = "/koodisto")
-public class KoodistoMvcController {
-    private static final Locale UI_LOCALE = new Locale("fi", "FI");
+public class KoodistoMvcController extends AbstractMvcController implements Serializable {
+    public static final Locale UI_LOCALE = new Locale("fi", "FI");
 
     @Autowired
     private KoodistoService koodistoService;

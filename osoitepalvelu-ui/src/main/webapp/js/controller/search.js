@@ -9,6 +9,7 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     var updateSaves = function() {
         SavesService.list(function(data) {
             $scope.saves = data;
+            $scope.selectedSavedSearch = SearchService.getSelectedSearch();
         });
     };
 
@@ -26,10 +27,13 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     };
 
     $scope.saves = [];
-    updateSaves();
     $scope.selectedSavedSearch = null;
+    updateSaves();
 
-    $scope.updateTerms = function() {
+    $scope.updateTerms = function(updateOptions) {
+        if( updateOptions === undefined ) {
+            updateOptions = true;
+        }
         $log.info("Update search terms");
 
         $scope.searchTypes = SearchTypes;
@@ -48,19 +52,21 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         } );
         $scope.showExtraTerms = false;
 
-        $scope.options = angular.copy(EmptyTerms);
-        OptionsService.listTutkintotoimikuntas(function(data) { $scope.options.tutkintotoimikuntas = data; });
-        OptionsService.listTutkintotoimikuntaRoolis(function(data) { $scope.options.tutkintotoimikuntaRoolis = data; });
-        OptionsService.listKoulutaRoolis(function(data) { $scope.options.koulutaRoolis = data; });
-        OptionsService.listAipalRoolis(function(data) { $scope.options.aipalRoolis = data; });
-        OptionsService.listOrganisaationKielis(function(data) { $scope.options.organisaationKielis = data; });
-        OptionsService.listAvis(function(data) { $scope.options.avis = data; });
-        OptionsService.listMaakuntas(function(data) { $scope.options.maakuntas = data; });
-        OptionsService.listKuntas(function(data) { $scope.options.kuntas = data; });
-        OptionsService.listOppilaitostyyppis(function(data) { $scope.options.oppilaitostyyppis = data; });
-        OptionsService.listOmistajatyyppis(function(data) { $scope.options.omistajatyyppis = data; });
-        OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
-        OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
+        if( updateOptions ) {
+            $scope.options = angular.copy(EmptyTerms);
+            OptionsService.listTutkintotoimikuntas(function(data) { $scope.options.tutkintotoimikuntas = data; });
+            OptionsService.listTutkintotoimikuntaRoolis(function(data) { $scope.options.tutkintotoimikuntaRoolis = data; });
+            OptionsService.listKoulutaRoolis(function(data) { $scope.options.koulutaRoolis = data; });
+            OptionsService.listAipalRoolis(function(data) { $scope.options.aipalRoolis = data; });
+            OptionsService.listOrganisaationKielis(function(data) { $scope.options.organisaationKielis = data; });
+            OptionsService.listAvis(function(data) { $scope.options.avis = data; });
+            OptionsService.listMaakuntas(function(data) { $scope.options.maakuntas = data; });
+            OptionsService.listKuntas(function(data) { $scope.options.kuntas = data; });
+            OptionsService.listOppilaitostyyppis(function(data) { $scope.options.oppilaitostyyppis = data; });
+            OptionsService.listOmistajatyyppis(function(data) { $scope.options.omistajatyyppis = data; });
+            OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
+            OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
+        }
 
         $scope.terms = SearchService.getTerms();
         $log.info($scope.terms);
@@ -103,10 +109,11 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
                 SearchService.updateSearchType(save.searchType, save.addressFields, save.receiverFields);
                 SearchService.updateTargetGroups(save.targetGroups);
                 SearchService.updateTerms(save.terms);
-                $scope.updateTerms();
+                $scope.updateTerms(false);
                 $scope.selectedSavedSearch = selected;
             });
         }
+        SearchService.updateSelectedSearch($scope.selectedSavedSearch);
     };
 
     $scope.nonSelectedByField = FilterHelper.extractedFieldNotInArray;
@@ -198,4 +205,3 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
         });
     };
 }
-
