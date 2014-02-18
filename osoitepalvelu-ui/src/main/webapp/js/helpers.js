@@ -11,6 +11,21 @@ angular.module('Helpers', [])
         });
         return results;
     };
+    this.ensureArray = function(arr) {
+        if( !(arr instanceof Array) ) {
+            return [arr];
+        }
+        return arr;
+    };
+    this.forAll = function(arr, callback) {
+        var conditionsMet = true;
+        angular.forEach( arr, function(item, key) {
+            if( !callback(item, key) ) {
+                conditionsMet = false;
+            }
+        });
+        return conditionsMet;
+    };
 })
 .service('FilterHelper', function() {
     this.notInArray = function(arr) {

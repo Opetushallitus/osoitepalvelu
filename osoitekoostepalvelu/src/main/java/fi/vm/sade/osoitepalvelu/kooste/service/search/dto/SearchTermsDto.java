@@ -16,7 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
-import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTargetGroupDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTermDto;
 
@@ -30,17 +29,25 @@ import java.util.List;
  * Time: 2:51 PM
  */
 public class SearchTermsDto implements Serializable {
-    private SavedSearch.SaveType searchType;
+
+    public enum SearchType {
+        EMAIL,
+        SEND_LETTER,
+        LETTER,
+        CONTACT;
+    }
+
+    private SearchType searchType;
     private List<String> addressFields = new ArrayList<String>();
     private List<String> receiverFields = new ArrayList<String>();
     private List<SearchTargetGroupDto> targetGroups = new ArrayList<SearchTargetGroupDto>();
     private List<SearchTermDto> terms = new ArrayList<SearchTermDto>();
 
-    public SavedSearch.SaveType getSearchType() {
+    public SearchType getSearchType() {
         return searchType;
     }
 
-    public void setSearchType(SavedSearch.SaveType searchType) {
+    public void setSearchType(SearchType searchType) {
         this.searchType = searchType;
     }
 

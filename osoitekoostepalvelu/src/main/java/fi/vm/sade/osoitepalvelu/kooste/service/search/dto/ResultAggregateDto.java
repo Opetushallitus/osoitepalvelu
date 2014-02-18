@@ -53,7 +53,7 @@ public class ResultAggregateDto implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = ( organisaatio.getOid() != null ? organisaatio.getOid().hashCode() : 0 );
+        int result = ( organisaatio != null && organisaatio.getOid() != null ? organisaatio.getOid().hashCode() : 0 );
         result = 31 * result + (henkilo != null && henkilo.getOid() != null ? henkilo.getOid().hashCode() : 0);
         result = 31 * result + (osoite != null && osoite.getYhteystietoOid() != null ? osoite.getYhteystietoOid().hashCode() : 0);
         return result;
@@ -68,7 +68,9 @@ public class ResultAggregateDto implements Serializable {
             return false;
         }
         ResultAggregateDto that = (ResultAggregateDto) o;
-        if (!EqualsHelper.equals(organisaatio.getOid(), that.organisaatio)) {
+        if (EqualsHelper.differentNulls(osoite, that.osoite)
+                || (EqualsHelper.notNulls(osoite, that.osoite)
+                    && !EqualsHelper.equals(organisaatio.getOid(), that.organisaatio))) {
             return false;
         }
         if (EqualsHelper.differentNulls(osoite, that.osoite)

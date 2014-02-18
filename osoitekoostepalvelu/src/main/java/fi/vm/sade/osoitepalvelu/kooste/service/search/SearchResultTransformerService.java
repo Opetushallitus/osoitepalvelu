@@ -17,7 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.List;
@@ -30,19 +30,22 @@ import java.util.List;
 public interface SearchResultTransformerService {
 
     /**
-     * @param results to be aggregated
+     * Creates a scalar product of given orgranisaatios, their yhteyshenkilos and postiosoites.
+     * Filters the postiosoites to match the possibly given locale of the presentation and localizes orgnisaatio's
+     * nimi with the same locale.
+     *
+     * @param results to be transformed
      * @param presentation holding the preferred locale to filter positosoites with
-     * @return the aggregated rows for presentation (in view or excel, for example)
+     * @return the results, rows for presentation
      */
-    List<SearchResultRowDto> aggregateResultRows( List<OrganisaatioResultDto> results,
-                                                  SearchResultPresentation presentation );
+    SearchResultsDto transformToResultRows(List<OrganisaatioResultDto> results,
+                                                   SearchResultPresentation presentation);
 
     /**
      * @param workbook the excel workbook to produce the rows to
-     * @param rows the rows for the excel
-     * @param presentation holding e.g. the preferred localization locale and columns to include in the excel
+     * @param searchResults to produce to the workbook
      */
-    void produceExcel(Workbook workbook, List<SearchResultRowDto> rows, SearchResultPresentation presentation);
+    void produceExcel(Workbook workbook, SearchResultsDto searchResults);
 
     /**
      * @return the currently logged in user's OID.

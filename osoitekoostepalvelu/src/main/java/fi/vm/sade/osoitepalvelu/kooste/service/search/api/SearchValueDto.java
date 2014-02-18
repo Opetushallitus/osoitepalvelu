@@ -43,7 +43,7 @@ public class SearchValueDto implements Comparable<SearchValueDto>, Serializable{
     @Override
     public int compareTo(SearchValueDto o) {
         if (o != null) {
-            return ((SearchValueDto) o).getKoodiArvo().compareTo(this.getKoodiArvo());
+            return o.getKoodiArvo().compareTo(this.getKoodiArvo());
         } else {
             return -1;
         }

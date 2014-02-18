@@ -23,7 +23,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultTransformerSer
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchService;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentationByAddressFieldsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.exolab.castor.types.DateTime;
@@ -39,7 +39,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -64,14 +63,14 @@ public class SeachController extends AbstractMvcController implements Serializab
 
     /**
      * @param searchTerms to use
-     * @return the matching rows for listing
+     * @return the results
      */
     @RequestMapping(value="list.json", method = RequestMethod.POST)
-    public @ResponseBody List<SearchResultRowDto> list( @RequestBody SearchTermsDto searchTerms) {
+    public @ResponseBody SearchResultsDto list( @RequestBody SearchTermsDto searchTerms) {
         OrganisaatioResultsDto results = searchService.find(searchTerms);
-        return resultTransformerService.aggregateResultRows(results.getResults(),
-                new SearchResultPresentationByAddressFieldsDto(searchTerms,
-                        /*TODO:*/KoodistoMvcController.UI_LOCALE ) );
+        SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(searchTerms,
+                        /*TODO:*/KoodistoMvcController.UI_LOCALE);
+        return resultTransformerService.transformToResultRows(results.getResults(), presentation);
     }
 
     /**
@@ -93,6 +92,10 @@ public class SeachController extends AbstractMvcController implements Serializab
      * only by the same user that has stored the parameters for that id. Results for any given downloadId may be
      * removed if downloadId has not been used within 5 minutes (TODO: see if this should be implemented as such).
      *
+     * @see #storeExcelParameters(FilteredSearchParameters)
+     * There might be a better way around. Done this way so that we can avoid too long GET-request and redirect
+     * borwser to the download action without the need to store data on disk/db.
+     *
      * @param downlaodId id returned form a prepare.excel.do call (associated with stored parameters)
      * @return the Excel presentation
      * @throws NotFoundException if downloadId did not exist or already used.
@@ -104,18 +107,18 @@ public class SeachController extends AbstractMvcController implements Serializab
         if( searchParameters == null ) {
             throw new NotFoundException("Excel not found for download with key="+downlaodId);
         }
-        this.storedParameters.remove(storeKey);
+        this.storedParameters.remove(storeKey); // <- not really REST here :/
         OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms());
-        final SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
+        SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
                 searchParameters.getSearchTerms(),
                         /*TODO:*/KoodistoMvcController.UI_LOCALE,
                 searchParameters.getNonIncludedOrganisaatioOids() );
-        final List<SearchResultRowDto> rows = resultTransformerService.aggregateResultRows(results.getResults(), presentation);
+        final SearchResultsDto searchResults = resultTransformerService.transformToResultRows(results.getResults(), presentation);
         return new AbstractExcelView() {
             @Override
             protected void buildExcelDocument(Map<String, Object> model, HSSFWorkbook workbook, HttpServletRequest request,
                                               HttpServletResponse response) throws Exception {
-                resultTransformerService.produceExcel(workbook, rows, presentation);
+                resultTransformerService.produceExcel(workbook, searchResults);
             }
         };
     }

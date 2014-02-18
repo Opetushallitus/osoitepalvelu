@@ -3,9 +3,22 @@
  */
 
 OsoiteKoostepalvelu.service('OptionsService', function($log, $http, TutkintotoimikuntaRoolis) {
-
     var _commonErrorHandler = function(e) {
         $log.error(e);
+    };
+
+    // Cache here only means that user should refresh the page (or re-navigate to it) in order to referesh the options.
+    // We can avoid a number of requests when going back to the search from the results.
+    var _getCache = {},
+    _get = function( url, success, error ) {
+        if( _getCache[url] ) {
+            success( _getCache[url] );
+        } else {
+            $http.get(url).success(function(data) {
+                _getCache[url] = data;
+                success(data);
+            }).error(error || _commonErrorHandler);
+        }
     };
 
     this.listTutkintotoimikuntas = function(success, error) {
@@ -28,34 +41,34 @@ OsoiteKoostepalvelu.service('OptionsService', function($log, $http, Tutkintotoim
     };
 
     this.listOrganisaationKielis = function(success, error) {
-    	 $http.get('api/koodisto/opetuskieli').success(success).error(error || _commonErrorHandler);
+        _get('api/koodisto/opetuskieli', success, error);
     };
 
     this.listAvis = function(success, error) {
-    	$http.get('api/koodisto/avi').success(success).error(error || _commonErrorHandler);
+        _get('api/koodisto/avi', success, error);
     };
 
     this.listMaakuntas = function(success, error) {
-    	$http.get('api/koodisto/maakunta').success(success).error(error || _commonErrorHandler);
+        _get('api/koodisto/maakunta', success, error);
     };
 
     this.listKuntas = function(success, error) {
-    	$http.get('api/koodisto/kunta').success(success).error(error || _commonErrorHandler);
+        _get('api/koodisto/kunta', success, error);
     };
 
     this.listOppilaitostyyppis = function(success, error) {
-    	$http.get('api/koodisto/oppilaitostyyppi').success(success).error(error || _commonErrorHandler);
+        _get('api/koodisto/oppilaitostyyppi', success, error);
     };
 
     this.listOmistajatyyppis = function(success, error) {
-    	$http.get('api/koodisto/omistajatyyppi').success(success).error(error || _commonErrorHandler);
+        _get('api/koodisto/omistajatyyppi', success, error);
     };
 
     this.listVuosiluokkas = function(success, error) {
-    	$http.get('api/koodisto/vuosiluokka').success(success).error(error || _commonErrorHandler);
+        _get('api/koodisto/vuosiluokka', success, error);
     };
 
     this.listKoultuksenjarjestajas = function(success, error) {
-    	$http.get('api/koodisto/koulutuksenjarjestaja').success(success).error(error || _commonErrorHandler);
+        _get('api/koodisto/koulutuksenjarjestaja', success, error);
     };
 });

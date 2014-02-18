@@ -23,7 +23,6 @@ package fi.vm.sade.osoitepalvelu.service.search;
  */
 
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
-import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultTransformerService;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.KayttajahakuResultDto;
@@ -31,6 +30,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentationByAddressFieldsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -42,8 +42,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={SpringTestAppConfig.class})
@@ -81,7 +80,10 @@ public class SearchResultTransformerServiceTest {
         organisaatio1.getYhteyshenkilöt().add(yhteyshenkilo2);
 
         List<OrganisaatioResultDto> list = Arrays.asList(organisaatio1, organisaatio2);
-        List<SearchResultRowDto> rows = resultTranformerService.aggregateResultRows(list, new AllColumnsSearchResultPresentation());
+        SearchResultsDto results = resultTranformerService.transformToResultRows(list,
+                new AllColumnsSearchResultPresentation());
+        assertNotNull(results.getPresentation());
+        List<SearchResultRowDto> rows = results.getRows();
         assertEquals(3, rows.size());
         assertEquals("org1", rows.get(0).getOrganisaatioOid());
         assertEquals("henk1", rows.get(0).getHenkiloOid());
@@ -136,8 +138,9 @@ public class SearchResultTransformerServiceTest {
         organisaatio2.getPostiosoite().add(osoite3);
 
         List<OrganisaatioResultDto> list = Arrays.asList(organisaatio1, organisaatio2);
-        List<SearchResultRowDto> rows = resultTranformerService.aggregateResultRows(list,
-                new AllColumnsSearchResultPresentation(new Locale("sv","SE")));
+        SearchResultsDto results = resultTranformerService.transformToResultRows(list,
+                new AllColumnsSearchResultPresentation(new Locale("sv", "SE")));
+        List<SearchResultRowDto> rows = results.getRows();
         assertEquals(6, rows.size());
         assertEquals("org1", rows.get(0).getOrganisaatioOid());
         assertEquals("org1", rows.get(3).getOrganisaatioOid());
@@ -176,8 +179,9 @@ public class SearchResultTransformerServiceTest {
         organisaatio.getPostiosoite().add(osoite2);
 
         List<OrganisaatioResultDto> list = Arrays.asList(organisaatio);
-        List<SearchResultRowDto> rows = resultTranformerService.aggregateResultRows(list,
-                new AllColumnsSearchResultPresentation(new Locale("sv","SE")));
+        SearchResultsDto results = resultTranformerService.transformToResultRows(list,
+                new AllColumnsSearchResultPresentation(new Locale("sv", "SE")));
+        List<SearchResultRowDto> rows = results.getRows();
         assertEquals(1, rows.size());
         assertEquals("fi", rows.get(0).getOsoiteKieli());
     }
@@ -185,7 +189,7 @@ public class SearchResultTransformerServiceTest {
     @Test
     public void testSearchResultPresentationByAddressFieldsDtoFields() {
         SearchTermsDto terms = new SearchTermsDto();
-        terms.setSearchType(SavedSearch.SaveType.CONTACT);
+        terms.setSearchType(SearchTermsDto.SearchType.CONTACT);
         terms.setAddressFields(SearchResultPresentationByAddressFieldsDto.fieldMappingKeys());
         new SearchResultPresentationByAddressFieldsDto(terms, new Locale("fi"));
     }
@@ -193,7 +197,8 @@ public class SearchResultTransformerServiceTest {
     @Test
     public void testProduceEmptyExcel() {
         Workbook wb = new HSSFWorkbook();
-        resultTranformerService.produceExcel(wb, new ArrayList<SearchResultRowDto>(), new AllColumnsSearchResultPresentation());
+        resultTranformerService.produceExcel(wb, new SearchResultsDto(new ArrayList<SearchResultRowDto>(),
+                new AllColumnsSearchResultPresentation()));
         assertEquals(1, wb.getNumberOfSheets());
         assertEquals(0, wb.getSheetAt(0).getLastRowNum());
         assertEquals("Organisaatio", wb.getSheetAt(0).getRow(0).getCell(0).getStringCellValue());
@@ -207,14 +212,12 @@ public class SearchResultTransformerServiceTest {
         nimi.put("fi", "Organisaation nimi");
         organisaatio.setNimi(nimi);
         SearchResultPresentation presentation = new AllColumnsSearchResultPresentation();
-        List<SearchResultRowDto> rows = resultTranformerService.aggregateResultRows(Arrays.asList(organisaatio), presentation);
+        SearchResultsDto results = resultTranformerService.transformToResultRows(Arrays.asList(organisaatio), presentation);
 
         Workbook wb = new HSSFWorkbook();
-        resultTranformerService.produceExcel(wb, rows, presentation);
+        resultTranformerService.produceExcel(wb, results);
         assertEquals(1, wb.getNumberOfSheets());
         assertEquals(1, wb.getSheetAt(0).getLastRowNum());
         assertEquals("Organisaation nimi", wb.getSheetAt(0).getRow(1).getCell(0).getStringCellValue());
     }
-
-
 }

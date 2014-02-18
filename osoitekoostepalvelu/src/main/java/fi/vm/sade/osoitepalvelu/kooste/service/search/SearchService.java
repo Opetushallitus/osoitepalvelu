@@ -19,9 +19,6 @@ package fi.vm.sade.osoitepalvelu.kooste.service.search;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 
-import java.util.Collection;
-import java.util.List;
-
 /**
  * User: ratamaa
  * Date: 2/17/14

@@ -23,6 +23,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.ResultAggregateDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +51,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
     private MessageSource messageSource;
 
     @Override
-    public List<SearchResultRowDto> aggregateResultRows(List<OrganisaatioResultDto> results,
-                                                        SearchResultPresentation presentation) {
+    public SearchResultsDto transformToResultRows(List<OrganisaatioResultDto> results,
+                                                          SearchResultPresentation presentation) {
         Set<ResultAggregateDto> aggregates = new LinkedHashSet<ResultAggregateDto>();
         for (OrganisaatioResultDto result : results) {
             List<OsoitteistoDto> filteredOsoites = filterOsoites(result.getPostiosoite(), presentation.getLocale());
@@ -72,15 +73,15 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 aggregates.add(new ResultAggregateDto(result, null, null));
             }
         }
-        List<SearchResultRowDto> aggregatedResults = new ArrayList<SearchResultRowDto>();
+        List<SearchResultRowDto> transformedResults = new ArrayList<SearchResultRowDto>();
         for( ResultAggregateDto aggregate : aggregates ) {
             SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto());
             row.setNimi(localized(aggregate.getOrganisaatio().getNimi(), presentation.getLocale(), DEFAULT_LOCALE));
             if( presentation.isResultRowIncluded(row) ) {
-                aggregatedResults.add(row);
+                transformedResults.add(row);
             }
         }
-        return aggregatedResults;
+        return new SearchResultsDto(transformedResults, presentation);
     }
 
     @Override
@@ -124,14 +125,14 @@ public class DefaultSearchResultTransformerService extends AbstractService
     }
 
     @Override
-    public void produceExcel(Workbook workbook, List<SearchResultRowDto> rows, SearchResultPresentation presentation) {
+    public void produceExcel(Workbook workbook, SearchResultsDto searchResults) {
         Sheet sheet = workbook.createSheet();
 
         int rowNum = 0;
-        int maxColumn = produceHeader(sheet, rowNum, 0, presentation);
-        for (SearchResultRowDto row : rows) {
-            if( presentation.isResultRowIncluded(row) ) {
-                produceRow(presentation, sheet, ++rowNum, row);
+        int maxColumn = produceHeader(sheet, rowNum, 0, searchResults.getPresentation());
+        for (SearchResultRowDto row : searchResults.getRows()) {
+            if( searchResults.getPresentation().isResultRowIncluded(row) ) {
+                produceRow(searchResults.getPresentation(), sheet, ++rowNum, row);
             }
         }
         for (int i = 0; i < maxColumn; ++i) {

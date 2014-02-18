@@ -17,7 +17,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
 import fi.ratamaa.dtoconverter.reflection.Property;
-import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;

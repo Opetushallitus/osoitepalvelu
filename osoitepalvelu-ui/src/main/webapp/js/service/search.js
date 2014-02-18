@@ -80,7 +80,10 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
             }),
             nonIncludedOrganisaatioOids: _deletedIds,
             callback: function(data) {
-                success( $filter('filter')(data, FilterHelper.extractedFieldNotInArray(_deletedIds, "organisaatioOid") )  );
+                success( {
+                    presentation: data.presentation,
+                    rows: $filter('filter')(data.rows, FilterHelper.extractedFieldNotInArray(_deletedIds, "organisaatioOid") )
+                } );
             },
             errorCallback: function(e) {
                 $log.error(e);

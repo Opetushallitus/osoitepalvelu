@@ -37,6 +37,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.Koodisto
 @Controller
 @RequestMapping(value = "/koodisto")
 public class KoodistoMvcController extends AbstractMvcController implements Serializable {
+    /// TODO:
     public static final Locale UI_LOCALE = new Locale("fi", "FI");
 
     @Autowired
