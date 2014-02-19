@@ -19,8 +19,10 @@ package fi.vm.sade.osoitepalvelu.service.search.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -74,6 +76,10 @@ public class ApiToJsonTest {
         result.setPuhelinnumero("0955544412");
         result.setToimipistekoodi("0032901");
         result.setWwwOsoite("http://www.kimitoon.fi/barn-och-utbildning/skolor/svenskaskolor/kimitoonsgymnasi");
+        result.setViranomaistiedotuksenEmail("viranomaisille@email.com");
+        result.setKoulutusneuvonnanEmail("Koulutusneuvonta@email.com");
+        result.setKriisitiedotuksenEmail("kriisitiedotus@email.com");
+        
         
         OsoitteistoDto kayntiosoite = new OsoitteistoDto();
         kayntiosoite.setKieli("fi");
@@ -86,7 +92,8 @@ public class ApiToJsonTest {
         
         OsoitteistoDto postiosoite = new OsoitteistoDto();
         postiosoite.setKieli("fi");
-        postiosoite.setOsoite("PL 231");
+        postiosoite.setPostilokero("PL 3");
+        postiosoite.setOsoite("");
         postiosoite.setOsoiteTyyppi("posti");
         postiosoite.setPostinumero("00101");
         postiosoite.setPostitoimipaikka("Helsinki");
@@ -120,6 +127,10 @@ public class ApiToJsonTest {
         result.setPuhelinnumero("03555666000");
         result.setToimipistekoodi("0032902");
         result.setWwwOsoite("http://www.organisaatio.ab");
+        result.setViranomaistiedotuksenEmail("viranomaiset@email.com");
+        result.setKoulutusneuvonnanEmail("kouutus@email.com");
+        result.setKriisitiedotuksenEmail("kriisi@email.com");
+
         
         kayntiosoite = new OsoitteistoDto();
         kayntiosoite.setKieli("fi");
@@ -132,7 +143,7 @@ public class ApiToJsonTest {
         
         postiosoite = new OsoitteistoDto();
         postiosoite.setKieli("fi");
-        postiosoite.setOsoite("PL 231");
+        postiosoite.setPostilokero("PL 231");
         postiosoite.setOsoiteTyyppi("posti");
         postiosoite.setPostinumero("33101");
         postiosoite.setPostitoimipaikka("Tampere");
