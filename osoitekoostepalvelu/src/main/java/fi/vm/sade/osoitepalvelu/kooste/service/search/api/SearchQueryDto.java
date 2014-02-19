@@ -24,15 +24,11 @@ public class SearchQueryDto implements Serializable {
 
     private static final long serialVersionUID = 1078154058705560606L;
     
-    private Map<String, ConditionDto> taiEhdot;
-    
-    private Map<String, ConditionDto> jaEhdot;
+    private Map<String, ConditionDto> taiEhdot = new HashMap<String, ConditionDto>();
+    private Map<String, ConditionDto> jaEhdot = new HashMap<String, ConditionDto>();
     
     public SearchQueryDto() {
-        taiEhdot = new HashMap<String, ConditionDto>();
-        jaEhdot = new HashMap<String, ConditionDto>();
     }
-    
     
     public Map<String, ConditionDto> getTaiEhdot() {
         return taiEhdot;

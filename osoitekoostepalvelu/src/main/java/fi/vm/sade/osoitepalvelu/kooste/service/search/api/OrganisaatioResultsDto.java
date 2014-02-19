@@ -16,14 +16,14 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrganisaatioResultsDto {
+public class OrganisaatioResultsDto implements Serializable {
 
-    private List<OrganisaatioResultDto> tulos;
-    
-    
+    private List<OrganisaatioResultDto> tulos = new ArrayList<OrganisaatioResultDto>();
+
     public OrganisaatioResultsDto() {
         tulos = new ArrayList<OrganisaatioResultDto>();
     }

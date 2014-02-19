@@ -16,11 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class OrganisaatioResultDto {
+public class OrganisaatioResultDto implements Serializable {
 
     private String oid; // Yksikäsitteinen tunniste
     private String kotikunta;
@@ -34,9 +35,9 @@ public class OrganisaatioResultDto {
     private List<OsoitteistoDto> postiosoite = new ArrayList<OsoitteistoDto>();
     private List<OsoitteistoDto> kayntiosoite = new ArrayList<OsoitteistoDto>();
     private List<KayttajahakuResultDto> yhteyshenkilöt = new ArrayList<KayttajahakuResultDto>();
-    // TODO: viranomaistiedotuksenEmail?
-    // TODO: koulutusneuvonnanEmail?
-    // TODO: kriisitiedotuksenEmail?
+    private String viranomaistiedotuksenEmail;
+    private String koulutusneuvonnanEmail;
+    private String kriisitiedotuksenEmail;
 
     public String getOid() {
         return oid;
@@ -138,4 +139,27 @@ public class OrganisaatioResultDto {
         this.yhteyshenkilöt.add(yhteyshenkilo);
     }
 
+    public String getViranomaistiedotuksenEmail() {
+        return viranomaistiedotuksenEmail;
+    }
+
+    public void setViranomaistiedotuksenEmail(String viranomaistiedotuksenEmail) {
+        this.viranomaistiedotuksenEmail = viranomaistiedotuksenEmail;
+    }
+
+    public String getKoulutusneuvonnanEmail() {
+        return koulutusneuvonnanEmail;
+    }
+
+    public void setKoulutusneuvonnanEmail(String koulutusneuvonnanEmail) {
+        this.koulutusneuvonnanEmail = koulutusneuvonnanEmail;
+    }
+
+    public String getKriisitiedotuksenEmail() {
+        return kriisitiedotuksenEmail;
+    }
+
+    public void setKriisitiedotuksenEmail(String kriisitiedotuksenEmail) {
+        this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
+    }
 }

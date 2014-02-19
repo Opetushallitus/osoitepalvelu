@@ -40,6 +40,9 @@ public class SearchResultRowDto implements Serializable {
     private String puhelinnumero;
     private String emailOsoite;
     private List<String> tyypit;
+    private String viranomaistiedotuksenEmail;
+    private String koulutusneuvonnanEmail;
+    private String kriisitiedotuksenEmail;
 
     private Set<String> roolit;
     private String etunimi;
@@ -54,6 +57,7 @@ public class SearchResultRowDto implements Serializable {
     private String yhteystietoOid;
     @DtoConversion(path="osoite.osoite", withClass = ResultAggregateDto.class)
     private String osoite;
+    private String postilokero;
     private String postinumero;
     private String postitoimipaikka;
     private String extraRivi;
@@ -227,23 +231,35 @@ public class SearchResultRowDto implements Serializable {
         this.osoiteKieli = osoiteKieli;
     }
 
-    @DtoConversion(skip = true) /*TODO*/
-    public String getPostilokero() {
-        return getOsoite();
+    public String getViranomaistiedotuksenEmail() {
+        return viranomaistiedotuksenEmail;
     }
 
-    @DtoConversion(skip = true) /*TODO*/
-    public String getVirnaomaistiedotuksenEmail() {
-        return getEmailOsoite();
+    public void setViranomaistiedotuksenEmail(String viranomaistiedotuksenEmail) {
+        this.viranomaistiedotuksenEmail = viranomaistiedotuksenEmail;
     }
 
-    @DtoConversion(skip = true) /*TODO*/
     public String getKoulutusneuvonnanEmail() {
-        return getEmailOsoite();
+        return koulutusneuvonnanEmail;
     }
 
-    @DtoConversion(skip = true) /*TODO*/
+    public void setKoulutusneuvonnanEmail(String koulutusneuvonnanEmail) {
+        this.koulutusneuvonnanEmail = koulutusneuvonnanEmail;
+    }
+
     public String getKriisitiedotuksenEmail() {
-        return getEmailOsoite();
+        return kriisitiedotuksenEmail;
+    }
+
+    public void setKriisitiedotuksenEmail(String kriisitiedotuksenEmail) {
+        this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
+    }
+
+    public String getPostilokero() {
+        return this.postilokero;
+    }
+
+    public void setPostilokero(String postilokero) {
+        this.postilokero = postilokero;
     }
 }

@@ -223,7 +223,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
             value( cell(sheet, rowNum, cellNum++), row.getWwwOsoite() );
         }
         if (presentation.isViranomaistiedotuksenSahkopostiosoiteIncluded()) {
-            value( cell(sheet, rowNum, cellNum++), row.getVirnaomaistiedotuksenEmail() );
+            value( cell(sheet, rowNum, cellNum++), row.getViranomaistiedotuksenEmail() );
         }
         if (presentation.isKoulutusneuvonnanSahkopostiosoiteIncluded()) {
             value( cell(sheet, rowNum, cellNum++), row.getKoulutusneuvonnanEmail() );

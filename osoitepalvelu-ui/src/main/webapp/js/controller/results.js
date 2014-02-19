@@ -18,7 +18,7 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
         'puhelinnumero':                'puhelinnumeroIncluded',
         'faksinumero':                  'faksinumeroIncluded',
         'wwwOsoite':                    'wwwOsoiteIncluded',
-        'virnaomaistiedotuksenEmail':   'viranomaistiedotuksenSahkopostiosoiteIncluded',
+        'viranomaistiedotuksenEmail':   'viranomaistiedotuksenSahkopostiosoiteIncluded',
         'koulutusneuvonnanEmail':       'koulutusneuvonnanSahkopostiosoiteIncluded',
         'kriisitiedotuksenEmail':       'kriisitiedotuksenSahkopostiosoiteIncluded',
         'kotikunta':                    'organisaationSijaintikuntaIncluded'

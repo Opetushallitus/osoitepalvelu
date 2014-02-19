@@ -23,7 +23,6 @@ public class SearchKeyDto implements Serializable, Comparable<SearchKeyDto> {
     private static final long serialVersionUID = -7866357718772030725L;
     
     private String koodistoUri;
-    
     private String operaattori;
     
     public SearchKeyDto() {

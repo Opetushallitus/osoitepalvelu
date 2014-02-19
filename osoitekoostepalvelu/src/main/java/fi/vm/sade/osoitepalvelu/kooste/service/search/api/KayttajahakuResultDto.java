@@ -16,10 +16,11 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class KayttajahakuResultDto {
+public class KayttajahakuResultDto implements Serializable {
 
     private Set<String> roolit;
     private String etunimi;

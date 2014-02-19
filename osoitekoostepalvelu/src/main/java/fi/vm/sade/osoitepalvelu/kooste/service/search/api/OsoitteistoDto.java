@@ -26,7 +26,7 @@ public class OsoitteistoDto implements Serializable {
     private String osoiteTyyppi;
     private String yhteystietoOid;
     private String osoite;
-    // TODO: postilokero?
+    private String postilokero;
     private String postinumero;
     private String postitoimipaikka;
     private String extraRivi;
@@ -86,5 +86,12 @@ public class OsoitteistoDto implements Serializable {
     public void setKieli(String kieli) {
         this.kieli = kieli;
     }
-    
+
+    public String getPostilokero() {
+        return postilokero;
+    }
+
+    public void setPostilokero(String postilokero) {
+        this.postilokero = postilokero;
+    }
 }

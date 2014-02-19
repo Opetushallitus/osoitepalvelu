@@ -102,7 +102,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         column_puhelinnumero: 'Puhelinnumero',
         column_faksinumero: 'Faksinumero',
         column_wwwOsoite: 'Internetosoite',
-        column_virnaomaistiedotuksenEmail: 'Viranomaistiedotuksen sähköpostiosoite',
+        column_viranomaistiedotuksenEmail: 'Viranomaistiedotuksen sähköpostiosoite',
         column_koulutusneuvonnanEmail: 'Koulutusneuvonnan sähköpostiosoite',
         column_kriisitiedotuksenEmail: 'Kriisitiedotuksen sähköpostiosoite',
         column_kotikunta: 'Organisaation sijaintikunta',

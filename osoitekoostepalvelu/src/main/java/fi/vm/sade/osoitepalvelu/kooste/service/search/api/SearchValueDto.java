@@ -23,7 +23,6 @@ public class SearchValueDto implements Comparable<SearchValueDto>, Serializable{
     private static final long serialVersionUID = -5123398206835328711L;
     
     private String koodiArvo;
-    
 
     public SearchValueDto() {
     }
@@ -48,6 +47,4 @@ public class SearchValueDto implements Comparable<SearchValueDto>, Serializable{
             return -1;
         }
     }
-    
-    
 }
