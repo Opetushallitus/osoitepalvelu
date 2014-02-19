@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <artifactId>osoitepalvelu</artifactId>
-        <groupId>fi.vm.sade.osoitepalvelu</groupId>
-        <version>1.0-SNAPSHOT</version>
-	<relativePath>..</relativePath>
-    </parent>
-    
-    <groupId>fi.vm.sade.osoitepalvelu</groupId>
-    <artifactId>osoitepalvelu-ui</artifactId>
-    <name>Osoitepalvelu :: UI</name>
+	<groupId>fi.vm.sade.osoitepalvelu</groupId>
+	<artifactId>osoitepalvelu-ui</artifactId>
+	<name>Osoitepalvelu :: UI</name>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+	<packaging>war</packaging>
 
-    <build>
-        <finalName>${project.artifactId}</finalName>
+	<build>
+		<finalName>${project.artifactId}</finalName>
 
         <pluginManagement>
             <plugins>
@@ -74,7 +67,6 @@
                             <jsSourceExcludes>
                                 <jsSourceExclude>target/${project.artifactId}/jslib/*.js</jsSourceExclude>
                                 <jsSourceExclude>**/*.min.js</jsSourceExclude>
-                                <jsSourceExclude>**/*.ignored.js</jsSourceExclude>
                             </jsSourceExcludes>
                             <jsEngine>CLOSURE</jsEngine>
                             <!-- Can not replace variable names since AngularJS has special meaning for them: (e.g. $scope) -->
@@ -97,8 +89,9 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <basedir>${project.build.directory}</basedir>
                     <includes>
-                        <include>target/${project.artifactId}/index.html</include>
+                        <include>${project.artifactId}/index.html</include>
                     </includes>
                     <encoding>UTF-8</encoding>
                     <regexFlags>
@@ -118,6 +111,6 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+	</build>
 
 </project>
