@@ -41,7 +41,7 @@ OsoiteKoostepalvelu.service('OptionsService', function($log, $http, Tutkintotoim
     };
 
     this.listOrganisaationKielis = function(success, error) {
-        _get('api/koodisto/opetuskieli', success, error);
+        _get('api/koodisto/kielivalikoima', success, error);
     };
 
     this.listAvis = function(success, error) {
