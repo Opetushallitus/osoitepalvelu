@@ -30,6 +30,7 @@
         <ehcache.version>2.5.0</ehcache.version>
         <ehcache-jgroupsreplication.version>1.5</ehcache-jgroupsreplication.version>
         <jgroups.version>2.10.0.GA</jgroups.version>
+        <cas-client-core.version>3.1.12</cas-client-core.version>
     </properties>
 
 
@@ -400,6 +401,17 @@
                 <groupId>org.jgroups</groupId>
                 <artifactId>jgroups</artifactId>
                 <version>${jgroups.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jasig.cas.client</groupId>
+                <artifactId>cas-client-support-distributed-ehcache</artifactId>
+                <version>${cas-client-core.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>net.sf.ehcache</groupId>
+                        <artifactId>ehcache</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
