@@ -68,19 +68,19 @@ public class DefaultSearchResultTransformerService extends AbstractService
         for (OrganisaatioResultDto result : results) {
             List<OsoitteistoDto> filteredOsoites = filterOsoites(result.getPostiosoite(), presentation.getLocale());
             for (OsoitteistoDto osoite : filteredOsoites) {
-                for (OrganisaatioYhteystietoDto kayttaja : result.getYhteyshenkilöt() ) {
+                for (OrganisaatioYhteystietoDto kayttaja : result.getYhteyshenkilot() ) {
                     aggregates.add(new ResultAggregateDto(result, kayttaja, osoite));
                 }
-                if(result.getYhteyshenkilöt().size() < 1) {
+                if(result.getYhteyshenkilot().size() < 1) {
                     aggregates.add(new ResultAggregateDto(result, null, osoite));
                 }
             }
             if( filteredOsoites.size() < 1 ) {
-                for (OrganisaatioYhteystietoDto kayttaja : result.getYhteyshenkilöt() ) {
+                for (OrganisaatioYhteystietoDto kayttaja : result.getYhteyshenkilot() ) {
                     aggregates.add(new ResultAggregateDto(result, kayttaja, null));
                 }
             }
-            if( result.getPostiosoite().size() < 1 && result.getYhteyshenkilöt().size() < 1 ) {
+            if( result.getPostiosoite().size() < 1 && result.getYhteyshenkilot().size() < 1 ) {
                 aggregates.add(new ResultAggregateDto(result, null, null));
             }
         }

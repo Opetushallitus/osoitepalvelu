@@ -81,8 +81,8 @@ public class SearchResultTransformerServiceTest {
         yhteyshenkilo1.setNimike("A");
         yhteyshenkilo2.setNimi("henk2");
         yhteyshenkilo2.setEmail("email2");
-        organisaatio1.getYhteyshenkilöt().add(yhteyshenkilo1);
-        organisaatio1.getYhteyshenkilöt().add(yhteyshenkilo2);
+        organisaatio1.getYhteyshenkilot().add(yhteyshenkilo1);
+        organisaatio1.getYhteyshenkilot().add(yhteyshenkilo2);
 
         List<OrganisaatioResultDto> list = Arrays.asList(organisaatio1, organisaatio2);
         SearchResultsDto results = resultTranformerService.transformToResultRows(list,
@@ -116,8 +116,8 @@ public class SearchResultTransformerServiceTest {
                 yhteyshenkilo2 = new OrganisaatioYhteystietoDto();
         yhteyshenkilo1.setEmail("henk1");
         yhteyshenkilo2.setEmail("henk2");
-        organisaatio1.getYhteyshenkilöt().add(yhteyshenkilo1);
-        organisaatio1.getYhteyshenkilöt().add(yhteyshenkilo2);
+        organisaatio1.getYhteyshenkilot().add(yhteyshenkilo1);
+        organisaatio1.getYhteyshenkilot().add(yhteyshenkilo2);
 
         OsoitteistoDto osoite1 = new OsoitteistoDto(),
                 osoite2 = new OsoitteistoDto(),
