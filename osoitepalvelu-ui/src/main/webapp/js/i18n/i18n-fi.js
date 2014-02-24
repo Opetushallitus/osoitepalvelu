@@ -43,10 +43,10 @@ angular.module("I18n", [], ["$provide", function($provider) {
         receiver_field_organisaatio: 'Organisaatio',
         receiver_field_yhteyshenkilo: 'Yhteyshenkilö',
 
-        email_search_type: 'Sähköpostin lähetys',
+        email_search_type: 'Lähetä sähköpostia',
         send_letter_search_type: 'Kirjepostin lähetys',
-        letter_search_type: 'Etsi kirjeosoitteet',
-        contact_search_type: 'Hae yhteystietoja',
+        letter_search_type: 'Lähetä kirjepostia',
+        contact_search_type: 'Hae lista yhteystiedoista',
         search_action: 'Hae',
         save_search_action: 'Tallenna haku',
         clear_action: 'Tyhjennä',

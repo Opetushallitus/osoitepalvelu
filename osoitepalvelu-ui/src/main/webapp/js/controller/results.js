@@ -95,7 +95,7 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
     };
     $log.info("SHOWING GRID.");
     var colOverrides = {
-        'organisaatioOid': {width: '20px'}
+        'organisaatioOid': {} /*..*/
     };
 
     angular.forEach(columns, function(c) {

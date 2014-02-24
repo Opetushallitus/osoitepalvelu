@@ -59,11 +59,11 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
             OptionsService.listKoulutaRoolis(function(data) { $scope.options.koulutaRoolis = data; });
             OptionsService.listAipalRoolis(function(data) { $scope.options.aipalRoolis = data; });
             OptionsService.listOrganisaationKielis(function(data) { $scope.options.organisaationKielis = data; });
-            OptionsService.listAvis(function(data) { $scope.options.avis = data; });
+            //OptionsService.listAvis(function(data) { $scope.options.avis = data; });
             OptionsService.listMaakuntas(function(data) { $scope.options.maakuntas = data; });
             OptionsService.listKuntas(function(data) { $scope.options.kuntas = data; });
             OptionsService.listOppilaitostyyppis(function(data) { $scope.options.oppilaitostyyppis = data; });
-            OptionsService.listOmistajatyyppis(function(data) { $scope.options.omistajatyyppis = data; });
+            //OptionsService.listOmistajatyyppis(function(data) { $scope.options.omistajatyyppis = data; });
             OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
             OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
         }
