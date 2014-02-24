@@ -52,6 +52,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Scope(value= WebApplicationContext.SCOPE_APPLICATION)
 @RequestMapping(value = "/search")
 public class SeachController extends AbstractMvcController implements Serializable {
+    private static final long serialVersionUID = -4986869170151316267L;
+
     @Autowired
     private SearchService searchService;
 

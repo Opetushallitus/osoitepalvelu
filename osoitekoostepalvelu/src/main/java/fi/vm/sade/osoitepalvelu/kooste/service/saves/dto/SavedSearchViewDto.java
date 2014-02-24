@@ -33,6 +33,8 @@ import java.util.List;
 @DtoConversion
 @DtoNotExported
 public class SavedSearchViewDto implements Serializable {
+    private static final long serialVersionUID = -3986479736234952248L;
+    
     private Long id;
     private SavedSearch.SaveType searchType;
     private DateTime createdAt;

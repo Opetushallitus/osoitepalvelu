@@ -29,6 +29,7 @@ import java.util.List;
  * Time: 2:51 PM
  */
 public class SearchTermsDto implements Serializable {
+    private static final long serialVersionUID = -6050192875078360323L;
 
     public enum SearchType {
         EMAIL,

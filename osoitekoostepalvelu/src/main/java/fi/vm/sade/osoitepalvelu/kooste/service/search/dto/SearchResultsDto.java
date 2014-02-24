@@ -27,6 +27,8 @@ import java.util.List;
  * Time: 9:45 AM
  */
 public class SearchResultsDto implements Serializable {
+    private static final long serialVersionUID = -8360101698155316476L;
+    
     private List<SearchResultRowDto> rows;
     private SearchResultPresentation presentation;
 

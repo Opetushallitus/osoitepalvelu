@@ -32,6 +32,8 @@ import java.util.List;
  */
 @Document(collection = "savedSearches")
 public class SavedSearch implements Serializable, Comparable<SavedSearch> {
+    private static final long serialVersionUID = 4164512181923649287L;
+
     public enum SaveType {
         EMAIL,
         SEND_LETTER,

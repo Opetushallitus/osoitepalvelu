@@ -22,6 +22,7 @@ package fi.vm.sade.osoitepalvelu.kooste.common.exception;
  * Time: 1:51 PM
  */
 public class AuthorizationException extends RuntimeException {
+    private static final long serialVersionUID = 160157720583809160L;
 
     public AuthorizationException(String message) {
         super(message);

@@ -101,13 +101,10 @@ public class ApiToJsonTest {
         postiosoite.setYhteystietoOid("1.2.246.562.5.140081871810");
         result.addPostiosoite(postiosoite);
         
-        KayttajahakuResultDto yhteyshenkilo = new KayttajahakuResultDto();
+        OrganisaatioYhteystietoDto yhteyshenkilo = new OrganisaatioYhteystietoDto();
         yhteyshenkilo.setEmail("ylli.yhteyshenkilo@email.fi");
-        yhteyshenkilo.setEtunimi("Ylli");
-        yhteyshenkilo.setSukunimi("Yhteyshenkilö");
-        yhteyshenkilo.setOrganisaatioOid(result.getOid());
-        yhteyshenkilo.addRooli("Yhteyshenkilö");
-        yhteyshenkilo.setOid("1.2.3.4.1.4.3");
+        yhteyshenkilo.setNimike("Yhteyshenkilö");
+        yhteyshenkilo.setNimi("Ylli Yhteyshenkilö");
         result.addYhteyshenkilö(yhteyshenkilo);
         
         results.addResult(result);
@@ -151,22 +148,16 @@ public class ApiToJsonTest {
         postiosoite.setYhteystietoOid("1.2.246.562.5.140081871815");
         result.addPostiosoite(postiosoite);
         
-        yhteyshenkilo = new KayttajahakuResultDto();
+        yhteyshenkilo = new OrganisaatioYhteystietoDto();
         yhteyshenkilo.setEmail("rehtori.reijo@opetus.fi");
-        yhteyshenkilo.setEtunimi("Reijo");
-        yhteyshenkilo.setSukunimi("Rehtori");
-        yhteyshenkilo.setOrganisaatioOid(result.getOid());
-        yhteyshenkilo.addRooli("Rehtori");
-        yhteyshenkilo.setOid("1.2.3.4.1.4.2");
+        yhteyshenkilo.setNimi("Reijo Rehtori");
+        yhteyshenkilo.setNimike("Rehtori");
         result.addYhteyshenkilö(yhteyshenkilo);
         
-        yhteyshenkilo = new KayttajahakuResultDto();
+        yhteyshenkilo = new OrganisaatioYhteystietoDto();
         yhteyshenkilo.setEmail("apuri.pertti@opetus.fi");
-        yhteyshenkilo.setEtunimi("Pertti");
-        yhteyshenkilo.setSukunimi("Apuri");
-        yhteyshenkilo.setOrganisaatioOid(result.getOid());
-        yhteyshenkilo.addRooli("Apulaisrehtori");
-        yhteyshenkilo.setOid("1.2.3.4.1.4.5");
+        yhteyshenkilo.setNimi("Pertti Apuri");
+        yhteyshenkilo.setNimike("Apulaisrehtori");
         result.addYhteyshenkilö(yhteyshenkilo);
         
         results.addResult(result);

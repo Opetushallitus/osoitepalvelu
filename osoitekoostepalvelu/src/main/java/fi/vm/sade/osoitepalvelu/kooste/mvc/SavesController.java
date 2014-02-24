@@ -39,6 +39,8 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/saves")
 public class SavesController extends AbstractMvcController implements Serializable {
+    private static final long serialVersionUID = 3284395720660368511L;
+    
     @Autowired
     private SavedSearchService savedSearchService;
 

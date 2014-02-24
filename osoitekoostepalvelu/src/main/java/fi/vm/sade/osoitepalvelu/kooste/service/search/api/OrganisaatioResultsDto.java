@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrganisaatioResultsDto implements Serializable {
-
+    private static final long serialVersionUID = -2063655804200866815L;
+    
     private List<OrganisaatioResultDto> tulos = new ArrayList<OrganisaatioResultDto>();
 
     public OrganisaatioResultsDto() {

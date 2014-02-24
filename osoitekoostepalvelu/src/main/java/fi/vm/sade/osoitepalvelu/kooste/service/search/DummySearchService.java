@@ -16,16 +16,17 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.KayttajahakuResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioYhteystietoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 
 /**
  * User: ratamaa
@@ -67,13 +68,10 @@ public class DummySearchService implements SearchService {
         postiosoite.setYhteystietoOid("1.2.246.562.5.140081871810");
         result.addPostiosoite(postiosoite);
 
-        KayttajahakuResultDto yhteyshenkilo = new KayttajahakuResultDto();
+        OrganisaatioYhteystietoDto yhteyshenkilo = new OrganisaatioYhteystietoDto();
         yhteyshenkilo.setEmail("ylli.yhteyshenkilo@email.fi");
-        yhteyshenkilo.setEtunimi("Ylli");
-        yhteyshenkilo.setSukunimi("Yhteyshenkilö");
-        yhteyshenkilo.setOrganisaatioOid(result.getOid());
-        yhteyshenkilo.addRooli("Yhteyshenkilö");
-        yhteyshenkilo.setOid("1.2.3.4.1.4.3");
+        yhteyshenkilo.setNimi("Ylli Yhteyshenkilö");
+        yhteyshenkilo.setNimike("Yhteyshenkilö");
         result.addYhteyshenkilö(yhteyshenkilo);
 
         results.addResult(result);

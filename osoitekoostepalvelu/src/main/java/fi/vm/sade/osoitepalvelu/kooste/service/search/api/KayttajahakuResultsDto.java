@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KayttajahakuResultsDto implements Serializable {
-
+    private static final long serialVersionUID = 5525465817208222978L;
+    
     private List<KayttajahakuResultDto> results = new ArrayList<KayttajahakuResultDto>();
     
     public KayttajahakuResultsDto() {

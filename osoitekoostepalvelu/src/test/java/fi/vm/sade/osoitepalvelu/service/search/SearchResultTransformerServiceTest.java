@@ -22,16 +22,16 @@ package fi.vm.sade.osoitepalvelu.service.search;
  * Time: 4:05 PM
  */
 
-import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultTransformerService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.KayttajahakuResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentationByAddressFieldsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Test;
@@ -40,9 +40,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.*;
-
-import static org.junit.Assert.*;
+import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultTransformerService;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioYhteystietoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentationByAddressFieldsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={SpringTestAppConfig.class})
@@ -67,15 +74,13 @@ public class SearchResultTransformerServiceTest {
         organisaatio2.setToimipistekoodi("toimipiste");
         organisaatio2.setTyypit(new ArrayList<String>(Arrays.asList("Tyyppi1", "Tyyppi2")));
         organisaatio2.setWwwOsoite("www");
-        KayttajahakuResultDto yhteyshenkilo1 = new KayttajahakuResultDto(),
-                yhteyshenkilo2 = new KayttajahakuResultDto();
-        yhteyshenkilo1.setOid("henk1");
+        OrganisaatioYhteystietoDto yhteyshenkilo1 = new OrganisaatioYhteystietoDto(),
+                yhteyshenkilo2 = new OrganisaatioYhteystietoDto();
         yhteyshenkilo1.setEmail("email");
-        yhteyshenkilo1.setEtunimi("Etu");
-        yhteyshenkilo1.setSukunimi("Suku");
-        yhteyshenkilo1.setRoolit(new HashSet<String>(Arrays.asList("A", "B")));
-        yhteyshenkilo2.setOid("henk2");
-        yhteyshenkilo2.setSukunimi("Suku2");
+        yhteyshenkilo1.setNimi("Etu Suku");
+        yhteyshenkilo1.setNimike("A");
+        yhteyshenkilo2.setNimi("henk2");
+        yhteyshenkilo2.setEmail("email2");
         organisaatio1.getYhteyshenkilöt().add(yhteyshenkilo1);
         organisaatio1.getYhteyshenkilöt().add(yhteyshenkilo2);
 
@@ -86,12 +91,10 @@ public class SearchResultTransformerServiceTest {
         List<SearchResultRowDto> rows = results.getRows();
         assertEquals(3, rows.size());
         assertEquals("org1", rows.get(0).getOrganisaatioOid());
-        assertEquals("henk1", rows.get(0).getHenkiloOid());
-        assertEquals("email", rows.get(0).getEmail());
-        assertEquals("Etu", rows.get(0).getEtunimi());
-        assertEquals("Suku", rows.get(0).getSukunimi());
+        assertEquals("email", rows.get(0).getHenkiloEmail());
+        assertEquals("Etu Suku", rows.get(0).getYhteystietoNimi());
         assertEquals("org1", rows.get(1).getOrganisaatioOid());
-        assertEquals("Suku2", rows.get(1).getSukunimi());
+        assertEquals("henk2", rows.get(1).getYhteystietoNimi());
         assertEquals("org2", rows.get(2).getOrganisaatioOid());
         assertEquals("org email", rows.get(2).getEmailOsoite());
         assertEquals("org puh", rows.get(2).getPuhelinnumero());
@@ -99,7 +102,7 @@ public class SearchResultTransformerServiceTest {
         assertEquals("toimipiste", rows.get(2).getToimipistekoodi());
         assertEquals(2, rows.get(2).getTyypit().size());
         assertEquals("suomi", rows.get(2).getNimi());
-        assertNull(rows.get(2).getHenkiloOid());
+        assertNull(rows.get(2).getHenkiloEmail());
     }
 
 
@@ -109,10 +112,10 @@ public class SearchResultTransformerServiceTest {
                 organisaatio2 = new OrganisaatioResultDto();
         organisaatio1.setOid("org1");
         organisaatio2.setOid("org2");
-        KayttajahakuResultDto yhteyshenkilo1 = new KayttajahakuResultDto(),
-                yhteyshenkilo2 = new KayttajahakuResultDto();
-        yhteyshenkilo1.setOid("henk1");
-        yhteyshenkilo2.setOid("henk2");
+        OrganisaatioYhteystietoDto yhteyshenkilo1 = new OrganisaatioYhteystietoDto(),
+                yhteyshenkilo2 = new OrganisaatioYhteystietoDto();
+        yhteyshenkilo1.setEmail("henk1");
+        yhteyshenkilo2.setEmail("henk2");
         organisaatio1.getYhteyshenkilöt().add(yhteyshenkilo1);
         organisaatio1.getYhteyshenkilöt().add(yhteyshenkilo2);
 
@@ -154,15 +157,15 @@ public class SearchResultTransformerServiceTest {
         assertEquals("yht1", rows.get(1).getYhteystietoOid());
         assertEquals("yht2", rows.get(2).getYhteystietoOid());
         assertEquals("yht2", rows.get(3).getYhteystietoOid());
-        assertEquals("henk1", rows.get(0).getHenkiloOid());
-        assertEquals("henk2", rows.get(1).getHenkiloOid());
-        assertEquals("henk1", rows.get(2).getHenkiloOid());
-        assertEquals("henk2", rows.get(3).getHenkiloOid());
+        assertEquals("henk1", rows.get(0).getHenkiloEmail());
+        assertEquals("henk2", rows.get(1).getHenkiloEmail());
+        assertEquals("henk1", rows.get(2).getHenkiloEmail());
+        assertEquals("henk2", rows.get(3).getHenkiloEmail());
         assertEquals("org2", rows.get(4).getOrganisaatioOid());
         assertEquals("yht1", rows.get(4).getYhteystietoOid());
         assertEquals("org2", rows.get(5).getOrganisaatioOid());
         assertEquals("yht2", rows.get(5).getYhteystietoOid());
-        assertNull(rows.get(5).getHenkiloOid());
+        assertNull(rows.get(5).getHenkiloEmail());
     }
 
     @Test

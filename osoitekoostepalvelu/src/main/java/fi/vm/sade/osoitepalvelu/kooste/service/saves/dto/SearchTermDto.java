@@ -29,6 +29,8 @@ import java.util.List;
  */
 @DtoConversion
 public class SearchTermDto implements Serializable {
+    private static final long serialVersionUID = -1563200682961231758L;
+    
     private String type;
     private List<String> values = new ArrayList<String>();
 

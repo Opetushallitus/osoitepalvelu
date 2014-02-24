@@ -14,37 +14,40 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.domain;
-
-import org.springframework.data.mongodb.core.mapping.Document;
+package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
 
 import java.io.Serializable;
 
-/**
- * User: ratamaa
- * Date: 12/12/13
- * Time: 6:37 PM
- */
-@Document(collection = "sequence")
-public class Sequence implements Serializable {
-    private static final long serialVersionUID = -984175757901146908L;
+public class OrganisaatioYhteystietoDto implements Serializable {
+    private static final long serialVersionUID = -4697143053873590608L;
     
-    private String name;
-    private long sequence;
-
-    public String getName() {
-        return name;
+    private String nimi;
+    private String nimike; //Kuten Rehtori
+    private String email;
+    
+    
+    public String getNimi() {
+        return nimi;
     }
-
-    public void setName(String name) {
-        this.name = name;
+    
+    public void setNimi(String nimi) {
+        this.nimi = nimi;
     }
-
-    public long getSequence() {
-        return sequence;
+    
+    public String getNimike() {
+        return nimike;
     }
-
-    public void setSequence(long sequence) {
-        this.sequence = sequence;
+    
+    public void setNimike(String nimike) {
+        this.nimike = nimike;
     }
+    
+    public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    };
+        
 }

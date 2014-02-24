@@ -27,6 +27,8 @@ import java.util.Set;
  * Time: 4:34 PM
  */
 public class FilteredSearchParameters implements Serializable {
+    private static final long serialVersionUID = -8288132415175555661L;
+    
     private SearchTermsDto searchTerms;
     private Set<String> nonIncludedOrganisaatioOids;
 

@@ -21,8 +21,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class KayttajahakuResultDto implements Serializable {
-
-    private Set<String> roolit;
+    private static final long serialVersionUID = -862732979602353326L;
+    
+    private Set<String> roolit = new TreeSet<String>();
     private String etunimi;
     private String sukunimi;
     private String email;
@@ -37,11 +38,7 @@ public class KayttajahakuResultDto implements Serializable {
         this.roolit = roolit;
     }
     
-    public void addRooli(String rooli) {
-        if(this.roolit == null) {
-            this.roolit = new TreeSet<String>();
-        }
-        
+    public void addRooli(String rooli) {        
         this.roolit.add(rooli);
     }
     

@@ -26,6 +26,8 @@ import java.util.List;
  * Time: 1:30 PM
  */
 public class SearchTerm implements Serializable {
+    private static final long serialVersionUID = 7817695731755786307L;
+    
     private String type;
     private List<String> values = new ArrayList<String>();
 

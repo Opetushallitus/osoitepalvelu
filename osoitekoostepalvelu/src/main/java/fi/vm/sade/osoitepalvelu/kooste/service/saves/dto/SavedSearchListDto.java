@@ -29,6 +29,8 @@ import java.io.Serializable;
 @DtoConversion
 @DtoNotExported
 public class SavedSearchListDto implements Serializable{
+    private static final long serialVersionUID = -5360150502343268907L;
+    
     private Long id;
     private String name;
 

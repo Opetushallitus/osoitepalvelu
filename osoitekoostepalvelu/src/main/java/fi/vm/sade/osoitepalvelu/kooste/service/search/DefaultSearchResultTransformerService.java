@@ -16,23 +16,34 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
+import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.KayttajahakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.ResultAggregateDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
-import org.apache.poi.ss.usermodel.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Service;
-
-import java.util.*;
-
-import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
 
 /**
  * User: ratamaa
@@ -57,7 +68,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         for (OrganisaatioResultDto result : results) {
             List<OsoitteistoDto> filteredOsoites = filterOsoites(result.getPostiosoite(), presentation.getLocale());
             for (OsoitteistoDto osoite : filteredOsoites) {
-                for (KayttajahakuResultDto kayttaja : result.getYhteyshenkilöt() ) {
+                for (OrganisaatioYhteystietoDto kayttaja : result.getYhteyshenkilöt() ) {
                     aggregates.add(new ResultAggregateDto(result, kayttaja, osoite));
                 }
                 if(result.getYhteyshenkilöt().size() < 1) {
@@ -65,7 +76,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 }
             }
             if( filteredOsoites.size() < 1 ) {
-                for (KayttajahakuResultDto kayttaja : result.getYhteyshenkilöt() ) {
+                for (OrganisaatioYhteystietoDto kayttaja : result.getYhteyshenkilöt() ) {
                     aggregates.add(new ResultAggregateDto(result, kayttaja, null));
                 }
             }
@@ -195,10 +206,10 @@ public class DefaultSearchResultTransformerService extends AbstractService
             value( cell(sheet, rowNum, cellNum++), row.getOrganisaatioOid() );
         }
         if (presentation.isYhteyshenkiloIncluded()) {
-            value( cell(sheet, rowNum, cellNum++), join(" ", row.getEtunimi(), row.getSukunimi()) );
+            value( cell(sheet, rowNum, cellNum++), join(" ", row.getYhteystietoNimi()));
         }
         if (presentation.isYhteyshenkiloEmailIncluded()) {
-            value( cell(sheet, rowNum, cellNum++), row.getEmail() );
+            value( cell(sheet, rowNum, cellNum++), row.getHenkiloEmail() );
         }
         if (presentation.isPositosoiteIncluded()) {
             value( cell(sheet, rowNum, cellNum++), join("\n",

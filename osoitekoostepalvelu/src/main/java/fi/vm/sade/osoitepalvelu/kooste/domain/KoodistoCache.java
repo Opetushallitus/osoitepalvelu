@@ -32,6 +32,7 @@ import java.util.Locale;
  */
 @Document(collection = "koodistoCache")
 public class KoodistoCache implements Serializable {
+    private static final long serialVersionUID = 4351568551821745238L;
 
     public enum KoodistoTyyppi {
             OPPILAITOSTYYPPI,
@@ -50,6 +51,8 @@ public class KoodistoCache implements Serializable {
     }
 
     public static class CacheKey implements Serializable {
+        private static final long serialVersionUID = -1966991269006762979L;
+        
         private KoodistoTyyppi tyyppi;
         private Locale locale;
 

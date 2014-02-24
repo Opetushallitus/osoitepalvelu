@@ -11,7 +11,7 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
         'nimi':                         'organisaationNimiIncluded',
         'organisaatioOid':              [],//'organisaatiotunnisteIncluded',
         'yhteyshenkilonNimi':           'yhteyshenkiloIncluded',
-        'email':                        'yhteyshenkiloEmailIncluded',
+        'henkiloEmail':                 'yhteyshenkiloEmailIncluded',
         'postiosoite':                  'positosoiteIncluded',
         'katuPostinumero':              ['katuosoiteIncluded', 'postinumeroIncluded'],
         'plPostinumero':                ['pLIncluded', 'postinumeroIncluded'],
@@ -37,7 +37,7 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
     };
 
     var addAggrationColumns = function(v) {
-        v.yhteyshenkilonNimi = v.etunimi + " " + v.sukunimi;
+        v.yhteyshenkilonNimi = v.yhteystietoNimi;
         v.postiosoite = v.osoite +(v.osoite ? "\n":"") + v.extraRivi + (v.extraRivi ? "\n":"")
                 + v.postinumero + " " + v.postitoimipaikka;
         v.katuPostinumero = v.osoite +(v.osoite ? ", ":"")

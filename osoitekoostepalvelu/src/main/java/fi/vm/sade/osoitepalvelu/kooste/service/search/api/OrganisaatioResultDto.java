@@ -22,19 +22,20 @@ import java.util.HashMap;
 import java.util.List;
 
 public class OrganisaatioResultDto implements Serializable {
-
+    private static final long serialVersionUID = -3235512233762738508L;
+    
     private String oid; // Yksikäsitteinen tunniste
     private String kotikunta;
     private String toimipistekoodi;
     private String wwwOsoite;
-    private HashMap<String, String> nimi; // Organisaation nimi lokaalin mukaan
+    private HashMap<String, String> nimi = new HashMap<String, String>(); // Organisaation nimi lokaalin mukaan
     private String puhelinnumero;
     private String faksinumero;
     private String emailOsoite;
     private List<String> tyypit;
     private List<OsoitteistoDto> postiosoite = new ArrayList<OsoitteistoDto>();
     private List<OsoitteistoDto> kayntiosoite = new ArrayList<OsoitteistoDto>();
-    private List<KayttajahakuResultDto> yhteyshenkilöt = new ArrayList<KayttajahakuResultDto>();
+    private List<OrganisaatioYhteystietoDto> yhteyshenkilöt = new ArrayList<OrganisaatioYhteystietoDto>();
     private String viranomaistiedotuksenEmail;
     private String koulutusneuvonnanEmail;
     private String kriisitiedotuksenEmail;
@@ -127,15 +128,15 @@ public class OrganisaatioResultDto implements Serializable {
         this.kayntiosoite.add(kayntiosoite);
     }
     
-    public List<KayttajahakuResultDto> getYhteyshenkilöt() {
+    public List<OrganisaatioYhteystietoDto> getYhteyshenkilöt() {
         return yhteyshenkilöt;
     }
     
-    public void setYhteyshenkilöt(List<KayttajahakuResultDto> yhteyshenkilöt) {
+    public void setYhteyshenkilöt(List<OrganisaatioYhteystietoDto> yhteyshenkilöt) {
         this.yhteyshenkilöt = yhteyshenkilöt;
     }
     
-    public void addYhteyshenkilö(KayttajahakuResultDto yhteyshenkilo) {
+    public void addYhteyshenkilö(OrganisaatioYhteystietoDto yhteyshenkilo) {
         this.yhteyshenkilöt.add(yhteyshenkilo);
     }
 

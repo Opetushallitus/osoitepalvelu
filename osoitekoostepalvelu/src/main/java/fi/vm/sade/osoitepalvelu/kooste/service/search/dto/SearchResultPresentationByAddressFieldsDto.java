@@ -30,6 +30,8 @@ import java.util.*;
  * Time: 10:31 AM
  */
 public class SearchResultPresentationByAddressFieldsDto implements SearchResultPresentation, Serializable {
+    private static final long serialVersionUID = -9202420166871480974L;
+    
     private static MultiValueMap<String,String> fieldMappings;
     static {
         fieldMappings = new LinkedMultiValueMap<String, String>();

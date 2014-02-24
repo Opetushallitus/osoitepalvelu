@@ -30,6 +30,8 @@ import java.util.List;
  */
 @DtoConversion
 public class SearchTargetGroupDto implements Serializable {
+    private static final long serialVersionUID = 191054363453587812L;
+    
     private SearchTargetGroup.GroupType type;
     private List<SearchTargetGroup.TargetType> options = new ArrayList<SearchTargetGroup.TargetType>();
 

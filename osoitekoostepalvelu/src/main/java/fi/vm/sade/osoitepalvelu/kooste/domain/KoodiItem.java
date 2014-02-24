@@ -24,6 +24,8 @@ import java.io.Serializable;
  * Time: 9:05 AM
  */
 public class KoodiItem implements Serializable {
+    private static final long serialVersionUID = -6732834870766631012L;
+    
     private KoodistoCache.KoodistoTyyppi koodistonTyyppi;
     private String koodiId;
     private String nimi;

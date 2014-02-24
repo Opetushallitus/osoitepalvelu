@@ -22,6 +22,7 @@ package fi.vm.sade.osoitepalvelu.kooste.common.exception;
  * Time: 1:50 PM
  */
 public class NotFoundException extends Exception {
+    private static final long serialVersionUID = 7431836003851165850L;
 
     public NotFoundException(String message) {
         super(message);

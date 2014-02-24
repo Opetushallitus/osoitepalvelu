@@ -26,6 +26,8 @@ import java.util.List;
  * Time: 1:34 PM
  */
 public class SearchTargetGroup implements Serializable {
+    private static final long serialVersionUID = -1439905791723850160L;
+
     public enum GroupType {
         JARJESTAJAT_YLLAPITAJAT,
         OPPILAITOKSET,

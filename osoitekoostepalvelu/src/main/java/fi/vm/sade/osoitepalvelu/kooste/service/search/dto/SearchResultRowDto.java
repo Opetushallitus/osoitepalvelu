@@ -16,11 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
-import fi.ratamaa.dtoconverter.annotation.DtoConversion;
-
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
+
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 
 /**
  * User: ratamaa
@@ -29,6 +28,8 @@ import java.util.Set;
  */
 @DtoConversion(path={"organisaatio", "henkilo", "osoite"}, withClass = ResultAggregateDto.class)
 public class SearchResultRowDto implements Serializable {
+    private static final long serialVersionUID = -1252066099444560569L;
+    
     @DtoConversion(path="organisaatio.oid", withClass = ResultAggregateDto.class)
     private String organisaatioOid;
     private String kotikunta;
@@ -44,12 +45,11 @@ public class SearchResultRowDto implements Serializable {
     private String koulutusneuvonnanEmail;
     private String kriisitiedotuksenEmail;
 
-    private Set<String> roolit;
-    private String etunimi;
-    private String sukunimi;
-    private String email;
-    @DtoConversion(path="henkilo.oid", withClass = ResultAggregateDto.class)
-    private String henkiloOid;
+    private String nimike;
+    @DtoConversion(path="henkilo.nimi", withClass = ResultAggregateDto.class)
+    private String yhteystietoNimi;
+    @DtoConversion(path="henkilo.email", withClass = ResultAggregateDto.class)
+    private String henkiloEmail;
 
     @DtoConversion(path="osoite.kieli", withClass = ResultAggregateDto.class)
     private String osoiteKieli;
@@ -119,45 +119,30 @@ public class SearchResultRowDto implements Serializable {
         this.emailOsoite = emailOsoite;
     }
 
-    public Set<String> getRoolit() {
-        return roolit;
+    public String getNimike() {
+        return nimike;
+    }
+    
+    public void setNimike(String nimike) {
+        this.nimike = nimike;
+    }
+    
+    public String getYhteystietoNimi() {
+        return yhteystietoNimi;
+    }
+    
+    public void setYhteystietoNimi(String yhteystietoNimi) {
+        this.yhteystietoNimi = yhteystietoNimi;
     }
 
-    public void setRoolit(Set<String> roolit) {
-        this.roolit = roolit;
+    public String getHenkiloEmail() {
+        return henkiloEmail;
+    }
+    
+    public void setHenkiloEmail(String henkiloEmail) {
+        this.henkiloEmail = henkiloEmail;
     }
 
-    public String getEtunimi() {
-        return etunimi;
-    }
-
-    public void setEtunimi(String etunimi) {
-        this.etunimi = etunimi;
-    }
-
-    public String getSukunimi() {
-        return sukunimi;
-    }
-
-    public void setSukunimi(String sukunimi) {
-        this.sukunimi = sukunimi;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getHenkiloOid() {
-        return henkiloOid;
-    }
-
-    public void setHenkiloOid(String henkiloOid) {
-        this.henkiloOid = henkiloOid;
-    }
 
     public String getOsoiteTyyppi() {
         return osoiteTyyppi;
