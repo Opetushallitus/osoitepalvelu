@@ -45,7 +45,7 @@ import java.io.IOException;
  * Time: 9:33 AM
  */
 @Configuration
-@PropertySource({"classpath:/mongo.properties", "classpath:/test.properties"})
+@PropertySource({"classpath:/test.properties"})
 public class MongoTestConfig extends AbstractMongoConfiguration {
     private static final int DEFAULT_MONGO_DB_PORT = 12345;
     private static final int MAX_DB_START_RETRY_COUNT = 4;
@@ -113,7 +113,7 @@ public class MongoTestConfig extends AbstractMongoConfiguration {
 
     protected String hostAndPort() {
         String port = env.getProperty("mongodb.port");
-        return env.getProperty("mongodb.host") + (port != null && port.length() > 0 ? ":"+port : "");
+        return env.getProperty("mongodb.host") + (port != null && port.length() > 0 ? ":" + port : "");
     }
 
     @Bean
@@ -139,7 +139,7 @@ public class MongoTestConfig extends AbstractMongoConfiguration {
 
     @Override
     public String getDatabaseName() {
-        return env.getProperty("mongodb.osoitepalvelu.databaseName");
+        return env.getProperty("osoitepalvelu.mongodb.dbname");
     }
 
     @Bean

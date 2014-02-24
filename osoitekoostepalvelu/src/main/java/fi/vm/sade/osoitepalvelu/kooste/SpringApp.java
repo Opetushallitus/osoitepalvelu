@@ -18,10 +18,9 @@ package fi.vm.sade.osoitepalvelu.kooste;
 
 import fi.vm.sade.osoitepalvelu.kooste.config.MongoConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.config.OsoitepalveluCamelConfig;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.core.env.Environment;
 
 /**
  * User: ratamaa
@@ -31,12 +30,12 @@ import org.springframework.core.env.Environment;
 @Configuration
 @ComponentScan(basePackageClasses = SpringApp.class)
 @ImportResource("classpath:spring/application-context.xml")
-@Import(value={MongoConfig.class, OsoitepalveluCamelConfig.class})
-@PropertySource({"classpath:/osoitekoostepalvelu.properties", "file://${user.home}/oph-configuration/common.properties"})
+@Import(value = {MongoConfig.class, OsoitepalveluCamelConfig.class})
 public class SpringApp {
     private static final int SECONDS_TO_MS_FACTOR = 1000;
-    @Autowired
-    private Environment env;
+
+    @Value("${koodisto.cache.livetime.seconds}")
+    private int koodistoCacheLiveTimeSeconds;
 
     public static class Config {
         private int cacheTimeoutMillis;
@@ -61,7 +60,7 @@ public class SpringApp {
     @Bean
     public Config config() {
         Config config = new Config();
-        config.setCacheTimeoutMillis(Integer.parseInt(env.getProperty("koodisto.cache.livetime.seconds")) * SECONDS_TO_MS_FACTOR);
+        config.setCacheTimeoutMillis(koodistoCacheLiveTimeSeconds * SECONDS_TO_MS_FACTOR);
         return config;
     }
 }

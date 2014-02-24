@@ -17,12 +17,11 @@
 package fi.vm.sade.osoitepalvelu.kooste.config;
 
 import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mongodb.MongoClientURI;
+import com.mongodb.MongoURI;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
@@ -34,11 +33,13 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
  * Time: 2:16 PM
  */
 @Configuration
-@PropertySource({"classpath:/mongo.properties", "file://${user.home}/oph-configuration/common.properties"})
 public class MongoConfig extends AbstractMongoConfiguration {
 
-    @Autowired
-    protected Environment env;
+    @Value("${osoitepalvelu.mongodb.dbname")
+    protected String dbName;
+
+    @Value("${osoitepalvelu.mongodb.uri}")
+    protected String mongoUri;
 
     @Bean
     @Override
@@ -47,26 +48,21 @@ public class MongoConfig extends AbstractMongoConfiguration {
         return mongoTemplate;
     }
 
-    protected String hostAndPort() {
-        String port = env.getProperty("mongodb.port");
-        return env.getProperty("mongodb.host") + (port != null && port.length() > 0 ? ":"+port : "");
-    }
-
     @Bean
     @Override
     public SimpleMongoDbFactory mongoDbFactory() throws Exception {
-        return new SimpleMongoDbFactory(new MongoClient(hostAndPort()), getDatabaseName());
+        return new SimpleMongoDbFactory(new MongoURI(new MongoClientURI(mongoUri)));
     }
 
     @Bean
     @Override
     public Mongo mongo() throws Exception {
-        return new Mongo(hostAndPort());
+        return new Mongo(new MongoURI(new MongoClientURI(mongoUri)));
     }
 
     @Override
     public String getDatabaseName() {
-        return env.getProperty("mongodb.osoitepalvelu.databaseName");
+        return dbName;
     }
 
     @Bean
