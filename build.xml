@@ -46,9 +46,9 @@
                 <echo>unzip files to wepabbs -directory...</echo>
         <sshexec command="cd ${tomcat.home}/webapps
 ls -la
-mkdir osoitepalvelu-ui;
+mkdir osoitekoostepalvelu;
 
-unzip -qo -dosoitepalvelu-ui osoitekoostepalvelu.war;
+unzip -qo -dosoitekoostepalvelu osoitekoostepalvelu.war;
                                                         
 rm -rf *.war;"
                 host="${tomcat-host}" username="tomcat" keyfile="${ssh.keyfile}"
