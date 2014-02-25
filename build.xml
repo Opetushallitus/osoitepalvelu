@@ -41,21 +41,14 @@
                                <fileset dir="artifacts/osoitekoostepalvelu/target" >
                                        <include name="osoitekoostepalvelu.war"/>
                                </fileset>
-                        
-                                <fileset dir="artifacts/osoitepalvelu-ui/target" >
-                                       <include name="osoitepalvelu-ui.war"/>
-                               </fileset>
-
                 </scp>
 
                 <echo>unzip files to wepabbs -directory...</echo>
         <sshexec command="cd ${tomcat.home}/webapps
 ls -la
-mkdir osoitekoostepalvelu;
 mkdir osoitepalvelu-ui;
 
-unzip -qo -dosoitekoostepalvelu osoitekoostepalvelu.war;
-unzip -qo -dosoitepalvelu-ui osoitepalvelu-ui.war;
+unzip -qo -dosoitepalvelu-ui osoitekoostepalvelu.war;
                                                         
 rm -rf *.war;"
                 host="${tomcat-host}" username="tomcat" keyfile="${ssh.keyfile}"
