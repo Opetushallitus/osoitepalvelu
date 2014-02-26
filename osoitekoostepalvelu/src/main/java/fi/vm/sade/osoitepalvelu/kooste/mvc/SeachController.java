@@ -25,6 +25,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentationByAddressFieldsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
+import fi.vm.sade.security.SimpleCache;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.exolab.castor.types.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class SeachController extends AbstractMvcController implements Serializab
     private SearchResultTransformerService resultTransformerService;
 
     private AtomicInteger i = new AtomicInteger(0);
-    private Map<String, FilteredSearchParameters> storedParameters = new HashMap<String, FilteredSearchParameters>();
+    private Map<String, FilteredSearchParameters> storedParameters = SimpleCache.buildCache(2048);
 
     /**
      * @param searchTerms to use
@@ -92,7 +93,7 @@ public class SeachController extends AbstractMvcController implements Serializab
     /**
      * Produces the excel for previously stored search parameters. A downloadId may only be used once and
      * only by the same user that has stored the parameters for that id. Results for any given downloadId may be
-     * removed if downloadId has not been used within 5 minutes (TODO: see if this should be implemented as such).
+     * removed if downloadId has not been used instantly after storeExcelParameters call.
      *
      * @see #storeExcelParameters(FilteredSearchParameters)
      * There might be a better way around. Done this way so that we can avoid too long GET-request and redirect

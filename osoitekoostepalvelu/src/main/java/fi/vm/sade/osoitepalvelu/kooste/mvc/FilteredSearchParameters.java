@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OidAndTyyppiPair;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 
 import java.io.Serializable;
@@ -30,7 +31,7 @@ public class FilteredSearchParameters implements Serializable {
     private static final long serialVersionUID = -8288132415175555661L;
     
     private SearchTermsDto searchTerms;
-    private Set<String> nonIncludedOrganisaatioOids;
+    private Set<OidAndTyyppiPair> nonIncludedOrganisaatioOids;
 
     public SearchTermsDto getSearchTerms() {
         return searchTerms;
@@ -40,11 +41,11 @@ public class FilteredSearchParameters implements Serializable {
         this.searchTerms = searchTerms;
     }
 
-    public Set<String> getNonIncludedOrganisaatioOids() {
+    public Set<OidAndTyyppiPair> getNonIncludedOrganisaatioOids() {
         return nonIncludedOrganisaatioOids;
     }
 
-    public void setNonIncludedOrganisaatioOids(Set<String> nonIncludedOrganisaatioOids) {
+    public void setNonIncludedOrganisaatioOids(Set<OidAndTyyppiPair> nonIncludedOrganisaatioOids) {
         this.nonIncludedOrganisaatioOids = nonIncludedOrganisaatioOids;
     }
 }

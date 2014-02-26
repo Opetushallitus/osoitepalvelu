@@ -97,9 +97,11 @@ OsoiteKoostepalvelu.service("SaveConverter", function($log, $filter, FilterHelpe
             FilterHelper.extractedFieldInArray(ArrayHelper.extract(domainSave.targetGroups, "type"), "type"));
         angular.forEach(domainSave.targetGroups, function(domainTargetGroup) {
             var targetGroup = $filter('filter')(save.targetGroups, {type:domainTargetGroup.type})[0];
-            angular.forEach(targetGroup.options, function(option) {
-                option.selected = domainTargetGroup.options.indexOf(option.type) != -1;
-            });
+            if( targetGroup && domainTargetGroup.options ) {
+                angular.forEach(targetGroup.options, function(option) {
+                    option.selected = domainTargetGroup.options && domainTargetGroup.options.indexOf(option.type) != -1;
+                });
+            }
         });
 
         return save;

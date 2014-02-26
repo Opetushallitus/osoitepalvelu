@@ -32,7 +32,6 @@
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
-
     <!-- Declare a Spring MVC DispatcherServlet as usual -->
     <servlet>
         <servlet-name>Spring MVC</servlet-name>
@@ -54,6 +53,11 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>healthcheck</servlet-name>
+        <servlet-class>fi.vm.sade.osoitepalvelu.kooste.webapp.CustomSpringAwareHealthCheckerServlet</servlet-class>
+    </servlet>
+
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
@@ -62,6 +66,12 @@
     <servlet-mapping>
         <servlet-name>Spring MVC</servlet-name>
         <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet-mapping>
+        <servlet-name>healthcheck</servlet-name>
+        <url-pattern>/healthcheck</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

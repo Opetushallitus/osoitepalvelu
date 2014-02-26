@@ -257,4 +257,11 @@ public class SearchResultRowDto implements Serializable {
     public void setHenkiloOid(String henkiloOid) {
         this.henkiloOid = henkiloOid;
     }
+
+    public OidAndTyyppiPair getOidAndTyyppiPair() {
+        if( this.henkiloOid != null ) {
+            return new OidAndTyyppiPair(OidAndTyyppiPair.TYYPPI_HENKILO, this.henkiloOid);
+        }
+        return new OidAndTyyppiPair(OidAndTyyppiPair.TYYPPI_ORGANISAATIO, this.organisaatioOid);
+    }
 }

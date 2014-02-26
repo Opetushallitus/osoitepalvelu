@@ -17,8 +17,10 @@
 package fi.vm.sade.osoitepalvelu.service.search;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OidAndTyyppiPair;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.Set;
 
@@ -27,10 +29,9 @@ import java.util.Set;
  * Date: 2/17/14
  * Time: 12:50 PM
  */
-public class AllColumnsSearchResultPresentation implements SearchResultPresentation {
-    
+public class AllColumnsSearchResultPresentation implements SearchResultPresentation, Serializable {
     private Locale locale;
-    private Set<String> nonIncludedOrganisaatioOidsStrings;
+    private Set<OidAndTyyppiPair> nonIncludedOids;
 
     public AllColumnsSearchResultPresentation() {
     }
@@ -39,9 +40,9 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
         this.locale = locale;
     }
 
-    public AllColumnsSearchResultPresentation( Locale locale, Set<String> nonIncludedOrganisaatioOidsStrings ) {
+    public AllColumnsSearchResultPresentation( Locale locale, Set<OidAndTyyppiPair> nonIncludedOids ) {
         this(locale);
-        this.nonIncludedOrganisaatioOidsStrings = nonIncludedOrganisaatioOidsStrings;
+        this.nonIncludedOids = nonIncludedOids;
     }
 
     @Override
@@ -51,7 +52,7 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
 
     @Override
     public boolean isResultRowIncluded(SearchResultRowDto row) {
-        return this.nonIncludedOrganisaatioOidsStrings == null || !this.nonIncludedOrganisaatioOidsStrings.contains(row.getOrganisaatioOid());
+        return this.nonIncludedOids == null || !this.nonIncludedOids.contains(row.getOidAndTyyppiPair());
     }
 
     @Override

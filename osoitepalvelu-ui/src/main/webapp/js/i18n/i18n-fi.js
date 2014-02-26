@@ -93,7 +93,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
 
         total_results: 'osoitetta',
         column_nimi: 'Organisaatio',
-        column_organisaatioOid: 'OID',
+        column_organisaatioTunniste: 'Tunniste',
         column_yhteyshenkilonNimi: 'Yhteyshenkilö',
         column_email: 'Sähköpostiosoite',
         column_postiosoite: 'Postiosoite',

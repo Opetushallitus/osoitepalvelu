@@ -14,7 +14,7 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
     };
 
     var getCurrentSaveDetails = function() {
-        var selectedSave = $filter('filter')($scope.saves, {id: $scope.selectedSavedSearch})[0];
+        var selectedSave = $scope.selectedSavedSearch ? $filter('filter')($scope.saves, {id: $scope.selectedSavedSearch})[0] : null;
         return {
             id: selectedSave ? selectedSave.id : null,
             name: selectedSave ? selectedSave.name : null,
@@ -167,6 +167,7 @@ var SearchController = function($scope, i18n, $log, $modal, $location, $filter, 
                 resolve: {save: getCurrentSaveDetails}
             });
         } else {
+
             modalInstance = $modal.open({
                 templateUrl: 'partials/newSavePopup.html',
                 controller: NewSavePopupController,

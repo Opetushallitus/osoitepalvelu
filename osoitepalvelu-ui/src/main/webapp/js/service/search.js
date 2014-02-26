@@ -13,6 +13,24 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
         _deletedIds = [],
         _selectedSearch = null;
 
+    var _addColumnData = function(v) {
+        if( v.henkiloOid ) {
+            v.oidTyyppi = 'henkilo';
+            v.oid = v.henkiloOid;
+        } else {
+            v.oidTyyppi = 'organisaatio';
+            v.oid = v.organisaatioOid;
+        }
+        v.organisaatioTunniste = v.toimipistekoodi; // <-- TODO: onko näin?
+        v.yhteyshenkilonNimi = v.yhteystietoNimi;
+        v.postiosoite = v.osoite +(v.osoite ? "\n":"") + v.extraRivi + (v.extraRivi ? "\n":"")
+                + v.postinumero + " " + v.postitoimipaikka;
+        v.katuPostinumero = v.osoite +(v.osoite ? ", ":"")
+                + v.postinumero + " " + v.postitoimipaikka;
+        v.plPostinumero = v.postilokero +(v.postilokero ? ", ":"")
+                + v.postinumero + " " + v.postitoimipaikka;
+    };
+
     this.getTerms = function() {return _terms;};
     this.getTargetGroups = function() {return _targetGroups;};
     this.getSearchType = function() {return _searchType;};
@@ -28,8 +46,19 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
     };
     this.getReceiverFields = function() {return _receiverFields;};
 
-    this.addDeleted = function(ids) {
-        angular.forEach( $filter('filter')(ids, FilterHelper.notInArray(_deletedIds) ), function(id) { if(id) _deletedIds.push(id);});
+
+    /**
+     * @param oidAndTyyppis {
+     *      oid: <string>,
+     *      oidTyyppi: 'organisaatio' | 'henkilo'
+     * }
+     */
+    this.addDeleted = function(oidAndTyyppis) {
+        angular.forEach( $filter('filter')(oidAndTyyppis, FilterHelper.notInArray(_deletedIds) ),
+            function(oidAndTyyppi) {
+                if(oidAndTyyppi) _deletedIds.push(oidAndTyyppi);
+            }
+        );
     };
 
     this.getDeletedIds = function() {
@@ -80,9 +109,13 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
             }),
             nonIncludedOrganisaatioOids: _deletedIds,
             callback: function(data) {
+                angular.forEach(data.rows, function(row) {
+                    _addColumnData(row);
+                });
+                var filteredRows = $filter('filter')(data.rows, FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi"]) );
                 success( {
                     presentation: data.presentation,
-                    rows: $filter('filter')(data.rows, FilterHelper.extractedFieldNotInArray(_deletedIds, "organisaatioOid") )
+                    rows: filteredRows
                 } );
             },
             errorCallback: function(e) {

@@ -71,7 +71,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean kriisitiedotuksenSahkopostiosoiteIncluded;
     private boolean organisaationSijaintikuntaIncluded;
     private Locale locale;
-    private Set<String> nonIncludedOrganisaatioOidsStrings;
+    private Set<OidAndTyyppiPair> nonIncludedOids;
 
     public SearchResultPresentationByAddressFieldsDto( SearchTermsDto searchTerms, Locale locale ) {
         if( searchTerms.getSearchType() != null ) {
@@ -96,9 +96,9 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public SearchResultPresentationByAddressFieldsDto( SearchTermsDto searchTerms, Locale locale,
-                                                       Set<String> nonIncludedOrganisaatioOidsStrings ) {
+                                                       Set<OidAndTyyppiPair> nonIncludedOrganisaatioOidsStrings ) {
         this(searchTerms, locale);
-        this.nonIncludedOrganisaatioOidsStrings = nonIncludedOrganisaatioOidsStrings;
+        this.nonIncludedOids = nonIncludedOrganisaatioOidsStrings;
     }
 
     public void includeAddressFields( Collection<String> addressFields ) {
@@ -258,7 +258,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     @Override
     public boolean isResultRowIncluded(SearchResultRowDto row) {
-        return this.nonIncludedOrganisaatioOidsStrings == null || !this.nonIncludedOrganisaatioOidsStrings.contains(row.getOrganisaatioOid());
+        return this.nonIncludedOids == null || !this.nonIncludedOids.contains(row.getOidAndTyyppiPair());
     }
 
     public void setLocale(Locale locale) {

@@ -9,7 +9,7 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
 
     var columnVisibilityMapping = {
         'nimi':                         'organisaationNimiIncluded',
-        'organisaatioOid':              [],//'organisaatiotunnisteIncluded',
+        'organisaatioTunniste':         'organisaatiotunnisteIncluded',
         'yhteyshenkilonNimi':           'yhteyshenkiloIncluded',
         'henkiloEmail':                 'yhteyshenkiloEmailIncluded',
         'postiosoite':                  'positosoiteIncluded',
@@ -36,22 +36,9 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
         );
     };
 
-    var addAggrationColumns = function(v) {
-        v.yhteyshenkilonNimi = v.yhteystietoNimi;
-        v.postiosoite = v.osoite +(v.osoite ? "\n":"") + v.extraRivi + (v.extraRivi ? "\n":"")
-                + v.postinumero + " " + v.postitoimipaikka;
-        v.katuPostinumero = v.osoite +(v.osoite ? ", ":"")
-                + v.postinumero + " " + v.postitoimipaikka;
-        v.plPostinumero = v.postilokero +(v.postilokero ? ", ":"")
-                + v.postinumero + " " + v.postitoimipaikka;
-    };
-
     var updateResults = function() {
         SearchService.search(function(data) {
             $log.info("Got data as results.");
-            angular.forEach(data.rows, function(row) {
-                addAggrationColumns(row);
-            });
             $log.info(data);
             angular.forEach($scope.customColumnDefs, function(colDef) {
                 colDef.visible = isColumnVisible(colDef.field, data.presentation);
@@ -72,7 +59,7 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
 
     $scope.deleteSelected = function() {
         $log.info($scope.resultGridOptions.selectedItems);
-        SearchService.addDeleted( ArrayHelper.extract($scope.resultGridOptions.selectedItems, "organisaatioOid") );
+        SearchService.addDeleted( ArrayHelper.extract($scope.resultGridOptions.selectedItems, ["oid", "oidTyyppi"]) );
         updateResults();
     };
 
@@ -99,7 +86,7 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
     };
     $log.info("SHOWING GRID.");
     var colOverrides = {
-        'organisaatioOid': {} /*..*/
+        'organisaatioTunniste': {} /*..*/
     };
 
     angular.forEach(columns, function(c) {

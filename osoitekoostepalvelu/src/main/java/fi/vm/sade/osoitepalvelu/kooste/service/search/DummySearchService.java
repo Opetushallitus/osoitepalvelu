@@ -38,43 +38,49 @@ public class DummySearchService implements SearchService {
 
     @Override
     public OrganisaatioResultsDto find(SearchTermsDto terms) {
-        // TODO:
+        // TODO: Haun toteutus
+        // Testataan käyttöliittymää suhteellisen suurella datamäärällä. 5000 oli vielä myös OK mutta
+        // käytännössä jäävät yleensä pienemmäksi.
 
         OrganisaatioResultsDto results = new OrganisaatioResultsDto();
 
-        OrganisaatioResultDto result = new OrganisaatioResultDto();
-        List<String> tyypit = new ArrayList<String>();
-        tyypit.add("Opetuspiste");
-        HashMap<String, String> nimi = new HashMap<String, String>();
-        nimi.put("sv", "Svenska text");
-        nimi.put("fi", "Suomeksi nimi");
-        result.setNimi(nimi);
-        result.setTyypit(tyypit);
-        result.setEmailOsoite("organisaatio2@example.com");
-        result.setFaksinumero("09123123");
-        result.setKotikunta("Helsinki");
-        result.setOid("1.2.246.562.10.38898719687");
-        result.setPuhelinnumero("0955544412");
-        result.setToimipistekoodi("0032901");
-        result.setWwwOsoite("http://www.kimitoon.fi/barn-och-utbildning/skolor/svenskaskolor/kimitoonsgymnasi");
+        for( long i = 1; i <= 1000; ++i ) {
+            OrganisaatioResultDto result = new OrganisaatioResultDto();
+            List<String> tyypit = new ArrayList<String>();
+            tyypit.add("Opetuspiste");
+            HashMap<String, String> nimi = new HashMap<String, String>();
+            nimi.put("sv", "Svenska text "+i);
+            nimi.put("fi", "Suomeksi nimi "+i);
+            result.setNimi(nimi);
+            result.setTyypit(tyypit);
+            result.setEmailOsoite("organisaatio"+i+"@example.com");
+            result.setFaksinumero("09123123");
+            result.setKotikunta("Helsinki");
+            result.setOid("1.2.246.562.10."+(38898719687l+i));
+            result.setPuhelinnumero("0955544412");
+            result.setToimipistekoodi(""+(32901+i));
+            result.setWwwOsoite("http://www.kimitoon.fi/barn-och-utbildning/skolor/svenskaskolor/kimitoonsgymnasi");
 
-        OsoitteistoDto postiosoite = new OsoitteistoDto();
-        postiosoite.setKieli("fi");
-        postiosoite.setOsoite("Mannerheiminkatu 48B");
-        postiosoite.setOsoiteTyyppi("posti");
-        postiosoite.setPostinumero("00101");
-        postiosoite.setPostitoimipaikka("Helsinki");
-        postiosoite.setExtraRivi("Ostolaskut");
-        postiosoite.setYhteystietoOid("1.2.246.562.5.140081871810");
-        result.addPostiosoite(postiosoite);
+            OsoitteistoDto postiosoite = new OsoitteistoDto();
+            postiosoite.setKieli("fi");
+            postiosoite.setOsoite("Mannerheiminkatu 48B");
+            postiosoite.setOsoiteTyyppi("posti");
+            postiosoite.setPostinumero("00101");
+            postiosoite.setPostitoimipaikka("Helsinki");
+            postiosoite.setExtraRivi("Ostolaskut");
+            postiosoite.setYhteystietoOid("1.2.246.562.5."+(140081871810l+i));
+            result.addPostiosoite(postiosoite);
 
-        OrganisaatioYhteystietoDto yhteyshenkilo = new OrganisaatioYhteystietoDto();
-        yhteyshenkilo.setEmail("ylli.yhteyshenkilo@email.fi");
-        yhteyshenkilo.setNimi("Ylli Yhteyshenkilö");
-        yhteyshenkilo.setNimike("Yhteyshenkilö");
-        result.addYhteyshenkilö(yhteyshenkilo);
+            OrganisaatioYhteystietoDto yhteyshenkilo = new OrganisaatioYhteystietoDto();
+            yhteyshenkilo.setYhteyshenkiloOid("1.2.3.4."+(45654858484l+i));
+            yhteyshenkilo.setEmail("ylli.yhteyshenkilo@email.fi");
+            yhteyshenkilo.setNimi("Ylli Yhteyshenkilö");
+            yhteyshenkilo.setNimike("Yhteyshenkilö");
+            result.addYhteyshenkilö(yhteyshenkilo);
 
-        results.addResult(result);
+            results.addResult(result);
+        }
+
         return results;
     }
 

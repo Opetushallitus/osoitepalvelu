@@ -41,7 +41,7 @@ public class DefaultSequenceRepository implements SequenceRepository {
         return increaseCounter(SAVED_SEARCH_ID_SEQUENCE_NAME);
     }
 
-    private long increaseCounter(String sequenceName) {
+    public long increaseCounter(String sequenceName) {
         Query query = new Query(Criteria.where("name").is(sequenceName));
         Update update = new Update().inc("sequence", 1);
         Sequence seq = mongoTemplate.findAndModify(query, update, Sequence.class);

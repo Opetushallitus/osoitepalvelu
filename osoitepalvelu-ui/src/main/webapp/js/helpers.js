@@ -3,13 +3,49 @@
  */
 
 angular.module('Helpers', [])
-.service('ArrayHelper', function() {
-    this.extract = function(arr, field) {
+.service('EqualsHelper', function() {
+    this.equal = function(a, b) {
+        for( var p in a ) {
+            var va = a[p],
+                vb = b[p];
+            if( va !== vb ) return false;
+        }
+        for( var p in b ) {
+            var va = a[p],
+                vb = b[p];
+            if( va !== vb ) return false;
+        }
+        return true;
+    };
+})
+.service('ExtractHelper', function() {
+    this.extract = function(val, fields) {
+        if( fields instanceof Array ) {
+            var extracted = {};
+            angular.forEach(fields, function(field) {
+                extracted[field] = val[field];
+            });
+            return extracted;
+        } else {
+            return val[fields];
+        }
+    };
+})
+.service('ArrayHelper', function(ExtractHelper,EqualsHelper) {
+    this.extract = function(arr, fields) {
         var results = [];
         angular.forEach(arr, function(v) {
-            results.push( v[field] );
+            results.push( ExtractHelper.extract(v, fields) );
         });
         return results;
+    };
+    this.containsEqual = function(arr, value) {
+        for( var i in arr ) {
+            if( EqualsHelper.equal(arr[i], value) ) {
+                return true;
+            }
+        }
+        return false;
     };
     this.ensureArray = function(arr) {
         if( !(arr instanceof Array) ) {
@@ -27,23 +63,31 @@ angular.module('Helpers', [])
         return conditionsMet;
     };
 })
-.service('FilterHelper', function() {
+.service('FilterHelper', function(ExtractHelper, ArrayHelper) {
     this.notInArray = function(arr) {
         return function(val) {
             if( !arr ) return true;
             return arr.indexOf(val) == -1;
         }
     };
-    this.extractedFieldNotInArray = function(arr, field) {
+    this.extractedFieldNotInArray = function(arr, fields) {
         return function(val) {
             if( !arr ) return true;
-            return arr.indexOf(val[field]) == -1;
+            if( !(fields instanceof Array) ) {
+                return arr.indexOf(ExtractHelper.extract(val, fields)) == -1;
+            } else {
+                return !ArrayHelper.containsEqual( arr, ExtractHelper.extract(val, fields) );
+            }
         }
     };
-    this.extractedFieldInArray = function(arr, field) {
+    this.extractedFieldInArray = function(arr, fields) {
         return function(val) {
             if( !arr ) return true;
-            return arr.indexOf(val[field]) != -1;
+            if( !(fields instanceof Array) ) {
+                return arr.indexOf(ExtractHelper.extract(val, fields)) != -1;
+            } else {
+                return ArrayHelper.containsEqual( arr, ExtractHelper.extract(val, fields) );
+            }
         }
     };
 })
