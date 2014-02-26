@@ -105,6 +105,7 @@ public class ApiToJsonTest {
         yhteyshenkilo.setEmail("ylli.yhteyshenkilo@email.fi");
         yhteyshenkilo.setNimike("Yhteyshenkilö");
         yhteyshenkilo.setNimi("Ylli Yhteyshenkilö");
+        yhteyshenkilo.setYhteyshenkiloOid("1.3.445864.474584848");
         result.addYhteyshenkilö(yhteyshenkilo);
         
         results.addResult(result);
@@ -152,12 +153,14 @@ public class ApiToJsonTest {
         yhteyshenkilo.setEmail("rehtori.reijo@opetus.fi");
         yhteyshenkilo.setNimi("Reijo Rehtori");
         yhteyshenkilo.setNimike("Rehtori");
+        yhteyshenkilo.setYhteyshenkiloOid("1.3.445864.2323235451");
         result.addYhteyshenkilö(yhteyshenkilo);
         
         yhteyshenkilo = new OrganisaatioYhteystietoDto();
         yhteyshenkilo.setEmail("apuri.pertti@opetus.fi");
         yhteyshenkilo.setNimi("Pertti Apuri");
         yhteyshenkilo.setNimike("Apulaisrehtori");
+        yhteyshenkilo.setYhteyshenkiloOid("1.3.445868.154845151");
         result.addYhteyshenkilö(yhteyshenkilo);
         
         results.addResult(result);

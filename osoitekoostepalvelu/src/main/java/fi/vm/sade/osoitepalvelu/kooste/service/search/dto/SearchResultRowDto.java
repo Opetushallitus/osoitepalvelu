@@ -50,6 +50,8 @@ public class SearchResultRowDto implements Serializable {
     private String yhteystietoNimi;
     @DtoConversion(path="henkilo.email", withClass = ResultAggregateDto.class)
     private String henkiloEmail;
+    @DtoConversion(path="henkilo.nimi", withClass = ResultAggregateDto.class)
+    private String henkiloOid;
 
     @DtoConversion(path="osoite.kieli", withClass = ResultAggregateDto.class)
     private String osoiteKieli;
@@ -246,5 +248,13 @@ public class SearchResultRowDto implements Serializable {
 
     public void setPostilokero(String postilokero) {
         this.postilokero = postilokero;
+    }
+
+    public String getHenkiloOid() {
+        return henkiloOid;
+    }
+
+    public void setHenkiloOid(String henkiloOid) {
+        this.henkiloOid = henkiloOid;
     }
 }

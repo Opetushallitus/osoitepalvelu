@@ -20,11 +20,11 @@ import java.io.Serializable;
 
 public class OrganisaatioYhteystietoDto implements Serializable {
     private static final long serialVersionUID = -4697143053873590608L;
-    
+
+    private String yhteyshenkiloOid;
     private String nimi;
     private String nimike; //Kuten Rehtori
     private String email;
-    
     
     public String getNimi() {
         return nimi;
@@ -48,6 +48,13 @@ public class OrganisaatioYhteystietoDto implements Serializable {
     
     public void setEmail(String email) {
         this.email = email;
-    };
-        
+    }
+
+    public String getYhteyshenkiloOid() {
+        return yhteyshenkiloOid;
+    }
+
+    public void setYhteyshenkiloOid(String yhteyshenkiloOid) {
+        this.yhteyshenkiloOid = yhteyshenkiloOid;
+    }
 }
