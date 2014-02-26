@@ -124,5 +124,4 @@ public class SeachController extends AbstractMvcController implements Serializab
             }
         };
     }
-
 }

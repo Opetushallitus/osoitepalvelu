@@ -1,7 +1,7 @@
 /**
  * Created by ratamaa on 12/9/13.
  */
-var ResultsController = function($scope, i18n, $log, $location, $filter, $timeout, SearchService, ArrayHelper) {
+var ResultsController = function($scope, i18n, $log, $location, $filter, $timeout, SearchService, EmailService, ArrayHelper) {
     $scope.msg = i18n;
     $scope.results = [];
     $scope.searchDone = false;
@@ -78,6 +78,10 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
 
     $scope.downloadExcel = function() {
         SearchService.downloadExcel();
+    };
+
+    $scope.sendEmail = function() {
+        EmailService.sendEmail($scope.results);
     };
 
     $scope.resultGridOptions = {
