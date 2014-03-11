@@ -103,6 +103,8 @@
             <groupId>fi.vm.sade.koodisto</groupId>
             <artifactId>koodisto-api</artifactId>
         </dependency>
+        
+        
 
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
@@ -447,7 +449,12 @@
             <artifactId>logback-classic</artifactId>
             <version>1.0.13</version>
         </dependency>
-
+        
+        <dependency>
+            <groupId>fi.vm.sade.log</groupId>
+            <artifactId>log-client</artifactId>
+            <version>${generic.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
