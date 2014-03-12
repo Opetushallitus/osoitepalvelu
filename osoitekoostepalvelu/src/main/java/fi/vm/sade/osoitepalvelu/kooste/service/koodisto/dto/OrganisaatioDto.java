@@ -16,11 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 
-public class OrganisaatioDto {
+public class OrganisaatioDto implements Serializable {
     private static final String DEFAULT_TO_STRING_LANG = "fi";
 
     private OrganisaatioOid oid; // Organisaation oid (Yksikäsitteinen tunniste)

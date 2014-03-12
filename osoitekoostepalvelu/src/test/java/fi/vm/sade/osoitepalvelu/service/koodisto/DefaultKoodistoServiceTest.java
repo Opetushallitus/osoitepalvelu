@@ -19,8 +19,11 @@ package fi.vm.sade.osoitepalvelu.service.koodisto;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
+import fi.vm.sade.osoitepalvelu.service.koodisto.mock.KoodistoRouteMock;
+import org.joda.time.LocalDate;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +39,53 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={SpringTestAppConfig.class, OsoitepalveluCamelConfig.class})
 public class DefaultKoodistoServiceTest {
-
     private static final Locale LOCALE_FI = new Locale("fi", "FI");
+    private static final String FI = "fi";
+    private static final String SV = "sv";
+    private static final String EN = "en";
 
     @Autowired
     private DefaultKoodistoService koodistoService;
+
+    @Before
+    public void init() {
+        KoodistoRouteMock mock = new KoodistoRouteMock();
+        mock.add( versio(KoodistoTyyppi.OPPILAITOSTYYPPI, 0l), koodi("Yliopisto") );
+        mock.add( versio(KoodistoTyyppi.OPPILAITOSTYYPPI, 1l),
+                koodi("Yliopisto")
+                        .add(arvo(FI, "Yliopisto"))
+                        .add(arvo(EN, "Univerisity")),
+                koodi("Ammattikoulu") );
+        mock.add( versio(KoodistoTyyppi.OMISTAJATYYPPI, 1l), koodi("Testi") );
+        mock.add( versio(KoodistoTyyppi.VUOSILUOKAT, 1l), koodi("Testi") );
+        mock.add( versio(KoodistoTyyppi.MAAKUNTA, 1l),
+                koodi("Ahvenanmaa"),
+                koodi("Uusimaa") );
+        mock.add( versio(KoodistoTyyppi.KUNTA, 1l), koodi("Helsinki"), koodi("Tampere") );
+        mock.add( versio(KoodistoTyyppi.TUTKINTOTYYPPI, 1l), koodi("Toisen asteen ammatillinen koulutus") );
+        mock.add( versio(KoodistoTyyppi.TUTKINTO, 1l), koodi("Maisterintutkinto") );
+        mock.add( versio(KoodistoTyyppi.OPPILAITOKSEN_OPETUSKIELI, 1l), koodi("suomi") );
+        mock.add( versio(KoodistoTyyppi.KOULUTUS_KIELIVALIKOIMA, 1l), koodi("suomi"), koodi("englanti") );
+        mock.add( versio(KoodistoTyyppi.KOULUTUSASTEKELA, 1l), koodi("Testi") );
+        mock.add( versio(KoodistoTyyppi.KOULUTUSTOIMIJA, 1l), koodi("Testi") );
+        mock.add( versio(KoodistoTyyppi.OPINTOALAOPH2002, 1l), koodi("Testi") );
+        mock.add( versio(KoodistoTyyppi.ALUEHALLINTOVIRASTO, 1l), koodi("Uudenmaan aluehallintovirasto") );
+
+        koodistoService.setKoodistoRoute(mock);
+    }
+
+    protected KoodistoVersioDto versio(KoodistoTyyppi tyyppi, long version) {
+        return new KoodistoVersioDto( tyyppi.getUri(), tyyppi, version, new LocalDate(), new LocalDate(),
+                KoodistoTila.LUONNOS );
+    }
+
+    protected KoodiDto koodi(String arvo) {
+        return new KoodiDto(arvo);
+    }
+
+    protected KoodiArvoDto arvo(String locale, String arvo) {
+        return new KoodiArvoDto(arvo, arvo, arvo, locale);
+    }
 
     @Test
     public void testHaeOppilaitosTyyppiValinnat() {

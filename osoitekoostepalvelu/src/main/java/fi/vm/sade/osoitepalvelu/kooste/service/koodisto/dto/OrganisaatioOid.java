@@ -16,7 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
 
-public class OrganisaatioOid {
+import java.io.Serializable;
+
+public class OrganisaatioOid implements Serializable {
     private String value;
 
     public OrganisaatioOid() {

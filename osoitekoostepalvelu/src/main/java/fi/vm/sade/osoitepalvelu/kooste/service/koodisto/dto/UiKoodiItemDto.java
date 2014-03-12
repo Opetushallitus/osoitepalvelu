@@ -21,10 +21,11 @@ import fi.ratamaa.dtoconverter.annotation.DtoConversions;
 import fi.ratamaa.dtoconverter.annotation.DtoPath;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UiKoodiItemDto {
+public class UiKoodiItemDto implements Serializable {
     @DtoConversion
     @DtoPath(value="koodisto.tyyppi", withClass = KoodiDto.class)
     private KoodistoTyyppi koodistonTyyppi; // Kategoria

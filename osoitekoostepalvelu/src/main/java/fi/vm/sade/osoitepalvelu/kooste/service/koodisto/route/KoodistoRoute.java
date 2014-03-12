@@ -16,109 +16,41 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
-
-import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
-import fi.vm.sade.osoitepalvelu.kooste.common.route.HeaderBuilder;
-import org.apache.camel.Exchange;
-import org.codehaus.jackson.type.TypeReference;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoVersioDto;
 
+import java.util.List;
+
 /**
- * Koodisto-palvelun Camel-reittien toteutus.
+ * User: ratamaa
+ * Date: 3/12/14
+ * Time: 3:13 PM
  */
-@Component
-public class KoodistoRoute extends AbstractJsonToDtoRouteBuilder {
-
-    private static final String REITTI_HAE_KOODISTON_KOODIT = "direct:haeKoodistonKoodit";
-    private static final String REITTI_HAE_KOODISTO_VERSION_KOODIT = "direct:haeKoodistoVersionKoodit";
-    private static final String REITTI_HAE_KOODISTON_VERSIOT = "direct:haeKoodistonVersiot";
-
-    @Value("${valintalaskentakoostepalvelu.koodiService.rest.url}")
-    private String koodistoUri;
-
-    private boolean findCounterUsed = false;
-    private AtomicLong findCounter = new AtomicLong(0L);
-
-    @Override
-    public void configure() throws Exception {
-        koodistoUri = trim(koodistoUri);
-
-        // Reitti, joka hakee tietyn koodiston koodit
-        TypeReference<List<KoodiDto>> dtoType = new TypeReference<List<KoodiDto>>() {};
-        fromHttpGetToDtos(REITTI_HAE_KOODISTON_KOODIT, koodistoUri, Exchange.HTTP_PATH,
-                simple("${in.headers.koodistoTyyppi}/koodi"), dtoType);
-
-        // Seuraava reitti hakee tietyn koodistoversion kaikki koodit
-        HeaderBuilder headers = new HeaderBuilder();
-        headers.add(Exchange.HTTP_PATH, simple("${in.headers.koodistoTyyppi}/koodi"));
-        headers.add(Exchange.HTTP_QUERY, simple("koodistoVersio=${in.headers.koodistoVersio}"));
-        fromHttpGetToDtos(REITTI_HAE_KOODISTO_VERSION_KOODIT, koodistoUri, headers, dtoType);
-
-        // Reitti, joka hakee koodiston versiotiedot
-        TypeReference<List<KoodistoVersioDto>> versioDtoType = new TypeReference<List<KoodistoVersioDto>>() {};
-        fromHttpGetToDtos(REITTI_HAE_KOODISTON_VERSIOT, koodistoUri, Exchange.HTTP_PATH,
-                simple("${in.headers.koodistoTyyppi}"), versioDtoType);
-    }
+public interface KoodistoRoute {
 
     /**
      * Hakee tietyn koodiston kaikki koodit annetun koodistotyypin perusteella.
-     * 
+     *
      * @param koodistoTyyppi
      *            Haettavan koodiston tyyppi.
      * @return Lista koodeista, jotka kuuluvat valittuun koodistoon.
      */
-    public List<KoodiDto> haeKooditKoodistonTyyppilla(KoodistoTyyppi koodistoTyyppi) {
-        @SuppressWarnings("unchecked")
-        List<KoodiDto> koodit = getCamelTemplate().requestBodyAndHeader(REITTI_HAE_KOODISTON_KOODIT, "",
-                "koodistoTyyppi", koodistoTyyppi.getUri(), List.class);
-        return koodit;
-    }
-
-    public List<KoodiDto> haeKooditKoodistonVersiolleTyyppilla(KoodistoTyyppi koodistoTyyppi, long versio) {
-        // Asetataan tarvittavat parametrit
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("koodistoTyyppi", koodistoTyyppi.getUri());
-        parameters.put("koodistoVersio", "" + versio);
-        @SuppressWarnings("unchecked")
-        List<KoodiDto> koodit = getCamelTemplate().requestBodyAndHeaders(REITTI_HAE_KOODISTO_VERSION_KOODIT, "",
-                parameters, List.class);
-        if (isFindCounterUsed()) {
-            findCounter.incrementAndGet();
-        }
-        return koodit;
-    }
+    List<KoodiDto> findKooditKoodistonTyyppilla(KoodistoDto.KoodistoTyyppi koodistoTyyppi);
 
     /**
      * Hakee tietyn koodin versiot.
-     * 
+     *
      * @param koodistoTyyppi
      * @return
      */
-    public List<KoodistoVersioDto> haeKoodistonVersiot(KoodistoTyyppi koodistoTyyppi) {
-        @SuppressWarnings("unchecked")
-        List<KoodistoVersioDto> versiot = getCamelTemplate().requestBodyAndHeader(REITTI_HAE_KOODISTON_VERSIOT, "",
-                "koodistoTyyppi", koodistoTyyppi.getUri(), List.class);
-        return versiot;
-    }
+    List<KoodistoVersioDto> findKoodistonVersiot(KoodistoDto.KoodistoTyyppi koodistoTyyppi);
 
-    public boolean isFindCounterUsed() {
-        return findCounterUsed;
-    }
+    List<KoodiDto> findKooditKoodistonVersiolleTyyppilla(KoodistoDto.KoodistoTyyppi koodistoTyyppi, long versio);
 
-    public void setFindCounterUsed(boolean findCounterUsed) {
-        this.findCounterUsed = findCounterUsed;
-    }
+    boolean isFindCounterUsed();
 
-    public long getFindCounterValue() {
-        return findCounter.longValue();
-    }
+    void setFindCounterUsed(boolean findCounterUsed);
+
+    long getFindCounterValue();
 }

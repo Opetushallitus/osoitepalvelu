@@ -16,10 +16,11 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KoodistoDto {
+public class KoodistoDto implements Serializable {
     // Eri koodistojen tuetut kategoriat/tyypit
     public enum KoodistoTyyppi {
         //

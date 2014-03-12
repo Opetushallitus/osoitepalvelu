@@ -170,17 +170,17 @@ public class DefaultKoodistoService implements KoodistoService {
         return cached(new Cacheable<List<UiKoodiItemDto>>() {
             @Override
             public List<UiKoodiItemDto> get() {
-                KoodistoVersioDto koodistoVersio = haeViimeisinVoimassaOlevaKoodistonVersio(tyyppi);
+                KoodistoVersioDto koodistoVersio = findViimeisinVoimassaOlevaKoodistonVersio(tyyppi);
                 if (koodistoVersio == null) {
                     return new ArrayList<UiKoodiItemDto>(); // Palautetaan tässä
                                                             // tyhjä lista
                 }
-                List<KoodiDto> arvot = koodistoRoute.haeKooditKoodistonVersiolleTyyppilla(tyyppi,
+                List<KoodiDto> arvot = koodistoRoute.findKooditKoodistonVersiolleTyyppilla(tyyppi,
                         koodistoVersio.getVersio());
-                arvot = filteroiAktiivisetKoodit(arvot, new LocalDate());
+                arvot = filterActiveKoodis(arvot, new LocalDate());
                 List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
                         UiKoodiItemDto.class, locale);
-                return jarjestaNimetNousevasti(optiot);
+                return orderNimisAsc(optiot);
             }
         }, tyyppi, locale);
     }
@@ -196,7 +196,7 @@ public class DefaultKoodistoService implements KoodistoService {
      *            voimassa.
      * @return Suodatettu lista, jossa mukana vain voimassa olevat arvot.
      */
-    private List<KoodiDto> filteroiAktiivisetKoodit(List<KoodiDto> koodit, LocalDate voimassaPvm) {
+    private List<KoodiDto> filterActiveKoodis(List<KoodiDto> koodit, LocalDate voimassaPvm) {
         HashMap<String, KoodiDto> aktiivisetMap = new HashMap<String, KoodiDto>();
         for (KoodiDto koodi : koodit) {
             if (koodi.isVoimassaPvm(voimassaPvm) && KoodistoTila.isAktiivinenTila(koodi.getTila())) {
@@ -221,7 +221,7 @@ public class DefaultKoodistoService implements KoodistoService {
      *            Koodiston arvot, jotka tulisi järjestää.
      * @return
      */
-    private List<UiKoodiItemDto> jarjestaNimetNousevasti(List<UiKoodiItemDto> values) {
+    private List<UiKoodiItemDto> orderNimisAsc(List<UiKoodiItemDto> values) {
         Collections.sort(values, new Comparator<UiKoodiItemDto>() {
             @Override
             public int compare(UiKoodiItemDto koodiA, UiKoodiItemDto koodiB) {
@@ -250,8 +250,8 @@ public class DefaultKoodistoService implements KoodistoService {
      * @return Voimassa oleva koodiston versio tai null, jos tällaista versiota
      *         ei löydy.
      */
-    private KoodistoVersioDto haeViimeisinVoimassaOlevaKoodistonVersio(KoodistoTyyppi tyyppi) {
-        List<KoodistoVersioDto> versiot = koodistoRoute.haeKoodistonVersiot(tyyppi);
+    private KoodistoVersioDto findViimeisinVoimassaOlevaKoodistonVersio(KoodistoTyyppi tyyppi) {
+        List<KoodistoVersioDto> versiot = koodistoRoute.findKoodistonVersiot(tyyppi);
         long maxVersionNumber = -1L;
         KoodistoVersioDto versioVoimassa = null;
         if (versiot != null && versiot.size() > 0) {
@@ -276,5 +276,13 @@ public class DefaultKoodistoService implements KoodistoService {
 
     public void setCacheTimeoutMillis(long cacheTimeoutMillis) {
         this.cacheTimeoutMillis = cacheTimeoutMillis;
+    }
+
+    public void setKoodistoRoute(KoodistoRoute koodistoRoute) {
+        this.koodistoRoute = koodistoRoute;
+    }
+
+    public void setAuthenticationServiceRoute(AuthenticationServiceRoute authenticationServiceRoute) {
+        this.authenticationServiceRoute = authenticationServiceRoute;
     }
 }

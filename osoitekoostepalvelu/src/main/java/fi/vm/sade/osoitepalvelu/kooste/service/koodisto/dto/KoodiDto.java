@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ import org.joda.time.LocalDate;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.helpers.KoodistoDateHelper;
 
-public class KoodiDto {
+public class KoodiDto implements Serializable {
     private String koodiUri;
     private long versio; // Koodin versio
     private String koodiArvo;
@@ -36,6 +37,13 @@ public class KoodiDto {
 
     // Todellinen koodin data: Sisältää useita arvoja eri lokaaleille
     private List<KoodiArvoDto> metadata = new ArrayList<KoodiArvoDto>();
+
+    public KoodiDto() {
+    }
+
+    public KoodiDto(String koodiArvo) {
+        this.koodiArvo = koodiArvo;
+    }
 
     public String getKoodiUri() {
         return koodiUri;
@@ -112,5 +120,10 @@ public class KoodiDto {
 
     public boolean isVoimassaPvm(LocalDate pvm) {
         return KoodistoDateHelper.isPaivaVoimassaValilla(pvm, voimassaAlkuPvm, voimassaLoppuPvm);
+    }
+
+    public KoodiDto add(KoodiArvoDto arvo) {
+        this.metadata.add(arvo);
+        return this;
     }
 }

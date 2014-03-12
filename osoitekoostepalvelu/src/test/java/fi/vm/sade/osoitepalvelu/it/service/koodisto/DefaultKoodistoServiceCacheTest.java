@@ -14,16 +14,19 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.service.koodisto;
+package fi.vm.sade.osoitepalvelu.it.service.koodisto;
 
+import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.KoodistoRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.DefaultKoodistoRoute;
+import fi.vm.sade.osoitepalvelu.service.koodisto.DefaultKoodistoServiceTest;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -39,9 +42,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 12/30/13
  * Time: 12:40 PM
  */
-@Ignore /// TODO FIXME: testCache(fi.vm.sade.osoitepalvelu.service.koodisto.DefaultKoodistoServiceCacheTest):can't call something
-// : localhost/127.0.0.1:12345/osoitekoostepalvelu; nested exception is com.mongodb.MongoException$Network:
-// can't call something : localhost/127.0.0.1:12345/osoitekoostepalvelu
+@Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={SpringTestAppConfig.class, OsoitepalveluCamelConfig.class})
 public class DefaultKoodistoServiceCacheTest {
@@ -52,7 +53,7 @@ public class DefaultKoodistoServiceCacheTest {
     private DefaultKoodistoService koodistoService;
 
     @Autowired
-    private KoodistoRoute koodistoReitti;
+    private DefaultKoodistoRoute koodistoReitti;
 
     @Test
     public void testCache() {

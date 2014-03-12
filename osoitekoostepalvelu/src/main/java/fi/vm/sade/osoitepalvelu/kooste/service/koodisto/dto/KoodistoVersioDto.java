@@ -21,10 +21,12 @@ import org.joda.time.LocalDate;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.helpers.KoodistoDateHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
 
+import java.io.Serializable;
+
 /**
  * Koodiston versiotietojen mallintaminen.
  */
-public class KoodistoVersioDto {
+public class KoodistoVersioDto implements Serializable {
     private String koodistoUri;
     private KoodistoTyyppi koodistoTyyppi;
     private long versio;
@@ -32,6 +34,19 @@ public class KoodistoVersioDto {
     private LocalDate voimassaLoppuPvm;
 
     private KoodistoTila tila;
+
+    public KoodistoVersioDto() {
+    }
+
+    public KoodistoVersioDto(String koodistoUri, KoodistoTyyppi koodistoTyyppi, long versio,
+                             LocalDate voimassaAlkuPvm, LocalDate voimassaLoppuPvm, KoodistoTila tila) {
+        this.koodistoUri = koodistoUri;
+        this.koodistoTyyppi = koodistoTyyppi;
+        this.versio = versio;
+        this.voimassaAlkuPvm = voimassaAlkuPvm;
+        this.voimassaLoppuPvm = voimassaLoppuPvm;
+        this.tila = tila;
+    }
 
     public String getKoodistoUri() {
         return koodistoUri;
@@ -86,5 +101,27 @@ public class KoodistoVersioDto {
 
     public boolean isVoimassaPvm(LocalDate pvm) {
         return KoodistoDateHelper.isPaivaVoimassaValilla(pvm, voimassaAlkuPvm, voimassaLoppuPvm);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        KoodistoVersioDto that = (KoodistoVersioDto) o;
+
+        if (versio != that.versio) return false;
+        if (koodistoTyyppi != that.koodistoTyyppi) return false;
+        if (koodistoUri != null ? !koodistoUri.equals(that.koodistoUri) : that.koodistoUri != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = koodistoUri != null ? koodistoUri.hashCode() : 0;
+        result = 31 * result + (koodistoTyyppi != null ? koodistoTyyppi.hashCode() : 0);
+        result = 31 * result + (int) (versio ^ (versio >>> 32));
+        return result;
     }
 }

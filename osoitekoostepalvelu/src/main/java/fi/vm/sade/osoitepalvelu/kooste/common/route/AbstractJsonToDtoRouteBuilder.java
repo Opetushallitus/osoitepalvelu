@@ -16,11 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
-import java.util.Map.Entry;
-
+import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
-import org.apache.camel.*;
+import org.apache.camel.Exchange;
+import org.apache.camel.Expression;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.model.LoadBalanceDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
@@ -28,9 +29,9 @@ import org.apache.camel.spring.SpringRouteBuilder;
 import org.apache.camel.support.ExpressionAdapter;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
 import org.springframework.beans.factory.annotation.Value;
+
+import java.util.Map.Entry;
 
 /**
  * Abstrakti kantaluokka, joka tarjoaa peruspalvelut Camel-reittien luomiseen,

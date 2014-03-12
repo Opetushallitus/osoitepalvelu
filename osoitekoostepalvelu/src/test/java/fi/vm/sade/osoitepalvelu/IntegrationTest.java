@@ -14,21 +14,14 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route;
-
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KayttooikesuryhmaDto;
-
-import java.util.List;
+package fi.vm.sade.osoitepalvelu;
 
 /**
+ * Category for integration tests.
+ *
  * User: ratamaa
  * Date: 3/12/14
- * Time: 3:13 PM
+ * Time: 3:11 PM
  */
-public interface AuthenticationServiceRoute {
-
-    /**
-     * @return all kayttoikeusryhmas
-     */
-    List<KayttooikesuryhmaDto> findKayttooikeusryhmas();
+public interface IntegrationTest {
 }

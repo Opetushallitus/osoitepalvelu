@@ -14,14 +14,16 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.reitit;
+package fi.vm.sade.osoitepalvelu.it.reitit;
 
+import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.AuthenticationServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.DefaultAuthenticationServiceRoute;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -29,19 +31,20 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: ratamaa
  * Date: 3/11/14
  * Time: 3:30 PM
  */
-@Ignore
+@Ignore // missing system user authentication properties
+@Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
 public class AuthenticationServiceRouteTest {
     @Autowired
-    private AuthenticationServiceRoute authenticationServiceRoute;
+    private DefaultAuthenticationServiceRoute authenticationServiceRoute;
 
     @Test
     public void testFindKayttooikeusryhmas() {

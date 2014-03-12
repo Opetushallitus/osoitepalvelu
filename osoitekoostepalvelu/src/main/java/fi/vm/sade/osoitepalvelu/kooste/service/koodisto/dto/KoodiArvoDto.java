@@ -16,11 +16,23 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
 
-public class KoodiArvoDto {
+import java.io.Serializable;
+
+public class KoodiArvoDto implements Serializable {
     private String nimi;
     private String kuvaus;
     private String lyhytNimi;
     private String kieli;
+
+    public KoodiArvoDto() {
+    }
+
+    public KoodiArvoDto(String nimi, String kuvaus, String lyhytNimi, String kieli) {
+        this.nimi = nimi;
+        this.kuvaus = kuvaus;
+        this.lyhytNimi = lyhytNimi;
+        this.kieli = kieli;
+    }
 
     public String getNimi() {
         return nimi;

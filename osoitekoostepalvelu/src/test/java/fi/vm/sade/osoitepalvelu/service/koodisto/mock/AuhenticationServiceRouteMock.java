@@ -14,21 +14,31 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route;
+package fi.vm.sade.osoitepalvelu.service.koodisto.mock;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.AuthenticationServiceRoute;
 
 import java.util.List;
 
 /**
  * User: ratamaa
  * Date: 3/12/14
- * Time: 3:13 PM
+ * Time: 3:18 PM
  */
-public interface AuthenticationServiceRoute {
+public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute {
+    private List<KayttooikesuryhmaDto> kayttooikesuryhmas;
 
-    /**
-     * @return all kayttoikeusryhmas
-     */
-    List<KayttooikesuryhmaDto> findKayttooikeusryhmas();
+    public AuhenticationServiceRouteMock(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
+        this.kayttooikesuryhmas = kayttooikesuryhmas;
+    }
+
+    public void setKayttooikesuryhmas(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
+        this.kayttooikesuryhmas = kayttooikesuryhmas;
+    }
+
+    @Override
+    public List<KayttooikesuryhmaDto> findKayttooikeusryhmas() {
+        return kayttooikesuryhmas;
+    }
 }
