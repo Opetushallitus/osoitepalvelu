@@ -52,7 +52,15 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         return process.setHeader("CasSecurityTicket", new ExpressionAdapter() {
             @Override
             public Object evaluate(Exchange exchange) {
-                return casTicketProvider.provideTicket(service);
+                String serviceUriToUse = service;
+                // Seems to be needed...
+                if (!serviceUriToUse.endsWith("/j_spring_cas_security_check")) {
+                    serviceUriToUse = serviceUriToUse+"/j_spring_cas_security_check";
+                }
+                if( serviceUriToUse.startsWith("https://") ) {
+                    serviceUriToUse = serviceUriToUse.replaceAll("(https://)(.*):443(/?.*)", "$1$2$3");
+                }
+                return casTicketProvider.provideTicket(serviceUriToUse);
             }
         });
     }

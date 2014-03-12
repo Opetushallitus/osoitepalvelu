@@ -39,7 +39,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 public class DummySearchService implements SearchService {
 
     @Autowired
-    Logger sadeLogger;
+    private Logger sadeLogger;
     
     @Override
     public OrganisaatioResultsDto find(SearchTermsDto terms) {

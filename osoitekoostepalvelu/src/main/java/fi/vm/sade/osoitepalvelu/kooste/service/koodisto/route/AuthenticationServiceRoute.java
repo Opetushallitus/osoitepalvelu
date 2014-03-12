@@ -38,8 +38,8 @@ public class AuthenticationServiceRoute extends AbstractJsonToDtoRouteBuilder {
     @Value("${authenticationService.kayttoikeusryhma.rest.url}")
     private String authenticationServiceKayttooikeusryhmasUri;
 
-    //@Value("${cas.service.authentication-service}")
-    private String authenticationServiceCasService = "https://itest-virkailija.oph.ware.fi/authentication-service/j_spring_cas_security_check";
+    @Value("${cas.service.authentication-service}")
+    private String authenticationServiceCasService;
 
     @Override
     public void configure() throws Exception {
