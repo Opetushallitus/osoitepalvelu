@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fi.vm.sade.log.client.Logger;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioYhteystietoDto;
@@ -36,12 +38,22 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 @Service
 public class DummySearchService implements SearchService {
 
+    @Autowired
+    Logger sadeLogger;
+    
     @Override
     public OrganisaatioResultsDto find(SearchTermsDto terms) {
         // TODO: Haun toteutus
         // Testataan käyttöliittymää suhteellisen suurella datamäärällä. 5000 oli vielä myös OK mutta
         // käytännössä jäävät yleensä pienemmäksi.
 
+        /* Esimerkki logituksesta
+        String currentUserOID = "2323";
+        Tapahtuma t = Tapahtuma.createREAD("log-service", currentUserOID, "Henkilö", "1.2.3.4.238726766");
+        
+        sadeLogger.log(t);
+        */
+        
         OrganisaatioResultsDto results = new OrganisaatioResultsDto();
 
         for( long i = 1; i <= 1000; ++i ) {
