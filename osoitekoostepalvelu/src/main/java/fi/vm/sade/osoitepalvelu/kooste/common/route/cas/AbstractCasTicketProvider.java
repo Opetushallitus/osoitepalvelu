@@ -18,16 +18,18 @@ package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
 
 /**
  * User: ratamaa
- * Date: 3/11/14
- * Time: 5:14 PM
+ * Date: 3/12/14
+ * Time: 2:11 PM
  */
-public interface CasTicketProvider {
-    public static final String CAS_HEADER = "CasSecurityTicket";
+public abstract class AbstractCasTicketProvider implements CasTicketProvider {
 
-    /**
-     * @param service the CAS service
-     * @return the ticket for the service
-     */
-    public String provideTicket(String service);
-
+    protected String getTargetServiceCasUri( String service ) {
+        if (!service.endsWith("/j_spring_cas_security_check")) {
+            service = service+"/j_spring_cas_security_check";
+        }
+        if( service.startsWith("https://") ) {
+            service = service.replaceAll("(https://)(.*):443(/?.*)", "$1$2$3");
+        }
+        return service;
+    }
 }

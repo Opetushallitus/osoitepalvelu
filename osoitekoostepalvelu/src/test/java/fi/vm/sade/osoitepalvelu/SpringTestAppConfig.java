@@ -26,6 +26,9 @@ import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * User: ratamaa
  * Date: 12/30/13
@@ -50,11 +53,20 @@ public class SpringTestAppConfig {
     @Value("${web.url.cas}")
     private String casService;
 
-    @Value("${authentication.app.username.to.organisaatioservice}")
-    private String casTestUsername;
+    @Value("${cas.service.organisaatio-service:''}")
+    private String organisaatioCasService;
+    @Value("${osoitepalvelu.app.username.to.organisaatioservice:''}")
+    private String casOrganisaatioServiceUsername;
+    @Value("${osoitepalvelu.app.password.to.organisaatioservice:''}")
+    private String casOrganisaatioServicePassword;
 
-    @Value("${authentication.app.password.to.organisaatioservice}")
-    private String casTestPassword;
+    @Value("${cas.service.authentication-service:''}")
+    private String authenticationCasService;
+    @Value("${osoitepalvelu.app.username.to.authenticationservice:''}")
+    private String casAuthenticationServiceUsername;
+    @Value("${osoitepalvelu.app.password.to.authenticationservice:''}")
+    private String casAuthenticationServicePassword;
+
 
     @Bean
     public Config config() {
@@ -78,6 +90,23 @@ public class SpringTestAppConfig {
 
     @Bean
     public CasTicketProvider usernamePasswordCasTicketProvider() {
-        return new UsernamePasswordCasClientTicketProvider(casService, casTestUsername, casTestPassword);
+        final CasTicketProvider defaultProvider = new UsernamePasswordCasClientTicketProvider(
+                casService, casOrganisaatioServiceUsername, casOrganisaatioServicePassword);;
+        final Map<String,CasTicketProvider> providersByService = new HashMap<String, CasTicketProvider>();
+        providersByService.put(organisaatioCasService, defaultProvider);
+        providersByService.put(authenticationCasService, new UsernamePasswordCasClientTicketProvider(casService,
+                        casAuthenticationServiceUsername, casAuthenticationServicePassword));
+        // ..
+
+        // Always use username and password authentication in tests (since user not logged in):
+        return new CasTicketProvider() {
+            @Override
+            public String provideTicket(String service) {
+                if( providersByService.containsKey(service) ) {
+                    return providersByService.get(service).provideTicket(service);
+                }
+                return defaultProvider.provideTicket(service);
+            }
+        };
     }
 }

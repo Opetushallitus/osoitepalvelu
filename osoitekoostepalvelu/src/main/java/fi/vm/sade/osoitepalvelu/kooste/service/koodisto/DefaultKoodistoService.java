@@ -135,8 +135,6 @@ public class DefaultKoodistoService implements KoodistoService {
     }
 
     protected interface Cacheable<T> {
-        // 03.01.2014: Poistettu static keyword checkstyle tarkistuksen yhteydessä
-        //  "All field members declared in an interface are by default public, static and final"
         T get();
     }
 

@@ -16,10 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
-import java.util.Map;
 import java.util.Map.Entry;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
 import org.apache.camel.*;
 import org.apache.camel.model.LoadBalanceDefinition;
 import org.apache.camel.model.ProcessorDefinition;
@@ -30,6 +30,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Abstrakti kantaluokka, joka tarjoaa peruspalvelut Camel-reittien luomiseen,
@@ -40,27 +41,36 @@ import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
  * rakentamista osoitepalvelussa.
  */
 public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
+
     private static final int DEFAULT_RETRY_LIMIT = 10;
+
+    @Value("${web.url.cas}")
+    private String casService;
 
     @Autowired
     protected ObjectMapperProvider mapperProvider;
 
     @Autowired
-    protected CasTicketProvider casTicketProvider;
+    protected CasTicketProvider authenticatedUserCasTicketProvider;
 
-    protected<T extends ProcessorDefinition<T>> ProcessorDefinition<T> casAuthenticated( T process, final String service ) {
-        return process.setHeader("CasSecurityTicket", new ExpressionAdapter() {
+
+    protected<T extends ProcessorDefinition<T>> ProcessorDefinition<T> casByAuthenticatedUser(T process, final String service) {
+        return process.setHeader(CasTicketProvider.CAS_HEADER, new ExpressionAdapter() {
             @Override
             public Object evaluate(Exchange exchange) {
-                String serviceUriToUse = service;
-                // Seems to be needed...
-                if (!serviceUriToUse.endsWith("/j_spring_cas_security_check")) {
-                    serviceUriToUse = serviceUriToUse+"/j_spring_cas_security_check";
-                }
-                if( serviceUriToUse.startsWith("https://") ) {
-                    serviceUriToUse = serviceUriToUse.replaceAll("(https://)(.*):443(/?.*)", "$1$2$3");
-                }
-                return casTicketProvider.provideTicket(serviceUriToUse);
+                return authenticatedUserCasTicketProvider.provideTicket(service);
+            }
+        });
+    }
+
+    protected<T extends ProcessorDefinition<T>> ProcessorDefinition<T> casBydSystemUser(T process, final String service,
+                                                                                        final String username,
+                                                                                        final String password) {
+        return process.setHeader(CasTicketProvider.CAS_HEADER, new ExpressionAdapter() {
+            @Override
+            public Object evaluate(Exchange exchange) {
+                return new UsernamePasswordCasClientTicketProvider(casService, username, password)
+                        .provideTicket(service);
             }
         });
     }

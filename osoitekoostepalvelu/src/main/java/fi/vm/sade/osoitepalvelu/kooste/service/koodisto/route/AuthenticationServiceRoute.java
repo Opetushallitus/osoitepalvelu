@@ -43,7 +43,7 @@ public class AuthenticationServiceRoute extends AbstractJsonToDtoRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        casAuthenticated(from(ROUTE_KAYTTOOIKESURYHMAS), authenticationServiceCasService)
+        casByAuthenticatedUser(from(ROUTE_KAYTTOOIKESURYHMAS), authenticationServiceCasService)
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .to(trim(authenticationServiceKayttooikeusryhmasUri))
                 .process(new JacksonJsonProcessor(mapperProvider, new TypeReference<List<KayttooikesuryhmaDto>>() {}));

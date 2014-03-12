@@ -26,7 +26,7 @@ import fi.vm.sade.authentication.cas.CasClient;
  * Date: 3/11/14
  * Time: 5:22 PM
  */
-public class UsernamePasswordCasClientTicketProvider implements CasTicketProvider {
+public class UsernamePasswordCasClientTicketProvider extends AbstractCasTicketProvider {
     private String casService;
     private String username;
     private String password;
@@ -39,6 +39,6 @@ public class UsernamePasswordCasClientTicketProvider implements CasTicketProvide
 
     @Override
     public String provideTicket(String service) {
-        return CasClient.getTicket(casService+ "/v1/tickets", username, password, service);
+        return CasClient.getTicket(casService+ "/v1/tickets", username, password, getTargetServiceCasUri(service));
     }
 }

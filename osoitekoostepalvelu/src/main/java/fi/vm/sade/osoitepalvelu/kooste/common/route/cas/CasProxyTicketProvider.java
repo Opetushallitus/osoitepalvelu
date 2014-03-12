@@ -26,7 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * Date: 3/11/14
  * Time: 5:15 PM
  */
-public class CasProxyTicketProvider implements CasTicketProvider {
+public class CasProxyTicketProvider extends AbstractCasTicketProvider {
     private ProxyAuthenticator proxyAuthenticator = new ProxyAuthenticator();
     private String casService;
 
@@ -36,6 +36,7 @@ public class CasProxyTicketProvider implements CasTicketProvider {
 
     @Override
     public String provideTicket(String service) {
+        service = getTargetServiceCasUri(service);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if( authentication != null && authentication instanceof UsernamePasswordAuthenticationToken ) {
             // Development mode, this works provided that Spring Security's authentication manager has
@@ -59,7 +60,7 @@ public class CasProxyTicketProvider implements CasTicketProvider {
         proxyAuthenticator.proxyAuthenticate(service, "prod", new ProxyAuthenticator.Callback() {
             @Override
             public void setRequestHeader(String key, String value) {
-                if("CasSecurityTicket".equals(key)) {
+                if(CAS_HEADER.equals(key)) {
                     // Dirty callback solution, but the implementation is not asynchronous, so we are safe here:
                     result.set(value);
                 } else {
