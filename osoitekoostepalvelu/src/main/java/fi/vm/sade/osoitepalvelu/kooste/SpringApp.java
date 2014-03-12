@@ -16,8 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste;
 
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasProxyTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.config.MongoConfig;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -36,6 +38,9 @@ public class SpringApp {
 
     @Value("${koodisto.cache.livetime.seconds}")
     private int koodistoCacheLiveTimeSeconds;
+
+    @Value("${web.url.cas}")
+    private String casService;
 
     public static class Config {
         private int cacheTimeoutMillis;
@@ -62,5 +67,10 @@ public class SpringApp {
         Config config = new Config();
         config.setCacheTimeoutMillis(koodistoCacheLiveTimeSeconds * SECONDS_TO_MS_FACTOR);
         return config;
+    }
+
+    @Bean
+    public CasTicketProvider proxyTicketProvider() {
+        return new CasProxyTicketProvider(casService);
     }
 }

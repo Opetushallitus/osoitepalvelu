@@ -37,7 +37,8 @@ public class KoodistoDto {
         KOULUTUSASTEKELA("koulutusastekela"),       // Koulutusaste
         KOULUTUSTOIMIJA("koulutustoimija"),         // Koulutuksen järjestäjä
         OPINTOALAOPH2002("opintoalaoph2002"),       // Koulutus ja Opintoala
-        ALUEHALLINTOVIRASTO("aluehallintovirasto"); // AluehallintoVIrasto (AVI)
+        ALUEHALLINTOVIRASTO("aluehallintovirasto"), // AluehallintoVIrasto (AVI)
+        KAYTTOOIKEUSRYHMA("kayttoikeusryhma"); // Ei Koodistosta, vaan auhtneitcation-servicestä
 
         private String uri; // Koodiston URI
 
@@ -117,6 +118,6 @@ public class KoodistoDto {
 
     @Override
     public String toString() {
-        return tyyppi.getUri() + ", " + organisaatioOid;
+        return tyyppi.name() + ", " + organisaatioOid;
     }
 }

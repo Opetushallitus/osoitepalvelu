@@ -18,7 +18,8 @@
 
     <ctx:annotation-config/>
 
-    <ctx:property-placeholder location="classpath:osoitekoostepalvelu.properties" />
+    <ctx:property-placeholder location="classpath:osoitekoostepalvelu.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/override.properties"
+                              ignore-resource-not-found="true"/>
 
     <bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
 

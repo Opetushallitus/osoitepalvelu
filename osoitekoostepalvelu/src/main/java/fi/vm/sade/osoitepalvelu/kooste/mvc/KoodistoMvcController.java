@@ -128,4 +128,10 @@ public class KoodistoMvcController extends AbstractMvcController implements Seri
     public List<UiKoodiItemDto> findAlueHallintoVirastoOptions() {
         return koodistoService.findAlueHallintoVirastoOptions(UI_LOCALE);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/kayttoikeusryhma")
+    @ResponseBody
+    public List<UiKoodiItemDto> findKayttooikeusryhmas() {
+        return koodistoService.findKayttooikeusryhmas(UI_LOCALE);
+    }
 }

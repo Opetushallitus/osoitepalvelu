@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.HeaderBuilder;
 import org.apache.camel.Exchange;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +36,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoVersioDto;
  * Koodisto-palvelun Camel-reittien toteutus.
  */
 @Component
-public class KoodistoReitti extends AbstractJsonToDtoRouteBuilder {
+public class KoodistoRoute extends AbstractJsonToDtoRouteBuilder {
 
     private static final String REITTI_HAE_KOODISTON_KOODIT = "direct:haeKoodistonKoodit";
     private static final String REITTI_HAE_KOODISTO_VERSION_KOODIT = "direct:haeKoodistoVersionKoodit";

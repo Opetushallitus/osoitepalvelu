@@ -18,7 +18,7 @@ package fi.vm.sade.osoitepalvelu.service.koodisto;
 
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import org.junit.Test;

@@ -14,16 +14,18 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route;
+package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
+import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Expression;
-import org.apache.camel.ProducerTemplate;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
+import org.apache.camel.*;
 import org.apache.camel.model.LoadBalanceDefinition;
+import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.support.ExpressionAdapter;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -42,6 +44,18 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
     @Autowired
     protected ObjectMapperProvider mapperProvider;
+
+    @Autowired
+    protected CasTicketProvider casTicketProvider;
+
+    protected<T extends ProcessorDefinition<T>> ProcessorDefinition<T> casAuthenticated( T process, final String service ) {
+        return process.setHeader("CasSecurityTicket", new ExpressionAdapter() {
+            @Override
+            public Object evaluate(Exchange exchange) {
+                return casTicketProvider.provideTicket(service);
+            }
+        });
+    }
 
     protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, TypeReference<T> targetDtoType) {
         JacksonJsonProcessor jsonToDtoConverter = new JacksonJsonProcessor(mapperProvider, targetDtoType);

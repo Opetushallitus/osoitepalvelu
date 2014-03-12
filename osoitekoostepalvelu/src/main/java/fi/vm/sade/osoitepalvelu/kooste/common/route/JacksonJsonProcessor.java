@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route;
+package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;

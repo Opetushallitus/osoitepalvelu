@@ -14,21 +14,32 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter;
+package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
 
-import fi.ratamaa.dtoconverter.DtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-
-import java.util.Locale;
+import java.io.Serializable;
 
 /**
  * User: ratamaa
- * Date: 12/17/13
- * Time: 1:50 PM
+ * Date: 3/11/14
+ * Time: 3:06 PM
  */
-public interface KoodistoDtoConverter extends DtoConverter {
+public class LocalizedValueDto implements Serializable {
+    private String text; // Note: can be null
+    private String lang; // Note: can be uppoer or lower case.
 
-    UiKoodiItemDto convert(KoodiDto koodi, UiKoodiItemDto uiKoodi, Locale lokaali);
+    public String getText() {
+        return text;
+    }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
 }

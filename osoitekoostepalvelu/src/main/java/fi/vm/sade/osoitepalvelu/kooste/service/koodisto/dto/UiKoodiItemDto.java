@@ -16,15 +16,26 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+import fi.ratamaa.dtoconverter.annotation.DtoConversions;
+import fi.ratamaa.dtoconverter.annotation.DtoPath;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UiKoodiItemDto {
+    @DtoConversion
+    @DtoPath(value="koodisto.tyyppi", withClass = KoodiDto.class)
     private KoodistoTyyppi koodistonTyyppi; // Kategoria
+    @DtoPath(value="koodiArvo", withClass = KoodiDto.class)
     private String koodiId; // koodiArvo koodistossa
 
     private String nimi;
     private String kuvaus;
     private String lyhytNimi;
+    @DtoConversion
+    private List<OrganisaatioviiteDto> organisaatioViite = new ArrayList<OrganisaatioviiteDto>();
 
     public KoodistoTyyppi getKoodistonTyyppi() {
         return koodistonTyyppi;
@@ -68,5 +79,13 @@ public class UiKoodiItemDto {
 
     public String toString() {
         return this.koodiId + ": " + this.nimi;
+    }
+
+    public List<OrganisaatioviiteDto> getOrganisaatioViite() {
+        return organisaatioViite;
+    }
+
+    public void setOrganisaatioViite(List<OrganisaatioviiteDto> organisaatioViite) {
+        this.organisaatioViite = organisaatioViite;
     }
 }

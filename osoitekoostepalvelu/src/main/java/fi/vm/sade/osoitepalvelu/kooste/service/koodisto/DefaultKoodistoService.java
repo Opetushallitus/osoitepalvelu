@@ -19,13 +19,11 @@ package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 import fi.vm.sade.osoitepalvelu.kooste.dao.koodistoCache.KoodistoCacheRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodiItem;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoTila;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoVersioDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter.KoodistoDtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.KoodistoReitti;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.AuthenticationServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.KoodistoRoute;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
@@ -45,7 +43,10 @@ public class DefaultKoodistoService implements KoodistoService {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private KoodistoReitti koodistoReitti;
+    private KoodistoRoute koodistoRoute;
+
+    @Autowired
+    private AuthenticationServiceRoute authenticationServiceRoute;
 
     @Autowired
     private KoodistoDtoConverter dtoConverter;
@@ -120,7 +121,19 @@ public class DefaultKoodistoService implements KoodistoService {
     public List<UiKoodiItemDto> findAlueHallintoVirastoOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.ALUEHALLINTOVIRASTO);
     }
-    
+
+    @Override
+    public List<UiKoodiItemDto> findKayttooikeusryhmas(final Locale locale) {
+        return cached(new Cacheable<List<UiKoodiItemDto>>() {
+            @Override
+            public List<UiKoodiItemDto> get() {
+                List<KayttooikesuryhmaDto> kayttoikeusryhmas = authenticationServiceRoute.findKayttooikeusryhmas();
+                return dtoConverter.convert( kayttoikeusryhmas, new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
+                        locale );
+            }
+        }, KoodistoTyyppi.KAYTTOOIKEUSRYHMA, locale);
+    }
+
     protected interface Cacheable<T> {
         // 03.01.2014: Poistettu static keyword checkstyle tarkistuksen yhteydessä
         //  "All field members declared in an interface are by default public, static and final"
@@ -164,10 +177,11 @@ public class DefaultKoodistoService implements KoodistoService {
                     return new ArrayList<UiKoodiItemDto>(); // Palautetaan tässä
                                                             // tyhjä lista
                 }
-                List<KoodiDto> arvot = koodistoReitti.haeKooditKoodistonVersiolleTyyppilla(tyyppi,
+                List<KoodiDto> arvot = koodistoRoute.haeKooditKoodistonVersiolleTyyppilla(tyyppi,
                         koodistoVersio.getVersio());
                 arvot = filteroiAktiivisetKoodit(arvot, new LocalDate());
-                List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(), locale);
+                List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
+                        UiKoodiItemDto.class, locale);
                 return jarjestaNimetNousevasti(optiot);
             }
         }, tyyppi, locale);
@@ -239,7 +253,7 @@ public class DefaultKoodistoService implements KoodistoService {
      *         ei löydy.
      */
     private KoodistoVersioDto haeViimeisinVoimassaOlevaKoodistonVersio(KoodistoTyyppi tyyppi) {
-        List<KoodistoVersioDto> versiot = koodistoReitti.haeKoodistonVersiot(tyyppi);
+        List<KoodistoVersioDto> versiot = koodistoRoute.haeKoodistonVersiot(tyyppi);
         long maxVersionNumber = -1L;
         KoodistoVersioDto versioVoimassa = null;
         if (versiot != null && versiot.size() > 0) {

@@ -14,21 +14,19 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter;
-
-import fi.ratamaa.dtoconverter.DtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-
-import java.util.Locale;
+package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
 
 /**
  * User: ratamaa
- * Date: 12/17/13
- * Time: 1:50 PM
+ * Date: 3/11/14
+ * Time: 5:14 PM
  */
-public interface KoodistoDtoConverter extends DtoConverter {
+public interface CasTicketProvider {
 
-    UiKoodiItemDto convert(KoodiDto koodi, UiKoodiItemDto uiKoodi, Locale lokaali);
+    /**
+     * @param service the CAS service
+     * @return the ticket for the service
+     */
+    public String provideTicket(String service);
 
 }

@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * User: ratamaa
@@ -31,6 +32,7 @@ public class KoodiItem implements Serializable {
     private String nimi;
     private String kuvaus;
     private String lyhytNimi;
+    private List<Organisaatioviite> organisaatioViite;
 
     public String getKoodiId() {
         return koodiId;
@@ -70,5 +72,13 @@ public class KoodiItem implements Serializable {
 
     public void setKoodistonTyyppi(KoodistoCache.KoodistoTyyppi koodistonTyyppi) {
         this.koodistonTyyppi = koodistonTyyppi;
+    }
+
+    public List<Organisaatioviite> getOrganisaatioViite() {
+        return organisaatioViite;
+    }
+
+    public void setOrganisaatioViite(List<Organisaatioviite> organisaatioViite) {
+        this.organisaatioViite = organisaatioViite;
     }
 }

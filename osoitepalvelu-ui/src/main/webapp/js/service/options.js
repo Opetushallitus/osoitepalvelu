@@ -31,8 +31,7 @@ OsoiteKoostepalvelu.service('OptionsService', function($log, $http, Tutkintotoim
     };
 
     this.listKoulutaRoolis = function(success, error) {
-        // TODO:
-        success( [] );
+        _get('api/koodisto/kayttoikeusryhma', success, error);
     };
 
     this.listAipalRoolis = function(success, error) {

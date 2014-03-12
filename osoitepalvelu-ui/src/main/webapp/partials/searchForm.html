@@ -109,7 +109,7 @@
                 <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm()"></div>
                 <div class="term" ng-show="isShowKoulutaTerm()">
                     <select ui-select2 multiple id="koulutaRoolis" class="form-control" ng-model="terms.koulutaRoolis" data-placeholder="{{msg.search_term_kouluta_rooli}}">
-                        <option ng-repeat="opt in options.koulutaRoolis" value="{{opt.id}}">{{opt.name}}</option>
+                        <option ng-repeat="opt in options.koulutaRoolis" value="{{opt.koodiId}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term" ng-show="isShowAipalTerm()">

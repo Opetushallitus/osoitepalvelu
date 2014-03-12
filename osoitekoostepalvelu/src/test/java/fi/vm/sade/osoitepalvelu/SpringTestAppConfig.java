@@ -16,8 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu;
 
+import fi.vm.sade.generic.ui.portlet.security.SecurityTicketOutInterceptorRest;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
@@ -43,6 +47,15 @@ public class SpringTestAppConfig {
     @Autowired
     private Environment env;
 
+    @Value("${web.url.cas}")
+    private String casService;
+
+    @Value("${authentication.app.username.to.organisaatioservice}")
+    private String casTestUsername;
+
+    @Value("${authentication.app.password.to.organisaatioservice}")
+    private String casTestPassword;
+
     @Bean
     public Config config() {
         Config config = new Config();
@@ -56,5 +69,15 @@ public class SpringTestAppConfig {
         messageSource.setBasename("Messages");
         messageSource.setCacheSeconds(3600);
         return messageSource;
+    }
+
+    @Bean
+    public SecurityTicketOutInterceptorRest ticketInterceptorRest() {
+        return new SecurityTicketOutInterceptorRest();
+    }
+
+    @Bean
+    public CasTicketProvider usernamePasswordCasTicketProvider() {
+        return new UsernamePasswordCasClientTicketProvider(casService, casTestUsername, casTestPassword);
     }
 }

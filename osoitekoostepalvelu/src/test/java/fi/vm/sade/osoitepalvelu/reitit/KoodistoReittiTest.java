@@ -17,11 +17,11 @@
 package fi.vm.sade.osoitepalvelu.reitit;
 
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoVersioDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.KoodistoReitti;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.KoodistoRoute;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +36,7 @@ import java.util.List;
 public class KoodistoReittiTest {
 
     @Autowired
-    private KoodistoReitti koodistoReitti;
+    private KoodistoRoute koodistoReitti;
 
     @Test
     public void testHaeKaikkiOppilaitosTyypit() {

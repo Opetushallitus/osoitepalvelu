@@ -16,12 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 
 /**
  * Service -rajapinta, jonka kautta pystyy hakemaan koodiston arvoja koodiston
@@ -55,6 +55,8 @@ public interface KoodistoService {
     List<UiKoodiItemDto> findOpintoAlaOptions(Locale locale);
 
     List<UiKoodiItemDto> findAlueHallintoVirastoOptions(Locale locale);
+
+    List<UiKoodiItemDto> findKayttooikeusryhmas(Locale locale);
 
     /**
      * Hakee kaikkien koodistojen arvot yhdellä kertaa ja paulattaa näistä

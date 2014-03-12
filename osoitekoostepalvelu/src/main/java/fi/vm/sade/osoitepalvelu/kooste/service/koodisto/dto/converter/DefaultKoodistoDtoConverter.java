@@ -16,23 +16,41 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter;
 
-import java.util.List;
-import java.util.Locale;
-
+import fi.ratamaa.dtoconverter.ConversionCall;
+import fi.ratamaa.dtoconverter.reflection.PropertyConversionContext;
+import fi.ratamaa.dtoconverter.typeconverter.TypeConversionContainer;
+import fi.ratamaa.dtoconverter.typeconverter.TypeConverterAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.*;
 import org.springframework.stereotype.Component;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiArvoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
+import java.util.Locale;
 
 @Component
 public class DefaultKoodistoDtoConverter extends AbstractDtoConverter implements KoodistoDtoConverter {
+    public static final Locale DEFAULT_LOCALE = new Locale("fi", "FI");
+
+    @Override
+    protected void registerConverters(TypeConversionContainer conversions) {
+        super.registerConverters(conversions);
+        conversions.add(LocalizedContainerDto.class, String.class, new TypeConverterAdapter<LocalizedContainerDto, String>() {
+            @Override
+            public String convert(LocalizedContainerDto obj, PropertyConversionContext context, String currentValue, ConversionCall call) {
+                Locale locale = parameterOfType(Locale.class, 0, call);
+                return obj.findForLocale(locale == null ? DEFAULT_LOCALE : locale, DEFAULT_LOCALE);
+            }
+        });
+    }
+
+    public UiKoodiItemDto convert(KayttooikesuryhmaDto from, UiKoodiItemDto to, Locale locale) {
+        convertValue(from, to, locale);
+        to.setKoodistonTyyppi(KoodistoDto.KoodistoTyyppi.KAYTTOOIKEUSRYHMA);
+        to.setLyhytNimi(to.getNimi());
+        return to;
+    }
 
     public UiKoodiItemDto convert(KoodiDto koodi, UiKoodiItemDto uiKoodi, Locale lokaali) {
-        uiKoodi.setKoodiId(koodi.getKoodiArvo());
-        uiKoodi.setKoodistonTyyppi(koodi.getKoodisto().getTyyppi());
-
+        convertValue(koodi, uiKoodi, lokaali);
         KoodiArvoDto arvo = koodi.getArvoByKieli(lokaali.getLanguage());
         if (arvo != null) {
             uiKoodi.setNimi(arvo.getNimi());
@@ -43,13 +61,5 @@ public class DefaultKoodistoDtoConverter extends AbstractDtoConverter implements
             uiKoodi.setLyhytNimi(lokaali.getLanguage() + "_missing!");
         }
         return uiKoodi;
-    }
-
-    public List<UiKoodiItemDto> convert(List<KoodiDto> koodit, List<UiKoodiItemDto> uiKoodit, Locale lokaali) {
-        for (KoodiDto koodi : koodit) {
-            UiKoodiItemDto optio = convert(koodi, new UiKoodiItemDto(), lokaali);
-            uiKoodit.add(optio);
-        }
-        return uiKoodit;
     }
 }
