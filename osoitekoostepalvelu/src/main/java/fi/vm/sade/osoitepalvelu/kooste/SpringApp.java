@@ -39,8 +39,11 @@ public class SpringApp {
     @Value("${koodisto.cache.livetime.seconds}")
     private int koodistoCacheLiveTimeSeconds;
 
-    @Value("${web.url.cas}")
+    @Value("${web.url.cas:'prod'}")
     private String casService;
+
+    @Value("${auth.mode}")
+    private String authMode;
 
     public static class Config {
         private int cacheTimeoutMillis;
@@ -71,6 +74,6 @@ public class SpringApp {
 
     @Bean
     public CasTicketProvider proxyTicketProvider() {
-        return new CasProxyTicketProvider(casService);
+        return new CasProxyTicketProvider(casService, authMode);
     }
 }

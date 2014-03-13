@@ -29,16 +29,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class CasProxyTicketProvider extends AbstractCasTicketProvider {
     private ProxyAuthenticator proxyAuthenticator = new ProxyAuthenticator();
     private String casService;
+    private String authMode;
 
-    public CasProxyTicketProvider(String casService) {
+    public CasProxyTicketProvider(String casService, String authMode) {
         this.casService = casService;
+        this.authMode = authMode;
     }
 
     @Override
     public String provideTicket(String service) {
         service = getTargetServiceCasUri(service);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if( authentication != null && authentication instanceof UsernamePasswordAuthenticationToken ) {
+        if( authentication != null && authentication instanceof UsernamePasswordAuthenticationToken
+                && "dev".equals(authMode) ) {
             // Development mode, this works provided that Spring Security's authentication manager has
             // erase-credientals=false: <authentication-manager alias="authenticationManager"  erase-credentials="false">
             UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
@@ -48,16 +51,13 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
 
         // In production we basically do this
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if( authentication == null || !(authentication instanceof CasAuthenticationToken) ) {
-//            return null;
-//        }
 //        Assertion assertion = ((CasAuthenticationToken) authentication).getAssertion();
 //        return assertion.getPrincipal().getProxyTicketFor(service);
 
         // But for performance reasons, use a ticket cache implemented in ProxyAuthenticator (implementation might
         // also change):
         final Holder<String> result = new Holder<String>();
-        proxyAuthenticator.proxyAuthenticate(service, "prod", new ProxyAuthenticator.Callback() {
+        proxyAuthenticator.proxyAuthenticate(service, authMode, new ProxyAuthenticator.Callback() {
             @Override
             public void setRequestHeader(String key, String value) {
                 if(CAS_HEADER.equals(key)) {
@@ -65,7 +65,7 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
                     result.set(value);
                 } else {
                     throw new IllegalStateException("Not implemented: The header field " + key + " has been added "
-                        + " to CAS authentication procedure and not currently supported by Osoitepalvelu's"
+                        + " to CAS authentication procedure and not currently supported by current"
                         + " Camel CAS authentication implementation.");
                 }
             }
