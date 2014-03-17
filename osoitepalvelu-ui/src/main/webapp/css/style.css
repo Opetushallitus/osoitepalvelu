@@ -71,7 +71,9 @@ option.placeholder {
     margin-bottom: 20px;
 }
 .selectedCriterion {
-    background-color: lightgrey;
+    /*background-color: lightgrey;*/
+    background-color: #EEEEEE;
+    background-image: -moz-linear-gradient(center bottom , #FFFFFF 0%, #EEEEEE 50%);
     border-radius: 4px 4px 4px 4px;
     margin-bottom:5px;
 }
@@ -89,7 +91,7 @@ option.placeholder {
 .selectedCriterionName {
     vertical-align: top;
     padding-top: 4px;
-    font-size: 1.2em;
+    font-size: 1.1em;
     width: 40%;
     font-weight: bold;
     text-align: left;
@@ -197,4 +199,37 @@ a {
 }
 .rightPosition button {
     margin-left: 10px;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice {
+    color: #333333;
+    cursor: default;
+    line-height: inherit;
+    background: #D2ECF5;
+    text-shadow: none;
+    background-image: none;
+    border-color: rgb( 89, 174, 202 );
+    border-radius: 3px;
+}
+
+.select2-container-multi .select2-choices    .select2-search-choice-focus {
+   background-color: rgb(159, 219, 240);
+   color: #FFFFFF;
+}
+
+.select2-search-choice-close {
+    top: 7px;
+}
+
+.select2-container {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+}
+
+.select2-container:hover, .select2-container input:hover, .select2-choice:hover {
+    background: #FFF5DA;
+}
+
+.select2-results .select2-highlighted {
+    background: none repeat scroll 0 0 #E99F00;
 }

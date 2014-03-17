@@ -46,6 +46,7 @@ public class DefaultKoodistoDtoConverter extends AbstractDtoConverter implements
 
     public UiKoodiItemDto convert(KayttooikesuryhmaDto from, UiKoodiItemDto to, Locale locale) {
         convertValue(from, to, locale);
+        to.setKoodiUri(to.getKoodiId());
         to.setKoodistonTyyppi(KoodistoDto.KoodistoTyyppi.KAYTTOOIKEUSRYHMA);
         to.setLyhytNimi(to.getNimi());
         return to;
