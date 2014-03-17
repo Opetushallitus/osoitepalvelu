@@ -14,12 +14,12 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
+package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
 import org.joda.time.LocalDate;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.helpers.KoodistoDateHelper;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.KoodistoDateHelper;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 
 import java.io.Serializable;
 

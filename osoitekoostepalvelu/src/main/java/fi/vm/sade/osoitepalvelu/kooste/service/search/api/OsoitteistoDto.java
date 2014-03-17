@@ -16,6 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoiteDto;
+
 import java.io.Serializable;
 
 public class OsoitteistoDto implements Serializable {
@@ -23,6 +26,7 @@ public class OsoitteistoDto implements Serializable {
     private static final long serialVersionUID = 6985560274560979066L;
     
     private String kieli;
+    @DtoConversion(withClass = OrganisaatioYhteysosoiteDto.class)
     private String osoiteTyyppi;
     private String yhteystietoOid;
     private String osoite;

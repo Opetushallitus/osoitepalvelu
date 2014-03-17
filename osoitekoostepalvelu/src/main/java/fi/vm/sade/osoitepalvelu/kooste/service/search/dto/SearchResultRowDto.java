@@ -34,6 +34,7 @@ public class SearchResultRowDto implements Serializable {
     private String organisaatioOid;
     private String kotikunta;
     private String toimipistekoodi;
+    private String oppilaitosKoodi;
     private String wwwOsoite;
     @DtoConversion(skip = true, withClass = ResultAggregateDto.class)
     private String nimi;
@@ -145,7 +146,6 @@ public class SearchResultRowDto implements Serializable {
         this.henkiloEmail = henkiloEmail;
     }
 
-
     public String getOsoiteTyyppi() {
         return osoiteTyyppi;
     }
@@ -256,6 +256,14 @@ public class SearchResultRowDto implements Serializable {
 
     public void setHenkiloOid(String henkiloOid) {
         this.henkiloOid = henkiloOid;
+    }
+
+    public String getOppilaitosKoodi() {
+        return oppilaitosKoodi;
+    }
+
+    public void setOppilaitosKoodi(String oppilaitosKoodi) {
+        this.oppilaitosKoodi = oppilaitosKoodi;
     }
 
     public OidAndTyyppiPair getOidAndTyyppiPair() {

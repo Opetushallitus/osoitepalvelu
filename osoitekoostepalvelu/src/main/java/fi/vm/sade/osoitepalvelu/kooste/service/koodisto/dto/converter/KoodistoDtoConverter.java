@@ -17,7 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter;
 
 import fi.ratamaa.dtoconverter.DtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 
 import java.util.Locale;

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.*;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,6 +75,7 @@ public class ApiToJsonTest {
         result.setOid("1.2.246.562.10.38898719687");
         result.setPuhelinnumero("0955544412");
         result.setToimipistekoodi("0032901");
+        result.setOppilaitosKoodi("0032901");
         result.setWwwOsoite("http://www.kimitoon.fi/barn-och-utbildning/skolor/svenskaskolor/kimitoonsgymnasi");
         result.setViranomaistiedotuksenEmail("viranomaisille@email.com");
         result.setKoulutusneuvonnanEmail("Koulutusneuvonta@email.com");
@@ -124,6 +125,7 @@ public class ApiToJsonTest {
         result.setOid("1.2.246.562.10.388987196872");
         result.setPuhelinnumero("03555666000");
         result.setToimipistekoodi("0032902");
+        result.setOppilaitosKoodi("0032902");
         result.setWwwOsoite("http://www.organisaatio.ab");
         result.setViranomaistiedotuksenEmail("viranomaiset@email.com");
         result.setKoulutusneuvonnanEmail("kouutus@email.com");

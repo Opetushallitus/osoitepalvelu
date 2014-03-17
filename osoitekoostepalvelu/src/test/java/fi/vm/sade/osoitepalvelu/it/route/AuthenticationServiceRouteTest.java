@@ -14,13 +14,13 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.it.reitit;
+package fi.vm.sade.osoitepalvelu.it.route;
 
 import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.DefaultAuthenticationServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultAuthenticationServiceRoute;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;

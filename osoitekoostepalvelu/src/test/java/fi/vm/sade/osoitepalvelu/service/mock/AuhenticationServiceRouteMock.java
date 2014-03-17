@@ -14,11 +14,13 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.service.koodisto.mock;
+package fi.vm.sade.osoitepalvelu.service.mock;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.AuthenticationServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +29,18 @@ import java.util.List;
  * Time: 3:18 PM
  */
 public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute {
-    private List<KayttooikesuryhmaDto> kayttooikesuryhmas;
+    private List<KayttooikesuryhmaDto> kayttooikesuryhmas = new ArrayList<KayttooikesuryhmaDto>();
+    private List<HenkiloDto> henkilos = new ArrayList<HenkiloDto>();
+
+    @Override
+    public List<KayttooikesuryhmaDto> findKayttooikeusryhmas() {
+        return kayttooikesuryhmas;
+    }
+
+    @Override
+    public List<HenkiloDto> findHenkilosByOrganisaatioOids(List<String> ooids) {
+        return henkilos;
+    }
 
     public AuhenticationServiceRouteMock(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
         this.kayttooikesuryhmas = kayttooikesuryhmas;
@@ -37,8 +50,11 @@ public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute
         this.kayttooikesuryhmas = kayttooikesuryhmas;
     }
 
-    @Override
-    public List<KayttooikesuryhmaDto> findKayttooikeusryhmas() {
-        return kayttooikesuryhmas;
+    public List<HenkiloDto> getHenkilos() {
+        return henkilos;
+    }
+
+    public void setHenkilos(List<HenkiloDto> henkilos) {
+        this.henkilos = henkilos;
     }
 }

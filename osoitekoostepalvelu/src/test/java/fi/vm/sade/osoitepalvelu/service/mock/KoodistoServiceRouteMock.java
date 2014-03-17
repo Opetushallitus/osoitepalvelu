@@ -14,14 +14,14 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.service.koodisto.mock;
+package fi.vm.sade.osoitepalvelu.service.mock;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoVersioDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.KoodistoRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.KoodistoRoute;
 
 import java.util.*;
 
@@ -30,7 +30,7 @@ import java.util.*;
  * Date: 3/12/14
  * Time: 3:20 PM
  */
-public class KoodistoRouteMock implements KoodistoRoute {
+public class KoodistoServiceRouteMock implements KoodistoRoute {
     private Map<KoodistoVersioDto, List<KoodiDto>> koodis = new HashMap<KoodistoVersioDto, List<KoodiDto>>();
     private Map<KoodistoDto.KoodistoTyyppi, KoodistoDto> koodistosByTyyppis
             = new HashMap<KoodistoDto.KoodistoTyyppi, KoodistoDto>();

@@ -17,9 +17,10 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
-import fi.ratamaa.dtoconverter.annotation.DtoConversions;
 import fi.ratamaa.dtoconverter.annotation.DtoPath;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioviiteDto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class UiKoodiItemDto implements Serializable {
     private KoodistoTyyppi koodistonTyyppi; // Kategoria
     @DtoPath(value="koodiArvo", withClass = KoodiDto.class)
     private String koodiId; // koodiArvo koodistossa
+    private String koodiUri;
 
     private String nimi;
     private String kuvaus;
@@ -88,5 +90,13 @@ public class UiKoodiItemDto implements Serializable {
 
     public void setOrganisaatioViite(List<OrganisaatioviiteDto> organisaatioViite) {
         this.organisaatioViite = organisaatioViite;
+    }
+
+    public String getKoodiUri() {
+        return koodiUri;
+    }
+
+    public void setKoodiUri(String koodiUri) {
+        this.koodiUri = koodiUri;
     }
 }

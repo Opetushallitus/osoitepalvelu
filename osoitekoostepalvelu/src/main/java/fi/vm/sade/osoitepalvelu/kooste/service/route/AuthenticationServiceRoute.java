@@ -14,22 +14,28 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
+package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
-import java.util.Map;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
+
+import java.util.List;
 
 /**
  * User: ratamaa
- * Date: 3/11/14
- * Time: 5:14 PM
+ * Date: 3/12/14
+ * Time: 3:13 PM
  */
-public interface CasTicketProvider {
-    public static final String CAS_HEADER = "CasSecurityTicket";
+public interface AuthenticationServiceRoute {
 
     /**
-     * @param service the CAS service
-     * @return the ticket for the service
+     * @return all kayttoikeusryhmas
      */
-    public Map<String,String> provideTicketHeaders(String service);
+    List<KayttooikesuryhmaDto> findKayttooikeusryhmas();
 
+    /**
+     * @param ooids of the organisaatio
+     * @return henkilös for the organisaatio
+     */
+    List<HenkiloDto> findHenkilosByOrganisaatioOids(List<String> ooids);
 }

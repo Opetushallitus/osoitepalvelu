@@ -29,6 +29,7 @@ import fi.vm.sade.security.SimpleCache;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.exolab.castor.types.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +56,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SeachController extends AbstractMvcController implements Serializable {
     private static final long serialVersionUID = -4986869170151316267L;
 
-    @Autowired
+    @Autowired @Qualifier("dummy")
     private SearchService searchService;
 
     @Autowired

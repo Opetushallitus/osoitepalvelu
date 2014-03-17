@@ -203,7 +203,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
             value( cell(sheet, rowNum, cellNum++), row.getNimi() );
         }
         if (presentation.isOrganisaatiotunnisteIncluded()) {
-            value( cell(sheet, rowNum, cellNum++), row.getOrganisaatioOid() );
+            value( cell(sheet, rowNum, cellNum++), row.getOppilaitosKoodi() );
         }
         if (presentation.isYhteyshenkiloIncluded()) {
             value( cell(sheet, rowNum, cellNum++), join(" ", row.getYhteystietoNimi()));

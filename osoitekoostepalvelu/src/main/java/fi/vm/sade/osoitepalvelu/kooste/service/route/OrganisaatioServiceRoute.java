@@ -14,32 +14,25 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
+package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
-import java.io.Serializable;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+
+import java.util.List;
 
 /**
  * User: ratamaa
- * Date: 3/11/14
- * Time: 3:06 PM
+ * Date: 3/14/14
+ * Time: 1:54 PM
  */
-public class LocalizedValueDto implements Serializable {
-    private String text; // Note: can be null
-    private String lang; // Note: can be uppoer or lower case.
+public interface OrganisaatioServiceRoute {
 
-    public String getText() {
-        return text;
-    }
+    /**
+     * @param criteria for organisaatios' yhteystietos
+     * @return the yhteystietos for the organisaatios matching the search criteria
+     */
+    List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
+            OrganisaatioYhteystietoCriteriaDto criteria);
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getLang() {
-        return lang;
-    }
-
-    public void setLang(String lang) {
-        this.lang = lang;
-    }
 }

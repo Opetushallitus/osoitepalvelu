@@ -14,21 +14,32 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route;
+package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KayttooikesuryhmaDto;
-
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * User: ratamaa
- * Date: 3/12/14
- * Time: 3:13 PM
+ * Date: 3/11/14
+ * Time: 3:06 PM
  */
-public interface AuthenticationServiceRoute {
+public class LocalizedValueDto implements Serializable {
+    private String text; // Note: can be null
+    private String lang; // Note: can be uppoer or lower case.
 
-    /**
-     * @return all kayttoikeusryhmas
-     */
-    List<KayttooikesuryhmaDto> findKayttooikeusryhmas();
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
 }

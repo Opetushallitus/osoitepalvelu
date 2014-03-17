@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.helpers;
+package fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers;
 
 import org.joda.time.LocalDate;
 

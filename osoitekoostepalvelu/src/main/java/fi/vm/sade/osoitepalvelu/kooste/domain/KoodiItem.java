@@ -29,6 +29,7 @@ public class KoodiItem implements Serializable {
     
     private KoodistoCache.KoodistoTyyppi koodistonTyyppi;
     private String koodiId;
+    private String koodiUri;
     private String nimi;
     private String kuvaus;
     private String lyhytNimi;
@@ -80,5 +81,13 @@ public class KoodiItem implements Serializable {
 
     public void setOrganisaatioViite(List<Organisaatioviite> organisaatioViite) {
         this.organisaatioViite = organisaatioViite;
+    }
+
+    public String getKoodiUri() {
+        return koodiUri;
+    }
+
+    public void setKoodiUri(String koodiUri) {
+        this.koodiUri = koodiUri;
     }
 }

@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
+package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.joda.time.LocalDate;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.helpers.KoodistoDateHelper;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.KoodistoDateHelper;
 
 public class KoodiDto implements Serializable {
     private String koodiUri;

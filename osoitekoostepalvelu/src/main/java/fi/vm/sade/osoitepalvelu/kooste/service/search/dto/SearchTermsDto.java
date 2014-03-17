@@ -83,4 +83,13 @@ public class SearchTermsDto implements Serializable {
     public void setTerms(List<SearchTermDto> terms) {
         this.terms = terms;
     }
+
+    public List<String> findTerms( String type ) {
+        for( SearchTermDto term : this.terms ) {
+            if( type.equals(term.getType()) ) {
+                return term.getValues();
+            }
+        }
+        return new ArrayList<String>();
+    }
 }

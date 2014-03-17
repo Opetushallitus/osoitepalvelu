@@ -14,15 +14,15 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.it.reitit;
+package fi.vm.sade.osoitepalvelu.it.route;
 
 import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoVersioDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.DefaultKoodistoRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultKoodistoRoute;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;

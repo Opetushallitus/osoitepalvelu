@@ -21,7 +21,7 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
             v.oidTyyppi = 'organisaatio';
             v.oid = v.organisaatioOid;
         }
-        v.organisaatioTunniste = v.toimipistekoodi; // <-- TODO: onko näin?
+        v.organisaatioTunniste = v.oppilaitosKoodi;
         v.yhteyshenkilonNimi = v.yhteystietoNimi;
         v.postiosoite = v.osoite +(v.osoite ? "\n":"") + v.extraRivi + (v.extraRivi ? "\n":"")
                 + v.postinumero + " " + v.postitoimipaikka;

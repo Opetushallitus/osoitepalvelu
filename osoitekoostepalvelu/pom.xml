@@ -176,6 +176,11 @@
             <artifactId>jackson-xc</artifactId>
             <version>1.9.11</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jackson</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.cxf</groupId>

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import fi.vm.sade.log.client.Logger;
@@ -36,24 +37,18 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
  * Time: 2:54 PM
  */
 @Service
+@Qualifier("dummy")
 public class DummySearchService implements SearchService {
 
     @Autowired
     private Logger sadeLogger;
-    
+
     @Override
     public OrganisaatioResultsDto find(SearchTermsDto terms) {
         // TODO: Haun toteutus
         // Testataan käyttöliittymää suhteellisen suurella datamäärällä. 5000 oli vielä myös OK mutta
         // käytännössä jäävät yleensä pienemmäksi.
 
-        /* Esimerkki logituksesta
-        String currentUserOID = "2323";
-        Tapahtuma t = Tapahtuma.createREAD("log-service", currentUserOID, "Henkilö", "1.2.3.4.238726766");
-        
-        sadeLogger.log(t);
-        */
-        
         OrganisaatioResultsDto results = new OrganisaatioResultsDto();
 
         for( long i = 1; i <= 1000; ++i ) {
@@ -71,6 +66,7 @@ public class DummySearchService implements SearchService {
             result.setOid("1.2.246.562.10."+(38898719687l+i));
             result.setPuhelinnumero("0955544412");
             result.setToimipistekoodi(""+(32901+i));
+            result.setOppilaitosKoodi("" + (32901 + i));
             result.setWwwOsoite("http://www.kimitoon.fi/barn-och-utbildning/skolor/svenskaskolor/kimitoonsgymnasi");
 
             OsoitteistoDto postiosoite = new OsoitteistoDto();

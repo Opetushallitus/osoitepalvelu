@@ -16,10 +16,13 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrganisaatioResultDto implements Serializable {
     private static final long serialVersionUID = -3235512233762738508L;
@@ -27,13 +30,16 @@ public class OrganisaatioResultDto implements Serializable {
     private String oid; // Yksikäsitteinen tunniste
     private String kotikunta;
     private String toimipistekoodi;
+    private String oppilaitosKoodi;
     private String wwwOsoite;
-    private HashMap<String, String> nimi = new HashMap<String, String>(); // Organisaation nimi lokaalin mukaan
+    private Map<String, String> nimi = new HashMap<String, String>(); // Organisaation nimi lokaalin mukaan
     private String puhelinnumero;
     private String faksinumero;
     private String emailOsoite;
     private List<String> tyypit;
+    @DtoConversion
     private List<OsoitteistoDto> postiosoite = new ArrayList<OsoitteistoDto>();
+    @DtoConversion
     private List<OsoitteistoDto> kayntiosoite = new ArrayList<OsoitteistoDto>();
     private List<OrganisaatioYhteystietoDto> yhteyshenkilot = new ArrayList<OrganisaatioYhteystietoDto>();
     private String viranomaistiedotuksenEmail;
@@ -72,11 +78,11 @@ public class OrganisaatioResultDto implements Serializable {
         this.wwwOsoite = wwwOsoite;
     }
 
-    public HashMap<String, String> getNimi() {
+    public Map<String, String> getNimi() {
         return nimi;
     }
 
-    public void setNimi(HashMap<String, String> nimi) {
+    public void setNimi(Map<String, String> nimi) {
         this.nimi = nimi;
     }
 
@@ -162,5 +168,13 @@ public class OrganisaatioResultDto implements Serializable {
 
     public void setKriisitiedotuksenEmail(String kriisitiedotuksenEmail) {
         this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
+    }
+
+    public String getOppilaitosKoodi() {
+        return oppilaitosKoodi;
+    }
+
+    public void setOppilaitosKoodi(String oppilaitosKoodi) {
+        this.oppilaitosKoodi = oppilaitosKoodi;
     }
 }

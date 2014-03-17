@@ -14,11 +14,11 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route;
+package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoVersioDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
 
 import java.util.List;
 

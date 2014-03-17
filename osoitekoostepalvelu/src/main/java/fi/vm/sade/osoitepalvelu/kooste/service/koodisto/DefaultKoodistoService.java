@@ -20,10 +20,14 @@ import fi.vm.sade.osoitepalvelu.kooste.dao.koodistoCache.KoodistoCacheRepository
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodiItem;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.*;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter.KoodistoDtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.AuthenticationServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.route.KoodistoRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.KoodistoRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoTila;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
@@ -39,6 +43,7 @@ import java.util.*;
  */
 @Service
 public class DefaultKoodistoService implements KoodistoService {
+    public static final Locale DEFAULT_LOCALE = new Locale("fi", "FI");
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 

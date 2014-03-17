@@ -101,11 +101,11 @@ public class SpringTestAppConfig {
         // Always use username and password authentication in tests (since user not logged in):
         return new CasTicketProvider() {
             @Override
-            public String provideTicket(String service) {
+            public Map<String,String> provideTicketHeaders(String service) {
                 if( providersByService.containsKey(service) ) {
-                    return providersByService.get(service).provideTicket(service);
+                    return providersByService.get(service).provideTicketHeaders(service);
                 }
-                return defaultProvider.provideTicket(service);
+                return defaultProvider.provideTicketHeaders(service);
             }
         };
     }

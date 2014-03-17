@@ -21,6 +21,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * User: ratamaa
  * Date: 3/11/14
@@ -37,7 +40,7 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
     }
 
     @Override
-    public String provideTicket(String service) {
+    public Map<String,String> provideTicketHeaders(String service) {
         service = getTargetServiceCasUri(service);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if( authentication != null && authentication instanceof UsernamePasswordAuthenticationToken
@@ -46,7 +49,7 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
             // erase-credientals=false: <authentication-manager alias="authenticationManager"  erase-credentials="false">
             UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
             return new UsernamePasswordCasClientTicketProvider(casService, token.getName(),
-                    ""+token.getCredentials()).provideTicket(service);
+                    ""+token.getCredentials()).provideTicketHeaders(service);
         }
 
         // In production we basically do this
@@ -56,32 +59,14 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
 
         // But for performance reasons, use a ticket cache implemented in ProxyAuthenticator (implementation might
         // also change):
-        final Holder<String> result = new Holder<String>();
+        final Map<String,String> result = new HashMap<String, String>();
         proxyAuthenticator.proxyAuthenticate(service, authMode, new ProxyAuthenticator.Callback() {
             @Override
             public void setRequestHeader(String key, String value) {
-                if(CAS_HEADER.equals(key)) {
-                    // Dirty callback solution, but the implementation is not asynchronous, so we are safe here:
-                    result.set(value);
-                } else {
-                    throw new IllegalStateException("Not implemented: The header field " + key + " has been added "
-                        + " to CAS authentication procedure and not currently supported by current"
-                        + " Camel CAS authentication implementation.");
-                }
+                // Dirty callback solution, but the implementation is not asynchronous, so we are safe here:
+                result.put(key, value);
             }
         });
-        return result.get();
-    }
-
-    protected static class Holder<T> {
-        private T value;
-
-        public T get() {
-            return value;
-        }
-
-        public void set(T value) {
-            this.value = value;
-        }
+        return result;
     }
 }

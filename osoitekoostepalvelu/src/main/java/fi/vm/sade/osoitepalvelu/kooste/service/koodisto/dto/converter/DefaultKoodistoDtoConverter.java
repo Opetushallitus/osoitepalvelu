@@ -21,14 +21,15 @@ import fi.ratamaa.dtoconverter.reflection.PropertyConversionContext;
 import fi.ratamaa.dtoconverter.typeconverter.TypeConversionContainer;
 import fi.ratamaa.dtoconverter.typeconverter.TypeConverterAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.*;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
 @Component
 public class DefaultKoodistoDtoConverter extends AbstractDtoConverter implements KoodistoDtoConverter {
-    public static final Locale DEFAULT_LOCALE = new Locale("fi", "FI");
 
     @Override
     protected void registerConverters(TypeConversionContainer conversions) {
@@ -37,7 +38,8 @@ public class DefaultKoodistoDtoConverter extends AbstractDtoConverter implements
             @Override
             public String convert(LocalizedContainerDto obj, PropertyConversionContext context, String currentValue, ConversionCall call) {
                 Locale locale = parameterOfType(Locale.class, 0, call);
-                return obj.findForLocale(locale == null ? DEFAULT_LOCALE : locale, DEFAULT_LOCALE);
+                return obj.findForLocale(locale == null ? DefaultKoodistoService.DEFAULT_LOCALE
+                        : DefaultKoodistoService.DEFAULT_LOCALE);
             }
         });
     }

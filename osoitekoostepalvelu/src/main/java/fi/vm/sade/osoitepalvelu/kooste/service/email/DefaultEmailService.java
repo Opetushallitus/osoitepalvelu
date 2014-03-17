@@ -21,7 +21,7 @@ public class DefaultEmailService extends AbstractService implements EmailService
         EmailSendSettingsDto settings = new EmailSendSettingsDto();
         settings.setEndpointUrl( emailSendEmailUrl );
         settings.getEmail().setSenderOid( getLoggedInUserOid() );
-        // TODO: resolve currenlty logged in user's other details.
+
         return settings;
     }
 }

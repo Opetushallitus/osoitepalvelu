@@ -16,9 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service;
 
+import fi.vm.sade.log.client.Logger;
+import fi.vm.sade.log.model.Tapahtuma;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -29,8 +32,30 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public abstract class AbstractService {
 
+    @Autowired
+    protected Logger sadeLogger;
+
+    protected Tapahtuma read( String oidType, String oid ) {
+        return Tapahtuma.createREAD("osoitepalvelu", getLoggedInUserOidOrNull(), oidType, oid);
+    }
+
+    protected void log( Tapahtuma tapahtuma ) {
+        sadeLogger.log(tapahtuma);
+    }
+
     protected String getLoggedInUserOid() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if( auth == null ) {
+            throw new AuthorizationException("User not logged in.");
+        }
+        return auth.getName();
+    }
+
+    protected String getLoggedInUserOidOrNull() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if( auth == null ) {
+            return null;
+        }
         return auth.getName();
     }
 

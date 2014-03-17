@@ -14,14 +14,15 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
+package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
-public enum KoodistoTila {
-    PASSIIVINEN, 
-    LUONNOS, 
-    HYVAKSYTTY;
+import java.io.Serializable;
 
-    public static boolean isAktiivinenTila(KoodistoTila tila) {
-        return (tila != null && (tila == KoodistoTila.LUONNOS || tila == KoodistoTila.HYVAKSYTTY));
-    }
+/**
+ * User: ratamaa
+ * Date: 3/14/14
+ * Time: 1:10 PM
+ */
+public class HenkiloDto implements Serializable {
+    /// TODO:
 }

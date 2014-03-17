@@ -20,8 +20,12 @@ import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.*;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.service.koodisto.mock.KoodistoRouteMock;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiArvoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoTila;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
+import fi.vm.sade.osoitepalvelu.service.mock.KoodistoServiceRouteMock;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +53,7 @@ public class DefaultKoodistoServiceTest {
 
     @Before
     public void init() {
-        KoodistoRouteMock mock = new KoodistoRouteMock();
+        KoodistoServiceRouteMock mock = new KoodistoServiceRouteMock();
         mock.add( versio(KoodistoTyyppi.OPPILAITOSTYYPPI, 0l), koodi("Yliopisto") );
         mock.add( versio(KoodistoTyyppi.OPPILAITOSTYYPPI, 1l),
                 koodi("Yliopisto")

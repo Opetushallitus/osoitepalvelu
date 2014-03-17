@@ -18,6 +18,9 @@ package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
 
 import fi.vm.sade.authentication.cas.CasClient;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * To be used only for tests/development.
  * @see CasProxyTicketProvider
@@ -38,7 +41,10 @@ public class UsernamePasswordCasClientTicketProvider extends AbstractCasTicketPr
     }
 
     @Override
-    public String provideTicket(String service) {
-        return CasClient.getTicket(casService+ "/v1/tickets", username, password, getTargetServiceCasUri(service));
+    public Map<String,String> provideTicketHeaders(String service) {
+        Map<String,String> headers = new HashMap<String, String>();
+        String casHeader = CasClient.getTicket(casService+ "/v1/tickets", username, password, getTargetServiceCasUri(service));
+        headers.put(CAS_HEADER, casHeader);
+        return headers;
     }
 }

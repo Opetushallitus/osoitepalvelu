@@ -21,16 +21,18 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
+import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.model.LoadBalanceDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.spring.SpringRouteBuilder;
-import org.apache.camel.support.ExpressionAdapter;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -55,48 +57,69 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected CasTicketProvider authenticatedUserCasTicketProvider;
 
 
-    protected<T extends ProcessorDefinition<T>> ProcessorDefinition<T> casByAuthenticatedUser(T process, final String service) {
-        return process.setHeader(CasTicketProvider.CAS_HEADER, new ExpressionAdapter() {
+    protected <T extends ProcessorDefinition<? extends T>> T casByAuthenticatedUser(T process, final String service) {
+        return process.process(new SetOutHeadersProcessor() {
             @Override
-            public Object evaluate(Exchange exchange) {
-                return authenticatedUserCasTicketProvider.provideTicket(service);
+            protected Map<String, String> getHeaders() {
+                return authenticatedUserCasTicketProvider.provideTicketHeaders(service);
             }
         });
     }
 
-    protected<T extends ProcessorDefinition<T>> ProcessorDefinition<T> casBydSystemUser(T process, final String service,
+    protected <T extends ProcessorDefinition<? extends T>> T casBydSystemUser(T process, final String service,
                                                                                         final String username,
                                                                                         final String password) {
-        return process.setHeader(CasTicketProvider.CAS_HEADER, new ExpressionAdapter() {
+        return process.process(new SetOutHeadersProcessor() {
             @Override
-            public Object evaluate(Exchange exchange) {
+            protected Map<String, String> getHeaders() {
                 return new UsernamePasswordCasClientTicketProvider(casService, username, password)
-                        .provideTicket(service);
+                        .provideTicketHeaders(service);
             }
         });
     }
 
-    protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, TypeReference<T> targetDtoType) {
-        JacksonJsonProcessor jsonToDtoConverter = new JacksonJsonProcessor(mapperProvider, targetDtoType);
-        return from(routeId).setHeader(Exchange.HTTP_METHOD, constant("GET")).to(url).process(jsonToDtoConverter);
+    protected abstract static class SetOutHeadersProcessor implements Processor {
+
+        protected abstract Map<String,String> getHeaders();
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if( exchange.getOut() != null ) {
+                Map<String,String> headers = getHeaders();
+                for( Map.Entry<String,String> kv : headers.entrySet() ) {
+                    exchange.getOut().setHeader(kv.getKey(), kv.getValue());
+                }
+            } else {
+                throw new IllegalStateException("No Out message in Exchange. " +
+                        "Perhaps you added process after call to to?");
+            }
+        }
     }
 
-    protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, String headerName,
-            Expression headerValue, TypeReference<T> targetDtoType) {
-        JacksonJsonProcessor jsonToDtoConverter = new JacksonJsonProcessor(mapperProvider, targetDtoType);
-        return from(routeId).setHeader(Exchange.HTTP_METHOD, constant("GET")).setHeader(headerName, headerValue)
-                .to(url).process(jsonToDtoConverter);
+    protected HeaderBuilder headers() {
+        return new HeaderBuilder();
     }
 
-    protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, HeaderBuilder headers,
-            TypeReference<T> targetDtoType) {
-        JacksonJsonProcessor jsonToDtoConverter = new JacksonJsonProcessor(mapperProvider, targetDtoType);
-        RouteDefinition route = from(routeId).setHeader(Exchange.HTTP_METHOD, constant("GET"));
-        // Asetetaan tässä käyttäjän antamat headereiden arvot
+    protected <T extends ProcessorDefinition<? extends T>> T headers( T route, HeaderBuilder headers ) {
         for (Entry<String, Expression> header : headers.getHeaders().entrySet()) {
             route.setHeader(header.getKey(), header.getValue());
         }
-        return route.to(url).process(jsonToDtoConverter);
+        return route;
+    }
+
+    protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, HeaderBuilder headers,
+                                                    TypeReference<T> targetDtoType) {
+        return headers(
+                from(routeId),
+                headers
+                    .get()
+            )
+            .to(url)
+            .process(jsonToDto(targetDtoType));
+    }
+
+    protected <T> JacksonJsonProcessor jsonToDto(TypeReference<T> targetDtoType) {
+        return new JacksonJsonProcessor(mapperProvider, targetDtoType);
     }
 
     protected LoadBalanceDefinition addRouteErrorHandlers(RouteDefinition route) {
@@ -114,5 +137,62 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             return value.trim();
         }
         return null;
+    }
+
+    protected class HeaderBuilder {
+        private Map<String, Expression> headers = new HashMap<String, Expression>();
+
+        public HeaderBuilder() {
+        }
+
+        public HeaderBuilder(String headerName, Expression expr) {
+            add(headerName, expr);
+        }
+
+        public HeaderBuilder add(String headerName, Expression expr) {
+            headers.put(headerName, expr);
+            return this;
+        }
+
+        public HeaderBuilder get() {
+            return add(Exchange.HTTP_METHOD, constant("GET"));
+        }
+
+        public HeaderBuilder post() {
+            return add(Exchange.HTTP_METHOD, constant("POST"));
+        }
+
+        public HeaderBuilder path(String path) {
+            return add(Exchange.HTTP_PATH, simple(path));
+        }
+
+        public HeaderBuilder query(String query) {
+            return add(Exchange.HTTP_QUERY, simple(query));
+        }
+
+        public Expression getHeaderValue(String headerName) {
+            return headers.get(headerName);
+        }
+
+        public Map<String, Expression> getHeaders() {
+            return headers;
+        }
+    }
+
+    protected HeaderValueBuilder headerValues() {
+        return new HeaderValueBuilder();
+    }
+
+    protected static class HeaderValueBuilder {
+        private Map<String,Object> map = new HashMap<String, Object>();
+
+        public HeaderValueBuilder add(String header, Object value) {
+            this.map.put(header, value);
+            return this;
+        }
+
+        public Map<String,Object> map() {
+            return this.map;
+        }
     }
 }
