@@ -31,6 +31,7 @@
 
         <script src="js/main.ignored.js"></script>
         <!-- REMOVE --><link rel="stylesheet" href="css/style.css"/><!-- END -->
+        <!-- REMOVE --><link rel="stylesheet" href="css/virkailija.css"/><!-- END -->
         <!-- REMOVE --><script src="js/helpers.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/project.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/service/saves.js"></script><!-- END -->
@@ -42,13 +43,17 @@
         <!-- REMOVE --><script src="js/controller/confirm.popup.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/controller/search.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/controller/results.js"></script><!-- END -->
-        <!-- REMOVE --><script src="js/i18n/i18n-fi.js"></script><!-- END -->
+        <!-- REMOVE --><script src="js/i18n/i18n.js"></script><!-- END -->
+        <!-- REMOVE --><script src="js/loading.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/standalone.ignored.js"></script><!-- END -->
         <!-- PRODUCTION:<link rel="stylesheet" href="css/style.min.css"/>  -->
         <!-- PRODUCTION:<script src="js/script.min.js"></script>  -->
     </head>
     <body>
         <div ng-animate="'animate'" ng-view>
+        </div>
+        <div ng-controller="LoadingCtrl">
+            <div ng-show="loading" style="position: fixed; left: 0px; top: 0px; background: gold; padding: 0.3em; font-weight: bold;" ng-cloak>{{i18n.loading}}</div>
         </div>
     </body>
 </html>

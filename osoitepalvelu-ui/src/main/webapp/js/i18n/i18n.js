@@ -3,6 +3,7 @@
  */
 angular.module("I18n", [], ["$provide", function($provider) {
     var values = {
+        loading: 'Ladataan...',
         search_title : 'Osoitehaku',
         results_title : 'Osoitteet',
         saved_searches : 'Tallennetut haut',
