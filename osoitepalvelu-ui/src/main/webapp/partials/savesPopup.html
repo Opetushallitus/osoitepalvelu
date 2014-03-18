@@ -1,9 +1,9 @@
 <div class="modal-header">
-    <h3>{{msg.saves_popup_title}}</h3>
+    <h3 tt="saves_popup_title">Tallennetut haut</h3>
 </div>
 <div class="modal-body">
-    <div class="noResults" ng-show="!saves.length">
-        {{msg.saves_popup_no_saves}}
+    <div class="noResults" ng-show="!saves.length" tt="saves_popup_no_saves">
+        Ei tallennettuja hakuja.
     </div>
     <table class="saveList" ng-show="saves.length">
         <tr class="save" ng-repeat="save in saves">
@@ -11,11 +11,11 @@
                 {{save.name}}
             </td>
             <td>
-                <a ng-click="deleteSave(save.id)">{{msg.saves_popup_delete}}</a>
+                <a ng-click="deleteSave(save.id)" tt="saves_popup_delete">poista</a>
             </td>
         </tr>
     </table>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="close()">{{msg.saves_popup_close}}</button>
+    <button class="btn btn-primary" ng-click="close()" tt="saves_popup_close">Sulje</button>
 </div>

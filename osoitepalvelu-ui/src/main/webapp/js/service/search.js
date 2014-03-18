@@ -4,7 +4,8 @@
 
 OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $location, FilterHelper,
                                                       AddressFields, ReceiverTypes, EmptyTerms,
-                                                      SearchResultProvider, SaveConverter) {
+                                                      SearchResultProvider, SaveConverter,
+                                                      LocalisationService, commonErrorHandler) {
     var _terms = angular.copy(EmptyTerms),
         _targetGroups = [],
         _searchType = null,
@@ -94,37 +95,38 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
         _terms = angular.copy(terms);
     };
 
-    this.search = function(success) {
+    this.search = function(success, error) {
         $log.info(_searchType);
         $log.info(_addressFields);
         $log.info(_targetGroups);
         $log.info(_terms);
         SearchResultProvider({
-            searchTerms: SaveConverter.toDomain({
-                searchType: _searchType,
-                terms: _terms,
-                addressFields: _addressFields,
-                receiverFields: _receiverFields,
-                targetGroups: _targetGroups
-            }),
-            nonIncludedOrganisaatioOids: _deletedIds,
+            data: {
+                searchTerms: SaveConverter.toDomain({
+                    searchType: _searchType,
+                    terms: _terms,
+                    addressFields: _addressFields,
+                    receiverFields: _receiverFields,
+                    targetGroups: _targetGroups
+                }),
+                nonIncludedOrganisaatioOids: _deletedIds
+            },
             callback: function(data) {
                 angular.forEach(data.rows, function(row) {
                     _addColumnData(row);
                 });
-                var filteredRows = $filter('filter')(data.rows, FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi"]) );
+                var filteredRows = $filter('filter')(data.rows,
+                        FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi"]) );
                 success( {
                     presentation: data.presentation,
                     rows: filteredRows
                 } );
             },
-            errorCallback: function(e) {
-                $log.error(e);
-            }
+            errorCallback: (error || commonErrorHandler)
         });
     };
 
-    this.downloadExcel = function() {
+    this.downloadExcel = function(success, error) {
         $log.info(_searchType);
         $log.info(_addressFields);
         $log.info(_targetGroups);
@@ -139,13 +141,11 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
                       targetGroups: _targetGroups
                   }),
                   nonIncludedOrganisaatioOids: _deletedIds
-            })
-            .success(function(key) {
-                window.location = 'api/search/excel.do?downloadId='+key;
-            })
-            .error(function(e) {
-               $log.error(e);
-            });
+            } )
+        .success(function(key) {
+            success('api/search/excel.do?downloadId='+key+"&lang="+LocalisationService.getLocale());
+        })
+        .error( error || commonErrorHandler );
     };
 
     this.updateSelectedSearch = function(search) {

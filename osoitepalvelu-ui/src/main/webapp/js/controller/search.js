@@ -1,10 +1,12 @@
 /**
  * Created by ratamaa on 12/3/13.
  */
-var SearchController = function($scope, i18n, $log, $modal, $location, $filter, SearchService,
+var SearchController = function($scope, $log, $modal, $location, $filter, SearchService,
                                 SearchTypes, TargetGroups, EmptyTerms,
-                                FilterHelper, SavesService, OptionsService) {
-    $scope.msg = i18n;
+                                FilterHelper, SavesService, OptionsService, LocalisationService) {
+    $scope.msg = function( key, params ) {
+        return LocalisationService.t(key, params);
+    };
 
     var updateSaves = function() {
         SavesService.list(function(data) {

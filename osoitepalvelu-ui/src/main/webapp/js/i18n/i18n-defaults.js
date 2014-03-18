@@ -2,7 +2,8 @@
  * Created by ratamaa on 12/3/13.
  */
 angular.module("I18n", [], ["$provide", function($provider) {
-    var values = {
+    var defaultValues = {};
+    defaultValues['fi'] = {
         loading: 'Ladataan...',
         search_title : 'Osoitehaku',
         results_title : 'Osoitteet',
@@ -87,8 +88,8 @@ angular.module("I18n", [], ["$provide", function($provider) {
         search_term_vuosiluokka: 'vuosiluokka',
         search_term_koultuksenjarjestaja: 'koulutuksen järjestäjä',
 
-        show_more_terms: 'enemmän rajaushetoja',
-        hide_extra_terms: 'vähemmän rajaushetoja',
+        show_more_terms: 'enemmän rajausehtoja',
+        hide_extra_terms: 'vähemmän rajausehtoja',
 
         back_to_search_terms: 'hakuehdot',
 
@@ -97,6 +98,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         column_organisaatioTunniste: 'Oppilaitoskoodi',
         column_yhteyshenkilonNimi: 'Yhteyshenkilö',
         column_email: 'Sähköpostiosoite',
+        column_henkiloEmail: 'Sähköpostiosoite',
         column_postiosoite: 'Postiosoite',
         column_katuPostinumero: 'Katu ja postinumero',
         column_plPostinumero: 'PL ja postinumero',
@@ -123,14 +125,5 @@ angular.module("I18n", [], ["$provide", function($provider) {
         overwrite_save_popup_save: 'Ylikirjoita',
         overwrite_save_popup_save_as: 'Tallenna nimellä'
     };
-    values.format = function( key ) {
-        var val = values[key];
-        for( var i = 1; i < arguments.length; ++i ) {
-            var pattern = "\\{"+(i-1)+"\\}",
-                re = new RegExp(pattern, "g");
-            val = val.replace(re, arguments[i]);
-        }
-        return val;
-    };
-    $provider.value("i18n", values);
+    $provider.value("i18nDefaults", defaultValues);
 }]);

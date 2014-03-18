@@ -1,10 +1,10 @@
 <div>
     <div class="form" role="form">
-        <h2>{{msg.search_title}}</h2>
+        <h2 tt="search_title">Osoitehaku</h2>
 
         <div class="form-row">
             <div class="label-cell">
-                <label for="savedSearch">{{msg.saved_searches}}</label>
+                <label for="savedSearch" tt="saved_searches">Tallennetut haut</label>
             </div>
             <div class="field-cell">
                 <select ui-select2 id="savedSearch" class="form-control" ng-model="selectedSavedSearch"
@@ -22,19 +22,19 @@
 
         <div class="form-row">
             <div class="label-cell">
-                <label for="searchType">{{msg.search_type}}</label>
+                <label for="searchType" tt="search_type">Haku</label>
             </div>
             <div class="field-cell">
                 <select ui-select2 id="searchType" class="form-control" ng-model="searchType">
-                    <option class="placeholder" value="">{{msg.search_type_placeholder}}</option>
+                    <option class="placeholder" value="" tt="search_type_placeholder">Valitse mihin tarkoitukseen tarvitset yhteystietoja</option>
                     <option ng-repeat="opt in searchTypes" value="{{opt.type}}">{{opt.name}}</option>
                 </select>
             </div>
         </div>
 
         <div class="form-row" ng-show="searchType == 'SEND_LETTER'">
-            <div class="label-cell">
-                {{msg.receiver_fields}}
+            <div class="label-cell" tt="receiver_fields">
+                Vastaanottaja
             </div>
             <div class="field-cell">
                 <div class="criterionOptions receiverTypes">
@@ -47,8 +47,8 @@
         </div>
 
         <div class="form-row" ng-show="searchType == 'CONTACT'">
-            <div class="label-cell">
-                {{msg.address_fields}}
+            <div class="label-cell" tt="address_fields">
+                Esitettävät tiedot
             </div>
             <div class="field-cell">
                 <div class="criterionOptions addressTypes">
@@ -62,7 +62,7 @@
 
         <div class="form-row" ng-show="isShowTargetGroup()">
             <div class="label-cell">
-                <label for="targetGroup">{{msg.target_group}}</label>
+                <label for="targetGroup" tt="target_group">Kohderyhmä</label>
             </div>
             <div class="field-cell">
                 <div ng-repeat="tg in visibleTargetGroups" class="selectedCriterion targetGroups">
@@ -92,62 +92,62 @@
         </div>
 
         <div class="form-row" ng-show="isTermsShown()" ng-animate="'animate'">
-            <div class="label-cell">
-                {{msg.search_terms}}
+            <div class="label-cell" tt="search_terms">
+                Rajaus
             </div>
             <div class="field-cell">
                 <div class="term" ng-show="isShowTutkintotoimikuntaTerm()">
-                    <select ui-select2 multiple id="tutkintotoimikuntas" class="form-control" ng-model="terms.tutkintotoimikuntas" data-placeholder="{{msg.search_term_tutkintotoimikunta}}">
+                    <select ui-select2 multiple id="tutkintotoimikuntas" class="form-control" ng-model="terms.tutkintotoimikuntas" data-placeholder="{{msg('search_term_tutkintotoimikunta')}}">
                         <option ng-repeat="opt in options.tutkintotoimikuntas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term" ng-show="isShowTutkintotoimikuntaRooliTerm()">
-                    <select ui-select2 multiple id="tutkintotoimikuntaRoolis" class="form-control" ng-model="terms.tutkintotoimikuntaRoolis" data-placeholder="{{msg.search_term_tutkintotoimikunta_rooli}}">
+                    <select ui-select2 multiple id="tutkintotoimikuntaRoolis" class="form-control" ng-model="terms.tutkintotoimikuntaRoolis" data-placeholder="{{msg('search_term_tutkintotoimikunta_rooli')}}">
                         <option ng-repeat="opt in options.tutkintotoimikuntaRoolis" value="{{opt.type}}">{{opt.name}}</option>
                     </select>
                 </div>
                 <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm()"></div>
                 <div class="term" ng-show="isShowKoulutaTerm()">
-                    <select ui-select2 multiple id="koulutaRoolis" class="form-control" ng-model="terms.koulutaRoolis" data-placeholder="{{msg.search_term_kouluta_rooli}}">
+                    <select ui-select2 multiple id="koulutaRoolis" class="form-control" ng-model="terms.koulutaRoolis" data-placeholder="{{msg('search_term_kouluta_rooli')}}">
                         <option ng-repeat="opt in options.koulutaRoolis" value="{{opt.koodiId}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term" ng-show="isShowAipalTerm()">
-                    <select ui-select2 multiple id="aipalRoolis" class="form-control" ng-model="terms.aipalRoolis" data-placeholder="{{msg.search_term_aipal_rooli}}">
+                    <select ui-select2 multiple id="aipalRoolis" class="form-control" ng-model="terms.aipalRoolis" data-placeholder="{{msg('search_term_aipal_rooli')}}">
                         <option ng-repeat="opt in options.aipalRoolis" value="{{opt.id}}">{{opt.name}}</option>
                     </select>
                 </div>
                 <div class="term-separator" ng-show="isShowKoulutaTerm() || isShowAipalTerm()"></div>
                 <div class="term term-full-width">
-                    <select ui-select2 multiple id="organisaationKielis" class="form-control" ng-model="terms.organisaationKielis" data-placeholder="{{msg.search_term_organisaation_kieli}}">
+                    <select ui-select2 multiple id="organisaationKielis" class="form-control" ng-model="terms.organisaationKielis" data-placeholder="{{msg('search_term_organisaation_kieli')}}">
                         <option ng-repeat="opt in options.organisaationKielis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term-separator"></div>
                 <div class="term">
-                    <select ui-select2 multiple id="maakunta" class="form-control" ng-model="terms.maakuntas" data-placeholder="{{msg.search_term_maakunta}}">
+                    <select ui-select2 multiple id="maakunta" class="form-control" ng-model="terms.maakuntas" data-placeholder="{{msg('search_term_maakunta')}}">
                         <option ng-repeat="opt in options.maakuntas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term">
-                    <select ui-select2 multiple data-disable-selectall id="kunta" class="form-control" ng-model="terms.kuntas" data-placeholder="{{msg.search_term_kunta}}">
+                    <select ui-select2 multiple data-disable-selectall id="kunta" class="form-control" ng-model="terms.kuntas" data-placeholder="{{msg('search_term_kunta')}}">
                         <option ng-repeat="opt in options.kuntas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term-separator"></div>
                 <div class="term term-full-width">
-                    <select ui-select2 multiple id="oppilaitostyyppi" class="form-control" ng-model="terms.oppilaitostyyppis" data-placeholder="{{msg.search_term_oppilaitostyyppi}}">
+                    <select ui-select2 multiple id="oppilaitostyyppi" class="form-control" ng-model="terms.oppilaitostyyppis" data-placeholder="{{msg('search_term_oppilaitostyyppi')}}">
                         <option ng-repeat="opt in options.oppilaitostyyppis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term-separator"></div>
                 <div class="term">
-                    <select ui-select2 multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas" data-placeholder="{{msg.search_term_vuosiluokka}}">
+                    <select ui-select2 multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas" data-placeholder="{{msg('search_term_vuosiluokka')}}">
                         <option ng-repeat="opt in options.vuosiluokkas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term">
-                    <select ui-select2 multiple data-disable-selectall id="koultuksenjarjestaja" class="form-control" ng-model="terms.koultuksenjarjestajas" data-placeholder="{{msg.search_term_koultuksenjarjestaja}}">
+                    <select ui-select2 multiple data-disable-selectall id="koultuksenjarjestaja" class="form-control" ng-model="terms.koultuksenjarjestajas" data-placeholder="{{msg('search_term_koultuksenjarjestaja')}}">
                         <option ng-repeat="opt in options.koultuksenjarjestajas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
@@ -155,11 +155,10 @@
 
                 <div style="clear:both;">
                     <a ng-click="toggleShowMore()">
-                        {{ showExtraTerms ? "" : msg.show_more_terms }}
+                        <span ng-show="showExtraTerms" tt="show_more_terms">enemmän rajausehtoja</span>
                     </a>
                 </div>
                 <div ng-show="showExtraTerms">
-                    TODO
                 </div>
             </div>
         </div>
@@ -168,9 +167,9 @@
             <div class="label-cell"></div>
             <div class="field-cell">
                 <div class="form-action" ng-if="isSearchAllowed()">
-                    <button class="btn btn-lg btn-primary" ng-click="search()">{{msg.search_action}}</button>
-                    <button class="btn btn-lg" ng-click="saveSearch()">{{msg.save_search_action}}</button>
-                    <button class="btn btn-lg" ng-click="clear()">{{msg.clear_action}}</button>
+                    <button class="btn btn-lg btn-primary" ng-click="search()" tt="search_action">Hae</button>
+                    <button class="btn btn-lg" ng-click="saveSearch()" tt="save_search_action">Tallenna haku</button>
+                    <button class="btn btn-lg" ng-click="clear()" tt="clear_action">Tyhjennä</button>
                 </div>
             </div>
         </div>

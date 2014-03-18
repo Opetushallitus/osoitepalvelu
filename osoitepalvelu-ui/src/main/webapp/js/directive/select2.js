@@ -12,7 +12,8 @@
  * - similar "implementation" for jQuery chosen plugin: http://stackoverflow.com/questions/11172269/select-all-and-remove-all-with-chosen-js#18785302
  * Tag with: data-disable-selectall attribute to disable this feature or specify a tresshold with data-selectall-tresshold
  */
-angular.module('ui.select2', ['I18n']).value('uiSelect2Config', {}).directive('uiSelect2', ['uiSelect2Config', '$timeout', 'i18n', function (uiSelect2Config, $timeout, i18n) {
+angular.module('ui.select2', ['localisation']).value('uiSelect2Config', {}).directive('uiSelect2', ['uiSelect2Config', '$timeout', 'LocalisationService',
+function (uiSelect2Config, $timeout, LocalisationService) {
   var options = {};
   if (uiSelect2Config) {
     angular.extend(options, uiSelect2Config);
@@ -40,8 +41,8 @@ angular.module('ui.select2', ['I18n']).value('uiSelect2Config', {}).directive('u
           var width = $dropdown.width();
           var showBtnsTresshold = $field.attr("data-selectall-tresshold") || 0;
           optionsCount = $field.children().length,
-              selectAllText = i18n.select_all,
-              selectNoneText = i18n.select_none;
+              selectAllText = LocalisationService.t('select_all'),
+              selectNoneText = LocalisationService.t('select_none');
           if( $field.attr("multiple") !== undefined
                     && !( $field.attr("data-disable-selectall") !== undefined && $field.attr("data-disable-selectnone") !== undefined )
                     && optionsCount >= showBtnsTresshold ) {

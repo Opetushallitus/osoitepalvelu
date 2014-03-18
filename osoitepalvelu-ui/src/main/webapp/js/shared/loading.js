@@ -39,8 +39,7 @@ mod.run(function($http, onStartInterceptor) {
     $http.defaults.transformRequest.push(onStartInterceptor);
 });
 
-mod.controller('LoadingCtrl', function($scope, loadingService, i18n) {
-    $scope.i18n = i18n;
+mod.controller('LoadingCtrl', function($scope, loadingService) {
     $scope.$watch(function() {
         return loadingService.isLoading();
     }, function(value) {

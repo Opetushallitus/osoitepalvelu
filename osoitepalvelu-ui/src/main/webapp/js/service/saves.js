@@ -2,11 +2,7 @@
  * Created by ratamaa on 12/4/13.
  */
 
-OsoiteKoostepalvelu.service('SavesService', function($log, $http, SaveConverter) {
-
-    var _commonErrorHandler = function(e) {
-            $log.error(e);
-        };
+OsoiteKoostepalvelu.service('SavesService', function($log, $http, SaveConverter, commonErrorHandler) {
 
     this.list = function(success, error) {
         $http.get('api/saves/').success(success).error(error);
@@ -17,25 +13,25 @@ OsoiteKoostepalvelu.service('SavesService', function($log, $http, SaveConverter)
         save = SaveConverter.toDomain(save);
         delete(save.id);
         $log.info(save);
-        $http.put('api/saves/', save).success(success).error(error || _commonErrorHandler);
+        $http.put('api/saves/', save).success(success).error(error || commonErrorHandler);
     };
 
     this.updateSearch = function(save, success, error) {
         $log.info("Updating search");
         save = SaveConverter.toDomain(save);
         $log.info(save);
-        $http.post('api/saves/', save).success(success).error(error || _commonErrorHandler);
+        $http.post('api/saves/', save).success(success).error(error || commonErrorHandler);
     };
 
     this.getSearch = function(id, success, error) {
         $http.get("api/saves/"+id).success(function(data) {
             success( SaveConverter.fromDomain(data) );
-        }).error(error || _commonErrorHandler);
+        }).error(error || commonErrorHandler);
     };
 
     this.deleteSearch = function(id, success, error) {
         $log.info("Deleting search: " + id);
-        $http['delete']("api/saves/"+id).success(success).error(error || _commonErrorHandler);
+        $http['delete']("api/saves/"+id).success(success).error(error || commonErrorHandler);
     };
 });
 

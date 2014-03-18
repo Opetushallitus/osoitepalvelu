@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="OsoiteKoostepalvelu">
+<html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
 
@@ -11,7 +11,9 @@
 
         <!-- AngularJS -->
         <script src="jslib/angular-1.2.3/angular.min.js"></script>
+        <script src="jslib/angular-1.2.3/angular-resource.min.js"></script>
         <script src="jslib/angular-1.2.3/angular-route.min.js"></script>
+        <script src="jslib/angular-flash.js"></script>
 		
         <!-- Bootstrap -->
         <link rel="stylesheet" href="jslib/font-awesome-4.0.3/css/font-awesome.min.css">
@@ -23,15 +25,22 @@
         <link rel="stylesheet" href="jslib/select2-3.4.5/select2-bootstrap.css"/>
         <script src="jslib/select2-3.4.5/select2.min.js"></script>
         <script src="jslib/select2-3.4.5/select2_locale_fi.js"></script>
-        <script src="jslib/angular-select2/select2.js"></script>
 
         <!-- ng-grid -->
         <link rel="stylesheet" href="jslib/ng-grid/ng-grid.min.css">
         <script src="jslib/ng-grid/ng-grid-2.0.7.min.js"></script>
 
+        <!-- PRODUCTION:<script src="api/app/settings.js"></script>  -->
+        <!-- REMOVE --><script src="js/directive/select2.js"></script><!-- END -->
         <script src="js/main.ignored.js"></script>
         <!-- REMOVE --><link rel="stylesheet" href="css/style.css"/><!-- END -->
         <!-- REMOVE --><link rel="stylesheet" href="css/virkailija.css"/><!-- END -->
+        <!-- REMOVE --><link rel="stylesheet" href="css/common.css"/><!-- END -->
+        <!-- REMOVE --><script src="ext/env-configuration.js"/></script><!-- END -->
+        <!-- REMOVE --><script src="js/shared/config.js"></script><!-- END -->
+        <!-- REMOVE --><script src="js/shared/auth.js"></script><!-- END -->
+        <!-- REMOVE --><script src="js/shared/localisation.js"></script><!-- END -->
+        <!-- REMOVE --><script src="js/shared/loading.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/helpers.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/project.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/service/saves.js"></script><!-- END -->
@@ -44,16 +53,17 @@
         <!-- REMOVE --><script src="js/controller/search.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/controller/results.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/i18n/i18n.js"></script><!-- END -->
-        <!-- REMOVE --><script src="js/loading.js"></script><!-- END -->
         <!-- REMOVE --><script src="js/standalone.ignored.js"></script><!-- END -->
         <!-- PRODUCTION:<link rel="stylesheet" href="css/style.min.css"/>  -->
         <!-- PRODUCTION:<script src="js/script.min.js"></script>  -->
     </head>
     <body>
+        <ol flash:messages></ol>
         <div ng-animate="'animate'" ng-view>
         </div>
         <div ng-controller="LoadingCtrl">
-            <div ng-show="loading" style="position: fixed; left: 0px; top: 0px; background: gold; padding: 0.3em; font-weight: bold;" ng-cloak>{{i18n.loading}}</div>
+            <div ng-show="loading" class="topCournerInfoMessage" ng-cloak tt="loading">Ladataan...</div>
         </div>
+        <script> osoitepalveluInit(); </script>
     </body>
 </html>

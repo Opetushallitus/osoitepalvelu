@@ -1,8 +1,8 @@
 <div class="modal-header">
-    <h3>{{msg.format("overwrite_save_popup_title",save.name)}}</h3>
+    <h3>{{msg("overwrite_save_popup_title",[save.name])}}</h3>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-danger" ng-click="saveAction()" >{{msg.overwrite_save_popup_save}}</button>
-    <button class="btn btn-primary" ng-click="saveAs()">{{msg.overwrite_save_popup_save_as}}</button>
-    <button class="btn btn-lg" ng-click="cancel()">{{msg.new_save_popup_cancel}}</button>
+    <button class="btn btn-danger" ng-click="saveAction()" tt="overwrite_save_popup_save" >Ylikirjoita</button>
+    <button class="btn btn-primary" ng-click="saveAs()" tt="overwrite_save_popup_save_as">Tallenna nimellä</button>
+    <button class="btn btn-lg" ng-click="cancel()" tt="new_save_popup_cancel">Peruuta</button>
 </div>

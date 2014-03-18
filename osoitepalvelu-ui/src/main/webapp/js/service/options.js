@@ -1,11 +1,8 @@
 /**
  * Created by ratamaa on 12/4/13.
  */
-
-OsoiteKoostepalvelu.service('OptionsService', function($log, $http, TutkintotoimikuntaRoolis) {
-    var _commonErrorHandler = function(e) {
-        $log.error(e);
-    };
+OsoiteKoostepalvelu.service('OptionsService', function($log, $http, TutkintotoimikuntaRoolis, LocalisationService,
+                commonErrorHandler) {
 
     // Cache here only means that user should refresh the page (or re-navigate to it) in order to referesh the options.
     // We can avoid a number of requests when going back to the search from the results.
@@ -14,10 +11,10 @@ OsoiteKoostepalvelu.service('OptionsService', function($log, $http, Tutkintotoim
         if( _getCache[url] ) {
             success( _getCache[url] );
         } else {
-            $http.get(url).success(function(data) {
+            $http.get(url, {params: {lang: LocalisationService.getLocale()}} ).success(function(data) {
                 _getCache[url] = data;
                 success(data);
-            }).error(error || _commonErrorHandler);
+            }).error(error || commonErrorHandler);
         }
     };
 

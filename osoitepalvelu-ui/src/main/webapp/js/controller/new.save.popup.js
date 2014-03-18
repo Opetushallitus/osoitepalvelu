@@ -1,8 +1,11 @@
 /**
  * Created by ratamaa on 12/9/13.
  */
-var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout, save, i18n, SavesService) {
-    $scope.msg = i18n;
+var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout, save, LocalisationService, SavesService) {
+    var msg = function( key, params ) {
+        return LocalisationService.t(key, params);
+    };
+    $scope.msg = msg;
 
     $scope.save = save;
 
@@ -26,7 +29,7 @@ var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout,
               save: function() {
                   return angular.extend({}, $scope.save, {
                       id: null,
-                      name: $scope.save.name + i18n.save_name_copy_ending
+                      name: $scope.save.name + msg('save_name_copy_ending')
                   });
               }
           }

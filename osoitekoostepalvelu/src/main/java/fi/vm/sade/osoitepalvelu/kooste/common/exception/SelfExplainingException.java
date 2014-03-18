@@ -14,22 +14,19 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
-
-import java.util.Map;
+package fi.vm.sade.osoitepalvelu.kooste.common.exception;
 
 /**
  * User: ratamaa
- * Date: 3/11/14
- * Time: 5:14 PM
+ * Date: 3/18/14
+ * Time: 4:10 PM
  */
-public interface CasTicketProvider {
-    public static final String CAS_HEADER = "CasSecurityTicket";
+public interface SelfExplainingException {
 
-    /**
-     * @param service the CAS service
-     * @return the headers to be used for authenticating the request
-     */
-    public Map<String,String> provideTicketHeaders(String service);
+    String getMessageKey();
+
+    Object[] getMessageParams();
+
+    String getErrorCode();
 
 }

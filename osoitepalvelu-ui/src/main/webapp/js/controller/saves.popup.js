@@ -1,8 +1,11 @@
 /**
  * Created by ratamaa on 12/4/13.
  */
-var SavesPopupController = function ($scope, $modalInstance, $modal, $filter, saves, i18n, SavesService) {
-    $scope.msg = i18n;
+var SavesPopupController = function ($scope, $modalInstance, $modal, $filter, saves, LocalisationService, SavesService) {
+    var msg = function( key, params ) {
+        return LocalisationService.t(key, params);
+    };
+    $scope.msg = msg;
 
     $scope.saves = saves;
 
@@ -17,9 +20,9 @@ var SavesPopupController = function ($scope, $modalInstance, $modal, $filter, sa
             controller: ConfirmPopupController,
             resolve: {options: function() {
                 return {
-                    title: i18n.format('saves_popup_delete_confirm_title', $filter('filter')($scope.saves, {id: id})[0].name ),
-                    yesText: i18n.saves_popup_delete_confirm_yes,
-                    noText: i18n.saves_popup_delete_confirm_no,
+                    title: msg('saves_popup_delete_confirm_title', [$filter('filter')($scope.saves, {id: id})[0].name] ),
+                    yesText: msg('saves_popup_delete_confirm_yes'),
+                    noText: msg('saves_popup_delete_confirm_no'),
                     yesClass: 'btn-danger'
                 };
             }}

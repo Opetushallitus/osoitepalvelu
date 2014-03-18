@@ -1,12 +1,15 @@
 /**
  * Created by ratamaa on 12/12/13.
  */
-var ConfirmPopupController = function ($scope, $modalInstance, $modal, $timeout, i18n, options) {
-    $scope.msg = i18n;
+var ConfirmPopupController = function ($scope, $modalInstance, $modal, $timeout, LocalisationService, options) {
+    var msg = function( key, params ) {
+        return LocalisationService.t(key, params);
+    };
+    $scope.msg = msg;
 
     $scope.title = options.title;
-    $scope.yesText = options.yesText || i18n.confirm_yes;
-    $scope.noText = options.noText || i18n.confirm_no;
+    $scope.yesText = options.yesText || msg('confirm_yes');
+    $scope.noText = options.noText || msg('confirm_no');
     $scope.yesClass = options.yesClass || "btn-primary";
     $scope.noClass = options.noClass || "btn-lg";
 

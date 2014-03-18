@@ -66,7 +66,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 ),
                 headers()
                     .get().path("/byOoids")
-                    .query("ht=virkailija&ooids=${in.headers.ooids}") /// <- TODO: ensure this is indeed "virkailija"
+                    .query("ht=VIRKAILIJA&ooids=${in.headers.ooids}")
         )
         .to(trim(authenticationServiceHenkiloServiceRestUrl))
         .process(jsonToDto(new TypeReference<List<HenkiloDto>>() {}));

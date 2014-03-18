@@ -1,8 +1,12 @@
 /**
  * Created by ratamaa on 12/9/13.
  */
-var ResultsController = function($scope, i18n, $log, $location, $filter, $timeout, SearchService, EmailService, ArrayHelper) {
-    $scope.msg = i18n;
+var ResultsController = function($scope, $log, $location, $filter, $timeout,
+                SearchService, EmailService, ArrayHelper, LocalisationService) {
+    var msg = function( key, params ) {
+        return LocalisationService.t(key, params);
+    };
+    $scope.msg = msg;
     $scope.results = [];
     $scope.searchDone = false;
     $scope.customColumnDefs = [];
@@ -64,7 +68,9 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
     };
 
     $scope.downloadExcel = function() {
-        SearchService.downloadExcel();
+        SearchService.downloadExcel(function(downloadUrl) {
+            window.location = downloadUrl;
+        });
     };
 
     $scope.sendEmail = function() {
@@ -92,7 +98,7 @@ var ResultsController = function($scope, i18n, $log, $location, $filter, $timeou
     angular.forEach(columns, function(c) {
         $scope.customColumnDefs.push( angular.extend( {
             field: c,
-            displayName: i18n['column_'+c]
+            displayName: msg('column_'+c)
         }, (colOverrides[c] || {}) ) );
     });
 };

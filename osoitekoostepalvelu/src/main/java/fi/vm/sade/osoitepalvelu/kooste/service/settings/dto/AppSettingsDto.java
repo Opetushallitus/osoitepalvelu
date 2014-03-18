@@ -14,22 +14,37 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
+package fi.vm.sade.osoitepalvelu.kooste.service.settings.dto;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * User: ratamaa
- * Date: 3/11/14
- * Time: 5:14 PM
+ * Date: 3/18/14
+ * Time: 12:52 PM
  */
-public interface CasTicketProvider {
-    public static final String CAS_HEADER = "CasSecurityTicket";
+public class AppSettingsDto implements Serializable {
+    private Map<String,Object> env = new HashMap<String, Object>();
+    private Map<String,Object> app = new HashMap<String, Object>();
 
-    /**
-     * @param service the CAS service
-     * @return the headers to be used for authenticating the request
-     */
-    public Map<String,String> provideTicketHeaders(String service);
+    public AppSettingsDto() {
+    }
 
+    public Map<String, Object> getEnv() {
+        return env;
+    }
+
+    public void setEnv(Map<String, Object> env) {
+        this.env = env;
+    }
+
+    public Map<String, Object> getApp() {
+        return app;
+    }
+
+    public void setApp(Map<String, Object> app) {
+        this.app = app;
+    }
 }

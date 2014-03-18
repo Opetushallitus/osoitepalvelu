@@ -14,22 +14,18 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
+package fi.vm.sade.osoitepalvelu.kooste.service.settings;
 
-import java.util.Map;
+import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
 
 /**
  * User: ratamaa
- * Date: 3/11/14
- * Time: 5:14 PM
+ * Date: 3/18/14
+ * Time: 12:52 PM
  */
-public interface CasTicketProvider {
-    public static final String CAS_HEADER = "CasSecurityTicket";
-
+public interface AppSettingsService {
     /**
-     * @param service the CAS service
-     * @return the headers to be used for authenticating the request
+     * @return the env and app settings for UI
      */
-    public Map<String,String> provideTicketHeaders(String service);
-
+    AppSettingsDto getUiSettings();
 }

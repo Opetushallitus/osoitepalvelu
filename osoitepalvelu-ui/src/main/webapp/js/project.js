@@ -1,5 +1,5 @@
 
-OsoiteKoostepalvelu.config(function($routeProvider) {
+OsoiteKoostepalvelu.config(function($routeProvider, $provide) {
     $routeProvider.when('/results', {
             controller:'ResultsController',
             templateUrl:'partials/results.html'
@@ -11,12 +11,21 @@ OsoiteKoostepalvelu.config(function($routeProvider) {
             redirectTo:'/'
     });
 })
-.factory('SearchTypes', function(i18n) {
+.factory('commonErrorHandler', function($log, LocalisationService, flash) {
+    return function(data, status, headers, config) {
+        $log.error("Error "+status+": ", data);
+        if( data.messageKey ) {
+            flash('error', LocalisationService.t( data.messageKey, data.messageParams )
+                + (data.errorCode ? " ("+data.errorCode+")" : "") );
+        }
+    };
+})
+.factory('SearchTypes', function(LocalisationService) {
     return [
-        {type: 'EMAIL',         name: i18n.email_search_type},
-        /*{type: 'SEND_LETTER',   name: i18n.send_letter_search_type},*/
-        {type: 'LETTER',        name: i18n.letter_search_type},
-        {type: 'CONTACT',       name: i18n.contact_search_type}
+        {type: 'EMAIL',         name: LocalisationService.t('email_search_type')},
+        /*{type: 'SEND_LETTER',   name: LocalisationService.t('send_letter_search_type')},*/
+        {type: 'LETTER',        name: LocalisationService.t('letter_search_type')},
+        {type: 'CONTACT',       name: LocalisationService.t('contact_search_type')}
     ];
 })
 .factory('EmptyTerms', function() {
@@ -35,81 +44,81 @@ OsoiteKoostepalvelu.config(function($routeProvider) {
         koultuksenjarjestajas: []
     };
 })
-.factory('AddressFields', function(i18n) {
+.factory('AddressFields', function(LocalisationService) {
     return [
-        {type: 'ORGANIAATIO_NIMI',          name: i18n.address_field_organisaatio_nimi},
-        {type: 'ORGANIAATIO_TUNNISTE',      name: i18n.address_field_organisaatio_tunniste},
-        //{type: 'YHTEYSHENKILO',             name: i18n.address_field_yhteyshenkilo},
-        {type: 'POSTIOSOITE',               name: i18n.address_field_postiosoite},
-        {type: 'KATU_POSTINUMERO',          name: i18n.address_field_katu_postinumero},
-        {type: 'PL_POSTINUMERO',            name: i18n.address_field_pl_postinumero},
-        {type: 'PUHELINNUMERO',             name: i18n.address_field_puhelinnumero},
-        {type: 'FAXINUMERO',                name: i18n.address_field_faxinumero},
-        {type: 'INTERNET_OSOITE',           name: i18n.address_field_internet_osoite},
-        //{type: 'VIRANOMAISTIEDOTUS_EMAIL',  name: i18n.address_field_viranomaistiedotus_email},
-        //{type: 'KOULUTUSNEUVONNAN_EMAIL',   name: i18n.address_field_koulutusneuvonnan_email},
-        //{type: 'KRIISITIEDOTUKSEN_EMAIL',   name: i18n.address_field_kriisitiedotuksen_email},
-        {type: 'ORGANISAATIO_SIJAINTIKUNTA',name: i18n.address_field_organisaatio_sijaintikunta}
+        {type: 'ORGANIAATIO_NIMI',          name: LocalisationService.t('address_field_organisaatio_nimi')},
+        {type: 'ORGANIAATIO_TUNNISTE',      name: LocalisationService.t('address_field_organisaatio_tunniste')},
+        //{type: 'YHTEYSHENKILO',             name: LocalisationService.t('address_field_yhteyshenkilo')},
+        {type: 'POSTIOSOITE',               name: LocalisationService.t('address_field_postiosoite')},
+        {type: 'KATU_POSTINUMERO',          name: LocalisationService.t('address_field_katu_postinumero')},
+        {type: 'PL_POSTINUMERO',            name: LocalisationService.t('address_field_pl_postinumero')},
+        {type: 'PUHELINNUMERO',             name: LocalisationService.t('address_field_puhelinnumero')},
+        {type: 'FAXINUMERO',                name: LocalisationService.t('address_field_faxinumero')},
+        {type: 'INTERNET_OSOITE',           name: LocalisationService.t('address_field_internet_osoite')},
+        //{type: 'VIRANOMAISTIEDOTUS_EMAIL',  name: LocalisationService.t('address_field_viranomaistiedotus_email')},
+        //{type: 'KOULUTUSNEUVONNAN_EMAIL',   name: LocalisationService.t('address_field_koulutusneuvonnan_email')},
+        //{type: 'KRIISITIEDOTUKSEN_EMAIL',   name: LocalisationService.t('address_field_kriisitiedotuksen_email')},
+        {type: 'ORGANISAATIO_SIJAINTIKUNTA',name: LocalisationService.t('address_field_organisaatio_sijaintikunta')}
     ];
 })
-.factory("ReceiverTypes", function(i18n) {
+.factory("ReceiverTypes", function(LocalisationService) {
     return [
-        {type: 'ORGANISAATIO',              name: i18n.receiver_field_organisaatio},
-        {type: 'YHTEYSHENKILO',             name: i18n.receiver_field_yhteyshenkilo}
+        {type: 'ORGANISAATIO',              name: LocalisationService.t('receiver_field_organisaatio')},
+        {type: 'YHTEYSHENKILO',             name: LocalisationService.t('receiver_field_yhteyshenkilo')}
     ];
 })
-.factory("TutkintotoimikuntaRoolis", function(i18n) {
+.factory("TutkintotoimikuntaRoolis", function(LocalisationService) {
     return [
-        {type: 'PUHEENJOHTAJA', name: i18n.target_group_option_puheenjohtaja},
-        {type: 'SIHTEERI',      name: i18n.target_group_option_sihteeri},
-        {type: 'JASENET',       name: i18n.target_gorup_option_jasenet}
+        {type: 'PUHEENJOHTAJA', name: LocalisationService.t('target_group_option_puheenjohtaja')},
+        {type: 'SIHTEERI',      name: LocalisationService.t('target_group_option_sihteeri')},
+        {type: 'JASENET',       name: LocalisationService.t('target_gorup_option_jasenet')}
     ];
 })
-.factory('TargetGroups', function(i18n, TutkintotoimikuntaRoolis) {
+.factory('TargetGroups', function(LocalisationService, TutkintotoimikuntaRoolis) {
     return [
-        {type: 'JARJESTAJAT_YLLAPITAJAT',   name: i18n.target_group_jarjestajat_yllapitajat,
+        {type: 'JARJESTAJAT_YLLAPITAJAT',   name: LocalisationService.t('target_group_jarjestajat_yllapitajat'),
             options: [
-                {type: "ORGANISAATIO",      name: i18n.target_group_option_organisaatio}//,
-                //{type: "YHTEYSHENKILO",     name: i18n.target_group_option_yhteyshenkilo},
-                //{type: "KRIISITIEDOTUS",    name: i18n.target_group_option_kriisitiedotus}
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')}//,
+                //{type: "YHTEYSHENKILO",     name: LocalisationService.t('target_group_option_yhteyshenkilo')},
+                //{type: "KRIISITIEDOTUS",    name: LocalisationService.t('target_group_option_kriisitiedotus')}
             ]
         },
-        {type: 'OPPILAITOKSET',             name: i18n.target_group_oppilaitos,
+        {type: 'OPPILAITOKSET',             name: LocalisationService.t('target_group_oppilaitos'),
             options: [
-                {type: "ORGANISAATIO",      name: i18n.target_group_option_organisaatio}//,
-                //{type: "REHTORI",           name: i18n.target_group_option_rehtori},
-                //{type: "KOULUTUSNEVONTA",   name: i18n.target_group_option_koulutusneuvonta}
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')}//,
+                //{type: "REHTORI",           name: LocalisationService.t('target_group_option_rehtori')},
+                //{type: "KOULUTUSNEVONTA",   name: LocalisationService.t('target_group_option_koulutusneuvonta')}
             ]
         },
-        {type: 'OPETUSPISTEET',             name: i18n.target_group_opetuspisteet,
+        {type: 'OPETUSPISTEET',             name: LocalisationService.t('target_group_opetuspisteet'),
             options: [
-                {type: "ORGANISAATIO",      name: i18n.target_group_option_organisaatio}//,
-                //{type: "YHTEYSHENKILO",     name: i18n.target_group_option_yhteyshenkilo},
-                //{type: "KOULUTUSNEVONTA",   name: i18n.target_group_option_koulutusneuvonta}
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')}//,
+                //{type: "YHTEYSHENKILO",     name: LocalisationService.t('target_group_option_yhteyshenkilo')},
+                //{type: "KOULUTUSNEVONTA",   name: LocalisationService.t('target_group_option_koulutusneuvonta')}
             ]
         },
-        /*{type: 'OPPISOPIMUSTOIMPISTEET',    name: i18n.target_group_oppisopimustoimipisteet,
+        /*{type: 'OPPISOPIMUSTOIMPISTEET',    name: LocalisationService.t('target_group_oppisopimustoimipisteet'),
             options: [
-                {type: "ORGANISAATIO",      name: i18n.target_group_option_organisaatio},
-                {type: "YHTEYSHENKILO",     name: i18n.target_group_option_yhteyshenkilo}
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')},
+                {type: "YHTEYSHENKILO",     name: LocalisationService.t('target_group_option_yhteyshenkilo')}
             ]
         },*/
-        /*{type: 'MUUT_ORGANISAATIOT',        name: i18n.target_group_muut_organisaatiot,
+        /*{type: 'MUUT_ORGANISAATIOT',        name: LocalisationService.t('target_group_muut_organisaatiot'),
             options: [
-                {type: 'TUNNUKSENHALTIJAT', name: i18n.target_group_option_tunnuksenhaltijat}
+                {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat')}
             ]
         },*/
-        {type: 'TUTKINTOTOIMIKUNNAT',       name: i18n.target_group_tutkintotoimikunnat,
+        {type: 'TUTKINTOTOIMIKUNNAT',       name: LocalisationService.t('target_group_tutkintotoimikunnat'),
             options: angular.copy(TutkintotoimikuntaRoolis)
         },
-        {type: 'KOULUTA_KAYTTAJAT',         name: i18n.target_group_kouluta_kayttajat,
+        {type: 'KOULUTA_KAYTTAJAT',         name: LocalisationService.t('target_group_kouluta_kayttajat'),
             options: [
-                {type: 'TUNNUKSENHALTIJAT', name: i18n.target_group_option_tunnuksenhaltijat}
+                {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat')}
             ]
         },
-        {type: 'AIPAL_KAYTTAJAT',           name: i18n.target_group_aipal_kayttajat,
+        {type: 'AIPAL_KAYTTAJAT',           name: LocalisationService.t('target_group_aipal_kayttajat'),
             options: [
-                {type: 'TUNNUKSENHALTIJAT', name: i18n.target_group_option_tunnuksenhaltijat}
+                {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat')}
             ]
         }
     ];

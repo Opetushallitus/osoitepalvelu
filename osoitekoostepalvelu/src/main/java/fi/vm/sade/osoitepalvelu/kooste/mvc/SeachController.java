@@ -18,13 +18,13 @@ package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
 import com.wordnik.swagger.annotations.Api;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
+import fi.vm.sade.osoitepalvelu.kooste.mvc.dto.FilteredSearchParametersDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultTransformerService;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchService;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentationByAddressFieldsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 import fi.vm.sade.security.SimpleCache;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.exolab.castor.types.DateTime;
@@ -40,7 +40,6 @@ import org.springframework.web.servlet.view.document.AbstractExcelView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -63,17 +62,19 @@ public class SeachController extends AbstractMvcController implements Serializab
     private SearchResultTransformerService resultTransformerService;
 
     private AtomicInteger i = new AtomicInteger(0);
-    private Map<String, FilteredSearchParameters> storedParameters = SimpleCache.buildCache(2048);
+    private Map<String, FilteredSearchParametersDto> storedParameters = SimpleCache.buildCache(2048);
 
     /**
-     * @param searchTerms to use
+     * @param searchParameters to use
      * @return the results
      */
     @RequestMapping(value="list.json", method = RequestMethod.POST)
-    public @ResponseBody SearchResultsDto list( @RequestBody SearchTermsDto searchTerms) {
-        OrganisaatioResultsDto results = searchService.find(searchTerms);
-        SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(searchTerms,
-                        /*TODO:*/KoodistoMvcController.UI_LOCALE);
+    public @ResponseBody SearchResultsDto list( @RequestBody FilteredSearchParametersDto searchParameters,
+                                                @RequestParam("lang") String lang ) {
+        OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms());
+        SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
+                searchParameters.getSearchTerms(), parseLocale(lang),
+                searchParameters.getNonIncludedOrganisaatioOids() );
         return resultTransformerService.transformToResultRows(results.getResults(), presentation);
     }
 
@@ -84,7 +85,7 @@ public class SeachController extends AbstractMvcController implements Serializab
      * @return the key associated with the stored parameters to be used in the GET request for the Excel.
      */
     @RequestMapping(value="prepare.excel.do", method = RequestMethod.POST)
-    public @ResponseBody String storeExcelParameters( @RequestBody FilteredSearchParameters searchParameters  ) {
+    public @ResponseBody String storeExcelParameters( @RequestBody FilteredSearchParametersDto searchParameters  ) {
         String key = (i.incrementAndGet()+"."+new DateTime().toDate().getTime());
         String storeKey = resultTransformerService.getLoggeInUserOid()+"@"+key;
         this.storedParameters.put(storeKey, searchParameters);
@@ -96,26 +97,27 @@ public class SeachController extends AbstractMvcController implements Serializab
      * only by the same user that has stored the parameters for that id. Results for any given downloadId may be
      * removed if downloadId has not been used instantly after storeExcelParameters call.
      *
-     * @see #storeExcelParameters(FilteredSearchParameters)
+     * @see #storeExcelParameters(fi.vm.sade.osoitepalvelu.kooste.mvc.dto.FilteredSearchParametersDto)
      * There might be a better way around. Done this way so that we can avoid too long GET-request and redirect
      * borwser to the download action without the need to store data on disk/db.
      *
      * @param downlaodId id returned form a prepare.excel.do call (associated with stored parameters)
+     * @param lang the language to use
      * @return the Excel presentation
      * @throws NotFoundException if downloadId did not exist or already used.
      */
     @RequestMapping(value="excel.do", method = RequestMethod.GET)
-    public View downloadExcel( @RequestParam("downloadId") String downlaodId ) throws NotFoundException {
+    public View downloadExcel( @RequestParam("downloadId") String downlaodId,
+                               @RequestParam("lang") String lang ) throws NotFoundException {
         String storeKey = resultTransformerService.getLoggeInUserOid()+"@"+downlaodId;
-        FilteredSearchParameters searchParameters = storedParameters.get(storeKey);
+        FilteredSearchParametersDto searchParameters = storedParameters.get(storeKey);
         if( searchParameters == null ) {
             throw new NotFoundException("Excel not found for download with key="+downlaodId);
         }
         this.storedParameters.remove(storeKey); // <- not really REST here :/
         OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms());
         SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
-                searchParameters.getSearchTerms(),
-                        /*TODO:*/KoodistoMvcController.UI_LOCALE,
+                searchParameters.getSearchTerms(), parseLocale(lang),
                 searchParameters.getNonIncludedOrganisaatioOids() );
         final SearchResultsDto searchResults = resultTransformerService.transformToResultRows(results.getResults(), presentation);
         return new AbstractExcelView() {

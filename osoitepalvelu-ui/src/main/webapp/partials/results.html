@@ -1,15 +1,15 @@
 <div class="resultsContainer">
-    <button class="btn btn-lg" ng-click="back()"><i class="fa fa-arrow-up"></i> {{msg.back_to_search_terms}}</button>
+    <button class="btn btn-lg" ng-click="back()"><i class="fa fa-arrow-up"></i> <span tt="back_to_search_terms">hakuehdot</span></button>
 
-    <div id="no-results" ng-show="searchDone && results.length < 1">
-        {{msg.no_results}}
+    <div id="no-results" ng-show="searchDone && results.length < 1" tt="no_results">
+        Ei lötynyt osoitteita.
     </div>
     <div style="position:relative;" full-size-grid data-height-padding="119" data-width-padding="20">
        <div id="results" ng-show="searchDone && results.length">
            <div class="resultInfo">
-               {{results.length}} {{msg.total_results}}
+               {{results.length}} <span tt="total_results">osoitetta</span>
            </div>
-           <h2>{{msg.results_title}}</h2>
+           <h2 tt="results_title">Osoitteet</h2>
            <div class="gridStyle" ng-grid="resultGridOptions"
                 full-size-grid data-width-padding="40"
                 data-height-padding="319"></div>
@@ -17,11 +17,11 @@
        <div class="searchActions">
            <div class="leftPosition">
                <button class="btn btn-lg" ng-click="deleteSelected()"
-                       ng-disabled="!resultGridOptions.selectedItems.length || !results.length">{{msg.remove_selected}}</button>
+                       ng-disabled="!resultGridOptions.selectedItems.length || !results.length" tt="remove_selected">Poista valitut</button>
            </div>
            <div class="rightPosition">
-               <button class="btn btn-lg" ng-click="downloadExcel()" ng-disabled="!results.length">{{msg.save_excel}}</button>
-               <button class="btn btn-lg btn-primary" ng-click="sendEmail()" ng-disabled="!results.length">{{msg.send_message}}</button>
+               <button class="btn btn-lg" ng-click="downloadExcel()" ng-disabled="!results.length" tt="save_excel">Tallenna excel</button>
+               <button class="btn btn-lg btn-primary" ng-click="sendEmail()" ng-disabled="!results.length" tt="send_message">Lähetä viesti</button>
            </div>
        </div>
        <div style="clear:both;"></div>

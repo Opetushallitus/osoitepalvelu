@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.mvc;
+package fi.vm.sade.osoitepalvelu.kooste.mvc.dto;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OidAndTyyppiPair;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
@@ -27,7 +27,7 @@ import java.util.Set;
  * Date: 2/17/14
  * Time: 4:34 PM
  */
-public class FilteredSearchParameters implements Serializable {
+public class FilteredSearchParametersDto implements Serializable {
     private static final long serialVersionUID = -8288132415175555661L;
     
     private SearchTermsDto searchTerms;
