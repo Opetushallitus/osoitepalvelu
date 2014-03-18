@@ -21,6 +21,20 @@
     <ctx:property-placeholder location="classpath:osoitekoostepalvelu.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/override.properties"
                               ignore-resource-not-found="true"/>
 
+    <bean id="uiEnvProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="uiAppProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+            </list>
+        </property>
+    </bean>
+
     <bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
 
     <!-- Lokituspalvelun käyttöönotto -->
