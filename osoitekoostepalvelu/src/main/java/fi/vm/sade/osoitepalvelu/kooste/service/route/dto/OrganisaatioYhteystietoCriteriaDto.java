@@ -26,8 +26,8 @@ import java.util.List;
  * Time: 2:08 PM
  */
 public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
-    private List<String> kieliList = new ArrayList<String>();
     private List<String> kuntaList = new ArrayList<String>();
+    private List<String> kieliList = new ArrayList<String>();
     private List<String> oppilaitostyyppiList = new ArrayList<String>();
     private List<String> vuosiluokkaList = new ArrayList<String>();
     private Integer limit = 0;

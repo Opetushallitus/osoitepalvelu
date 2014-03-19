@@ -26,26 +26,26 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: ratamaa
  * Date: 3/17/14
  * Time: 10:12 AM
  */
-@Ignore // missing system user authentication properties and the service in Luokka seems to result in 500 whenever
+//@Ignore // missing system user authentication properties and the service in Luokka seems to result in 500 whenever
 // there is any property present in the request body's JSON criteria
 @Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -60,13 +60,9 @@ public class OrganisaatioServiceRouteTest {
     private KoodistoService koodistoService;
 
     @Test
-    public void testFindOrganisaatiosByVuosiluokkas() {
-        List<String> vuosiluokkas = koodiUriValues(koodistoService.findVuosiluokkaOptions(TEST_LOCALE));
-        List<String> kuntas = koodiUriValues(koodistoService.findKuntaOptions(TEST_LOCALE));
-
+    public void testFindOrganisaatiosByKuntas() {
         OrganisaatioYhteystietoCriteriaDto criteria = new OrganisaatioYhteystietoCriteriaDto();
-        criteria.setVuosiluokkaList( first(vuosiluokkas, 2) );
-        criteria.setKuntaList( first(kuntas, 10) );
+        criteria.setKuntaList(Arrays.asList(new String[] {"kunta_604", "kunta_400"}));
         criteria.setLimit(100);
         List<OrganisaatioYhteystietoHakuResultDto> yhteystietos = organisaatioServiceRoute
                 .findOrganisaatioYhteystietos(criteria);

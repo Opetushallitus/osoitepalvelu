@@ -50,23 +50,20 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     @Override
     public void configure() throws Exception {
         headers(
-                casByAuthenticatedUser(
-                        from(ROUTE_KAYTTOOIKESURYHMAS),
-                        authenticationServiceCasServiceUrl
-                ),
-                headers().get()
+                from(ROUTE_KAYTTOOIKESURYHMAS),
+                headers()
+                        .get()
+                        .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
         .to(trim(authenticationServiceKayttooikeusryhmasRestUrl))
         .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
 
         headers(
-                casByAuthenticatedUser(
-                        from(ROUTE_HENKILOS),
-                        authenticationServiceCasServiceUrl
-                ),
+                from(ROUTE_HENKILOS),
                 headers()
                     .get().path("/byOoids")
-                    .query("ht=VIRKAILIJA&ooids=${in.headers.ooids}")
+                            .query("ht=VIRKAILIJA&ooids=${in.headers.ooids}")
+                    .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
         .to(trim(authenticationServiceHenkiloServiceRestUrl))
         .process(jsonToDto(new TypeReference<List<HenkiloDto>>() {}));

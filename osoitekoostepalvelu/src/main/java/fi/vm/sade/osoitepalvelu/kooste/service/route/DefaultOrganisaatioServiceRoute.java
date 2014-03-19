@@ -19,7 +19,6 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import org.apache.camel.model.dataformat.JsonLibrary;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,6 +34,7 @@ import java.util.List;
 public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuilder
             implements  OrganisaatioServiceRoute {
     private static final String ORGANSIAATIOHAKU_ENDPOINT = "direct:organisaatioYhteystietohakuV2";
+    public static final String YHTEYSTIEDOT_PATH = "/v2/yhteystiedot/hae";
 
     @Value("${organisaatioService.rest.url}")
     private String organisaatioServiceRestUrl;
@@ -45,16 +45,15 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     @Override
     public void configure() throws Exception {
         headers(
-                casByAuthenticatedUser(
-                    from(ORGANSIAATIOHAKU_ENDPOINT)
-                            .marshal().json(JsonLibrary.Jackson),
-                    organisaatioServiceCasServiceUrl),
+                from(ORGANSIAATIOHAKU_ENDPOINT),
                 headers()
                     .post()
-                    .path("/v2/yhteystiedot/hae")
+                    .jsonRequstBody()
+                    .path(YHTEYSTIEDOT_PATH)
+                    .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
         )
         .to(trim(organisaatioServiceRestUrl))
-        .process(jsonToDto(new TypeReference<OrganisaatioYhteystietoHakuResultDto>() {}));
+        .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() {}));
     }
 
     @Override
