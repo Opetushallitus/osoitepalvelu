@@ -26,6 +26,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import java.util.List;
  * Time: 2:22 PM
  */
 @Service
+@Qualifier("actual")
 public class DefaultSearchService extends AbstractService implements SearchService {
 
     @Autowired
@@ -61,12 +63,15 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
         //log(read("henkilo", "1.2.3.4.238726766"));
 
+
+
         return results;
     }
 
     protected List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatios(SearchTermsDto terms) {
         OrganisaatioYhteystietoCriteriaDto organisaatioYhteystietosCriteria = new OrganisaatioYhteystietoCriteriaDto();
         List<String> kuntas = resolveKuntaKoodis(terms);
+        organisaatioYhteystietosCriteria.setLimit(100); // TODO: How can we have no limit?
         organisaatioYhteystietosCriteria.setKuntaList( kuntas );
         organisaatioYhteystietosCriteria.setKieliList(terms.findTerms("organisaationKielis"));
         organisaatioYhteystietosCriteria.setOppilaitostyyppiList(terms.findTerms("oppilaitostyyppis"));

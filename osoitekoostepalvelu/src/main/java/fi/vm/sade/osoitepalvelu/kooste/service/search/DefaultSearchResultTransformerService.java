@@ -124,12 +124,13 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
         List<OsoitteistoDto> filtered = new ArrayList<OsoitteistoDto>();
         for( OsoitteistoDto osoite : osoites ) {
-            if (EqualsHelper.equals(locale.getLanguage(), osoite.getKieli())
-                    || EqualsHelper.equals(locale.toString(), osoite.getKieli())) {
+            String langCode = osoite.getLanguageCode();
+            if (EqualsHelper.equals(locale.getLanguage(), langCode)
+                    || EqualsHelper.equals(locale.toString(), langCode)) {
                 filtered.add(osoite);
             }
         }
-        if( filtered.size() < 1 ) {
+        if( filtered.size() < 1 && !locale.getLanguage().toLowerCase().equals(DEFAULT_LOCALE.getLanguage().toLowerCase())) {
             return filterOsoites(osoites, DEFAULT_LOCALE);
         }
         return filtered;

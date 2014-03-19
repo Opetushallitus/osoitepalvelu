@@ -68,27 +68,4 @@ public class OrganisaatioServiceRouteTest {
                 .findOrganisaatioYhteystietos(criteria);
         assertTrue( yhteystietos.size() > 0 );
     }
-
-    protected List<String> koodiUriValues(List<UiKoodiItemDto> items) {
-        return new ArrayList<String>(Collections2.transform(items, new Function<UiKoodiItemDto, String>() {
-            @Override
-            public String apply(UiKoodiItemDto input) {
-                return input.getKoodiId();
-            }
-        }));
-    }
-
-    protected<T, C extends List<T>> List<T> first( C c, int numberOfItems ) {
-        List<T> result = new ArrayList<T>();
-        int i = 1;
-        for( T item : c ) {
-            if( i <= numberOfItems ) {
-                result.add(item);
-            } else {
-                break;
-            }
-            ++i;
-        }
-        return result;
-    }
 }

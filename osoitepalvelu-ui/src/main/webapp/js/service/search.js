@@ -24,12 +24,13 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
         }
         v.organisaatioTunniste = v.oppilaitosKoodi;
         v.yhteyshenkilonNimi = v.yhteystietoNimi;
-        v.postiosoite = v.osoite +(v.osoite ? "\n":"") + v.extraRivi + (v.extraRivi ? "\n":"")
-                + v.postinumero + " " + v.postitoimipaikka;
-        v.katuPostinumero = v.osoite +(v.osoite ? ", ":"")
-                + v.postinumero + " " + v.postitoimipaikka;
-        v.plPostinumero = v.postilokero +(v.postilokero ? ", ":"")
-                + v.postinumero + " " + v.postitoimipaikka;
+        v.postiosoite = (v.osoite ? v.osoite : "") +(v.osoite ? "\n":"")
+                + ( v.extraRivi ? v.extraRivi : "" ) + (v.extraRivi ? "\n":"")
+                + ( v.postinumero ? v.postinumero : "" ) + " " + ( v.postitoimipaikka ? v.postitoimipaikka : "" );
+        v.katuPostinumero = ( v.osoite ? v.osoite : "" ) +(v.osoite ? ", ":"")
+                + ( v.postinumero ? v.postinumero : "" ) + " " + ( v.postitoimipaikka ? v.postitoimipaikka : "" );
+        v.plPostinumero = ( v.postilokero ? v.postilokero : "" ) +(v.postilokero ? ", ":"")
+                + ( v.postinumero ? v.postinumero : "" ) + " " + ( v.postitoimipaikka ? v.postitoimipaikka : "" );
     };
 
     this.getTerms = function() {return _terms;};

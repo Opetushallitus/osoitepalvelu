@@ -86,6 +86,13 @@ public class OsoitteistoDto implements Serializable {
     public String getKieli() {
         return kieli;
     }
+
+    public String getLanguageCode() {
+        if (kieli == null) {
+            return null;
+        }
+        return kieli.replaceAll("kieli_(.*?)#.*", "$1");
+    }
     
     public void setKieli(String kieli) {
         this.kieli = kieli;

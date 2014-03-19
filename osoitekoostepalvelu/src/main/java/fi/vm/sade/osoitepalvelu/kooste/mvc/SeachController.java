@@ -55,7 +55,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SeachController extends AbstractMvcController implements Serializable {
     private static final long serialVersionUID = -4986869170151316267L;
 
-    @Autowired @Qualifier("dummy")
+    @Autowired @Qualifier("actual")
     private SearchService searchService;
 
     @Autowired
