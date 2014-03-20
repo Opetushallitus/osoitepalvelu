@@ -71,4 +71,32 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     public void setVuosiluokkaList(List<String> vuosiluokkaList) {
         this.vuosiluokkaList = vuosiluokkaList;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrganisaatioYhteystietoCriteriaDto that = (OrganisaatioYhteystietoCriteriaDto) o;
+
+        if (kieliList != null ? !kieliList.equals(that.kieliList) : that.kieliList != null) return false;
+        if (kuntaList != null ? !kuntaList.equals(that.kuntaList) : that.kuntaList != null) return false;
+        if (!limit.equals(that.limit)) return false;
+        if (oppilaitostyyppiList != null ? !oppilaitostyyppiList.equals(that.oppilaitostyyppiList) : that.oppilaitostyyppiList != null)
+            return false;
+        if (vuosiluokkaList != null ? !vuosiluokkaList.equals(that.vuosiluokkaList) : that.vuosiluokkaList != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = kuntaList != null ? kuntaList.hashCode() : 0;
+        result = 31 * result + (kieliList != null ? kieliList.hashCode() : 0);
+        result = 31 * result + (oppilaitostyyppiList != null ? oppilaitostyyppiList.hashCode() : 0);
+        result = 31 * result + (vuosiluokkaList != null ? vuosiluokkaList.hashCode() : 0);
+        result = 31 * result + limit.hashCode();
+        return result;
+    }
 }

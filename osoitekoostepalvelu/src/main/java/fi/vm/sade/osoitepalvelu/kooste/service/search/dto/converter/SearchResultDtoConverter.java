@@ -17,7 +17,16 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoiteDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 /**
  * User: ratamaa
@@ -26,4 +35,31 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SearchResultDtoConverter extends AbstractDtoConverter {
+    @Autowired
+    private KoodistoService koodistoService;
+
+    public OrganisaatioTiedotDto convert(OrganisaatioYhteystietoHakuResultDto from, OrganisaatioTiedotDto to,
+                                         Locale locale) {
+        convertValue(from, to, locale);
+        if (from.getKotipaikka() != null) {
+            UiKoodiItemDto kuntaKoodi = koodistoService
+                    .findKuntaByKoodiUri(locale, from.getKotipaikka());
+            to.setKotikunta(kuntaKoodi.getNimi());
+        }
+        return to;
+    }
+
+    public OsoitteistoDto convert(OrganisaatioYhteysosoiteDto from, OsoitteistoDto to, Locale locale) {
+        convertValue(from, to, locale);
+        if (from.getPostinumero() != null) {
+            UiKoodiItemDto postinumeroKoodi = koodistoService
+                    .findPostinumeroByKoodiUri(locale, from.getPostinumero());
+            if (postinumeroKoodi != null) {
+                to.setPostinumero(postinumeroKoodi.getKoodiId());
+                to.setPostitoimipaikka(postinumeroKoodi.getNimi());
+            }
+        }
+        return to;
+    }
+
 }

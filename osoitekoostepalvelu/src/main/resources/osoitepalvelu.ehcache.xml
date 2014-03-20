@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="false">
+
+    <defaultCache
+            maxElementsInMemory="50"
+            eternal="false"
+            overflowToDisk="false"
+            timeToIdleSeconds="0" timeToLiveSeconds="3600"
+            memoryStoreEvictionPolicy="LFU" />
+
+    <!-- 5 min cache for the overall search results by terms (for going back and forth
+          and downloading Excel in the view) -->
+    <cache name="osoitepalveluSearchResultsCache"
+           eternal="false" maxElementsInMemory="500"
+           overflowToDisk="false" diskPersistent="false"
+           timeToIdleSeconds="0" timeToLiveSeconds="300"
+           memoryStoreEvictionPolicy="LRU" />
+
+    <!-- Organisaatio haku takes a lot of time, cache their results seprerately for an hour -->
+    <cache name="organisaatioHakuResultsCache"
+           eternal="false" maxElementsInMemory="1000"
+           overflowToDisk="false" diskPersistent="false"
+           timeToIdleSeconds="0" timeToLiveSeconds="3600"
+           memoryStoreEvictionPolicy="LRU" />
+
+    <!-- Details for a single organisaatio may stay in cache for longer time: 5 hours for now  -->
+    <cache name="organisaatioByOidCache"
+           eternal="false" maxElementsInMemory="15000"
+           overflowToDisk="false" diskPersistent="false"
+           timeToIdleSeconds="0" timeToLiveSeconds="18000"
+           memoryStoreEvictionPolicy="LRU" />
+
+</ehcache>

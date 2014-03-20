@@ -59,8 +59,7 @@ public abstract class AbstractMvcController {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR) // 500
     @ExceptionHandler(Throwable.class)
     public ModelAndView otherCheckedException(HttpServletRequest req, Throwable exception) {
-        logger.error("Request: " + req.getRequestURL() + " raised " + exception);
-
+        logger.error("Request: " + req.getRequestURL() + " raised " + exception, exception);
         ModelAndView mav = new ModelAndView();
         String messageKey = "internal_error";
         Object[] params = new Object[0];

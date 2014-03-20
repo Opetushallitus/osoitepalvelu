@@ -19,6 +19,11 @@ package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
 import java.util.Map;
 
 /**
+ * Provides headers for CAS authentication with e.g. Camel.
+ *
+ * @see AbstractCasTicketProvider
+ * @see fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder
+ *
  * User: ratamaa
  * Date: 3/11/14
  * Time: 5:14 PM

@@ -30,7 +30,8 @@ public class KoodistoDto implements Serializable {
         OMISTAJATYYPPI("omistajatyyppi"), 
         VUOSILUOKAT("vuosiluokat"), 
         MAAKUNTA("maakunta"), 
-        KUNTA("kunta"), 
+        KUNTA("kunta"),
+        POSTINUMERO("posti"),
         TUTKINTOTYYPPI("tutkintotyyppi"), 
         TUTKINTO("tutkinto"), 
         OPPILAITOKSEN_OPETUSKIELI("oppilaitoksenopetuskieli"), 
@@ -52,6 +53,7 @@ public class KoodistoDto implements Serializable {
                 put(VUOSILUOKAT.getUri(), VUOSILUOKAT);
                 put(MAAKUNTA.getUri(), MAAKUNTA);
                 put(KUNTA.getUri(), KUNTA);
+                put(POSTINUMERO.getUri(), POSTINUMERO);
                 put(TUTKINTOTYYPPI.getUri(), TUTKINTOTYYPPI);
                 put(TUTKINTO.getUri(), TUTKINTO);
                 put(OPPILAITOKSEN_OPETUSKIELI.getUri(), OPPILAITOKSEN_OPETUSKIELI);

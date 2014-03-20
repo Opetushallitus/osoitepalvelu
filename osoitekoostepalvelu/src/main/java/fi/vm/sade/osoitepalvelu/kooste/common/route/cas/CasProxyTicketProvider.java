@@ -25,6 +25,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Provides the CAS authentication headers using ProxyAuthenticator by default.
+ * @see ProxyAuthenticator that uses an internal ticket cache
+ *
+ * However, if "dev" authMode is used and the Spring Security's context contains a
+ * UsernamePasswordAuthenticationToken, which is the case for the basic authentication
+ * used in development environment, act as UsernamePasswordCasClientTicketProvider
+ * using the username and passwrod found in the token to issue a new CAS ticket for
+ * the service.
+ * @see UsernamePasswordCasClientTicketProvider
+ *
+ * @see CasTicketProvider
+ *
  * User: ratamaa
  * Date: 3/11/14
  * Time: 5:15 PM

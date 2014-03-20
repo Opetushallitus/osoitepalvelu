@@ -39,11 +39,13 @@ import java.util.Map.Entry;
 
 /**
  * Abstrakti kantaluokka, joka tarjoaa peruspalvelut Camel-reittien luomiseen,
- * joilla voi lukea HTTP GET pyynnöllä JSON datan halutusta URL:sta ja
+ * joilla voi lukea HTTP pyynnöllä JSON datan halutusta URL:sta ja
  * automaattisesti konvertoida datan tietyksi DTO-luokiksi.
- * 
+ *
  * Tämä luokka on toteutettu helpottamaan ja nopeuttamaan JSON Camel-reittien
- * rakentamista osoitepalvelussa.
+ * rakentamista Osoitepalvelussa.
+ *
+ * @see HeaderBuilder
  */
 public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     public static final String CONTENT_TYPE_JSON = "application/json;charset=UTF-8";
@@ -58,25 +60,60 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     @Autowired
     protected CasTicketProvider authenticatedUserCasTicketProvider;
 
-
+    /**
+     * @param process the process to authenticate
+     * @param service the CAS service
+     * @param <T> the process type
+     * @return a process where CAS authentication by logged in user is applied as headers to the message
+     * @see CasTicketDefinitionProcessor
+     */
     protected <T extends ProcessorDefinition<? extends T>> T casByAuthenticatedUser(T process, String service) {
         return casByAuthenticatedUser(service).process(process);
     }
 
+    /**
+     * @param service the CAS service
+     * @return a CasTicketDefinitionProcessor for given service with authenticated user CAS authentication applied
+     * by CasTicketProvider found from the context (CasProxyTicketProvider should be used in actual application mode)
+     * @see fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasProxyTicketProvider
+     * @see ProcessDefinitionProcessor
+     */
     protected CasTicketDefinitionProcessor casByAuthenticatedUser(String service) {
         return new CasTicketDefinitionProcessor(authenticatedUserCasTicketProvider, service);
     }
 
+    /**
+     * @param process the process to authenticate
+     * @param service the CAS service
+     * @param username the system username to authenticate the process with
+     * @param password the system password to authenticate
+     * @param <T>
+     * @return a process where CAS authentication by system user is applied as headers to the message
+     * @see UsernamePasswordCasClientTicketProvider
+     */
     protected <T extends ProcessorDefinition<? extends T>> T casBydSystemUser(
             T process, String service, String username, String password) {
         return casBydSystemUser(service, username, password).process(process);
     }
 
+    /**
+     * @param service the CAS service
+     * @param username the system username to authenticate the process with
+     * @param password the system password to authenticate
+     * @return a CasTicketDefinitionProcessor for given service with authenticated user CAS authentication applied
+     * by CasTicketProvider found from the context (CasProxyTicketProvider should be used in actual application mode)
+     * @see UsernamePasswordCasClientTicketProvider
+     * @see ProcessDefinitionProcessor
+     */
     protected CasTicketDefinitionProcessor casBydSystemUser(String service, String username, String password) {
         return new CasTicketDefinitionProcessor(
                 new UsernamePasswordCasClientTicketProvider(casService, username, password), service);
     }
 
+    /**
+     * @see #casByAuthenticatedUser(String) to construct
+     * @see #casBydSystemUser(String, String, String) to construct
+     */
     protected class CasTicketDefinitionProcessor implements ProcessDefinitionProcessor {
         private CasTicketProvider ticketProvider;
         private String service;
@@ -88,14 +125,19 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
         @Override
         public <T extends ProcessorDefinition<? extends T>> T process(T process) {
-            return process.process(new SetOutHeadersProcessor() {
+            Debugger debug = debug("CasTicketDefinitionProcessor");
+            return process.process(debug)
+                    .process(new SetOutHeadersProcessor() {
                 protected Map<String, String> getHeaders() {
                     return ticketProvider.provideTicketHeaders(service);
                 }
-            });
+            }).process(debug);
         }
     }
 
+    /**
+     * @return a ProcessDefinitionProcessor that marshals the Request body to JSON using Jackson implementation
+     */
     protected ProcessDefinitionProcessor bodyAsJson() {
         return new ProcessDefinitionProcessor() {
             @Override
@@ -106,12 +148,21 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         };
     }
 
+    /**
+     * A Camel's Processor that sets a number of headers to the Exchange and
+     * internally calls #inToOut
+     * @see HeaderBuilder
+     * @see #inToOut()
+     */
     protected abstract class SetOutHeadersProcessor implements Processor {
 
+        /**
+         * @return the headers to set
+         */
         protected abstract Map<String,String> getHeaders();
 
         @Override
-        public void process(Exchange exchange) throws Exception {
+        public final void process(Exchange exchange) throws Exception {
             if( exchange.getIn() != null ) {
                 Map<String,String> headers = getHeaders();
                 for( Map.Entry<String,String> kv : headers.entrySet() ) {
@@ -125,45 +176,88 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         }
     }
 
-    protected HeaderBuilder headers() {
-        return new HeaderBuilder();
+    /**
+     * @param route to apply a HeaderBuilder to
+     * @param processor to apply to the route
+     * @param <T>
+     * @return the route with given header processor applied
+     * @see HeaderBuilder
+     */
+    protected <T extends ProcessorDefinition<? extends T>> T headers( T route, HeaderBuilder processor ) {
+        return apply(route, processor);
     }
 
-    protected <T extends ProcessorDefinition<? extends T>> T headers( T route, HeaderBuilder headers ) {
-        for (Entry<String, Expression> header : headers.getHeaders().entrySet()) {
-            route.setHeader(header.getKey(), header.getValue());
-        }
-        for (ProcessDefinitionProcessor defProcessor : headers.getAdditionalProcessors()) {
-            route = defProcessor.process(route);
-        }
-        return route;
+    /**
+     * @param route to apply a ProcessDefinitionProcessor to
+     * @param processor to apply to the route
+     * @param <T>
+     * @return the route with given processor applied
+     * @see HeaderBuilder
+     */
+    protected <T extends ProcessorDefinition<? extends T>> T apply( T route, ProcessDefinitionProcessor processor ) {
+        return processor.process(route);
     }
 
+    /**
+     * @param routeId the route id for from(URI)
+     * @param url the target URL for the RouteDefinition#to(URI) call
+     * @param headers to apply
+     * @param targetDtoType the target DTO type to convert to (use anonymous style)
+     * @param <T>
+     * @return the Camel route with BET method to the given URL processed to given DTO type from JSON with
+     * Debugging enabled with routeId.ServiceCall name
+     * @see #from(String)
+     * @see RouteDefinition#to(String)
+     * @see HeaderBuilder
+     * @see #debug(String)
+     */
     protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, HeaderBuilder headers,
                                                     TypeReference<T> targetDtoType) {
+        Debugger debug = debug(routeId+".ServiceCall");
         return headers(
                 from(routeId),
                 headers
-                    .get()
-            )
+                        .get()
+        )
+            .process(debug)
             .to(url)
+            .process(debug)
             .process(jsonToDto(targetDtoType));
     }
 
+    /**
+     * @param targetDtoType the type to convert JSON to
+     * @param <T> the type
+     * @return a JacksonJsonProcessor for JSON -> DTO conversion produced by a ObjectMapperProvider bound into
+     * Spring's context
+     * @see ObjectMapperProvider
+     */
     protected <T> JacksonJsonProcessor jsonToDto(TypeReference<T> targetDtoType) {
         return new JacksonJsonProcessor(mapperProvider, targetDtoType);
     }
 
+    /**
+     * @param route to load balance
+     * @return route with DEFAULT_RETRY_LIMIT applied as failover with roundRobin and inheritedErrorHandler
+     */
     protected LoadBalanceDefinition addRouteErrorHandlers(RouteDefinition route) {
         boolean roundRobin = true;
         boolean inheritErrorHandler = true;
         return route.loadBalance().failover(DEFAULT_RETRY_LIMIT, inheritErrorHandler, roundRobin);
     }
 
+    /**
+     * @return a ProducerTemplate from Spring's ApplicationContext
+     */
     protected ProducerTemplate getCamelTemplate() {
         return this.getApplicationContext().getBean(ProducerTemplate.class);
     }
 
+    /**
+     * A null-safe String.trim
+     * @param value to be trimmed
+     * @return a trimmed value
+     */
     protected String trim(String value) {
         if (value != null) {
             return value.trim();
@@ -171,53 +265,58 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         return null;
     }
 
-    protected Processor debug() {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                logIn(exchange);
-                logOut(exchange);
-                inToOut().process(exchange);
-            }
-        };
-    }
+    /**
+     * Tracks the time elapsed between the two processes phases in Camel route the (same) instance of this Debugger
+     * is associated to. Also calls #inToOut at the end. Override doProcess.
+     *
+     * @see #doProcess(org.apache.camel.Exchange) to do the actual logging
+     */
+    protected abstract class Debugger implements Processor {
+        private Long beginMoment=null;
+        private String name;
 
-    protected Processor debugIn() {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                logIn(exchange);
-                inToOut().process(exchange);
-            }
-        };
-    }
-
-    protected Processor debugOut() {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                logOut(exchange);
-                inToOut().process(exchange);
-            }
-        };
-    }
-
-    protected void logIn(Exchange exchange) {
-        if (exchange.getIn() != null) {
-            log.info("EXCHANGE IN: " + debug(exchange.getIn()) );
-        } else {
-            log.warn("EXCHANGE IN Body is null!");
+        protected Debugger(String name) {
+            this.name = name;
         }
-    }
 
-    protected void logOut(Exchange exchange) {
-        if (exchange.getOut() != null) {
-            log.info("EXCHANGE OUT: " + debug(exchange.getOut()) );
-        } else {
-            log.warn("EXCHANGE OUT Body is null!");
+        protected Debugger() {
         }
+
+        public String getName() {
+            if (this.name != null) {
+                return this.name;
+            }
+            return "Camel";
+        }
+
+        @Override
+        public final void process(Exchange exchange) throws Exception {
+            if (beginMoment == null) {
+                beginMoment = System.currentTimeMillis();
+            } else {
+                long now = System.currentTimeMillis();
+                long duration = now-beginMoment;
+                log.info(getName()+" execution took: "+duration+"ms since last call.");
+                beginMoment = null;
+            }
+            inToOut(exchange);
+            doProcess(exchange);
+        }
+
+        /**
+         * @param exchange to wrapped call to process as in a normal Camel Processor
+         * @throws Exception
+         * @see Processor#process(org.apache.camel.Exchange)
+         */
+        public abstract void doProcess(Exchange exchange) throws Exception;
     }
 
+    /**
+     * Additional Processors introduced into Camel route definition seem to null the set the out part of the Exchange
+     * to in and set the out part as null. After execution of a custom Processor, we therefore want to reverse this.
+     *
+     * @param exchange for which to set Excahge.out = Exchange.in
+     */
     protected void inToOut(Exchange exchange) {
         if (exchange.getIn() != null) {
             if (exchange.getOut() == null) {
@@ -230,6 +329,50 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         }
     }
 
+    /**
+     * @param name for the debugger to identify it in logs
+     * @return a new logger that logs the Body and Headers for In and Out part of the Exchange every time called and
+     * act as a time tracking Debugger
+     * @see Debugger
+     */
+    protected Debugger debug(String name) {
+        return new Debugger(name) {
+            @Override
+            public void doProcess(Exchange exchange) throws Exception {
+                logIn(exchange, getName());
+                //logOut(exchange);
+            }
+        };
+    }
+
+    /**
+     * @param exchange the In part of which to be logged
+     * @param name the prefix used in logging
+     */
+    protected void logIn(Exchange exchange, String name) {
+        if (exchange.getIn() != null) {
+            log.info(name + " Exchange in: " + debug(exchange.getIn()) );
+        } else {
+            log.warn(name + " Exchange in is null!");
+        }
+    }
+
+    /**
+     * @param exchange the Out part of which to be logged
+     * @param name the prefix used in logging
+     */
+    protected void logOut(Exchange exchange, String name) {
+        if (exchange.getOut() != null) {
+            log.info(name + " Exchange out: " + debug(exchange.getOut()) );
+        } else {
+            log.warn(name + " Exchange out is null!");
+        }
+    }
+
+    /**
+     * @return a Processor which converts input to output
+     * @see #inToOut(org.apache.camel.Exchange)
+     */
     protected Processor inToOut() {
         return new Processor() {
             @Override
@@ -239,102 +382,191 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         };
     }
 
-    protected String debug(Message m) {
+    /**
+     * @param message the message
+     * @return
+     */
+    protected String debug(Message message) {
         try {
-            return stringify(m.getBody())
-                    + " WITH HEADERS " + mapperProvider.getContext(ObjectMapper.class).writeValueAsString(m.getHeaders());
+            return stringify(message.getBody())
+                    + " with headers: " + mapperProvider.getContext(ObjectMapper.class).writeValueAsString(message.getHeaders());
         } catch (IOException e) {
-            return stringify(m.getBody()) + " (Headers could not be converted to JSON cause: " +e.getMessage()+")";
+            return stringify(message.getBody()) + " (Headers could not be converted to JSON cause: " +e.getMessage()+")";
         }
     }
 
-    protected String stringify(Object o) {
-        if( o == null ) return "null";
-        if( o.getClass().isArray() && Byte.TYPE.equals(o.getClass().getComponentType()) ) {
-            return new String((byte[]) o);
+    /**
+     * @param object to stringify, null-safe
+     * @return object as string, converting byte arrays to String, using  .toString() for other objects and "null"
+     * for nulls
+     */
+    protected String stringify(Object object) {
+        if( object == null ) return "null";
+        if( object.getClass().isArray() && Byte.TYPE.equals(object.getClass().getComponentType()) ) {
+            return new String((byte[]) object);
         }
-        return o.toString();
+        return object.toString();
     }
 
-    protected class HeaderBuilder {
+    /**
+     * @return a new HeaderBuilder
+     * @see HeaderBuilder
+     */
+    protected HeaderBuilder headers() {
+        return new HeaderBuilder();
+    }
+
+    /**
+     * Can be used to avoid some repeating .setHeader-calls when building a Camel route.
+     *
+     * @see #headers() to construct
+     * @see #headers(org.apache.camel.model.ProcessorDefinition,
+     *  fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder.HeaderBuilder) to apply
+     */
+    protected class HeaderBuilder implements ProcessDefinitionProcessor {
         private Map<String, Expression> headers = new HashMap<String, Expression>();
         private List<ProcessDefinitionProcessor> additionalProcessors = new ArrayList<ProcessDefinitionProcessor>();
 
         public HeaderBuilder() {
         }
 
-        public HeaderBuilder(String headerName, Expression expr) {
-            add(headerName, expr);
-        }
-
+        /**
+         * @param headerName
+         * @param expr the value for the header
+         * @return this HeaderBuilder with given header set to given Expression value
+         * @see Exchange for header constants
+         * @see #simple(String) for simple ${} containing expressions that may change for each call
+         * @see #constant(Object) for constant header values
+         */
         public HeaderBuilder add(String headerName, Expression expr) {
             headers.put(headerName, expr);
             return this;
         }
 
-        public HeaderBuilder get() {
-            return add(Exchange.HTTP_METHOD, constant("GET"));
-        }
-
-        public HeaderBuilder post() {
-            return add(Exchange.HTTP_METHOD, constant("POST"));
-        }
-
-        public HeaderBuilder path(String path) {
-            return add(Exchange.HTTP_PATH, simple(path));
-        }
-
-        public HeaderBuilder query(String query) {
-            return add(Exchange.HTTP_QUERY, simple(query));
-        }
-
-        public HeaderBuilder contentType(String type) {
-            return add(Exchange.CONTENT_TYPE, constant(type));
-        }
-
-        public HeaderBuilder casAuthenticationByAuthenticatedUser(String service) {
-            return add(casByAuthenticatedUser(service));
-        }
-
-        public HeaderBuilder casAuthenticationBySystemUser(String service, String username, String password) {
-            return add(casBydSystemUser(service, username, password));
-        }
-
-        public HeaderBuilder jsonRequstBody() {
-            return add(bodyAsJson())
-                    .contentType(CONTENT_TYPE_JSON);
-        }
-
+        /**
+         * @param additionalProcessor to add after the other definitions
+         * @return this HeaderBuilder with additionalProcessor applied
+         */
         public HeaderBuilder add(ProcessDefinitionProcessor additionalProcessor) {
             this.additionalProcessors.add(additionalProcessor);
             return this;
         }
 
-        public Expression getHeaderValue(String headerName) {
-            return headers.get(headerName);
+        /**
+         * @return this HeaderBuilder with GET HTTP_METHOD
+         */
+        public HeaderBuilder get() {
+            return add(Exchange.HTTP_METHOD, constant("GET"));
         }
 
-        public Map<String, Expression> getHeaders() {
-            return headers;
+        /**
+         * @return this HeaderBuilder with POST HTTP_METHOD
+         */
+        public HeaderBuilder post() {
+            return add(Exchange.HTTP_METHOD, constant("POST"));
         }
 
-        public List<ProcessDefinitionProcessor> getAdditionalProcessors() {
-            return additionalProcessors;
+        /**
+         * @param path to set as a simple HTTP_PATH header value
+         * @return this HeaderBuilder with given HTTP_PATH
+         */
+        public HeaderBuilder path(String path) {
+            return add(Exchange.HTTP_PATH, simple(path));
+        }
+
+        /**
+         * @param query to set as HTTP_QUERY simple header value.
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder query(String query) {
+            return add(Exchange.HTTP_QUERY, simple(query));
+        }
+
+        /**
+         * @param type the CONTENT_TYPE constant header value
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder contentType(String type) {
+            return add(Exchange.CONTENT_TYPE, constant(type));
+        }
+
+        /**
+         * Sets the CONTENT_TYPE type to application/json;charset=UTF-8
+         * and adds an ProcessDefinitionProcessor which marshalls the
+         * Message Body in the request as JSON.
+         *
+         * @return this HeaderBuilder
+         * @see #bodyAsJson()
+         */
+        public HeaderBuilder jsonRequstBody() {
+            return add(bodyAsJson())
+                    .contentType(CONTENT_TYPE_JSON);
+        }
+
+        /**
+         * @param service the CAS service
+         * @return this HeaderBuilder with CAS authentication by authenticated user applied
+         * @see #casByAuthenticatedUser(String)
+         */
+        public HeaderBuilder casAuthenticationByAuthenticatedUser(String service) {
+            return add(casByAuthenticatedUser(service));
+        }
+
+        /**
+         * @param service the CAS service
+         * @param username the username for a CAS system user
+         * @param password the password for a CAS system user
+         * @return this HeaderBuilder with CAS authentication by given system user applied
+         * @see #casBydSystemUser(String, String, String)
+         */
+        public HeaderBuilder casAuthenticationBySystemUser(String service, String username, String password) {
+            return add(casBydSystemUser(service, username, password));
+        }
+
+        @Override
+        public <T extends ProcessorDefinition<? extends T>> T process(T process) {
+            for (Entry<String, Expression> header : headers.entrySet()) {
+                process = process.setHeader(header.getKey(), header.getValue());
+            }
+            for (ProcessDefinitionProcessor defProcessor : additionalProcessors) {
+                process = defProcessor.process(process);
+            }
+            return process;
         }
     }
 
+    /**
+     * @return a HeaderValueBuilder that may be used with ProducerTemplate.requestBodyAndHeaders
+     * @see ProducerTemplate#requestBodyAndHeaders(org.apache.camel.Endpoint, Object, java.util.Map)
+     * @see ProducerTemplate#requestBodyAndHeaders(org.apache.camel.Endpoint, Object, java.util.Map, Class)
+     */
     protected HeaderValueBuilder headerValues() {
         return new HeaderValueBuilder();
     }
 
+    /**
+     * May be used with ProducerTemplate.requestBodyAndHeaders
+     *
+     * @see ProducerTemplate#requestBodyAndHeaders(org.apache.camel.Endpoint, Object, java.util.Map)
+     * @see ProducerTemplate#requestBodyAndHeaders(org.apache.camel.Endpoint, Object, java.util.Map, Class)
+     * @see fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder.HeaderValueBuilder#map()
+     */
     protected static class HeaderValueBuilder {
         private Map<String,Object> map = new HashMap<String, Object>();
 
+        /**
+         * @param header
+         * @param value
+         * @return this builder with header set to value
+         */
         public HeaderValueBuilder add(String header, Object value) {
             this.map.put(header, value);
             return this;
         }
 
+        /**
+         * @return a Map value for the builder
+         */
         public Map<String,Object> map() {
             return this.map;
         }

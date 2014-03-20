@@ -50,6 +50,7 @@ public class DefaultKoodistoCacheRepository extends SimpleMongoRepository<Koodis
 
     @Override
     public KoodistoCache findCacheByTypeAndLocale(KoodistoCache.KoodistoTyyppi tyyppi, Locale locale) {
-        return findOne(new KoodistoCache.CacheKey(tyyppi, locale));
+        KoodistoCache.CacheKey key = new KoodistoCache.CacheKey(tyyppi, locale);
+        return findOne(key);
     }
 }

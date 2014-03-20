@@ -22,6 +22,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTermDto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * User: ratamaa
@@ -38,11 +39,20 @@ public class SearchTermsDto implements Serializable {
         CONTACT;
     }
 
+    private Locale locale;
     private SearchType searchType;
     private List<String> addressFields = new ArrayList<String>();
     private List<String> receiverFields = new ArrayList<String>();
     private List<SearchTargetGroupDto> targetGroups = new ArrayList<SearchTargetGroupDto>();
     private List<SearchTermDto> terms = new ArrayList<SearchTermDto>();
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
 
     public SearchType getSearchType() {
         return searchType;

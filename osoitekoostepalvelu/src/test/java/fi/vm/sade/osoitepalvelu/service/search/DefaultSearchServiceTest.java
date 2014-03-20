@@ -21,7 +21,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.DefaultSearchService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 import fi.vm.sade.osoitepalvelu.service.mock.KoodistoServiceRouteMock;
@@ -98,7 +98,7 @@ public class DefaultSearchServiceTest {
         OrganisaatioResultsDto results = this.defaultSearchService.find(terms);
         assertNotNull(results.getResults());
         assertEquals(1, results.getResults().size());
-        OrganisaatioResultDto firstResult = results.getResults().get(0);
+        OrganisaatioTiedotDto firstResult = results.getResults().get(0);
         assertEquals("OID", firstResult.getOid());
         assertEquals("OPKOODI", firstResult.getOppilaitosKoodi());
         assertEquals(nimi, firstResult.getNimi());

@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import fi.vm.sade.log.client.Logger;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
@@ -52,7 +52,7 @@ public class DummySearchService implements SearchService {
         OrganisaatioResultsDto results = new OrganisaatioResultsDto();
 
         for( long i = 1; i <= 1000; ++i ) {
-            OrganisaatioResultDto result = new OrganisaatioResultDto();
+            OrganisaatioTiedotDto result = new OrganisaatioTiedotDto();
             List<String> tyypit = new ArrayList<String>();
             tyypit.add("Opetuspiste");
             HashMap<String, String> nimi = new HashMap<String, String>();

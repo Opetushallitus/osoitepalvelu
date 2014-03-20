@@ -71,9 +71,10 @@ public class SeachController extends AbstractMvcController implements Serializab
     @RequestMapping(value="list.json", method = RequestMethod.POST)
     public @ResponseBody SearchResultsDto list( @RequestBody FilteredSearchParametersDto searchParameters,
                                                 @RequestParam("lang") String lang ) {
+        searchParameters.getSearchTerms().setLocale(parseLocale(lang));
         OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms());
         SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
-                searchParameters.getSearchTerms(), parseLocale(lang),
+                searchParameters.getSearchTerms(),
                 searchParameters.getNonIncludedOrganisaatioOids() );
         return resultTransformerService.transformToResultRows(results.getResults(), presentation);
     }
@@ -115,9 +116,10 @@ public class SeachController extends AbstractMvcController implements Serializab
             throw new NotFoundException("Excel not found for download with key="+downlaodId);
         }
         this.storedParameters.remove(storeKey); // <- not really REST here :/
+        searchParameters.getSearchTerms().setLocale(parseLocale(lang));
         OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms());
         SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
-                searchParameters.getSearchTerms(), parseLocale(lang),
+                searchParameters.getSearchTerms(),
                 searchParameters.getNonIncludedOrganisaatioOids() );
         final SearchResultsDto searchResults = resultTransformerService.transformToResultRows(results.getResults(), presentation);
         return new AbstractExcelView() {

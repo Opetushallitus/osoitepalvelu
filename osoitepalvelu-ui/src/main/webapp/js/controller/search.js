@@ -185,6 +185,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         SearchService.updateSearchType($scope.searchType, $scope.addressFields, $scope.receiverFields);
         SearchService.updateTargetGroups($scope.visibleTargetGroups);
         SearchService.updateTerms($scope.terms);
+        SearchService.setSearchReady();
         $location.path("/results");
     };
 

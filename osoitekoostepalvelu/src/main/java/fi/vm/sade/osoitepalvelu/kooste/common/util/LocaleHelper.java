@@ -26,9 +26,10 @@ import java.util.Locale;
 public class LocaleHelper {
 
     /**
-     * @param locale tha language and country code pair, language or kieli_language to parse
-     * @param defaultLocale to return if the given locale is null or empty
-     * @return the parsed locale or defaultLocale if locale is not defined
+     * @param locale tha language and country code pair, language or kieli_language(#versio) to parse language from,
+     *               may be null
+     * @param defaultLocale to return if the given locale is null or empty, may be null
+     * @return the parsed locale or defaultLocale if locale is not defined (may be null)
      */
     public static Locale parseLocale(String locale, Locale defaultLocale) {
         if (locale == null || locale.trim().length() < 1) {
@@ -36,6 +37,10 @@ public class LocaleHelper {
         }
         if (locale.startsWith("kieli_")) {
             locale = locale.substring("kieli_".length());
+        }
+        String[] stripPrts = locale.split("#");
+        if (stripPrts.length > 1) {
+            locale = stripPrts[0];
         }
         String[] prts = locale.split("_");
         if (prts.length == 2) {
@@ -48,4 +53,19 @@ public class LocaleHelper {
         return new Locale(locale.toLowerCase());
     }
 
+    /**
+     * @param locale1 locale language part of which to compare against locale2
+     * @param locale2 locale language part of which to compare against locale1
+     * @return true if both locales are null or if their language code equals (case insensitive), null-safe
+     */
+    public static boolean languageEquals(Locale locale1, Locale locale2) {
+        if (locale1 == null && locale2 == null) {
+            return true;
+        }
+        if (locale1 == null || locale2 == null) {
+            return false;
+        }
+        return EqualsHelper.equals(StringHelper.lower(locale1.getLanguage()),
+                                StringHelper.lower(locale2.getLanguage()));
+    }
 }

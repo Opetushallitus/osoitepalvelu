@@ -16,34 +16,33 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
-import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Service;
-
+import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoElementtiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtainenYhteystietoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.ResultAggregateDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
+import org.apache.poi.ss.usermodel.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
 
 /**
  * User: ratamaa
@@ -61,11 +60,16 @@ public class DefaultSearchResultTransformerService extends AbstractService
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired(required = false)
+    private OrganisaatioServiceRoute organisaatioServiceRoute;
+
     @Override
-    public SearchResultsDto transformToResultRows(List<OrganisaatioResultDto> results,
+    public SearchResultsDto transformToResultRows(List<OrganisaatioTiedotDto> results,
                                                           SearchResultPresentation presentation) {
+        resolveRelatedVisibleDetails(results, presentation);
+
         Set<ResultAggregateDto> aggregates = new LinkedHashSet<ResultAggregateDto>();
-        for (OrganisaatioResultDto result : results) {
+        for (OrganisaatioTiedotDto result : results) {
             List<OsoitteistoDto> filteredOsoites = filterOsoites(result.getPostiosoite(), presentation.getLocale());
             for (OsoitteistoDto osoite : filteredOsoites) {
                 for (OrganisaatioYhteystietoDto kayttaja : result.getYhteyshenkilot() ) {
@@ -93,6 +97,105 @@ public class DefaultSearchResultTransformerService extends AbstractService
             }
         }
         return new SearchResultsDto(transformedResults, presentation);
+    }
+
+    protected void resolveRelatedVisibleDetails(List<OrganisaatioTiedotDto> results,
+                                                SearchResultPresentation presentation) {
+        if (organisaatioServiceRoute == null) {
+            return;
+        }
+
+        Map<String,OrganisaatioYksityiskohtaisetTiedotDto> organisaatioByOidCache
+                = new HashMap<String, OrganisaatioYksityiskohtaisetTiedotDto>();
+        Locale locale = presentation.getLocale();
+
+        if (presentation.isWwwOsoiteIncluded()) {
+            copyDetails(results, new DetailCopier(locale, organisaatioByOidCache) {
+                @Override
+                protected boolean isMissing(OrganisaatioTiedotDto from) {
+                    return from.getWwwOsoite() == null;
+                }
+                @Override
+                public void copy(OrganisaatioYksityiskohtaisetTiedotDto from, OrganisaatioTiedotDto to) {
+                    Iterator<OrganisaatioYhteystietoElementtiDto> elementtis = Collections2.filter(from.getYhteystietoArvos(),
+                            new OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate("Www", locale)).iterator();
+                    if (elementtis.hasNext()) {
+                        to.setWwwOsoite(elementtis.next().getArvo());
+                    }
+                    Iterator<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystietos = Collections2.filter(from.getYhteystiedot(),
+                        new OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate(locale)).iterator();
+                    if (yhteystietos.hasNext()) {
+                        to.setWwwOsoite(yhteystietos.next().getWww());
+                    }
+                }
+            });
+        }
+
+        if (presentation.isYhteyshenkiloEmailIncluded()) {
+            copyDetails(results, new DetailCopier(locale, organisaatioByOidCache) {
+                @Override
+                protected boolean isMissing(OrganisaatioTiedotDto from) {
+                    return from.getEmailOsoite() == null;
+                }
+                @Override
+                public void copy(OrganisaatioYksityiskohtaisetTiedotDto from, OrganisaatioTiedotDto to) {
+                    Iterator<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystietos = Collections2.filter(from.getYhteystiedot(),
+                            new OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(locale)).iterator();
+                    if (yhteystietos.hasNext()) {
+                        to.setEmailOsoite(yhteystietos.next().getEmail());
+                    }
+                }
+            });
+        }
+
+        if (presentation.isPuhelinnumeroIncluded()) {
+            copyDetails(results, new DetailCopier(locale, organisaatioByOidCache) {
+                @Override
+                protected boolean isMissing(OrganisaatioTiedotDto from) {
+                    return from.getPuhelinnumero() == null;
+                }
+                @Override
+                public void copy(OrganisaatioYksityiskohtaisetTiedotDto from, OrganisaatioTiedotDto to) {
+                    Iterator<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystietos = Collections2.filter(from.getYhteystiedot(),
+                            new OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate(locale)).iterator();
+                    if (yhteystietos.hasNext()) {
+                        to.setPuhelinnumero(yhteystietos.next().getNumero());
+                    }
+                }
+            });
+        }
+
+        // TODO: ...
+    }
+
+    protected abstract class DetailCopier {
+        protected Locale locale;
+        private Map<String,OrganisaatioYksityiskohtaisetTiedotDto> cache;
+
+        protected DetailCopier(Locale locale, Map<String, OrganisaatioYksityiskohtaisetTiedotDto> cache) {
+            this.locale = locale;
+            this.cache = cache;
+        }
+
+        protected abstract boolean isMissing(OrganisaatioTiedotDto from);
+
+        protected abstract void copy(OrganisaatioYksityiskohtaisetTiedotDto from, OrganisaatioTiedotDto to);
+    }
+
+    protected void copyDetails(List<OrganisaatioTiedotDto> results, DetailCopier copier) {
+        for (OrganisaatioTiedotDto result : results) {
+            String oid = result.getOid();
+            if (oid != null && copier.isMissing(result)) {
+                OrganisaatioYksityiskohtaisetTiedotDto details;
+                if (copier.cache.containsKey(oid)) {
+                    details = copier.cache.get(oid);
+                } else {
+                    details = organisaatioServiceRoute.getdOrganisaatioByOid(oid);
+                    copier.cache.put(oid, details);
+                }
+                copier.copy( details, result );
+            }
+        }
     }
 
     @Override
@@ -123,14 +226,12 @@ public class DefaultSearchResultTransformerService extends AbstractService
             return osoites;
         }
         List<OsoitteistoDto> filtered = new ArrayList<OsoitteistoDto>();
-        for( OsoitteistoDto osoite : osoites ) {
-            String langCode = osoite.getLanguageCode();
-            if (EqualsHelper.equals(locale.getLanguage(), langCode)
-                    || EqualsHelper.equals(locale.toString(), langCode)) {
+        for (OsoitteistoDto osoite : osoites ) {
+            if (LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(osoite.getKieli(),DEFAULT_LOCALE))) {
                 filtered.add(osoite);
             }
         }
-        if( filtered.size() < 1 && !locale.getLanguage().toLowerCase().equals(DEFAULT_LOCALE.getLanguage().toLowerCase())) {
+        if (filtered.size() < 1 && !LocaleHelper.languageEquals(DEFAULT_LOCALE, locale)) {
             return filterOsoites(osoites, DEFAULT_LOCALE);
         }
         return filtered;
@@ -300,5 +401,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
             cell = row.createCell(colNum);
         }
         return cell;
+    }
+
+    public void setOrganisaatioServiceRoute(OrganisaatioServiceRoute organisaatioServiceRoute) {
+        this.organisaatioServiceRoute = organisaatioServiceRoute;
     }
 }

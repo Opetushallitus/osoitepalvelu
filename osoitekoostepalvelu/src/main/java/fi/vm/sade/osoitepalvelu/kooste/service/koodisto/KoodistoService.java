@@ -40,6 +40,12 @@ public interface KoodistoService {
 
     List<UiKoodiItemDto> findKuntaOptions(Locale locale);
 
+    UiKoodiItemDto findKuntaByKoodiUri(Locale locale, String koodiUri);
+
+    List<UiKoodiItemDto> findPostinumeroOptions(Locale locale);
+
+    UiKoodiItemDto findPostinumeroByKoodiUri(Locale locale, String koodiUri);
+
     List<UiKoodiItemDto> findTutkintoTyyppiOptions(Locale locale);
 
     List<UiKoodiItemDto> findTutkintoOptions(Locale locale);

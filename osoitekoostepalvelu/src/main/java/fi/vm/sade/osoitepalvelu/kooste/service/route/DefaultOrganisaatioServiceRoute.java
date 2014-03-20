@@ -16,9 +16,13 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
+import com.googlecode.ehcache.annotations.Cacheable;
+import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
+import org.apache.camel.component.http.HttpOperationFailedException;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,7 +38,9 @@ import java.util.List;
 public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuilder
             implements  OrganisaatioServiceRoute {
     private static final String ORGANSIAATIOHAKU_ENDPOINT = "direct:organisaatioYhteystietohakuV2";
-    public static final String YHTEYSTIEDOT_PATH = "/v2/yhteystiedot/hae";
+    private static final String YHTEYSTIEDOT_PATH = "/v2/yhteystiedot/hae";
+    private static final String SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT = "direct:singleOrganisaatioByOid";
+    private static final String SINGLE_ORGANISAATIO_PATH = "/${in.headers.oid}";
 
     @Value("${organisaatioService.rest.url}")
     private String organisaatioServiceRestUrl;
@@ -44,6 +50,12 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
 
     @Override
     public void configure() throws Exception {
+        buildOrganisaatioHaku();
+        buildSingleOrganisaatioTiedot();
+    }
+
+    protected void buildOrganisaatioHaku() {
+        Debugger organisaatioCallInOutDebug = debug(ORGANSIAATIOHAKU_ENDPOINT+".OrgansiaatioServiceCall");
         headers(
                 from(ORGANSIAATIOHAKU_ENDPOINT),
                 headers()
@@ -52,13 +64,42 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                     .path(YHTEYSTIEDOT_PATH)
                     .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
         )
+        .process(organisaatioCallInOutDebug)
         .to(trim(organisaatioServiceRestUrl))
+        .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() {}));
     }
 
+    protected void buildSingleOrganisaatioTiedot() {
+        Debugger organisaatioCallInOutDebug = debug(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT +".OrgansiaatioServiceCall");
+        headers(
+                from(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT),
+                headers()
+                        .get()
+                        .path(SINGLE_ORGANISAATIO_PATH)
+                        .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
+        )
+        .process(organisaatioCallInOutDebug)
+        .to(trim(organisaatioServiceRestUrl))
+        .process(organisaatioCallInOutDebug)
+        .process(jsonToDto(new TypeReference<OrganisaatioYksityiskohtaisetTiedotDto>() {}))
+        .onException(HttpOperationFailedException.class)
+                .throwException(new NotFoundException("Organisaatio nof round by OID."));
+    }
+
     @Override
+    @Cacheable(cacheName = "organisaatioHakuResultsCache")
     public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
             OrganisaatioYhteystietoCriteriaDto criteria) {
         return getCamelTemplate().requestBody(ORGANSIAATIOHAKU_ENDPOINT, criteria, List.class);
+    }
+
+    @Override
+    @Cacheable(cacheName = "organisaatioByOidCache")
+    public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(String oid) {
+        return getCamelTemplate().requestBodyAndHeaders(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT, "",
+                headerValues()
+                        .add("oid", oid)
+                        .map(), OrganisaatioYksityiskohtaisetTiedotDto.class);
     }
 }

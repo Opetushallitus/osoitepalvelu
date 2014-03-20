@@ -3,6 +3,11 @@
  */
 var ResultsController = function($scope, $log, $location, $filter, $timeout,
                 SearchService, EmailService, ArrayHelper, LocalisationService) {
+    if( !SearchService.isSearchReady() ) {
+        $location.path("/");
+        return;
+    }
+
     var msg = function( key, params ) {
         return LocalisationService.t(key, params);
     };
@@ -40,8 +45,9 @@ var ResultsController = function($scope, $log, $location, $filter, $timeout,
         );
     };
 
-    var updateResults = function() {
-        SearchService.search(function(data) {
+    var updateResults = function(update) {
+        var f = update ? SearchService.search : SearchService.results;
+        f(function(data) {
             $log.info("Got data as results.");
             $log.info(data);
             angular.forEach($scope.customColumnDefs, function(colDef) {
@@ -54,7 +60,7 @@ var ResultsController = function($scope, $log, $location, $filter, $timeout,
         });
     };
     $timeout(function() {
-        updateResults();
+        updateResults(true);
     }, 0, false);
 
     $scope.back = function() {

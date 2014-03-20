@@ -22,46 +22,46 @@ package fi.vm.sade.osoitepalvelu.service.search;
  * Time: 4:05 PM
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
+import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.DefaultSearchResultTransformerService;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultTransformerService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentationByAddressFieldsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={SpringTestAppConfig.class})
+@ContextConfiguration(classes = { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
 public class SearchResultTransformerServiceTest {
 
     @Autowired
-    private SearchResultTransformerService resultTranformerService;
+    private DefaultSearchResultTransformerService resultTranformerService;
+
+    @Before
+    public void init() {
+        resultTranformerService.setOrganisaatioServiceRoute(null);
+    }
 
     @Test
     public void testAggregateOrganisaatiotWithYhteyshenkilos() {
-        OrganisaatioResultDto organisaatio1 = new OrganisaatioResultDto(),
-                organisaatio2 = new OrganisaatioResultDto();
+        OrganisaatioTiedotDto organisaatio1 = new OrganisaatioTiedotDto(),
+                organisaatio2 = new OrganisaatioTiedotDto();
         organisaatio1.setOid("org1");
         organisaatio2.setOid("org2");
         organisaatio2.setEmailOsoite("org email");
@@ -85,7 +85,7 @@ public class SearchResultTransformerServiceTest {
         organisaatio1.getYhteyshenkilot().add(yhteyshenkilo1);
         organisaatio1.getYhteyshenkilot().add(yhteyshenkilo2);
 
-        List<OrganisaatioResultDto> list = Arrays.asList(organisaatio1, organisaatio2);
+        List<OrganisaatioTiedotDto> list = Arrays.asList(organisaatio1, organisaatio2);
         SearchResultsDto results = resultTranformerService.transformToResultRows(list,
                 new AllColumnsSearchResultPresentation());
         assertNotNull(results.getPresentation());
@@ -110,8 +110,8 @@ public class SearchResultTransformerServiceTest {
 
     @Test
     public void testAggregateOrganisaatiotWithYhteyshenkiloAndPostiosoites() {
-        OrganisaatioResultDto organisaatio1 = new OrganisaatioResultDto(),
-                organisaatio2 = new OrganisaatioResultDto();
+        OrganisaatioTiedotDto organisaatio1 = new OrganisaatioTiedotDto(),
+                organisaatio2 = new OrganisaatioTiedotDto();
         organisaatio1.setOid("org1");
         organisaatio2.setOid("org2");
         OrganisaatioYhteystietoDto yhteyshenkilo1 = new OrganisaatioYhteystietoDto(),
@@ -142,7 +142,7 @@ public class SearchResultTransformerServiceTest {
         organisaatio2.getPostiosoite().add(osoite2);
         organisaatio2.getPostiosoite().add(osoite3);
 
-        List<OrganisaatioResultDto> list = Arrays.asList(organisaatio1, organisaatio2);
+        List<OrganisaatioTiedotDto> list = Arrays.asList(organisaatio1, organisaatio2);
         SearchResultsDto results = resultTranformerService.transformToResultRows(list,
                 new AllColumnsSearchResultPresentation(new Locale("sv", "SE")));
         List<SearchResultRowDto> rows = results.getRows();
@@ -172,7 +172,7 @@ public class SearchResultTransformerServiceTest {
 
     @Test
     public void fallbackToFinnishLocaleInPostiosoite() {
-        OrganisaatioResultDto organisaatio = new OrganisaatioResultDto();
+        OrganisaatioTiedotDto organisaatio = new OrganisaatioTiedotDto();
         OsoitteistoDto osoite = new OsoitteistoDto(),
                 osoite2 = new OsoitteistoDto();
         osoite.setYhteystietoOid("osoite-fi");
@@ -183,7 +183,7 @@ public class SearchResultTransformerServiceTest {
         osoite2.setKieli("en");
         organisaatio.getPostiosoite().add(osoite2);
 
-        List<OrganisaatioResultDto> list = Arrays.asList(organisaatio);
+        List<OrganisaatioTiedotDto> list = Arrays.asList(organisaatio);
         SearchResultsDto results = resultTranformerService.transformToResultRows(list,
                 new AllColumnsSearchResultPresentation(new Locale("sv", "SE")));
         List<SearchResultRowDto> rows = results.getRows();
@@ -196,7 +196,8 @@ public class SearchResultTransformerServiceTest {
         SearchTermsDto terms = new SearchTermsDto();
         terms.setSearchType(SearchTermsDto.SearchType.CONTACT);
         terms.setAddressFields(SearchResultPresentationByAddressFieldsDto.fieldMappingKeys());
-        new SearchResultPresentationByAddressFieldsDto(terms, new Locale("fi"));
+        terms.setLocale(new Locale("fi"));
+        new SearchResultPresentationByAddressFieldsDto(terms);
     }
 
     @Test
@@ -211,7 +212,7 @@ public class SearchResultTransformerServiceTest {
 
     @Test
     public void testProduceSingleLineNullExcel() {
-        OrganisaatioResultDto organisaatio = new OrganisaatioResultDto();
+        OrganisaatioTiedotDto organisaatio = new OrganisaatioTiedotDto();
         HashMap<String,String> nimi = new HashMap<String, String>();
         nimi.put("sv", "Organisations namnet");
         nimi.put("fi", "Organisaation nimi");
@@ -225,4 +226,6 @@ public class SearchResultTransformerServiceTest {
         assertEquals(1, wb.getSheetAt(0).getLastRowNum());
         assertEquals("Organisaation nimi", wb.getSheetAt(0).getRow(1).getCell(0).getStringCellValue());
     }
+
+    // TODO: Test additional information by searches to Organisaatiopalvelu
 }

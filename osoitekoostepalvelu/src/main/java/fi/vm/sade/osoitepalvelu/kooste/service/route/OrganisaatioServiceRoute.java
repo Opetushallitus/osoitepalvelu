@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
 
 import java.util.List;
 
@@ -35,4 +36,9 @@ public interface OrganisaatioServiceRoute {
     List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
             OrganisaatioYhteystietoCriteriaDto criteria);
 
+    /**
+     * @param oid
+     * @return
+     */
+    OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(String oid);
 }

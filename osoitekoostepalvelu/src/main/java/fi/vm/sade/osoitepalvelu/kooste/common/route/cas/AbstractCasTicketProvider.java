@@ -17,12 +17,21 @@
 package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
 
 /**
+ * @see CasTicketProvider
+ * @see CasProxyTicketProvider
+ * @see UsernamePasswordCasClientTicketProvider
+ *
  * User: ratamaa
  * Date: 3/12/14
  * Time: 2:11 PM
  */
 public abstract class AbstractCasTicketProvider implements CasTicketProvider {
 
+    /**
+     * @param service the URL of the service for the CAS
+     * @return the standard format for the URL with a /j_spring_cas_security_check postfix and port 443 removed with
+     * https protocol.
+     */
     protected String getTargetServiceCasUri( String service ) {
         if (!service.endsWith("/j_spring_cas_security_check")) {
             service = service+"/j_spring_cas_security_check";

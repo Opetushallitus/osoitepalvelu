@@ -22,8 +22,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * To be used only for tests/development.
+ * To be used with system username and password authentication mode, tests and, in development
+ * mode as a replacement for
  * @see CasProxyTicketProvider
+ *
+ * Uses CasClient to issuea a new CAS ticket by given username and password.
+ * @see CasClient
+ *
+ * @see AbstractCasTicketProvider
  *
  * User: ratamaa
  * Date: 3/11/14

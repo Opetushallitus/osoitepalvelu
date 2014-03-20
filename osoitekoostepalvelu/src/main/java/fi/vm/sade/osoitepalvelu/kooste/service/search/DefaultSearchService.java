@@ -16,12 +16,13 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
+import com.googlecode.ehcache.annotations.Cacheable;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
@@ -51,12 +52,14 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     private SearchResultDtoConverter searchResultDtoConverter;
 
     @Override
+    @Cacheable(cacheName = "osoitepalveluSearchResultsCache")
     public OrganisaatioResultsDto find(SearchTermsDto terms) {
         OrganisaatioResultsDto results = new OrganisaatioResultsDto();
 
         List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults = findOrganisaatios(terms);
-        List<OrganisaatioResultDto> convertedResults = searchResultDtoConverter.convert(
-                organisaatioYhteystietoResults, new ArrayList<OrganisaatioResultDto>(), OrganisaatioResultDto.class);
+        List<OrganisaatioTiedotDto> convertedResults = searchResultDtoConverter.convert(
+                organisaatioYhteystietoResults, new ArrayList<OrganisaatioTiedotDto>(), OrganisaatioTiedotDto.class,
+                    terms.getLocale());
         results.getResults().addAll(convertedResults);
 
         // TOOD: hae henkiloöt

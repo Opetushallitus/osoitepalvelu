@@ -14,24 +14,25 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.search.route;
+package fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers;
 
-import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
-import org.springframework.beans.factory.annotation.Value;
+import com.google.common.base.Predicate;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 
 /**
  * User: ratamaa
- * Date: 3/11/14
- * Time: 2:50 PM
+ * Date: 3/20/14
+ * Time: 2:23 PM
  */
-public class OrganisaatioRoute extends AbstractJsonToDtoRouteBuilder {
+public class UiKoodiItemByKoodiUriPredicate implements Predicate<UiKoodiItemDto> {
+    private String uri;
 
-    @Value("${valintalaskentakoostepalvelu.organisaatioService.rest.url}")
-    private String organisaatioUri;
+    public UiKoodiItemByKoodiUriPredicate(String uri) {
+        this.uri = uri;
+    }
 
     @Override
-    public void configure() throws Exception {
-
-
+    public boolean apply(UiKoodiItemDto item) {
+        return uri.equals(item.getKoodiUri());
     }
 }

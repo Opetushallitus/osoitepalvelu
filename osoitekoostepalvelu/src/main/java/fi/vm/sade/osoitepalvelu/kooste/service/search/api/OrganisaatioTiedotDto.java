@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OrganisaatioResultDto implements Serializable {
+public class OrganisaatioTiedotDto implements Serializable {
     private static final long serialVersionUID = -3235512233762738508L;
     
     private String oid; // Yksikäsitteinen tunniste

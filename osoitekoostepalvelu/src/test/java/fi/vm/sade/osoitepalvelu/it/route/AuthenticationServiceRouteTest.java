@@ -21,11 +21,10 @@ import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultAuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultAuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import org.junit.Ignore;
@@ -47,7 +46,6 @@ import static org.junit.Assert.assertTrue;
  * Date: 3/11/14
  * Time: 3:30 PM
  */
-//@Ignore // missing system user authentication properties from Bamboo test environment
 @Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
@@ -66,6 +64,7 @@ public class AuthenticationServiceRouteTest {
     }
 
     @Test
+    @Ignore // not still deployes to Luokka
     public void testFindHenkilosByOrganisaatioOids() {
         OrganisaatioYhteystietoCriteriaDto criteria = new OrganisaatioYhteystietoCriteriaDto();
         criteria.setKuntaList(Arrays.asList(new String[]{"kunta_604", "kunta_400"}));
@@ -84,19 +83,5 @@ public class AuthenticationServiceRouteTest {
                 return yhteystieto.getOid();
             }
         }));
-    }
-
-    protected<T, C extends List<T>> List<T> first( C c, int numberOfItems ) {
-        List<T> result = new ArrayList<T>();
-        int i = 1;
-        for( T item : c ) {
-            if( i <= numberOfItems ) {
-                result.add(item);
-            } else {
-                break;
-            }
-            ++i;
-        }
-        return result;
     }
 }

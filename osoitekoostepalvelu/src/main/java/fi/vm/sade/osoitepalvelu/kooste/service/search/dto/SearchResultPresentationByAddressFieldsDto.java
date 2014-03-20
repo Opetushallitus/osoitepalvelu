@@ -73,7 +73,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private Locale locale;
     private Set<OidAndTyyppiPair> nonIncludedOids;
 
-    public SearchResultPresentationByAddressFieldsDto( SearchTermsDto searchTerms, Locale locale ) {
+    public SearchResultPresentationByAddressFieldsDto( SearchTermsDto searchTerms) {
         if( searchTerms.getSearchType() != null ) {
             switch (searchTerms.getSearchType()) {
                 case CONTACT:
@@ -92,12 +92,12 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
                 default: break;
             }
         }
-        this.locale = locale;
+        this.locale = searchTerms.getLocale();
     }
 
-    public SearchResultPresentationByAddressFieldsDto( SearchTermsDto searchTerms, Locale locale,
+    public SearchResultPresentationByAddressFieldsDto( SearchTermsDto searchTerms,
                                                        Set<OidAndTyyppiPair> nonIncludedOrganisaatioOidsStrings ) {
-        this(searchTerms, locale);
+        this(searchTerms);
         this.nonIncludedOids = nonIncludedOrganisaatioOidsStrings;
     }
 

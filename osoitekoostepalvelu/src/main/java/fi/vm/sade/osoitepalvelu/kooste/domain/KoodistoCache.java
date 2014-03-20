@@ -40,6 +40,7 @@ public class KoodistoCache implements Serializable {
             VUOSILUOKAT,
             MAAKUNTA,
             KUNTA,
+            POSTINUMERO,
             TUTKINTOTYYPPI,
             TUTKINTO,
             OPPILAITOKSEN_OPETUSKIELI,
@@ -79,6 +80,24 @@ public class KoodistoCache implements Serializable {
 
         public void setLocale(Locale locale) {
             this.locale = locale;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            CacheKey cacheKey = (CacheKey) o;
+
+            if (tyyppi != cacheKey.tyyppi) return false;
+            if (!locale.equals(cacheKey.locale)) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return tyyppi.ordinal();
         }
     }
 

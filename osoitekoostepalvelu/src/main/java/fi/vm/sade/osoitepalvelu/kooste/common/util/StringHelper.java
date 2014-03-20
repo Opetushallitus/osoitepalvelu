@@ -23,6 +23,11 @@ package fi.vm.sade.osoitepalvelu.kooste.common.util;
  */
 public class StringHelper {
 
+    /**
+     * @param concatBy the concatenator
+     * @param values to concatenate by concatBy
+     * @return values concatenated by concatBy
+     */
     public static String join( String concatBy, String... values ) {
         StringBuffer b = new StringBuffer();
         for (int i=0; i < values.length; ++i) {
@@ -35,6 +40,17 @@ public class StringHelper {
             }
         }
         return b.toString();
+    }
+
+    /**
+     * @param str
+     * @return str in lowercase, null-safe
+     */
+    public static String lower(String str) {
+        if (str == null) {
+            return null;
+        }
+        return str.toLowerCase();
     }
 
 }

@@ -32,7 +32,6 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Component
 public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implements KoodistoRoute {
-
     private static final String REITTI_HAE_KOODISTON_KOODIT = "direct:haeKoodistonKoodit";
     private static final String REITTI_HAE_KOODISTO_VERSION_KOODIT = "direct:haeKoodistoVersionKoodit";
     private static final String REITTI_HAE_KOODISTON_VERSIOT = "direct:haeKoodistonVersiot";
@@ -40,29 +39,38 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     @Value("${koodiService.rest.url}")
     private String koodistoUri;
 
+    // For cache testing:
     private boolean findCounterUsed = false;
     private AtomicLong findCounter = new AtomicLong(0L);
 
     @Override
     public void configure() throws Exception {
-        koodistoUri = trim(koodistoUri);
+        buildKoodistonKoodit();
+        buildKoodiversioKoodis();
+        buildKaikkiVersiotiedot();
+    }
 
-        // Reitti, joka hakee tietyn koodiston koodit
-        TypeReference<List<KoodiDto>> dtoType = new TypeReference<List<KoodiDto>>() {};
-        fromHttpGetToDtos(REITTI_HAE_KOODISTON_KOODIT, koodistoUri,
-                headers().path("${in.headers.koodistoTyyppi}/koodi"), dtoType);
+    protected void buildKaikkiVersiotiedot() {
+        // Reitti, joka hakee koodiston versiotiedot
+        fromHttpGetToDtos(REITTI_HAE_KOODISTON_VERSIOT, trim(koodistoUri),
+                headers().path("${in.headers.koodistoTyyppi}"),
+                new TypeReference<List<KoodistoVersioDto>>() {} );
+    }
 
+    protected void buildKoodiversioKoodis() {
         // Seuraava reitti hakee tietyn koodistoversion kaikki koodit
-        fromHttpGetToDtos(REITTI_HAE_KOODISTO_VERSION_KOODIT, koodistoUri,
+        fromHttpGetToDtos(REITTI_HAE_KOODISTO_VERSION_KOODIT, trim(koodistoUri),
                 headers()
                     .path("${in.headers.koodistoTyyppi}/koodi")
                     .query("koodistoVersio=${in.headers.koodistoVersio}"),
-                dtoType);
+                new TypeReference<List<KoodiDto>>() {});
+    }
 
-        // Reitti, joka hakee koodiston versiotiedot
-        fromHttpGetToDtos(REITTI_HAE_KOODISTON_VERSIOT, koodistoUri,
-                headers().path("${in.headers.koodistoTyyppi}"),
-                new TypeReference<List<KoodistoVersioDto>>() {} );
+    protected void buildKoodistonKoodit() {
+        // Reitti, joka hakee tietyn koodiston koodit
+        fromHttpGetToDtos(REITTI_HAE_KOODISTON_KOODIT, trim(koodistoUri),
+                headers().path("${in.headers.koodistoTyyppi}/koodi"),
+                new TypeReference<List<KoodiDto>>() {});
     }
 
     @Override

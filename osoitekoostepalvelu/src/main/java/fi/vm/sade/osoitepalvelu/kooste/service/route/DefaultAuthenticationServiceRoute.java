@@ -49,15 +49,12 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
 
     @Override
     public void configure() throws Exception {
-        headers(
-                from(ROUTE_KAYTTOOIKESURYHMAS),
-                headers()
-                        .get()
-                        .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
-        )
-        .to(trim(authenticationServiceKayttooikeusryhmasRestUrl))
-        .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
+        buildKayttoOikeusryhmas();
+        buildHenkilo();
+    }
 
+    protected void buildHenkilo() {
+        Debugger authenticationCallInOutDebug = debug(ROUTE_HENKILOS+".AuthenticationServiceCall");
         headers(
                 from(ROUTE_HENKILOS),
                 headers()
@@ -65,8 +62,24 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                             .query("ht=VIRKAILIJA&ooids=${in.headers.ooids}")
                     .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
+        .process(authenticationCallInOutDebug)
         .to(trim(authenticationServiceHenkiloServiceRestUrl))
+        .process(authenticationCallInOutDebug)
         .process(jsonToDto(new TypeReference<List<HenkiloDto>>() {}));
+    }
+
+    protected void buildKayttoOikeusryhmas() {
+        Debugger authenticationCallInOutDebug = debug(ROUTE_KAYTTOOIKESURYHMAS+".AuthenticationServiceCall");
+        headers(
+                from(ROUTE_KAYTTOOIKESURYHMAS),
+                headers()
+                        .get()
+                        .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
+        )
+        .process(authenticationCallInOutDebug)
+        .to(trim(authenticationServiceKayttooikeusryhmasRestUrl))
+        .process(authenticationCallInOutDebug)
+        .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
     }
 
     @Override

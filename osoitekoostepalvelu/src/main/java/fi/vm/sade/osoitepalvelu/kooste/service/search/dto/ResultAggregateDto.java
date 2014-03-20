@@ -19,7 +19,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 import java.io.Serializable;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
 
@@ -31,17 +31,17 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
 public class ResultAggregateDto implements Serializable {
     private static final long serialVersionUID = 1483746476279296389L;
     
-    private OrganisaatioResultDto organisaatio;
+    private OrganisaatioTiedotDto organisaatio;
     private OrganisaatioYhteystietoDto henkilo;
     private OsoitteistoDto osoite;
 
-    public ResultAggregateDto(OrganisaatioResultDto organisaatio, OrganisaatioYhteystietoDto henkilo, OsoitteistoDto osoite) {
+    public ResultAggregateDto(OrganisaatioTiedotDto organisaatio, OrganisaatioYhteystietoDto henkilo, OsoitteistoDto osoite) {
         this.organisaatio = organisaatio;
         this.henkilo = henkilo;
         this.osoite = osoite;
     }
 
-    public OrganisaatioResultDto getOrganisaatio() {
+    public OrganisaatioTiedotDto getOrganisaatio() {
         return organisaatio;
     }
 

@@ -26,6 +26,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -67,5 +70,14 @@ public class OrganisaatioServiceRouteTest {
         List<OrganisaatioYhteystietoHakuResultDto> yhteystietos = organisaatioServiceRoute
                 .findOrganisaatioYhteystietos(criteria);
         assertTrue( yhteystietos.size() > 0 );
+    }
+
+    @Test
+    public void testFindOrganisaatioByOid() {
+        String testOid = "1.2.246.562.10.00000000001";
+        OrganisaatioYksityiskohtaisetTiedotDto tiedot
+                = organisaatioServiceRoute.getdOrganisaatioByOid(testOid);
+        assertNotNull(tiedot);
+        assertEquals(testOid, tiedot.getOid());
     }
 }

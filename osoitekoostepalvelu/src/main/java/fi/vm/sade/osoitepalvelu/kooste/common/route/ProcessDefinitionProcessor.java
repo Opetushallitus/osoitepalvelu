@@ -19,6 +19,8 @@ package fi.vm.sade.osoitepalvelu.kooste.common.route;
 import org.apache.camel.model.ProcessorDefinition;
 
 /**
+ * A helper for Camel route building to append  a set of definitions to the process.
+ *
  * User: ratamaa
  * Date: 3/19/14
  * Time: 1:53 PM

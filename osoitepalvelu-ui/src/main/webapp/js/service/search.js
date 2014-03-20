@@ -12,7 +12,9 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
         _addressFields = angular.copy(AddressFields),
         _receiverFields = angular.copy(ReceiverTypes),
         _deletedIds = [],
-        _selectedSearch = null;
+        _selectedSearch = null,
+        _resultData = null,
+        _searchReady=false;
 
     var _addColumnData = function(v) {
         if( v.henkiloOid ) {
@@ -96,7 +98,20 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
         _terms = angular.copy(terms);
     };
 
-    this.search = function(success, error) {
+
+    var _transformResults = function(data, success) {
+        angular.forEach(data.rows, function(row) {
+            _addColumnData(row);
+        });
+        var filteredRows = $filter('filter')(data.rows,
+                FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi"]) );
+        success( {
+            presentation: data.presentation,
+            rows: filteredRows
+        } );
+    };
+
+    var _performSearch = function(success, error) {
         $log.info(_searchType);
         $log.info(_addressFields);
         $log.info(_targetGroups);
@@ -113,18 +128,23 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
                 nonIncludedOrganisaatioOids: _deletedIds
             },
             callback: function(data) {
-                angular.forEach(data.rows, function(row) {
-                    _addColumnData(row);
-                });
-                var filteredRows = $filter('filter')(data.rows,
-                        FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi"]) );
-                success( {
-                    presentation: data.presentation,
-                    rows: filteredRows
-                } );
+                _resultData = data;
+                _transformResults(data, success);
             },
             errorCallback: (error || commonErrorHandler)
         });
+    };
+
+    this.results = function(success, error) {
+        if(_resultData===null) {
+            _performSearch(success);
+        } else {
+            _transformResults(_resultData, success);
+        }
+    };
+
+    this.search = function(success, error) {
+        _performSearch(success, error);
     };
 
     this.downloadExcel = function(success, error) {
@@ -155,5 +175,13 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
 
     this.getSelectedSearch = function() {
         return _selectedSearch;
+    };
+
+    this.setSearchReady = function() {
+        _searchReady = true;
+    };
+
+    this.isSearchReady = function() {
+        return _searchReady;
     };
 });

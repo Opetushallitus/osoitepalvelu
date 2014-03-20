@@ -16,18 +16,20 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 
+import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.dao.koodistoCache.KoodistoCacheRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodiItem;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.*;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter.KoodistoDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.KoodistoRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoTila;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.UiKoodiItemByKoodiUriPredicate;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
@@ -62,6 +64,9 @@ public class DefaultKoodistoService implements KoodistoService {
     @Value("#{config.cacheTimeoutMillis}")
     private long cacheTimeoutMillis;
 
+    private Map<KoodistoCache.CacheKey, MemoryCacheHolder> memoryCache
+            = new HashMap<KoodistoCache.CacheKey, MemoryCacheHolder>();
+
     @Override
     public List<UiKoodiItemDto> findOppilaitosTyyppiOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.OPPILAITOSTYYPPI);
@@ -85,6 +90,31 @@ public class DefaultKoodistoService implements KoodistoService {
     @Override
     public List<UiKoodiItemDto> findKuntaOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.KUNTA);
+    }
+
+    @Override
+    public UiKoodiItemDto findKuntaByKoodiUri(Locale locale, String koodiUri) {
+        Iterator<UiKoodiItemDto> i = Collections2.filter(findKuntaOptions(locale),
+                new UiKoodiItemByKoodiUriPredicate(koodiUri)).iterator();
+        if (i.hasNext()) {
+            return i.next();
+        }
+        return null;
+    }
+
+    @Override
+    public List<UiKoodiItemDto> findPostinumeroOptions(Locale locale) {
+        return findKoodistoByTyyppi(locale, KoodistoTyyppi.POSTINUMERO);
+    }
+
+    @Override
+    public UiKoodiItemDto findPostinumeroByKoodiUri(Locale locale, String koodiUri) {
+        Iterator<UiKoodiItemDto> i = Collections2.filter(findPostinumeroOptions(locale),
+                new UiKoodiItemByKoodiUriPredicate(koodiUri)).iterator();
+        if (i.hasNext()) {
+            return i.next();
+        }
+        return null;
     }
 
     @Override
@@ -143,19 +173,43 @@ public class DefaultKoodistoService implements KoodistoService {
         T get();
     }
 
+    protected class MemoryCacheHolder {
+        private DateTime createdAt;
+        private List<UiKoodiItemDto> items;
+
+        public MemoryCacheHolder(DateTime createdAt, List<UiKoodiItemDto> items) {
+            this.createdAt = createdAt;
+            this.items = items;
+        }
+
+        public DateTime getCreatedAt() {
+            return createdAt;
+        }
+
+        public List<UiKoodiItemDto> getItems() {
+            return items;
+        }
+    }
+
     protected List<UiKoodiItemDto> cached(Cacheable<List<UiKoodiItemDto>> provider, KoodistoTyyppi tyyppi, Locale locale) {
-        KoodistoCache.KoodistoTyyppi cacheType = KoodistoCache.KoodistoTyyppi.valueOf(tyyppi.name());
-        long cacheLiveTime = cacheTimeoutMillis;
-        boolean cacheUsed = koodistoCacheRepository != null && cacheLiveTime >= 0;
+        KoodistoCache.KoodistoTyyppi cacheType = getCacheType(tyyppi);
+        boolean cacheUsed = isCacheUsed();
         if (!cacheUsed) {
             logger.info("CACHE DISABLED.");
             return provider.get();
         }
+        KoodistoCache.CacheKey key = new KoodistoCache.CacheKey(cacheType, locale);
+        MemoryCacheHolder holder = memoryCache.get(key);
+        if (holder != null && isCacheUsable(holder.getCreatedAt())) {
+            // Hit memory cache:
+            return holder.getItems();
+        }
+
         KoodistoCache cache = koodistoCacheRepository.findCacheByTypeAndLocale(cacheType, locale);
-        boolean refresh = cache == null || cache.getUpdatedAt().plus(cacheLiveTime).compareTo(new DateTime()) < 0;
+        boolean refresh = cache == null || !isCacheUsable(cache.getUpdatedAt());
         if (cache == null) {
             cache = new KoodistoCache();
-            cache.setKey(new KoodistoCache.CacheKey(cacheType, locale));
+            cache.setKey(key);
         }
         List<UiKoodiItemDto> items;
         if (refresh) {
@@ -166,9 +220,22 @@ public class DefaultKoodistoService implements KoodistoService {
             logger.info("SAVED CACHED ITEMS FOR KoodistoTyyppi: " + tyyppi);
         } else {
             items = dtoConverter.convert(cache.getItems(), new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class);
-            logger.info("GOT CACHED RESULT FOR KoodistoTyyppi: " + tyyppi + " updated at " + cache.getUpdatedAt());
+            logger.info("Got cached results for KoodistoTyyppi: " + tyyppi + " updated at " + cache.getUpdatedAt());
         }
+        memoryCache.put(key, new MemoryCacheHolder(cache.getUpdatedAt(), items));
         return items;
+    }
+
+    private KoodistoCache.KoodistoTyyppi getCacheType(KoodistoTyyppi tyyppi) {
+        return KoodistoCache.KoodistoTyyppi.valueOf(tyyppi.name());
+    }
+
+    private boolean isCacheUsable(DateTime updatedAt) {
+        return updatedAt.plus(cacheTimeoutMillis).compareTo(new DateTime()) > 0;
+    }
+
+    private boolean isCacheUsed() {
+        return koodistoCacheRepository != null && cacheTimeoutMillis >= 0;
     }
 
     protected List<UiKoodiItemDto> findKoodistoByTyyppi(final Locale locale, final KoodistoTyyppi tyyppi) {

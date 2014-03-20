@@ -19,6 +19,7 @@ package fi.vm.sade.osoitepalvelu.service.mock;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +31,20 @@ import java.util.List;
  */
 public class OrganisaatioServiceRouteMock implements OrganisaatioServiceRoute {
     private List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
+    private OrganisaatioYksityiskohtaisetTiedotDto yksityiskohtaisetTiedotByOid;
 
     @Override
     public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(OrganisaatioYhteystietoCriteriaDto criteria) {
         return organisaatioYhteystietoResults;
+    }
+
+    @Override
+    public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(String oid) {
+        return yksityiskohtaisetTiedotByOid;
+    }
+
+    public void setYksityiskohtaisetTiedotByOid(OrganisaatioYksityiskohtaisetTiedotDto yksityiskohtaisetTiedotByOid) {
+        this.yksityiskohtaisetTiedotByOid = yksityiskohtaisetTiedotByOid;
     }
 
     public void setOrganisaatioYhteystietoResults(List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults) {

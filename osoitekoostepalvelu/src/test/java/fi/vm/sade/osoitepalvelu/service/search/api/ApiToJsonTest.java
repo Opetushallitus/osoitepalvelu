@@ -61,7 +61,7 @@ public class ApiToJsonTest {
     public void generateResultsJsonExample() {
         OrganisaatioResultsDto results = new OrganisaatioResultsDto();
         
-        OrganisaatioResultDto result = new OrganisaatioResultDto();
+        OrganisaatioTiedotDto result = new OrganisaatioTiedotDto();
         List<String> tyypit = new ArrayList<String>();
         tyypit.add("Opetuspiste");
         HashMap<String, String> nimi = new HashMap<String, String>();
@@ -111,7 +111,7 @@ public class ApiToJsonTest {
         
         results.addResult(result);
         
-        result = new OrganisaatioResultDto();
+        result = new OrganisaatioTiedotDto();
         tyypit = new ArrayList<String>();
         tyypit.add("Toimipiste");
         result.setTyypit(tyypit);
