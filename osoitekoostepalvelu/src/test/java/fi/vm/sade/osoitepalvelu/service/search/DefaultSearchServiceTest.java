@@ -17,12 +17,15 @@
 package fi.vm.sade.osoitepalvelu.service.search;
 
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTargetGroupDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.DefaultSearchService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 import fi.vm.sade.osoitepalvelu.service.mock.KoodistoServiceRouteMock;
 import fi.vm.sade.osoitepalvelu.service.mock.OrganisaatioServiceRouteMock;
@@ -81,7 +84,7 @@ public class DefaultSearchServiceTest {
         nimi.put("fi", "Koulu");
         nimi.put("sv", "Skolan");
         yhteystieto.setNimi(nimi);
-        yhteystieto.setTyypit(Arrays.asList(new String[]{"Peruskoulu"}));
+        yhteystieto.setTyypit(Arrays.asList(new String[]{"Oppilaitos"}));
         List<OrganisaatioYhteysosoiteDto> osoittees = new ArrayList<OrganisaatioYhteysosoiteDto>();
         OrganisaatioYhteysosoiteDto osoite = new OrganisaatioYhteysosoiteDto();
         osoite.setKieli("fi");
@@ -95,7 +98,12 @@ public class DefaultSearchServiceTest {
         organisaatioRouteMock.setOrganisaatioYhteystietoResults(yhteystietos);
 
         SearchTermsDto terms = new SearchTermsDto();
-        OrganisaatioResultsDto results = this.defaultSearchService.find(terms);
+        List<SearchTargetGroupDto> targetGroups = new ArrayList<SearchTargetGroupDto>();
+        SearchTargetGroupDto targetGroup = new SearchTargetGroupDto();
+        targetGroup.setType(SearchTargetGroup.GroupType.OPPILAITOKSET);
+        targetGroups.add(targetGroup);
+        terms.setTargetGroups(targetGroups);
+        OrganisaatioResultsDto results = this.defaultSearchService.find(terms, new DefaultCamelRequestContext());
         assertNotNull(results.getResults());
         assertEquals(1, results.getResults().size());
         OrganisaatioTiedotDto firstResult = results.getResults().get(0);

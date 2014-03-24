@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
@@ -24,6 +25,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -83,16 +85,18 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     }
 
     @Override
-    public List<KayttooikesuryhmaDto> findKayttooikeusryhmas() {
-        return getCamelTemplate().requestBody(ROUTE_KAYTTOOIKESURYHMAS, "", List.class);
+    public List<KayttooikesuryhmaDto> findKayttooikeusryhmas(CamelRequestContext requestContext) {
+        return sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_KAYTTOOIKESURYHMAS, "",
+                new HashMap<String, Object>(), requestContext, List.class);
     }
 
     // TODO: TEST ME, does not exists in luokka yet
     @Override
-    public List<HenkiloDto> findHenkilosByOrganisaatioOids(List<String> ooids) {
-        return getCamelTemplate().requestBodyAndHeaders(ROUTE_HENKILOS, "",
+    public List<HenkiloDto> findHenkilosByOrganisaatioOids(List<String> ooids, CamelRequestContext requestContext) {
+        return sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_HENKILOS, "",
                 headerValues()
                         .add("ooids", StringHelper.join(",", ooids.toArray(new String[0])))
-                        .map(), List.class);
+                        .map(),
+                requestContext, List.class);
     }
 }

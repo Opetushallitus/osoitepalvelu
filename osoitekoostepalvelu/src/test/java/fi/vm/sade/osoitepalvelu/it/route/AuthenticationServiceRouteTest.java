@@ -20,6 +20,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultAuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
@@ -59,7 +60,8 @@ public class AuthenticationServiceRouteTest {
 
     @Test
     public void testFindKayttooikeusryhmas() {
-        List<KayttooikesuryhmaDto> ryhmas = authenticationServiceRoute.findKayttooikeusryhmas();
+        List<KayttooikesuryhmaDto> ryhmas = authenticationServiceRoute.findKayttooikeusryhmas(
+                new DefaultCamelRequestContext());
         assertTrue( ryhmas.size() > 0 );
     }
 
@@ -70,9 +72,10 @@ public class AuthenticationServiceRouteTest {
         criteria.setKuntaList(Arrays.asList(new String[]{"kunta_604", "kunta_400"}));
         criteria.setLimit(100);
         List<OrganisaatioYhteystietoHakuResultDto> yhteystietos = organisaatioServiceRoute
-                .findOrganisaatioYhteystietos(criteria);
+                .findOrganisaatioYhteystietos(criteria, new DefaultCamelRequestContext());
 
-        List<HenkiloDto> henkilos = authenticationServiceRoute.findHenkilosByOrganisaatioOids(oids(yhteystietos));
+        List<HenkiloDto> henkilos = authenticationServiceRoute.findHenkilosByOrganisaatioOids( oids(yhteystietos),
+                new DefaultCamelRequestContext());
         assertTrue( yhteystietos.size() > 0 );
     }
 

@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 
 import com.google.common.collect.Collections2;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.dao.koodistoCache.KoodistoCacheRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodiItem;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
@@ -162,7 +163,8 @@ public class DefaultKoodistoService implements KoodistoService {
         return cached(new Cacheable<List<UiKoodiItemDto>>() {
             @Override
             public List<UiKoodiItemDto> get() {
-                List<KayttooikesuryhmaDto> kayttoikeusryhmas = authenticationServiceRoute.findKayttooikeusryhmas();
+                List<KayttooikesuryhmaDto> kayttoikeusryhmas = authenticationServiceRoute
+                        .findKayttooikeusryhmas(new DefaultCamelRequestContext());
                 return dtoConverter.convert( kayttoikeusryhmas, new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
                         locale );
             }

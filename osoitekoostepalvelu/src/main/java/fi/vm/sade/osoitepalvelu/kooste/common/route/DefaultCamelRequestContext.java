@@ -14,24 +14,20 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.search;
+package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
-import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
 
 /**
  * User: ratamaa
- * Date: 2/17/14
- * Time: 2:53 PM
+ * Date: 3/24/14
+ * Time: 12:46 PM
  */
-public interface SearchService {
+public class DefaultCamelRequestContext implements CamelRequestContext {
+    private CasTicketCache ticketCache = new CasTicketCache();
 
-    /**
-     * @param terms to search with
-     * @param requestContext the context for HTTP request received by the application to operate in
-     * @return organisaatio results
-     */
-    OrganisaatioResultsDto find( SearchTermsDto terms, CamelRequestContext requestContext );
-
+    @Override
+    public CasTicketCache getTicketCache() {
+        return this.ticketCache;
+    }
 }

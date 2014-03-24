@@ -18,6 +18,8 @@ package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
 import com.wordnik.swagger.annotations.Api;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.mvc.dto.FilteredSearchParametersDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultTransformerService;
@@ -71,12 +73,13 @@ public class SeachController extends AbstractMvcController implements Serializab
     @RequestMapping(value="list.json", method = RequestMethod.POST)
     public @ResponseBody SearchResultsDto list( @RequestBody FilteredSearchParametersDto searchParameters,
                                                 @RequestParam("lang") String lang ) {
+        CamelRequestContext context = new DefaultCamelRequestContext();
         searchParameters.getSearchTerms().setLocale(parseLocale(lang));
-        OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms());
+        OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms(), context);
         SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
                 searchParameters.getSearchTerms(),
                 searchParameters.getNonIncludedOrganisaatioOids() );
-        return resultTransformerService.transformToResultRows(results.getResults(), presentation);
+        return resultTransformerService.transformToResultRows(results.getResults(), presentation, context);
     }
 
     /**
@@ -117,11 +120,13 @@ public class SeachController extends AbstractMvcController implements Serializab
         }
         this.storedParameters.remove(storeKey); // <- not really REST here :/
         searchParameters.getSearchTerms().setLocale(parseLocale(lang));
-        OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms());
+        CamelRequestContext context = new DefaultCamelRequestContext();
+        OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms(), context);
         SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
                 searchParameters.getSearchTerms(),
                 searchParameters.getNonIncludedOrganisaatioOids() );
-        final SearchResultsDto searchResults = resultTransformerService.transformToResultRows(results.getResults(), presentation);
+        final SearchResultsDto searchResults = resultTransformerService
+                .transformToResultRows(results.getResults(), presentation, context);
         return new AbstractExcelView() {
             @Override
             protected void buildExcelDocument(Map<String, Object> model, HSSFWorkbook workbook, HttpServletRequest request,

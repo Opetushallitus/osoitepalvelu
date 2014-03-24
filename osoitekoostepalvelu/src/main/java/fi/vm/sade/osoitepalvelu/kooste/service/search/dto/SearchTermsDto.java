@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
+import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTargetGroupDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTermDto;
 
@@ -76,6 +77,17 @@ public class SearchTermsDto implements Serializable {
 
     public void setReceiverFields(List<String> receiverFields) {
         this.receiverFields = receiverFields;
+    }
+
+    public boolean containsAnyTargetGroup(SearchTargetGroup.GroupType ...groupTypes) {
+        for (SearchTargetGroupDto targetGroup : targetGroups) {
+            for (SearchTargetGroup.GroupType type : groupTypes) {
+                if (type == targetGroup.getType()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public List<SearchTargetGroupDto> getTargetGroups() {

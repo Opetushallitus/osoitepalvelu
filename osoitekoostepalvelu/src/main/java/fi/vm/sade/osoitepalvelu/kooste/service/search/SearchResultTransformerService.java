@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
+import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -36,10 +37,12 @@ public interface SearchResultTransformerService {
      *
      * @param results to be transformed
      * @param presentation holding the preferred locale to filter positosoites with
+     * @param requestContext the context for HTTP request received by the application to operate in
      * @return the results, rows for presentation
      */
     SearchResultsDto transformToResultRows(List<OrganisaatioTiedotDto> results,
-                                                   SearchResultPresentation presentation);
+                                                   SearchResultPresentation presentation,
+                                                   CamelRequestContext requestContext);
 
     /**
      * @param workbook the excel workbook to produce the rows to

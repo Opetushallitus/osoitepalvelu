@@ -17,8 +17,10 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
 import com.googlecode.ehcache.annotations.Cacheable;
+import com.googlecode.ehcache.annotations.PartialCacheKey;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
@@ -27,6 +29,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -90,16 +93,19 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     @Override
     @Cacheable(cacheName = "organisaatioHakuResultsCache")
     public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
-            OrganisaatioYhteystietoCriteriaDto criteria) {
-        return getCamelTemplate().requestBody(ORGANSIAATIOHAKU_ENDPOINT, criteria, List.class);
+            @PartialCacheKey OrganisaatioYhteystietoCriteriaDto criteria,
+            CamelRequestContext requestContext) {
+        return sendBodyHeadersAndProperties( getCamelTemplate(), ORGANSIAATIOHAKU_ENDPOINT,
+                criteria, new HashMap<String, Object>(), requestContext, List.class);
     }
 
     @Override
     @Cacheable(cacheName = "organisaatioByOidCache")
-    public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(String oid) {
-        return getCamelTemplate().requestBodyAndHeaders(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT, "",
+    public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(@PartialCacheKey String oid,
+                                                                        CamelRequestContext requestContext) {
+        return sendBodyHeadersAndProperties( getCamelTemplate(), SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT, "",
                 headerValues()
-                        .add("oid", oid)
-                        .map(), OrganisaatioYksityiskohtaisetTiedotDto.class);
+                    .add("oid", oid)
+                .map(), requestContext, OrganisaatioYksityiskohtaisetTiedotDto.class);
     }
 }

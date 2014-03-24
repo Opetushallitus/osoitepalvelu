@@ -30,13 +30,36 @@ public class SearchTargetGroup implements Serializable {
 
     public enum GroupType {
         JARJESTAJAT_YLLAPITAJAT,
-        OPPILAITOKSET,
-        OPETUSPISTEET,
-        OPPISOPIMUSTOIMPISTEET,
-        MUUT_ORGANISAATIOT,
+        OPPILAITOKSET("Oppilaitos"),
+        OPETUSPISTEET("Opetuspiste"),
+        OPPISOPIMUSTOIMPISTEET("Oppisopimustoimipiste"),
+        MUUT_ORGANISAATIOT("Muu organisaatio"),
         TUTKINTOTOIMIKUNNAT,
         KOULUTA_KAYTTAJAT,
         AIPAL_KAYTTAJAT;
+
+        private final String organisaatioPalveluTyyppiArvo;
+
+        private GroupType() {
+            this.organisaatioPalveluTyyppiArvo = null;
+        }
+        private GroupType(String organisaatioPalveluTyyppiArvo) {
+            this.organisaatioPalveluTyyppiArvo = organisaatioPalveluTyyppiArvo;
+        }
+
+        public String getOrganisaatioPalveluTyyppiArvo() {
+            return organisaatioPalveluTyyppiArvo;
+        }
+
+        public static GroupType[] getOrganisaatioPalveluTypes() {
+            List<GroupType> types = new ArrayList<GroupType>();
+            for (GroupType type : values()) {
+                if (type.getOrganisaatioPalveluTyyppiArvo() != null) {
+                    types.add(type);
+                }
+            }
+            return types.toArray(new GroupType[0]);
+        }
     };
 
     public enum TargetType {

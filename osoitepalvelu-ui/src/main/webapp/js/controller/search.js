@@ -155,7 +155,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
     };
 
     $scope.isSearchAllowed = function() {
-        return $scope.isTermsShown();
+        return $scope.isTermsShown() && $scope.visibleTargetGroups.length > 0;
     };
 
     $scope.saveSearch = function() {

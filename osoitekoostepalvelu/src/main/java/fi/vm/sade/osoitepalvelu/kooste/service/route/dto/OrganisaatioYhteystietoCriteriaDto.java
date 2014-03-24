@@ -30,7 +30,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     private List<String> kieliList = new ArrayList<String>();
     private List<String> oppilaitostyyppiList = new ArrayList<String>();
     private List<String> vuosiluokkaList = new ArrayList<String>();
-    private Integer limit = 0;
+    private Integer limit = 999999999;
 
     public List<String> getKieliList() {
         return kieliList;
@@ -48,14 +48,6 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         this.kuntaList = kuntaList;
     }
 
-    public Integer getLimit() {
-        return limit;
-    }
-
-    public void setLimit(Integer limit) {
-        this.limit = limit;
-    }
-
     public List<String> getOppilaitostyyppiList() {
         return oppilaitostyyppiList;
     }
@@ -70,6 +62,14 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
 
     public void setVuosiluokkaList(List<String> vuosiluokkaList) {
         this.vuosiluokkaList = vuosiluokkaList;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
     }
 
     @Override

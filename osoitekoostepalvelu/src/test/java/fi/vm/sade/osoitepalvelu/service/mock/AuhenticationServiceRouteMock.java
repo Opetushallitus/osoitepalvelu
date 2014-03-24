@@ -16,9 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.service.mock;
 
+import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +34,12 @@ public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute
     private List<HenkiloDto> henkilos = new ArrayList<HenkiloDto>();
 
     @Override
-    public List<KayttooikesuryhmaDto> findKayttooikeusryhmas() {
+    public List<KayttooikesuryhmaDto> findKayttooikeusryhmas(CamelRequestContext context) {
         return kayttooikesuryhmas;
     }
 
     @Override
-    public List<HenkiloDto> findHenkilosByOrganisaatioOids(List<String> ooids) {
+    public List<HenkiloDto> findHenkilosByOrganisaatioOids(List<String> ooids, CamelRequestContext context) {
         return henkilos;
     }
 

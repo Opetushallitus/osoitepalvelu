@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.webapp;
 
 import fi.vm.sade.generic.healthcheck.HealthChecker;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
 import org.apache.camel.util.StopWatch;
@@ -40,7 +41,8 @@ public class AuthenticationServiceHealthCheck implements HealthChecker {
     @Override
     public Object checkHealth() throws Throwable {
         final StopWatch watch = new StopWatch();
-        final List<KayttooikesuryhmaDto> kayttoikeusryhmas = authenticationServiceRoute.findKayttooikeusryhmas();
+        final List<KayttooikesuryhmaDto> kayttoikeusryhmas = authenticationServiceRoute.findKayttooikeusryhmas(
+                new DefaultCamelRequestContext());
         final long resultTook = watch.stop();
         return new LinkedHashMap(){{
             put("status", "OK");

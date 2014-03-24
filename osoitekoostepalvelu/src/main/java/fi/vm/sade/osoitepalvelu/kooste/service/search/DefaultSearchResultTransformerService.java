@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
 import com.google.common.collect.Collections2;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
@@ -65,8 +66,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
     @Override
     public SearchResultsDto transformToResultRows(List<OrganisaatioTiedotDto> results,
-                                                          SearchResultPresentation presentation) {
-        resolveRelatedVisibleDetails(results, presentation);
+                                                          SearchResultPresentation presentation,
+                                                          CamelRequestContext context) {
+        resolveRelatedVisibleDetails(results, presentation, context);
 
         Set<ResultAggregateDto> aggregates = new LinkedHashSet<ResultAggregateDto>();
         for (OrganisaatioTiedotDto result : results) {
@@ -100,7 +102,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
     }
 
     protected void resolveRelatedVisibleDetails(List<OrganisaatioTiedotDto> results,
-                                                SearchResultPresentation presentation) {
+                                                SearchResultPresentation presentation,
+                                                CamelRequestContext context) {
         if (organisaatioServiceRoute == null) {
             return;
         }
@@ -128,7 +131,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                         to.setWwwOsoite(yhteystietos.next().getWww());
                     }
                 }
-            });
+            }, context);
         }
 
         if (presentation.isYhteyshenkiloEmailIncluded()) {
@@ -145,7 +148,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                         to.setEmailOsoite(yhteystietos.next().getEmail());
                     }
                 }
-            });
+            }, context);
         }
 
         if (presentation.isPuhelinnumeroIncluded()) {
@@ -162,7 +165,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                         to.setPuhelinnumero(yhteystietos.next().getNumero());
                     }
                 }
-            });
+            }, context);
         }
 
         // TODO: ...
@@ -182,7 +185,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         protected abstract void copy(OrganisaatioYksityiskohtaisetTiedotDto from, OrganisaatioTiedotDto to);
     }
 
-    protected void copyDetails(List<OrganisaatioTiedotDto> results, DetailCopier copier) {
+    protected void copyDetails(List<OrganisaatioTiedotDto> results, DetailCopier copier, CamelRequestContext context) {
         for (OrganisaatioTiedotDto result : results) {
             String oid = result.getOid();
             if (oid != null && copier.isMissing(result)) {
@@ -190,7 +193,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 if (copier.cache.containsKey(oid)) {
                     details = copier.cache.get(oid);
                 } else {
-                    details = organisaatioServiceRoute.getdOrganisaatioByOid(oid);
+                    details = organisaatioServiceRoute.getdOrganisaatioByOid(oid, context);
                     copier.cache.put(oid, details);
                 }
                 copier.copy( details, result );

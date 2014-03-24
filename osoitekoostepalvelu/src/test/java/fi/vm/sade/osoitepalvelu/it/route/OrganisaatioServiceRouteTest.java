@@ -16,13 +16,11 @@
 
 package fi.vm.sade.osoitepalvelu.it.route;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
@@ -35,13 +33,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import scala.actors.threadpool.Arrays;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: ratamaa
@@ -65,10 +60,9 @@ public class OrganisaatioServiceRouteTest {
     @Test
     public void testFindOrganisaatiosByKuntas() {
         OrganisaatioYhteystietoCriteriaDto criteria = new OrganisaatioYhteystietoCriteriaDto();
-        criteria.setKuntaList(Arrays.asList(new String[] {"kunta_604", "kunta_400"}));
-        criteria.setLimit(100);
+        criteria.setKuntaList(Arrays.asList(new String[]{"kunta_604", "kunta_400"}));
         List<OrganisaatioYhteystietoHakuResultDto> yhteystietos = organisaatioServiceRoute
-                .findOrganisaatioYhteystietos(criteria);
+                .findOrganisaatioYhteystietos(criteria, new DefaultCamelRequestContext());
         assertTrue( yhteystietos.size() > 0 );
     }
 
@@ -76,7 +70,7 @@ public class OrganisaatioServiceRouteTest {
     public void testFindOrganisaatioByOid() {
         String testOid = "1.2.246.562.10.00000000001";
         OrganisaatioYksityiskohtaisetTiedotDto tiedot
-                = organisaatioServiceRoute.getdOrganisaatioByOid(testOid);
+                = organisaatioServiceRoute.getdOrganisaatioByOid(testOid, new DefaultCamelRequestContext());
         assertNotNull(tiedot);
         assertEquals(testOid, tiedot.getOid());
     }

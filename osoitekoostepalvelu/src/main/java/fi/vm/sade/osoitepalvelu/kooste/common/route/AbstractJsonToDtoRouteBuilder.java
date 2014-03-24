@@ -18,7 +18,9 @@ package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.LazyCasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
 import org.apache.camel.*;
 import org.apache.camel.model.LoadBalanceDefinition;
@@ -26,6 +28,7 @@ import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.util.ExchangeHelper;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,6 +53,7 @@ import java.util.Map.Entry;
 public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     public static final String CONTENT_TYPE_JSON = "application/json;charset=UTF-8";
     private static final int DEFAULT_RETRY_LIMIT = 10;
+    public static final String CAS_TICKET_CACHE_PROPERTY = "CasTicketCache";
 
     @Value("${web.url.cas}")
     private String casService;
@@ -128,8 +132,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             Debugger debug = debug("CasTicketDefinitionProcessor");
             return process.process(debug)
                     .process(new SetOutHeadersProcessor() {
-                protected Map<String, String> getHeaders() {
-                    return ticketProvider.provideTicketHeaders(service);
+                protected Map<String, String> getHeaders(Exchange exchange) {
+                    CasTicketCache cache = exchange.getProperty(CAS_TICKET_CACHE_PROPERTY, CasTicketCache.class);
+                    return new LazyCasTicketProvider(cache, ticketProvider).provideTicketHeaders(service);
                 }
             }).process(debug);
         }
@@ -159,12 +164,12 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         /**
          * @return the headers to set
          */
-        protected abstract Map<String,String> getHeaders();
+        protected abstract Map<String,String> getHeaders(Exchange exchange);
 
         @Override
         public final void process(Exchange exchange) throws Exception {
             if( exchange.getIn() != null ) {
-                Map<String,String> headers = getHeaders();
+                Map<String,String> headers = getHeaders(exchange);
                 for( Map.Entry<String,String> kv : headers.entrySet() ) {
                     exchange.getIn().setHeader(kv.getKey(), kv.getValue());
                 }
@@ -569,6 +574,73 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
          */
         public Map<String,Object> map() {
             return this.map;
+        }
+    }
+
+    /**
+     * @param template the ProducerTemplate
+     * @param endpointUri the endpoint URI
+     * @param body the Exchange In body
+     * @param headers the Exchange In headers
+     * @param requestContext the context within the application in which this Camel request is performed
+     * @param type to convert the output to
+     * @param <T> the type
+     * @return the results
+     * @throws CamelExecutionException
+     */
+    public<T> T sendBodyHeadersAndProperties(ProducerTemplate template, String endpointUri,
+                                             final Object body, final Map<String, Object> headers,
+                                             final CamelRequestContext requestContext,
+                                             Class<T> type) throws CamelExecutionException {
+        Map<String,Object> properties = new HashMap<String, Object>();
+        CasTicketCache cache = requestContext.getTicketCache();
+        if (cache != null) {
+            properties.put(CAS_TICKET_CACHE_PROPERTY, cache);
+        }
+        return sendBodyHeadersAndProperties(template, endpointUri, body, headers, properties, type);
+    }
+
+    /**
+     * Extension to ProducerTemplate's requestBodyAndHeaders with properties based on the implementation of
+     * org.apache.camel.impl.DefaultProducerTemplate (no such method exists in the ProducerTemplate)
+     *
+     * @param template the ProducerTemplate
+     * @param endpointUri the endpoint URI
+     * @param body the Exchange In body
+     * @param headers the Exchange In headers
+     * @param properties the properties to be set to the exchange
+     * @param type to convert the output to
+     * @param <T> the type
+     * @return the results
+     * @throws CamelExecutionException
+     */
+    public<T> T sendBodyHeadersAndProperties(ProducerTemplate template, String endpointUri,
+                 final Object body, final Map<String, Object> headers,
+                 final Map<String, Object> properties,
+                 Class<T> type) throws CamelExecutionException {
+        ExchangePattern pattern = ExchangePattern.InOut;
+        Endpoint endpoint = template.getCamelContext().getEndpoint(endpointUri);
+        if (endpoint == null) {
+            throw new NoSuchEndpointException(endpointUri);
+        }
+        Exchange exchange = template.send(endpoint, pattern, new Processor() {
+            public void process(Exchange exchange) throws Exception {
+                for (Map.Entry<String, Object> property : properties.entrySet()) {
+                    exchange.setProperty(property.getKey(), property.getValue());
+                }
+                Message in = exchange.getIn();
+                for (Map.Entry<String, Object> header : headers.entrySet()) {
+                    in.setHeader(header.getKey(), header.getValue());
+                }
+                in.setBody(body);
+            }
+        });
+        Object result = ExchangeHelper.extractResultBody(exchange, pattern);
+        if (pattern.isOutCapable()) {
+            return template.getCamelContext().getTypeConverter().convertTo(type, result);
+        } else {
+            // return null if not OUT capable
+            return null;
         }
     }
 }

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,7 +45,7 @@ public class DummySearchService implements SearchService {
     private Logger sadeLogger;
 
     @Override
-    public OrganisaatioResultsDto find(SearchTermsDto terms) {
+    public OrganisaatioResultsDto find(SearchTermsDto terms, CamelRequestContext context) {
         // TODO: Haun toteutus
         // Testataan käyttöliittymää suhteellisen suurella datamäärällä. 5000 oli vielä myös OK mutta
         // käytännössä jäävät yleensä pienemmäksi.
