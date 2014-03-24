@@ -48,6 +48,12 @@ public interface KoodistoRoute {
 
     List<KoodiDto> findKooditKoodistonVersiolleTyyppilla(KoodistoDto.KoodistoTyyppi koodistoTyyppi, long versio);
 
+    /**
+     * @param koodiUri the koodiUri to get children for
+     * @return the koodis
+     */
+    List<KoodiDto> findKoodisWithParent(String koodiUri);
+
     boolean isFindCounterUsed();
 
     void setFindCounterUsed(boolean findCounterUsed);

@@ -34,6 +34,7 @@ public class KoodistoServiceRouteMock implements KoodistoRoute {
     private Map<KoodistoVersioDto, List<KoodiDto>> koodis = new HashMap<KoodistoVersioDto, List<KoodiDto>>();
     private Map<KoodistoDto.KoodistoTyyppi, KoodistoDto> koodistosByTyyppis
             = new HashMap<KoodistoDto.KoodistoTyyppi, KoodistoDto>();
+    private Map<String, List<KoodiDto>> kuntasByMaakuntaUri = new HashMap<String, List<KoodiDto>>();
 
     public void add(KoodistoVersioDto versio, KoodiDto ...koodis ) {
         add(versio, Arrays.asList(koodis));
@@ -46,6 +47,10 @@ public class KoodistoServiceRouteMock implements KoodistoRoute {
             koodisto.setKoodistoUri(versio.getKoodistoTyyppi().getUri());
             koodistosByTyyppis.put(versio.getKoodistoTyyppi(), koodisto);
         }
+        applyVersiotieto(versio, koodis);
+    }
+
+    private void applyVersiotieto(KoodistoVersioDto versio, List<KoodiDto> koodis) {
         KoodistoDto koodisto = koodistosByTyyppis.get(versio.getKoodistoTyyppi());
         for (KoodiDto koodi : koodis) {
             koodi.setKoodisto(koodisto);
@@ -54,6 +59,15 @@ public class KoodistoServiceRouteMock implements KoodistoRoute {
             koodi.setVoimassaLoppuPvm(versio.getVoimassaLoppuPvm());
             koodi.setVersio(versio.getVersio());
         }
+    }
+
+    public void addKuntaByMaakunta(String maakuntaUri, KoodistoVersioDto versio, KoodiDto... koodis) {
+        addKuntaByMaakunta(maakuntaUri, versio, Arrays.asList(koodis));
+    }
+
+    public void addKuntaByMaakunta(String maakuntaUri, KoodistoVersioDto versio, List<KoodiDto> koodis) {
+        this.kuntasByMaakuntaUri.put(maakuntaUri, koodis);
+        applyVersiotieto(versio, koodis);
     }
 
     @Override
@@ -78,6 +92,15 @@ public class KoodistoServiceRouteMock implements KoodistoRoute {
                 return input.getVersio() == versio && input.getKoodistoTyyppi() == koodistoTyyppi;
             }
         }) );
+    }
+
+    @Override
+    public List<KoodiDto> findKoodisWithParent(String koodiUri) {
+        List<KoodiDto> kuntas = kuntasByMaakuntaUri.get(koodiUri);
+        if (kuntas == null) {
+            return new ArrayList<KoodiDto>();
+        }
+        return kuntas;
     }
 
     protected List<KoodiDto> collect(Collection<KoodistoVersioDto> versions) {

@@ -25,6 +25,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -43,8 +44,7 @@ import static org.junit.Assert.*;
  * Date: 3/17/14
  * Time: 10:12 AM
  */
-//@Ignore // missing system user authentication properties and the service in Luokka seems to result in 500 whenever
-// there is any property present in the request body's JSON criteria
+@Ignore // No specified username/password pairs in Bamboo for system user
 @Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })

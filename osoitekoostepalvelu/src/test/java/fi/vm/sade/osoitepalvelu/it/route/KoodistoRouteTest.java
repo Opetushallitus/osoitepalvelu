@@ -19,10 +19,10 @@ package fi.vm.sade.osoitepalvelu.it.route;
 import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultKoodistoRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultKoodistoRoute;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -62,5 +62,12 @@ public class KoodistoRouteTest {
                 versio.getVersio());
         Assert.assertNotNull(oppilaitosTyypit);
         Assert.assertTrue(oppilaitosTyypit.size() > 0);
+    }
+
+    @Test
+    public void testFindKuntasByMaakunta() {
+        List<KoodiDto> koodis = koodistoReitti.findKoodisWithParent("maakunta_12");
+        Assert.assertNotNull(koodis);
+        Assert.assertTrue(koodis.size() > 0);
     }
 }

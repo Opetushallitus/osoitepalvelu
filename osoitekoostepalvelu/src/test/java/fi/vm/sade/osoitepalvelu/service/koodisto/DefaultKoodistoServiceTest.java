@@ -74,6 +74,7 @@ public class DefaultKoodistoServiceTest {
         mock.add( versio(KoodistoTyyppi.KOULUTUSTOIMIJA, 1l), koodi("Testi") );
         mock.add( versio(KoodistoTyyppi.OPINTOALAOPH2002, 1l), koodi("Testi") );
         mock.add( versio(KoodistoTyyppi.ALUEHALLINTOVIRASTO, 1l), koodi("Uudenmaan aluehallintovirasto") );
+        mock.addKuntaByMaakunta("maakunta_12", versio(KoodistoTyyppi.KUNTA, 1l), koodi("Polvijärvi"), koodi("Kontiolahti") );
 
         koodistoService.setKoodistoRoute(mock);
     }
@@ -167,6 +168,13 @@ public class DefaultKoodistoServiceTest {
     public void testHaeAlueHallintoVirastoValinnat() {
         List<UiKoodiItemDto> optiot = koodistoService.findAlueHallintoVirastoOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.ALUEHALLINTOVIRASTO);
+    }
+
+    @Test
+    public void testFindKuntasByMaakuntas() {
+        List<UiKoodiItemDto> options = koodistoService.findKuntasByMaakuntaUri(LOCALE_FI, "maakunta_12");
+        assertNotNull(options);
+        assertTrue(options.size() > 0);
     }
 
     public static <T> void assertListNotEmpty(List<T> arvot, String arvojoukonNimi) {

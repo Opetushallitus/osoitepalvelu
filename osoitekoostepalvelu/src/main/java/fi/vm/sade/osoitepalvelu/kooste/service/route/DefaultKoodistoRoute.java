@@ -35,6 +35,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     private static final String REITTI_HAE_KOODISTON_KOODIT = "direct:haeKoodistonKoodit";
     private static final String REITTI_HAE_KOODISTO_VERSION_KOODIT = "direct:haeKoodistoVersionKoodit";
     private static final String REITTI_HAE_KOODISTON_VERSIOT = "direct:haeKoodistonVersiot";
+    private static final String REITTI_SIALTYY_YLAKOODIS = "direct:sisaltyYlakoodis";
 
     @Value("${koodiService.rest.url}")
     private String koodistoUri;
@@ -48,6 +49,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         buildKoodistonKoodit();
         buildKoodiversioKoodis();
         buildKaikkiVersiotiedot();
+        buildSisaltyyYlakoodis();
     }
 
     protected void buildKaikkiVersiotiedot() {
@@ -70,6 +72,12 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         // Reitti, joka hakee tietyn koodiston koodit
         fromHttpGetToDtos(REITTI_HAE_KOODISTON_KOODIT, trim(koodistoUri),
                 headers().path("${in.headers.koodistoTyyppi}/koodi"),
+                new TypeReference<List<KoodiDto>>() {});
+    }
+
+    protected void buildSisaltyyYlakoodis() {
+        fromHttpGetToDtos(REITTI_SIALTYY_YLAKOODIS, trim(koodistoUri),
+                headers().path("relaatio/sisaltyy-ylakoodit/${in.headers.koodiUri}"),
                 new TypeReference<List<KoodiDto>>() {});
     }
 
@@ -101,6 +109,14 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         List<KoodistoVersioDto> versiot = getCamelTemplate().requestBodyAndHeader(REITTI_HAE_KOODISTON_VERSIOT, "",
                 "koodistoTyyppi", koodistoTyyppi.getUri(), List.class);
         return versiot;
+    }
+
+    @Override
+    public List<KoodiDto> findKoodisWithParent(String koodiUri) {
+        @SuppressWarnings("unchecked")
+        List<KoodiDto> koodis = getCamelTemplate().requestBodyAndHeader(REITTI_SIALTYY_YLAKOODIS, "",
+                "koodiUri", koodiUri, List.class);
+        return koodis;
     }
 
     @Override

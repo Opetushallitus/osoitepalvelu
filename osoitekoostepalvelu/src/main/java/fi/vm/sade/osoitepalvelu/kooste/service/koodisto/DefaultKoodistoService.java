@@ -21,6 +21,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.dao.koodistoCache.KoodistoCacheRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodiItem;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
+import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter.KoodistoDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
@@ -45,7 +46,7 @@ import java.util.*;
  * Service, jonka kautta voidaan hakea koodiston eri arvojoukkoja.
  */
 @Service
-public class DefaultKoodistoService implements KoodistoService {
+public class DefaultKoodistoService extends AbstractService implements KoodistoService {
     public static final Locale DEFAULT_LOCALE = new Locale("fi", "FI");
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -91,6 +92,20 @@ public class DefaultKoodistoService implements KoodistoService {
     @Override
     public List<UiKoodiItemDto> findKuntaOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.KUNTA);
+    }
+
+    @Override
+    public List<UiKoodiItemDto> findKuntasByMaakuntaUri(final Locale locale, final String maakuntaUri) {
+        return cached(new Cacheable<List<UiKoodiItemDto>>() {
+            @Override
+            public List<UiKoodiItemDto> get() {
+                List<KoodiDto> arvot = koodistoRoute.findKoodisWithParent(maakuntaUri);
+                arvot = filterActiveKoodis(arvot, new LocalDate());
+                List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
+                        UiKoodiItemDto.class, locale);
+                return orderNimisAsc(optiot);
+            }
+        }, new KoodistoCache.CacheKey(maakuntaUri, locale));
     }
 
     @Override
@@ -168,7 +183,8 @@ public class DefaultKoodistoService implements KoodistoService {
                 return dtoConverter.convert( kayttoikeusryhmas, new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
                         locale );
             }
-        }, KoodistoTyyppi.KAYTTOOIKEUSRYHMA, locale);
+        }, new KoodistoCache.CacheKey(KoodistoCache.KoodistoTyyppi.valueOf(KoodistoTyyppi.KAYTTOOIKEUSRYHMA.name()),
+                locale));
     }
 
     protected interface Cacheable<T> {
@@ -193,21 +209,18 @@ public class DefaultKoodistoService implements KoodistoService {
         }
     }
 
-    protected List<UiKoodiItemDto> cached(Cacheable<List<UiKoodiItemDto>> provider, KoodistoTyyppi tyyppi, Locale locale) {
-        KoodistoCache.KoodistoTyyppi cacheType = getCacheType(tyyppi);
+    protected List<UiKoodiItemDto> cached(Cacheable<List<UiKoodiItemDto>> provider, KoodistoCache.CacheKey key) {
         boolean cacheUsed = isCacheUsed();
         if (!cacheUsed) {
             logger.info("CACHE DISABLED.");
             return provider.get();
         }
-        KoodistoCache.CacheKey key = new KoodistoCache.CacheKey(cacheType, locale);
         MemoryCacheHolder holder = memoryCache.get(key);
         if (holder != null && isCacheUsable(holder.getCreatedAt())) {
             // Hit memory cache:
             return holder.getItems();
         }
-
-        KoodistoCache cache = koodistoCacheRepository.findCacheByTypeAndLocale(cacheType, locale);
+        KoodistoCache cache = koodistoCacheRepository.findCacheByTypeAndLocale(key);
         boolean refresh = cache == null || !isCacheUsable(cache.getUpdatedAt());
         if (cache == null) {
             cache = new KoodistoCache();
@@ -219,10 +232,10 @@ public class DefaultKoodistoService implements KoodistoService {
             cache.setItems(dtoConverter.convert(items, new ArrayList<KoodiItem>(), KoodiItem.class));
             cache.setUpdatedAt(new DateTime());
             koodistoCacheRepository.save(cache);
-            logger.info("SAVED CACHED ITEMS FOR KoodistoTyyppi: " + tyyppi);
+            logger.info("SAVED CACHED Koodisto items for key: " + key);
         } else {
             items = dtoConverter.convert(cache.getItems(), new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class);
-            logger.info("Got cached results for KoodistoTyyppi: " + tyyppi + " updated at " + cache.getUpdatedAt());
+            logger.info("Got cached results for key: " + key+ " updated at " + cache.getUpdatedAt());
         }
         memoryCache.put(key, new MemoryCacheHolder(cache.getUpdatedAt(), items));
         return items;
@@ -256,7 +269,7 @@ public class DefaultKoodistoService implements KoodistoService {
                         UiKoodiItemDto.class, locale);
                 return orderNimisAsc(optiot);
             }
-        }, tyyppi, locale);
+        }, new KoodistoCache.CacheKey(KoodistoCache.KoodistoTyyppi.valueOf(tyyppi.name()), locale));
     }
 
     /**

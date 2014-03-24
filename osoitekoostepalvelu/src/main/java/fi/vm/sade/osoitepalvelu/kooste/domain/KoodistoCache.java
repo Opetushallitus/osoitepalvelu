@@ -57,12 +57,18 @@ public class KoodistoCache implements Serializable {
         
         private KoodistoTyyppi tyyppi;
         private Locale locale;
+        private String parentUri;
 
         public CacheKey() {
         }
 
         public CacheKey(KoodistoTyyppi tyyppi, Locale locale) {
             this.tyyppi = tyyppi;
+            this.locale = locale;
+        }
+
+        public CacheKey(String parentUri, Locale locale) {
+            this.parentUri = parentUri;
             this.locale = locale;
         }
 
@@ -82,6 +88,30 @@ public class KoodistoCache implements Serializable {
             this.locale = locale;
         }
 
+        public String getParentUri() {
+            return parentUri;
+        }
+
+        public void setParentUri(String parentUri) {
+            this.parentUri = parentUri;
+        }
+
+        @Override
+        public String toString() {
+            StringBuffer b = new StringBuffer();
+            if (tyyppi != null) {
+                b.append("KoodistoTyyppi: ").append(tyyppi.name());
+            }
+            if (parentUri != null) {
+                if (b.length() > 0) {
+                    b.append(", ");
+                }
+                b.append("ParentURI: ").append(parentUri);
+            }
+            b.append(", Locale: ").append(locale);
+            return b.toString();
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -89,15 +119,19 @@ public class KoodistoCache implements Serializable {
 
             CacheKey cacheKey = (CacheKey) o;
 
-            if (tyyppi != cacheKey.tyyppi) return false;
             if (!locale.equals(cacheKey.locale)) return false;
+            if (parentUri != null ? !parentUri.equals(cacheKey.parentUri) : cacheKey.parentUri != null) return false;
+            if (tyyppi != cacheKey.tyyppi) return false;
 
             return true;
         }
 
         @Override
         public int hashCode() {
-            return tyyppi.ordinal();
+            int result = tyyppi != null ? tyyppi.hashCode() : 0;
+            result = 31 * result + locale.hashCode();
+            result = 31 * result + (parentUri != null ? parentUri.hashCode() : 0);
+            return result;
         }
     }
 

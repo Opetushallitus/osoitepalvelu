@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.googlecode.ehcache.annotations.Cacheable;
@@ -25,6 +26,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.AndPredicateAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
@@ -40,6 +42,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * User: ratamaa
@@ -76,8 +79,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
         //log(read("henkilo", "1.2.3.4.238726766"));
 
-
-
         return results;
     }
 
@@ -99,14 +100,19 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         List<String> kuntas = new ArrayList<String>();
         kuntas.addAll(terms.findTerms("kuntas"));
         for( String maakuntaKoodi : terms.findTerms("maakuntas") ) {
-            kuntas.addAll( kuntasForMaakunta(maakuntaKoodi) );
+            kuntas.addAll( kuntasForMaakunta(terms.getLocale(), maakuntaKoodi) );
         }
         return kuntas;
     }
 
-    protected Collection<? extends String> kuntasForMaakunta(String maakuntaKoodi) {
-        // TODO: mistä koodistosta saa maakuntien kunna? kunnilla ei ole mitään maakuntaan liittyvää metatietoa :/
-        return new ArrayList<String>();
+    protected Collection<? extends String> kuntasForMaakunta(Locale locale, String maakuntaUri) {
+        return Collections2.transform(koodistoService.findKuntasByMaakuntaUri(locale, maakuntaUri),
+                new Function<UiKoodiItemDto, String>() {
+            @Override
+            public String apply(UiKoodiItemDto koodi) {
+                return koodi.getKoodiUri();
+            }
+        });
     }
 
     protected List<OrganisaatioYhteystietoHakuResultDto> filterOrganisaatioResults(List<OrganisaatioYhteystietoHakuResultDto> results,

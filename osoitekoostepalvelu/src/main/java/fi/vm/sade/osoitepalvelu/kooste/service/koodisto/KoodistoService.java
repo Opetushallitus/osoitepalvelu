@@ -16,8 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +39,8 @@ public interface KoodistoService {
     List<UiKoodiItemDto> findMaakuntaOptions(Locale locale);
 
     List<UiKoodiItemDto> findKuntaOptions(Locale locale);
+
+    List<UiKoodiItemDto> findKuntasByMaakuntaUri(Locale locale, String maakuntaUri);
 
     UiKoodiItemDto findKuntaByKoodiUri(Locale locale, String koodiUri);
 

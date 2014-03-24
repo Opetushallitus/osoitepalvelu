@@ -25,8 +25,6 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Locale;
-
 /**
  * User: ratamaa
  * Date: 12/17/13
@@ -49,8 +47,7 @@ public class DefaultKoodistoCacheRepository extends SimpleMongoRepository<Koodis
     }
 
     @Override
-    public KoodistoCache findCacheByTypeAndLocale(KoodistoCache.KoodistoTyyppi tyyppi, Locale locale) {
-        KoodistoCache.CacheKey key = new KoodistoCache.CacheKey(tyyppi, locale);
+    public KoodistoCache findCacheByTypeAndLocale(KoodistoCache.CacheKey key) {
         return findOne(key);
     }
 }
