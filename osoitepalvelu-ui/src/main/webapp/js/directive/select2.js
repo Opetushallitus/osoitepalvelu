@@ -1,9 +1,9 @@
 /**
  * Enhanced Select2 Dropmenus
  *
- * @AJAX Mode - When in this mode, your value will be an object (or array of objects) of the data used by Select2
+ * AJAX Mode - When in this mode, your value will be an object (or array of objects) of the data used by Select2
  *     This change is so that you do not have to do an additional query yourself on top of Select2's own query
- * @params [options] {object} The configuration options passed to $.fn.select2(). Refer to the documentation
+ * params [options] {object} The configuration options passed to $.fn.select2(). Refer to the documentation
  *
  *
  * Hacked support for select all and select none based on
