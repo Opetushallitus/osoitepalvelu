@@ -24,10 +24,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultAuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -40,6 +37,7 @@ import scala.actors.threadpool.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -78,6 +76,14 @@ public class AuthenticationServiceRouteTest {
         List<HenkiloDto> henkilos = authenticationServiceRoute.findHenkilosByOrganisaatioOids( oids(yhteystietos),
                 new DefaultCamelRequestContext());
         assertTrue( yhteystietos.size() > 0 );
+    }
+
+    @Test
+    public void testMe() {
+        MyInformationDto me = authenticationServiceRoute.getMe();
+        assertNotNull(me);
+        assertNotNull(me.getUid());
+        assertNotNull(me.getOid());
     }
 
     protected List<String> oids(List<OrganisaatioYhteystietoHakuResultDto> yhteystietos) {

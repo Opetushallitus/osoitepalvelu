@@ -30,6 +30,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     private List<String> kieliList = new ArrayList<String>();
     private List<String> oppilaitostyyppiList = new ArrayList<String>();
     private List<String> vuosiluokkaList = new ArrayList<String>();
+    private List<String> ytunnusList = new ArrayList<String>();
     private Integer limit = 999999999;
 
     public List<String> getKieliList() {
@@ -72,6 +73,14 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         this.limit = limit;
     }
 
+    public List<String> getYtunnusList() {
+        return ytunnusList;
+    }
+
+    public void setYtunnusList(List<String> ytunnusList) {
+        this.ytunnusList = ytunnusList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,11 +90,12 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
 
         if (kieliList != null ? !kieliList.equals(that.kieliList) : that.kieliList != null) return false;
         if (kuntaList != null ? !kuntaList.equals(that.kuntaList) : that.kuntaList != null) return false;
-        if (!limit.equals(that.limit)) return false;
+        if (limit != null ? !limit.equals(that.limit) : that.limit != null) return false;
         if (oppilaitostyyppiList != null ? !oppilaitostyyppiList.equals(that.oppilaitostyyppiList) : that.oppilaitostyyppiList != null)
             return false;
         if (vuosiluokkaList != null ? !vuosiluokkaList.equals(that.vuosiluokkaList) : that.vuosiluokkaList != null)
             return false;
+        if (ytunnusList != null ? !ytunnusList.equals(that.ytunnusList) : that.ytunnusList != null) return false;
 
         return true;
     }
@@ -96,7 +106,8 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         result = 31 * result + (kieliList != null ? kieliList.hashCode() : 0);
         result = 31 * result + (oppilaitostyyppiList != null ? oppilaitostyyppiList.hashCode() : 0);
         result = 31 * result + (vuosiluokkaList != null ? vuosiluokkaList.hashCode() : 0);
-        result = 31 * result + limit.hashCode();
+        result = 31 * result + (ytunnusList != null ? ytunnusList.hashCode() : 0);
+        result = 31 * result + (limit != null ? limit.hashCode() : 0);
         return result;
     }
 }

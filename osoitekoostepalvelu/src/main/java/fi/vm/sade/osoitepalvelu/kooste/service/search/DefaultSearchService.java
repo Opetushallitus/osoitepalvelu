@@ -90,7 +90,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         organisaatioYhteystietosCriteria.setKieliList(terms.findTerms("organisaationKielis"));
         organisaatioYhteystietosCriteria.setOppilaitostyyppiList(terms.findTerms("oppilaitostyyppis"));
         organisaatioYhteystietosCriteria.setVuosiluokkaList(terms.findTerms("vuosiluokkas"));
-        /// TODO: koultuksenjarjestajas,
+        organisaatioYhteystietosCriteria.setYtunnusList(terms.findTerms("koultuksenjarjestajas"));
         List<OrganisaatioYhteystietoHakuResultDto> results
                 = organisaatioServiceRoute.findOrganisaatioYhteystietos(organisaatioYhteystietosCriteria, context);
         return filterOrganisaatioResults(results, terms);

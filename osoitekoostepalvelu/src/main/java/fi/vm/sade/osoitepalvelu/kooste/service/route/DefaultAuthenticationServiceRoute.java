@@ -18,9 +18,11 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.MyInformationDto;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -36,8 +38,10 @@ import java.util.List;
 @Component
 public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBuilder
         implements AuthenticationServiceRoute {
-    private String ROUTE_KAYTTOOIKESURYHMAS = "direct:findKayttoikeusryhmas";
-    private String ROUTE_HENKILOS = "direct:henkilos";
+    private static final String ROUTE_KAYTTOOIKESURYHMAS = "direct:findKayttoikeusryhmas";
+    private static final String ROUTE_HENKILOS = "direct:henkilos";
+    private static final String ROUTE_MY_INFORMATION = "direct:myInformation";
+    private static final String MY_INFORMATION_PATH = "/me";
 
     @Value("${authenticationService.kayttoikeusryhma.rest.url}")
     private String authenticationServiceKayttooikeusryhmasRestUrl;
@@ -53,6 +57,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     public void configure() throws Exception {
         buildKayttoOikeusryhmas();
         buildHenkilo();
+        buildMyInformation();
     }
 
     protected void buildHenkilo() {
@@ -84,6 +89,22 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
     }
 
+    protected void buildMyInformation() {
+        Debugger authenticationCallInOutDebug = debug(ROUTE_MY_INFORMATION+".AuthenticationServiceCall");
+        headers(
+                from(ROUTE_MY_INFORMATION),
+                headers()
+                        .get().path(MY_INFORMATION_PATH)
+                        .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
+        )
+        .process(authenticationCallInOutDebug)
+        .to(trim(casService))
+        .process(authenticationCallInOutDebug)
+        .process(jsonToDto(new TypeReference<MyInformationDto>() {
+        }));
+    }
+
+
     @Override
     public List<KayttooikesuryhmaDto> findKayttooikeusryhmas(CamelRequestContext requestContext) {
         return sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_KAYTTOOIKESURYHMAS, "",
@@ -98,5 +119,11 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                         .add("ooids", StringHelper.join(",", ooids.toArray(new String[0])))
                         .map(),
                 requestContext, List.class);
+    }
+
+    @Override
+    public MyInformationDto getMe() {
+        return sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_MY_INFORMATION, "",
+                new HashMap<String, Object>(), new DefaultCamelRequestContext(), MyInformationDto.class);
     }
 }

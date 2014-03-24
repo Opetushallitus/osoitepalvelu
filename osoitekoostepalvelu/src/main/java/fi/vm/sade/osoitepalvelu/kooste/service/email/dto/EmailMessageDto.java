@@ -1,6 +1,8 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.email.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: ratamaa
@@ -11,20 +13,12 @@ import java.io.Serializable;
  * fi.vm.sade.ryhmasahkoposti.api.dto.EmailMessage with default values and without attachments.
  */
 public class EmailMessageDto implements Serializable {
-    private static final String OSOITEJARJESTELMA_PROCESS_NAME = "Osoitetietojarjestelma";
-    private static final String DEFAULT_OWNER_EMAIL = "oph_tiedotus@oph.fi";
-    private static final String EMAIL_CONSTANT_CHARSET_UTF8 = "UTF-8";
-
-    private String callingProcess = OSOITEJARJESTELMA_PROCESS_NAME;
-    private String ownerEmail = DEFAULT_OWNER_EMAIL;
-    private String senderEmail;
-    private String senderOid;
-    private String senderOidType;
+    private String callingProcess;
+    private String from;
+    private String replyTo;
     private String subject;
     private String body;
-    private String footer;
-    private boolean isHtml=false;
-    private String charset = EMAIL_CONSTANT_CHARSET_UTF8;
+    private List<Object> attachInfo = new ArrayList<Object>();
 
     public String getCallingProcess() {
         return callingProcess;
@@ -34,36 +28,20 @@ public class EmailMessageDto implements Serializable {
         this.callingProcess = callingProcess;
     }
 
-    public String getOwnerEmail() {
-        return ownerEmail;
+    public String getFrom() {
+        return from;
     }
 
-    public void setOwnerEmail(String ownerEmail) {
-        this.ownerEmail = ownerEmail;
+    public void setFrom(String from) {
+        this.from = from;
     }
 
-    public String getSenderEmail() {
-        return senderEmail;
+    public String getReplyTo() {
+        return replyTo;
     }
 
-    public void setSenderEmail(String senderEmail) {
-        this.senderEmail = senderEmail;
-    }
-
-    public String getSenderOid() {
-        return senderOid;
-    }
-
-    public void setSenderOid(String senderOid) {
-        this.senderOid = senderOid;
-    }
-
-    public String getSenderOidType() {
-        return senderOidType;
-    }
-
-    public void setSenderOidType(String senderOidType) {
-        this.senderOidType = senderOidType;
+    public void setReplyTo(String replyTo) {
+        this.replyTo = replyTo;
     }
 
     public String getSubject() {
@@ -82,27 +60,11 @@ public class EmailMessageDto implements Serializable {
         this.body = body;
     }
 
-    public String getFooter() {
-        return footer;
+    public List<Object> getAttachInfo() {
+        return attachInfo;
     }
 
-    public void setFooter(String footer) {
-        this.footer = footer;
-    }
-
-    public boolean isHtml() {
-        return isHtml;
-    }
-
-    public void setHtml(boolean html) {
-        isHtml = html;
-    }
-
-    public String getCharset() {
-        return charset;
-    }
-
-    public void setCharset(String charset) {
-        this.charset = charset;
+    public void setAttachInfo(List<Object> attachInfo) {
+        this.attachInfo = attachInfo;
     }
 }

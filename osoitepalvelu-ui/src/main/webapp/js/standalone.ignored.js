@@ -95,9 +95,9 @@ OsoiteKoostepalvelu.factory('DummyVuosiluokkas', function() {
 });
 OsoiteKoostepalvelu.factory('DummyKoulutuksenjarjestajas', function() {
     return [
-        {koodiUrl: 1, nimi: 'Helsingin kaupunki'},
-        {koodiUrl: 2, nimi: 'Helsingin Konservatorion Säätiö'},
-        {koodiUrl: 3, nimi: 'Helsingin normaalilyseo'}
+        {koodiUrl: 'koulutustoimija_12345', koodiId: '12345-1', nimi: 'Helsingin kaupunki'},
+        {koodiUrl: 'koulutustoimija_12346', koodiId: '12345-2', nimi: 'Helsingin Konservatorion Säätiö'},
+        {koodiUrl: 'koulutustoimija_12347', koodiId: '12345-3', nimi: 'Helsingin normaalilyseo'}
     ];
 });
 

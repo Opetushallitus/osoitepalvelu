@@ -56,7 +56,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     public static final String CAS_TICKET_CACHE_PROPERTY = "CasTicketCache";
 
     @Value("${web.url.cas}")
-    private String casService;
+    protected String casService;
 
     @Autowired
     protected ObjectMapperProvider mapperProvider;
