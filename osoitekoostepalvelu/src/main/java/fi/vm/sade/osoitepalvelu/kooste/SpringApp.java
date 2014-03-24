@@ -39,10 +39,10 @@ public class SpringApp {
     @Value("${koodisto.cache.livetime.seconds}")
     private int koodistoCacheLiveTimeSeconds;
 
-    @Value("${web.url.cas:'prod'}")
+    @Value("${web.url.cas}")
     private String casService;
 
-    @Value("${auth.mode}")
+    @Value("${auth.mode:'prod'}")
     private String authMode;
 
     public static class Config {
