@@ -44,7 +44,7 @@ public class MongoConfig extends AbstractMongoConfiguration {
     @Bean
     @Override
     public MongoTemplate mongoTemplate() throws Exception {
-        MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory());
+        MongoTemplate mongoTemplate  =  new MongoTemplate(mongoDbFactory());
         return mongoTemplate;
     }
 

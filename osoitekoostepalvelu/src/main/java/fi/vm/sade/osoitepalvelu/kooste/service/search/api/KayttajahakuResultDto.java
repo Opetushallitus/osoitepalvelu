@@ -21,9 +21,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class KayttajahakuResultDto implements Serializable {
-    private static final long serialVersionUID = -862732979602353326L;
+    private static final long serialVersionUID  =  -862732979602353326L;
     
-    private Set<String> roolit = new TreeSet<String>();
+    private Set<String> roolit  =  new TreeSet<String>();
     private String etunimi;
     private String sukunimi;
     private String email;
@@ -35,7 +35,7 @@ public class KayttajahakuResultDto implements Serializable {
     }
     
     public void setRoolit(Set<String> roolit) {
-        this.roolit = roolit;
+        this.roolit  =  roolit;
     }
     
     public void addRooli(String rooli) {        
@@ -47,7 +47,7 @@ public class KayttajahakuResultDto implements Serializable {
     }
 
     public void setEtunimi(String etunimi) {
-        this.etunimi = etunimi;
+        this.etunimi  =  etunimi;
     }
 
     public String getSukunimi() {
@@ -55,7 +55,7 @@ public class KayttajahakuResultDto implements Serializable {
     }
 
     public void setSukunimi(String sukunimi) {
-        this.sukunimi = sukunimi;
+        this.sukunimi  =  sukunimi;
     }
 
     public String getEmail() {
@@ -63,7 +63,7 @@ public class KayttajahakuResultDto implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email  =  email;
     }
 
     public String getOid() {
@@ -71,7 +71,7 @@ public class KayttajahakuResultDto implements Serializable {
     }
 
     public void setOid(String oid) {
-        this.oid = oid;
+        this.oid  =  oid;
     }
 
     public String getOrganisaatioOid() {
@@ -79,7 +79,7 @@ public class KayttajahakuResultDto implements Serializable {
     }
 
     public void setOrganisaatioOid(String organisaatioOid) {
-        this.organisaatioOid = organisaatioOid;
+        this.organisaatioOid  =  organisaatioOid;
     }
 
 }

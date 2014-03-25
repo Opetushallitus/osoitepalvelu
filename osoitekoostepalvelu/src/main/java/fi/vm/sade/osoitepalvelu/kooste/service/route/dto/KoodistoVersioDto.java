@@ -27,6 +27,7 @@ import java.io.Serializable;
  * Koodiston versiotietojen mallintaminen.
  */
 public class KoodistoVersioDto implements Serializable {
+    private static final int HASH_FACTOR = 31;
     private String koodistoUri;
     private KoodistoTyyppi koodistoTyyppi;
     private long versio;
@@ -40,12 +41,12 @@ public class KoodistoVersioDto implements Serializable {
 
     public KoodistoVersioDto(String koodistoUri, KoodistoTyyppi koodistoTyyppi, long versio,
                              LocalDate voimassaAlkuPvm, LocalDate voimassaLoppuPvm, KoodistoTila tila) {
-        this.koodistoUri = koodistoUri;
-        this.koodistoTyyppi = koodistoTyyppi;
-        this.versio = versio;
-        this.voimassaAlkuPvm = voimassaAlkuPvm;
-        this.voimassaLoppuPvm = voimassaLoppuPvm;
-        this.tila = tila;
+        this.koodistoUri  =  koodistoUri;
+        this.koodistoTyyppi  =  koodistoTyyppi;
+        this.versio  =  versio;
+        this.voimassaAlkuPvm  =  voimassaAlkuPvm;
+        this.voimassaLoppuPvm  =  voimassaLoppuPvm;
+        this.tila  =  tila;
     }
 
     public String getKoodistoUri() {
@@ -55,7 +56,7 @@ public class KoodistoVersioDto implements Serializable {
     public void setKoodistoUri(String koodistoUri) {
         this.koodistoUri = koodistoUri;
         if (koodistoUri != null) {
-            this.koodistoTyyppi = KoodistoTyyppi.parseTyyppi(koodistoUri);
+            this.koodistoTyyppi  =  KoodistoTyyppi.parseTyyppi(koodistoUri);
         }
     }
 
@@ -64,7 +65,7 @@ public class KoodistoVersioDto implements Serializable {
     }
 
     public void setKoodistoTyyppi(KoodistoTyyppi koodistoTyyppi) {
-        this.koodistoTyyppi = koodistoTyyppi;
+        this.koodistoTyyppi  =  koodistoTyyppi;
     }
 
     public long getVersio() {
@@ -72,7 +73,7 @@ public class KoodistoVersioDto implements Serializable {
     }
 
     public void setVersio(long versio) {
-        this.versio = versio;
+        this.versio  =  versio;
     }
 
     public LocalDate getVoimassaAlkuPvm() {
@@ -80,7 +81,7 @@ public class KoodistoVersioDto implements Serializable {
     }
 
     public void setVoimassaAlkuPvm(LocalDate voimassaAlkuPvm) {
-        this.voimassaAlkuPvm = voimassaAlkuPvm;
+        this.voimassaAlkuPvm  =  voimassaAlkuPvm;
     }
 
     public LocalDate getVoimassaLoppuPvm() {
@@ -88,7 +89,7 @@ public class KoodistoVersioDto implements Serializable {
     }
 
     public void setVoimassaLoppuPvm(LocalDate voimassaLoppuPvm) {
-        this.voimassaLoppuPvm = voimassaLoppuPvm;
+        this.voimassaLoppuPvm  =  voimassaLoppuPvm;
     }
 
     public KoodistoTila getTila() {
@@ -96,7 +97,7 @@ public class KoodistoVersioDto implements Serializable {
     }
 
     public void setTila(KoodistoTila tila) {
-        this.tila = tila;
+        this.tila  =  tila;
     }
 
     public boolean isVoimassaPvm(LocalDate pvm) {
@@ -105,23 +106,33 @@ public class KoodistoVersioDto implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { 
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) { 
+            return false;
+        }
 
-        KoodistoVersioDto that = (KoodistoVersioDto) o;
+        KoodistoVersioDto that  =  (KoodistoVersioDto) o;
 
-        if (versio != that.versio) return false;
-        if (koodistoTyyppi != that.koodistoTyyppi) return false;
-        if (koodistoUri != null ? !koodistoUri.equals(that.koodistoUri) : that.koodistoUri != null) return false;
+        if (versio != that.versio) { 
+            return false;
+        }
+        if (koodistoTyyppi != that.koodistoTyyppi) { 
+            return false;
+        }
+        if (koodistoUri != null ? !koodistoUri.equals(that.koodistoUri) : that.koodistoUri != null) {
+            return false;
+        }
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = koodistoUri != null ? koodistoUri.hashCode() : 0;
-        result = 31 * result + (koodistoTyyppi != null ? koodistoTyyppi.hashCode() : 0);
-        result = 31 * result + (int) (versio ^ (versio >>> 32));
+        int result  =  koodistoUri != null ? koodistoUri.hashCode() : 0;
+        result  =  HASH_FACTOR * result  +  (koodistoTyyppi != null ? koodistoTyyppi.hashCode() : 0);
+        result  =  HASH_FACTOR * result  +  (int) (versio ^ (versio >>> (HASH_FACTOR + 1)));
         return result;
     }
 }

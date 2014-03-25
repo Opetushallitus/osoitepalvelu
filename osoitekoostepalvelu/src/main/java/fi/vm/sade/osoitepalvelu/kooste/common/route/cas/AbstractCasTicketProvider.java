@@ -32,12 +32,12 @@ public abstract class AbstractCasTicketProvider implements CasTicketProvider {
      * @return the standard format for the URL with a /j_spring_cas_security_check postfix and port 443 removed with
      * https protocol.
      */
-    protected String getTargetServiceCasUri( String service ) {
+    protected String getTargetServiceCasUri(String service) {
         if (!service.endsWith("/j_spring_cas_security_check")) {
-            service = service+"/j_spring_cas_security_check";
+            service  =  service  +  "/j_spring_cas_security_check";
         }
-        if( service.startsWith("https://") ) {
-            service = service.replaceAll("(https://)(.*):443(/?.*)", "$1$2$3");
+        if(service.startsWith("https://")) {
+            service  =  service.replaceAll("(https://)(.*):443(/?.*)", "$1$2$3");
         }
         return service;
     }

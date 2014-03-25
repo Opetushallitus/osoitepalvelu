@@ -26,17 +26,17 @@ import java.util.List;
  * Time: 1:30 PM
  */
 public class SearchTerm implements Serializable {
-    private static final long serialVersionUID = 7817695731755786307L;
+    private static final long serialVersionUID  =  7817695731755786307L;
     
     private String type;
-    private List<String> values = new ArrayList<String>();
+    private List<String> values  =  new ArrayList<String>();
 
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type  =  type;
     }
 
     public List<String> getValues() {
@@ -44,6 +44,6 @@ public class SearchTerm implements Serializable {
     }
 
     public void setValues(List<String> values) {
-        this.values = values;
+        this.values  =  values;
     }
 }

@@ -31,19 +31,19 @@ import java.util.*;
  * Time: 3:20 PM
  */
 public class KoodistoServiceRouteMock implements KoodistoRoute {
-    private Map<KoodistoVersioDto, List<KoodiDto>> koodis = new HashMap<KoodistoVersioDto, List<KoodiDto>>();
+    private Map<KoodistoVersioDto, List<KoodiDto>> koodis  =  new HashMap<KoodistoVersioDto, List<KoodiDto>>();
     private Map<KoodistoDto.KoodistoTyyppi, KoodistoDto> koodistosByTyyppis
-            = new HashMap<KoodistoDto.KoodistoTyyppi, KoodistoDto>();
-    private Map<String, List<KoodiDto>> kuntasByMaakuntaUri = new HashMap<String, List<KoodiDto>>();
+             =  new HashMap<KoodistoDto.KoodistoTyyppi, KoodistoDto>();
+    private Map<String, List<KoodiDto>> kuntasByMaakuntaUri  =  new HashMap<String, List<KoodiDto>>();
 
-    public void add(KoodistoVersioDto versio, KoodiDto ...koodis ) {
+    public void add(KoodistoVersioDto versio, KoodiDto ...koodis) {
         add(versio, Arrays.asList(koodis));
     }
 
-    public void add(KoodistoVersioDto versio, List<KoodiDto> koodis ) {
+    public void add(KoodistoVersioDto versio, List<KoodiDto> koodis) {
         this.koodis.put(versio, koodis);
         if (!koodistosByTyyppis.containsKey(versio.getKoodistoTyyppi())) {
-            KoodistoDto koodisto = new KoodistoDto();
+            KoodistoDto koodisto  =  new KoodistoDto();
             koodisto.setKoodistoUri(versio.getKoodistoTyyppi().getUri());
             koodistosByTyyppis.put(versio.getKoodistoTyyppi(), koodisto);
         }
@@ -51,7 +51,7 @@ public class KoodistoServiceRouteMock implements KoodistoRoute {
     }
 
     private void applyVersiotieto(KoodistoVersioDto versio, List<KoodiDto> koodis) {
-        KoodistoDto koodisto = koodistosByTyyppis.get(versio.getKoodistoTyyppi());
+        KoodistoDto koodisto  =  koodistosByTyyppis.get(versio.getKoodistoTyyppi());
         for (KoodiDto koodi : koodis) {
             koodi.setKoodisto(koodisto);
             koodi.setTila(versio.getTila());
@@ -87,16 +87,16 @@ public class KoodistoServiceRouteMock implements KoodistoRoute {
     @Override
     public List<KoodiDto> findKooditKoodistonVersiolleTyyppilla(final KoodistoDto.KoodistoTyyppi koodistoTyyppi,
                                                                 final long versio) {
-        return collect( Collections2.filter(koodis.keySet(), new Predicate<KoodistoVersioDto>() {
+        return collect(Collections2.filter(koodis.keySet(), new Predicate<KoodistoVersioDto>() {
             public boolean apply(KoodistoVersioDto input) {
                 return input.getVersio() == versio && input.getKoodistoTyyppi() == koodistoTyyppi;
             }
-        }) );
+        }));
     }
 
     @Override
     public List<KoodiDto> findKoodisWithParent(String koodiUri) {
-        List<KoodiDto> kuntas = kuntasByMaakuntaUri.get(koodiUri);
+        List<KoodiDto> kuntas  =  kuntasByMaakuntaUri.get(koodiUri);
         if (kuntas == null) {
             return new ArrayList<KoodiDto>();
         }
@@ -104,7 +104,7 @@ public class KoodistoServiceRouteMock implements KoodistoRoute {
     }
 
     protected List<KoodiDto> collect(Collection<KoodistoVersioDto> versions) {
-        List<KoodiDto> result = new ArrayList<KoodiDto>();
+        List<KoodiDto> result  =  new ArrayList<KoodiDto>();
         for (KoodistoVersioDto koodistoVersio : versions) {
             result.addAll(koodis.get(koodistoVersio));
         }

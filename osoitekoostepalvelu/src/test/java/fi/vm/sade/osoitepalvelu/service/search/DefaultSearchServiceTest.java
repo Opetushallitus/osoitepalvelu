@@ -51,7 +51,7 @@ import static org.junit.Assert.assertNotNull;
  * Time: 9:22 AM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={SpringTestAppConfig.class})
+@ContextConfiguration(classes = {SpringTestAppConfig.class })
 public class DefaultSearchServiceTest {
     private OrganisaatioServiceRouteMock organisaatioRouteMock;
     private KoodistoServiceRouteMock koodistoRouteMock;
@@ -64,8 +64,8 @@ public class DefaultSearchServiceTest {
 
     @Before
     public void init() {
-        this.organisaatioRouteMock = new OrganisaatioServiceRouteMock();
-        this.koodistoRouteMock = new KoodistoServiceRouteMock();
+        this.organisaatioRouteMock  =  new OrganisaatioServiceRouteMock();
+        this.koodistoRouteMock  =  new KoodistoServiceRouteMock();
         this.defaultSearchService.setOrganisaatioServiceRoute(this.organisaatioRouteMock);
 
         this.defaultKoodistoService.setKoodistoRoute(this.koodistoRouteMock);
@@ -74,19 +74,19 @@ public class DefaultSearchServiceTest {
 
     @Test
     public void testResultsReturned() {
-        List<OrganisaatioYhteystietoHakuResultDto> yhteystietos = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
-        OrganisaatioYhteystietoHakuResultDto yhteystieto = new OrganisaatioYhteystietoHakuResultDto();
+        List<OrganisaatioYhteystietoHakuResultDto> yhteystietos  =  new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
+        OrganisaatioYhteystietoHakuResultDto yhteystieto  =  new OrganisaatioYhteystietoHakuResultDto();
         yhteystieto.setOid("OID");
         yhteystieto.setOppilaitosKoodi("OPKOODI");
         yhteystieto.setKotipaikka("Jurmala");
         yhteystieto.setKielet(Arrays.asList(new String[]{"fi", "sv"}));
-        Map<String,String> nimi = new HashMap<String, String>();
+        Map<String, String> nimi  =  new HashMap<String, String>();
         nimi.put("fi", "Koulu");
         nimi.put("sv", "Skolan");
         yhteystieto.setNimi(nimi);
         yhteystieto.setTyypit(Arrays.asList(new String[]{"Oppilaitos"}));
-        List<OrganisaatioYhteysosoiteDto> osoittees = new ArrayList<OrganisaatioYhteysosoiteDto>();
-        OrganisaatioYhteysosoiteDto osoite = new OrganisaatioYhteysosoiteDto();
+        List<OrganisaatioYhteysosoiteDto> osoittees  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
+        OrganisaatioYhteysosoiteDto osoite  =  new OrganisaatioYhteysosoiteDto();
         osoite.setKieli("fi");
         osoite.setOsoite("Oppijankuja 6");
         osoite.setPostinumero("12345");
@@ -97,16 +97,16 @@ public class DefaultSearchServiceTest {
         yhteystietos.add(yhteystieto);
         organisaatioRouteMock.setOrganisaatioYhteystietoResults(yhteystietos);
 
-        SearchTermsDto terms = new SearchTermsDto();
-        List<SearchTargetGroupDto> targetGroups = new ArrayList<SearchTargetGroupDto>();
-        SearchTargetGroupDto targetGroup = new SearchTargetGroupDto();
+        SearchTermsDto terms  =  new SearchTermsDto();
+        List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
+        SearchTargetGroupDto targetGroup  =  new SearchTargetGroupDto();
         targetGroup.setType(SearchTargetGroup.GroupType.OPPILAITOKSET);
         targetGroups.add(targetGroup);
         terms.setTargetGroups(targetGroups);
-        OrganisaatioResultsDto results = this.defaultSearchService.find(terms, new DefaultCamelRequestContext());
+        OrganisaatioResultsDto results  =  this.defaultSearchService.find(terms, new DefaultCamelRequestContext());
         assertNotNull(results.getResults());
         assertEquals(1, results.getResults().size());
-        OrganisaatioTiedotDto firstResult = results.getResults().get(0);
+        OrganisaatioTiedotDto firstResult  =  results.getResults().get(0);
         assertEquals("OID", firstResult.getOid());
         assertEquals("OPKOODI", firstResult.getOppilaitosKoodi());
         assertEquals(nimi, firstResult.getNimi());

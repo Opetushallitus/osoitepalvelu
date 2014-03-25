@@ -36,15 +36,15 @@ public class DefaultEmailService extends AbstractService implements EmailService
 
     @Override
     public EmailSendSettingsDto getEmailSendSettings() {
-        EmailSendSettingsDto settings = new EmailSendSettingsDto();
-        settings.setEndpointUrl( emailSendEmailUrl );
+        EmailSendSettingsDto settings  =  new EmailSendSettingsDto();
+        settings.setEndpointUrl(emailSendEmailUrl);
         settings.getEmail().setCallingProcess(callingProcess);
         settings.getEmail().setFrom(emailFrom);
 
-        MyInformationDto myInfo = authenticationServiceRoute.getMe();
+        MyInformationDto myInfo  =  authenticationServiceRoute.getMe();
         settings.getEmail().setReplyTo(myInfo.getEmail());
         if (settings.getEmail().getReplyTo() == null) {
-            settings.getEmail().setReplyTo(myInfo.getFirstName()+"."+myInfo.getLastName()+"@oph.fi");
+            settings.getEmail().setReplyTo(myInfo.getFirstName() + "." + myInfo.getLastName() + "@oph.fi");
         }
 
         return settings;

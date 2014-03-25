@@ -22,10 +22,10 @@ import java.util.Map;
 
 public class SearchQueryDto implements Serializable {
 
-    private static final long serialVersionUID = 1078154058705560606L;
+    private static final long serialVersionUID  =  1078154058705560606L;
     
-    private Map<String, ConditionDto> taiEhdot = new HashMap<String, ConditionDto>();
-    private Map<String, ConditionDto> jaEhdot = new HashMap<String, ConditionDto>();
+    private Map<String, ConditionDto> taiEhdot  =  new HashMap<String, ConditionDto>();
+    private Map<String, ConditionDto> jaEhdot  =  new HashMap<String, ConditionDto>();
     
     public SearchQueryDto() {
     }
@@ -41,7 +41,7 @@ public class SearchQueryDto implements Serializable {
     public void addAndCriteria(SearchKeyDto keyDto, SearchValueDto value) {
 
         if (!jaEhdot.containsKey(keyDto.getKoodistoUri())) {
-            ConditionDto dto = new ConditionDto();
+            ConditionDto dto  =  new ConditionDto();
             dto.setOperaattori(keyDto.getOperaattori());
             jaEhdot.put(keyDto.getKoodistoUri(), dto);
         }
@@ -52,7 +52,7 @@ public class SearchQueryDto implements Serializable {
     public void addOrCriteria(SearchKeyDto keyDto, SearchValueDto value) {
 
         if (!taiEhdot.containsKey(keyDto.getKoodistoUri())) {
-            ConditionDto dto = new ConditionDto();
+            ConditionDto dto  =  new ConditionDto();
             dto.setOperaattori(keyDto.getOperaattori());
             taiEhdot.put(keyDto.getKoodistoUri(), dto);
         }

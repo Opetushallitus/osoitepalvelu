@@ -25,23 +25,23 @@ import java.util.List;
 import java.util.Map;
 
 public class OrganisaatioTiedotDto implements Serializable {
-    private static final long serialVersionUID = -3235512233762738508L;
+    private static final long serialVersionUID  =  -3235512233762738508L;
     
     private String oid; // Yksikäsitteinen tunniste
     private String kotikunta;
     private String toimipistekoodi;
     private String oppilaitosKoodi;
     private String wwwOsoite;
-    private Map<String, String> nimi = new HashMap<String, String>(); // Organisaation nimi lokaalin mukaan
+    private Map<String, String> nimi  =  new HashMap<String, String>(); // Organisaation nimi lokaalin mukaan
     private String puhelinnumero;
     private String faksinumero;
     private String emailOsoite;
     private List<String> tyypit;
     @DtoConversion
-    private List<OsoitteistoDto> postiosoite = new ArrayList<OsoitteistoDto>();
+    private List<OsoitteistoDto> postiosoite  =  new ArrayList<OsoitteistoDto>();
     @DtoConversion
-    private List<OsoitteistoDto> kayntiosoite = new ArrayList<OsoitteistoDto>();
-    private List<OrganisaatioYhteystietoDto> yhteyshenkilot = new ArrayList<OrganisaatioYhteystietoDto>();
+    private List<OsoitteistoDto> kayntiosoite  =  new ArrayList<OsoitteistoDto>();
+    private List<OrganisaatioYhteystietoDto> yhteyshenkilot  =  new ArrayList<OrganisaatioYhteystietoDto>();
     private String viranomaistiedotuksenEmail;
     private String koulutusneuvonnanEmail;
     private String kriisitiedotuksenEmail;
@@ -51,7 +51,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setOid(String oid) {
-        this.oid = oid;
+        this.oid  =  oid;
     }
 
     public String getKotikunta() {
@@ -59,7 +59,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setKotikunta(String kotikunta) {
-        this.kotikunta = kotikunta;
+        this.kotikunta  =  kotikunta;
     }
 
     public String getToimipistekoodi() {
@@ -67,7 +67,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setToimipistekoodi(String toimipistekoodi) {
-        this.toimipistekoodi = toimipistekoodi;
+        this.toimipistekoodi  =  toimipistekoodi;
     }
 
     public String getWwwOsoite() {
@@ -75,7 +75,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setWwwOsoite(String wwwOsoite) {
-        this.wwwOsoite = wwwOsoite;
+        this.wwwOsoite  =  wwwOsoite;
     }
 
     public Map<String, String> getNimi() {
@@ -83,7 +83,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setNimi(Map<String, String> nimi) {
-        this.nimi = nimi;
+        this.nimi  =  nimi;
     }
 
     public String getPuhelinnumero() {
@@ -91,7 +91,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setPuhelinnumero(String puhelinnumero) {
-        this.puhelinnumero = puhelinnumero;
+        this.puhelinnumero  =  puhelinnumero;
     }
 
     public String getFaksinumero() {
@@ -99,7 +99,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setFaksinumero(String faksinumero) {
-        this.faksinumero = faksinumero;
+        this.faksinumero  =  faksinumero;
     }
 
     public String getEmailOsoite() {
@@ -107,7 +107,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setEmailOsoite(String emailOsoite) {
-        this.emailOsoite = emailOsoite;
+        this.emailOsoite  =  emailOsoite;
     }
     
     public List<String> getTyypit() {
@@ -115,7 +115,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
     
     public void setTyypit(List<String> tyypit) {
-        this.tyypit = tyypit;
+        this.tyypit  =  tyypit;
     }
 
     public List<OsoitteistoDto> getPostiosoite() {
@@ -138,11 +138,11 @@ public class OrganisaatioTiedotDto implements Serializable {
         return yhteyshenkilot;
     }
     
-    public void setYhteyshenkilöt(List<OrganisaatioYhteystietoDto> yhteyshenkilöt) {
-        this.yhteyshenkilot = yhteyshenkilöt;
+    public void setYhteyshenkilot(List<OrganisaatioYhteystietoDto> yhteyshenkilot) {
+        this.yhteyshenkilot  =  yhteyshenkilot;
     }
     
-    public void addYhteyshenkilö(OrganisaatioYhteystietoDto yhteyshenkilo) {
+    public void addYhteyshenkilo(OrganisaatioYhteystietoDto yhteyshenkilo) {
         this.yhteyshenkilot.add(yhteyshenkilo);
     }
 
@@ -151,7 +151,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setViranomaistiedotuksenEmail(String viranomaistiedotuksenEmail) {
-        this.viranomaistiedotuksenEmail = viranomaistiedotuksenEmail;
+        this.viranomaistiedotuksenEmail  =  viranomaistiedotuksenEmail;
     }
 
     public String getKoulutusneuvonnanEmail() {
@@ -159,7 +159,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setKoulutusneuvonnanEmail(String koulutusneuvonnanEmail) {
-        this.koulutusneuvonnanEmail = koulutusneuvonnanEmail;
+        this.koulutusneuvonnanEmail  =  koulutusneuvonnanEmail;
     }
 
     public String getKriisitiedotuksenEmail() {
@@ -167,7 +167,7 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setKriisitiedotuksenEmail(String kriisitiedotuksenEmail) {
-        this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
+        this.kriisitiedotuksenEmail  =  kriisitiedotuksenEmail;
     }
 
     public String getOppilaitosKoodi() {
@@ -175,6 +175,6 @@ public class OrganisaatioTiedotDto implements Serializable {
     }
 
     public void setOppilaitosKoodi(String oppilaitosKoodi) {
-        this.oppilaitosKoodi = oppilaitosKoodi;
+        this.oppilaitosKoodi  =  oppilaitosKoodi;
     }
 }

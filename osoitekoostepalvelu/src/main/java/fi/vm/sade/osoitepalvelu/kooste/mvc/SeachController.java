@@ -52,10 +52,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Api("Haku")
 @Controller
-@Scope(value= WebApplicationContext.SCOPE_APPLICATION)
-@RequestMapping(value = "/search")
+@Scope(value =  WebApplicationContext.SCOPE_APPLICATION)
+@RequestMapping(value  =  "/search")
 public class SeachController extends AbstractMvcController implements Serializable {
-    private static final long serialVersionUID = -4986869170151316267L;
+
+    private static final long serialVersionUID  =  -4986869170151316267L;
 
     @Autowired @Qualifier("actual")
     private SearchService searchService;
@@ -63,22 +64,25 @@ public class SeachController extends AbstractMvcController implements Serializab
     @Autowired
     private SearchResultTransformerService resultTransformerService;
 
-    private AtomicInteger i = new AtomicInteger(0);
-    private Map<String, FilteredSearchParametersDto> storedParameters = SimpleCache.buildCache(2048);
+    private AtomicInteger i  =  new AtomicInteger(0);
+    
+    private static final int STORAGE_SIZE = 2048;
+    private Map<String, FilteredSearchParametersDto> storedParameters  =  SimpleCache.buildCache(STORAGE_SIZE);
 
     /**
      * @param searchParameters to use
      * @return the results
      */
-    @RequestMapping(value="list.json", method = RequestMethod.POST)
-    public @ResponseBody SearchResultsDto list( @RequestBody FilteredSearchParametersDto searchParameters,
-                                                @RequestParam("lang") String lang ) {
-        CamelRequestContext context = new DefaultCamelRequestContext();
+    @RequestMapping(value = "list.json", method  =  RequestMethod.POST)
+    @ResponseBody
+    public SearchResultsDto list(@RequestBody FilteredSearchParametersDto searchParameters,
+                                                @RequestParam("lang") String lang) {
+        CamelRequestContext context  =  new DefaultCamelRequestContext();
         searchParameters.getSearchTerms().setLocale(parseLocale(lang));
-        OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms(), context);
-        SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
+        OrganisaatioResultsDto results  =  searchService.find(searchParameters.getSearchTerms(), context);
+        SearchResultPresentation presentation  =  new SearchResultPresentationByAddressFieldsDto(
                 searchParameters.getSearchTerms(),
-                searchParameters.getNonIncludedOrganisaatioOids() );
+                searchParameters.getNonIncludedOrganisaatioOids());
         return resultTransformerService.transformToResultRows(results.getResults(), presentation, context);
     }
 
@@ -88,10 +92,11 @@ public class SeachController extends AbstractMvcController implements Serializab
      * @param searchParameters to store
      * @return the key associated with the stored parameters to be used in the GET request for the Excel.
      */
-    @RequestMapping(value="prepare.excel.do", method = RequestMethod.POST)
-    public @ResponseBody String storeExcelParameters( @RequestBody FilteredSearchParametersDto searchParameters  ) {
-        String key = (i.incrementAndGet()+"."+new DateTime().toDate().getTime());
-        String storeKey = resultTransformerService.getLoggeInUserOid()+"@"+key;
+    @RequestMapping(value = "prepare.excel.do", method  =  RequestMethod.POST)
+    @ResponseBody
+    public String storeExcelParameters(@RequestBody FilteredSearchParametersDto searchParameters) {
+        String key  =  (i.incrementAndGet() + "." + new DateTime().toDate().getTime());
+        String storeKey  =  resultTransformerService.getLoggeInUserOid() + "@" + key;
         this.storedParameters.put(storeKey, searchParameters);
         return key;
     }
@@ -110,22 +115,22 @@ public class SeachController extends AbstractMvcController implements Serializab
      * @return the Excel presentation
      * @throws NotFoundException if downloadId did not exist or already used.
      */
-    @RequestMapping(value="excel.do", method = RequestMethod.GET)
-    public View downloadExcel( @RequestParam("downloadId") String downlaodId,
-                               @RequestParam("lang") String lang ) throws NotFoundException {
-        String storeKey = resultTransformerService.getLoggeInUserOid()+"@"+downlaodId;
-        FilteredSearchParametersDto searchParameters = storedParameters.get(storeKey);
-        if( searchParameters == null ) {
-            throw new NotFoundException("Excel not found for download with key="+downlaodId);
+    @RequestMapping(value = "excel.do", method  =  RequestMethod.GET)
+    public View downloadExcel(@RequestParam("downloadId") String downlaodId,
+                               @RequestParam("lang") String lang) throws NotFoundException {
+        String storeKey  =  resultTransformerService.getLoggeInUserOid() + "@" + downlaodId;
+        FilteredSearchParametersDto searchParameters  =  storedParameters.get(storeKey);
+        if(searchParameters  == null) {
+            throw new NotFoundException("Excel not found for download with key = " + downlaodId);
         }
         this.storedParameters.remove(storeKey); // <- not really REST here :/
         searchParameters.getSearchTerms().setLocale(parseLocale(lang));
-        CamelRequestContext context = new DefaultCamelRequestContext();
-        OrganisaatioResultsDto results = searchService.find(searchParameters.getSearchTerms(), context);
-        SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
+        CamelRequestContext context  =  new DefaultCamelRequestContext();
+        OrganisaatioResultsDto results  =  searchService.find(searchParameters.getSearchTerms(), context);
+        SearchResultPresentation presentation  =  new SearchResultPresentationByAddressFieldsDto(
                 searchParameters.getSearchTerms(),
-                searchParameters.getNonIncludedOrganisaatioOids() );
-        final SearchResultsDto searchResults = resultTransformerService
+                searchParameters.getNonIncludedOrganisaatioOids());
+        final SearchResultsDto searchResults  =  resultTransformerService
                 .transformToResultRows(results.getResults(), presentation, context);
         return new AbstractExcelView() {
             @Override

@@ -28,7 +28,7 @@ import java.util.Set;
  * Time: 4:34 PM
  */
 public class FilteredSearchParametersDto implements Serializable {
-    private static final long serialVersionUID = -8288132415175555661L;
+    private static final long serialVersionUID  =  -8288132415175555661L;
     
     private SearchTermsDto searchTerms;
     private Set<OidAndTyyppiPair> nonIncludedOrganisaatioOids;
@@ -38,7 +38,7 @@ public class FilteredSearchParametersDto implements Serializable {
     }
 
     public void setSearchTerms(SearchTermsDto searchTerms) {
-        this.searchTerms = searchTerms;
+        this.searchTerms  =  searchTerms;
     }
 
     public Set<OidAndTyyppiPair> getNonIncludedOrganisaatioOids() {
@@ -46,6 +46,6 @@ public class FilteredSearchParametersDto implements Serializable {
     }
 
     public void setNonIncludedOrganisaatioOids(Set<OidAndTyyppiPair> nonIncludedOrganisaatioOids) {
-        this.nonIncludedOrganisaatioOids = nonIncludedOrganisaatioOids;
+        this.nonIncludedOrganisaatioOids  =  nonIncludedOrganisaatioOids;
     }
 }

@@ -23,8 +23,12 @@ import java.util.Locale;
  * Date: 3/18/14
  * Time: 4:28 PM
  */
-public class LocaleHelper {
+public final class LocaleHelper {
 
+    
+    private LocaleHelper() {
+    }
+    
     /**
      * @param locale tha language and country code pair, language or kieli_language(#versio) to parse language from,
      *               may be null
@@ -36,17 +40,17 @@ public class LocaleHelper {
             return defaultLocale;
         }
         if (locale.startsWith("kieli_")) {
-            locale = locale.substring("kieli_".length());
+            locale  =  locale.substring("kieli_".length());
         }
         String[] stripPrts = locale.split("#");
         if (stripPrts.length > 1) {
-            locale = stripPrts[0];
+            locale  =  stripPrts[0];
         }
         String[] prts = locale.split("_");
         if (prts.length == 2) {
             return new Locale(prts[0].toLowerCase(), prts[1].toUpperCase());
         }
-        prts = locale.split("-");
+        prts  =  locale.split("-");
         if (prts.length == 2) {
             return new Locale(prts[0].toLowerCase(), prts[1].toUpperCase());
         }

@@ -30,21 +30,21 @@ public class AndPredicateAdapter<T> implements Predicate<T> {
     private List<Predicate<T>> predicates;
 
     public AndPredicateAdapter() {
-        this.predicates = new ArrayList<Predicate<T>>();
+        this.predicates  =  new ArrayList<Predicate<T>>();
     }
 
     public AndPredicateAdapter(List<Predicate<T>> predicates) {
-        this.predicates = new ArrayList<Predicate<T>>(predicates);
+        this.predicates  =  new ArrayList<Predicate<T>>(predicates);
     }
 
     public AndPredicateAdapter(Predicate<T> predicate1, Predicate<T> predicate2) {
-        this.predicates = new ArrayList<Predicate<T>>();
+        this.predicates  =  new ArrayList<Predicate<T>>();
         this.predicates.add(predicate1);
         this.predicates.add(predicate2);
     }
 
     public AndPredicateAdapter(List<Predicate<T>> predicates, Predicate<T> additional) {
-        this.predicates = new ArrayList<Predicate<T>>(predicates);
+        this.predicates  =  new ArrayList<Predicate<T>>(predicates);
         this.predicates.add(additional);
     }
 
@@ -69,5 +69,10 @@ public class AndPredicateAdapter<T> implements Predicate<T> {
         }
         AndPredicateAdapter other = (AndPredicateAdapter)obj;
         return this.predicates.equals(other.predicates);
+    }
+    
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

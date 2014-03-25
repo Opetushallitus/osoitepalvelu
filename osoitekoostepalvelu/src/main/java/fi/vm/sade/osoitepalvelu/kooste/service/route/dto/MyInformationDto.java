@@ -32,14 +32,14 @@ public class MyInformationDto implements Serializable {
     private String lastName;
     private String email; // seems to be null in some environemnts
     private String lang; // seems to be null in some environemnts
-    private List<String> groups = new ArrayList<String>();
+    private List<String> groups  =  new ArrayList<String>();
 
     public String getUid() {
         return uid;
     }
 
     public void setUid(String uid) {
-        this.uid = uid;
+        this.uid  =  uid;
     }
 
     public String getOid() {
@@ -47,7 +47,7 @@ public class MyInformationDto implements Serializable {
     }
 
     public void setOid(String oid) {
-        this.oid = oid;
+        this.oid  =  oid;
     }
 
     public String getFirstName() {
@@ -55,7 +55,7 @@ public class MyInformationDto implements Serializable {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName  =  firstName;
     }
 
     public String getLastName() {
@@ -63,7 +63,7 @@ public class MyInformationDto implements Serializable {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName  =  lastName;
     }
 
     public String getLang() {
@@ -71,7 +71,7 @@ public class MyInformationDto implements Serializable {
     }
 
     public void setLang(String lang) {
-        this.lang = lang;
+        this.lang  =  lang;
     }
 
     public String getEmail() {
@@ -79,7 +79,7 @@ public class MyInformationDto implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email  =  email;
     }
 
     public List<String> getGroups() {
@@ -87,6 +87,6 @@ public class MyInformationDto implements Serializable {
     }
 
     public void setGroups(List<String> groups) {
-        this.groups = groups;
+        this.groups  =  groups;
     }
 }

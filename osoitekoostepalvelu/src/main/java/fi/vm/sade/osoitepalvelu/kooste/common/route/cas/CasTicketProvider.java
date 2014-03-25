@@ -29,12 +29,12 @@ import java.util.Map;
  * Time: 5:14 PM
  */
 public interface CasTicketProvider {
-    public static final String CAS_HEADER = "CasSecurityTicket";
+    String CAS_HEADER  =  "CasSecurityTicket";
 
     /**
      * @param service the CAS service
      * @return the headers to be used for authenticating the request
      */
-    public Map<String,String> provideTicketHeaders(String service);
+    Map<String, String> provideTicketHeaders(String service);
 
 }

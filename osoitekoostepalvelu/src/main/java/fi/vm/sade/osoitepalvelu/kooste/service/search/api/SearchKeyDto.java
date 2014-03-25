@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 public class SearchKeyDto implements Serializable, Comparable<SearchKeyDto> {
 
-    private static final long serialVersionUID = -7866357718772030725L;
+    private static final long serialVersionUID  =  -7866357718772030725L;
     
     private String koodistoUri;
     private String operaattori;
@@ -29,8 +29,8 @@ public class SearchKeyDto implements Serializable, Comparable<SearchKeyDto> {
     }
     
     public SearchKeyDto(String koodistoUri, String operaattori) {
-        this.koodistoUri = koodistoUri;
-        this.operaattori = operaattori;
+        this.koodistoUri  =  koodistoUri;
+        this.operaattori  =  operaattori;
     }
     
     public String getKoodistoUri() {
@@ -38,7 +38,7 @@ public class SearchKeyDto implements Serializable, Comparable<SearchKeyDto> {
     }
     
     public void setKoodistoUri(String koodistoUri) {
-        this.koodistoUri = koodistoUri;
+        this.koodistoUri  =  koodistoUri;
     }
     
     public String getOperaattori() {
@@ -46,7 +46,7 @@ public class SearchKeyDto implements Serializable, Comparable<SearchKeyDto> {
     }
     
     public void setOperaattori(String operaattori) {
-        this.operaattori = operaattori;
+        this.operaattori  =  operaattori;
     }
 
     @Override
@@ -57,8 +57,8 @@ public class SearchKeyDto implements Serializable, Comparable<SearchKeyDto> {
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof SearchKeyDto) {
-            return (this.koodistoUri + this.operaattori).equals(((SearchKeyDto) obj).getKoodistoUri()
-                    + ((SearchKeyDto) obj).getOperaattori());
+            return (this.koodistoUri  +  this.operaattori).equals(((SearchKeyDto) obj).getKoodistoUri()
+                     +  ((SearchKeyDto) obj).getOperaattori());
         } else {
             return false;
         }
@@ -66,6 +66,6 @@ public class SearchKeyDto implements Serializable, Comparable<SearchKeyDto> {
     
     @Override
     public int hashCode() {
-        return (this.koodistoUri+this.operaattori).hashCode();
+        return (this.koodistoUri + this.operaattori).hashCode();
     }    
 }

@@ -35,7 +35,7 @@ import java.util.List;
 
 @Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
+@ContextConfiguration(classes  =  { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
 public class KoodistoRouteTest {
 
     @Autowired
@@ -43,22 +43,22 @@ public class KoodistoRouteTest {
 
     @Test
     public void testHaeKaikkiOppilaitosTyypit() {
-        KoodistoTyyppi tyyppi = KoodistoTyyppi.OPPILAITOSTYYPPI;
-        List<KoodiDto> oppilaitosTyypit = koodistoReitti.findKooditKoodistonTyyppilla(tyyppi);
+        KoodistoTyyppi tyyppi  =  KoodistoTyyppi.OPPILAITOSTYYPPI;
+        List<KoodiDto> oppilaitosTyypit  =  koodistoReitti.findKooditKoodistonTyyppilla(tyyppi);
         Assert.assertNotNull(oppilaitosTyypit);
         Assert.assertTrue(oppilaitosTyypit.size() > 0);
     }
 
     @Test
     public void testHaeOppilaitosTyypitKoodistonVersiotJaKooditVersiolla() {
-        KoodistoTyyppi tyyppi = KoodistoTyyppi.OPPILAITOSTYYPPI;
-        List<KoodistoVersioDto> versiot = koodistoReitti.findKoodistonVersiot(tyyppi);
+        KoodistoTyyppi tyyppi  =  KoodistoTyyppi.OPPILAITOSTYYPPI;
+        List<KoodistoVersioDto> versiot  =  koodistoReitti.findKoodistonVersiot(tyyppi);
         Assert.assertNotNull(versiot);
         Assert.assertTrue(versiot.size() > 0);
 
         // Testataan, toimiiko tässä haku tietylle koodiston versiolle
-        KoodistoVersioDto versio = versiot.get(0);
-        List<KoodiDto> oppilaitosTyypit = koodistoReitti.findKooditKoodistonVersiolleTyyppilla(tyyppi,
+        KoodistoVersioDto versio  =  versiot.get(0);
+        List<KoodiDto> oppilaitosTyypit  =  koodistoReitti.findKooditKoodistonVersiolleTyyppilla(tyyppi,
                 versio.getVersio());
         Assert.assertNotNull(oppilaitosTyypit);
         Assert.assertTrue(oppilaitosTyypit.size() > 0);
@@ -66,7 +66,7 @@ public class KoodistoRouteTest {
 
     @Test
     public void testFindKuntasByMaakunta() {
-        List<KoodiDto> koodis = koodistoReitti.findKoodisWithParent("maakunta_12");
+        List<KoodiDto> koodis  =  koodistoReitti.findKoodisWithParent("maakunta_12");
         Assert.assertNotNull(koodis);
         Assert.assertTrue(koodis.size() > 0);
     }

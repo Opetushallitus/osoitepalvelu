@@ -35,7 +35,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import scala.actors.threadpool.Arrays;
 
 import java.util.List;
-import java.util.Locale;
 
 import static org.junit.Assert.*;
 
@@ -47,10 +46,9 @@ import static org.junit.Assert.*;
 @Ignore // No specified username/password pairs in Bamboo for system user
 @Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
+@ContextConfiguration(classes  =  { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
 public class OrganisaatioServiceRouteTest {
-    private final Locale TEST_LOCALE = new Locale("fi","FI");
-
+    
     @Autowired
     private OrganisaatioServiceRoute organisaatioServiceRoute;
 
@@ -59,18 +57,18 @@ public class OrganisaatioServiceRouteTest {
 
     @Test
     public void testFindOrganisaatiosByKuntas() {
-        OrganisaatioYhteystietoCriteriaDto criteria = new OrganisaatioYhteystietoCriteriaDto();
+        OrganisaatioYhteystietoCriteriaDto criteria  =  new OrganisaatioYhteystietoCriteriaDto();
         criteria.setKuntaList(Arrays.asList(new String[]{"kunta_604", "kunta_400"}));
-        List<OrganisaatioYhteystietoHakuResultDto> yhteystietos = organisaatioServiceRoute
+        List<OrganisaatioYhteystietoHakuResultDto> yhteystietos  =  organisaatioServiceRoute
                 .findOrganisaatioYhteystietos(criteria, new DefaultCamelRequestContext());
-        assertTrue( yhteystietos.size() > 0 );
+        assertTrue(yhteystietos.size() > 0);
     }
 
     @Test
     public void testFindOrganisaatioByOid() {
-        String testOid = "1.2.246.562.10.00000000001";
+        String testOid  =  "1.2.246.562.10.00000000001";
         OrganisaatioYksityiskohtaisetTiedotDto tiedot
-                = organisaatioServiceRoute.getdOrganisaatioByOid(testOid, new DefaultCamelRequestContext());
+                 =  organisaatioServiceRoute.getdOrganisaatioByOid(testOid, new DefaultCamelRequestContext());
         assertNotNull(tiedot);
         assertEquals(testOid, tiedot.getOid());
     }

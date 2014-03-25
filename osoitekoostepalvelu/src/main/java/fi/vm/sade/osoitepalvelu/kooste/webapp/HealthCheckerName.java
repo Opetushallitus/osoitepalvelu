@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * Time: 3:47 PM
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value = ElementType.TYPE)
+@Target(value  =  ElementType.TYPE)
 public @interface HealthCheckerName {
-    public String value();
+    String value();
 }

@@ -40,14 +40,14 @@ public class KoodistoServiceHealtCheck implements HealthChecker {
 
     @Override
     public Object checkHealth() throws Throwable {
-        final StopWatch watch = new StopWatch();
-        final List<KoodistoVersioDto> koodistoVersions = koodistoRoute.findKoodistonVersiot(
+        final StopWatch watch  =  new StopWatch();
+        final List<KoodistoVersioDto> koodistoVersions  =  koodistoRoute.findKoodistonVersiot(
                 KoodistoDto.KoodistoTyyppi.OPPILAITOSTYYPPI);
-        final long resultTook = watch.stop();
-        return new LinkedHashMap(){{
+        final long resultTook  =  watch.stop();
+        return new LinkedHashMap() { {
             put("status", "OK");
-            put("response-time", ""+resultTook+" ms");
+            put("response-time", "" + resultTook + " ms");
             put("oppilaitostyyppi-versions", koodistoVersions.size());
-        }};
+        } };
     }
 }

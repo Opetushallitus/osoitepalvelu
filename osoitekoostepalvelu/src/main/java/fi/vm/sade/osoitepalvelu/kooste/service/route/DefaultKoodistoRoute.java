@@ -32,17 +32,17 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Component
 public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implements KoodistoRoute {
-    private static final String REITTI_HAE_KOODISTON_KOODIT = "direct:haeKoodistonKoodit";
-    private static final String REITTI_HAE_KOODISTO_VERSION_KOODIT = "direct:haeKoodistoVersionKoodit";
-    private static final String REITTI_HAE_KOODISTON_VERSIOT = "direct:haeKoodistonVersiot";
-    private static final String REITTI_SIALTYY_YLAKOODIS = "direct:sisaltyYlakoodis";
+    private static final String REITTI_HAE_KOODISTON_KOODIT  =  "direct:haeKoodistonKoodit";
+    private static final String REITTI_HAE_KOODISTO_VERSION_KOODIT  =  "direct:haeKoodistoVersionKoodit";
+    private static final String REITTI_HAE_KOODISTON_VERSIOT  =  "direct:haeKoodistonVersiot";
+    private static final String REITTI_SIALTYY_YLAKOODIS  =  "direct:sisaltyYlakoodis";
 
     @Value("${koodiService.rest.url}")
     private String koodistoUri;
 
     // For cache testing:
-    private boolean findCounterUsed = false;
-    private AtomicLong findCounter = new AtomicLong(0L);
+    private boolean findCounterUsed  =  false;
+    private AtomicLong findCounter  =  new AtomicLong(0L);
 
     @Override
     public void configure() throws Exception {
@@ -56,7 +56,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         // Reitti, joka hakee koodiston versiotiedot
         fromHttpGetToDtos(REITTI_HAE_KOODISTON_VERSIOT, trim(koodistoUri),
                 headers().path("${in.headers.koodistoTyyppi}"),
-                new TypeReference<List<KoodistoVersioDto>>() {} );
+                new TypeReference<List<KoodistoVersioDto>>() { });
     }
 
     protected void buildKoodiversioKoodis() {
@@ -64,27 +64,27 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         fromHttpGetToDtos(REITTI_HAE_KOODISTO_VERSION_KOODIT, trim(koodistoUri),
                 headers()
                     .path("${in.headers.koodistoTyyppi}/koodi")
-                    .query("koodistoVersio=${in.headers.koodistoVersio}"),
-                new TypeReference<List<KoodiDto>>() {});
+                    .query("koodistoVersio = ${in.headers.koodistoVersio}"),
+                new TypeReference<List<KoodiDto>>() { });
     }
 
     protected void buildKoodistonKoodit() {
         // Reitti, joka hakee tietyn koodiston koodit
         fromHttpGetToDtos(REITTI_HAE_KOODISTON_KOODIT, trim(koodistoUri),
                 headers().path("${in.headers.koodistoTyyppi}/koodi"),
-                new TypeReference<List<KoodiDto>>() {});
+                new TypeReference<List<KoodiDto>>() { });
     }
 
     protected void buildSisaltyyYlakoodis() {
         fromHttpGetToDtos(REITTI_SIALTYY_YLAKOODIS, trim(koodistoUri),
                 headers().path("relaatio/sisaltyy-ylakoodit/${in.headers.koodiUri}"),
-                new TypeReference<List<KoodiDto>>() {});
+                new TypeReference<List<KoodiDto>>() { });
     }
 
     @Override
     public List<KoodiDto> findKooditKoodistonTyyppilla(KoodistoTyyppi koodistoTyyppi) {
         @SuppressWarnings("unchecked")
-        List<KoodiDto> koodit = getCamelTemplate().requestBodyAndHeader(REITTI_HAE_KOODISTON_KOODIT, "",
+        List<KoodiDto> koodit  =  getCamelTemplate().requestBodyAndHeader(REITTI_HAE_KOODISTON_KOODIT, "",
                 "koodistoTyyppi", koodistoTyyppi.getUri(), List.class);
         return koodit;
     }
@@ -92,10 +92,10 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     @Override
     public List<KoodiDto> findKooditKoodistonVersiolleTyyppilla(KoodistoTyyppi koodistoTyyppi, long versio) {
         @SuppressWarnings("unchecked")
-        List<KoodiDto> koodit = getCamelTemplate().requestBodyAndHeaders(REITTI_HAE_KOODISTO_VERSION_KOODIT, "",
+        List<KoodiDto> koodit  =  getCamelTemplate().requestBodyAndHeaders(REITTI_HAE_KOODISTO_VERSION_KOODIT, "",
                 headerValues()
                         .add("koodistoTyyppi", koodistoTyyppi.getUri())
-                        .add("koodistoVersio", "" + versio)
+                        .add("koodistoVersio", ""  +  versio)
                 .map(), List.class);
         if (isFindCounterUsed()) {
             findCounter.incrementAndGet();
@@ -106,7 +106,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     @Override
     public List<KoodistoVersioDto> findKoodistonVersiot(KoodistoTyyppi koodistoTyyppi) {
         @SuppressWarnings("unchecked")
-        List<KoodistoVersioDto> versiot = getCamelTemplate().requestBodyAndHeader(REITTI_HAE_KOODISTON_VERSIOT, "",
+        List<KoodistoVersioDto> versiot  =  getCamelTemplate().requestBodyAndHeader(REITTI_HAE_KOODISTON_VERSIOT, "",
                 "koodistoTyyppi", koodistoTyyppi.getUri(), List.class);
         return versiot;
     }
@@ -114,7 +114,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     @Override
     public List<KoodiDto> findKoodisWithParent(String koodiUri) {
         @SuppressWarnings("unchecked")
-        List<KoodiDto> koodis = getCamelTemplate().requestBodyAndHeader(REITTI_SIALTYY_YLAKOODIS, "",
+        List<KoodiDto> koodis  =  getCamelTemplate().requestBodyAndHeader(REITTI_SIALTYY_YLAKOODIS, "",
                 "koodiUri", koodiUri, List.class);
         return koodis;
     }
@@ -126,7 +126,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
 
     @Override
     public void setFindCounterUsed(boolean findCounterUsed) {
-        this.findCounterUsed = findCounterUsed;
+        this.findCounterUsed  =  findCounterUsed;
     }
 
     @Override

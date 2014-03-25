@@ -56,28 +56,28 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
 
     @Override
     public SavedSearchViewDto getSaveById(long id) throws NotFoundException, AuthorizationException {
-        SavedSearch save = found(savedSearchRepository.findOne(id));
+        SavedSearch save  =  found(savedSearchRepository.findOne(id));
         ensureLoggedInUser(save.getOwnerUserOid());
         return dtoConverter.convert(save, new SavedSearchViewDto());
     }
 
     @Override
     public void deleteSavedSearch(long id) throws NotFoundException, AuthorizationException {
-        SavedSearch save = found(savedSearchRepository.findOne(id));
+        SavedSearch save  =  found(savedSearchRepository.findOne(id));
         ensureLoggedInUser(save.getOwnerUserOid());
         savedSearchRepository.delete(id);
     }
 
     @Override
     public long saveSearch(SavedSearchSaveDto dto) {
-        SavedSearch search = dtoConverter.convert(dto, new SavedSearch());
+        SavedSearch search  =  dtoConverter.convert(dto, new SavedSearch());
         search.setOwnerUserOid(getLoggedInUserOid());
         return savedSearchRepository.saveNew(search).getId();
     }
 
     @Override
     public void updateSavedSearch(SavedSearchEditDto dto) throws NotFoundException, AuthorizationException {
-        SavedSearch save = found(savedSearchRepository.findOne(dto.getId()));
+        SavedSearch save  =  found(savedSearchRepository.findOne(dto.getId()));
         dtoConverter.convert(dto, save);
         savedSearchRepository.save(save);
     }

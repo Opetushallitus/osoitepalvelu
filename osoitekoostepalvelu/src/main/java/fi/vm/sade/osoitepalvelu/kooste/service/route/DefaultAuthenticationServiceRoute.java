@@ -38,10 +38,10 @@ import java.util.List;
 @Component
 public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBuilder
         implements AuthenticationServiceRoute {
-    private static final String ROUTE_KAYTTOOIKESURYHMAS = "direct:findKayttoikeusryhmas";
-    private static final String ROUTE_HENKILOS = "direct:henkilos";
-    private static final String ROUTE_MY_INFORMATION = "direct:myInformation";
-    private static final String MY_INFORMATION_PATH = "/me";
+    private static final String ROUTE_KAYTTOOIKESURYHMAS  =  "direct:findKayttoikeusryhmas";
+    private static final String ROUTE_HENKILOS  =  "direct:henkilos";
+    private static final String ROUTE_MY_INFORMATION  =  "direct:myInformation";
+    private static final String MY_INFORMATION_PATH  =  "/me";
 
     @Value("${authenticationService.kayttoikeusryhma.rest.url}")
     private String authenticationServiceKayttooikeusryhmasRestUrl;
@@ -61,42 +61,42 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     }
 
     protected void buildHenkilo() {
-        Debugger authenticationCallInOutDebug = debug(ROUTE_HENKILOS+".AuthenticationServiceCall");
+        Debugger authenticationCallInOutDebug  =  debug(ROUTE_HENKILOS + ".AuthenticationServiceCall");
         headers(
                 from(ROUTE_HENKILOS),
                 headers()
                     .get().path("/byOoids")
-                            .query("ht=VIRKAILIJA&ooids=${in.headers.ooids}")
+                            .query("ht = VIRKAILIJA&ooids = ${in.headers.ooids}")
                     .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
-        )
+      )
         .process(authenticationCallInOutDebug)
         .to(trim(authenticationServiceHenkiloServiceRestUrl))
         .process(authenticationCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<HenkiloDto>>() {}));
+        .process(jsonToDto(new TypeReference<List<HenkiloDto>>() { }));
     }
 
     protected void buildKayttoOikeusryhmas() {
-        Debugger authenticationCallInOutDebug = debug(ROUTE_KAYTTOOIKESURYHMAS+".AuthenticationServiceCall");
+        Debugger authenticationCallInOutDebug  =  debug(ROUTE_KAYTTOOIKESURYHMAS + ".AuthenticationServiceCall");
         headers(
                 from(ROUTE_KAYTTOOIKESURYHMAS),
                 headers()
                         .get()
                         .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
-        )
+      )
         .process(authenticationCallInOutDebug)
         .to(trim(authenticationServiceKayttooikeusryhmasRestUrl))
         .process(authenticationCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
+        .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() { }));
     }
 
     protected void buildMyInformation() {
-        Debugger authenticationCallInOutDebug = debug(ROUTE_MY_INFORMATION+".AuthenticationServiceCall");
+        Debugger authenticationCallInOutDebug  =  debug(ROUTE_MY_INFORMATION + ".AuthenticationServiceCall");
         headers(
                 from(ROUTE_MY_INFORMATION),
                 headers()
                         .get().path(MY_INFORMATION_PATH)
                         .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
-        )
+      )
         .process(authenticationCallInOutDebug)
         .to(trim(casService))
         .process(authenticationCallInOutDebug)

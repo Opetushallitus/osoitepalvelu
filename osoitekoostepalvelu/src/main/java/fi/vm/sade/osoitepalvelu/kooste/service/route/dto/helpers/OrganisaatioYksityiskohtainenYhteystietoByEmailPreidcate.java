@@ -32,12 +32,12 @@ public class OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate
     private Locale locale;
 
     public OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(Locale locale) {
-        this.locale = locale;
+        this.locale  =  locale;
     }
 
     @Override
     public boolean apply(OrganisaatioYksityiskohtainenYhteystietoDto yhteystieto) {
         return  yhteystieto.getEmail() != null
-            && LocaleHelper.languageEquals( locale, LocaleHelper.parseLocale(yhteystieto.getKieli(), null) );
+            && LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(yhteystieto.getKieli(), null));
     }
 }

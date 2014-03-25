@@ -31,7 +31,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class DefaultSequenceRepository implements SequenceRepository {
-    private static final String SAVED_SEARCH_ID_SEQUENCE_NAME = "savedSearch";
+    private static final String SAVED_SEARCH_ID_SEQUENCE_NAME  =  "savedSearch";
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -42,9 +42,9 @@ public class DefaultSequenceRepository implements SequenceRepository {
     }
 
     public long increaseCounter(String sequenceName) {
-        Query query = new Query(Criteria.where("name").is(sequenceName));
-        Update update = new Update().inc("sequence", 1);
-        Sequence seq = mongoTemplate.findAndModify(query, update, Sequence.class);
+        Query query  =  new Query(Criteria.where("name").is(sequenceName));
+        Update update  =  new Update().inc("sequence", 1);
+        Sequence seq  =  mongoTemplate.findAndModify(query, update, Sequence.class);
         if (seq == null) {
             seq = new Sequence();
             seq.setName(sequenceName);

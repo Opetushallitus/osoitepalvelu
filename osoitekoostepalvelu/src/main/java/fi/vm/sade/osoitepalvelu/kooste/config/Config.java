@@ -29,6 +29,6 @@ public class Config {
     }
 
     public void setCacheTimeoutMillis(int cacheTimeoutMillis) {
-        this.cacheTimeoutMillis = cacheTimeoutMillis;
+        this.cacheTimeoutMillis  =  cacheTimeoutMillis;
     }
 }

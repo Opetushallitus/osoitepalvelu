@@ -21,17 +21,20 @@ package fi.vm.sade.osoitepalvelu.kooste.common.util;
  * Date: 2/17/14
  * Time: 12:29 PM
  */
-public class StringHelper {
+public final class StringHelper {
 
+    private StringHelper() {
+    }
+    
     /**
      * @param concatBy the concatenator
      * @param values to concatenate by concatBy
      * @return values concatenated by concatBy
      */
-    public static String join( String concatBy, String... values ) {
-        StringBuffer b = new StringBuffer();
-        for (int i=0; i < values.length; ++i) {
-            String val = values[i];
+    public static String join(String concatBy, String... values) {
+        StringBuffer b  =  new StringBuffer();
+        for (int i = 0; i < values.length; ++i) {
+            String val  =  values[i];
             if (val != null) {
                 if (b.length() > 0) {
                     b.append(concatBy);

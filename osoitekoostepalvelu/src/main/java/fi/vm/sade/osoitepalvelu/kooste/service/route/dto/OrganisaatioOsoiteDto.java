@@ -36,7 +36,7 @@ public class OrganisaatioOsoiteDto implements Serializable {
     }
 
     public void setOsoiteTyyppi(OrganisaatioYhteysosoiteDto.OsoiteTyyppi osoiteTyyppi) {
-        this.osoiteTyyppi = osoiteTyyppi;
+        this.osoiteTyyppi  =  osoiteTyyppi;
     }
 
     public String getYhteystietoOid() {
@@ -44,7 +44,7 @@ public class OrganisaatioOsoiteDto implements Serializable {
     }
 
     public void setYhteystietoOid(String yhteystietoOid) {
-        this.yhteystietoOid = yhteystietoOid;
+        this.yhteystietoOid  =  yhteystietoOid;
     }
 
     public String getPostinumeroUri() {
@@ -52,7 +52,7 @@ public class OrganisaatioOsoiteDto implements Serializable {
     }
 
     public void setPostinumeroUri(String postinumeroUri) {
-        this.postinumeroUri = postinumeroUri;
+        this.postinumeroUri  =  postinumeroUri;
     }
 
     public String getOsoite() {
@@ -60,7 +60,7 @@ public class OrganisaatioOsoiteDto implements Serializable {
     }
 
     public void setOsoite(String osoite) {
-        this.osoite = osoite;
+        this.osoite  =  osoite;
     }
 
     public String getPostitoimipaikka() {
@@ -68,7 +68,7 @@ public class OrganisaatioOsoiteDto implements Serializable {
     }
 
     public void setPostitoimipaikka(String postitoimipaikka) {
-        this.postitoimipaikka = postitoimipaikka;
+        this.postitoimipaikka  =  postitoimipaikka;
     }
 
     public String getExtraRivi() {
@@ -76,6 +76,6 @@ public class OrganisaatioOsoiteDto implements Serializable {
     }
 
     public void setExtraRivi(String extraRivi) {
-        this.extraRivi = extraRivi;
+        this.extraRivi  =  extraRivi;
     }
 }

@@ -18,9 +18,9 @@ package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
 
 import java.io.Serializable;
 
-public class SearchValueDto implements Comparable<SearchValueDto>, Serializable{
+public class SearchValueDto implements Comparable<SearchValueDto>, Serializable {
 
-    private static final long serialVersionUID = -5123398206835328711L;
+    private static final long serialVersionUID  =  -5123398206835328711L;
     
     private String koodiArvo;
 
@@ -28,7 +28,7 @@ public class SearchValueDto implements Comparable<SearchValueDto>, Serializable{
     }
     
     public SearchValueDto(String koodiArvo) {
-        this.koodiArvo = koodiArvo;
+        this.koodiArvo  =  koodiArvo;
     }
     
     public String getKoodiArvo() {
@@ -36,7 +36,7 @@ public class SearchValueDto implements Comparable<SearchValueDto>, Serializable{
     }
     
     public void setKoodiArvo(String koodiArvo) {
-        this.koodiArvo = koodiArvo;
+        this.koodiArvo  =  koodiArvo;
     }
 
     @Override

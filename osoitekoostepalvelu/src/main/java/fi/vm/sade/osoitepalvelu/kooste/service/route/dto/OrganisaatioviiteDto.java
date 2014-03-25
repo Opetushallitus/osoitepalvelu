@@ -26,14 +26,14 @@ import java.io.Serializable;
 public class OrganisaatioviiteDto implements Serializable {
     private Long id;
     private String organisaatioOid;
-    private boolean includeChildren=false;
+    private boolean includeChildren = false;
 
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id  =  id;
     }
 
     public String getOrganisaatioOid() {
@@ -41,7 +41,7 @@ public class OrganisaatioviiteDto implements Serializable {
     }
 
     public void setOrganisaatioOid(String organisaatioOid) {
-        this.organisaatioOid = organisaatioOid;
+        this.organisaatioOid  =  organisaatioOid;
     }
 
     public boolean isIncludeChildren() {
@@ -49,6 +49,6 @@ public class OrganisaatioviiteDto implements Serializable {
     }
 
     public void setIncludeChildren(boolean includeChildren) {
-        this.includeChildren = includeChildren;
+        this.includeChildren  =  includeChildren;
     }
 }

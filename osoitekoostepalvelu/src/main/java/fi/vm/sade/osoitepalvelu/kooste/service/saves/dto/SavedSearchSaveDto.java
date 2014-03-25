@@ -33,17 +33,17 @@ import java.util.List;
 public class SavedSearchSaveDto {
     private String name;
     private SavedSearch.SaveType searchType;
-    private List<String> addressFields = new ArrayList<String>();
-    private List<String> receiverFields = new ArrayList<String>();
-    private List<SearchTargetGroupDto> targetGroups = new ArrayList<SearchTargetGroupDto>();
-    private List<SearchTermDto> terms = new ArrayList<SearchTermDto>();
+    private List<String> addressFields  =  new ArrayList<String>();
+    private List<String> receiverFields  =  new ArrayList<String>();
+    private List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
+    private List<SearchTermDto> terms  =  new ArrayList<SearchTermDto>();
 
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name  =  name;
     }
 
     public SavedSearch.SaveType getSearchType() {
@@ -51,7 +51,7 @@ public class SavedSearchSaveDto {
     }
 
     public void setSearchType(SavedSearch.SaveType searchType) {
-        this.searchType = searchType;
+        this.searchType  =  searchType;
     }
 
     public List<String> getReceiverFields() {
@@ -59,7 +59,7 @@ public class SavedSearchSaveDto {
     }
 
     public void setReceiverFields(List<String> receiverFields) {
-        this.receiverFields = receiverFields;
+        this.receiverFields  =  receiverFields;
     }
 
     public List<String> getAddressFields() {
@@ -67,7 +67,7 @@ public class SavedSearchSaveDto {
     }
 
     public void setAddressFields(List<String> addressFields) {
-        this.addressFields = addressFields;
+        this.addressFields  =  addressFields;
     }
 
     public List<SearchTargetGroupDto> getTargetGroups() {
@@ -75,7 +75,7 @@ public class SavedSearchSaveDto {
     }
 
     public void setTargetGroups(List<SearchTargetGroupDto> targetGroups) {
-        this.targetGroups = targetGroups;
+        this.targetGroups  =  targetGroups;
     }
 
     public List<SearchTermDto> getTerms() {
@@ -83,6 +83,6 @@ public class SavedSearchSaveDto {
     }
 
     public void setTerms(List<SearchTermDto> terms) {
-        this.terms = terms;
+        this.terms  =  terms;
     }
 }

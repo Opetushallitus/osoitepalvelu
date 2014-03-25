@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KayttajahakuResultsDto implements Serializable {
-    private static final long serialVersionUID = 5525465817208222978L;
+    private static final long serialVersionUID  =  5525465817208222978L;
     
-    private List<KayttajahakuResultDto> results = new ArrayList<KayttajahakuResultDto>();
+    private List<KayttajahakuResultDto> results  =  new ArrayList<KayttajahakuResultDto>();
     
     public KayttajahakuResultsDto() {
-        results = new ArrayList<KayttajahakuResultDto>();
+        results  =  new ArrayList<KayttajahakuResultDto>();
     }
     
     public List<KayttajahakuResultDto> getResults() {
@@ -34,7 +34,7 @@ public class KayttajahakuResultsDto implements Serializable {
     }
     
     public void setResults(List<KayttajahakuResultDto> results) {
-        this.results = results;
+        this.results  =  results;
     }
     
     public void addResult(KayttajahakuResultDto result) {

@@ -23,10 +23,10 @@ import java.io.Serializable;
 
 public class OsoitteistoDto implements Serializable {
 
-    private static final long serialVersionUID = 6985560274560979066L;
+    private static final long serialVersionUID  =  6985560274560979066L;
     
     private String kieli;
-    @DtoConversion(withClass = OrganisaatioYhteysosoiteDto.class)
+    @DtoConversion(withClass  =  OrganisaatioYhteysosoiteDto.class)
     private String osoiteTyyppi;
     private String yhteystietoOid;
     private String osoite;
@@ -40,7 +40,7 @@ public class OsoitteistoDto implements Serializable {
     }
 
     public void setOsoiteTyyppi(String osoiteTyyppi) {
-        this.osoiteTyyppi = osoiteTyyppi;
+        this.osoiteTyyppi  =  osoiteTyyppi;
     }
 
     public String getYhteystietoOid() {
@@ -48,7 +48,7 @@ public class OsoitteistoDto implements Serializable {
     }
 
     public void setYhteystietoOid(String yhteystietoOid) {
-        this.yhteystietoOid = yhteystietoOid;
+        this.yhteystietoOid  =  yhteystietoOid;
     }
 
     public String getOsoite() {
@@ -56,7 +56,7 @@ public class OsoitteistoDto implements Serializable {
     }
 
     public void setOsoite(String osoite) {
-        this.osoite = osoite;
+        this.osoite  =  osoite;
     }
 
     public String getPostinumero() {
@@ -64,7 +64,7 @@ public class OsoitteistoDto implements Serializable {
     }
 
     public void setPostinumero(String postinumero) {
-        this.postinumero = postinumero;
+        this.postinumero  =  postinumero;
     }
 
     public String getPostitoimipaikka() {
@@ -72,7 +72,7 @@ public class OsoitteistoDto implements Serializable {
     }
 
     public void setPostitoimipaikka(String postitoimipaikka) {
-        this.postitoimipaikka = postitoimipaikka;
+        this.postitoimipaikka  =  postitoimipaikka;
     }
 
     public String getExtraRivi() {
@@ -80,7 +80,7 @@ public class OsoitteistoDto implements Serializable {
     }
 
     public void setExtraRivi(String extraRivi) {
-        this.extraRivi = extraRivi;
+        this.extraRivi  =  extraRivi;
     }
     
     public String getKieli() {
@@ -88,7 +88,7 @@ public class OsoitteistoDto implements Serializable {
     }
     
     public void setKieli(String kieli) {
-        this.kieli = kieli;
+        this.kieli  =  kieli;
     }
 
     public String getPostilokero() {
@@ -96,6 +96,6 @@ public class OsoitteistoDto implements Serializable {
     }
 
     public void setPostilokero(String postilokero) {
-        this.postilokero = postilokero;
+        this.postilokero  =  postilokero;
     }
 }

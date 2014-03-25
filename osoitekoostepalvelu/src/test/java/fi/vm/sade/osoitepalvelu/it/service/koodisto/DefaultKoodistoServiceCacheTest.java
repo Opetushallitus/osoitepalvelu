@@ -43,10 +43,10 @@ import static org.junit.Assert.assertEquals;
  */
 @Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={SpringTestAppConfig.class, OsoitepalveluCamelConfig.class})
+@ContextConfiguration(classes =  {SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
 public class DefaultKoodistoServiceCacheTest {
-    private static final Locale LOCALE_FI = new Locale("fi", "FI");
-    private static final long DEFAULT_CACHE_TIMEOUT_MS = 1000L * 3600L;
+    private static final Locale LOCALE_FI  =  new Locale("fi", "FI");
+    private static final long DEFAULT_CACHE_TIMEOUT_MS  =  1000L * 3600L;
     
     @Autowired
     private DefaultKoodistoService koodistoService;
@@ -56,26 +56,26 @@ public class DefaultKoodistoServiceCacheTest {
 
     @Test
     public void testCache() {
-        long defaultCache = koodistoService.getCacheTimeoutMillis(), orignalSearchCount = koodistoReitti
+        long defaultCache  =  koodistoService.getCacheTimeoutMillis(), orignalSearchCount  =  koodistoReitti
                 .getFindCounterValue();
         koodistoReitti.setFindCounterUsed(true);
 
         // Ensure cache turned off:
         koodistoService.setCacheTimeoutMillis(-1L);
 
-        List<UiKoodiItemDto> optiot = koodistoService.findAlueHallintoVirastoOptions(LOCALE_FI);
+        List<UiKoodiItemDto> optiot  =  koodistoService.findAlueHallintoVirastoOptions(LOCALE_FI);
         DefaultKoodistoServiceTest.assertListNonEmptyAndItemsOfType(optiot,
                 KoodistoDto.KoodistoTyyppi.ALUEHALLINTOVIRASTO);
 
         // Ensure cache not used:
-        assertEquals(orignalSearchCount + 1L, koodistoReitti.getFindCounterValue());
+        assertEquals(orignalSearchCount  +  1L, koodistoReitti.getFindCounterValue());
 
         // Turn cache on:
         koodistoService.setCacheTimeoutMillis(DEFAULT_CACHE_TIMEOUT_MS);
 
-        List<UiKoodiItemDto> optiot2 = koodistoService.findAlueHallintoVirastoOptions(LOCALE_FI);
+        List<UiKoodiItemDto> optiot2  =  koodistoService.findAlueHallintoVirastoOptions(LOCALE_FI);
         // Ensure cache used:
-        assertEquals(orignalSearchCount + 2L, koodistoReitti.getFindCounterValue());
+        assertEquals(orignalSearchCount  +  2L, koodistoReitti.getFindCounterValue());
 
         // And that results match the original:
         DefaultKoodistoServiceTest.assertListNonEmptyAndItemsOfType(optiot2,

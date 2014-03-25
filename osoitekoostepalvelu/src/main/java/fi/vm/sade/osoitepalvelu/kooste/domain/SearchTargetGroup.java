@@ -26,7 +26,7 @@ import java.util.List;
  * Time: 1:34 PM
  */
 public class SearchTargetGroup implements Serializable {
-    private static final long serialVersionUID = -1439905791723850160L;
+    private static final long serialVersionUID  =  -1439905791723850160L;
 
     public enum GroupType {
         JARJESTAJAT_YLLAPITAJAT("Koulutustoimija"), // ??
@@ -41,10 +41,10 @@ public class SearchTargetGroup implements Serializable {
         private final String organisaatioPalveluTyyppiArvo;
 
         private GroupType() {
-            this.organisaatioPalveluTyyppiArvo = null;
+            this.organisaatioPalveluTyyppiArvo  =  null;
         }
         private GroupType(String organisaatioPalveluTyyppiArvo) {
-            this.organisaatioPalveluTyyppiArvo = organisaatioPalveluTyyppiArvo;
+            this.organisaatioPalveluTyyppiArvo  =  organisaatioPalveluTyyppiArvo;
         }
 
         public String getOrganisaatioPalveluTyyppiArvo() {
@@ -52,7 +52,7 @@ public class SearchTargetGroup implements Serializable {
         }
 
         public static GroupType[] getOrganisaatioPalveluTypes() {
-            List<GroupType> types = new ArrayList<GroupType>();
+            List<GroupType> types  =  new ArrayList<GroupType>();
             for (GroupType type : values()) {
                 if (type.getOrganisaatioPalveluTyyppiArvo() != null) {
                     types.add(type);
@@ -75,14 +75,14 @@ public class SearchTargetGroup implements Serializable {
     };
 
     private GroupType type;
-    private List<TargetType> options = new ArrayList<TargetType>();
+    private List<TargetType> options  =  new ArrayList<TargetType>();
 
     public SearchTargetGroup() {
     }
 
     public SearchTargetGroup(GroupType type, List<TargetType> options) {
-        this.type = type;
-        this.options = options;
+        this.type  =  type;
+        this.options  =  options;
     }
 
     public GroupType getType() {
@@ -90,7 +90,7 @@ public class SearchTargetGroup implements Serializable {
     }
 
     public void setType(GroupType type) {
-        this.type = type;
+        this.type  =  type;
     }
 
     public List<TargetType> getOptions() {
@@ -98,6 +98,6 @@ public class SearchTargetGroup implements Serializable {
     }
 
     public void setOptions(List<TargetType> options) {
-        this.options = options;
+        this.options  =  options;
     }
 }

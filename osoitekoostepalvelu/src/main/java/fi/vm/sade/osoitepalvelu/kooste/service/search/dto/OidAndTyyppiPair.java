@@ -10,8 +10,9 @@ import java.io.Serializable;
  * Time: 1:49 PM
  */
 public class OidAndTyyppiPair implements Serializable {
-    public static final String TYYPPI_ORGANISAATIO = "organisaatio";
-    public static final String TYYPPI_HENKILO = "henkilo";
+    private static final int HASH_FACTOR = 31;
+    public static final String TYYPPI_ORGANISAATIO  =  "organisaatio";
+    public static final String TYYPPI_HENKILO  =  "henkilo";
 
     private String oidTyyppi;
     private String oid;
@@ -20,8 +21,8 @@ public class OidAndTyyppiPair implements Serializable {
     }
 
     public OidAndTyyppiPair(String oidTyyppi, String oid) {
-        this.oidTyyppi = oidTyyppi;
-        this.oid = oid;
+        this.oidTyyppi  =  oidTyyppi;
+        this.oid  =  oid;
     }
 
     public String getOid() {
@@ -29,7 +30,7 @@ public class OidAndTyyppiPair implements Serializable {
     }
 
     public void setOid(String oid) {
-        this.oid = oid;
+        this.oid  =  oid;
     }
 
     public String getOidTyyppi() {
@@ -37,22 +38,22 @@ public class OidAndTyyppiPair implements Serializable {
     }
 
     public void setOidTyyppi(String oidTyyppi) {
-        this.oidTyyppi = oidTyyppi;
+        this.oidTyyppi  =  oidTyyppi;
     }
 
     @Override
     public int hashCode() {
-        int result = oid != null ? oid.hashCode() : 0;
-        result = 31 * result + (oidTyyppi != null ? oidTyyppi.hashCode() : 0);
+        int result  =  oid != null ? oid.hashCode() : 0;
+        result  =  HASH_FACTOR * result  +  (oidTyyppi != null ? oidTyyppi.hashCode() : 0);
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if ( !(obj instanceof  OidAndTyyppiPair) ) {
+        if (!(obj instanceof  OidAndTyyppiPair)) {
             return false;
         }
-        OidAndTyyppiPair other = (OidAndTyyppiPair) obj;
+        OidAndTyyppiPair other  =  (OidAndTyyppiPair) obj;
         return EqualsHelper.equals(this.oid, other.oid)
                 && EqualsHelper.equals(this.oidTyyppi, other.oidTyyppi);
     }

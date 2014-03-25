@@ -30,11 +30,13 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  * Time: 1:09 PM
  */
 @Configuration
-@ComponentScan(basePackageClasses = SpringApp.class)
+@ComponentScan(basePackageClasses  =  SpringApp.class)
 @ImportResource("classpath:spring/application-context.xml")
-@Import(value = {MongoConfig.class, OsoitepalveluCamelConfig.class})
+@Import(value  =  {MongoConfig.class, OsoitepalveluCamelConfig.class })
 public class SpringApp {
-    private static final int SECONDS_TO_MS_FACTOR = 1000;
+    private static final int SECONDS_IN_HOUR = 3600;
+
+    private static final int SECONDS_TO_MS_FACTOR  =  1000;
 
     @Value("${koodisto.cache.livetime.seconds}")
     private int koodistoCacheLiveTimeSeconds;
@@ -53,21 +55,21 @@ public class SpringApp {
         }
 
         public void setCacheTimeoutMillis(int cacheTimeoutMillis) {
-            this.cacheTimeoutMillis = cacheTimeoutMillis;
+            this.cacheTimeoutMillis  =  cacheTimeoutMillis;
         }
     }
 
     @Bean
     public ResourceBundleMessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        ResourceBundleMessageSource messageSource  =  new ResourceBundleMessageSource();
         messageSource.setBasename("Messages");
-        messageSource.setCacheSeconds(3600);
+        messageSource.setCacheSeconds(SECONDS_IN_HOUR);
         return messageSource;
     }
 
     @Bean
     public Config config() {
-        Config config = new Config();
+        Config config  =  new Config();
         config.setCacheTimeoutMillis(koodistoCacheLiveTimeSeconds * SECONDS_TO_MS_FACTOR);
         return config;
     }

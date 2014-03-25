@@ -26,19 +26,20 @@ import java.util.List;
  * Time: 2:08 PM
  */
 public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
-    private List<String> kuntaList = new ArrayList<String>();
-    private List<String> kieliList = new ArrayList<String>();
-    private List<String> oppilaitostyyppiList = new ArrayList<String>();
-    private List<String> vuosiluokkaList = new ArrayList<String>();
-    private List<String> ytunnusList = new ArrayList<String>();
-    private Integer limit = 999999999;
+    private static final int HASH_FACTOR = 31;
+    private List<String> kuntaList  =  new ArrayList<String>();
+    private List<String> kieliList  =  new ArrayList<String>();
+    private List<String> oppilaitostyyppiList  =  new ArrayList<String>();
+    private List<String> vuosiluokkaList  =  new ArrayList<String>();
+    private List<String> ytunnusList  =  new ArrayList<String>();
+    private Integer limit  =  Integer.MAX_VALUE;
 
     public List<String> getKieliList() {
         return kieliList;
     }
 
     public void setKieliList(List<String> kieliList) {
-        this.kieliList = kieliList;
+        this.kieliList  =  kieliList;
     }
 
     public List<String> getKuntaList() {
@@ -46,7 +47,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     }
 
     public void setKuntaList(List<String> kuntaList) {
-        this.kuntaList = kuntaList;
+        this.kuntaList  =  kuntaList;
     }
 
     public List<String> getOppilaitostyyppiList() {
@@ -54,7 +55,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     }
 
     public void setOppilaitostyyppiList(List<String> oppilaitostyyppiList) {
-        this.oppilaitostyyppiList = oppilaitostyyppiList;
+        this.oppilaitostyyppiList  =  oppilaitostyyppiList;
     }
 
     public List<String> getVuosiluokkaList() {
@@ -62,7 +63,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     }
 
     public void setVuosiluokkaList(List<String> vuosiluokkaList) {
-        this.vuosiluokkaList = vuosiluokkaList;
+        this.vuosiluokkaList  =  vuosiluokkaList;
     }
 
     public Integer getLimit() {
@@ -70,7 +71,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     }
 
     public void setLimit(Integer limit) {
-        this.limit = limit;
+        this.limit  =  limit;
     }
 
     public List<String> getYtunnusList() {
@@ -78,24 +79,38 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     }
 
     public void setYtunnusList(List<String> ytunnusList) {
-        this.ytunnusList = ytunnusList;
+        this.ytunnusList  =  ytunnusList;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        OrganisaatioYhteystietoCriteriaDto that = (OrganisaatioYhteystietoCriteriaDto) o;
-
-        if (kieliList != null ? !kieliList.equals(that.kieliList) : that.kieliList != null) return false;
-        if (kuntaList != null ? !kuntaList.equals(that.kuntaList) : that.kuntaList != null) return false;
-        if (limit != null ? !limit.equals(that.limit) : that.limit != null) return false;
-        if (oppilaitostyyppiList != null ? !oppilaitostyyppiList.equals(that.oppilaitostyyppiList) : that.oppilaitostyyppiList != null)
+        if (this == o) { 
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) { 
             return false;
-        if (vuosiluokkaList != null ? !vuosiluokkaList.equals(that.vuosiluokkaList) : that.vuosiluokkaList != null)
+        }
+
+        OrganisaatioYhteystietoCriteriaDto that  =  (OrganisaatioYhteystietoCriteriaDto) o;
+
+        if (kieliList != null ? !kieliList.equals(that.kieliList) : that.kieliList != null) { 
             return false;
-        if (ytunnusList != null ? !ytunnusList.equals(that.ytunnusList) : that.ytunnusList != null) return false;
+        }
+        if (kuntaList != null ? !kuntaList.equals(that.kuntaList) : that.kuntaList != null) { 
+            return false;
+        }
+        if (limit != null ? !limit.equals(that.limit) : that.limit != null) { 
+            return false;
+        }
+        if (oppilaitostyyppiList != null ? !oppilaitostyyppiList.equals(that.oppilaitostyyppiList) : that.oppilaitostyyppiList != null) {
+            return false;
+        }
+        if (vuosiluokkaList != null ? !vuosiluokkaList.equals(that.vuosiluokkaList) : that.vuosiluokkaList != null) {
+            return false;
+        }
+        if (ytunnusList != null ? !ytunnusList.equals(that.ytunnusList) : that.ytunnusList != null) { 
+            return false;
+        }
 
         return true;
     }
@@ -103,11 +118,11 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     @Override
     public int hashCode() {
         int result = kuntaList != null ? kuntaList.hashCode() : 0;
-        result = 31 * result + (kieliList != null ? kieliList.hashCode() : 0);
-        result = 31 * result + (oppilaitostyyppiList != null ? oppilaitostyyppiList.hashCode() : 0);
-        result = 31 * result + (vuosiluokkaList != null ? vuosiluokkaList.hashCode() : 0);
-        result = 31 * result + (ytunnusList != null ? ytunnusList.hashCode() : 0);
-        result = 31 * result + (limit != null ? limit.hashCode() : 0);
+        result  =  HASH_FACTOR * result  +  (kieliList != null ? kieliList.hashCode() : 0);
+        result  =  HASH_FACTOR * result  +  (oppilaitostyyppiList != null ? oppilaitostyyppiList.hashCode() : 0);
+        result  =  HASH_FACTOR * result  +  (vuosiluokkaList != null ? vuosiluokkaList.hashCode() : 0);
+        result  =  HASH_FACTOR * result  +  (ytunnusList != null ? ytunnusList.hashCode() : 0);
+        result  =  HASH_FACTOR * result  +  (limit != null ? limit.hashCode() : 0);
         return result;
     }
 }

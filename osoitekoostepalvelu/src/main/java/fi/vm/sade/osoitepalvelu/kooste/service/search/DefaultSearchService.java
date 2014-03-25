@@ -62,14 +62,14 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     private SearchResultDtoConverter searchResultDtoConverter;
 
     @Override
-    @Cacheable(cacheName = "osoitepalveluSearchResultsCache")
+    @Cacheable(cacheName  =  "osoitepalveluSearchResultsCache")
     public OrganisaatioResultsDto find(@PartialCacheKey SearchTermsDto terms, CamelRequestContext context) {
-        OrganisaatioResultsDto results = new OrganisaatioResultsDto();
+        OrganisaatioResultsDto results  =  new OrganisaatioResultsDto();
 
         if (terms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes())) {
             List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults
-                    = findOrganisaatios(terms, context);
-            List<OrganisaatioTiedotDto> convertedResults = searchResultDtoConverter.convert(
+                     =  findOrganisaatios(terms, context);
+            List<OrganisaatioTiedotDto> convertedResults  =  searchResultDtoConverter.convert(
                     organisaatioYhteystietoResults, new ArrayList<OrganisaatioTiedotDto>(), OrganisaatioTiedotDto.class,
                     terms.getLocale());
             results.getResults().addAll(convertedResults);
@@ -84,23 +84,23 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     protected List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatios(SearchTermsDto terms,
                                                                            CamelRequestContext context) {
-        OrganisaatioYhteystietoCriteriaDto organisaatioYhteystietosCriteria = new OrganisaatioYhteystietoCriteriaDto();
-        List<String> kuntas = resolveKuntaKoodis(terms);
-        organisaatioYhteystietosCriteria.setKuntaList( kuntas );
+        OrganisaatioYhteystietoCriteriaDto organisaatioYhteystietosCriteria  =  new OrganisaatioYhteystietoCriteriaDto();
+        List<String> kuntas  =  resolveKuntaKoodis(terms);
+        organisaatioYhteystietosCriteria.setKuntaList(kuntas);
         organisaatioYhteystietosCriteria.setKieliList(terms.findTerms("organisaationKielis"));
         organisaatioYhteystietosCriteria.setOppilaitostyyppiList(terms.findTerms("oppilaitostyyppis"));
         organisaatioYhteystietosCriteria.setVuosiluokkaList(terms.findTerms("vuosiluokkas"));
         organisaatioYhteystietosCriteria.setYtunnusList(terms.findTerms("koultuksenjarjestajas"));
         List<OrganisaatioYhteystietoHakuResultDto> results
-                = organisaatioServiceRoute.findOrganisaatioYhteystietos(organisaatioYhteystietosCriteria, context);
+                 =  organisaatioServiceRoute.findOrganisaatioYhteystietos(organisaatioYhteystietosCriteria, context);
         return filterOrganisaatioResults(results, terms);
     }
 
     protected List<String> resolveKuntaKoodis(SearchTermsDto terms) {
-        List<String> kuntas = new ArrayList<String>();
+        List<String> kuntas  =  new ArrayList<String>();
         kuntas.addAll(terms.findTerms("kuntas"));
-        for( String maakuntaKoodi : terms.findTerms("maakuntas") ) {
-            kuntas.addAll( kuntasForMaakunta(terms.getLocale(), maakuntaKoodi) );
+        for(String maakuntaKoodi : terms.findTerms("maakuntas")) {
+            kuntas.addAll(kuntasForMaakunta(terms.getLocale(), maakuntaKoodi));
         }
         return kuntas;
     }
@@ -117,17 +117,17 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     protected List<OrganisaatioYhteystietoHakuResultDto> filterOrganisaatioResults(List<OrganisaatioYhteystietoHakuResultDto> results,
                                                                                  final SearchTermsDto terms) {
-        AndPredicateAdapter<OrganisaatioYhteystietoHakuResultDto> predicate =
+        AndPredicateAdapter<OrganisaatioYhteystietoHakuResultDto> predicate  = 
                 new AndPredicateAdapter<OrganisaatioYhteystietoHakuResultDto>();
 
-        final List<String> organisaatioTyyppis = new ArrayList<String>();
+        final List<String> organisaatioTyyppis  =  new ArrayList<String>();
         for (SearchTargetGroupDto groupDto : terms.getTargetGroups()) {
-            SearchTargetGroup.GroupType groupType = groupDto.getType();
+            SearchTargetGroup.GroupType groupType  =  groupDto.getType();
             if (groupType.getOrganisaatioPalveluTyyppiArvo() != null) {
                 organisaatioTyyppis.add(groupType.getOrganisaatioPalveluTyyppiArvo());
             }
         }
-        predicate = predicate.and(new Predicate<OrganisaatioYhteystietoHakuResultDto>() {
+        predicate  =  predicate.and(new Predicate<OrganisaatioYhteystietoHakuResultDto>() {
             @Override
             public boolean apply(OrganisaatioYhteystietoHakuResultDto result) {
                 for (String tyyppi : result.getTyypit()) {
@@ -143,10 +143,10 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     }
 
     public void setOrganisaatioServiceRoute(OrganisaatioServiceRoute organisaatioServiceRoute) {
-        this.organisaatioServiceRoute = organisaatioServiceRoute;
+        this.organisaatioServiceRoute  =  organisaatioServiceRoute;
     }
 
     public void setKoodistoService(KoodistoService koodistoService) {
-        this.koodistoService = koodistoService;
+        this.koodistoService  =  koodistoService;
     }
 }

@@ -35,25 +35,25 @@ public abstract class AbstractService {
     @Autowired
     protected Logger sadeLogger;
 
-    protected Tapahtuma read( String oidType, String oid ) {
+    protected Tapahtuma read(String oidType, String oid) {
         return Tapahtuma.createREAD("osoitepalvelu", getLoggedInUserOidOrNull(), oidType, oid);
     }
 
-    protected void log( Tapahtuma tapahtuma ) {
+    protected void log(Tapahtuma tapahtuma) {
         sadeLogger.log(tapahtuma);
     }
 
     protected String getLoggedInUserOid() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if( auth == null ) {
+        Authentication auth  =  SecurityContextHolder.getContext().getAuthentication();
+        if(auth == null) {
             throw new AuthorizationException("User not logged in.");
         }
         return auth.getName();
     }
 
     protected String getLoggedInUserOidOrNull() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if( auth == null ) {
+        Authentication auth  =  SecurityContextHolder.getContext().getAuthentication();
+        if(auth == null) {
             return null;
         }
         return auth.getName();
@@ -68,8 +68,8 @@ public abstract class AbstractService {
 
     protected void ensureLoggedInUser(String ownerUsername) {
         if (!EqualsHelper.equals(ownerUsername, getLoggedInUserOid())) {
-            throw new AuthorizationException("Authenticated user " + getLoggedInUserOid()
-                    + " does not have access right to given entity.");
+            throw new AuthorizationException("Authenticated user "  +  getLoggedInUserOid()
+                     +  " does not have access right to given entity.");
         }
     }
 }

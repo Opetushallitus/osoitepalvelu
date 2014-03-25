@@ -36,7 +36,7 @@ public class ApiToJsonTest {
 
     @Test
     public void generateSearchJsonExample() {
-        SearchQueryDto haku = new SearchQueryDto();
+        SearchQueryDto haku  =  new SearchQueryDto();
 
         haku.addOrCriteria(new SearchKeyDto(KoodistoTyyppi.OPPILAITOKSEN_OPETUSKIELI.toString(), "TAI"),
                 new SearchValueDto("1"));
@@ -59,12 +59,12 @@ public class ApiToJsonTest {
     
     @Test
     public void generateResultsJsonExample() {
-        OrganisaatioResultsDto results = new OrganisaatioResultsDto();
+        OrganisaatioResultsDto results  =  new OrganisaatioResultsDto();
         
-        OrganisaatioTiedotDto result = new OrganisaatioTiedotDto();
-        List<String> tyypit = new ArrayList<String>();
+        OrganisaatioTiedotDto result  =  new OrganisaatioTiedotDto();
+        List<String> tyypit  =  new ArrayList<String>();
         tyypit.add("Opetuspiste");
-        HashMap<String, String> nimi = new HashMap<String, String>();
+        HashMap<String, String> nimi  =  new HashMap<String, String>();
         nimi.put("sv", "Svenska text");
         nimi.put("fi", "Suomeksi nimi");
         result.setNimi(nimi);
@@ -82,7 +82,7 @@ public class ApiToJsonTest {
         result.setKriisitiedotuksenEmail("kriisitiedotus@email.com");
         
         
-        OsoitteistoDto kayntiosoite = new OsoitteistoDto();
+        OsoitteistoDto kayntiosoite  =  new OsoitteistoDto();
         kayntiosoite.setKieli("fi");
         kayntiosoite.setOsoite("Mannerheiminkatu 48B");
         kayntiosoite.setOsoiteTyyppi("kaynti");
@@ -91,7 +91,7 @@ public class ApiToJsonTest {
         kayntiosoite.setYhteystietoOid("1.2.246.562.5.95913959722");
         result.addKayntiosoite(kayntiosoite);
         
-        OsoitteistoDto postiosoite = new OsoitteistoDto();
+        OsoitteistoDto postiosoite  =  new OsoitteistoDto();
         postiosoite.setKieli("fi");
         postiosoite.setPostilokero("PL 3");
         postiosoite.setOsoite("");
@@ -102,20 +102,20 @@ public class ApiToJsonTest {
         postiosoite.setYhteystietoOid("1.2.246.562.5.140081871810");
         result.addPostiosoite(postiosoite);
         
-        OrganisaatioYhteystietoDto yhteyshenkilo = new OrganisaatioYhteystietoDto();
+        OrganisaatioYhteystietoDto yhteyshenkilo  =  new OrganisaatioYhteystietoDto();
         yhteyshenkilo.setEmail("ylli.yhteyshenkilo@email.fi");
         yhteyshenkilo.setNimike("Yhteyshenkilö");
         yhteyshenkilo.setNimi("Ylli Yhteyshenkilö");
         yhteyshenkilo.setYhteyshenkiloOid("1.3.445864.474584848");
-        result.addYhteyshenkilö(yhteyshenkilo);
+        result.addYhteyshenkilo(yhteyshenkilo);
         
         results.addResult(result);
         
-        result = new OrganisaatioTiedotDto();
-        tyypit = new ArrayList<String>();
+        result  =  new OrganisaatioTiedotDto();
+        tyypit  =  new ArrayList<String>();
         tyypit.add("Toimipiste");
         result.setTyypit(tyypit);
-        nimi = new HashMap<String, String>();
+        nimi  =  new HashMap<String, String>();
         nimi.put("sv", "Högskola");
         nimi.put("fi", "Tre Korkeakoulu");
         result.setNimi(nimi);
@@ -132,7 +132,7 @@ public class ApiToJsonTest {
         result.setKriisitiedotuksenEmail("kriisi@email.com");
 
         
-        kayntiosoite = new OsoitteistoDto();
+        kayntiosoite  =  new OsoitteistoDto();
         kayntiosoite.setKieli("fi");
         kayntiosoite.setOsoite("Yliopistonkatu 58 B");
         kayntiosoite.setOsoiteTyyppi("kaynti");
@@ -141,7 +141,7 @@ public class ApiToJsonTest {
         kayntiosoite.setYhteystietoOid("1.2.246.562.5.95913959724");
         result.addKayntiosoite(kayntiosoite);
         
-        postiosoite = new OsoitteistoDto();
+        postiosoite  =  new OsoitteistoDto();
         postiosoite.setKieli("fi");
         postiosoite.setPostilokero("PL 231");
         postiosoite.setOsoiteTyyppi("posti");
@@ -151,19 +151,19 @@ public class ApiToJsonTest {
         postiosoite.setYhteystietoOid("1.2.246.562.5.140081871815");
         result.addPostiosoite(postiosoite);
         
-        yhteyshenkilo = new OrganisaatioYhteystietoDto();
+        yhteyshenkilo  =  new OrganisaatioYhteystietoDto();
         yhteyshenkilo.setEmail("rehtori.reijo@opetus.fi");
         yhteyshenkilo.setNimi("Reijo Rehtori");
         yhteyshenkilo.setNimike("Rehtori");
         yhteyshenkilo.setYhteyshenkiloOid("1.3.445864.2323235451");
-        result.addYhteyshenkilö(yhteyshenkilo);
+        result.addYhteyshenkilo(yhteyshenkilo);
         
-        yhteyshenkilo = new OrganisaatioYhteystietoDto();
+        yhteyshenkilo  =  new OrganisaatioYhteystietoDto();
         yhteyshenkilo.setEmail("apuri.pertti@opetus.fi");
         yhteyshenkilo.setNimi("Pertti Apuri");
         yhteyshenkilo.setNimike("Apulaisrehtori");
         yhteyshenkilo.setYhteyshenkiloOid("1.3.445868.154845151");
-        result.addYhteyshenkilö(yhteyshenkilo);
+        result.addYhteyshenkilo(yhteyshenkilo);
         
         results.addResult(result);
         
@@ -173,9 +173,9 @@ public class ApiToJsonTest {
     
     @Test
     public void generateKayttajahakuResultsJsonExample() {
-        KayttajahakuResultsDto results = new KayttajahakuResultsDto();
+        KayttajahakuResultsDto results  =  new KayttajahakuResultsDto();
         
-        KayttajahakuResultDto result = new KayttajahakuResultDto();
+        KayttajahakuResultDto result  =  new KayttajahakuResultDto();
         result.addRooli("Opettaja");
         result.addRooli("Opo");
         result.setEmail("olli.opettaja@opetus.fi");
@@ -186,7 +186,7 @@ public class ApiToJsonTest {
         
         results.addResult(result);
         
-        result = new KayttajahakuResultDto();
+        result  =  new KayttajahakuResultDto();
         result.addRooli("Lehtori");
         result.setEmail("pertti.pera@koulu.fi");
         result.setEtunimi("pertti");
@@ -202,7 +202,7 @@ public class ApiToJsonTest {
     
     
     private void printJson(Object object) {
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper  =  new ObjectMapper();
         mapper.getSerializationConfig().without(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
         try {

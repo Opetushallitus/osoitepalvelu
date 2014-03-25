@@ -40,14 +40,14 @@ public class AuthenticationServiceHealthCheck implements HealthChecker {
 
     @Override
     public Object checkHealth() throws Throwable {
-        final StopWatch watch = new StopWatch();
-        final List<KayttooikesuryhmaDto> kayttoikeusryhmas = authenticationServiceRoute.findKayttooikeusryhmas(
+        final StopWatch watch  =  new StopWatch();
+        final List<KayttooikesuryhmaDto> kayttoikeusryhmas  =  authenticationServiceRoute.findKayttooikeusryhmas(
                 new DefaultCamelRequestContext());
-        final long resultTook = watch.stop();
-        return new LinkedHashMap(){{
+        final long resultTook  =  watch.stop();
+        return new LinkedHashMap() { {
             put("status", "OK");
-            put("response-time", ""+resultTook+" ms");
+            put("response-time", ""  +  resultTook  +  " ms");
             put("kayttoikeusryhmas-count", kayttoikeusryhmas.size());
-        }};
+        } };
     }
 }

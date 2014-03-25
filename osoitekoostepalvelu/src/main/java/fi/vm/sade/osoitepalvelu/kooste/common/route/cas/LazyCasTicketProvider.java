@@ -28,20 +28,20 @@ public class LazyCasTicketProvider implements CasTicketProvider {
     private CasTicketProvider target;
 
     public LazyCasTicketProvider(CasTicketCache cache, CasTicketProvider target) {
-        this.cache = cache;
-        this.target = target;
+        this.cache  =  cache;
+        this.target  =  target;
     }
 
     @Override
     public Map<String, String> provideTicketHeaders(String service) {
-        Map<String, String> headers=null;
+        Map<String, String> headers = null;
         if (this.cache != null) {
-            headers = this.cache.get(service);
+            headers  =  this.cache.get(service);
             if (headers != null) {
                 return headers;
             }
         }
-        headers = this.target.provideTicketHeaders(service);
+        headers  =  this.target.provideTicketHeaders(service);
         if (this.cache != null) {
             this.cache.store(service, headers);
         }

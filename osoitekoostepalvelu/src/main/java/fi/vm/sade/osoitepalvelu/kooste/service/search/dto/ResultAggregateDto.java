@@ -29,16 +29,18 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
  * Time: 3:38 PM
  */
 public class ResultAggregateDto implements Serializable {
-    private static final long serialVersionUID = 1483746476279296389L;
+    private static final int HASH_FACTOR = 31;
+
+    private static final long serialVersionUID  =  1483746476279296389L;
     
     private OrganisaatioTiedotDto organisaatio;
     private OrganisaatioYhteystietoDto henkilo;
     private OsoitteistoDto osoite;
 
     public ResultAggregateDto(OrganisaatioTiedotDto organisaatio, OrganisaatioYhteystietoDto henkilo, OsoitteistoDto osoite) {
-        this.organisaatio = organisaatio;
-        this.henkilo = henkilo;
-        this.osoite = osoite;
+        this.organisaatio  =  organisaatio;
+        this.henkilo  =  henkilo;
+        this.osoite  =  osoite;
     }
 
     public OrganisaatioTiedotDto getOrganisaatio() {
@@ -55,9 +57,9 @@ public class ResultAggregateDto implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = ( organisaatio != null && organisaatio.getOid() != null ? organisaatio.getOid().hashCode() : 0 );
-        result = 31 * result + (henkilo != null && henkilo.getEmail() != null ? henkilo.getEmail().hashCode() : 0);
-        result = 31 * result + (osoite != null && osoite.getYhteystietoOid() != null ? osoite.getYhteystietoOid().hashCode() : 0);
+        int result  =  (organisaatio != null && organisaatio.getOid() != null ? organisaatio.getOid().hashCode() : 0);
+        result  =  HASH_FACTOR * result + (henkilo != null && henkilo.getEmail() != null ? henkilo.getEmail().hashCode() : 0);
+        result  =  HASH_FACTOR * result  +  (osoite != null && osoite.getYhteystietoOid() != null ? osoite.getYhteystietoOid().hashCode() : 0);
         return result;
     }
 
@@ -69,7 +71,7 @@ public class ResultAggregateDto implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ResultAggregateDto that = (ResultAggregateDto) o;
+        ResultAggregateDto that  =  (ResultAggregateDto) o;
         if (EqualsHelper.differentNulls(osoite, that.osoite)
                 || (EqualsHelper.notNulls(osoite, that.osoite)
                     && !EqualsHelper.equals(organisaatio.getOid(), that.organisaatio))) {
@@ -80,12 +82,12 @@ public class ResultAggregateDto implements Serializable {
                     && !EqualsHelper.equals(henkilo.getEmail(), that.henkilo.getEmail()))) {
             return false;
         }
-        if ( EqualsHelper.differentNulls(osoite, that.osoite)
+        if (EqualsHelper.differentNulls(osoite, that.osoite)
                 || (EqualsHelper.notNulls(osoite, that.osoite)
                     && !(
                         EqualsHelper.equals(osoite.getYhteystietoOid(), that.osoite.getYhteystietoOid()))
                         && EqualsHelper.equals(osoite.getKieli(), that.osoite.getKieli())
-                    ) ) {
+                  )) {
             return false;
         }
         return true;

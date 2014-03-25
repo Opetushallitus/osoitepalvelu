@@ -48,7 +48,7 @@ import static org.junit.Assert.assertTrue;
 @Ignore // No specified username/password pairs in Bamboo for system user
 @Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
+@ContextConfiguration(classes  =  { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
 public class AuthenticationServiceRouteTest {
     @Autowired
     private DefaultAuthenticationServiceRoute authenticationServiceRoute;
@@ -59,28 +59,28 @@ public class AuthenticationServiceRouteTest {
 
     @Test
     public void testFindKayttooikeusryhmas() {
-        List<KayttooikesuryhmaDto> ryhmas = authenticationServiceRoute.findKayttooikeusryhmas(
+        List<KayttooikesuryhmaDto> ryhmas  =  authenticationServiceRoute.findKayttooikeusryhmas(
                 new DefaultCamelRequestContext());
-        assertTrue( ryhmas.size() > 0 );
+        assertTrue(ryhmas.size() > 0);
     }
 
     @Test
     @Ignore // not still deployes to Luokka
     public void testFindHenkilosByOrganisaatioOids() {
-        OrganisaatioYhteystietoCriteriaDto criteria = new OrganisaatioYhteystietoCriteriaDto();
+        OrganisaatioYhteystietoCriteriaDto criteria  =  new OrganisaatioYhteystietoCriteriaDto();
         criteria.setKuntaList(Arrays.asList(new String[]{"kunta_604", "kunta_400"}));
         criteria.setLimit(100);
-        List<OrganisaatioYhteystietoHakuResultDto> yhteystietos = organisaatioServiceRoute
+        List<OrganisaatioYhteystietoHakuResultDto> yhteystietos  =  organisaatioServiceRoute
                 .findOrganisaatioYhteystietos(criteria, new DefaultCamelRequestContext());
 
-        List<HenkiloDto> henkilos = authenticationServiceRoute.findHenkilosByOrganisaatioOids( oids(yhteystietos),
+        List<HenkiloDto> henkilos  =  authenticationServiceRoute.findHenkilosByOrganisaatioOids(oids(yhteystietos),
                 new DefaultCamelRequestContext());
-        assertTrue( yhteystietos.size() > 0 );
+        assertTrue(yhteystietos.size() > 0);
     }
 
     @Test
     public void testMe() {
-        MyInformationDto me = authenticationServiceRoute.getMe();
+        MyInformationDto me  =  authenticationServiceRoute.getMe();
         assertNotNull(me);
         assertNotNull(me.getUid());
         assertNotNull(me.getOid());

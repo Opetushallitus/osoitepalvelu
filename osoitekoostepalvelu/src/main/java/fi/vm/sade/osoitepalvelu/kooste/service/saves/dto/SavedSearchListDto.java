@@ -28,8 +28,8 @@ import java.io.Serializable;
  */
 @DtoConversion
 @DtoNotExported
-public class SavedSearchListDto implements Serializable{
-    private static final long serialVersionUID = -5360150502343268907L;
+public class SavedSearchListDto implements Serializable {
+    private static final long serialVersionUID  =  -5360150502343268907L;
     
     private Long id;
     private String name;
@@ -39,7 +39,7 @@ public class SavedSearchListDto implements Serializable{
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id  =  id;
     }
 
     public String getName() {
@@ -47,6 +47,6 @@ public class SavedSearchListDto implements Serializable{
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name  =  name;
     }
 }

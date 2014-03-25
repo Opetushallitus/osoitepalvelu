@@ -38,37 +38,37 @@ import java.util.Locale;
  * Time: 4:32 PM
  */
 public abstract class AbstractMvcController {
-    public static final Locale DEFAULT_UI_LOCALE = new Locale("fi", "FI");
+    public static final Locale DEFAULT_UI_LOCALE  =  new Locale("fi", "FI");
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger  =  LoggerFactory.getLogger(getClass());
 
     protected Locale parseLocale(String locale) {
         return LocaleHelper.parseLocale(locale, DEFAULT_UI_LOCALE);
     }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Entity not found by primary key.") // 404
+    @ResponseStatus(value  =  HttpStatus.NOT_FOUND, reason  =  "Entity not found by primary key.") // 404
     @ExceptionHandler(NotFoundException.class)
     public void notFound() {
     }
 
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Not authorized.") // 401
+    @ResponseStatus(value  =  HttpStatus.UNAUTHORIZED, reason  =  "Not authorized.") // 401
     @ExceptionHandler(AuthorizationException.class)
     public void notAuthorized() {
     }
 
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR) // 500
+    @ResponseStatus(value  =  HttpStatus.INTERNAL_SERVER_ERROR) // 500
     @ExceptionHandler(Throwable.class)
     public ModelAndView otherCheckedException(HttpServletRequest req, Throwable exception) {
-        logger.error("Request: " + req.getRequestURL() + " raised " + exception, exception);
-        ModelAndView mav = new ModelAndView();
-        String messageKey = "internal_error";
-        Object[] params = new Object[0];
-        String errno = "";
-        if( exception instanceof SelfExplainingException) {
-            SelfExplainingException e = (SelfExplainingException) exception;
-            messageKey = e.getMessageKey();
-            params = e.getMessageParams();
-            errno = e.getErrorCode();
+        logger.error("Request: "  +  req.getRequestURL()  +  " raised "  +  exception, exception);
+        ModelAndView mav  =  new ModelAndView();
+        String messageKey  =  "internal_error";
+        Object[] params  =  new Object[0];
+        String errno  =  "";
+        if(exception instanceof SelfExplainingException) {
+            SelfExplainingException e  =  (SelfExplainingException) exception;
+            messageKey  =  e.getMessageKey();
+            params  =  e.getMessageParams();
+            errno  =  e.getErrorCode();
         }
         mav.addObject("exceptionMessage", exception.getMessage());
         mav.addObject("messageKey", messageKey);

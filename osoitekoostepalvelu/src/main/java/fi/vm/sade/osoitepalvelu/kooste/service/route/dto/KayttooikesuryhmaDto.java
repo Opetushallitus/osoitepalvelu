@@ -28,21 +28,21 @@ import java.util.List;
  * Time: 3:02 PM
  */
 public class KayttooikesuryhmaDto implements Serializable {
-    @DtoConversion(path="koodiId")
+    @DtoConversion(path = "koodiId")
     private Long id;
-    @DtoConversion(path="nimi")
+    @DtoConversion(path = "nimi")
     private String name;
-    @DtoConversion(path="kuvaus")
-    private LocalizedContainerDto description = new LocalizedContainerDto();
-    private List<OrganisaatioviiteDto> organisaatioViite = new ArrayList<OrganisaatioviiteDto>();
-    private Object rooliRajoite;/// TODO? what does this contain?
+    @DtoConversion(path = "kuvaus")
+    private LocalizedContainerDto description  =  new LocalizedContainerDto();
+    private List<OrganisaatioviiteDto> organisaatioViite  =  new ArrayList<OrganisaatioviiteDto>();
+    private Object rooliRajoite; /// TODO? what does this contain?
 
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id  =  id;
     }
 
     public String getName() {
@@ -50,7 +50,7 @@ public class KayttooikesuryhmaDto implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name  =  name;
     }
 
     public LocalizedContainerDto getDescription() {
@@ -58,7 +58,7 @@ public class KayttooikesuryhmaDto implements Serializable {
     }
 
     public void setDescription(LocalizedContainerDto description) {
-        this.description = description;
+        this.description  =  description;
     }
 
     public List<OrganisaatioviiteDto> getOrganisaatioViite() {
@@ -66,7 +66,7 @@ public class KayttooikesuryhmaDto implements Serializable {
     }
 
     public void setOrganisaatioViite(List<OrganisaatioviiteDto> organisaatioViite) {
-        this.organisaatioViite = organisaatioViite;
+        this.organisaatioViite  =  organisaatioViite;
     }
 
     public Object getRooliRajoite() {
@@ -74,6 +74,6 @@ public class KayttooikesuryhmaDto implements Serializable {
     }
 
     public void setRooliRajoite(Object rooliRajoite) {
-        this.rooliRajoite = rooliRajoite;
+        this.rooliRajoite  =  rooliRajoite;
     }
 }

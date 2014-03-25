@@ -33,22 +33,22 @@ import java.util.List;
 @DtoConversion
 @DtoNotExported
 public class SavedSearchViewDto implements Serializable {
-    private static final long serialVersionUID = -3986479736234952248L;
+    private static final long serialVersionUID  =  -3986479736234952248L;
     
     private Long id;
     private SavedSearch.SaveType searchType;
     private DateTime createdAt;
-    private List<String> addressFields = new ArrayList<String>();
-    private List<String> receiverFields = new ArrayList<String>();
-    private List<SearchTargetGroupDto> targetGroups = new ArrayList<SearchTargetGroupDto>();
-    private List<SearchTermDto> terms = new ArrayList<SearchTermDto>();
+    private List<String> addressFields  =  new ArrayList<String>();
+    private List<String> receiverFields  =  new ArrayList<String>();
+    private List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
+    private List<SearchTermDto> terms  =  new ArrayList<SearchTermDto>();
 
     public DateTime getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(DateTime createdAt) {
-        this.createdAt = createdAt;
+        this.createdAt  =  createdAt;
     }
 
     public Long getId() {
@@ -56,7 +56,7 @@ public class SavedSearchViewDto implements Serializable {
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id  =  id;
     }
 
     public SavedSearch.SaveType getSearchType() {
@@ -64,7 +64,7 @@ public class SavedSearchViewDto implements Serializable {
     }
 
     public void setSearchType(SavedSearch.SaveType searchType) {
-        this.searchType = searchType;
+        this.searchType  =  searchType;
     }
 
     public List<String> getAddressFields() {
@@ -72,7 +72,7 @@ public class SavedSearchViewDto implements Serializable {
     }
 
     public void setAddressFields(List<String> addressFields) {
-        this.addressFields = addressFields;
+        this.addressFields  =  addressFields;
     }
 
     public List<SearchTargetGroupDto> getTargetGroups() {
@@ -80,7 +80,7 @@ public class SavedSearchViewDto implements Serializable {
     }
 
     public void setTargetGroups(List<SearchTargetGroupDto> targetGroups) {
-        this.targetGroups = targetGroups;
+        this.targetGroups  =  targetGroups;
     }
 
     public List<SearchTermDto> getTerms() {
@@ -88,7 +88,7 @@ public class SavedSearchViewDto implements Serializable {
     }
 
     public void setTerms(List<SearchTermDto> terms) {
-        this.terms = terms;
+        this.terms  =  terms;
     }
 
     public List<String> getReceiverFields() {
@@ -96,6 +96,6 @@ public class SavedSearchViewDto implements Serializable {
     }
 
     public void setReceiverFields(List<String> receiverFields) {
-        this.receiverFields = receiverFields;
+        this.receiverFields  =  receiverFields;
     }
 }

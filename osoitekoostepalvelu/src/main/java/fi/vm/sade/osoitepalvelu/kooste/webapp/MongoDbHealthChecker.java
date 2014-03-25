@@ -25,13 +25,13 @@ public class MongoDbHealthChecker implements HealthChecker {
 
     @Override
     public Object checkHealth() throws Throwable {
-        final StopWatch watch = new StopWatch();
-        final long number = mongoTemplate.count(Query.query(new Criteria()), SavedSearch.class);
-        final long resultTook = watch.stop();
-        return new LinkedHashMap(){{
+        final StopWatch watch  =  new StopWatch();
+        final long number  =  mongoTemplate.count(Query.query(new Criteria()), SavedSearch.class);
+        final long resultTook  =  watch.stop();
+        return new LinkedHashMap() { {
             put("status", "OK");
-            put("response-time", ""+resultTook+" ms");
+            put("response-time", "" + resultTook + " ms");
             put("number-of-saved-searches", number);
-        }};
+        } };
     }
 }

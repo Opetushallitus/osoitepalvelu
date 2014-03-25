@@ -29,17 +29,17 @@ import java.util.List;
  */
 @DtoConversion
 public class SearchTermDto implements Serializable {
-    private static final long serialVersionUID = -1563200682961231758L;
+    private static final long serialVersionUID  =  -1563200682961231758L;
     
     private String type;
-    private List<String> values = new ArrayList<String>();
+    private List<String> values  =  new ArrayList<String>();
 
     public SearchTermDto() {
     }
 
     public SearchTermDto(String type, List<String> values) {
-        this.type = type;
-        this.values = values;
+        this.type  =  type;
+        this.values  =  values;
     }
 
     public String getType() {
@@ -47,7 +47,7 @@ public class SearchTermDto implements Serializable {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type  =  type;
     }
 
     public List<String> getValues() {
@@ -55,6 +55,6 @@ public class SearchTermDto implements Serializable {
     }
 
     public void setValues(List<String> values) {
-        this.values = values;
+        this.values  =  values;
     }
 }

@@ -28,7 +28,7 @@ public class UiKoodiItemByKoodiUriPredicate implements Predicate<UiKoodiItemDto>
     private String uri;
 
     public UiKoodiItemByKoodiUriPredicate(String uri) {
-        this.uri = uri;
+        this.uri  =  uri;
     }
 
     @Override

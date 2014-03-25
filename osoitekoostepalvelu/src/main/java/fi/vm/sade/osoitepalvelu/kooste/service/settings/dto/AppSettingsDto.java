@@ -26,8 +26,8 @@ import java.util.Map;
  * Time: 12:52 PM
  */
 public class AppSettingsDto implements Serializable {
-    private Map<String,Object> env = new HashMap<String, Object>();
-    private Map<String,Object> app = new HashMap<String, Object>();
+    private Map<String, Object> env  =  new HashMap<String, Object>();
+    private Map<String, Object> app  =  new HashMap<String, Object>();
 
     public AppSettingsDto() {
     }
@@ -37,7 +37,7 @@ public class AppSettingsDto implements Serializable {
     }
 
     public void setEnv(Map<String, Object> env) {
-        this.env = env;
+        this.env  =  env;
     }
 
     public Map<String, Object> getApp() {
@@ -45,6 +45,6 @@ public class AppSettingsDto implements Serializable {
     }
 
     public void setApp(Map<String, Object> app) {
-        this.app = app;
+        this.app  =  app;
     }
 }

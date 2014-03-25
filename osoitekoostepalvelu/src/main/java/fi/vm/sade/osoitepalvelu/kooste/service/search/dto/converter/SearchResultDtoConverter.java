@@ -42,7 +42,7 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
                                          Locale locale) {
         convertValue(from, to, locale);
         if (from.getKotipaikka() != null) {
-            UiKoodiItemDto kuntaKoodi = koodistoService
+            UiKoodiItemDto kuntaKoodi  =  koodistoService
                     .findKuntaByKoodiUri(locale, from.getKotipaikka());
             to.setKotikunta(kuntaKoodi.getNimi());
         }
@@ -52,7 +52,7 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
     public OsoitteistoDto convert(OrganisaatioYhteysosoiteDto from, OsoitteistoDto to, Locale locale) {
         convertValue(from, to, locale);
         if (from.getPostinumero() != null) {
-            UiKoodiItemDto postinumeroKoodi = koodistoService
+            UiKoodiItemDto postinumeroKoodi  =  koodistoService
                     .findPostinumeroByKoodiUri(locale, from.getPostinumero());
             if (postinumeroKoodi != null) {
                 to.setPostinumero(postinumeroKoodi.getKoodiId());

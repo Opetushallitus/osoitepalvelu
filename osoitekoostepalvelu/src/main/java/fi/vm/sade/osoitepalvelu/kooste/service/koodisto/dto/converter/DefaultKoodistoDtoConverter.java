@@ -37,7 +37,7 @@ public class DefaultKoodistoDtoConverter extends AbstractDtoConverter implements
         conversions.add(LocalizedContainerDto.class, String.class, new TypeConverterAdapter<LocalizedContainerDto, String>() {
             @Override
             public String convert(LocalizedContainerDto obj, PropertyConversionContext context, String currentValue, ConversionCall call) {
-                Locale locale = parameterOfType(Locale.class, 0, call);
+                Locale locale  =  parameterOfType(Locale.class, 0, call);
                 return obj.findForLocale(locale == null ? DefaultKoodistoService.DEFAULT_LOCALE
                         : DefaultKoodistoService.DEFAULT_LOCALE);
             }
@@ -54,14 +54,14 @@ public class DefaultKoodistoDtoConverter extends AbstractDtoConverter implements
 
     public UiKoodiItemDto convert(KoodiDto koodi, UiKoodiItemDto uiKoodi, Locale lokaali) {
         convertValue(koodi, uiKoodi, lokaali);
-        KoodiArvoDto arvo = koodi.getArvoByKieli(lokaali.getLanguage());
+        KoodiArvoDto arvo  =  koodi.getArvoByKieli(lokaali.getLanguage());
         if (arvo != null) {
             uiKoodi.setNimi(arvo.getNimi());
             uiKoodi.setKuvaus(arvo.getKuvaus());
             uiKoodi.setLyhytNimi(arvo.getLyhytNimi());
         } else {
-            uiKoodi.setNimi(lokaali.getLanguage() + "_missing!");
-            uiKoodi.setLyhytNimi(lokaali.getLanguage() + "_missing!");
+            uiKoodi.setNimi(lokaali.getLanguage()  +  "_missing!");
+            uiKoodi.setLyhytNimi(lokaali.getLanguage()  +  "_missing!");
         }
         return uiKoodi;
     }

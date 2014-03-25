@@ -47,9 +47,9 @@ import java.util.*;
  */
 @Service
 public class DefaultKoodistoService extends AbstractService implements KoodistoService {
-    public static final Locale DEFAULT_LOCALE = new Locale("fi", "FI");
+    public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger  =  LoggerFactory.getLogger(getClass());
 
     @Autowired
     private KoodistoRoute koodistoRoute;
@@ -60,14 +60,14 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     @Autowired
     private KoodistoDtoConverter dtoConverter;
 
-    @Autowired(required = false)
+    @Autowired(required  =  false)
     private KoodistoCacheRepository koodistoCacheRepository;
 
     @Value("#{config.cacheTimeoutMillis}")
     private long cacheTimeoutMillis;
 
     private Map<KoodistoCache.CacheKey, MemoryCacheHolder> memoryCache
-            = new HashMap<KoodistoCache.CacheKey, MemoryCacheHolder>();
+             =  new HashMap<KoodistoCache.CacheKey, MemoryCacheHolder>();
 
     @Override
     public List<UiKoodiItemDto> findOppilaitosTyyppiOptions(Locale locale) {
@@ -99,9 +99,9 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         return cached(new Cacheable<List<UiKoodiItemDto>>() {
             @Override
             public List<UiKoodiItemDto> get() {
-                List<KoodiDto> arvot = koodistoRoute.findKoodisWithParent(maakuntaUri);
-                arvot = filterActiveKoodis(arvot, new LocalDate());
-                List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
+                List<KoodiDto> arvot  =  koodistoRoute.findKoodisWithParent(maakuntaUri);
+                arvot  =  filterActiveKoodis(arvot, new LocalDate());
+                List<UiKoodiItemDto> optiot  =  dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
                         UiKoodiItemDto.class, locale);
                 return orderNimisAsc(optiot);
             }
@@ -110,7 +110,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     @Override
     public UiKoodiItemDto findKuntaByKoodiUri(Locale locale, String koodiUri) {
-        Iterator<UiKoodiItemDto> i = Collections2.filter(findKuntaOptions(locale),
+        Iterator<UiKoodiItemDto> i  =  Collections2.filter(findKuntaOptions(locale),
                 new UiKoodiItemByKoodiUriPredicate(koodiUri)).iterator();
         if (i.hasNext()) {
             return i.next();
@@ -125,7 +125,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     @Override
     public UiKoodiItemDto findPostinumeroByKoodiUri(Locale locale, String koodiUri) {
-        Iterator<UiKoodiItemDto> i = Collections2.filter(findPostinumeroOptions(locale),
+        Iterator<UiKoodiItemDto> i  =  Collections2.filter(findPostinumeroOptions(locale),
                 new UiKoodiItemByKoodiUriPredicate(koodiUri)).iterator();
         if (i.hasNext()) {
             return i.next();
@@ -178,10 +178,10 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         return cached(new Cacheable<List<UiKoodiItemDto>>() {
             @Override
             public List<UiKoodiItemDto> get() {
-                List<KayttooikesuryhmaDto> kayttoikeusryhmas = authenticationServiceRoute
+                List<KayttooikesuryhmaDto> kayttoikeusryhmas  =  authenticationServiceRoute
                         .findKayttooikeusryhmas(new DefaultCamelRequestContext());
-                return dtoConverter.convert( kayttoikeusryhmas, new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
-                        locale );
+                return dtoConverter.convert(kayttoikeusryhmas, new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
+                        locale);
             }
         }, new KoodistoCache.CacheKey(KoodistoCache.KoodistoTyyppi.valueOf(KoodistoTyyppi.KAYTTOOIKEUSRYHMA.name()),
                 locale));
@@ -196,8 +196,8 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         private List<UiKoodiItemDto> items;
 
         public MemoryCacheHolder(DateTime createdAt, List<UiKoodiItemDto> items) {
-            this.createdAt = createdAt;
-            this.items = items;
+            this.createdAt  =  createdAt;
+            this.items  =  items;
         }
 
         public DateTime getCreatedAt() {
@@ -210,12 +210,12 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     protected List<UiKoodiItemDto> cached(Cacheable<List<UiKoodiItemDto>> provider, KoodistoCache.CacheKey key) {
-        boolean cacheUsed = isCacheUsed();
+        boolean cacheUsed  =  isCacheUsed();
         if (!cacheUsed) {
             logger.info("CACHE DISABLED.");
             return provider.get();
         }
-        MemoryCacheHolder holder = memoryCache.get(key);
+        MemoryCacheHolder holder  =  memoryCache.get(key);
         if (holder != null && isCacheUsable(holder.getCreatedAt())) {
             // Hit memory cache:
             return holder.getItems();
@@ -228,14 +228,14 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         }
         List<UiKoodiItemDto> items;
         if (refresh) {
-            items = provider.get();
+            items  =  provider.get();
             cache.setItems(dtoConverter.convert(items, new ArrayList<KoodiItem>(), KoodiItem.class));
             cache.setUpdatedAt(new DateTime());
             koodistoCacheRepository.save(cache);
-            logger.info("SAVED CACHED Koodisto items for key: " + key);
+            logger.info("SAVED CACHED Koodisto items for key: "  +  key);
         } else {
-            items = dtoConverter.convert(cache.getItems(), new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class);
-            logger.info("Got cached results for key: " + key+ " updated at " + cache.getUpdatedAt());
+            items  =  dtoConverter.convert(cache.getItems(), new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class);
+            logger.info("Got cached results for key: "  +  key +  " updated at "  +  cache.getUpdatedAt());
         }
         memoryCache.put(key, new MemoryCacheHolder(cache.getUpdatedAt(), items));
         return items;
@@ -257,15 +257,15 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         return cached(new Cacheable<List<UiKoodiItemDto>>() {
             @Override
             public List<UiKoodiItemDto> get() {
-                KoodistoVersioDto koodistoVersio = findViimeisinVoimassaOlevaKoodistonVersio(tyyppi);
+                KoodistoVersioDto koodistoVersio  =  findViimeisinVoimassaOlevaKoodistonVersio(tyyppi);
                 if (koodistoVersio == null) {
                     return new ArrayList<UiKoodiItemDto>(); // Palautetaan tässä
                                                             // tyhjä lista
                 }
-                List<KoodiDto> arvot = koodistoRoute.findKooditKoodistonVersiolleTyyppilla(tyyppi,
+                List<KoodiDto> arvot  =  koodistoRoute.findKooditKoodistonVersiolleTyyppilla(tyyppi,
                         koodistoVersio.getVersio());
-                arvot = filterActiveKoodis(arvot, new LocalDate());
-                List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
+                arvot  =  filterActiveKoodis(arvot, new LocalDate());
+                List<UiKoodiItemDto> optiot  =  dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
                         UiKoodiItemDto.class, locale);
                 return orderNimisAsc(optiot);
             }
@@ -284,12 +284,12 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
      * @return Suodatettu lista, jossa mukana vain voimassa olevat arvot.
      */
     private List<KoodiDto> filterActiveKoodis(List<KoodiDto> koodit, LocalDate voimassaPvm) {
-        HashMap<String, KoodiDto> aktiivisetMap = new HashMap<String, KoodiDto>();
+        HashMap<String, KoodiDto> aktiivisetMap  =  new HashMap<String, KoodiDto>();
         for (KoodiDto koodi : koodit) {
             if (koodi.isVoimassaPvm(voimassaPvm) && KoodistoTila.isAktiivinenTila(koodi.getTila())) {
                 // Päivitetään tässä versiotieto
-                String mapKoodiId = koodi.getKoodiArvo();
-                KoodiDto aikaisempiVersio = aktiivisetMap.get(mapKoodiId);
+                String mapKoodiId  =  koodi.getKoodiArvo();
+                KoodiDto aikaisempiVersio  =  aktiivisetMap.get(mapKoodiId);
                 // Onko eka versio tai uudempi versionumero kyseessä?
                 if (aikaisempiVersio == null || koodi.getVersio() > aikaisempiVersio.getVersio()) {
                     // Tuoreempi versio -> Käytetään sitten tätä uusinta arvoa
@@ -320,10 +320,10 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     @Override
     public Map<KoodistoTyyppi, List<UiKoodiItemDto>> findAllKoodistos(Locale locale) {
-        Map<KoodistoTyyppi, List<UiKoodiItemDto>> koodistotMap = new HashMap<KoodistoTyyppi, List<UiKoodiItemDto>>();
-        KoodistoTyyppi[] tuetutKoodistot = KoodistoTyyppi.values();
+        Map<KoodistoTyyppi, List<UiKoodiItemDto>> koodistotMap  =  new HashMap<KoodistoTyyppi, List<UiKoodiItemDto>>();
+        KoodistoTyyppi[] tuetutKoodistot  =  KoodistoTyyppi.values();
         for (KoodistoTyyppi tyyppi : tuetutKoodistot) {
-            List<UiKoodiItemDto> koodistonArvojoukko = findKoodistoByTyyppi(locale, tyyppi);
+            List<UiKoodiItemDto> koodistonArvojoukko  =  findKoodistoByTyyppi(locale, tyyppi);
             koodistotMap.put(tyyppi, koodistonArvojoukko);
         }
         return koodistotMap;
@@ -338,18 +338,18 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
      *         ei löydy.
      */
     private KoodistoVersioDto findViimeisinVoimassaOlevaKoodistonVersio(KoodistoTyyppi tyyppi) {
-        List<KoodistoVersioDto> versiot = koodistoRoute.findKoodistonVersiot(tyyppi);
-        long maxVersionNumber = -1L;
-        KoodistoVersioDto versioVoimassa = null;
+        List<KoodistoVersioDto> versiot  =  koodistoRoute.findKoodistonVersiot(tyyppi);
+        long maxVersionNumber  =  -1L;
+        KoodistoVersioDto versioVoimassa  =  null;
         if (versiot != null && versiot.size() > 0) {
-            LocalDate tanaan = new LocalDate();
+            LocalDate tanaan  =  new LocalDate();
             for (KoodistoVersioDto versio : versiot) {
                 // Onko koodi aktiivinen ja tänään voimassa?
                 if (versio.isVoimassaPvm(tanaan) && KoodistoTila.isAktiivinenTila(versio.getTila())) {
                     // Etsitään maksimia versionumerosta
                     if (versio.getVersio() > maxVersionNumber) {
-                        maxVersionNumber = versio.getVersio();
-                        versioVoimassa = versio;
+                        maxVersionNumber  =  versio.getVersio();
+                        versioVoimassa  =  versio;
                     }
                 }
             }
@@ -362,14 +362,14 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     public void setCacheTimeoutMillis(long cacheTimeoutMillis) {
-        this.cacheTimeoutMillis = cacheTimeoutMillis;
+        this.cacheTimeoutMillis  =  cacheTimeoutMillis;
     }
 
     public void setKoodistoRoute(KoodistoRoute koodistoRoute) {
-        this.koodistoRoute = koodistoRoute;
+        this.koodistoRoute  =  koodistoRoute;
     }
 
     public void setAuthenticationServiceRoute(AuthenticationServiceRoute authenticationServiceRoute) {
-        this.authenticationServiceRoute = authenticationServiceRoute;
+        this.authenticationServiceRoute  =  authenticationServiceRoute;
     }
 }

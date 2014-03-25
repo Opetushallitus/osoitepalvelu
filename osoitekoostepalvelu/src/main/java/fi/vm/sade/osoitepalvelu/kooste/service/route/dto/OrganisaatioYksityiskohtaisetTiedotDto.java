@@ -31,26 +31,26 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     private Long version;
     private String oid;
     private String parentOid;
-    private List<String> parentOidPath = new ArrayList<String>();
-    private Map<String, String> nimi = new HashMap<String, String>();
-    private List<String> tyypit = new ArrayList<String>();
-    private List<String> kieletUris = new ArrayList<String>(); // opetuskieliUis, esim. oppilaitoksenopetuskieli_1#1
+    private List<String> parentOidPath  =  new ArrayList<String>();
+    private Map<String, String> nimi  =  new HashMap<String, String>();
+    private List<String> tyypit  =  new ArrayList<String>();
+    private List<String> kieletUris  =  new ArrayList<String>(); // opetuskieliUis, esim. oppilaitoksenopetuskieli_1#1
     private String oppilaitosTyyppiUri; // esim. oppilaitostyyppi_21#1
     private String oppilaitosKoodi; // esim. 10107
     private String toimipistekoodi;
     private String kotipaikkaUri; // esim. kunta_405
     private String maaUri; // esim. maatjavaltiot1_fin
     private OrganisaatioOsoiteDto postiosoite;
-    private List<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystiedot = new ArrayList<OrganisaatioYksityiskohtainenYhteystietoDto>();
-    private List<String> vuosiluokat = new ArrayList<String>();
-    private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
+    private List<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystiedot  =  new ArrayList<OrganisaatioYksityiskohtainenYhteystietoDto>();
+    private List<String> vuosiluokat  =  new ArrayList<String>();
+    private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos  =  new ArrayList<OrganisaatioYhteystietoElementtiDto>();
 
     public Long getVersion() {
         return version;
     }
 
     public void setVersion(Long version) {
-        this.version = version;
+        this.version  =  version;
     }
 
     public String getOid() {
@@ -58,7 +58,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setOid(String oid) {
-        this.oid = oid;
+        this.oid  =  oid;
     }
 
     public String getParentOid() {
@@ -66,7 +66,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setParentOid(String parentOid) {
-        this.parentOid = parentOid;
+        this.parentOid  =  parentOid;
     }
 
     public Map<String, String> getNimi() {
@@ -74,7 +74,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setNimi(Map<String, String> nimi) {
-        this.nimi = nimi;
+        this.nimi  =  nimi;
     }
 
     public List<String> getParentOidPath() {
@@ -82,7 +82,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setParentOidPath(List<String> parentOidPath) {
-        this.parentOidPath = parentOidPath;
+        this.parentOidPath  =  parentOidPath;
     }
 
     public List<String> getTyypit() {
@@ -90,7 +90,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setTyypit(List<String> tyypit) {
-        this.tyypit = tyypit;
+        this.tyypit  =  tyypit;
     }
 
     public String getOppilaitosTyyppiUri() {
@@ -98,7 +98,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setOppilaitosTyyppiUri(String oppilaitosTyyppiUri) {
-        this.oppilaitosTyyppiUri = oppilaitosTyyppiUri;
+        this.oppilaitosTyyppiUri  =  oppilaitosTyyppiUri;
     }
 
     public String getOppilaitosKoodi() {
@@ -106,7 +106,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setOppilaitosKoodi(String oppilaitosKoodi) {
-        this.oppilaitosKoodi = oppilaitosKoodi;
+        this.oppilaitosKoodi  =  oppilaitosKoodi;
     }
 
     public String getToimipistekoodi() {
@@ -114,7 +114,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setToimipistekoodi(String toimipistekoodi) {
-        this.toimipistekoodi = toimipistekoodi;
+        this.toimipistekoodi  =  toimipistekoodi;
     }
 
     public String getKotipaikkaUri() {
@@ -122,7 +122,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setKotipaikkaUri(String kotipaikkaUri) {
-        this.kotipaikkaUri = kotipaikkaUri;
+        this.kotipaikkaUri  =  kotipaikkaUri;
     }
 
     public String getMaaUri() {
@@ -130,7 +130,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setMaaUri(String maaUri) {
-        this.maaUri = maaUri;
+        this.maaUri  =  maaUri;
     }
 
     public OrganisaatioOsoiteDto getPostiosoite() {
@@ -138,7 +138,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setPostiosoite(OrganisaatioOsoiteDto postiosoite) {
-        this.postiosoite = postiosoite;
+        this.postiosoite  =  postiosoite;
     }
 
     public List<String> getVuosiluokat() {
@@ -146,7 +146,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setVuosiluokat(List<String> vuosiluokat) {
-        this.vuosiluokat = vuosiluokat;
+        this.vuosiluokat  =  vuosiluokat;
     }
 
     public List<OrganisaatioYhteystietoElementtiDto> getYhteystietoArvos() {
@@ -154,7 +154,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setYhteystietoArvos(List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos) {
-        this.yhteystietoArvos = yhteystietoArvos;
+        this.yhteystietoArvos  =  yhteystietoArvos;
     }
 
     public List<String> getKieletUris() {
@@ -162,7 +162,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setKieletUris(List<String> kieletUris) {
-        this.kieletUris = kieletUris;
+        this.kieletUris  =  kieletUris;
     }
 
     public List<OrganisaatioYksityiskohtainenYhteystietoDto> getYhteystiedot() {
@@ -170,6 +170,6 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     }
 
     public void setYhteystiedot(List<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystiedot) {
-        this.yhteystiedot = yhteystiedot;
+        this.yhteystiedot  =  yhteystiedot;
     }
 }

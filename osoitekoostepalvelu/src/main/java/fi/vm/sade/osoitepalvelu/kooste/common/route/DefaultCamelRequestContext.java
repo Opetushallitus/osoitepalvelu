@@ -24,7 +24,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
  * Time: 12:46 PM
  */
 public class DefaultCamelRequestContext implements CamelRequestContext {
-    private CasTicketCache ticketCache = new CasTicketCache();
+    private CasTicketCache ticketCache  =  new CasTicketCache();
 
     @Override
     public CasTicketCache getTicketCache() {

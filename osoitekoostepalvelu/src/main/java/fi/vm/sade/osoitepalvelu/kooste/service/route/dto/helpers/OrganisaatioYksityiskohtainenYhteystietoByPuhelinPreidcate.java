@@ -32,7 +32,7 @@ public class OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate
     private Locale locale;
 
     public OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate(Locale locale) {
-        this.locale = locale;
+        this.locale  =  locale;
     }
 
     @Override

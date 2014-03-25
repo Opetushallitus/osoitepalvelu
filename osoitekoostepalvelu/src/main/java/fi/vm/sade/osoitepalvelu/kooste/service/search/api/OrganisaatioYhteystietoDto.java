@@ -19,7 +19,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
 import java.io.Serializable;
 
 public class OrganisaatioYhteystietoDto implements Serializable {
-    private static final long serialVersionUID = -4697143053873590608L;
+    private static final long serialVersionUID  =  -4697143053873590608L;
 
     private String yhteyshenkiloOid;
     private String nimi;
@@ -31,7 +31,7 @@ public class OrganisaatioYhteystietoDto implements Serializable {
     }
     
     public void setNimi(String nimi) {
-        this.nimi = nimi;
+        this.nimi  =  nimi;
     }
     
     public String getNimike() {
@@ -39,7 +39,7 @@ public class OrganisaatioYhteystietoDto implements Serializable {
     }
     
     public void setNimike(String nimike) {
-        this.nimike = nimike;
+        this.nimike  =  nimike;
     }
     
     public String getEmail() {
@@ -47,7 +47,7 @@ public class OrganisaatioYhteystietoDto implements Serializable {
     }
     
     public void setEmail(String email) {
-        this.email = email;
+        this.email  =  email;
     }
 
     public String getYhteyshenkiloOid() {
@@ -55,6 +55,6 @@ public class OrganisaatioYhteystietoDto implements Serializable {
     }
 
     public void setYhteyshenkiloOid(String yhteyshenkiloOid) {
-        this.yhteyshenkiloOid = yhteyshenkiloOid;
+        this.yhteyshenkiloOid  =  yhteyshenkiloOid;
     }
 }

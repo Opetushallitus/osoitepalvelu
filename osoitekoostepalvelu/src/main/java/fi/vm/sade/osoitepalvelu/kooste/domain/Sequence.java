@@ -25,9 +25,9 @@ import java.io.Serializable;
  * Date: 12/12/13
  * Time: 6:37 PM
  */
-@Document(collection = "sequence")
+@Document(collection  =  "sequence")
 public class Sequence implements Serializable {
-    private static final long serialVersionUID = -984175757901146908L;
+    private static final long serialVersionUID  =  -984175757901146908L;
     
     private String name;
     private long sequence;
@@ -37,7 +37,7 @@ public class Sequence implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name  =  name;
     }
 
     public long getSequence() {
@@ -45,6 +45,6 @@ public class Sequence implements Serializable {
     }
 
     public void setSequence(long sequence) {
-        this.sequence = sequence;
+        this.sequence  =  sequence;
     }
 }

@@ -16,13 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.config;
 
-import org.apache.camel.*;
-import org.apache.camel.model.ProcessorDefinition;
-import org.apache.camel.processor.DelegateAsyncProcessor;
-import org.apache.camel.processor.DelegateProcessor;
-import org.apache.camel.spi.InterceptStrategy;
+import org.apache.camel.CamelContext;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.RoutesBuilder;
 import org.apache.camel.spring.SpringCamelContext;
-import org.apache.camel.util.StopWatch;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +41,7 @@ public class OsoitepalveluCamelConfig {
      */
     @Bean
     public CamelContext getCamelContext(RoutesBuilder[] builders, ApplicationContext appContext) throws Exception {
-        SpringCamelContext context = new SpringCamelContext(appContext);
+        SpringCamelContext context  =  new SpringCamelContext(appContext);
         for (RoutesBuilder route : builders) {
             context.addRoutes(route);
         }
@@ -61,7 +58,7 @@ public class OsoitepalveluCamelConfig {
      * @return Viite Camel ProducerTemplate -luokkaan, jonka kautta voi välittää
      *         dataa Camel-reitteihin.
      */
-    @Bean(name = "camelTemplate")
+    @Bean(name  =  "camelTemplate")
     public ProducerTemplate getProducerTemplate(CamelContext context) {
         if (producerTemplate == null) {
             producerTemplate = context.createProducerTemplate();

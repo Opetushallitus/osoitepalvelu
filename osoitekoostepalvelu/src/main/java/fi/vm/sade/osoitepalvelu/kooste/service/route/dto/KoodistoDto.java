@@ -45,8 +45,8 @@ public class KoodistoDto implements Serializable {
         private String uri; // Koodiston URI
 
         // Cache, jolla merkkijonot voidaan nopeasti mapata KoodistoTyypeiksi
-        private static Map<String, KoodistoTyyppi> uriToTypeMapper = new HashMap<String, KoodistoTyyppi>() {
-            private static final long serialVersionUID = -4218132478973020911L;
+        private static Map<String, KoodistoTyyppi> uriToTypeMapper  =  new HashMap<String, KoodistoTyyppi>() {
+            private static final long serialVersionUID  =  -4218132478973020911L;
             {
                 put(OPPILAITOSTYYPPI.getUri(), OPPILAITOSTYYPPI);
                 put(OMISTAJATYYPPI.getUri(), OMISTAJATYYPPI);
@@ -66,7 +66,7 @@ public class KoodistoDto implements Serializable {
         };
 
         private KoodistoTyyppi(String uri) {
-            this.uri = uri;
+            this.uri  =  uri;
         }
 
         public String getUri() {
@@ -74,10 +74,10 @@ public class KoodistoDto implements Serializable {
         }
 
         public static KoodistoTyyppi parseTyyppi(String koodistoTyyppi) {
-            KoodistoTyyppi tyyppi = uriToTypeMapper.get(koodistoTyyppi);
-            if (tyyppi == null) {
+            KoodistoTyyppi tyyppi  =  uriToTypeMapper.get(koodistoTyyppi);
+            if (tyyppi  == null) {
                 throw new IllegalStateException("Virhe: Merkkijono->Enum mappaus: Tuntematon koodistotyyppi: "
-                        + koodistoTyyppi);
+                         +  koodistoTyyppi);
             }
             return tyyppi;
         }
@@ -108,7 +108,7 @@ public class KoodistoDto implements Serializable {
     }
 
     public void setKoodistoUri(String koodistoUri) {
-        tyyppi = KoodistoTyyppi.parseTyyppi(koodistoUri);
+        tyyppi  =  KoodistoTyyppi.parseTyyppi(koodistoUri);
     }
 
     public OrganisaatioOid getOrganisaatioOid() {
@@ -116,11 +116,11 @@ public class KoodistoDto implements Serializable {
     }
 
     public void setOrganisaatioOid(OrganisaatioOid organisaatioOid) {
-        this.organisaatioOid = organisaatioOid;
+        this.organisaatioOid  =  organisaatioOid;
     }
 
     @Override
     public String toString() {
-        return tyyppi.name() + ", " + organisaatioOid;
+        return tyyppi.name()  +  ", "  +  organisaatioOid;
     }
 }

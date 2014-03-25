@@ -35,17 +35,17 @@ import java.util.Map;
  * Time: 9:27 AM
  */
 @Configuration
-@ComponentScan(basePackages = {
+@ComponentScan(basePackages  =  {
         "fi.vm.sade.osoitepalvelu.kooste.common",
         "fi.vm.sade.osoitepalvelu.kooste.domain",
         "fi.vm.sade.osoitepalvelu.kooste.dao",
         "fi.vm.sade.osoitepalvelu.kooste.service"
 })
 @ImportResource("classpath:spring/test-application-context.xml")
-@Import(value={MongoTestConfig.class})
-@PropertySource({"classpath:/osoitekoostepalvelu.properties", "classpath:/test.properties"})
+@Import(value = {MongoTestConfig.class })
+@PropertySource({"classpath:/osoitekoostepalvelu.properties", "classpath:/test.properties" })
 public class SpringTestAppConfig {
-    private static final int SECONDS_TO_MS_FACTOR = 1000;
+    private static final int SECONDS_TO_MS_FACTOR  =  1000;
     
     @Autowired
     private Environment env;
@@ -70,14 +70,14 @@ public class SpringTestAppConfig {
 
     @Bean
     public Config config() {
-        Config config = new Config();
+        Config config  =  new Config();
         config.setCacheTimeoutMillis(Integer.parseInt(env.getProperty("koodisto.cache.livetime.seconds")) * SECONDS_TO_MS_FACTOR);
         return config;
     }
 
     @Bean
     public ResourceBundleMessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        ResourceBundleMessageSource messageSource  =  new ResourceBundleMessageSource();
         messageSource.setBasename("Messages");
         messageSource.setCacheSeconds(3600);
         return messageSource;
@@ -90,9 +90,9 @@ public class SpringTestAppConfig {
 
     @Bean
     public CasTicketProvider usernamePasswordCasTicketProvider() {
-        final CasTicketProvider defaultProvider = new UsernamePasswordCasClientTicketProvider(
-                casService, casOrganisaatioServiceUsername, casOrganisaatioServicePassword);;
-        final Map<String,CasTicketProvider> providersByService = new HashMap<String, CasTicketProvider>();
+        final CasTicketProvider defaultProvider  =  new UsernamePasswordCasClientTicketProvider(
+                casService, casOrganisaatioServiceUsername, casOrganisaatioServicePassword);
+        final Map<String, CasTicketProvider> providersByService  =  new HashMap<String, CasTicketProvider>();
         providersByService.put(organisaatioCasService, defaultProvider);
         providersByService.put(authenticationCasService, new UsernamePasswordCasClientTicketProvider(casService,
                         casAuthenticationServiceUsername, casAuthenticationServicePassword));
@@ -101,8 +101,8 @@ public class SpringTestAppConfig {
         // Always use username and password authentication in tests (since user not logged in):
         return new CasTicketProvider() {
             @Override
-            public Map<String,String> provideTicketHeaders(String service) {
-                if( providersByService.containsKey(service) ) {
+            public Map<String, String> provideTicketHeaders(String service) {
+                if(providersByService.containsKey(service)) {
                     return providersByService.get(service).provideTicketHeaders(service);
                 }
                 return defaultProvider.provideTicketHeaders(service);

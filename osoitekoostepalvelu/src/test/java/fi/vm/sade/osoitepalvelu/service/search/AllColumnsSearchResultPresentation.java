@@ -40,7 +40,7 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
         this.locale = locale;
     }
 
-    public AllColumnsSearchResultPresentation( Locale locale, Set<OidAndTyyppiPair> nonIncludedOids ) {
+    public AllColumnsSearchResultPresentation(Locale locale, Set<OidAndTyyppiPair> nonIncludedOids) {
         this(locale);
         this.nonIncludedOids = nonIncludedOids;
     }

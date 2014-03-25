@@ -25,7 +25,7 @@ import java.util.List;
  * Time: 9:05 AM
  */
 public class KoodiItem implements Serializable {
-    private static final long serialVersionUID = -6732834870766631012L;
+    private static final long serialVersionUID  =  -6732834870766631012L;
     
     private KoodistoCache.KoodistoTyyppi koodistonTyyppi;
     private String koodiId;
@@ -40,7 +40,7 @@ public class KoodiItem implements Serializable {
     }
 
     public void setKoodiId(String koodiId) {
-        this.koodiId = koodiId;
+        this.koodiId  =  koodiId;
     }
 
     public String getNimi() {
@@ -48,7 +48,7 @@ public class KoodiItem implements Serializable {
     }
 
     public void setNimi(String nimi) {
-        this.nimi = nimi;
+        this.nimi  =  nimi;
     }
 
     public String getKuvaus() {
@@ -56,7 +56,7 @@ public class KoodiItem implements Serializable {
     }
 
     public void setKuvaus(String kuvaus) {
-        this.kuvaus = kuvaus;
+        this.kuvaus  =  kuvaus;
     }
 
     public String getLyhytNimi() {
@@ -64,7 +64,7 @@ public class KoodiItem implements Serializable {
     }
 
     public void setLyhytNimi(String lyhytNimi) {
-        this.lyhytNimi = lyhytNimi;
+        this.lyhytNimi  =  lyhytNimi;
     }
 
     public KoodistoCache.KoodistoTyyppi getKoodistonTyyppi() {
@@ -72,7 +72,7 @@ public class KoodiItem implements Serializable {
     }
 
     public void setKoodistonTyyppi(KoodistoCache.KoodistoTyyppi koodistonTyyppi) {
-        this.koodistonTyyppi = koodistonTyyppi;
+        this.koodistonTyyppi  =  koodistonTyyppi;
     }
 
     public List<Organisaatioviite> getOrganisaatioViite() {
@@ -80,7 +80,7 @@ public class KoodiItem implements Serializable {
     }
 
     public void setOrganisaatioViite(List<Organisaatioviite> organisaatioViite) {
-        this.organisaatioViite = organisaatioViite;
+        this.organisaatioViite  =  organisaatioViite;
     }
 
     public String getKoodiUri() {
@@ -88,6 +88,6 @@ public class KoodiItem implements Serializable {
     }
 
     public void setKoodiUri(String koodiUri) {
-        this.koodiUri = koodiUri;
+        this.koodiUri  =  koodiUri;
     }
 }

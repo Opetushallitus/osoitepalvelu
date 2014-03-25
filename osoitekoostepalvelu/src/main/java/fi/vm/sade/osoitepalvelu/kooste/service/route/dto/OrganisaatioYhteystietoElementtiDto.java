@@ -42,7 +42,7 @@ public class OrganisaatioYhteystietoElementtiDto implements Serializable {
     }
 
     public void setElementtiOid(String elementtiOid) {
-        this.elementtiOid = elementtiOid;
+        this.elementtiOid  =  elementtiOid;
     }
 
     public String getElementtiTyyppi() {
@@ -50,7 +50,7 @@ public class OrganisaatioYhteystietoElementtiDto implements Serializable {
     }
 
     public void setElementtiTyyppi(String elementtiTyyppi) {
-        this.elementtiTyyppi = elementtiTyyppi;
+        this.elementtiTyyppi  =  elementtiTyyppi;
     }
 
     public String getTyyppiOid() {
@@ -58,7 +58,7 @@ public class OrganisaatioYhteystietoElementtiDto implements Serializable {
     }
 
     public void setTyyppiOid(String tyyppiOid) {
-        this.tyyppiOid = tyyppiOid;
+        this.tyyppiOid  =  tyyppiOid;
     }
 
     public String getKieli() {
@@ -66,7 +66,7 @@ public class OrganisaatioYhteystietoElementtiDto implements Serializable {
     }
 
     public void setKieli(String kieli) {
-        this.kieli = kieli;
+        this.kieli  =  kieli;
     }
 
     public String getArvo() {
@@ -74,6 +74,6 @@ public class OrganisaatioYhteystietoElementtiDto implements Serializable {
     }
 
     public void setArvo(String arvo) {
-        this.arvo = arvo;
+        this.arvo  =  arvo;
     }
 }

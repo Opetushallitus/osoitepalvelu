@@ -36,8 +36,8 @@ public class JacksonJsonProcessor implements Processor {
     private TypeReference targetClassType;
 
     public <T> JacksonJsonProcessor(ObjectMapperProvider mapperProvider, TypeReference<T> targetClassType) {
-        this.targetClassType = targetClassType;
-        this.mapperProvider = mapperProvider;
+        this.targetClassType  =  targetClassType;
+        this.mapperProvider  =  mapperProvider;
     }
 
     @SuppressWarnings("rawtypes")
@@ -51,8 +51,8 @@ public class JacksonJsonProcessor implements Processor {
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        ObjectMapper objectMapper = mapperProvider.getContext(targetClassType.getClass());
-        String jsonData = exchange.getIn().getBody(String.class);
+        ObjectMapper objectMapper  =  mapperProvider.getContext(targetClassType.getClass());
+        String jsonData  =  exchange.getIn().getBody(String.class);
         exchange.getOut().setBody(objectMapper.readValue(jsonData, targetClassType));
     }
 }

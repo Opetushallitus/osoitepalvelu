@@ -38,42 +38,42 @@ import java.util.regex.Pattern;
 @Service
 public class DefaultAppSettingsService extends AbstractService implements AppSettingsService,
         EmbeddedValueResolverAware {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger  =  LoggerFactory.getLogger(getClass());
 
-    private static final Pattern EXPRESSION = Pattern.compile("\\$\\{(.*?)\\}");
+    private static final Pattern EXPRESSION  =  Pattern.compile("\\$\\{(.*?)\\}");
 
-    @Resource(name = "uiAppProperties")
+    @Resource(name  =  "uiAppProperties")
     private Properties uiAppProperties;
 
-    @Resource(name = "uiEnvProperties")
+    @Resource(name  =  "uiEnvProperties")
     private Properties uiEnvProperties;
 
     private StringValueResolver resolver;
 
     @Override
     public AppSettingsDto getUiSettings() {
-        AppSettingsDto settings = new AppSettingsDto();
-        for (Map.Entry<Object,Object> value : uiEnvProperties.entrySet()) {
+        AppSettingsDto settings  =  new AppSettingsDto();
+        for (Map.Entry<Object, Object> value : uiEnvProperties.entrySet()) {
             settings.getEnv().put(value.getKey().toString(), parseExpression(value.getValue()));
         }
-        for (Map.Entry<Object,Object> value : uiAppProperties.entrySet()) {
+        for (Map.Entry<Object, Object> value : uiAppProperties.entrySet()) {
             settings.getApp().put(value.getKey().toString(), parseExpression(value.getValue()));
         }
         return settings;
     }
 
     protected Object parseExpression(Object exp) {
-        if( exp instanceof String ) {
-            String expressionString = (String)exp;
-            Matcher m = EXPRESSION.matcher(expressionString);
+        if(exp instanceof String) {
+            String expressionString  =  (String)exp;
+            Matcher m  =  EXPRESSION.matcher(expressionString);
             while (m.find()) {
-                String expContainer = m.group(0);
-                String returnValue = resolver.resolveStringValue(expContainer);
+                String expContainer  =  m.group(0);
+                String returnValue  =  resolver.resolveStringValue(expContainer);
                 if (returnValue == null || expContainer.equals(returnValue)) {
-                    logger.warn("No value for env property: "+expContainer);
+                    logger.warn("No value for env property: "  +  expContainer);
                     returnValue = "";
                 }
-                expressionString = expressionString.replace(expContainer, returnValue);
+                expressionString  =  expressionString.replace(expContainer, returnValue);
             }
             return expressionString;
         }
@@ -82,6 +82,6 @@ public class DefaultAppSettingsService extends AbstractService implements AppSet
 
     @Override
     public void setEmbeddedValueResolver(StringValueResolver resolver) {
-        this.resolver = resolver;
+        this.resolver  =  resolver;
     }
 }

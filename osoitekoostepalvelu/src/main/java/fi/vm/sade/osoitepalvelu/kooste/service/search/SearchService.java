@@ -32,6 +32,6 @@ public interface SearchService {
      * @param requestContext the context for HTTP request received by the application to operate in
      * @return organisaatio results
      */
-    OrganisaatioResultsDto find( SearchTermsDto terms, CamelRequestContext requestContext );
+    OrganisaatioResultsDto find(SearchTermsDto terms, CamelRequestContext requestContext);
 
 }

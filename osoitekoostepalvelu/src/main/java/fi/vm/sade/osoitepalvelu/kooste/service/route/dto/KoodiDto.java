@@ -36,13 +36,13 @@ public class KoodiDto implements Serializable {
     private KoodistoTila tila;
 
     // Todellinen koodin data: Sisältää useita arvoja eri lokaaleille
-    private List<KoodiArvoDto> metadata = new ArrayList<KoodiArvoDto>();
+    private List<KoodiArvoDto> metadata  =  new ArrayList<KoodiArvoDto>();
 
     public KoodiDto() {
     }
 
     public KoodiDto(String koodiArvo) {
-        this.koodiArvo = koodiArvo;
+        this.koodiArvo  =  koodiArvo;
     }
 
     public String getKoodiUri() {
@@ -50,7 +50,7 @@ public class KoodiDto implements Serializable {
     }
 
     public void setKoodiUri(String koodiUri) {
-        this.koodiUri = koodiUri;
+        this.koodiUri  =  koodiUri;
     }
 
     public long getVersio() {
@@ -58,7 +58,7 @@ public class KoodiDto implements Serializable {
     }
 
     public void setVersio(long versio) {
-        this.versio = versio;
+        this.versio  =  versio;
     }
 
     public String getKoodiArvo() {
@@ -66,7 +66,7 @@ public class KoodiDto implements Serializable {
     }
 
     public void setKoodiArvo(String koodiArvo) {
-        this.koodiArvo = koodiArvo;
+        this.koodiArvo  =  koodiArvo;
     }
 
     public List<KoodiArvoDto> getMetadata() {
@@ -74,7 +74,7 @@ public class KoodiDto implements Serializable {
     }
 
     public void setMetadata(List<KoodiArvoDto> metadata) {
-        this.metadata = metadata;
+        this.metadata  =  metadata;
     }
 
     public KoodistoDto getKoodisto() {
@@ -82,7 +82,7 @@ public class KoodiDto implements Serializable {
     }
 
     public void setKoodisto(KoodistoDto koodisto) {
-        this.koodisto = koodisto;
+        this.koodisto  =  koodisto;
     }
 
     public KoodiArvoDto getArvoByKieli(String kieli) {
@@ -99,7 +99,7 @@ public class KoodiDto implements Serializable {
     }
 
     public void setVoimassaAlkuPvm(LocalDate voimassaAlkuPvm) {
-        this.voimassaAlkuPvm = voimassaAlkuPvm;
+        this.voimassaAlkuPvm  =  voimassaAlkuPvm;
     }
 
     public LocalDate getVoimassaLoppuPvm() {
@@ -107,7 +107,7 @@ public class KoodiDto implements Serializable {
     }
 
     public void setVoimassaLoppuPvm(LocalDate voimassaLoppuPvm) {
-        this.voimassaLoppuPvm = voimassaLoppuPvm;
+        this.voimassaLoppuPvm  =  voimassaLoppuPvm;
     }
 
     public KoodistoTila getTila() {
@@ -115,7 +115,7 @@ public class KoodiDto implements Serializable {
     }
 
     public void setTila(KoodistoTila tila) {
-        this.tila = tila;
+        this.tila  =  tila;
     }
 
     public boolean isVoimassaPvm(LocalDate pvm) {

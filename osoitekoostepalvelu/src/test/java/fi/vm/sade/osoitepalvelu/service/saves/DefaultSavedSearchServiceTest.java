@@ -51,7 +51,7 @@ import static org.junit.Assert.assertTrue;
  * Time: 10:32 AM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes=SpringTestAppConfig.class)
+@ContextConfiguration(classes = SpringTestAppConfig.class)
 public class DefaultSavedSearchServiceTest {
 
     @Autowired
@@ -65,7 +65,7 @@ public class DefaultSavedSearchServiceTest {
     @Before
     public void init() {
         loginAs("testUser");
-        cleanupSaveIds = new ArrayList<Long>();
+        cleanupSaveIds  =  new ArrayList<Long>();
     }
 
     @After
@@ -77,23 +77,23 @@ public class DefaultSavedSearchServiceTest {
     }
 
     private void loginAs(String user) {
-        SecurityContextHolder.getContext().setAuthentication(new RunAsUserToken("1234"+user, user, "1234",
+        SecurityContextHolder.getContext().setAuthentication(new RunAsUserToken("1234" + user, user, "1234",
                 Collections.<GrantedAuthority>emptyList(), null));
     }
 
     @Test
     public void testSaveSearch() {
-        SavedSearchSaveDto dto = createSavedSearch("Test", SavedSearch.SaveType.CONTACT);
-        long id = savedSearchService.saveSearch(dto);
+        SavedSearchSaveDto dto  =  createSavedSearch("Test", SavedSearch.SaveType.CONTACT);
+        long id  =  savedSearchService.saveSearch(dto);
         cleanupSaveIds.add(id);
         assertTrue(id > 0L);
     }
 
     @Test
     public void testGetSavedSearch() throws NotFoundException {
-        long saveId = savedSearchService.saveSearch(createSavedSearch("Test save", SavedSearch.SaveType.EMAIL));
+        long saveId  =  savedSearchService.saveSearch(createSavedSearch("Test save", SavedSearch.SaveType.EMAIL));
         cleanupSaveIds.add(saveId);
-        SavedSearchViewDto dto = savedSearchService.getSaveById(saveId);
+        SavedSearchViewDto dto  =  savedSearchService.getSaveById(saveId);
         assertEquals(saveId, dto.getId().longValue());
         assertEquals(SavedSearch.SaveType.EMAIL, dto.getSearchType());
         assertEquals(1, dto.getAddressFields().size());
@@ -102,20 +102,20 @@ public class DefaultSavedSearchServiceTest {
         assertEquals(2, dto.getTerms().size());
     }
 
-    @Test(expected = NotFoundException.class)
-    public void testDeleteSavedSearch() throws NotFoundException{
-        long saveId = savedSearchService.saveSearch(createSavedSearch("Test save", SavedSearch.SaveType.EMAIL));
+    @Test(expected  =  NotFoundException.class)
+    public void testDeleteSavedSearch() throws NotFoundException {
+        long saveId  =  savedSearchService.saveSearch(createSavedSearch("Test save", SavedSearch.SaveType.EMAIL));
         try {
             savedSearchService.deleteSavedSearch(saveId);
         } catch (NotFoundException e) {
             throw new IllegalStateException(e);
         }
-        SavedSearchViewDto dto = savedSearchService.getSaveById(saveId);
+        SavedSearchViewDto dto  =  savedSearchService.getSaveById(saveId);
     }
 
-    @Test(expected = AuthorizationException.class)
+    @Test(expected  =  AuthorizationException.class)
     public void testDeleteWhenNotOwner() throws NotFoundException {
-        long saveId = savedSearchService.saveSearch(createSavedSearch("Test save", SavedSearch.SaveType.EMAIL));
+        long saveId  =  savedSearchService.saveSearch(createSavedSearch("Test save", SavedSearch.SaveType.EMAIL));
         cleanupSaveIds.add(saveId);
         loginAs("otherUser");
         savedSearchService.deleteSavedSearch(saveId);
@@ -123,17 +123,17 @@ public class DefaultSavedSearchServiceTest {
 
     @Test
     public void testUpdate() throws NotFoundException {
-        SavedSearchSaveDto dto = createSavedSearch("Test", SavedSearch.SaveType.CONTACT);
-        long id = savedSearchService.saveSearch(dto);
+        SavedSearchSaveDto dto  =  createSavedSearch("Test", SavedSearch.SaveType.CONTACT);
+        long id  =  savedSearchService.saveSearch(dto);
         cleanupSaveIds.add(id);
 
-        SavedSearchEditDto editDto = dtoConverter.convert(dto, new SavedSearchEditDto());
+        SavedSearchEditDto editDto  =  dtoConverter.convert(dto, new SavedSearchEditDto());
         editDto.setId(id);
         editDto.setSearchType(SavedSearch.SaveType.LETTER);
         editDto.setAddressFields(Arrays.asList(new String[]{"TestField", "TestField2"}));
         savedSearchService.updateSavedSearch(editDto);
 
-        SavedSearchViewDto viewDto = savedSearchService.getSaveById(id);
+        SavedSearchViewDto viewDto  =  savedSearchService.getSaveById(id);
         assertEquals(SavedSearch.SaveType.LETTER, viewDto.getSearchType());
         assertEquals(2, viewDto.getAddressFields().size());
         assertEquals(2, viewDto.getReceiverFields().size());
@@ -141,12 +141,12 @@ public class DefaultSavedSearchServiceTest {
         assertEquals(2, viewDto.getTerms().size());
     }
 
-    @Test(expected = AuthorizationException.class)
+    @Test(expected  =  AuthorizationException.class)
     public void testUpdateWhenNotOwner() throws NotFoundException {
-        long saveId = savedSearchService.saveSearch(createSavedSearch("Test save", SavedSearch.SaveType.EMAIL));
+        long saveId  =  savedSearchService.saveSearch(createSavedSearch("Test save", SavedSearch.SaveType.EMAIL));
         cleanupSaveIds.add(saveId);
         loginAs("otherUser");
-        SavedSearchEditDto editDto = dtoConverter.convert(savedSearchService.getSaveById(saveId), new SavedSearchEditDto());
+        SavedSearchEditDto editDto  =  dtoConverter.convert(savedSearchService.getSaveById(saveId), new SavedSearchEditDto());
         savedSearchService.updateSavedSearch(editDto);
     }
 
@@ -155,20 +155,20 @@ public class DefaultSavedSearchServiceTest {
         cleanupSaveIds.add(savedSearchService.saveSearch(createSavedSearch("A", SavedSearch.SaveType.CONTACT)));
         cleanupSaveIds.add(savedSearchService.saveSearch(createSavedSearch("B", SavedSearch.SaveType.CONTACT)));
 
-        List<SavedSearchListDto> dtos = savedSearchService.findSavedSearchesForLoggedInUser();
+        List<SavedSearchListDto> dtos  =  savedSearchService.findSavedSearchesForLoggedInUser();
         assertEquals(2, dtos.size());
         assertEquals("A", dtos.get(0).getName());
         assertEquals("B", dtos.get(1).getName());
         assertTrue(!dtos.get(0).getId().equals(dtos.get(1).getId()));
 
         loginAs("otherUser");
-        dtos = savedSearchService.findSavedSearchesForLoggedInUser();
+        dtos  =  savedSearchService.findSavedSearchesForLoggedInUser();
         assertEquals(0, dtos.size());
     }
 
     @SuppressWarnings("unchecked")
     private SavedSearchSaveDto createSavedSearch(String name, SavedSearch.SaveType saveType) {
-        SavedSearchSaveDto dto = new SavedSearchSaveDto();
+        SavedSearchSaveDto dto  =  new SavedSearchSaveDto();
         dto.setName(name);
         dto.setSearchType(saveType);
         dto.setAddressFields(Arrays.asList(new String[] {"TestField"}));

@@ -42,36 +42,36 @@ import java.util.Map;
  * Time: 5:15 PM
  */
 public class CasProxyTicketProvider extends AbstractCasTicketProvider {
-    private ProxyAuthenticator proxyAuthenticator = new ProxyAuthenticator();
+    private ProxyAuthenticator proxyAuthenticator  =  new ProxyAuthenticator();
     private String casService;
     private String authMode;
 
     public CasProxyTicketProvider(String casService, String authMode) {
-        this.casService = casService;
-        this.authMode = authMode;
+        this.casService  =  casService;
+        this.authMode  =  authMode;
     }
 
     @Override
-    public Map<String,String> provideTicketHeaders(String service) {
-        service = getTargetServiceCasUri(service);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if( authentication != null && authentication instanceof UsernamePasswordAuthenticationToken
-                && "dev".equals(authMode) ) {
+    public Map<String, String> provideTicketHeaders(String service) {
+        service  =  getTargetServiceCasUri(service);
+        Authentication authentication  =  SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null && authentication instanceof UsernamePasswordAuthenticationToken
+                && "dev".equals(authMode)) {
             // Development mode, this works provided that Spring Security's authentication manager has
-            // erase-credientals=false: <authentication-manager alias="authenticationManager"  erase-credentials="false">
-            UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
+            // erase-credientals = false: <authentication-manager alias = "authenticationManager"  erase-credentials = "false">
+            UsernamePasswordAuthenticationToken token  =  (UsernamePasswordAuthenticationToken) authentication;
             return new UsernamePasswordCasClientTicketProvider(casService, token.getName(),
-                    ""+token.getCredentials()).provideTicketHeaders(service);
+                    ""  +  token.getCredentials()).provideTicketHeaders(service);
         }
 
         // In production we basically do this
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        Assertion assertion = ((CasAuthenticationToken) authentication).getAssertion();
+//        Authentication authentication  =  SecurityContextHolder.getContext().getAuthentication();
+//        Assertion assertion  =  ((CasAuthenticationToken) authentication).getAssertion();
 //        return assertion.getPrincipal().getProxyTicketFor(service);
 
         // But for performance reasons, use a ticket cache implemented in ProxyAuthenticator (implementation might
         // also change):
-        final Map<String,String> result = new HashMap<String, String>();
+        final Map<String, String> result  =  new HashMap<String, String>();
         proxyAuthenticator.proxyAuthenticate(service, authMode, new ProxyAuthenticator.Callback() {
             @Override
             public void setRequestHeader(String key, String value) {

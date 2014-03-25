@@ -33,13 +33,13 @@ public class OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate
     private Locale locale;
 
     public OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate(String tyyppi, Locale locale) {
-        this.tyyppi = tyyppi;
-        this.locale = locale;
+        this.tyyppi  =  tyyppi;
+        this.locale  =  locale;
     }
 
     @Override
     public boolean apply(OrganisaatioYhteystietoElementtiDto elementti) {
         return tyyppi.equals(elementti.getElementtiTyyppi())
-                && LocaleHelper.languageEquals( locale, LocaleHelper.parseLocale(elementti.getKieli(), null) );
+                && LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(elementti.getKieli(), null));
     }
 }

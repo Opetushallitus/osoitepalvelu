@@ -30,9 +30,9 @@ import java.util.List;
  * Date: 12/10/13
  * Time: 1:23 PM
  */
-@Document(collection = "savedSearches")
+@Document(collection  =  "savedSearches")
 public class SavedSearch implements Serializable, Comparable<SavedSearch> {
-    private static final long serialVersionUID = 4164512181923649287L;
+    private static final long serialVersionUID  =  4164512181923649287L;
 
     public enum SaveType {
         EMAIL,
@@ -47,18 +47,18 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     @Indexed
     private String ownerUserOid;
     private SaveType searchType;
-    private DateTime createdAt=new DateTime();
-    private List<String> addressFields = new ArrayList<String>();
-    private List<String> receiverFields = new ArrayList<String>();
-    private List<SearchTargetGroup> targetGroups = new ArrayList<SearchTargetGroup>();
-    private List<SearchTerm> terms = new ArrayList<SearchTerm>();
+    private DateTime createdAt = new DateTime();
+    private List<String> addressFields  =  new ArrayList<String>();
+    private List<String> receiverFields  =  new ArrayList<String>();
+    private List<SearchTargetGroup> targetGroups  =  new ArrayList<SearchTargetGroup>();
+    private List<SearchTerm> terms  =  new ArrayList<SearchTerm>();
 
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id  =  id;
     }
 
     public String getOwnerUserOid() {
@@ -66,7 +66,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     }
 
     public void setOwnerUserOid(String ownerUserOid) {
-        this.ownerUserOid = ownerUserOid;
+        this.ownerUserOid  =  ownerUserOid;
     }
 
     public List<String> getAddressFields() {
@@ -74,7 +74,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     }
 
     public void setAddressFields(List<String> addressFields) {
-        this.addressFields = addressFields;
+        this.addressFields  =  addressFields;
     }
 
     public List<SearchTargetGroup> getTargetGroups() {
@@ -82,7 +82,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     }
 
     public void setTargetGroups(List<SearchTargetGroup> targetGroups) {
-        this.targetGroups = targetGroups;
+        this.targetGroups  =  targetGroups;
     }
 
     public List<SearchTerm> getTerms() {
@@ -90,7 +90,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     }
 
     public void setTerms(List<SearchTerm> terms) {
-        this.terms = terms;
+        this.terms  =  terms;
     }
 
     public String getName() {
@@ -98,7 +98,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name  =  name;
     }
 
     public DateTime getCreatedAt() {
@@ -106,7 +106,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     }
 
     public void setCreatedAt(DateTime createdAt) {
-        this.createdAt = createdAt;
+        this.createdAt  =  createdAt;
     }
 
     public SaveType getSearchType() {
@@ -114,7 +114,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     }
 
     public void setSearchType(SaveType searchType) {
-        this.searchType = searchType;
+        this.searchType  =  searchType;
     }
 
     public List<String> getReceiverFields() {
@@ -122,7 +122,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     }
 
     public void setReceiverFields(List<String> receiverFields) {
-        this.receiverFields = receiverFields;
+        this.receiverFields  =  receiverFields;
     }
 
     @Override

@@ -28,10 +28,10 @@ public class KoodiArvoDto implements Serializable {
     }
 
     public KoodiArvoDto(String nimi, String kuvaus, String lyhytNimi, String kieli) {
-        this.nimi = nimi;
-        this.kuvaus = kuvaus;
-        this.lyhytNimi = lyhytNimi;
-        this.kieli = kieli;
+        this.nimi  =  nimi;
+        this.kuvaus  =  kuvaus;
+        this.lyhytNimi  =  lyhytNimi;
+        this.kieli  =  kieli;
     }
 
     public String getNimi() {
@@ -39,7 +39,7 @@ public class KoodiArvoDto implements Serializable {
     }
 
     public void setNimi(String nimi) {
-        this.nimi = nimi;
+        this.nimi  =  nimi;
     }
 
     public String getKuvaus() {
@@ -47,7 +47,7 @@ public class KoodiArvoDto implements Serializable {
     }
 
     public void setKuvaus(String kuvaus) {
-        this.kuvaus = kuvaus;
+        this.kuvaus  =  kuvaus;
     }
 
     public String getLyhytNimi() {
@@ -55,7 +55,7 @@ public class KoodiArvoDto implements Serializable {
     }
 
     public void setLyhytNimi(String lyhytNimi) {
-        this.lyhytNimi = lyhytNimi;
+        this.lyhytNimi  =  lyhytNimi;
     }
 
     public String getKieli() {
@@ -63,7 +63,7 @@ public class KoodiArvoDto implements Serializable {
     }
 
     public void setKieli(String kieli) {
-        this.kieli = kieli;
+        this.kieli  =  kieli;
     }
 
     @Override

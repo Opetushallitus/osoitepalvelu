@@ -25,7 +25,7 @@ public class OrganisaatioOid implements Serializable {
     }
 
     public OrganisaatioOid(String oid) {
-        this.value = oid;
+        this.value  =  oid;
     }
 
     public String getValue() {
@@ -33,14 +33,14 @@ public class OrganisaatioOid implements Serializable {
     }
 
     public void setValue(String value) {
-        this.value = value;
+        this.value  =  value;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((value == null) ? 0 : value.hashCode());
+        final int prime  =  31;
+        int result  =  1;
+        result  =  prime * result + ((value == null) ? 0 : value.hashCode());
         return result;
     }
 
@@ -55,7 +55,7 @@ public class OrganisaatioOid implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        OrganisaatioOid other = (OrganisaatioOid) obj;
+        OrganisaatioOid other  =  (OrganisaatioOid) obj;
         if (value == null) {
             if (other.value != null) {
                 return false;

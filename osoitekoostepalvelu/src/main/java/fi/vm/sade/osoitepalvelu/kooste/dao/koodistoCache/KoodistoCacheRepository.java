@@ -16,10 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.koodistoCache;
 
-import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.Locale;
+import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
 
 /**
  * User: ratamaa

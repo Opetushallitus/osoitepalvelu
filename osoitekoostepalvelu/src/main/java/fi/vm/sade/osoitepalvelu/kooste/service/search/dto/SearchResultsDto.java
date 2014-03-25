@@ -27,7 +27,7 @@ import java.util.List;
  * Time: 9:45 AM
  */
 public class SearchResultsDto implements Serializable {
-    private static final long serialVersionUID = -8360101698155316476L;
+    private static final long serialVersionUID  =  -8360101698155316476L;
     
     private List<SearchResultRowDto> rows;
     private SearchResultPresentation presentation;
@@ -36,8 +36,8 @@ public class SearchResultsDto implements Serializable {
     }
 
     public SearchResultsDto(List<SearchResultRowDto> rows, SearchResultPresentation presentation) {
-        this.rows = rows;
-        this.presentation = presentation;
+        this.rows  =  rows;
+        this.presentation  =  presentation;
     }
 
     public List<SearchResultRowDto> getRows() {
@@ -45,7 +45,7 @@ public class SearchResultsDto implements Serializable {
     }
 
     public void setRows(List<SearchResultRowDto> rows) {
-        this.rows = rows;
+        this.rows  =  rows;
     }
 
     public SearchResultPresentation getPresentation() {
@@ -53,6 +53,6 @@ public class SearchResultsDto implements Serializable {
     }
 
     public void setPresentation(SearchResultPresentation presentation) {
-        this.presentation = presentation;
+        this.presentation  =  presentation;
     }
 }

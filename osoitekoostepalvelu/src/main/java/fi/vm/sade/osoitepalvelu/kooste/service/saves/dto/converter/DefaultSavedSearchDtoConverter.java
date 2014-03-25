@@ -25,5 +25,5 @@ import org.springframework.stereotype.Component;
  * Time: 2:08 PM
  */
 @Component
-public class DefaultSavedSearchDtoConverter extends AbstractDtoConverter implements SavedSearchDtoConverter{
+public class DefaultSavedSearchDtoConverter extends AbstractDtoConverter implements SavedSearchDtoConverter {
 }

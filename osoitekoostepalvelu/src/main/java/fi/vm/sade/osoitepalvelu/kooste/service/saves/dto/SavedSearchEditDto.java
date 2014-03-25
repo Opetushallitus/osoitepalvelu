@@ -34,17 +34,17 @@ public class SavedSearchEditDto {
     private Long id;
     private String name;
     private SavedSearch.SaveType searchType;
-    private List<String> addressFields = new ArrayList<String>();
-    private List<String> receiverFields = new ArrayList<String>();
-    private List<SearchTargetGroupDto> targetGroups = new ArrayList<SearchTargetGroupDto>();
-    private List<SearchTermDto> terms = new ArrayList<SearchTermDto>();
+    private List<String> addressFields  =  new ArrayList<String>();
+    private List<String> receiverFields  =  new ArrayList<String>();
+    private List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
+    private List<SearchTermDto> terms  =  new ArrayList<SearchTermDto>();
 
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name  =  name;
     }
 
     public Long getId() {
@@ -52,7 +52,7 @@ public class SavedSearchEditDto {
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id  =  id;
     }
 
     public List<String> getAddressFields() {
@@ -60,7 +60,7 @@ public class SavedSearchEditDto {
     }
 
     public void setAddressFields(List<String> addressFields) {
-        this.addressFields = addressFields;
+        this.addressFields  =  addressFields;
     }
 
     public List<SearchTargetGroupDto> getTargetGroups() {
@@ -68,7 +68,7 @@ public class SavedSearchEditDto {
     }
 
     public void setTargetGroups(List<SearchTargetGroupDto> targetGroups) {
-        this.targetGroups = targetGroups;
+        this.targetGroups  =  targetGroups;
     }
 
     public List<SearchTermDto> getTerms() {
@@ -76,7 +76,7 @@ public class SavedSearchEditDto {
     }
 
     public void setTerms(List<SearchTermDto> terms) {
-        this.terms = terms;
+        this.terms  =  terms;
     }
 
     public SavedSearch.SaveType getSearchType() {
@@ -84,7 +84,7 @@ public class SavedSearchEditDto {
     }
 
     public void setSearchType(SavedSearch.SaveType searchType) {
-        this.searchType = searchType;
+        this.searchType  =  searchType;
     }
 
     public List<String> getReceiverFields() {
@@ -92,6 +92,6 @@ public class SavedSearchEditDto {
     }
 
     public void setReceiverFields(List<String> receiverFields) {
-        this.receiverFields = receiverFields;
+        this.receiverFields  =  receiverFields;
     }
 }

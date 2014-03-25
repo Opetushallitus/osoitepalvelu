@@ -28,9 +28,9 @@ import java.util.List;
 
 public class UiKoodiItemDto implements Serializable {
     @DtoConversion
-    @DtoPath(value="koodisto.tyyppi", withClass = KoodiDto.class)
+    @DtoPath(value = "koodisto.tyyppi", withClass  =  KoodiDto.class)
     private KoodistoTyyppi koodistonTyyppi; // Kategoria
-    @DtoPath(value="koodiArvo", withClass = KoodiDto.class)
+    @DtoPath(value = "koodiArvo", withClass  =  KoodiDto.class)
     private String koodiId; // koodiArvo koodistossa
     private String koodiUri;
 
@@ -38,14 +38,14 @@ public class UiKoodiItemDto implements Serializable {
     private String kuvaus;
     private String lyhytNimi;
     @DtoConversion
-    private List<OrganisaatioviiteDto> organisaatioViite = new ArrayList<OrganisaatioviiteDto>();
+    private List<OrganisaatioviiteDto> organisaatioViite  =  new ArrayList<OrganisaatioviiteDto>();
 
     public KoodistoTyyppi getKoodistonTyyppi() {
         return koodistonTyyppi;
     }
 
     public void setKoodistonTyyppi(KoodistoTyyppi koodistonTyyppi) {
-        this.koodistonTyyppi = koodistonTyyppi;
+        this.koodistonTyyppi  =  koodistonTyyppi;
     }
 
     public String getKoodiId() {
@@ -53,7 +53,7 @@ public class UiKoodiItemDto implements Serializable {
     }
 
     public void setKoodiId(String koodiId) {
-        this.koodiId = koodiId;
+        this.koodiId  =  koodiId;
     }
 
     public String getNimi() {
@@ -61,7 +61,7 @@ public class UiKoodiItemDto implements Serializable {
     }
 
     public void setNimi(String nimi) {
-        this.nimi = nimi;
+        this.nimi  =  nimi;
     }
 
     public String getKuvaus() {
@@ -69,7 +69,7 @@ public class UiKoodiItemDto implements Serializable {
     }
 
     public void setKuvaus(String kuvaus) {
-        this.kuvaus = kuvaus;
+        this.kuvaus  =  kuvaus;
     }
 
     public String getLyhytNimi() {
@@ -77,11 +77,11 @@ public class UiKoodiItemDto implements Serializable {
     }
 
     public void setLyhytNimi(String lyhytNimi) {
-        this.lyhytNimi = lyhytNimi;
+        this.lyhytNimi  =  lyhytNimi;
     }
 
     public String toString() {
-        return this.koodiId + ": " + this.nimi;
+        return this.koodiId  +  ": "  +  this.nimi;
     }
 
     public List<OrganisaatioviiteDto> getOrganisaatioViite() {
@@ -89,7 +89,7 @@ public class UiKoodiItemDto implements Serializable {
     }
 
     public void setOrganisaatioViite(List<OrganisaatioviiteDto> organisaatioViite) {
-        this.organisaatioViite = organisaatioViite;
+        this.organisaatioViite  =  organisaatioViite;
     }
 
     public String getKoodiUri() {
@@ -97,6 +97,6 @@ public class UiKoodiItemDto implements Serializable {
     }
 
     public void setKoodiUri(String koodiUri) {
-        this.koodiUri = koodiUri;
+        this.koodiUri  =  koodiUri;
     }
 }

@@ -29,21 +29,21 @@ import java.util.Map;
  */
 public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
     private String oid;
-    private Map<String, String> nimi = new HashMap<String,String>(); // short lowercase lang code => value pairs
-    private List<String> tyypit = new ArrayList<String>();
-    private List<String> kielet = new ArrayList<String>(); // koodiarvot
+    private Map<String, String> nimi  =  new HashMap<String, String>(); // short lowercase lang code  = > value pairs
+    private List<String> tyypit  =  new ArrayList<String>();
+    private List<String> kielet  =  new ArrayList<String>(); // koodiarvot
     private String kotipaikka;
     private String oppilaitosKoodi;
     private String toimipisteKoodi;
-    private List<OrganisaatioYhteysosoiteDto> postiosoite = new ArrayList<OrganisaatioYhteysosoiteDto>();
-    private List<OrganisaatioYhteysosoiteDto> kayntiosoite = new ArrayList<OrganisaatioYhteysosoiteDto>();
+    private List<OrganisaatioYhteysosoiteDto> postiosoite  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
+    private List<OrganisaatioYhteysosoiteDto> kayntiosoite  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
 
     public String getOid() {
         return oid;
     }
 
     public void setOid(String oid) {
-        this.oid = oid;
+        this.oid  =  oid;
     }
 
     public Map<String, String> getNimi() {
@@ -51,7 +51,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
     }
 
     public void setNimi(Map<String, String> nimi) {
-        this.nimi = nimi;
+        this.nimi  =  nimi;
     }
 
     public List<String> getTyypit() {
@@ -59,7 +59,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
     }
 
     public void setTyypit(List<String> tyypit) {
-        this.tyypit = tyypit;
+        this.tyypit  =  tyypit;
     }
 
     public List<String> getKielet() {
@@ -67,7 +67,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
     }
 
     public void setKielet(List<String> kielet) {
-        this.kielet = kielet;
+        this.kielet  =  kielet;
     }
 
     public String getKotipaikka() {
@@ -75,7 +75,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
     }
 
     public void setKotipaikka(String kotipaikka) {
-        this.kotipaikka = kotipaikka;
+        this.kotipaikka  =  kotipaikka;
     }
 
     public String getOppilaitosKoodi() {
@@ -83,7 +83,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
     }
 
     public void setOppilaitosKoodi(String oppilaitosKoodi) {
-        this.oppilaitosKoodi = oppilaitosKoodi;
+        this.oppilaitosKoodi  =  oppilaitosKoodi;
     }
 
     public List<OrganisaatioYhteysosoiteDto> getPostiosoite() {
@@ -91,7 +91,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
     }
 
     public void setPostiosoite(List<OrganisaatioYhteysosoiteDto> postiosoite) {
-        this.postiosoite = postiosoite;
+        this.postiosoite  =  postiosoite;
     }
 
     public List<OrganisaatioYhteysosoiteDto> getKayntiosoite() {
@@ -99,7 +99,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
     }
 
     public void setKayntiosoite(List<OrganisaatioYhteysosoiteDto> kayntiosoite) {
-        this.kayntiosoite = kayntiosoite;
+        this.kayntiosoite  =  kayntiosoite;
     }
 
     public String getToimipisteKoodi() {
@@ -107,6 +107,6 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
     }
 
     public void setToimipisteKoodi(String toimipisteKoodi) {
-        this.toimipisteKoodi = toimipisteKoodi;
+        this.toimipisteKoodi  =  toimipisteKoodi;
     }
 }

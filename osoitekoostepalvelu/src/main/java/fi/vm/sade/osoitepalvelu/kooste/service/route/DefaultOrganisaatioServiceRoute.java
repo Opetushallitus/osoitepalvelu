@@ -40,10 +40,10 @@ import java.util.List;
 @Service
 public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuilder
             implements  OrganisaatioServiceRoute {
-    private static final String ORGANSIAATIOHAKU_ENDPOINT = "direct:organisaatioYhteystietohakuV2";
-    private static final String YHTEYSTIEDOT_PATH = "/v2/yhteystiedot/hae";
-    private static final String SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT = "direct:singleOrganisaatioByOid";
-    private static final String SINGLE_ORGANISAATIO_PATH = "/${in.headers.oid}";
+    private static final String ORGANSIAATIOHAKU_ENDPOINT  =  "direct:organisaatioYhteystietohakuV2";
+    private static final String YHTEYSTIEDOT_PATH  =  "/v2/yhteystiedot/hae";
+    private static final String SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT  =  "direct:singleOrganisaatioByOid";
+    private static final String SINGLE_ORGANISAATIO_PATH  =  "/${in.headers.oid}";
 
     @Value("${organisaatioService.rest.url}")
     private String organisaatioServiceRestUrl;
@@ -58,7 +58,7 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     }
 
     protected void buildOrganisaatioHaku() {
-        Debugger organisaatioCallInOutDebug = debug(ORGANSIAATIOHAKU_ENDPOINT+".OrgansiaatioServiceCall");
+        Debugger organisaatioCallInOutDebug  =  debug(ORGANSIAATIOHAKU_ENDPOINT + ".OrgansiaatioServiceCall");
         headers(
                 from(ORGANSIAATIOHAKU_ENDPOINT),
                 headers()
@@ -66,44 +66,44 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                     .jsonRequstBody()
                     .path(YHTEYSTIEDOT_PATH)
                     .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
-        )
+      )
         .process(organisaatioCallInOutDebug)
         .to(trim(organisaatioServiceRestUrl))
         .process(organisaatioCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() {}));
+        .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() { }));
     }
 
     protected void buildSingleOrganisaatioTiedot() {
-        Debugger organisaatioCallInOutDebug = debug(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT +".OrgansiaatioServiceCall");
+        Debugger organisaatioCallInOutDebug  =  debug(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT  + ".OrgansiaatioServiceCall");
         headers(
                 from(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT),
                 headers()
                         .get()
                         .path(SINGLE_ORGANISAATIO_PATH)
                         .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
-        )
+      )
         .process(organisaatioCallInOutDebug)
         .to(trim(organisaatioServiceRestUrl))
         .process(organisaatioCallInOutDebug)
-        .process(jsonToDto(new TypeReference<OrganisaatioYksityiskohtaisetTiedotDto>() {}))
+        .process(jsonToDto(new TypeReference<OrganisaatioYksityiskohtaisetTiedotDto>() { }))
         .onException(HttpOperationFailedException.class)
                 .throwException(new NotFoundException("Organisaatio nof round by OID."));
     }
 
     @Override
-    @Cacheable(cacheName = "organisaatioHakuResultsCache")
+    @Cacheable(cacheName  =  "organisaatioHakuResultsCache")
     public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
             @PartialCacheKey OrganisaatioYhteystietoCriteriaDto criteria,
             CamelRequestContext requestContext) {
-        return sendBodyHeadersAndProperties( getCamelTemplate(), ORGANSIAATIOHAKU_ENDPOINT,
+        return sendBodyHeadersAndProperties(getCamelTemplate(), ORGANSIAATIOHAKU_ENDPOINT,
                 criteria, new HashMap<String, Object>(), requestContext, List.class);
     }
 
     @Override
-    @Cacheable(cacheName = "organisaatioByOidCache")
+    @Cacheable(cacheName  =  "organisaatioByOidCache")
     public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(@PartialCacheKey String oid,
                                                                         CamelRequestContext requestContext) {
-        return sendBodyHeadersAndProperties( getCamelTemplate(), SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT, "",
+        return sendBodyHeadersAndProperties(getCamelTemplate(), SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT, "",
                 headerValues()
                     .add("oid", oid)
                 .map(), requestContext, OrganisaatioYksityiskohtaisetTiedotDto.class);

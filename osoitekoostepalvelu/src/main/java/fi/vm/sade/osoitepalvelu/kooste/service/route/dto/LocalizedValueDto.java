@@ -32,7 +32,7 @@ public class LocalizedValueDto implements Serializable {
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.text  =  text;
     }
 
     public String getLang() {
@@ -40,6 +40,6 @@ public class LocalizedValueDto implements Serializable {
     }
 
     public void setLang(String lang) {
-        this.lang = lang;
+        this.lang  =  lang;
     }
 }

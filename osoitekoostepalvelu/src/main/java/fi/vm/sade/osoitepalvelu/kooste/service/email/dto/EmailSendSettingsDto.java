@@ -26,14 +26,14 @@ import java.io.Serializable;
  */
 public class EmailSendSettingsDto implements Serializable {
     private String endpointUrl;
-    private EmailMessageDto email = new EmailMessageDto();
+    private EmailMessageDto email  =  new EmailMessageDto();
 
     public EmailMessageDto getEmail() {
         return email;
     }
 
     public void setEmail(EmailMessageDto email) {
-        this.email = email;
+        this.email  =  email;
     }
 
     public String getEndpointUrl() {
@@ -41,6 +41,6 @@ public class EmailSendSettingsDto implements Serializable {
     }
 
     public void setEndpointUrl(String endpointUrl) {
-        this.endpointUrl = endpointUrl;
+        this.endpointUrl  =  endpointUrl;
     }
 }

@@ -51,9 +51,9 @@ import java.util.Map.Entry;
  * @see HeaderBuilder
  */
 public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
-    public static final String CONTENT_TYPE_JSON = "application/json;charset=UTF-8";
-    private static final int DEFAULT_RETRY_LIMIT = 10;
-    public static final String CAS_TICKET_CACHE_PROPERTY = "CasTicketCache";
+    public static final String CONTENT_TYPE_JSON  =  "application/json;charset = UTF-8";
+    private static final int DEFAULT_RETRY_LIMIT  =  10;
+    public static final String CAS_TICKET_CACHE_PROPERTY  =  "CasTicketCache";
 
     @Value("${web.url.cas}")
     protected String casService;
@@ -123,17 +123,17 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         private String service;
 
         public CasTicketDefinitionProcessor(CasTicketProvider ticketProvider, String service) {
-            this.ticketProvider = ticketProvider;
-            this.service = service;
+            this.ticketProvider  =  ticketProvider;
+            this.service  =  service;
         }
 
         @Override
         public <T extends ProcessorDefinition<? extends T>> T process(T process) {
-            Debugger debug = debug("CasTicketDefinitionProcessor");
+            Debugger debug  =  debug("CasTicketDefinitionProcessor");
             return process.process(debug)
                     .process(new SetOutHeadersProcessor() {
                 protected Map<String, String> getHeaders(Exchange exchange) {
-                    CasTicketCache cache = exchange.getProperty(CAS_TICKET_CACHE_PROPERTY, CasTicketCache.class);
+                    CasTicketCache cache  =  exchange.getProperty(CAS_TICKET_CACHE_PROPERTY, CasTicketCache.class);
                     return new LazyCasTicketProvider(cache, ticketProvider).provideTicketHeaders(service);
                 }
             }).process(debug);
@@ -164,18 +164,18 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         /**
          * @return the headers to set
          */
-        protected abstract Map<String,String> getHeaders(Exchange exchange);
+        protected abstract Map<String, String> getHeaders(Exchange exchange);
 
         @Override
         public final void process(Exchange exchange) throws Exception {
-            if( exchange.getIn() != null ) {
-                Map<String,String> headers = getHeaders(exchange);
-                for( Map.Entry<String,String> kv : headers.entrySet() ) {
+            if(exchange.getIn() != null) {
+                Map<String, String> headers  =  getHeaders(exchange);
+                for(Map.Entry<String, String> kv : headers.entrySet()) {
                     exchange.getIn().setHeader(kv.getKey(), kv.getValue());
                 }
             } else {
-                throw new IllegalStateException("No Out message in Exchange. " +
-                        "Perhaps you added process after call to to?");
+                throw new IllegalStateException("No Out message in Exchange. "
+                           + "Perhaps you added process after call to to?");
             }
             inToOut(exchange);
         }
@@ -188,7 +188,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      * @return the route with given header processor applied
      * @see HeaderBuilder
      */
-    protected <T extends ProcessorDefinition<? extends T>> T headers( T route, HeaderBuilder processor ) {
+    protected <T extends ProcessorDefinition<? extends T>> T headers(T route, HeaderBuilder processor) {
         return apply(route, processor);
     }
 
@@ -199,7 +199,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      * @return the route with given processor applied
      * @see HeaderBuilder
      */
-    protected <T extends ProcessorDefinition<? extends T>> T apply( T route, ProcessDefinitionProcessor processor ) {
+    protected <T extends ProcessorDefinition<? extends T>> T apply(T route, ProcessDefinitionProcessor processor) {
         return processor.process(route);
     }
 
@@ -218,12 +218,12 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      */
     protected <T> RouteDefinition fromHttpGetToDtos(String routeId, String url, HeaderBuilder headers,
                                                     TypeReference<T> targetDtoType) {
-        Debugger debug = debug(routeId+".ServiceCall");
+        Debugger debug  =  debug(routeId  +  ".ServiceCall");
         return headers(
                 from(routeId),
                 headers
                         .get()
-        )
+      )
             .process(debug)
             .to(url)
             .process(debug)
@@ -246,8 +246,8 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      * @return route with DEFAULT_RETRY_LIMIT applied as failover with roundRobin and inheritedErrorHandler
      */
     protected LoadBalanceDefinition addRouteErrorHandlers(RouteDefinition route) {
-        boolean roundRobin = true;
-        boolean inheritErrorHandler = true;
+        boolean roundRobin  =  true;
+        boolean inheritErrorHandler  =  true;
         return route.loadBalance().failover(DEFAULT_RETRY_LIMIT, inheritErrorHandler, roundRobin);
     }
 
@@ -277,11 +277,11 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      * @see #doProcess(org.apache.camel.Exchange) to do the actual logging
      */
     protected abstract class Debugger implements Processor {
-        private Long beginMoment=null;
+        private Long beginMoment = null;
         private String name;
 
         protected Debugger(String name) {
-            this.name = name;
+            this.name  =  name;
         }
 
         protected Debugger() {
@@ -300,8 +300,8 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                 beginMoment = System.currentTimeMillis();
             } else {
                 long now = System.currentTimeMillis();
-                long duration = now-beginMoment;
-                log.info(getName()+" execution took: "+duration+"ms since last call.");
+                long duration = now - beginMoment;
+                log.info(getName()  +  " execution took: "  +  duration  +  "ms since last call.");
                 beginMoment = null;
             }
             inToOut(exchange);
@@ -320,7 +320,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      * Additional Processors introduced into Camel route definition seem to null the set the out part of the Exchange
      * to in and set the out part as null. After execution of a custom Processor, we therefore want to reverse this.
      *
-     * @param exchange for which to set Excahge.out = Exchange.in
+     * @param exchange for which to set Excahge.out  =  Exchange.in
      */
     protected void inToOut(Exchange exchange) {
         if (exchange.getIn() != null) {
@@ -329,8 +329,8 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                 exchange.setOut(exchange.getIn());
             }
             // Have to set body and headers separately:
-            exchange.getOut().setBody( exchange.getIn().getBody() );
-            exchange.getOut().setHeaders( exchange.getIn().getHeaders() );
+            exchange.getOut().setBody(exchange.getIn().getBody());
+            exchange.getOut().setHeaders(exchange.getIn().getHeaders());
         }
     }
 
@@ -356,9 +356,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      */
     protected void logIn(Exchange exchange, String name) {
         if (exchange.getIn() != null) {
-            log.info(name + " Exchange in: " + debug(exchange.getIn()) );
+            log.info(name  +  " Exchange in: "  +  debug(exchange.getIn()));
         } else {
-            log.warn(name + " Exchange in is null!");
+            log.warn(name  +  " Exchange in is null!");
         }
     }
 
@@ -368,9 +368,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      */
     protected void logOut(Exchange exchange, String name) {
         if (exchange.getOut() != null) {
-            log.info(name + " Exchange out: " + debug(exchange.getOut()) );
+            log.info(name  +  " Exchange out: "  +  debug(exchange.getOut()));
         } else {
-            log.warn(name + " Exchange out is null!");
+            log.warn(name  +  " Exchange out is null!");
         }
     }
 
@@ -394,9 +394,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected String debug(Message message) {
         try {
             return stringify(message.getBody())
-                    + " with headers: " + mapperProvider.getContext(ObjectMapper.class).writeValueAsString(message.getHeaders());
+                     +  " with headers: "  +  mapperProvider.getContext(ObjectMapper.class).writeValueAsString(message.getHeaders());
         } catch (IOException e) {
-            return stringify(message.getBody()) + " (Headers could not be converted to JSON cause: " +e.getMessage()+")";
+            return stringify(message.getBody())  +  " (Headers could not be converted to JSON cause: "  +  e.getMessage()  +  ")";
         }
     }
 
@@ -406,8 +406,10 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      * for nulls
      */
     protected String stringify(Object object) {
-        if( object == null ) return "null";
-        if( object.getClass().isArray() && Byte.TYPE.equals(object.getClass().getComponentType()) ) {
+        if(object == null) { 
+            return "null";
+        }
+        if(object.getClass().isArray() && Byte.TYPE.equals(object.getClass().getComponentType())) {
             return new String((byte[]) object);
         }
         return object.toString();
@@ -429,8 +431,8 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      *  fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder.HeaderBuilder) to apply
      */
     protected class HeaderBuilder implements ProcessDefinitionProcessor {
-        private Map<String, Expression> headers = new HashMap<String, Expression>();
-        private List<ProcessDefinitionProcessor> additionalProcessors = new ArrayList<ProcessDefinitionProcessor>();
+        private Map<String, Expression> headers  =  new HashMap<String, Expression>();
+        private List<ProcessDefinitionProcessor> additionalProcessors  =  new ArrayList<ProcessDefinitionProcessor>();
 
         public HeaderBuilder() {
         }
@@ -440,7 +442,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
          * @param expr the value for the header
          * @return this HeaderBuilder with given header set to given Expression value
          * @see Exchange for header constants
-         * @see #simple(String) for simple ${} containing expressions that may change for each call
+         * @see #simple(String) for simple ${ } containing expressions that may change for each call
          * @see #constant(Object) for constant header values
          */
         public HeaderBuilder add(String headerName, Expression expr) {
@@ -496,7 +498,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         }
 
         /**
-         * Sets the CONTENT_TYPE type to application/json;charset=UTF-8
+         * Sets the CONTENT_TYPE type to application/json;charset = UTF-8
          * and adds an ProcessDefinitionProcessor which marshalls the
          * Message Body in the request as JSON.
          *
@@ -531,10 +533,10 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         @Override
         public <T extends ProcessorDefinition<? extends T>> T process(T process) {
             for (Entry<String, Expression> header : headers.entrySet()) {
-                process = process.setHeader(header.getKey(), header.getValue());
+                process  =  process.setHeader(header.getKey(), header.getValue());
             }
             for (ProcessDefinitionProcessor defProcessor : additionalProcessors) {
-                process = defProcessor.process(process);
+                process  =  defProcessor.process(process);
             }
             return process;
         }
@@ -557,7 +559,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      * @see fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder.HeaderValueBuilder#map()
      */
     protected static class HeaderValueBuilder {
-        private Map<String,Object> map = new HashMap<String, Object>();
+        private Map<String, Object> map  =  new HashMap<String, Object>();
 
         /**
          * @param header
@@ -572,7 +574,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         /**
          * @return a Map value for the builder
          */
-        public Map<String,Object> map() {
+        public Map<String, Object> map() {
             return this.map;
         }
     }
@@ -592,8 +594,8 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                                              final Object body, final Map<String, Object> headers,
                                              final CamelRequestContext requestContext,
                                              Class<T> type) throws CamelExecutionException {
-        Map<String,Object> properties = new HashMap<String, Object>();
-        CasTicketCache cache = requestContext.getTicketCache();
+        Map<String, Object> properties  =  new HashMap<String, Object>();
+        CasTicketCache cache  =  requestContext.getTicketCache();
         if (cache != null) {
             properties.put(CAS_TICKET_CACHE_PROPERTY, cache);
         }
@@ -618,24 +620,24 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                  final Object body, final Map<String, Object> headers,
                  final Map<String, Object> properties,
                  Class<T> type) throws CamelExecutionException {
-        ExchangePattern pattern = ExchangePattern.InOut;
+        ExchangePattern pattern  =  ExchangePattern.InOut;
         Endpoint endpoint = template.getCamelContext().getEndpoint(endpointUri);
         if (endpoint == null) {
             throw new NoSuchEndpointException(endpointUri);
         }
-        Exchange exchange = template.send(endpoint, pattern, new Processor() {
+        Exchange exchange  =  template.send(endpoint, pattern, new Processor() {
             public void process(Exchange exchange) throws Exception {
                 for (Map.Entry<String, Object> property : properties.entrySet()) {
                     exchange.setProperty(property.getKey(), property.getValue());
                 }
-                Message in = exchange.getIn();
+                Message in  =  exchange.getIn();
                 for (Map.Entry<String, Object> header : headers.entrySet()) {
                     in.setHeader(header.getKey(), header.getValue());
                 }
                 in.setBody(body);
             }
         });
-        Object result = ExchangeHelper.extractResultBody(exchange, pattern);
+        Object result  =  ExchangeHelper.extractResultBody(exchange, pattern);
         if (pattern.isOutCapable()) {
             return template.getCamelContext().getTypeConverter().convertTo(type, result);
         } else {

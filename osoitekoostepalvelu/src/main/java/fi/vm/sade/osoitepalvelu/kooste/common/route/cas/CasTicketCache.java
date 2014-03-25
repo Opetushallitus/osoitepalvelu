@@ -27,7 +27,7 @@ import java.util.Map;
  * Time: 12:34 PM
  */
 public class CasTicketCache {
-    private Map<String, Map<String, String>> store = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> store  =  new HashMap<String, Map<String, String>>();
 
     /**
      * @param service to get cached ticket headers for

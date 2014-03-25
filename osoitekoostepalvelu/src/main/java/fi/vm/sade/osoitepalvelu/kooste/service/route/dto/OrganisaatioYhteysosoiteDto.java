@@ -47,7 +47,7 @@ public class OrganisaatioYhteysosoiteDto implements Serializable {
     }
 
     public void setKieli(String kieli) {
-        this.kieli = kieli;
+        this.kieli  =  kieli;
     }
 
     public OsoiteTyyppi getOsoiteTyyppi() {
@@ -55,7 +55,7 @@ public class OrganisaatioYhteysosoiteDto implements Serializable {
     }
 
     public void setOsoiteTyyppi(OsoiteTyyppi osoiteTyyppi) {
-        this.osoiteTyyppi = osoiteTyyppi;
+        this.osoiteTyyppi  =  osoiteTyyppi;
     }
 
     public String getOsoite() {
@@ -63,7 +63,7 @@ public class OrganisaatioYhteysosoiteDto implements Serializable {
     }
 
     public void setOsoite(String osoite) {
-        this.osoite = osoite;
+        this.osoite  =  osoite;
     }
 
     public String getPostinumero() {
@@ -71,6 +71,6 @@ public class OrganisaatioYhteysosoiteDto implements Serializable {
     }
 
     public void setPostinumero(String postinumero) {
-        this.postinumero = postinumero;
+        this.postinumero  =  postinumero;
     }
 }

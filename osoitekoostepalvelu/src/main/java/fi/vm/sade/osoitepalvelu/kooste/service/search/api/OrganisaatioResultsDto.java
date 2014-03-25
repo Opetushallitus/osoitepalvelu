@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrganisaatioResultsDto implements Serializable {
-    private static final long serialVersionUID = -2063655804200866815L;
+    private static final long serialVersionUID  =  -2063655804200866815L;
     
-    private List<OrganisaatioTiedotDto> tulos = new ArrayList<OrganisaatioTiedotDto>();
+    private List<OrganisaatioTiedotDto> tulos  =  new ArrayList<OrganisaatioTiedotDto>();
 
     public OrganisaatioResultsDto() {
-        tulos = new ArrayList<OrganisaatioTiedotDto>();
+        tulos  =  new ArrayList<OrganisaatioTiedotDto>();
     }
     
     public List<OrganisaatioTiedotDto> getResults() {
@@ -34,7 +34,7 @@ public class OrganisaatioResultsDto implements Serializable {
     }
     
     public void setResults(List<OrganisaatioTiedotDto> results) {
-        this.tulos = results;
+        this.tulos  =  results;
     }
     
     public void addResult(OrganisaatioTiedotDto result) {

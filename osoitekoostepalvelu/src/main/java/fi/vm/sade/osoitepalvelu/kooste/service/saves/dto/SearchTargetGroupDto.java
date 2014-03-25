@@ -30,17 +30,17 @@ import java.util.List;
  */
 @DtoConversion
 public class SearchTargetGroupDto implements Serializable {
-    private static final long serialVersionUID = 191054363453587812L;
+    private static final long serialVersionUID  =  191054363453587812L;
     
     private SearchTargetGroup.GroupType type;
-    private List<SearchTargetGroup.TargetType> options = new ArrayList<SearchTargetGroup.TargetType>();
+    private List<SearchTargetGroup.TargetType> options  =  new ArrayList<SearchTargetGroup.TargetType>();
 
     public SearchTargetGroup.GroupType getType() {
         return type;
     }
 
     public void setType(SearchTargetGroup.GroupType type) {
-        this.type = type;
+        this.type  =  type;
     }
 
     public List<SearchTargetGroup.TargetType> getOptions() {
@@ -48,6 +48,6 @@ public class SearchTargetGroupDto implements Serializable {
     }
 
     public void setOptions(List<SearchTargetGroup.TargetType> options) {
-        this.options = options;
+        this.options  =  options;
     }
 }

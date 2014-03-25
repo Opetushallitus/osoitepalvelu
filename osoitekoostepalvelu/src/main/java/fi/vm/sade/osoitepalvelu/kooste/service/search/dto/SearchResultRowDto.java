@@ -26,17 +26,17 @@ import fi.ratamaa.dtoconverter.annotation.DtoConversion;
  * Date: 2/14/14
  * Time: 3:34 PM
  */
-@DtoConversion(path={"organisaatio", "henkilo", "osoite"}, withClass = ResultAggregateDto.class)
+@DtoConversion(path =  {"organisaatio", "henkilo", "osoite" }, withClass  =  ResultAggregateDto.class)
 public class SearchResultRowDto implements Serializable {
-    private static final long serialVersionUID = -1252066099444560569L;
+    private static final long serialVersionUID  =  -1252066099444560569L;
     
-    @DtoConversion(path="organisaatio.oid", withClass = ResultAggregateDto.class)
+    @DtoConversion(path = "organisaatio.oid", withClass  =  ResultAggregateDto.class)
     private String organisaatioOid;
     private String kotikunta;
     private String toimipistekoodi;
     private String oppilaitosKoodi;
     private String wwwOsoite;
-    @DtoConversion(skip = true, withClass = ResultAggregateDto.class)
+    @DtoConversion(skip  =  true, withClass  =  ResultAggregateDto.class)
     private String nimi;
     private String faksinumero;
     private String puhelinnumero;
@@ -47,18 +47,18 @@ public class SearchResultRowDto implements Serializable {
     private String kriisitiedotuksenEmail;
 
     private String nimike;
-    @DtoConversion(path="henkilo.nimi", withClass = ResultAggregateDto.class)
+    @DtoConversion(path = "henkilo.nimi", withClass  =  ResultAggregateDto.class)
     private String yhteystietoNimi;
-    @DtoConversion(path="henkilo.email", withClass = ResultAggregateDto.class)
+    @DtoConversion(path = "henkilo.email", withClass  =  ResultAggregateDto.class)
     private String henkiloEmail;
-    @DtoConversion(path="henkilo.nimi", withClass = ResultAggregateDto.class)
+    @DtoConversion(path = "henkilo.nimi", withClass  =  ResultAggregateDto.class)
     private String henkiloOid;
 
-    @DtoConversion(path="osoite.kieli", withClass = ResultAggregateDto.class)
+    @DtoConversion(path = "osoite.kieli", withClass  =  ResultAggregateDto.class)
     private String osoiteKieli;
     private String osoiteTyyppi;
     private String yhteystietoOid;
-    @DtoConversion(path="osoite.osoite", withClass = ResultAggregateDto.class)
+    @DtoConversion(path = "osoite.osoite", withClass  =  ResultAggregateDto.class)
     private String osoite;
     private String postilokero;
     private String postinumero;
@@ -71,7 +71,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setOrganisaatioOid(String organisaatioOid) {
-        this.organisaatioOid = organisaatioOid;
+        this.organisaatioOid  =  organisaatioOid;
     }
 
     public String getKotikunta() {
@@ -79,7 +79,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setKotikunta(String kotikunta) {
-        this.kotikunta = kotikunta;
+        this.kotikunta  =  kotikunta;
     }
 
     public String getToimipistekoodi() {
@@ -87,7 +87,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setToimipistekoodi(String toimipistekoodi) {
-        this.toimipistekoodi = toimipistekoodi;
+        this.toimipistekoodi  =  toimipistekoodi;
     }
 
     public String getWwwOsoite() {
@@ -95,7 +95,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setWwwOsoite(String wwwOsoite) {
-        this.wwwOsoite = wwwOsoite;
+        this.wwwOsoite  =  wwwOsoite;
     }
 
     public String getNimi() {
@@ -103,7 +103,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setNimi(String nimi) {
-        this.nimi = nimi;
+        this.nimi  =  nimi;
     }
 
     public String getFaksinumero() {
@@ -111,7 +111,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setFaksinumero(String faksinumero) {
-        this.faksinumero = faksinumero;
+        this.faksinumero  =  faksinumero;
     }
 
     public String getEmailOsoite() {
@@ -119,7 +119,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setEmailOsoite(String emailOsoite) {
-        this.emailOsoite = emailOsoite;
+        this.emailOsoite  =  emailOsoite;
     }
 
     public String getNimike() {
@@ -127,7 +127,7 @@ public class SearchResultRowDto implements Serializable {
     }
     
     public void setNimike(String nimike) {
-        this.nimike = nimike;
+        this.nimike  =  nimike;
     }
     
     public String getYhteystietoNimi() {
@@ -135,7 +135,7 @@ public class SearchResultRowDto implements Serializable {
     }
     
     public void setYhteystietoNimi(String yhteystietoNimi) {
-        this.yhteystietoNimi = yhteystietoNimi;
+        this.yhteystietoNimi  =  yhteystietoNimi;
     }
 
     public String getHenkiloEmail() {
@@ -143,7 +143,7 @@ public class SearchResultRowDto implements Serializable {
     }
     
     public void setHenkiloEmail(String henkiloEmail) {
-        this.henkiloEmail = henkiloEmail;
+        this.henkiloEmail  =  henkiloEmail;
     }
 
     public String getOsoiteTyyppi() {
@@ -151,7 +151,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setOsoiteTyyppi(String osoiteTyyppi) {
-        this.osoiteTyyppi = osoiteTyyppi;
+        this.osoiteTyyppi  =  osoiteTyyppi;
     }
 
     public String getYhteystietoOid() {
@@ -159,7 +159,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setYhteystietoOid(String yhteystietoOid) {
-        this.yhteystietoOid = yhteystietoOid;
+        this.yhteystietoOid  =  yhteystietoOid;
     }
 
     public String getOsoite() {
@@ -167,7 +167,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setOsoite(String osoite) {
-        this.osoite = osoite;
+        this.osoite  =  osoite;
     }
 
     public String getPostinumero() {
@@ -175,7 +175,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setPostinumero(String postinumero) {
-        this.postinumero = postinumero;
+        this.postinumero  =  postinumero;
     }
 
     public String getPostitoimipaikka() {
@@ -183,7 +183,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setPostitoimipaikka(String postitoimipaikka) {
-        this.postitoimipaikka = postitoimipaikka;
+        this.postitoimipaikka  =  postitoimipaikka;
     }
 
     public String getExtraRivi() {
@@ -191,7 +191,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setExtraRivi(String extraRivi) {
-        this.extraRivi = extraRivi;
+        this.extraRivi  =  extraRivi;
     }
 
     public String getPuhelinnumero() {
@@ -199,7 +199,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setPuhelinnumero(String puhelinnumero) {
-        this.puhelinnumero = puhelinnumero;
+        this.puhelinnumero  =  puhelinnumero;
     }
 
     public List<String> getTyypit() {
@@ -207,7 +207,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setTyypit(List<String> tyypit) {
-        this.tyypit = tyypit;
+        this.tyypit  =  tyypit;
     }
 
     public String getOsoiteKieli() {
@@ -215,7 +215,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setOsoiteKieli(String osoiteKieli) {
-        this.osoiteKieli = osoiteKieli;
+        this.osoiteKieli  =  osoiteKieli;
     }
 
     public String getViranomaistiedotuksenEmail() {
@@ -223,7 +223,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setViranomaistiedotuksenEmail(String viranomaistiedotuksenEmail) {
-        this.viranomaistiedotuksenEmail = viranomaistiedotuksenEmail;
+        this.viranomaistiedotuksenEmail  =  viranomaistiedotuksenEmail;
     }
 
     public String getKoulutusneuvonnanEmail() {
@@ -231,7 +231,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setKoulutusneuvonnanEmail(String koulutusneuvonnanEmail) {
-        this.koulutusneuvonnanEmail = koulutusneuvonnanEmail;
+        this.koulutusneuvonnanEmail  =  koulutusneuvonnanEmail;
     }
 
     public String getKriisitiedotuksenEmail() {
@@ -239,7 +239,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setKriisitiedotuksenEmail(String kriisitiedotuksenEmail) {
-        this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
+        this.kriisitiedotuksenEmail  =  kriisitiedotuksenEmail;
     }
 
     public String getPostilokero() {
@@ -247,7 +247,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setPostilokero(String postilokero) {
-        this.postilokero = postilokero;
+        this.postilokero  =  postilokero;
     }
 
     public String getHenkiloOid() {
@@ -255,7 +255,7 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setHenkiloOid(String henkiloOid) {
-        this.henkiloOid = henkiloOid;
+        this.henkiloOid  =  henkiloOid;
     }
 
     public String getOppilaitosKoodi() {
@@ -263,11 +263,11 @@ public class SearchResultRowDto implements Serializable {
     }
 
     public void setOppilaitosKoodi(String oppilaitosKoodi) {
-        this.oppilaitosKoodi = oppilaitosKoodi;
+        this.oppilaitosKoodi  =  oppilaitosKoodi;
     }
 
     public OidAndTyyppiPair getOidAndTyyppiPair() {
-        if( this.henkiloOid != null ) {
+        if(this.henkiloOid != null) {
             return new OidAndTyyppiPair(OidAndTyyppiPair.TYYPPI_HENKILO, this.henkiloOid);
         }
         return new OidAndTyyppiPair(OidAndTyyppiPair.TYYPPI_ORGANISAATIO, this.organisaatioOid);

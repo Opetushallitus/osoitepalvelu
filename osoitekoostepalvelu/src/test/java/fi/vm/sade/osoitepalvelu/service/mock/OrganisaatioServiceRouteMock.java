@@ -31,7 +31,7 @@ import java.util.List;
  * Time: 9:27 AM
  */
 public class OrganisaatioServiceRouteMock implements OrganisaatioServiceRoute {
-    private List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
+    private List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults  =  new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
     private OrganisaatioYksityiskohtaisetTiedotDto yksityiskohtaisetTiedotByOid;
 
     @Override
@@ -47,10 +47,10 @@ public class OrganisaatioServiceRouteMock implements OrganisaatioServiceRoute {
     }
 
     public void setYksityiskohtaisetTiedotByOid(OrganisaatioYksityiskohtaisetTiedotDto yksityiskohtaisetTiedotByOid) {
-        this.yksityiskohtaisetTiedotByOid = yksityiskohtaisetTiedotByOid;
+        this.yksityiskohtaisetTiedotByOid  =  yksityiskohtaisetTiedotByOid;
     }
 
     public void setOrganisaatioYhteystietoResults(List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults) {
-        this.organisaatioYhteystietoResults = organisaatioYhteystietoResults;
+        this.organisaatioYhteystietoResults  =  organisaatioYhteystietoResults;
     }
 }

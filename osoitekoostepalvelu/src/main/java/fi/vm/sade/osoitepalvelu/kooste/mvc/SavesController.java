@@ -37,39 +37,39 @@ import java.util.List;
  */
 @Api("Tallennetut haut")
 @Controller
-@RequestMapping(value = "/saves")
+@RequestMapping(value  =  "/saves")
 public class SavesController extends AbstractMvcController implements Serializable {
-    private static final long serialVersionUID = 3284395720660368511L;
+    private static final long serialVersionUID  =  3284395720660368511L;
     
     @Autowired
     private SavedSearchService savedSearchService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method  =  RequestMethod.GET)
     @ResponseBody
     public List<SavedSearchListDto> list() {
         return savedSearchService.findSavedSearchesForLoggedInUser();
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @RequestMapping(value  =  "{id}", method  =  RequestMethod.GET)
     @ResponseBody
     public SavedSearchViewDto get(@PathVariable("id") long id) throws NotFoundException {
         return savedSearchService.getSaveById(id);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value  =  "{id}", method  =  RequestMethod.DELETE)
     @ResponseBody
     public String delete(@PathVariable("id") long id) throws NotFoundException {
         savedSearchService.deleteSavedSearch(id);
         return "OK";
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(method  =  RequestMethod.PUT)
     @ResponseBody
     public long save(@RequestBody SavedSearchSaveDto dto) throws NotFoundException {
         return savedSearchService.saveSearch(dto);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method  =  RequestMethod.POST)
     @ResponseBody
     public String edit(@RequestBody SavedSearchEditDto dto) throws NotFoundException {
         savedSearchService.updateSavedSearch(dto);

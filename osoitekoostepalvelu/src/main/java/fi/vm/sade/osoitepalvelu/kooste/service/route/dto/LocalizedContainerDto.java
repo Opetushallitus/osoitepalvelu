@@ -27,14 +27,14 @@ import java.util.Locale;
  * Time: 3:05 PM
  */
 public class LocalizedContainerDto implements Serializable {
-    private List<LocalizedValueDto> texts = new ArrayList<LocalizedValueDto>();
+    private List<LocalizedValueDto> texts  =  new ArrayList<LocalizedValueDto>();
 
     public List<LocalizedValueDto> getTexts() {
         return texts;
     }
 
     public void setTexts(List<LocalizedValueDto> texts) {
-        this.texts = texts;
+        this.texts  =  texts;
     }
 
     public String findForLocale(Locale locale) {
@@ -42,15 +42,15 @@ public class LocalizedContainerDto implements Serializable {
     }
 
     public String findForLocale(Locale locale, Locale fallbackTo) {
-        String fallbackValue = null;
-        for( LocalizedValueDto value : texts ) {
-            if( value.getText() != null && value.getLang() != null ) {
-                if( value.getLang().toLowerCase().equals(locale.getLanguage().toLowerCase()) ) {
+        String fallbackValue  =  null;
+        for(LocalizedValueDto value : texts) {
+            if(value.getText() != null && value.getLang() != null) {
+                if(value.getLang().toLowerCase().equals(locale.getLanguage().toLowerCase())) {
                     return value.getText();
-                } else if( fallbackTo != null && value.getLang().toLowerCase().equals(fallbackTo.getLanguage().toLowerCase()) ) {
-                    fallbackValue = value.getText();
-                } else if( fallbackValue == null ) {
-                    fallbackValue = value.getText(); // Take the first one existing if fallbackTo is not defined or found
+                } else if(fallbackTo != null && value.getLang().toLowerCase().equals(fallbackTo.getLanguage().toLowerCase())) {
+                    fallbackValue  =  value.getText();
+                } else if(fallbackValue == null) {
+                    fallbackValue  =  value.getText(); // Take the first one existing if fallbackTo is not defined or found
                 }
             }
         }

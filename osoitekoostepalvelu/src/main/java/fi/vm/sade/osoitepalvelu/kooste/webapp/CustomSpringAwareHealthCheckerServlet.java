@@ -15,12 +15,12 @@ public class CustomSpringAwareHealthCheckerServlet extends SpringAwareHealthChec
 
     @Override
     protected Map<String, HealthChecker> registerHealthCheckers() {
-        Map<String, HealthChecker> checkers = ctx.getBeansOfType(HealthChecker.class);
+        Map<String, HealthChecker> checkers  =  ctx.getBeansOfType(HealthChecker.class);
         // Using mongodb as database, not the default JDBC dataSource dependant anonymous class for database.
-        Map<String, HealthChecker> checkersByNames = new HashMap<String, HealthChecker>();
-        for( Map.Entry<String,HealthChecker> checkerBean : checkers.entrySet() ) {
-            HealthChecker bean = checkerBean.getValue();
-            if( bean.getClass().isAnnotationPresent(HealthCheckerName.class) ) {
+        Map<String, HealthChecker> checkersByNames  =  new HashMap<String, HealthChecker>();
+        for(Map.Entry<String, HealthChecker> checkerBean : checkers.entrySet()) {
+            HealthChecker bean  =  checkerBean.getValue();
+            if(bean.getClass().isAnnotationPresent(HealthCheckerName.class)) {
                 checkersByNames.put(bean.getClass().getAnnotation(HealthCheckerName.class).value(), bean);
             } else {
                 checkersByNames.put(checkerBean.getKey(), checkerBean.getValue());

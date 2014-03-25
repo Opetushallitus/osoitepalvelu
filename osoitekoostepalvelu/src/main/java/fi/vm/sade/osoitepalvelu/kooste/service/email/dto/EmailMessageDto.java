@@ -18,14 +18,14 @@ public class EmailMessageDto implements Serializable {
     private String replyTo;
     private String subject;
     private String body;
-    private List<Object> attachInfo = new ArrayList<Object>();
+    private List<Object> attachInfo  =  new ArrayList<Object>();
 
     public String getCallingProcess() {
         return callingProcess;
     }
 
     public void setCallingProcess(String callingProcess) {
-        this.callingProcess = callingProcess;
+        this.callingProcess  =  callingProcess;
     }
 
     public String getFrom() {
@@ -33,7 +33,7 @@ public class EmailMessageDto implements Serializable {
     }
 
     public void setFrom(String from) {
-        this.from = from;
+        this.from  =  from;
     }
 
     public String getReplyTo() {
@@ -41,7 +41,7 @@ public class EmailMessageDto implements Serializable {
     }
 
     public void setReplyTo(String replyTo) {
-        this.replyTo = replyTo;
+        this.replyTo  =  replyTo;
     }
 
     public String getSubject() {
@@ -49,7 +49,7 @@ public class EmailMessageDto implements Serializable {
     }
 
     public void setSubject(String subject) {
-        this.subject = subject;
+        this.subject  =  subject;
     }
 
     public String getBody() {
@@ -57,7 +57,7 @@ public class EmailMessageDto implements Serializable {
     }
 
     public void setBody(String body) {
-        this.body = body;
+        this.body  =  body;
     }
 
     public List<Object> getAttachInfo() {
@@ -65,6 +65,6 @@ public class EmailMessageDto implements Serializable {
     }
 
     public void setAttachInfo(List<Object> attachInfo) {
-        this.attachInfo = attachInfo;
+        this.attachInfo  =  attachInfo;
     }
 }

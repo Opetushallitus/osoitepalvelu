@@ -31,7 +31,7 @@ import java.util.Locale;
  * Time: 2:51 PM
  */
 public class SearchTermsDto implements Serializable {
-    private static final long serialVersionUID = -6050192875078360323L;
+    private static final long serialVersionUID  =  -6050192875078360323L;
 
     public enum SearchType {
         EMAIL,
@@ -42,17 +42,17 @@ public class SearchTermsDto implements Serializable {
 
     private Locale locale;
     private SearchType searchType;
-    private List<String> addressFields = new ArrayList<String>();
-    private List<String> receiverFields = new ArrayList<String>();
-    private List<SearchTargetGroupDto> targetGroups = new ArrayList<SearchTargetGroupDto>();
-    private List<SearchTermDto> terms = new ArrayList<SearchTermDto>();
+    private List<String> addressFields  =  new ArrayList<String>();
+    private List<String> receiverFields  =  new ArrayList<String>();
+    private List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
+    private List<SearchTermDto> terms  =  new ArrayList<SearchTermDto>();
 
     public Locale getLocale() {
         return locale;
     }
 
     public void setLocale(Locale locale) {
-        this.locale = locale;
+        this.locale  =  locale;
     }
 
     public SearchType getSearchType() {
@@ -60,7 +60,7 @@ public class SearchTermsDto implements Serializable {
     }
 
     public void setSearchType(SearchType searchType) {
-        this.searchType = searchType;
+        this.searchType  =  searchType;
     }
 
     public List<String> getAddressFields() {
@@ -68,7 +68,7 @@ public class SearchTermsDto implements Serializable {
     }
 
     public void setAddressFields(List<String> addressFields) {
-        this.addressFields = addressFields;
+        this.addressFields  =  addressFields;
     }
 
     public List<String> getReceiverFields() {
@@ -76,7 +76,7 @@ public class SearchTermsDto implements Serializable {
     }
 
     public void setReceiverFields(List<String> receiverFields) {
-        this.receiverFields = receiverFields;
+        this.receiverFields  =  receiverFields;
     }
 
     public boolean containsAnyTargetGroup(SearchTargetGroup.GroupType ...groupTypes) {
@@ -95,7 +95,7 @@ public class SearchTermsDto implements Serializable {
     }
 
     public void setTargetGroups(List<SearchTargetGroupDto> targetGroups) {
-        this.targetGroups = targetGroups;
+        this.targetGroups  =  targetGroups;
     }
 
     public List<SearchTermDto> getTerms() {
@@ -103,12 +103,12 @@ public class SearchTermsDto implements Serializable {
     }
 
     public void setTerms(List<SearchTermDto> terms) {
-        this.terms = terms;
+        this.terms  =  terms;
     }
 
-    public List<String> findTerms( String type ) {
-        for( SearchTermDto term : this.terms ) {
-            if( type.equals(term.getType()) ) {
+    public List<String> findTerms(String type) {
+        for(SearchTermDto term : this.terms) {
+            if(type.equals(term.getType())) {
                 return term.getValues();
             }
         }

@@ -30,9 +30,9 @@ import java.util.Locale;
  * Date: 12/17/13
  * Time: 8:58 AM
  */
-@Document(collection = "koodistoCache")
+@Document(collection  =  "koodistoCache")
 public class KoodistoCache implements Serializable {
-    private static final long serialVersionUID = 4351568551821745238L;
+    private static final long serialVersionUID  =  4351568551821745238L;
 
     public enum KoodistoTyyppi {
             OPPILAITOSTYYPPI,
@@ -53,7 +53,9 @@ public class KoodistoCache implements Serializable {
     }
 
     public static class CacheKey implements Serializable {
-        private static final long serialVersionUID = -1966991269006762979L;
+        private static final int HASH_FACTOR = 31;
+
+        private static final long serialVersionUID  =  -1966991269006762979L;
         
         private KoodistoTyyppi tyyppi;
         private Locale locale;
@@ -63,13 +65,13 @@ public class KoodistoCache implements Serializable {
         }
 
         public CacheKey(KoodistoTyyppi tyyppi, Locale locale) {
-            this.tyyppi = tyyppi;
-            this.locale = locale;
+            this.tyyppi  =  tyyppi;
+            this.locale  =  locale;
         }
 
         public CacheKey(String parentUri, Locale locale) {
-            this.parentUri = parentUri;
-            this.locale = locale;
+            this.parentUri  =  parentUri;
+            this.locale  =  locale;
         }
 
         public KoodistoTyyppi getTyyppi() {
@@ -77,7 +79,7 @@ public class KoodistoCache implements Serializable {
         }
 
         public void setTyyppi(KoodistoTyyppi tyyppi) {
-            this.tyyppi = tyyppi;
+            this.tyyppi  =  tyyppi;
         }
 
         public Locale getLocale() {
@@ -85,7 +87,7 @@ public class KoodistoCache implements Serializable {
         }
 
         public void setLocale(Locale locale) {
-            this.locale = locale;
+            this.locale  =  locale;
         }
 
         public String getParentUri() {
@@ -93,12 +95,12 @@ public class KoodistoCache implements Serializable {
         }
 
         public void setParentUri(String parentUri) {
-            this.parentUri = parentUri;
+            this.parentUri  =  parentUri;
         }
 
         @Override
         public String toString() {
-            StringBuffer b = new StringBuffer();
+            StringBuffer b  =  new StringBuffer();
             if (tyyppi != null) {
                 b.append("KoodistoTyyppi: ").append(tyyppi.name());
             }
@@ -114,38 +116,48 @@ public class KoodistoCache implements Serializable {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
-            CacheKey cacheKey = (CacheKey) o;
+            CacheKey cacheKey  =  (CacheKey) o;
 
-            if (!locale.equals(cacheKey.locale)) return false;
-            if (parentUri != null ? !parentUri.equals(cacheKey.parentUri) : cacheKey.parentUri != null) return false;
-            if (tyyppi != cacheKey.tyyppi) return false;
+            if (!locale.equals(cacheKey.locale)) {
+                return false;
+            }
+            if (parentUri != null ? !parentUri.equals(cacheKey.parentUri) : cacheKey.parentUri != null) {
+                return false;
+            }
+            if (tyyppi != cacheKey.tyyppi) {
+                return false;
+            }
 
             return true;
         }
 
         @Override
         public int hashCode() {
-            int result = tyyppi != null ? tyyppi.hashCode() : 0;
-            result = 31 * result + locale.hashCode();
-            result = 31 * result + (parentUri != null ? parentUri.hashCode() : 0);
+            int result  =  tyyppi != null ? tyyppi.hashCode() : 0;
+            result  =  HASH_FACTOR * result + locale.hashCode();
+            result  =  HASH_FACTOR * result + (parentUri != null ? parentUri.hashCode() : 0);
             return result;
         }
     }
 
     @Id
     private CacheKey key;
-    private DateTime updatedAt = new DateTime();
-    private List<KoodiItem> items = new ArrayList<KoodiItem>();
+    private DateTime updatedAt  =  new DateTime();
+    private List<KoodiItem> items  =  new ArrayList<KoodiItem>();
 
     public CacheKey getKey() {
         return key;
     }
 
     public void setKey(CacheKey key) {
-        this.key = key;
+        this.key  =  key;
     }
 
     public DateTime getUpdatedAt() {
@@ -153,7 +165,7 @@ public class KoodistoCache implements Serializable {
     }
 
     public void setUpdatedAt(DateTime updatedAt) {
-        this.updatedAt = updatedAt;
+        this.updatedAt  =  updatedAt;
     }
 
     public List<KoodiItem> getItems() {
@@ -161,6 +173,6 @@ public class KoodistoCache implements Serializable {
     }
 
     public void setItems(List<KoodiItem> items) {
-        this.items = items;
+        this.items  =  items;
     }
 }

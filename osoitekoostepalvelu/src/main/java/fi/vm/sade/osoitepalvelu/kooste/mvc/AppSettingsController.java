@@ -38,8 +38,8 @@ import java.io.IOException;
  */
 @Api("Sovelluksen asetukset")
 @Controller
-@Scope(value= WebApplicationContext.SCOPE_APPLICATION)
-@RequestMapping(value = "/app")
+@Scope(value =  WebApplicationContext.SCOPE_APPLICATION)
+@RequestMapping(value  =  "/app")
 public class AppSettingsController extends AbstractMvcController {
     @Autowired
     private AppSettingsService appSettingsService;
@@ -47,11 +47,12 @@ public class AppSettingsController extends AbstractMvcController {
     @Autowired
     private ObjectMapperProvider objectMapperProvider;
 
-    @RequestMapping(value = "/settings.js", method = RequestMethod.GET,
-            produces = "text/javascript")
-    public @ResponseBody String settingsJs() throws IOException {
-        AppSettingsDto settings = appSettingsService.getUiSettings();
-        ObjectMapper mapper = objectMapperProvider.getContext(ObjectMapper.class);
-        return "window.CONFIG = " + mapper.writeValueAsString(settings) + ";";
+    @RequestMapping(value  =  "/settings.js", method  =  RequestMethod.GET,
+            produces  =  "text/javascript")
+    @ResponseBody
+    public String settingsJs() throws IOException {
+        AppSettingsDto settings  =  appSettingsService.getUiSettings();
+        ObjectMapper mapper  =  objectMapperProvider.getContext(ObjectMapper.class);
+        return "window.CONFIG  =  "  +  mapper.writeValueAsString(settings)  +  ";";
     }
 }

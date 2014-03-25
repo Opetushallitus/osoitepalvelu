@@ -41,15 +41,15 @@ public class UsernamePasswordCasClientTicketProvider extends AbstractCasTicketPr
     private String password;
 
     public UsernamePasswordCasClientTicketProvider(String casService, String username, String password) {
-        this.casService = casService;
-        this.username = username;
-        this.password = password;
+        this.casService  =  casService;
+        this.username  =  username;
+        this.password  =  password;
     }
 
     @Override
-    public Map<String,String> provideTicketHeaders(String service) {
-        Map<String,String> headers = new HashMap<String, String>();
-        String casHeader = CasClient.getTicket(casService+ "/v1/tickets", username, password, getTargetServiceCasUri(service));
+    public Map<String, String> provideTicketHeaders(String service) {
+        Map<String, String> headers  =  new HashMap<String, String>();
+        String casHeader  =  CasClient.getTicket(casService +  "/v1/tickets", username, password, getTargetServiceCasUri(service));
         headers.put(CAS_HEADER, casHeader);
         return headers;
     }

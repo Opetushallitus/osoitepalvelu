@@ -22,20 +22,22 @@ import java.util.Map;
  */
 @Api("Sähköpostin lähetys")
 @Controller
-@Scope(value= WebApplicationContext.SCOPE_APPLICATION)
-@RequestMapping(value = "/email")
+@Scope(value =  WebApplicationContext.SCOPE_APPLICATION)
+@RequestMapping(value  =  "/email")
 public class EmailController extends AbstractMvcController implements Serializable {
 
     @Autowired
     private EmailService emailService;
 
-    @RequestMapping(value="send.settings.json", method = RequestMethod.GET)
-    public @ResponseBody EmailSendSettingsDto getEmailSendSettings() {
+    @RequestMapping(value = "send.settings.json", method  =  RequestMethod.GET)
+    @ResponseBody
+    public EmailSendSettingsDto getEmailSendSettings() {
         return emailService.getEmailSendSettings();
     }
 
-    @RequestMapping(value="test.do", method = RequestMethod.POST)
-    public @ResponseBody Map testPostData( HttpServletRequest request ) {
+    @RequestMapping(value = "test.do", method  =  RequestMethod.POST)
+    @ResponseBody
+    public Map testPostData(HttpServletRequest request) {
         return request.getParameterMap();
     }
 }

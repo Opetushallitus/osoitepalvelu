@@ -45,12 +45,12 @@ import java.io.IOException;
  * Time: 9:33 AM
  */
 @Configuration
-@PropertySource({"classpath:/test.properties"})
+@PropertySource({"classpath:/test.properties" })
 public class MongoTestConfig extends AbstractMongoConfiguration {
-    private static final int DEFAULT_MONGO_DB_PORT = 12345;
-    private static final int MAX_DB_START_RETRY_COUNT = 4;
-    private static final long MAX_DB_START_RETRY_INTERVAL_MS = 1000L;
-    private static final long MAX_DB_STOP_RETRY_INTERVAL_MS = 200L;
+    private static final int DEFAULT_MONGO_DB_PORT  =  12345;
+    private static final int MAX_DB_START_RETRY_COUNT  =  4;
+    private static final long MAX_DB_START_RETRY_INTERVAL_MS  =  1000L;
+    private static final long MAX_DB_STOP_RETRY_INTERVAL_MS  =  200L;
 
     private MongodExecutable mongodExe;
     private MongodProcess mongod;
@@ -62,17 +62,17 @@ public class MongoTestConfig extends AbstractMongoConfiguration {
         if (mongodExe != null) {
             return;
         }
-        String port = env.getProperty("mongodb.port");
-        MongodStarter runtime = MongodStarter.getDefaultInstance();
-        mongodExe = runtime.prepare(new MongodConfigBuilder().version(Version.Main.PRODUCTION)
+        String port  =  env.getProperty("mongodb.port");
+        MongodStarter runtime  =  MongodStarter.getDefaultInstance();
+        mongodExe  =  runtime.prepare(new MongodConfigBuilder().version(Version.Main.PRODUCTION)
                 .net(new Net(port == null ? DEFAULT_MONGO_DB_PORT : Integer.parseInt(port), Network.localhostIsIPv6()))
                 .build());
-        boolean started = false;
-        int tried = 0, tries = MAX_DB_START_RETRY_COUNT;
+        boolean started  =  false;
+        int tried  =  0, tries  =  MAX_DB_START_RETRY_COUNT;
         while (!started && ++tried < tries) {
             try {
-                mongod = mongodExe.start();
-                started = true;
+                mongod  =  mongodExe.start();
+                started  =  true;
             } catch (IOException e) {
                 if (tried >= tries) {
                     throw e;
@@ -91,7 +91,7 @@ public class MongoTestConfig extends AbstractMongoConfiguration {
         if (mongodExe != null) {
             mongod.stop();
             mongodExe.stop();
-            mongodExe = null;
+            mongodExe  =  null;
             try {
                 Thread.sleep(MAX_DB_STOP_RETRY_INTERVAL_MS);
             } catch (InterruptedException e) {
@@ -112,14 +112,14 @@ public class MongoTestConfig extends AbstractMongoConfiguration {
     }
 
     protected String hostAndPort() {
-        String port = env.getProperty("mongodb.port");
-        return env.getProperty("mongodb.host") + (port != null && port.length() > 0 ? ":" + port : "");
+        String port  =  env.getProperty("mongodb.port");
+        return env.getProperty("mongodb.host")  +  (port !=null && port.length() > 0 ? ":"  +  port : "");
     }
 
     @Bean
     @Override
     public MongoTemplate mongoTemplate() throws Exception {
-        MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory());
+        MongoTemplate mongoTemplate  =  new MongoTemplate(mongoDbFactory());
         return mongoTemplate;
     }
 

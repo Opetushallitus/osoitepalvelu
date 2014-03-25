@@ -31,8 +31,8 @@ import java.util.List;
  * Time: 3:18 PM
  */
 public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute {
-    private List<KayttooikesuryhmaDto> kayttooikesuryhmas = new ArrayList<KayttooikesuryhmaDto>();
-    private List<HenkiloDto> henkilos = new ArrayList<HenkiloDto>();
+    private List<KayttooikesuryhmaDto> kayttooikesuryhmas  =  new ArrayList<KayttooikesuryhmaDto>();
+    private List<HenkiloDto> henkilos  =  new ArrayList<HenkiloDto>();
     private MyInformationDto me;
 
     @Override
@@ -51,11 +51,11 @@ public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute
     }
 
     public AuhenticationServiceRouteMock(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
-        this.kayttooikesuryhmas = kayttooikesuryhmas;
+        this.kayttooikesuryhmas  =  kayttooikesuryhmas;
     }
 
     public void setKayttooikesuryhmas(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
-        this.kayttooikesuryhmas = kayttooikesuryhmas;
+        this.kayttooikesuryhmas  =  kayttooikesuryhmas;
     }
 
     public List<HenkiloDto> getHenkilos() {
@@ -63,10 +63,10 @@ public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute
     }
 
     public void setHenkilos(List<HenkiloDto> henkilos) {
-        this.henkilos = henkilos;
+        this.henkilos  =  henkilos;
     }
 
     public void setMe(MyInformationDto me) {
-        this.me = me;
+        this.me  =  me;
     }
 }

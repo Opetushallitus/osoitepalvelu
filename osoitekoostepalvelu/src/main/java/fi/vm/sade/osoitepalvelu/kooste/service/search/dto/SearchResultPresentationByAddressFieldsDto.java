@@ -30,19 +30,19 @@ import java.util.*;
  * Time: 10:31 AM
  */
 public class SearchResultPresentationByAddressFieldsDto implements SearchResultPresentation, Serializable {
-    private static final long serialVersionUID = -9202420166871480974L;
+    private static final long serialVersionUID  =  -9202420166871480974L;
     
-    private static MultiValueMap<String,String> fieldMappings;
+    private static MultiValueMap<String, String> fieldMappings;
     static {
-        fieldMappings = new LinkedMultiValueMap<String, String>();
-        fieldMappings.add("ORGANIAATIO_NIMI","organisaationNimiIncluded");
-        fieldMappings.add("ORGANIAATIO_TUNNISTE","organisaatiotunnisteIncluded");
-        fieldMappings.add("YHTEYSHENKILO","yhteyshenkiloIncluded");
+        fieldMappings  =  new LinkedMultiValueMap<String, String>();
+        fieldMappings.add("ORGANIAATIO_NIMI", "organisaationNimiIncluded");
+        fieldMappings.add("ORGANIAATIO_TUNNISTE", "organisaatiotunnisteIncluded");
+        fieldMappings.add("YHTEYSHENKILO", "yhteyshenkiloIncluded");
         fieldMappings.add("POSTIOSOITE", "positosoiteIncluded");
         fieldMappings.add("KATU_POSTINUMERO", "katuosoiteIncluded");
-        fieldMappings.add("KATU_POSTINUMERO","postinumeroIncluded");
-        fieldMappings.add("PL_POSTINUMERO","pLIncluded");
-        fieldMappings.add("PL_POSTINUMERO","postinumeroIncluded");
+        fieldMappings.add("KATU_POSTINUMERO", "postinumeroIncluded");
+        fieldMappings.add("PL_POSTINUMERO", "pLIncluded");
+        fieldMappings.add("PL_POSTINUMERO", "postinumeroIncluded");
         fieldMappings.add("PUHELINNUMERO", "puhelinnumeroIncluded");
         fieldMappings.add("FAXINUMERO", "faksinumeroIncluded");
         fieldMappings.add("INTERNET_OSOITE", "wwwOsoiteIncluded");
@@ -61,7 +61,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean yhteyshenkiloEmailIncluded;
     private boolean positosoiteIncluded;
     private boolean katuosoiteIncluded;
-    private boolean PLIncluded;
+    private boolean plIncluded;
     private boolean postinumeroIncluded;
     private boolean puhelinnumeroIncluded;
     private boolean faksinumeroIncluded;
@@ -73,8 +73,8 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private Locale locale;
     private Set<OidAndTyyppiPair> nonIncludedOids;
 
-    public SearchResultPresentationByAddressFieldsDto( SearchTermsDto searchTerms) {
-        if( searchTerms.getSearchType() != null ) {
+    public SearchResultPresentationByAddressFieldsDto(SearchTermsDto searchTerms) {
+        if(searchTerms.getSearchType() != null) {
             switch (searchTerms.getSearchType()) {
                 case CONTACT:
                     includeAddressFields(searchTerms.getAddressFields());
@@ -92,25 +92,25 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
                 default: break;
             }
         }
-        this.locale = searchTerms.getLocale();
+        this.locale  =  searchTerms.getLocale();
     }
 
-    public SearchResultPresentationByAddressFieldsDto( SearchTermsDto searchTerms,
-                                                       Set<OidAndTyyppiPair> nonIncludedOrganisaatioOidsStrings ) {
+    public SearchResultPresentationByAddressFieldsDto(SearchTermsDto searchTerms,
+                                                       Set<OidAndTyyppiPair> nonIncludedOrganisaatioOidsStrings) {
         this(searchTerms);
-        this.nonIncludedOids = nonIncludedOrganisaatioOidsStrings;
+        this.nonIncludedOids  =  nonIncludedOrganisaatioOidsStrings;
     }
 
-    public void includeAddressFields( Collection<String> addressFields ) {
+    public void includeAddressFields(Collection<String> addressFields) {
         if (addressFields == null) {
             return;
         }
-        for( String addressField : addressFields ) {
-            List<String> fields = fieldMappings.get(addressField);
+        for(String addressField : addressFields) {
+            List<String> fields  =  fieldMappings.get(addressField);
             if (fields == null) {
-                throw new IllegalStateException("Unknown field " + addressField);
+                throw new IllegalStateException("Unknown field "  +  addressField);
             }
-            for( String field : fields ) {
+            for(String field : fields) {
                 Property.getForName(getClass(), field).set(this, true);
             }
         }
@@ -122,7 +122,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setOrganisaationNimiIncluded(boolean organisaationNimiIncluded) {
-        this.organisaationNimiIncluded = organisaationNimiIncluded;
+        this.organisaationNimiIncluded  =  organisaationNimiIncluded;
     }
 
     @Override
@@ -131,7 +131,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setOrganisaatiotunnisteIncluded(boolean organisaatiotunnisteIncluded) {
-        this.organisaatiotunnisteIncluded = organisaatiotunnisteIncluded;
+        this.organisaatiotunnisteIncluded  =  organisaatiotunnisteIncluded;
     }
 
     @Override
@@ -140,7 +140,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setYhteyshenkiloIncluded(boolean yhteyshenkiloIncluded) {
-        this.yhteyshenkiloIncluded = yhteyshenkiloIncluded;
+        this.yhteyshenkiloIncluded  =  yhteyshenkiloIncluded;
     }
 
     @Override
@@ -149,7 +149,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setYhteyshenkiloEmailIncluded(boolean yhteyshenkiloEmailIncluded) {
-        this.yhteyshenkiloEmailIncluded = yhteyshenkiloEmailIncluded;
+        this.yhteyshenkiloEmailIncluded  =  yhteyshenkiloEmailIncluded;
     }
 
     @Override
@@ -158,7 +158,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setPositosoiteIncluded(boolean positosoiteIncluded) {
-        this.positosoiteIncluded = positosoiteIncluded;
+        this.positosoiteIncluded  =  positosoiteIncluded;
     }
 
     @Override
@@ -167,16 +167,16 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setKatuosoiteIncluded(boolean katuosoiteIncluded) {
-        this.katuosoiteIncluded = katuosoiteIncluded;
+        this.katuosoiteIncluded  =  katuosoiteIncluded;
     }
 
     @Override
     public boolean isPLIncluded() {
-        return PLIncluded;
+        return plIncluded;
     }
 
-    public void setPLIncluded(boolean PLIncluded) {
-        this.PLIncluded = PLIncluded;
+    public void setPLIncluded(boolean plIncluded) {
+        this.plIncluded  =  plIncluded;
     }
 
     @Override
@@ -185,7 +185,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setPostinumeroIncluded(boolean postinumeroIncluded) {
-        this.postinumeroIncluded = postinumeroIncluded;
+        this.postinumeroIncluded  =  postinumeroIncluded;
     }
 
     @Override
@@ -194,7 +194,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setPuhelinnumeroIncluded(boolean puhelinnumeroIncluded) {
-        this.puhelinnumeroIncluded = puhelinnumeroIncluded;
+        this.puhelinnumeroIncluded  =  puhelinnumeroIncluded;
     }
 
     @Override
@@ -203,7 +203,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setFaksinumeroIncluded(boolean faksinumeroIncluded) {
-        this.faksinumeroIncluded = faksinumeroIncluded;
+        this.faksinumeroIncluded  =  faksinumeroIncluded;
     }
 
     @Override
@@ -212,7 +212,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setWwwOsoiteIncluded(boolean wwwOsoiteIncluded) {
-        this.wwwOsoiteIncluded = wwwOsoiteIncluded;
+        this.wwwOsoiteIncluded  =  wwwOsoiteIncluded;
     }
 
     @Override
@@ -221,7 +221,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setViranomaistiedotuksenSahkopostiosoiteIncluded(boolean viranomaistiedotuksenSahkopostiosoiteIncluded) {
-        this.viranomaistiedotuksenSahkopostiosoiteIncluded = viranomaistiedotuksenSahkopostiosoiteIncluded;
+        this.viranomaistiedotuksenSahkopostiosoiteIncluded  =  viranomaistiedotuksenSahkopostiosoiteIncluded;
     }
 
     @Override
@@ -230,7 +230,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setKoulutusneuvonnanSahkopostiosoiteIncluded(boolean koulutusneuvonnanSahkopostiosoiteIncluded) {
-        this.koulutusneuvonnanSahkopostiosoiteIncluded = koulutusneuvonnanSahkopostiosoiteIncluded;
+        this.koulutusneuvonnanSahkopostiosoiteIncluded  =  koulutusneuvonnanSahkopostiosoiteIncluded;
     }
 
     @Override
@@ -239,7 +239,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setKriisitiedotuksenSahkopostiosoiteIncluded(boolean kriisitiedotuksenSahkopostiosoiteIncluded) {
-        this.kriisitiedotuksenSahkopostiosoiteIncluded = kriisitiedotuksenSahkopostiosoiteIncluded;
+        this.kriisitiedotuksenSahkopostiosoiteIncluded  =  kriisitiedotuksenSahkopostiosoiteIncluded;
     }
 
     @Override
@@ -248,7 +248,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setOrganisaationSijaintikuntaIncluded(boolean organisaationSijaintikuntaIncluded) {
-        this.organisaationSijaintikuntaIncluded = organisaationSijaintikuntaIncluded;
+        this.organisaationSijaintikuntaIncluded  =  organisaationSijaintikuntaIncluded;
     }
 
     @Override
@@ -262,6 +262,6 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     public void setLocale(Locale locale) {
-        this.locale = locale;
+        this.locale  =  locale;
     }
 }
