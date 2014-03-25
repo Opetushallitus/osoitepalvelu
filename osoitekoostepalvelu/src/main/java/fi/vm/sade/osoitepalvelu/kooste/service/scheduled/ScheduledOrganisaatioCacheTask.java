@@ -79,7 +79,7 @@ public class ScheduledOrganisaatioCacheTask {
             ++i;
             // This will purge the possibly cached organisaatio from both method level memory based EH cache and
             // and the underlying MongoDB cache:
-            // organisaatioService.purgeOrganisaatioByOidCache(oid);
+            organisaatioService.purgeOrganisaatioByOidCache(oid);
             // ...and renew the cache:
             organisaatioService.getdOrganisaatioByOid(oid, context);
             logger.info("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});

@@ -39,7 +39,7 @@ public class SpringApp {
     @Value("${web.url.cas}")
     private String casService;
 
-    @Value("${auth.mode:'prod'}")
+    @Value("${auth.mode:'cas'}")
     private String authMode;
 
     @Bean
