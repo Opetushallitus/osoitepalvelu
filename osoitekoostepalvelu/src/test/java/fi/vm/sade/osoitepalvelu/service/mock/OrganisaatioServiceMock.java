@@ -17,7 +17,7 @@
 package fi.vm.sade.osoitepalvelu.service.mock;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
@@ -30,7 +30,7 @@ import java.util.List;
  * Date: 3/17/14
  * Time: 9:27 AM
  */
-public class OrganisaatioServiceRouteMock implements OrganisaatioServiceRoute {
+public class OrganisaatioServiceMock implements OrganisaatioService {
     private List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults  =  new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
     private OrganisaatioYksityiskohtaisetTiedotDto yksityiskohtaisetTiedotByOid;
 
@@ -44,6 +44,10 @@ public class OrganisaatioServiceRouteMock implements OrganisaatioServiceRoute {
     public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(String oid,
                                                                         CamelRequestContext context) {
         return yksityiskohtaisetTiedotByOid;
+    }
+
+    @Override
+    public void purgeOrganisaatioByOidCache(String oid) {
     }
 
     public void setYksityiskohtaisetTiedotByOid(OrganisaatioYksityiskohtaisetTiedotDto yksityiskohtaisetTiedotByOid) {

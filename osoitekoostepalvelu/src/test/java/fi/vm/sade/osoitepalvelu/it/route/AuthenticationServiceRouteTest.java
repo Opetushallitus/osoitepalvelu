@@ -53,7 +53,6 @@ public class AuthenticationServiceRouteTest {
     @Autowired
     private DefaultAuthenticationServiceRoute authenticationServiceRoute;
 
-
     @Autowired
     private OrganisaatioServiceRoute organisaatioServiceRoute;
 

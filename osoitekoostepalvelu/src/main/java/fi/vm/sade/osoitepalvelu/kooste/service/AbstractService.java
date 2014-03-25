@@ -21,6 +21,7 @@ import fi.vm.sade.log.model.Tapahtuma;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,8 @@ public abstract class AbstractService {
 
     @Autowired
     protected Logger sadeLogger;
+
+    protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
     protected Tapahtuma read(String oidType, String oid) {
         return Tapahtuma.createREAD("osoitepalvelu", getLoggedInUserOidOrNull(), oidType, oid);

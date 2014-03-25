@@ -56,12 +56,12 @@ public class DefaultKoodistoServiceCacheTest {
 
     @Test
     public void testCache() {
-        long defaultCache  =  koodistoService.getCacheTimeoutMillis(), orignalSearchCount  =  koodistoReitti
+        long defaultCache  =  koodistoService.getCacheTimeoutSeconds(), orignalSearchCount  =  koodistoReitti
                 .getFindCounterValue();
         koodistoReitti.setFindCounterUsed(true);
 
         // Ensure cache turned off:
-        koodistoService.setCacheTimeoutMillis(-1L);
+        koodistoService.setCacheTimeoutSeconds(-1L);
 
         List<UiKoodiItemDto> optiot  =  koodistoService.findAlueHallintoVirastoOptions(LOCALE_FI);
         DefaultKoodistoServiceTest.assertListNonEmptyAndItemsOfType(optiot,
@@ -71,7 +71,7 @@ public class DefaultKoodistoServiceCacheTest {
         assertEquals(orignalSearchCount  +  1L, koodistoReitti.getFindCounterValue());
 
         // Turn cache on:
-        koodistoService.setCacheTimeoutMillis(DEFAULT_CACHE_TIMEOUT_MS);
+        koodistoService.setCacheTimeoutSeconds(DEFAULT_CACHE_TIMEOUT_MS);
 
         List<UiKoodiItemDto> optiot2  =  koodistoService.findAlueHallintoVirastoOptions(LOCALE_FI);
         // Ensure cache used:
@@ -82,6 +82,6 @@ public class DefaultKoodistoServiceCacheTest {
                 KoodistoDto.KoodistoTyyppi.ALUEHALLINTOVIRASTO);
         assertEquals(optiot.size(), optiot2.size());
 
-        koodistoService.setCacheTimeoutMillis(defaultCache);
+        koodistoService.setCacheTimeoutSeconds(defaultCache);
     }
 }

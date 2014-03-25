@@ -18,7 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 
 import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.dao.koodistoCache.KoodistoCacheRepository;
+import fi.vm.sade.osoitepalvelu.kooste.dao.cache.KoodistoCacheRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodiItem;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
@@ -48,6 +48,7 @@ import java.util.*;
 @Service
 public class DefaultKoodistoService extends AbstractService implements KoodistoService {
     public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
+    public static final int MILLIS_IN_SECOND = 1000;
 
     private Logger logger  =  LoggerFactory.getLogger(getClass());
 
@@ -63,8 +64,8 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     @Autowired(required  =  false)
     private KoodistoCacheRepository koodistoCacheRepository;
 
-    @Value("#{config.cacheTimeoutMillis}")
-    private long cacheTimeoutMillis;
+    @Value("${koodisto.cache.livetime.seconds}")
+    private long cacheTimeoutSeconds;
 
     private Map<KoodistoCache.CacheKey, MemoryCacheHolder> memoryCache
              =  new HashMap<KoodistoCache.CacheKey, MemoryCacheHolder>();
@@ -246,11 +247,11 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     private boolean isCacheUsable(DateTime updatedAt) {
-        return updatedAt.plus(cacheTimeoutMillis).compareTo(new DateTime()) > 0;
+        return updatedAt.plus(cacheTimeoutSeconds * MILLIS_IN_SECOND).compareTo(new DateTime()) > 0;
     }
 
     private boolean isCacheUsed() {
-        return koodistoCacheRepository != null && cacheTimeoutMillis >= 0;
+        return koodistoCacheRepository != null && cacheTimeoutSeconds >= 0;
     }
 
     protected List<UiKoodiItemDto> findKoodistoByTyyppi(final Locale locale, final KoodistoTyyppi tyyppi) {
@@ -357,12 +358,12 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         return versioVoimassa;
     }
 
-    public long getCacheTimeoutMillis() {
-        return cacheTimeoutMillis;
+    public long getCacheTimeoutSeconds() {
+        return cacheTimeoutSeconds;
     }
 
-    public void setCacheTimeoutMillis(long cacheTimeoutMillis) {
-        this.cacheTimeoutMillis  =  cacheTimeoutMillis;
+    public void setCacheTimeoutSeconds(long cacheTimeoutSeconds) {
+        this.cacheTimeoutSeconds = cacheTimeoutSeconds;
     }
 
     public void setKoodistoRoute(KoodistoRoute koodistoRoute) {

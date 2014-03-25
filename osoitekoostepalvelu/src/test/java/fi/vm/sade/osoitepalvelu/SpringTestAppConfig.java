@@ -19,7 +19,6 @@ package fi.vm.sade.osoitepalvelu;
 import fi.vm.sade.generic.ui.portlet.security.SecurityTicketOutInterceptorRest;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
-import fi.vm.sade.osoitepalvelu.kooste.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
@@ -45,8 +44,6 @@ import java.util.Map;
 @Import(value = {MongoTestConfig.class })
 @PropertySource({"classpath:/osoitekoostepalvelu.properties", "classpath:/test.properties" })
 public class SpringTestAppConfig {
-    private static final int SECONDS_TO_MS_FACTOR  =  1000;
-    
     @Autowired
     private Environment env;
 
@@ -66,14 +63,6 @@ public class SpringTestAppConfig {
     private String casAuthenticationServiceUsername;
     @Value("${osoitepalvelu.app.password.to.authenticationservice:''}")
     private String casAuthenticationServicePassword;
-
-
-    @Bean
-    public Config config() {
-        Config config  =  new Config();
-        config.setCacheTimeoutMillis(Integer.parseInt(env.getProperty("koodisto.cache.livetime.seconds")) * SECONDS_TO_MS_FACTOR);
-        return config;
-    }
 
     @Bean
     public ResourceBundleMessageSource messageSource() {

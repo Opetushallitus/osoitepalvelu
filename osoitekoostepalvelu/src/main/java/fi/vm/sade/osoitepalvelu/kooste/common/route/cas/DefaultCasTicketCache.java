@@ -16,25 +16,24 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Used to store tickets for services that are called multiple times during <b>the same request</b>.
- *
  * User: ratamaa
- * Date: 3/24/14
- * Time: 12:34 PM
+ * Date: 3/25/14
+ * Time: 12:47 PM
  */
-public interface CasTicketCache {
-    /**
-     * @param service to get cached ticket headers for
-     * @return the cached headers or null if not cached
-     */
-    public Map<String, String> get(String service);
+public class DefaultCasTicketCache implements CasTicketCache {
+    private Map<String, Map<String, String>> store  =  new HashMap<String, Map<String, String>>();
 
-    /**
-     * @param service to store headers for
-     * @param headers to store
-     */
-    public void store(String service, Map<String, String> headers);
+    @Override
+    public Map<String, String> get(String service) {
+        return this.store.get(service);
+    }
+
+    @Override
+    public void store(String service, Map<String, String> headers) {
+        this.store.put(service, headers);
+    }
 }

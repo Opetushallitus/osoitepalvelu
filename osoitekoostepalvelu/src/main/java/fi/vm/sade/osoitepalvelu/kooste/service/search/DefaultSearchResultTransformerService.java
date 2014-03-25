@@ -21,7 +21,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoElementtiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtainenYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
@@ -53,7 +53,7 @@ import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
 @Service
 public class DefaultSearchResultTransformerService extends AbstractService
         implements SearchResultTransformerService {
-    private static final Locale DEFAULT_LOCALE = new Locale("fi","FI");
+    private static final Locale DEFAULT_LOCALE = new Locale("fi", "FI");
 
     @Autowired
     private SearchResultDtoConverter dtoConverter;
@@ -62,12 +62,12 @@ public class DefaultSearchResultTransformerService extends AbstractService
     private MessageSource messageSource;
 
     @Autowired(required = false)
-    private OrganisaatioServiceRoute organisaatioServiceRoute;
+    private OrganisaatioService organisaatioService;
 
     @Override
     public SearchResultsDto transformToResultRows(List<OrganisaatioTiedotDto> results,
-                                                          SearchResultPresentation presentation,
-                                                          CamelRequestContext context) {
+                                                  SearchResultPresentation presentation,
+                                                  CamelRequestContext context) {
         resolveRelatedVisibleDetails(results, presentation, context);
 
         Set<ResultAggregateDto> aggregates = new LinkedHashSet<ResultAggregateDto>();
@@ -77,24 +77,24 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 for (OrganisaatioYhteystietoDto kayttaja : result.getYhteyshenkilot()) {
                     aggregates.add(new ResultAggregateDto(result, kayttaja, osoite));
                 }
-                if(result.getYhteyshenkilot().size() < 1) {
+                if (result.getYhteyshenkilot().size() < 1) {
                     aggregates.add(new ResultAggregateDto(result, null, osoite));
                 }
             }
-            if(filteredOsoites.size() < 1) {
+            if (filteredOsoites.size() < 1) {
                 for (OrganisaatioYhteystietoDto kayttaja : result.getYhteyshenkilot()) {
                     aggregates.add(new ResultAggregateDto(result, kayttaja, null));
                 }
             }
-            if(result.getPostiosoite().size() < 1 && result.getYhteyshenkilot().size() < 1) {
+            if (result.getPostiosoite().size() < 1 && result.getYhteyshenkilot().size() < 1) {
                 aggregates.add(new ResultAggregateDto(result, null, null));
             }
         }
         List<SearchResultRowDto> transformedResults = new ArrayList<SearchResultRowDto>();
-        for(ResultAggregateDto aggregate : aggregates) {
+        for (ResultAggregateDto aggregate : aggregates) {
             SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto());
             row.setNimi(localized(aggregate.getOrganisaatio().getNimi(), presentation.getLocale(), DEFAULT_LOCALE));
-            if(presentation.isResultRowIncluded(row)) {
+            if (presentation.isResultRowIncluded(row)) {
                 transformedResults.add(row);
             }
         }
@@ -104,11 +104,11 @@ public class DefaultSearchResultTransformerService extends AbstractService
     protected void resolveRelatedVisibleDetails(List<OrganisaatioTiedotDto> results,
                                                 SearchResultPresentation presentation,
                                                 CamelRequestContext context) {
-        if (organisaatioServiceRoute == null) {
+        if (organisaatioService == null) {
             return;
         }
 
-        Map<String,OrganisaatioYksityiskohtaisetTiedotDto> organisaatioByOidCache
+        Map<String, OrganisaatioYksityiskohtaisetTiedotDto> organisaatioByOidCache
                 = new HashMap<String, OrganisaatioYksityiskohtaisetTiedotDto>();
         Locale locale = presentation.getLocale();
 
@@ -118,6 +118,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 protected boolean isMissing(OrganisaatioTiedotDto from) {
                     return from.getWwwOsoite() == null;
                 }
+
                 @Override
                 public void copy(OrganisaatioYksityiskohtaisetTiedotDto from, OrganisaatioTiedotDto to) {
                     Iterator<OrganisaatioYhteystietoElementtiDto> elementtis = Collections2.filter(from.getYhteystietoArvos(),
@@ -126,7 +127,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                         to.setWwwOsoite(elementtis.next().getArvo());
                     }
                     Iterator<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystietos = Collections2.filter(from.getYhteystiedot(),
-                        new OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate(locale)).iterator();
+                            new OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate(locale)).iterator();
                     if (yhteystietos.hasNext()) {
                         to.setWwwOsoite(yhteystietos.next().getWww());
                     }
@@ -140,6 +141,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 protected boolean isMissing(OrganisaatioTiedotDto from) {
                     return from.getEmailOsoite() == null;
                 }
+
                 @Override
                 public void copy(OrganisaatioYksityiskohtaisetTiedotDto from, OrganisaatioTiedotDto to) {
                     Iterator<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystietos = Collections2.filter(from.getYhteystiedot(),
@@ -157,6 +159,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 protected boolean isMissing(OrganisaatioTiedotDto from) {
                     return from.getPuhelinnumero() == null;
                 }
+
                 @Override
                 public void copy(OrganisaatioYksityiskohtaisetTiedotDto from, OrganisaatioTiedotDto to) {
                     Iterator<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystietos = Collections2.filter(from.getYhteystiedot(),
@@ -173,7 +176,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
     protected abstract class DetailCopier {
         protected Locale locale;
-        private Map<String,OrganisaatioYksityiskohtaisetTiedotDto> cache;
+        private Map<String, OrganisaatioYksityiskohtaisetTiedotDto> cache;
 
         protected DetailCopier(Locale locale, Map<String, OrganisaatioYksityiskohtaisetTiedotDto> cache) {
             this.locale = locale;
@@ -193,7 +196,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 if (copier.cache.containsKey(oid)) {
                     details = copier.cache.get(oid);
                 } else {
-                    details = organisaatioServiceRoute.getdOrganisaatioByOid(oid, context);
+                    details = organisaatioService.getdOrganisaatioByOid(oid, context);
                     copier.cache.put(oid, details);
                 }
                 copier.copy(details, result);
@@ -206,7 +209,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         return super.getLoggedInUserOid();
     }
 
-    protected String localized(Map<String,String> nimi, Locale preferredLocale, Locale defaultLocale) {
+    protected String localized(Map<String, String> nimi, Locale preferredLocale, Locale defaultLocale) {
         if (nimi == null || nimi.isEmpty()) {
             return null;
         }
@@ -218,19 +221,19 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 return nimi.get(preferredLocale.getLanguage());
             }
         }
-        if(!EqualsHelper.equals(preferredLocale, defaultLocale)) {
+        if (!EqualsHelper.equals(preferredLocale, defaultLocale)) {
             return localized(nimi, defaultLocale, defaultLocale);
         }
         return null;
     }
 
     protected List<OsoitteistoDto> filterOsoites(List<OsoitteistoDto> osoites, Locale locale) {
-        if (locale==null || osoites.size() < 1) {
+        if (locale == null || osoites.size() < 1) {
             return osoites;
         }
         List<OsoitteistoDto> filtered = new ArrayList<OsoitteistoDto>();
         for (OsoitteistoDto osoite : osoites) {
-            if (LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(osoite.getKieli(),DEFAULT_LOCALE))) {
+            if (LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(osoite.getKieli(), DEFAULT_LOCALE))) {
                 filtered.add(osoite);
             }
         }
@@ -247,7 +250,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         int rowNum = 0;
         int maxColumn = produceHeader(sheet, rowNum, 0, searchResults.getPresentation());
         for (SearchResultRowDto row : searchResults.getRows()) {
-            if(searchResults.getPresentation().isResultRowIncluded(row)) {
+            if (searchResults.getPresentation().isResultRowIncluded(row)) {
                 produceRow(searchResults.getPresentation(), sheet, ++rowNum, row);
             }
         }
@@ -352,7 +355,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
     }
 
-    protected String localized(Map<String,String> nimi, Locale preferredLocale) {
+    protected String localized(Map<String, String> nimi, Locale preferredLocale) {
         if (nimi == null || nimi.isEmpty()) {
             return null;
         }
@@ -364,14 +367,14 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 return nimi.get(preferredLocale.getLanguage());
             }
         }
-        if(!EqualsHelper.equals(preferredLocale, DEFAULT_LOCALE)) {
+        if (!EqualsHelper.equals(preferredLocale, DEFAULT_LOCALE)) {
             return localized(nimi, DEFAULT_LOCALE);
         }
         return null;
     }
 
     protected Cell value(Cell cell, String value) {
-        if(value != null) {
+        if (value != null) {
             cell.setCellValue(value);
         }
         return cell;
@@ -388,7 +391,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         font.setBoldweight(Font.BOLDWEIGHT_BOLD);
         style.setFont(font);
         cell.setCellStyle(style);
-        if(value != null) {
+        if (value != null) {
             cell.setCellValue(value);
         }
         return cell;
@@ -406,7 +409,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         return cell;
     }
 
-    public void setOrganisaatioServiceRoute(OrganisaatioServiceRoute organisaatioServiceRoute) {
-        this.organisaatioServiceRoute = organisaatioServiceRoute;
+    public void setOrganisaatioService(OrganisaatioService organisaatioService) {
+        this.organisaatioService = organisaatioService;
     }
 }

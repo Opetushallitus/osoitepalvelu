@@ -36,28 +36,11 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 public class SpringApp {
     private static final int SECONDS_IN_HOUR = 3600;
 
-    private static final int SECONDS_TO_MS_FACTOR  =  1000;
-
-    @Value("${koodisto.cache.livetime.seconds}")
-    private int koodistoCacheLiveTimeSeconds;
-
     @Value("${web.url.cas}")
     private String casService;
 
     @Value("${auth.mode:'prod'}")
     private String authMode;
-
-    public static class Config {
-        private int cacheTimeoutMillis;
-
-        public int getCacheTimeoutMillis() {
-            return cacheTimeoutMillis;
-        }
-
-        public void setCacheTimeoutMillis(int cacheTimeoutMillis) {
-            this.cacheTimeoutMillis  =  cacheTimeoutMillis;
-        }
-    }
 
     @Bean
     public ResourceBundleMessageSource messageSource() {
@@ -65,13 +48,6 @@ public class SpringApp {
         messageSource.setBasename("Messages");
         messageSource.setCacheSeconds(SECONDS_IN_HOUR);
         return messageSource;
-    }
-
-    @Bean
-    public Config config() {
-        Config config  =  new Config();
-        config.setCacheTimeoutMillis(koodistoCacheLiveTimeSeconds * SECONDS_TO_MS_FACTOR);
-        return config;
     }
 
     @Bean

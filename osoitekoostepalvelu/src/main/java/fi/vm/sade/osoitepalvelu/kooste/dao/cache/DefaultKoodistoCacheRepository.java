@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.dao.koodistoCache;
+package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
 
 import fi.vm.sade.osoitepalvelu.kooste.dao.sequence.SequenceRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;

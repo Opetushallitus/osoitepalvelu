@@ -27,12 +27,14 @@ import java.util.List;
  */
 public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     private static final int HASH_FACTOR = 31;
+    public static final int HIGH_LIMIT_VALUE = 999999999;
+
     private List<String> kuntaList  =  new ArrayList<String>();
     private List<String> kieliList  =  new ArrayList<String>();
     private List<String> oppilaitostyyppiList  =  new ArrayList<String>();
     private List<String> vuosiluokkaList  =  new ArrayList<String>();
     private List<String> ytunnusList  =  new ArrayList<String>();
-    private Integer limit  =  Integer.MAX_VALUE;
+    private Integer limit  = HIGH_LIMIT_VALUE; // Integer.MAX_VALUE seems to result in 500 error on the remote end
 
     public List<String> getKieliList() {
         return kieliList;
