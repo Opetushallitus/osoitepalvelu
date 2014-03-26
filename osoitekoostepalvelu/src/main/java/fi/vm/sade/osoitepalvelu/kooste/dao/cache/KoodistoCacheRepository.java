@@ -14,21 +14,19 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.config;
+package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
 
 /**
  * User: ratamaa
- * Date: 12/30/13
- * Time: 9:27 AM
+ * Date: 12/17/13
+ * Time: 9:08 AM
  */
-public class Config {
-    private int cacheTimeoutMillis;
+public interface KoodistoCacheRepository extends MongoRepository<KoodistoCache, KoodistoCache.CacheKey> {
 
-    public int getCacheTimeoutMillis() {
-        return cacheTimeoutMillis;
-    }
+    KoodistoCache findCacheByTypeAndLocale(KoodistoCache.CacheKey key);
 
-    public void setCacheTimeoutMillis(int cacheTimeoutMillis) {
-        this.cacheTimeoutMillis  =  cacheTimeoutMillis;
-    }
 }

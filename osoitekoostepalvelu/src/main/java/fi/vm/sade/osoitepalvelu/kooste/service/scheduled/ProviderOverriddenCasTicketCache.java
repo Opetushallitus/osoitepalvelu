@@ -14,29 +14,33 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.common.route;
+package fi.vm.sade.osoitepalvelu.kooste.service.scheduled;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.DefaultCasTicketCache;
+
+import java.util.Map;
 
 /**
  * User: ratamaa
- * Date: 3/24/14
- * Time: 12:46 PM
+ * Date: 3/25/14
+ * Time: 12:51 PM
  */
-public class DefaultCamelRequestContext implements CamelRequestContext {
-    private CasTicketCache ticketCache;
+public class ProviderOverriddenCasTicketCache extends DefaultCasTicketCache {
+    private CasTicketProvider ticketProvider;
 
-    public DefaultCamelRequestContext(CasTicketCache ticketCache) {
-        this.ticketCache = ticketCache;
-    }
-
-    public DefaultCamelRequestContext() {
-        this.ticketCache  =  new DefaultCasTicketCache();
+    public ProviderOverriddenCasTicketCache(CasTicketProvider ticketProvider) {
+        this.ticketProvider = ticketProvider;
     }
 
     @Override
-    public CasTicketCache getTicketCache() {
-        return this.ticketCache;
+    public Map<String, String> get(String service) {
+        Map<String, String> cached = super.get(service);
+        if (cached == null) {
+            cached = ticketProvider.provideTicketHeaders(service);
+            store(service, cached);
+        }
+        return cached;
     }
 }

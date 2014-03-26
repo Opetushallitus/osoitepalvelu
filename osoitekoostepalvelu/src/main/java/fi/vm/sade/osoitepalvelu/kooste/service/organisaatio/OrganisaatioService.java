@@ -14,8 +14,10 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.route;
+package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio;
 
+import com.googlecode.ehcache.annotations.Cacheable;
+import com.googlecode.ehcache.annotations.PartialCacheKey;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
@@ -25,15 +27,10 @@ import java.util.List;
 
 /**
  * User: ratamaa
- * Date: 3/14/14
- * Time: 1:54 PM
+ * Date: 3/25/14
+ * Time: 11:37 AM
  */
-public interface OrganisaatioServiceRoute {
-
-    /**
-     * @return all organisaatio OIDs
-     */
-    List<String> findAllOrganisaatioOids(CamelRequestContext requestContext);
+public interface OrganisaatioService {
 
     /**
      * @param criteria for organisaatios' yhteystietos
@@ -50,5 +47,10 @@ public interface OrganisaatioServiceRoute {
      * @return details for the organisaatio
      */
     OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(String oid,
-                                 CamelRequestContext requestContext);
+                                                                 CamelRequestContext requestContext);
+
+    /**
+     * @param oid of the organisaatio to purge from cache
+     */
+    void purgeOrganisaatioByOidCache(String oid);
 }

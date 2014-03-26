@@ -28,7 +28,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto
 import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 import fi.vm.sade.osoitepalvelu.service.mock.KoodistoServiceRouteMock;
-import fi.vm.sade.osoitepalvelu.service.mock.OrganisaatioServiceRouteMock;
+import fi.vm.sade.osoitepalvelu.service.mock.OrganisaatioServiceMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,7 +53,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringTestAppConfig.class })
 public class DefaultSearchServiceTest {
-    private OrganisaatioServiceRouteMock organisaatioRouteMock;
+    private OrganisaatioServiceMock organisaatioRouteMock;
     private KoodistoServiceRouteMock koodistoRouteMock;
 
     @Autowired
@@ -64,9 +64,9 @@ public class DefaultSearchServiceTest {
 
     @Before
     public void init() {
-        this.organisaatioRouteMock  =  new OrganisaatioServiceRouteMock();
+        this.organisaatioRouteMock  =  new OrganisaatioServiceMock();
         this.koodistoRouteMock  =  new KoodistoServiceRouteMock();
-        this.defaultSearchService.setOrganisaatioServiceRoute(this.organisaatioRouteMock);
+        this.defaultSearchService.setOrganisaatioService(this.organisaatioRouteMock);
 
         this.defaultKoodistoService.setKoodistoRoute(this.koodistoRouteMock);
         this.defaultSearchService.setKoodistoService(this.defaultKoodistoService);

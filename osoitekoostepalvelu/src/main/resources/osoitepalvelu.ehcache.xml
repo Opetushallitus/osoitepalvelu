@@ -24,7 +24,7 @@
            timeToIdleSeconds="0" timeToLiveSeconds="3600"
            memoryStoreEvictionPolicy="LRU" />
 
-    <!-- Details for a single organisaatio may stay in cache for longer time: 5 hours for now  -->
+    <!-- Details for a single organisaatio may stay in cache for longer time: 24 hours -->
     <cache name="organisaatioByOidCache"
            eternal="false" maxElementsInMemory="15000"
            overflowToDisk="false" diskPersistent="false"

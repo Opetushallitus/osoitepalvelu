@@ -56,7 +56,7 @@ public class SearchResultTransformerServiceTest {
 
     @Before
     public void init() {
-        resultTranformerService.setOrganisaatioServiceRoute(null);
+        resultTranformerService.setOrganisaatioService(null);
     }
 
     @Test

@@ -14,19 +14,16 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.dao.koodistoCache;
+package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.dto.converter;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-
-import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
+import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
+import org.springframework.stereotype.Component;
 
 /**
  * User: ratamaa
- * Date: 12/17/13
- * Time: 9:08 AM
+ * Date: 3/25/14
+ * Time: 11:40 AM
  */
-public interface KoodistoCacheRepository extends MongoRepository<KoodistoCache, KoodistoCache.CacheKey> {
-
-    KoodistoCache findCacheByTypeAndLocale(KoodistoCache.CacheKey key);
-
+@Component
+public class OrganisaatioDtoConverter extends AbstractDtoConverter {
 }

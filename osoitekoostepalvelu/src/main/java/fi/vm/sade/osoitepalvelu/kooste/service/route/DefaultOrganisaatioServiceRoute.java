@@ -16,8 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
-import com.googlecode.ehcache.annotations.Cacheable;
-import com.googlecode.ehcache.annotations.PartialCacheKey;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
@@ -40,10 +38,13 @@ import java.util.List;
 @Service
 public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuilder
             implements  OrganisaatioServiceRoute {
+    private static final String ORGANSIAATIO_OID_LIST_ENDPOINT  =  "direct:organisaatioOidList";
     private static final String ORGANSIAATIOHAKU_ENDPOINT  =  "direct:organisaatioYhteystietohakuV2";
     private static final String YHTEYSTIEDOT_PATH  =  "/v2/yhteystiedot/hae";
     private static final String SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT  =  "direct:singleOrganisaatioByOid";
     private static final String SINGLE_ORGANISAATIO_PATH  =  "/${in.headers.oid}";
+    private static final String ORGANISAATIO_OIDS_PATH  = "/";
+
 
     @Value("${organisaatioService.rest.url}")
     private String organisaatioServiceRestUrl;
@@ -53,8 +54,24 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
 
     @Override
     public void configure() throws Exception {
+        buildOrganisaatioOidList();
         buildOrganisaatioHaku();
         buildSingleOrganisaatioTiedot();
+    }
+
+    protected void buildOrganisaatioOidList() {
+        Debugger organisaatioCallInOutDebug  =  debug(ORGANSIAATIO_OID_LIST_ENDPOINT  + ".OrgansiaatioServiceCall");
+        headers(
+                from(ORGANSIAATIO_OID_LIST_ENDPOINT),
+                headers()
+                        .get()
+                        .path(ORGANISAATIO_OIDS_PATH)
+                        .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
+        )
+        .process(organisaatioCallInOutDebug)
+        .to(trim(organisaatioServiceRestUrl))
+        .process(organisaatioCallInOutDebug)
+        .process(jsonToDto(new TypeReference<List<String>>() { }));
     }
 
     protected void buildOrganisaatioHaku() {
@@ -87,25 +104,31 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<OrganisaatioYksityiskohtaisetTiedotDto>() { }))
         .onException(HttpOperationFailedException.class)
-                .throwException(new NotFoundException("Organisaatio nof round by OID."));
+                .throwException(new NotFoundException("Organisaatio not found by OID."));
     }
 
     @Override
-    @Cacheable(cacheName  =  "organisaatioHakuResultsCache")
+    public List<String> findAllOrganisaatioOids(CamelRequestContext requestContext) {
+        return sendBodyHeadersAndProperties(getCamelTemplate(), ORGANSIAATIO_OID_LIST_ENDPOINT,
+                "", new HashMap<String, Object>(), requestContext, List.class);
+    }
+
+    @Override
     public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
-            @PartialCacheKey OrganisaatioYhteystietoCriteriaDto criteria,
+            OrganisaatioYhteystietoCriteriaDto criteria,
             CamelRequestContext requestContext) {
         return sendBodyHeadersAndProperties(getCamelTemplate(), ORGANSIAATIOHAKU_ENDPOINT,
                 criteria, new HashMap<String, Object>(), requestContext, List.class);
     }
 
     @Override
-    @Cacheable(cacheName  =  "organisaatioByOidCache")
-    public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(@PartialCacheKey String oid,
+    public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(String oid,
                                                                         CamelRequestContext requestContext) {
-        return sendBodyHeadersAndProperties(getCamelTemplate(), SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT, "",
+        return sendBodyHeadersAndProperties(getCamelTemplate(),
+                SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT, "",
                 headerValues()
                     .add("oid", oid)
                 .map(), requestContext, OrganisaatioYksityiskohtaisetTiedotDto.class);
+
     }
 }

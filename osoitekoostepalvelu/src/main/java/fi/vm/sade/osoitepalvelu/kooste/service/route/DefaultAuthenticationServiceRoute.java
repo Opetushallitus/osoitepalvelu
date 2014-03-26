@@ -66,9 +66,9 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 from(ROUTE_HENKILOS),
                 headers()
                     .get().path("/byOoids")
-                            .query("ht = VIRKAILIJA&ooids = ${in.headers.ooids}")
+                            .query("ht=VIRKAILIJA&ooids=${in.headers.ooids}")
                     .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
-      )
+        )
         .process(authenticationCallInOutDebug)
         .to(trim(authenticationServiceHenkiloServiceRestUrl))
         .process(authenticationCallInOutDebug)
@@ -105,6 +105,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<KayttooikesuryhmaDto> findKayttooikeusryhmas(CamelRequestContext requestContext) {
         return sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_KAYTTOOIKESURYHMAS, "",
@@ -112,6 +113,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     }
 
     // TODO: TEST ME, does not exists in luokka yet
+    @SuppressWarnings("unchecked")
     @Override
     public List<HenkiloDto> findHenkilosByOrganisaatioOids(List<String> ooids, CamelRequestContext requestContext) {
         return sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_HENKILOS, "",

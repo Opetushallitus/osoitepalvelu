@@ -27,7 +27,7 @@ import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTargetGroupDto;
@@ -53,7 +53,7 @@ import java.util.Locale;
 @Qualifier("actual")
 public class DefaultSearchService extends AbstractService implements SearchService {
     @Autowired
-    private OrganisaatioServiceRoute organisaatioServiceRoute;
+    private OrganisaatioService organisaatioService;
 
     @Autowired
     private KoodistoService koodistoService;
@@ -92,7 +92,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         organisaatioYhteystietosCriteria.setVuosiluokkaList(terms.findTerms("vuosiluokkas"));
         organisaatioYhteystietosCriteria.setYtunnusList(terms.findTerms("koultuksenjarjestajas"));
         List<OrganisaatioYhteystietoHakuResultDto> results
-                 =  organisaatioServiceRoute.findOrganisaatioYhteystietos(organisaatioYhteystietosCriteria, context);
+                 =  organisaatioService.findOrganisaatioYhteystietos(organisaatioYhteystietosCriteria, context);
         return filterOrganisaatioResults(results, terms);
     }
 
@@ -142,8 +142,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         return new ArrayList<OrganisaatioYhteystietoHakuResultDto>(Collections2.filter(results, predicate));
     }
 
-    public void setOrganisaatioServiceRoute(OrganisaatioServiceRoute organisaatioServiceRoute) {
-        this.organisaatioServiceRoute  =  organisaatioServiceRoute;
+    public void setOrganisaatioService(OrganisaatioService organisaatioService) {
+        this.organisaatioService = organisaatioService;
     }
 
     public void setKoodistoService(KoodistoService koodistoService) {
