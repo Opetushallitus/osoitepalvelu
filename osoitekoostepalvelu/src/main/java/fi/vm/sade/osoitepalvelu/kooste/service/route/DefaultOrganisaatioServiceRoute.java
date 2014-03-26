@@ -19,9 +19,9 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
 import org.apache.camel.component.http.HttpOperationFailedException;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,7 +71,8 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
         .process(organisaatioCallInOutDebug)
         .to(trim(organisaatioServiceRestUrl))
         .process(organisaatioCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<String>>() { }));
+        .process(jsonToDto(new TypeReference<List<String>>() {
+        }));
     }
 
     protected void buildOrganisaatioHaku() {
@@ -79,15 +80,16 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
         headers(
                 from(ORGANSIAATIOHAKU_ENDPOINT),
                 headers()
-                    .post()
-                    .jsonRequstBody()
-                    .path(YHTEYSTIEDOT_PATH)
-                    .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
-      )
+                        .post()
+                        .jsonRequstBody()
+                        .path(YHTEYSTIEDOT_PATH)
+                        .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
+        )
         .process(organisaatioCallInOutDebug)
         .to(trim(organisaatioServiceRestUrl))
         .process(organisaatioCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() { }));
+        .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() {
+        }));
     }
 
     protected void buildSingleOrganisaatioTiedot() {
@@ -102,18 +104,21 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
         .process(organisaatioCallInOutDebug)
         .to(trim(organisaatioServiceRestUrl))
         .process(organisaatioCallInOutDebug)
-        .process(jsonToDto(new TypeReference<OrganisaatioYksityiskohtaisetTiedotDto>() { }))
+        .process(jsonToDto(new TypeReference<OrganisaatioDetailsDto>() {
+        }))
         .onException(HttpOperationFailedException.class)
                 .throwException(new NotFoundException("Organisaatio not found by OID."));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<String> findAllOrganisaatioOids(CamelRequestContext requestContext) {
         return sendBodyHeadersAndProperties(getCamelTemplate(), ORGANSIAATIO_OID_LIST_ENDPOINT,
                 "", new HashMap<String, Object>(), requestContext, List.class);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
             OrganisaatioYhteystietoCriteriaDto criteria,
             CamelRequestContext requestContext) {
@@ -122,13 +127,12 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     }
 
     @Override
-    public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(String oid,
-                                                                        CamelRequestContext requestContext) {
+    public OrganisaatioDetailsDto getdOrganisaatioByOid(String oid, CamelRequestContext requestContext) {
         return sendBodyHeadersAndProperties(getCamelTemplate(),
                 SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT, "",
                 headerValues()
                     .add("oid", oid)
-                .map(), requestContext, OrganisaatioYksityiskohtaisetTiedotDto.class);
+                .map(), requestContext, OrganisaatioDetailsDto.class);
 
     }
 }

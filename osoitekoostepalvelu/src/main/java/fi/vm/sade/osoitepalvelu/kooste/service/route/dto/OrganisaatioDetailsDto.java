@@ -27,7 +27,7 @@ import java.util.Map;
  * Date: 3/20/14
  * Time: 4:13 PM
  */
-public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
+public class OrganisaatioDetailsDto implements Serializable {
     private static final long serialVersionUID = -3400236718912392536L;
     
     private Long version;
@@ -43,7 +43,7 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
     private String kotipaikkaUri; // esim. kunta_405
     private String maaUri; // esim. maatjavaltiot1_fin
     private OrganisaatioOsoiteDto postiosoite;
-    private List<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystiedot  =  new ArrayList<OrganisaatioYksityiskohtainenYhteystietoDto>();
+    private List<OrganisaatioDetailsYhteystietoDto> yhteystiedot  =  new ArrayList<OrganisaatioDetailsYhteystietoDto>();
     private List<String> vuosiluokat  =  new ArrayList<String>();
     private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos  =  new ArrayList<OrganisaatioYhteystietoElementtiDto>();
 
@@ -167,11 +167,11 @@ public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
         this.kieletUris  =  kieletUris;
     }
 
-    public List<OrganisaatioYksityiskohtainenYhteystietoDto> getYhteystiedot() {
+    public List<OrganisaatioDetailsYhteystietoDto> getYhteystiedot() {
         return yhteystiedot;
     }
 
-    public void setYhteystiedot(List<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystiedot) {
+    public void setYhteystiedot(List<OrganisaatioDetailsYhteystietoDto> yhteystiedot) {
         this.yhteystiedot  =  yhteystiedot;
     }
 }

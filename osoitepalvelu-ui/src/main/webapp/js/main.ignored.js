@@ -59,7 +59,6 @@ function osoitepalveluInit() {
 	    console.log("Got ready signal from: " + id + " -> "+status+" -> IC="+init_counter/*, xhr*/);
 
 	    if (!fail && init_counter == 0) {
-
 	        angular.element(document).ready(function() {
 	            angular.module('myApp', ['OsoiteKoostepalvelu']);
 	            angular.bootstrap(document, ['myApp']);

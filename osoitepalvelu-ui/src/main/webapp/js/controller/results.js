@@ -61,7 +61,7 @@ var ResultsController = function($scope, $log, $location, $filter, $timeout,
     };
     $timeout(function() {
         updateResults(true);
-    }, 0, false);
+    }, 1, false);
 
     $scope.back = function() {
         $location.path("/");

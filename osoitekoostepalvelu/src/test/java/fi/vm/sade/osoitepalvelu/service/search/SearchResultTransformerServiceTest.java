@@ -27,13 +27,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.DefaultSearchResultTransformerService;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioYhteystietoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentationByAddressFieldsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Before;
@@ -59,10 +53,16 @@ public class SearchResultTransformerServiceTest {
         resultTranformerService.setOrganisaatioService(null);
     }
 
+    protected SearchResultsDto organisaatioResults(List<OrganisaatioResultDto> organisaatioResultDtos) {
+        SearchResultsDto results = new SearchResultsDto();
+        results.setOrganisaatios(organisaatioResultDtos);
+        return results;
+    }
+
     @Test
     public void testAggregateOrganisaatiotWithYhteyshenkilos() {
-        OrganisaatioTiedotDto organisaatio1  =  new OrganisaatioTiedotDto(),
-                organisaatio2  =  new OrganisaatioTiedotDto();
+        OrganisaatioResultDto organisaatio1  =  new OrganisaatioResultDto(),
+                organisaatio2  =  new OrganisaatioResultDto();
         organisaatio1.setOid("org1");
         organisaatio2.setOid("org2");
         organisaatio2.setEmailOsoite("org email");
@@ -86,8 +86,8 @@ public class SearchResultTransformerServiceTest {
         organisaatio1.getYhteyshenkilot().add(yhteyshenkilo1);
         organisaatio1.getYhteyshenkilot().add(yhteyshenkilo2);
 
-        List<OrganisaatioTiedotDto> list  =  Arrays.asList(organisaatio1, organisaatio2);
-        SearchResultsDto results  =  resultTranformerService.transformToResultRows(list,
+        List<OrganisaatioResultDto> list  =  Arrays.asList(organisaatio1, organisaatio2);
+        SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(organisaatioResults(list),
                 new AllColumnsSearchResultPresentation(),
                 new DefaultCamelRequestContext());
         assertNotNull(results.getPresentation());
@@ -112,8 +112,8 @@ public class SearchResultTransformerServiceTest {
 
     @Test
     public void testAggregateOrganisaatiotWithYhteyshenkiloAndPostiosoites() {
-        OrganisaatioTiedotDto organisaatio1  =  new OrganisaatioTiedotDto(),
-                organisaatio2  =  new OrganisaatioTiedotDto();
+        OrganisaatioResultDto organisaatio1  =  new OrganisaatioResultDto(),
+                organisaatio2  =  new OrganisaatioResultDto();
         organisaatio1.setOid("org1");
         organisaatio2.setOid("org2");
         OrganisaatioYhteystietoDto yhteyshenkilo1  =  new OrganisaatioYhteystietoDto(),
@@ -144,8 +144,8 @@ public class SearchResultTransformerServiceTest {
         organisaatio2.getPostiosoite().add(osoite2);
         organisaatio2.getPostiosoite().add(osoite3);
 
-        List<OrganisaatioTiedotDto> list  =  Arrays.asList(organisaatio1, organisaatio2);
-        SearchResultsDto results  =  resultTranformerService.transformToResultRows(list,
+        List<OrganisaatioResultDto> list  =  Arrays.asList(organisaatio1, organisaatio2);
+        SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(organisaatioResults(list),
                 new AllColumnsSearchResultPresentation(new Locale("sv", "SE")), new DefaultCamelRequestContext());
         List<SearchResultRowDto> rows  =  results.getRows();
         assertEquals(6, rows.size());
@@ -174,7 +174,7 @@ public class SearchResultTransformerServiceTest {
 
     @Test
     public void fallbackToFinnishLocaleInPostiosoite() {
-        OrganisaatioTiedotDto organisaatio  =  new OrganisaatioTiedotDto();
+        OrganisaatioResultDto organisaatio  =  new OrganisaatioResultDto();
         OsoitteistoDto osoite  =  new OsoitteistoDto(),
                 osoite2  =  new OsoitteistoDto();
         osoite.setYhteystietoOid("osoite-fi");
@@ -185,8 +185,8 @@ public class SearchResultTransformerServiceTest {
         osoite2.setKieli("en");
         organisaatio.getPostiosoite().add(osoite2);
 
-        List<OrganisaatioTiedotDto> list  =  Arrays.asList(organisaatio);
-        SearchResultsDto results  =  resultTranformerService.transformToResultRows(list,
+        List<OrganisaatioResultDto> list  =  Arrays.asList(organisaatio);
+        SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(organisaatioResults(list),
                 new AllColumnsSearchResultPresentation(new Locale("sv", "SE")),
                 new DefaultCamelRequestContext());
         List<SearchResultRowDto> rows  =  results.getRows();
@@ -206,7 +206,7 @@ public class SearchResultTransformerServiceTest {
     @Test
     public void testProduceEmptyExcel() {
         Workbook wb  =  new HSSFWorkbook();
-        resultTranformerService.produceExcel(wb, new SearchResultsDto(new ArrayList<SearchResultRowDto>(),
+        resultTranformerService.produceExcel(wb, new SearchResultsPresentationDto(new ArrayList<SearchResultRowDto>(),
                 new AllColumnsSearchResultPresentation()));
         assertEquals(1, wb.getNumberOfSheets());
         assertEquals(0, wb.getSheetAt(0).getLastRowNum());
@@ -215,13 +215,14 @@ public class SearchResultTransformerServiceTest {
 
     @Test
     public void testProduceSingleLineNullExcel() {
-        OrganisaatioTiedotDto organisaatio  =  new OrganisaatioTiedotDto();
+        OrganisaatioResultDto organisaatio  =  new OrganisaatioResultDto();
         HashMap<String, String> nimi  =  new HashMap<String, String>();
         nimi.put("sv", "Organisations namnet");
         nimi.put("fi", "Organisaation nimi");
         organisaatio.setNimi(nimi);
         SearchResultPresentation presentation  =  new AllColumnsSearchResultPresentation();
-        SearchResultsDto results  =  resultTranformerService.transformToResultRows(Arrays.asList(organisaatio),
+        SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(
+                organisaatioResults(Arrays.asList(organisaatio)),
                 presentation, new DefaultCamelRequestContext());
 
         Workbook wb  =  new HSSFWorkbook();

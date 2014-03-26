@@ -79,10 +79,11 @@ public class SearchTermsDto implements Serializable {
         this.receiverFields  =  receiverFields;
     }
 
-    public boolean containsAnyTargetGroup(SearchTargetGroup.GroupType ...groupTypes) {
+    public boolean containsAnyTargetGroup(SearchTargetGroup.GroupType[] groupTypes,
+                                          SearchTargetGroup.TargetType... targetTypes) {
         for (SearchTargetGroupDto targetGroup : targetGroups) {
             for (SearchTargetGroup.GroupType type : groupTypes) {
-                if (type == targetGroup.getType()) {
+                if (type == targetGroup.getType() && targetGroup.containsAnyOption(targetTypes)) {
                     return true;
                 }
             }

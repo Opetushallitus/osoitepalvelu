@@ -14,30 +14,32 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
+package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-public class OrganisaatioResultsDto implements Serializable {
-    private static final long serialVersionUID  =  -2063655804200866815L;
-    
-    private List<OrganisaatioTiedotDto> tulos  =  new ArrayList<OrganisaatioTiedotDto>();
+/**
+ * User: ratamaa
+ * Date: 3/26/14
+ * Time: 2:13 PM
+ */
+public class HenkiloKieliDto implements Serializable {
+    private String kieliKoodi; // esim. fi
+    private String KieliTyyppi; // esim. suomi
 
-    public OrganisaatioResultsDto() {
-        tulos  =  new ArrayList<OrganisaatioTiedotDto>();
+    public String getKieliKoodi() {
+        return kieliKoodi;
     }
-    
-    public List<OrganisaatioTiedotDto> getResults() {
-        return tulos;
+
+    public void setKieliKoodi(String kieliKoodi) {
+        this.kieliKoodi = kieliKoodi;
     }
-    
-    public void setResults(List<OrganisaatioTiedotDto> results) {
-        this.tulos  =  results;
+
+    public String getKieliTyyppi() {
+        return KieliTyyppi;
     }
-    
-    public void addResult(OrganisaatioTiedotDto result) {
-        this.tulos.add(result);
+
+    public void setKieliTyyppi(String kieliTyyppi) {
+        KieliTyyppi = kieliTyyppi;
     }
 }

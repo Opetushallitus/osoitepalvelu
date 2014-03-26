@@ -16,9 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioOsoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoElementtiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtainenYhteystietoDto;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -36,7 +36,7 @@ import java.util.Map;
  * Time: 11:25 AM
  */
 @Document(collection = "organisaatio")
-public class OrganisaatioYksityiskohtaisetTiedot implements Serializable {
+public class OrganisaatioDetails implements Serializable {
     private static final long serialVersionUID = 442147524555663558L;
     
     private Long version;
@@ -61,8 +61,8 @@ public class OrganisaatioYksityiskohtaisetTiedot implements Serializable {
     private String kotipaikkaUri; // esim. kunta_405
     private String maaUri; // esim. maatjavaltiot1_fin
     private OrganisaatioOsoiteDto postiosoite;
-    private List<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystiedot
-            = new ArrayList<OrganisaatioYksityiskohtainenYhteystietoDto>();
+    private List<OrganisaatioDetailsYhteystietoDto> yhteystiedot
+            = new ArrayList<OrganisaatioDetailsYhteystietoDto>();
     @Indexed
     private List<String> vuosiluokat = new ArrayList<String>();
     private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos
@@ -180,11 +180,11 @@ public class OrganisaatioYksityiskohtaisetTiedot implements Serializable {
         this.postiosoite = postiosoite;
     }
 
-    public List<OrganisaatioYksityiskohtainenYhteystietoDto> getYhteystiedot() {
+    public List<OrganisaatioDetailsYhteystietoDto> getYhteystiedot() {
         return yhteystiedot;
     }
 
-    public void setYhteystiedot(List<OrganisaatioYksityiskohtainenYhteystietoDto> yhteystiedot) {
+    public void setYhteystiedot(List<OrganisaatioDetailsYhteystietoDto> yhteystiedot) {
         this.yhteystiedot = yhteystiedot;
     }
 

@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
+package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoiteDto;
@@ -22,9 +22,8 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoit
 import java.io.Serializable;
 
 public class OsoitteistoDto implements Serializable {
-
     private static final long serialVersionUID  =  6985560274560979066L;
-    
+
     private String kieli;
     @DtoConversion(withClass  =  OrganisaatioYhteysosoiteDto.class)
     private String osoiteTyyppi;

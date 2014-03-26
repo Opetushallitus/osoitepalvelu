@@ -16,7 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
 
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioYksityiskohtaisetTiedot;
+import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
@@ -24,5 +24,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * Date: 3/25/14
  * Time: 11:32 AM
  */
-public interface OrganisaatioCacheRepository extends MongoRepository<OrganisaatioYksityiskohtaisetTiedot, String> {
+public interface OrganisaatioCacheRepository extends MongoRepository<OrganisaatioDetails, String> {
 }

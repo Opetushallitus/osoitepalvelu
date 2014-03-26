@@ -26,12 +26,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Locale;
+import java.util.Map;
+
 /**
  * User: ratamaa
  * Date: 12/10/13
  * Time: 2:25 PM
  */
 public abstract class AbstractService {
+    public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
+    public static final int MILLIS_IN_SECOND = 1000;
 
     @Autowired
     protected Logger sadeLogger;
@@ -74,5 +79,23 @@ public abstract class AbstractService {
             throw new AuthorizationException("Authenticated user "  +  getLoggedInUserOid()
                      +  " does not have access right to given entity.");
         }
+    }
+
+    protected String localized(Map<String, String> nimi, Locale preferredLocale, Locale defaultLocale) {
+        if (nimi == null || nimi.isEmpty()) {
+            return null;
+        }
+        if (preferredLocale != null) {
+            if (nimi.containsKey(preferredLocale.toString())) {
+                return nimi.get(preferredLocale.toString());
+            }
+            if (nimi.containsKey(preferredLocale.getLanguage())) {
+                return nimi.get(preferredLocale.getLanguage());
+            }
+        }
+        if (!EqualsHelper.equals(preferredLocale, defaultLocale)) {
+            return localized(nimi, defaultLocale, defaultLocale);
+        }
+        return null;
     }
 }

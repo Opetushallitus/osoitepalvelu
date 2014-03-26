@@ -14,40 +14,34 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio;
+package fi.vm.sade.osoitepalvelu.kooste.service.henkilo;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloListResultDto;
 
 import java.util.List;
 
 /**
  * User: ratamaa
- * Date: 3/25/14
- * Time: 11:37 AM
+ * Date: 3/26/14
+ * Time: 2:29 PM
  */
-public interface OrganisaatioService {
+public interface HenkiloService {
 
     /**
-     * @param criteria for organisaatios' yhteystietos
+     * @param criteria for henkilos
      * @param requestContext the context for HTTP request received by the application to operate in
-     * @return the yhteystietos for the organisaatios matching the search criteria
+     * @return henkilös for the criteria
      */
-    List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
-            OrganisaatioYhteystietoCriteriaDto criteria,
-            CamelRequestContext requestContext);
+    List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext);
 
     /**
-     * @param oid of the organisaatio
+     * @param oid of the henkilo
      * @param requestContext the context for HTTP request received by the application to operate in
-     * @return details for the organisaatio
+     * @return the details of the henkilo for the oid
      */
-    OrganisaatioDetailsDto getdOrganisaatioByOid(String oid, CamelRequestContext requestContext);
+    HenkiloDetailsDto getHenkiloTiedot(String oid, CamelRequestContext requestContext);
 
-    /**
-     * @param oid of the organisaatio to purge from cache
-     */
-    void purgeOrganisaatioByOidCache(String oid);
 }

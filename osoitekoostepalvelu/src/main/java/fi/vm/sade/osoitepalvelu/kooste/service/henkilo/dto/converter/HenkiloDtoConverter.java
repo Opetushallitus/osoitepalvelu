@@ -14,24 +14,16 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.search;
+package fi.vm.sade.osoitepalvelu.kooste.service.henkilo.dto.converter;
 
-import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
+import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
+import org.springframework.stereotype.Component;
 
 /**
  * User: ratamaa
- * Date: 2/17/14
- * Time: 2:53 PM
+ * Date: 3/26/14
+ * Time: 2:31 PM
  */
-public interface SearchService {
-
-    /**
-     * @param terms to search with
-     * @param requestContext the context for HTTP request received by the application to operate in
-     * @return results
-     */
-    SearchResultsDto find(SearchTermsDto terms, CamelRequestContext requestContext);
-
+@Component
+public class HenkiloDtoConverter extends AbstractDtoConverter {
 }

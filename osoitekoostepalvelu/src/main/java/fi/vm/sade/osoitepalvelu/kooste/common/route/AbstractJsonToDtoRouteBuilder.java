@@ -22,6 +22,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.LazyCasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
 import org.apache.camel.*;
 import org.apache.camel.model.LoadBalanceDefinition;
 import org.apache.camel.model.ProcessorDefinition;
@@ -34,6 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +57,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     public static final String CONTENT_TYPE_JSON  =  "application/json;charset = UTF-8";
     private static final int DEFAULT_RETRY_LIMIT  =  10;
     public static final String CAS_TICKET_CACHE_PROPERTY  =  "CasTicketCache";
+    public static final String URL_ENCODING = "UTF-8";
 
     @Value("${web.url.cas}")
     protected String casService;
@@ -424,6 +428,115 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     }
 
     /**
+     * An utility class to provide a StringBuffer like Expression aware join capability.
+     */
+    protected class ExpressionBuffer implements Expression {
+        private List<Expression> expressions = new ArrayList<Expression>();
+
+        /**
+         * @param expression to add to this buffer
+         * @return this ExpressionBuffer
+         */
+        public ExpressionBuffer append(Expression expression) {
+            this.expressions.add(expression);
+            return this;
+        }
+
+        /**
+         * @param constant to add to this buffer
+         * @return this ExpressionBuffer
+         */
+        public ExpressionBuffer append(String constant) {
+            return append(constant(constant));
+        }
+
+        /**
+         * @return the number of Expressions in this buffer
+         */
+        public int size() {
+            return this.expressions.size();
+        }
+
+        @Override
+        public <T> T evaluate(Exchange exchange, Class<T> type) {
+            StringBuffer b = new StringBuffer();
+            for (Expression expression : expressions) {
+                b.append(expression.evaluate(exchange, String.class));
+            }
+            return (T) b.toString();
+        }
+    }
+
+    /**
+     * @param expression to URL encode (to a List of String's or String)
+     * @return the URL encoded version of the Expression's evaluated value (List of Strings or a String)
+     */
+    protected Expression urlEncoded(final Expression expression) {
+        return new Expression() {
+            @Override
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
+                if (List.class.isAssignableFrom(type)) {
+                    List<String> values = expression.evaluate(exchange, List.class);
+                    List<String> encodedValues = new ArrayList<String>();
+                    for (String value : values) {
+                        encodedValues.add(encoded(value));
+                    }
+                    return (T) encodedValues;
+                }
+                String value = expression.evaluate(exchange, String.class);
+                if (value != null) {
+                    return (T) encoded(value);
+                }
+                return (T) value;
+            }
+
+            private String encoded(String value) {
+                try {
+                    value = URLEncoder.encode(value.toString(), URL_ENCODING);
+                } catch (UnsupportedEncodingException e) {
+                    throw new IllegalStateException(e);
+                }
+                return value;
+            }
+        };
+    }
+
+    /**
+     * @param listExpression an expression evaluating to a List of Strings
+     * @param concat the concatenator expression evaluating to a String that is appended between the elements
+     *               in the listExpression
+     * @param begin the begin expression evaluating to a String which is
+     * @return an Expression which evaluates the concatenator as a List of Strings and given that it is not empty or
+     * null returns an expression where values in the list are concatenated by the evaluated String value of
+     * concat prefixed with possible begin (if given)
+     */
+    protected Expression concatenatedList(final Expression listExpression, final Expression concat,
+                                          final Expression begin) {
+        return new Expression() {
+            @Override
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
+                ExpressionBuffer b = new ExpressionBuffer();
+                List<String> values = listExpression.evaluate(exchange, List.class);
+                if (values != null && !values.isEmpty()) {
+                    if (begin != null) {
+                        b.append(begin);
+                    }
+                    b.append(StringHelper.join(concat.evaluate(exchange, String.class), values.toArray(new String[0])));
+                }
+                return b.evaluate(exchange, type);
+            }
+        };
+    }
+
+    /**
+     * @param headerName the name of the header value
+     * @return a simple ${in.headers.headerName} expression.
+     */
+    protected Expression headerInValue(String headerName) {
+        return simple("${in.headers."+headerName+"}");
+    }
+
+    /**
      * Can be used to avoid some repeating .setHeader-calls when building a Camel route.
      *
      * @see #headers() to construct
@@ -432,6 +545,8 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      */
     protected class HeaderBuilder implements ProcessDefinitionProcessor {
         private Map<String, Expression> headers  =  new HashMap<String, Expression>();
+        private Map<String, List<Expression>> params = new HashMap<String, List<Expression>>();
+        private Map<String, Expression> multiValueParams = new HashMap<String, Expression>();
         private List<ProcessDefinitionProcessor> additionalProcessors  =  new ArrayList<ProcessDefinitionProcessor>();
 
         public HeaderBuilder() {
@@ -486,7 +601,88 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
          * @return this HeaderBuilder
          */
         public HeaderBuilder query(String query) {
-            return add(Exchange.HTTP_QUERY, simple(query));
+            return query(simple(query));
+        }
+
+        /**
+         * @param query to set as HTTP_QUERY header value.
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder query(Expression query) {
+            return add(Exchange.HTTP_QUERY, query);
+        }
+
+        /**
+         * Adds a query param to construct HTTP_QUERY with (overrides
+         * possible HTTP_QUERY set otherwise)
+         *
+         * @param name of the GET variable
+         * @param value value to append to list of values for the variable where URL encoding is applied
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder queryParam(String name, Expression value) {
+            if (!this.params.containsKey(name)) {
+                this.params.put(name, new ArrayList<Expression>());
+            }
+            this.params.get(name).add(value);
+            return this;
+        }
+
+        /**
+         * @see #queryParam(String, org.apache.camel.Expression)
+         * @param name of the GET variable
+         * @param simpleValue value to append to list of values for the variable
+         *                    in simple header value format where URL encoding is applied
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder queryParam(String name, String simpleValue) {
+            return this.queryParam(name, simple(simpleValue));
+        }
+
+        /**
+         * @see #headerInValue(String)
+         * @see #queryParam(String, org.apache.camel.Expression)
+         * @param name of the GET variable to assign a header in variable with the same name
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder queryParam(String name) {
+            return queryParam(name, headerInValue(name));
+        }
+
+        /**
+         * Adds a query param to construct HTTP_QUERY with (overrides
+         * possible HTTP_QUERY set otherwise but appends to single query parameters)
+         * with a value that evaluates to a List<String> each of the values
+         * of which are URLEncoded and added as separate params to the query string
+         *
+         * @param name of the GET variable
+         * @param listValue an expression that evaluates to a list of String, each value URLEncoded
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder queryArrayParam(String name, Expression listValue) {
+            this.multiValueParams.put(name, listValue);
+            return this;
+        }
+
+        /**
+         * @see #queryArrayParam(String, org.apache.camel.Expression)
+         * @param name of the GET variable
+         * @param listValueSimpleExpression a simple expression that evaluates to a list of String
+         *                                  each value URLEncoded
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder queryArrayParam(String name, String listValueSimpleExpression) {
+            return queryArrayParam(name, simple(listValueSimpleExpression));
+        }
+
+        /**
+         * @see #headerInValue(String)
+         * @see #queryArrayParam(String, org.apache.camel.Expression)
+         * @param name of the GET variable to assign a header in variable with the same name
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder queryArrayParam(String name) {
+            return queryArrayParam(name, headerInValue(name));
         }
 
         /**
@@ -499,7 +695,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
         /**
          * Sets the CONTENT_TYPE type to application/json;charset = UTF-8
-         * and adds an ProcessDefinitionProcessor which marshalls the
+         * and adds an ProcessDefinitionProcessor which marshals the
          * Message Body in the request as JSON.
          *
          * @return this HeaderBuilder
@@ -532,6 +728,22 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
         @Override
         public <T extends ProcessorDefinition<? extends T>> T process(T process) {
+            if (!this.params.isEmpty()) {
+                ExpressionBuffer query = new ExpressionBuffer();
+                for (Map.Entry<String, List<Expression>> kv : params.entrySet()) {
+                    for (Expression value : kv.getValue()) {
+                        if (query.size() > 0) {
+                            query.append("&");
+                        }
+                        query.append(kv.getKey()).append("=").append(urlEncoded(value));
+                    }
+                }
+                for (Map.Entry<String, Expression> kv : multiValueParams.entrySet()) {
+                    query.append(concatenatedList(kv.getValue(), constant("&"+kv.getKey()+"="),
+                            constant("&"+kv.getKey()+"=") ));
+                }
+                query(query);
+            }
             for (Entry<String, Expression> header : headers.entrySet()) {
                 process  =  process.setHeader(header.getKey(), header.getValue());
             }

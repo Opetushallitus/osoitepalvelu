@@ -22,9 +22,9 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -67,7 +67,7 @@ public class OrganisaatioServiceRouteTest {
     @Test
     public void testFindOrganisaatioByOid() {
         String testOid  =  "1.2.246.562.10.00000000001";
-        OrganisaatioYksityiskohtaisetTiedotDto tiedot
+        OrganisaatioDetailsDto tiedot
                  =  organisaatioServiceRoute.getdOrganisaatioByOid(testOid, new DefaultCamelRequestContext());
         assertNotNull(tiedot);
         assertEquals(testOid, tiedot.getOid());

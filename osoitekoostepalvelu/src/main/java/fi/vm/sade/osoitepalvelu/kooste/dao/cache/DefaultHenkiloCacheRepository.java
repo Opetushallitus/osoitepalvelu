@@ -16,7 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
 
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.domain.HenkiloDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
@@ -26,22 +26,20 @@ import org.springframework.stereotype.Repository;
 
 /**
  * User: ratamaa
- * Date: 3/25/14
- * Time: 11:32 AM
+ * Date: 3/26/14
+ * Time: 2:51 PM
  */
 @Repository
-public class DefaultOrganisaatioCacheRepository extends SimpleMongoRepository<OrganisaatioDetails, String>
-        implements OrganisaatioCacheRepository {
+public class DefaultHenkiloCacheRepository extends SimpleMongoRepository<HenkiloDetails, String> {
 
-    public DefaultOrganisaatioCacheRepository(MongoEntityInformation<OrganisaatioDetails,
-            String> metadata, MongoOperations mongoOperations) {
+    public DefaultHenkiloCacheRepository(MongoEntityInformation<HenkiloDetails, String> metadata,
+                                         MongoOperations mongoOperations) {
         super(metadata, mongoOperations);
     }
 
     @Autowired
-    public DefaultOrganisaatioCacheRepository(MongoRepositoryFactory factory, MongoOperations mongoOperations) {
-        this(factory.<OrganisaatioDetails, String>
-                getEntityInformation(OrganisaatioDetails.class), mongoOperations);
+    public DefaultHenkiloCacheRepository(MongoRepositoryFactory factory, MongoOperations mongoOperations) {
+        this(factory.<HenkiloDetails, String>getEntityInformation(HenkiloDetails.class), mongoOperations);
     }
 
 }

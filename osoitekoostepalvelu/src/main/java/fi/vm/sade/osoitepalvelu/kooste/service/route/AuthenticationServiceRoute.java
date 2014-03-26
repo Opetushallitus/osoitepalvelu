@@ -17,9 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.MyInformationDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 
 import java.util.List;
 
@@ -37,14 +35,22 @@ public interface AuthenticationServiceRoute {
     List<KayttooikesuryhmaDto> findKayttooikeusryhmas(CamelRequestContext requestContext);
 
     /**
-     * @param ooids of the organisaatio
+     * @param criteria for the henkilos
      * @param requestContext the context for HTTP request received by the application to operate in
-     * @return henkilös for the organisaatio
+     * @return henkilös for the criteria
      */
-    List<HenkiloDto> findHenkilosByOrganisaatioOids(List<String> ooids, CamelRequestContext requestContext);
+    List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext);
+
+    /**
+     * @param oid of the henkilo
+     * @param requestContext the context for HTTP request received by the application to operate in
+     * @return the details of the henkilo for the oid
+     */
+    HenkiloDetailsDto getHenkiloTiedot(String oid, CamelRequestContext requestContext);
 
     /**
      * @return the details for the logged in user.
+     * @param requestContext the context for HTTP request received by the application to operate in
      */
-    MyInformationDto getMe();
+    MyInformationDto getMyInformation(CamelRequestContext requestContext);
 }

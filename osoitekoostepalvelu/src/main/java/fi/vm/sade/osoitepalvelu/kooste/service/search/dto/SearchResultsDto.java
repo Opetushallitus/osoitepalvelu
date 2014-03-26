@@ -16,43 +16,32 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
-
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * User: ratamaa
- * Date: 2/18/14
- * Time: 9:45 AM
+ * Date: 3/26/14
+ * Time: 3:26 PM
  */
 public class SearchResultsDto implements Serializable {
-    private static final long serialVersionUID  =  -8360101698155316476L;
-    
-    private List<SearchResultRowDto> rows;
-    private SearchResultPresentation presentation;
+    private List<HenkiloHakuResultDto> henkilos = new ArrayList<HenkiloHakuResultDto>();
+    private List<OrganisaatioResultDto> organisaatios = new ArrayList<OrganisaatioResultDto>();
 
-    public SearchResultsDto() {
+    public List<HenkiloHakuResultDto> getHenkilos() {
+        return henkilos;
     }
 
-    public SearchResultsDto(List<SearchResultRowDto> rows, SearchResultPresentation presentation) {
-        this.rows  =  rows;
-        this.presentation  =  presentation;
+    public void setHenkilos(List<HenkiloHakuResultDto> henkilos) {
+        this.henkilos = henkilos;
     }
 
-    public List<SearchResultRowDto> getRows() {
-        return rows;
+    public List<OrganisaatioResultDto> getOrganisaatios() {
+        return organisaatios;
     }
 
-    public void setRows(List<SearchResultRowDto> rows) {
-        this.rows  =  rows;
-    }
-
-    public SearchResultPresentation getPresentation() {
-        return presentation;
-    }
-
-    public void setPresentation(SearchResultPresentation presentation) {
-        this.presentation  =  presentation;
+    public void setOrganisaatios(List<OrganisaatioResultDto> organisaatios) {
+        this.organisaatios = organisaatios;
     }
 }

@@ -34,8 +34,6 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.UiKoodiItemByKoodiUriPredicate;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,10 +45,6 @@ import java.util.*;
  */
 @Service
 public class DefaultKoodistoService extends AbstractService implements KoodistoService {
-    public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
-    public static final int MILLIS_IN_SECOND = 1000;
-
-    private Logger logger  =  LoggerFactory.getLogger(getClass());
 
     @Autowired
     private KoodistoRoute koodistoRoute;

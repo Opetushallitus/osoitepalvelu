@@ -1,5 +1,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.email;
 
+import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
@@ -41,7 +42,7 @@ public class DefaultEmailService extends AbstractService implements EmailService
         settings.getEmail().setCallingProcess(callingProcess);
         settings.getEmail().setFrom(emailFrom);
 
-        MyInformationDto myInfo  =  authenticationServiceRoute.getMe();
+        MyInformationDto myInfo  =  authenticationServiceRoute.getMyInformation(new DefaultCamelRequestContext());
         settings.getEmail().setReplyTo(myInfo.getEmail());
         if (settings.getEmail().getReplyTo() == null) {
             settings.getEmail().setReplyTo(myInfo.getFirstName() + "." + myInfo.getLastName() + "@oph.fi");

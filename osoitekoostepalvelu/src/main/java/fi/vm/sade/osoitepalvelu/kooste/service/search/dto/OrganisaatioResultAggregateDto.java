@@ -19,31 +19,28 @@ package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 import java.io.Serializable;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioYhteystietoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OsoitteistoDto;
 
 /**
  * User: ratamaa
  * Date: 2/14/14
  * Time: 3:38 PM
  */
-public class ResultAggregateDto implements Serializable {
+public class OrganisaatioResultAggregateDto implements Serializable {
     private static final int HASH_FACTOR = 31;
 
     private static final long serialVersionUID  =  1483746476279296389L;
     
-    private OrganisaatioTiedotDto organisaatio;
+    private OrganisaatioResultDto organisaatio;
     private OrganisaatioYhteystietoDto henkilo;
     private OsoitteistoDto osoite;
 
-    public ResultAggregateDto(OrganisaatioTiedotDto organisaatio, OrganisaatioYhteystietoDto henkilo, OsoitteistoDto osoite) {
+    public OrganisaatioResultAggregateDto(OrganisaatioResultDto organisaatio, OrganisaatioYhteystietoDto henkilo, OsoitteistoDto osoite) {
         this.organisaatio  =  organisaatio;
         this.henkilo  =  henkilo;
         this.osoite  =  osoite;
     }
 
-    public OrganisaatioTiedotDto getOrganisaatio() {
+    public OrganisaatioResultDto getOrganisaatio() {
         return organisaatio;
     }
 
@@ -71,7 +68,7 @@ public class ResultAggregateDto implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ResultAggregateDto that  =  (ResultAggregateDto) o;
+        OrganisaatioResultAggregateDto that  =  (OrganisaatioResultAggregateDto) o;
         if (EqualsHelper.differentNulls(osoite, that.osoite)
                 || (EqualsHelper.notNulls(osoite, that.osoite)
                     && !EqualsHelper.equals(organisaatio.getOid(), that.organisaatio))) {

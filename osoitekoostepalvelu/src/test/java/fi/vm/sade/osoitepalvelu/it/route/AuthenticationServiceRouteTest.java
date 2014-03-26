@@ -16,14 +16,11 @@
 
 package fi.vm.sade.osoitepalvelu.it.route;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultAuthenticationServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,7 +31,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import scala.actors.threadpool.Arrays;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
@@ -53,9 +49,6 @@ public class AuthenticationServiceRouteTest {
     @Autowired
     private DefaultAuthenticationServiceRoute authenticationServiceRoute;
 
-    @Autowired
-    private OrganisaatioServiceRoute organisaatioServiceRoute;
-
     @Test
     public void testFindKayttooikeusryhmas() {
         List<KayttooikesuryhmaDto> ryhmas  =  authenticationServiceRoute.findKayttooikeusryhmas(
@@ -64,33 +57,31 @@ public class AuthenticationServiceRouteTest {
     }
 
     @Test
-    @Ignore // not still deployes to Luokka
-    public void testFindHenkilosByOrganisaatioOids() {
-        OrganisaatioYhteystietoCriteriaDto criteria  =  new OrganisaatioYhteystietoCriteriaDto();
-        criteria.setKuntaList(Arrays.asList(new String[]{"kunta_604", "kunta_400"}));
-        criteria.setLimit(100);
-        List<OrganisaatioYhteystietoHakuResultDto> yhteystietos  =  organisaatioServiceRoute
-                .findOrganisaatioYhteystietos(criteria, new DefaultCamelRequestContext());
-
-        List<HenkiloDto> henkilos  =  authenticationServiceRoute.findHenkilosByOrganisaatioOids(oids(yhteystietos),
+    public void testFindHenkilos() {
+        List<String> oids = Arrays.asList(new String[] {
+            "1.2.246.562.10.93326837098",
+            "1.2.246.562.10.59574166134"
+        });
+        HenkiloCriteriaDto criteria = new HenkiloCriteriaDto();
+        criteria.setOrganisaatioOids(oids);
+        List<HenkiloListResultDto> henkilos  =  authenticationServiceRoute.findHenkilos(criteria,
                 new DefaultCamelRequestContext());
-        assertTrue(yhteystietos.size() > 0);
+        assertTrue(henkilos.size() > 0);
     }
 
     @Test
-    public void testMe() {
-        MyInformationDto me  =  authenticationServiceRoute.getMe();
+    public void testFindHenikiloByOid() {
+        String oid = "1.2.246.562.24.00000000001";
+        HenkiloDetailsDto details = authenticationServiceRoute.getHenkiloTiedot(oid, new DefaultCamelRequestContext());
+        assertNotNull(details);
+    }
+
+    @Ignore // 401.. possibly wrong CAS service URL?
+    @Test
+    public void testMyInformation() {
+        MyInformationDto me  =  authenticationServiceRoute.getMyInformation(new DefaultCamelRequestContext());
         assertNotNull(me);
         assertNotNull(me.getUid());
         assertNotNull(me.getOid());
-    }
-
-    protected List<String> oids(List<OrganisaatioYhteystietoHakuResultDto> yhteystietos) {
-        return new ArrayList<String>(Collections2.transform(yhteystietos, new Function<OrganisaatioYhteystietoHakuResultDto, String>() {
-            @Override
-            public String apply(OrganisaatioYhteystietoHakuResultDto yhteystieto) {
-                return yhteystieto.getOid();
-            }
-        }));
     }
 }
