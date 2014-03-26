@@ -19,6 +19,8 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 import java.io.Serializable;
 
 public class OrganisaatioOid implements Serializable {
+    private static final long serialVersionUID = -4883714311145623645L;
+    
     private String value;
 
     public OrganisaatioOid() {

@@ -27,6 +27,8 @@ import java.io.Serializable;
  * Koodiston versiotietojen mallintaminen.
  */
 public class KoodistoVersioDto implements Serializable {
+    private static final long serialVersionUID = -6700268835522853874L;
+    
     private static final int HASH_FACTOR = 31;
     private String koodistoUri;
     private KoodistoTyyppi koodistoTyyppi;

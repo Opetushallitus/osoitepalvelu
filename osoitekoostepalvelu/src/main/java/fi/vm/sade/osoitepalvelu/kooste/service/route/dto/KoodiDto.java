@@ -25,6 +25,8 @@ import org.joda.time.LocalDate;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.KoodistoDateHelper;
 
 public class KoodiDto implements Serializable {
+    private static final long serialVersionUID = -8855805983791109305L;
+    
     private String koodiUri;
     private long versio; // Koodin versio
     private String koodiArvo;

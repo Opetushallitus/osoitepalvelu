@@ -16,11 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.scheduled;
 
-import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
+import java.util.Map;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.DefaultCasTicketCache;
-
-import java.util.Map;
 
 /**
  * User: ratamaa

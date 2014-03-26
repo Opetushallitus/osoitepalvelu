@@ -28,6 +28,8 @@ import java.util.Map;
  * Time: 2:06 PM
  */
 public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
+    private static final long serialVersionUID = 2642158081723050787L;
+    
     private String oid;
     private Map<String, String> nimi  =  new HashMap<String, String>(); // short lowercase lang code  = > value pairs
     private List<String> tyypit  =  new ArrayList<String>();

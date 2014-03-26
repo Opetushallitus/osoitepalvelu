@@ -24,6 +24,8 @@ import java.io.Serializable;
  * Time: 4:18 PM
  */
 public class OrganisaatioOsoiteDto implements Serializable {
+    private static final long serialVersionUID = 5029563025955715983L;
+    
     private OrganisaatioYhteysosoiteDto.OsoiteTyyppi osoiteTyyppi;
     private String yhteystietoOid;
     private String postinumeroUri;

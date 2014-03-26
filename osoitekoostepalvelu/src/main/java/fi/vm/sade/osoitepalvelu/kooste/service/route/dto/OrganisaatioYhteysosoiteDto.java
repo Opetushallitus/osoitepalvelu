@@ -24,6 +24,8 @@ import java.io.Serializable;
  * Time: 2:16 PM
  */
 public class OrganisaatioYhteysosoiteDto implements Serializable {
+    private static final long serialVersionUID = 4643435353987836843L;
+
     /**
      * @see fi.vm.sade.organisaatio.api.model.types.OsoiteTyyppi
      */

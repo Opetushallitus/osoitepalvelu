@@ -12,6 +12,7 @@ import java.util.Map;
  * Time: 3:44 PM
  */
 public class CustomSpringAwareHealthCheckerServlet extends SpringAwareHealthCheckServlet {
+    private static final long serialVersionUID = 9131861317010702448L;
 
     @Override
     protected Map<String, HealthChecker> registerHealthCheckers() {

@@ -25,7 +25,8 @@ import java.util.Map;
 @Scope(value =  WebApplicationContext.SCOPE_APPLICATION)
 @RequestMapping(value  =  "/email")
 public class EmailController extends AbstractMvcController implements Serializable {
-
+    private static final long serialVersionUID = -741888911414782245L;
+    
     @Autowired
     private EmailService emailService;
 

@@ -26,6 +26,8 @@ import java.util.Map;
  * Time: 12:52 PM
  */
 public class AppSettingsDto implements Serializable {
+    private static final long serialVersionUID = 817543818821400959L;
+    
     private Map<String, Object> env  =  new HashMap<String, Object>();
     private Map<String, Object> app  =  new HashMap<String, Object>();
 

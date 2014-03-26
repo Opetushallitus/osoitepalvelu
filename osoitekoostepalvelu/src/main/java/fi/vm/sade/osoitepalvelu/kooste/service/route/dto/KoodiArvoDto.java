@@ -19,6 +19,8 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 import java.io.Serializable;
 
 public class KoodiArvoDto implements Serializable {
+    private static final long serialVersionUID = -655542369172152334L;
+    
     private String nimi;
     private String kuvaus;
     private String lyhytNimi;

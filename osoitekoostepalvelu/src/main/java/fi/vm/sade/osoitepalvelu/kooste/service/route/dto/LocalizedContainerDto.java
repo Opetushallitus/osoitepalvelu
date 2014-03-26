@@ -27,6 +27,8 @@ import java.util.Locale;
  * Time: 3:05 PM
  */
 public class LocalizedContainerDto implements Serializable {
+    private static final long serialVersionUID = -6571401682709013348L;
+    
     private List<LocalizedValueDto> texts  =  new ArrayList<LocalizedValueDto>();
 
     public List<LocalizedValueDto> getTexts() {

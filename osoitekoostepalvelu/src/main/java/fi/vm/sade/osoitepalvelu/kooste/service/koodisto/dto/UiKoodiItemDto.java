@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UiKoodiItemDto implements Serializable {
+    private static final long serialVersionUID = 303815492103134497L;
+    
     @DtoConversion
     @DtoPath(value = "koodisto.tyyppi", withClass  =  KoodiDto.class)
     private KoodistoTyyppi koodistonTyyppi; // Kategoria

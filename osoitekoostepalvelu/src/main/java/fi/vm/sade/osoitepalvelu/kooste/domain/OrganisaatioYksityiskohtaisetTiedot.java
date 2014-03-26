@@ -37,6 +37,8 @@ import java.util.Map;
  */
 @Document(collection = "organisaatio")
 public class OrganisaatioYksityiskohtaisetTiedot implements Serializable {
+    private static final long serialVersionUID = 442147524555663558L;
+    
     private Long version;
     @Id
     @Indexed(unique = true)

@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class KoodistoDto implements Serializable {
+    private static final long serialVersionUID = -4799209530323857832L;
+
     // Eri koodistojen tuetut kategoriat/tyypit
     public enum KoodistoTyyppi {
         //

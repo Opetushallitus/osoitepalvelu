@@ -24,6 +24,8 @@ import java.io.Serializable;
  * Time: 3:12 PM
  */
 public class OrganisaatioviiteDto implements Serializable {
+    private static final long serialVersionUID = 4249948446828069630L;
+    
     private Long id;
     private String organisaatioOid;
     private boolean includeChildren = false;

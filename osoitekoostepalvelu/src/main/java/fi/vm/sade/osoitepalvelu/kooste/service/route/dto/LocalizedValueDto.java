@@ -24,6 +24,8 @@ import java.io.Serializable;
  * Time: 3:06 PM
  */
 public class LocalizedValueDto implements Serializable {
+    private static final long serialVersionUID = -7416957289762490861L;
+    
     private String text; // Note: can be null
     private String lang; // Note: can be uppoer or lower case.
 

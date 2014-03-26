@@ -26,6 +26,8 @@ import java.util.List;
  * Time: 4:17 PM
  */
 public class MyInformationDto implements Serializable {
+    private static final long serialVersionUID = -5020037949187906720L;
+    
     private String uid;
     private String oid;
     private String firstName;

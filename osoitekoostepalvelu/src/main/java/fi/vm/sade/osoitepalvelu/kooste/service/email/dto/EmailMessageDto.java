@@ -13,6 +13,8 @@ import java.util.List;
  * fi.vm.sade.ryhmasahkoposti.api.dto.EmailMessage with default values and without attachments.
  */
 public class EmailMessageDto implements Serializable {
+    private static final long serialVersionUID = -1790563464167889613L;
+    
     private String callingProcess;
     private String from;
     private String replyTo;

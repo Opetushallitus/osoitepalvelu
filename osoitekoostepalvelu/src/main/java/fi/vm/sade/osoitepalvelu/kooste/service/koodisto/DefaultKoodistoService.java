@@ -242,10 +242,6 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         return items;
     }
 
-    private KoodistoCache.KoodistoTyyppi getCacheType(KoodistoTyyppi tyyppi) {
-        return KoodistoCache.KoodistoTyyppi.valueOf(tyyppi.name());
-    }
-
     private boolean isCacheUsable(DateTime updatedAt) {
         return updatedAt.plus(cacheTimeoutSeconds * MILLIS_IN_SECOND).compareTo(new DateTime()) > 0;
     }

@@ -28,6 +28,8 @@ import java.util.Map;
  * Time: 4:13 PM
  */
 public class OrganisaatioYksityiskohtaisetTiedotDto implements Serializable {
+    private static final long serialVersionUID = -3400236718912392536L;
+    
     private Long version;
     private String oid;
     private String parentOid;

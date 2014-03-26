@@ -26,6 +26,8 @@ import java.util.List;
  * Time: 2:08 PM
  */
 public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
+    private static final long serialVersionUID = 9152021492358122085L;
+    
     private static final int HASH_FACTOR = 31;
     public static final int HIGH_LIMIT_VALUE = 999999999;
 

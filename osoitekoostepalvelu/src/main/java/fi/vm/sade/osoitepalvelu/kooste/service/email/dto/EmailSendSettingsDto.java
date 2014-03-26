@@ -25,6 +25,8 @@ import java.io.Serializable;
  * Time: 11:00 AM
  */
 public class EmailSendSettingsDto implements Serializable {
+    private static final long serialVersionUID = 394117547458962445L;
+    
     private String endpointUrl;
     private EmailMessageDto email  =  new EmailMessageDto();
 

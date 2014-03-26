@@ -10,6 +10,8 @@ import java.io.Serializable;
  * Time: 1:49 PM
  */
 public class OidAndTyyppiPair implements Serializable {
+    private static final long serialVersionUID = 639768390250422033L;
+    
     private static final int HASH_FACTOR = 31;
     public static final String TYYPPI_ORGANISAATIO  =  "organisaatio";
     public static final String TYYPPI_HENKILO  =  "henkilo";
