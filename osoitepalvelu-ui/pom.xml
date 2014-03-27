@@ -140,7 +140,7 @@
                         </replacement>
                         <replacement>
                             <token>__BUID_TIMESTAMP__</token>
-                            <valueFile>target/osoitepalvelu-ui/buildtime.txt</valueFile>
+                            <valueFile>${project.build.directory}/${project.artifactId}/buildtime.txt</valueFile>
                         </replacement>
                     </replacements>
                 </configuration>
