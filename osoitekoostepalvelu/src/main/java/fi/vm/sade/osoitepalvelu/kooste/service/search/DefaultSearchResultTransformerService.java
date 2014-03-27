@@ -68,7 +68,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
     @Override
     public SearchResultsPresentationDto transformToResultRows(SearchResultsDto results,
-                                                              SearchResultPresentation presentation, CamelRequestContext context) {
+                                                SearchResultPresentation presentation, CamelRequestContext context) {
         List<SearchResultRowDto> transformedResults = new ArrayList<SearchResultRowDto>();
 
         List<SearchResultRowDto> organisaatioResults = transformOrganisaatios(results.getOrganisaatios(), presentation);
@@ -135,9 +135,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 for (OrganisaatioYhteystietoDto kayttaja : result.getYhteyshenkilot()) {
                     organisaatioAggregates.add(new OrganisaatioResultAggregateDto(result, kayttaja, null));
                 }
-            }
-            if (result.getPostiosoite().size() < 1 && result.getYhteyshenkilot().size() < 1) {
-                organisaatioAggregates.add(new OrganisaatioResultAggregateDto(result, null, null));
+                if (result.getYhteyshenkilot().size() < 1) {
+                    organisaatioAggregates.add(new OrganisaatioResultAggregateDto(result, null, null));
+                }
             }
         }
         for (OrganisaatioResultAggregateDto aggregate : organisaatioAggregates) {

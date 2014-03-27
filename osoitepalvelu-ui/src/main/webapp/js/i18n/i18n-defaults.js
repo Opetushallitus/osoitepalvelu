@@ -5,9 +5,11 @@ angular.module("I18n", [], ["$provide", function($provider) {
     var defaultValues = {};
     defaultValues['fi'] = {
         loading: 'Ladataan...',
+        loading_results: 'Ladataan tuloksia...',
         search_title : 'Osoitehaku',
         results_title : 'Osoitteet',
         saved_searches : 'Tallennetut haut',
+        saved_searches_placeholder: 'Valitse tallennettu haku',
 
         confirm_yes: 'Kyllä',
         confirm_no: 'Ei',
@@ -55,6 +57,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
 
         // TargetGroups:
         target_group: 'Kohderyhmä',
+        target_group_placeholder: 'Valitse lisättävä kohderyhmä',
         target_group_jarjestajat_yllapitajat: 'Koulutuksen järjestäjät ja oppilaitosten ylläpitäjät',
         target_group_oppilaitos: 'Oppilaitos',
         target_group_opetuspisteet: 'Opetuspisteet',

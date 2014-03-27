@@ -61,6 +61,7 @@ public class OrganisaatioDetails implements Serializable {
     private String kotipaikkaUri; // esim. kunta_405
     private String maaUri; // esim. maatjavaltiot1_fin
     private OrganisaatioOsoiteDto postiosoite;
+    private OrganisaatioOsoiteDto kayntiosoite;
     private List<OrganisaatioDetailsYhteystietoDto> yhteystiedot
             = new ArrayList<OrganisaatioDetailsYhteystietoDto>();
     @Indexed
@@ -202,5 +203,13 @@ public class OrganisaatioDetails implements Serializable {
 
     public void setYhteystietoArvos(List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos) {
         this.yhteystietoArvos = yhteystietoArvos;
+    }
+
+    public OrganisaatioOsoiteDto getKayntiosoite() {
+        return kayntiosoite;
+    }
+
+    public void setKayntiosoite(OrganisaatioOsoiteDto kayntiosoite) {
+        this.kayntiosoite = kayntiosoite;
     }
 }

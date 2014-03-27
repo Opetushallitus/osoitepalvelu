@@ -24,7 +24,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.LazyCasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
 import org.apache.camel.*;
-import org.apache.camel.model.LoadBalanceDefinition;
+import org.apache.camel.component.http.HttpOperationFailedException;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.dataformat.JsonLibrary;
@@ -55,7 +55,7 @@ import java.util.Map.Entry;
  */
 public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     public static final String CONTENT_TYPE_JSON  =  "application/json;charset = UTF-8";
-    private static final int DEFAULT_RETRY_LIMIT  =  10;
+    private static final int DEFAULT_RETRY_LIMIT  =  2;
     public static final String CAS_TICKET_CACHE_PROPERTY  =  "CasTicketCache";
     public static final String URL_ENCODING = "UTF-8";
 
@@ -246,16 +246,6 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     }
 
     /**
-     * @param route to load balance
-     * @return route with DEFAULT_RETRY_LIMIT applied as failover with roundRobin and inheritedErrorHandler
-     */
-    protected LoadBalanceDefinition addRouteErrorHandlers(RouteDefinition route) {
-        boolean roundRobin  =  true;
-        boolean inheritErrorHandler  =  true;
-        return route.loadBalance().failover(DEFAULT_RETRY_LIMIT, inheritErrorHandler, roundRobin);
-    }
-
-    /**
      * @return a ProducerTemplate from Spring's ApplicationContext
      */
     protected ProducerTemplate getCamelTemplate() {
@@ -281,7 +271,6 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      * @see #doProcess(org.apache.camel.Exchange) to do the actual logging
      */
     protected abstract class Debugger implements Processor {
-        private Long beginMoment = null;
         private String name;
 
         protected Debugger(String name) {
@@ -300,13 +289,15 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
         @Override
         public final void process(Exchange exchange) throws Exception {
+            Long beginMoment = exchange.getProperty("DebuggerBeginMoment_"+this.name, Long.TYPE);
             if (beginMoment == null) {
                 beginMoment = System.currentTimeMillis();
+                exchange.setProperty("DebuggerBeginMoment_"+this.name, beginMoment);
             } else {
                 long now = System.currentTimeMillis();
                 long duration = now - beginMoment;
                 log.info(getName()  +  " execution took: "  +  duration  +  "ms since last call.");
-                beginMoment = null;
+                exchange.setProperty("DebuggerBeginMoment_"+this.name, null);
             }
             inToOut(exchange);
             doProcess(exchange);
@@ -398,9 +389,11 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected String debug(Message message) {
         try {
             return stringify(message.getBody())
-                     +  " with headers: "  +  mapperProvider.getContext(ObjectMapper.class).writeValueAsString(message.getHeaders());
+                +  " with headers: "
+                +  mapperProvider.getContext(ObjectMapper.class).writeValueAsString(message.getHeaders());
         } catch (IOException e) {
-            return stringify(message.getBody())  +  " (Headers could not be converted to JSON cause: "  +  e.getMessage()  +  ")";
+            return stringify(message.getBody())  +  " (Headers could not be converted to JSON cause: "
+                    +  e.getMessage()  +  ")";
         }
     }
 
@@ -429,6 +422,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
     /**
      * An utility class to provide a StringBuffer like Expression aware join capability.
+     *
+     * Implements Expression for convenience (but can be turned to an immutable presentation)
+     * @see #toExpression()
      */
     protected class ExpressionBuffer implements Expression {
         private List<Expression> expressions = new ArrayList<Expression>();
@@ -457,14 +453,49 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             return this.expressions.size();
         }
 
+        /**
+         * @return true iff this buffer is empty
+         */
+        public boolean isEmpty() {
+            return this.expressions.isEmpty();
+        }
+
         @Override
         public <T> T evaluate(Exchange exchange, Class<T> type) {
-            StringBuffer b = new StringBuffer();
-            for (Expression expression : expressions) {
-                b.append(expression.evaluate(exchange, String.class));
+            if (!type.isAssignableFrom(String.class)) {
+                throw new IllegalArgumentException("ExpressionBuffer can not evaluate to type " + type);
             }
-            return (T) b.toString();
+            return (T) joined(this.expressions, exchange);
         }
+
+        /**
+         * @return an immutable expression presentation of this expression
+         */
+        public Expression toExpression() {
+            final List<Expression> buffer = new ArrayList<Expression>(this.expressions);
+            return new Expression() {
+                @Override
+                public <T> T evaluate(Exchange exchange, Class<T> type) {
+                    if (!type.isAssignableFrom(String.class)) {
+                        throw new IllegalArgumentException("ExpressionBuffer can not evaluate to type " + type);
+                    }
+                    return (T) joined(buffer, exchange);
+                }
+            };
+        }
+    }
+
+    /**
+     * @param expressions to join to a String
+     * @param exchange to evaluate against
+     * @return the evaluated result as a String
+     */
+    protected static String joined(List<Expression> expressions, Exchange exchange) {
+        StringBuffer b = new StringBuffer();
+        for (Expression expression : expressions) {
+            b.append(expression.evaluate(exchange, String.class));
+        }
+        return b.toString();
     }
 
     /**
@@ -483,6 +514,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                     }
                     return (T) encodedValues;
                 }
+                if (!type.isAssignableFrom(String.class)) {
+                    throw new IllegalArgumentException("URLEncoding can not be evaluated to type " + type);
+                }
                 String value = expression.evaluate(exchange, String.class);
                 if (value != null) {
                     return (T) encoded(value);
@@ -499,6 +533,14 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                 return value;
             }
         };
+    }
+
+    /**
+     * Factor for an expression buffer
+     * @return a new ExpressionBuffer
+     */
+    protected ExpressionBuffer buffer() {
+        return new ExpressionBuffer();
     }
 
     /**
@@ -544,12 +586,13 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      *  fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder.HeaderBuilder) to apply
      */
     protected class HeaderBuilder implements ProcessDefinitionProcessor {
+        private Expression body;
+        private Integer retryTimes;
         private Map<String, Expression> headers  =  new HashMap<String, Expression>();
-        private Map<String, List<Expression>> params = new HashMap<String, List<Expression>>();
-        private Map<String, Expression> multiValueParams = new HashMap<String, Expression>();
+        protected Map<String, ParameterContainer> parameters = new HashMap<String, ParameterContainer>();
         private List<ProcessDefinitionProcessor> additionalProcessors  =  new ArrayList<ProcessDefinitionProcessor>();
 
-        public HeaderBuilder() {
+        protected HeaderBuilder() {
         }
 
         /**
@@ -605,6 +648,15 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         }
 
         /**
+         * @param body to set as body to the Message.
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder body(Expression body) {
+            this.body = body;
+            return this;
+        }
+
+        /**
          * @param query to set as HTTP_QUERY header value.
          * @return this HeaderBuilder
          */
@@ -613,76 +665,14 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         }
 
         /**
-         * Adds a query param to construct HTTP_QUERY with (overrides
-         * possible HTTP_QUERY set otherwise)
-         *
-         * @param name of the GET variable
-         * @param value value to append to list of values for the variable where URL encoding is applied
-         * @return this HeaderBuilder
+         * @param name of the parameter
+         * @return this ParameterContainer for building the parameter value
          */
-        public HeaderBuilder queryParam(String name, Expression value) {
-            if (!this.params.containsKey(name)) {
-                this.params.put(name, new ArrayList<Expression>());
+        public ParameterContainer param(String name) {
+            if (!this.parameters.containsKey(name)) {
+                return new ParameterContainer(name);
             }
-            this.params.get(name).add(value);
-            return this;
-        }
-
-        /**
-         * @see #queryParam(String, org.apache.camel.Expression)
-         * @param name of the GET variable
-         * @param simpleValue value to append to list of values for the variable
-         *                    in simple header value format where URL encoding is applied
-         * @return this HeaderBuilder
-         */
-        public HeaderBuilder queryParam(String name, String simpleValue) {
-            return this.queryParam(name, simple(simpleValue));
-        }
-
-        /**
-         * @see #headerInValue(String)
-         * @see #queryParam(String, org.apache.camel.Expression)
-         * @param name of the GET variable to assign a header in variable with the same name
-         * @return this HeaderBuilder
-         */
-        public HeaderBuilder queryParam(String name) {
-            return queryParam(name, headerInValue(name));
-        }
-
-        /**
-         * Adds a query param to construct HTTP_QUERY with (overrides
-         * possible HTTP_QUERY set otherwise but appends to single query parameters)
-         * with a value that evaluates to a List<String> each of the values
-         * of which are URLEncoded and added as separate params to the query string
-         *
-         * @param name of the GET variable
-         * @param listValue an expression that evaluates to a list of String, each value URLEncoded
-         * @return this HeaderBuilder
-         */
-        public HeaderBuilder queryArrayParam(String name, Expression listValue) {
-            this.multiValueParams.put(name, listValue);
-            return this;
-        }
-
-        /**
-         * @see #queryArrayParam(String, org.apache.camel.Expression)
-         * @param name of the GET variable
-         * @param listValueSimpleExpression a simple expression that evaluates to a list of String
-         *                                  each value URLEncoded
-         * @return this HeaderBuilder
-         */
-        public HeaderBuilder queryArrayParam(String name, String listValueSimpleExpression) {
-            return queryArrayParam(name, simple(listValueSimpleExpression));
-        }
-
-        /**
-         * @see #headerInValue(String)
-         * @see #queryArrayParam(String, org.apache.camel.Expression)
-         * @param name of the GET variable to assign a header in variable with the same name
-         * @return this HeaderBuilder
-         */
-        public HeaderBuilder queryArrayParam(String name) {
-            return queryArrayParam(name, headerInValue(name));
+            return this.parameters.get(name);
         }
 
         /**
@@ -716,6 +706,15 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         }
 
         /**
+         * @param times to retry at maximum
+         * @return this HeaderBuilder
+         */
+        public HeaderBuilder retry(int times) {
+            this.retryTimes = times;
+            return this;
+        }
+
+        /**
          * @param service the CAS service
          * @param username the username for a CAS system user
          * @param password the password for a CAS system user
@@ -728,30 +727,204 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
         @Override
         public <T extends ProcessorDefinition<? extends T>> T process(T process) {
-            if (!this.params.isEmpty()) {
-                ExpressionBuffer query = new ExpressionBuffer();
-                for (Map.Entry<String, List<Expression>> kv : params.entrySet()) {
-                    for (Expression value : kv.getValue()) {
-                        if (query.size() > 0) {
-                            query.append("&");
-                        }
-                        query.append(kv.getKey()).append("=").append(urlEncoded(value));
+            if (!this.parameters.isEmpty()) {
+                ExpressionBuffer query = buffer(),
+                                body = buffer();
+                for (ParameterContainer param : this.parameters.values()) {
+                    if (param.bodyParameter) {
+                        param.buildTo(body);
+                    } else {
+                        param.buildTo(query);
                     }
                 }
-                for (Map.Entry<String, Expression> kv : multiValueParams.entrySet()) {
-                    query.append(concatenatedList(kv.getValue(), constant("&"+kv.getKey()+"="),
-                            constant("&"+kv.getKey()+"=") ));
+                if (!query.isEmpty()) {
+                    query(query);
                 }
-                query(query);
+                if (!body.isEmpty()) {
+                    body(body);
+                }
             }
             for (Entry<String, Expression> header : headers.entrySet()) {
                 process  =  process.setHeader(header.getKey(), header.getValue());
             }
+            if (this.body != null) {
+                process  =  process.setBody(this.body);
+            }
+            if (this.retryTimes == null) {
+                this.retryTimes = DEFAULT_RETRY_LIMIT;
+            }
+            add(new ProcessDefinitionProcessor() {
+                @Override
+                @SuppressWarnings("rawtypes")
+                public ProcessorDefinition process(ProcessorDefinition process) {
+                    return process.onException(HttpOperationFailedException.class)
+                            .retryWhile(
+                                    header(Exchange.REDELIVERY_COUNTER)
+                                        .isLessThan(retryTimes))
+                       .end();
+                }
+            });
             for (ProcessDefinitionProcessor defProcessor : additionalProcessors) {
                 process  =  defProcessor.process(process);
             }
             return process;
         }
+
+        /**
+         * Wrapper for query URI and POST body parameters with possibility for optional parameters and multi value
+         * parameters for the the sane. Applies URLEncoding to the values.
+         */
+        public class ParameterContainer {
+            private String name;
+            private List<Expression> values = new ArrayList<Expression>();
+            private Expression mutiliValueContainer;
+            private boolean optional=false;
+            private boolean bodyParameter=false;
+
+            protected ParameterContainer(String name) {
+                this.name = name;
+            }
+
+            /**
+             * Marks this container optional, meaning that if the values evaluate to null, they are
+             * discarded.
+             *
+             * @return this ParameterContainer
+             */
+            public ParameterContainer optional() {
+                this.optional = true;
+                return this;
+            }
+
+            /**
+             * Sets an expression that evaluates to a List of values of which to be added as single parameters
+             * with URL encoding applied
+             *
+             * @param listValue the expression evaluating to a List
+             * @return this ParameterContainer
+             */
+            public ParameterContainer list(Expression listValue) {
+                this.mutiliValueContainer = listValue;
+                return this;
+            }
+
+            /**
+             * Sets this parameter to be result of ${headers.in.<aparameterName>} evaluated into a List
+             * @see #list(org.apache.camel.Expression)
+             * @see #headerInValue(String)
+             *
+             * @return this ParameterContainer
+             */
+            public ParameterContainer listFromHeader() {
+                return list(headerInValue(this.name));
+            }
+
+            /**
+             * Add a value to this parameter container. This will be appended to the query string as
+             * name=value1&name=value2. Where the given value parameter evaluates to a single value.
+             * If this container is marked optional, msissing/null values are discarded.
+             *
+             * @see #optional()
+             * @see #list(org.apache.camel.Expression) for values that evaluate into List
+             *
+             * @param value to be added
+             * @return this ParameterContainer
+             */
+            public ParameterContainer value(Expression value) {
+                this.values.add(value);
+                return this;
+            }
+
+            /**
+             * Acts as a value with simple-wrapped expression:
+             * @see #value(org.apache.camel.Expression)
+             *
+             * @param value as simple expression to
+             * @return this ParameterContainer
+             */
+            public ParameterContainer value(String value) {
+                return value(simple(value));
+            }
+
+            /**
+             * Adds parameter to be result of ${headers.in.<aparameterName>} evaluated into a single value
+             * @see #value(org.apache.camel.Expression)
+             * @see #headerInValue(String)
+             *
+             * @return this ParameterContainer
+             */
+            public ParameterContainer valueFromHeader() {
+                return value(headerInValue(this.name));
+            }
+
+            /**
+             * Thread this parameter as a query parameter
+             *
+             * @return the HeaderBuilder assocated with this parameter
+             */
+            public HeaderBuilder toQuery() {
+                this.bodyParameter = false;
+                return attachToHeader();
+            }
+
+            /**
+             * Thread this parameter as a body parameter. NOTE: this overwrites otherwise set body.
+             *
+             * @return the HeaderBuilder assocated with this parameter
+             */
+            public HeaderBuilder toBody() {
+                this.bodyParameter = true;
+                return attachToHeader();
+            }
+
+            private HeaderBuilder attachToHeader() {
+                if (!parameters.containsKey(this.name)) {
+                    parameters.put(this.name, this);
+                }
+                return HeaderBuilder.this;
+            }
+
+            /**
+             * Build the ParameterContainer to a query "string". If the query is not empty, adds & to the beginning.
+             *
+             * @param query to build this parameter to
+             */
+            public void buildTo( ExpressionBuffer query ) {
+                for (final Expression value : values) {
+                    final boolean first = query.isEmpty();
+                    if (optional) {
+                        query.append(new Expression() {
+                            @Override
+                            public <T> T evaluate(Exchange exchange, Class<T> type) {
+                                Object evaluated = value.evaluate(exchange, type);
+                                if (evaluated == null) {
+                                    return (T) "";
+                                }
+                                return buffer().append(first ? "&" : "")
+                                        .append(name).append("=").append(urlEncoded(constant(evaluated)))
+                                        .evaluate(exchange, type);
+                            }
+                        });
+                    } else {
+                        if (!first) {
+                            query.append("&");
+                        }
+                        query.append(this.name).append("=").append(urlEncoded(value));
+                    }
+                }
+                if (this.mutiliValueContainer != null) {
+                    ExpressionBuffer infix = buffer().append(name).append("=");
+                    ExpressionBuffer begin = buffer();
+                    if (!query.isEmpty()) {
+                        begin.append("&");
+                    }
+                    begin.append(infix);
+                    query.append(concatenatedList(urlEncoded(this.mutiliValueContainer),
+                            buffer().append("&").append(infix), begin));
+                }
+            }
+        }
+
     }
 
     /**
@@ -788,6 +961,15 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
          */
         public Map<String, Object> map() {
             return this.map;
+        }
+
+        /**
+         * @return a copy of this HeaderValueBuilder
+         */
+        public HeaderValueBuilder copy() {
+            HeaderValueBuilder builder = new HeaderValueBuilder();
+            builder.map = new HashMap<String,Object>(this.map);
+            return builder;
         }
     }
 

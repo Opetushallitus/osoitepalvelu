@@ -31,6 +31,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTargetGroupDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTermDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,17 +113,21 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         OrganisaatioYhteystietoCriteriaDto organisaatioYhteystietosCriteria  =  new OrganisaatioYhteystietoCriteriaDto();
         List<String> kuntas  =  resolveKuntaKoodis(terms);
         organisaatioYhteystietosCriteria.setKuntaList(kuntas);
-        organisaatioYhteystietosCriteria.setKieliList(terms.findTerms("organisaationKielis"));
-        organisaatioYhteystietosCriteria.setOppilaitostyyppiList(terms.findTerms("oppilaitostyyppis"));
-        organisaatioYhteystietosCriteria.setVuosiluokkaList(terms.findTerms("vuosiluokkas"));
-        organisaatioYhteystietosCriteria.setYtunnusList(terms.findTerms("koultuksenjarjestajas"));
+        organisaatioYhteystietosCriteria.setKieliList(terms.findTerms(SearchTermDto.TERM_ORGANISAATION_KIELIS));
+        organisaatioYhteystietosCriteria.setOppilaitostyyppiList(terms.findTerms(SearchTermDto.TERM_OPPILAITOSTYYPPIS));
+        organisaatioYhteystietosCriteria.setVuosiluokkaList(terms.findTerms(SearchTermDto.TERM_VUOSILUOKKAS));
+        organisaatioYhteystietosCriteria.setYtunnusList(terms.findTerms(SearchTermDto.TERM_KOULTUKSENJARJESTAJAS));
         return organisaatioService.findOrganisaatioYhteystietos(organisaatioYhteystietosCriteria, context);
     }
 
     protected List<HenkiloDetailsDto> findHenkilos(SearchTermsDto terms, final CamelRequestContext context,
                                                 List<String> organisaatioOids) {
+        if (organisaatioOids.isEmpty()) {
+            return new ArrayList<HenkiloDetailsDto>();
+        }
         HenkiloCriteriaDto criteria = new HenkiloCriteriaDto();
         criteria.setOrganisaatioOids(organisaatioOids);
+        criteria.setKayttoOikeusRayhmas(terms.findTerms(SearchTermDto.TERM_KAYTTOOIKEUSRYHMAS));
         List<HenkiloListResultDto> henkilos = henkiloService.findHenkilos(criteria, context);
         return new ArrayList<HenkiloDetailsDto>(Collections2.transform(henkilos,
                     new Function<HenkiloListResultDto, HenkiloDetailsDto>() {
@@ -141,8 +146,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     protected List<String> resolveKuntaKoodis(SearchTermsDto terms) {
         List<String> kuntas  =  new ArrayList<String>();
-        kuntas.addAll(terms.findTerms("kuntas"));
-        for(String maakuntaKoodi : terms.findTerms("maakuntas")) {
+        kuntas.addAll(terms.findTerms(SearchTermDto.TERM_KUNTAS));
+        for(String maakuntaKoodi : terms.findTerms(SearchTermDto.TERM_MAAKUNTAS)) {
             kuntas.addAll(kuntasForMaakunta(terms.getLocale(), maakuntaKoodi));
         }
         return kuntas;

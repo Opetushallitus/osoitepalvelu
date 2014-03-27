@@ -14,7 +14,17 @@
  */
 angular.module('ui.select2', ['localisation']).value('uiSelect2Config', {}).directive('uiSelect2', ['uiSelect2Config', '$timeout', 'LocalisationService',
 function (uiSelect2Config, $timeout, LocalisationService) {
-  var options = {};
+  var format = function (option) {
+      var $originalOption = $(option.element);
+      if ($originalOption.attr("class")) {
+          return '<span class="'+$originalOption.attr("class")+'">'+option.text+'</span>';
+      }
+      return option.text;
+  };
+  var options = {
+    formatSelection: format,
+    formatResult: format
+  };
   if (uiSelect2Config) {
     angular.extend(options, uiSelect2Config);
   }

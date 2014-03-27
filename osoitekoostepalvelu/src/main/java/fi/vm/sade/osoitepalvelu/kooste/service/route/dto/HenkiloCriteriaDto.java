@@ -26,7 +26,9 @@ import java.util.List;
  * Time: 2:57 PM
  */
 public class HenkiloCriteriaDto implements Serializable {
+    private static final int HASH_FACTOR = 31;
     private List<String> organisaatioOids = new ArrayList<String>();
+    private List<String> kayttoOikeusRayhmas = new ArrayList<String>();
 
     public List<String> getOrganisaatioOids() {
         return organisaatioOids;
@@ -36,21 +38,40 @@ public class HenkiloCriteriaDto implements Serializable {
         this.organisaatioOids = organisaatioOids;
     }
 
+    public List<String> getKayttoOikeusRayhmas() {
+        return kayttoOikeusRayhmas;
+    }
+
+    public void setKayttoOikeusRayhmas(List<String> kayttoOikeusRayhmas) {
+        this.kayttoOikeusRayhmas = kayttoOikeusRayhmas;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         HenkiloCriteriaDto that = (HenkiloCriteriaDto) o;
 
-        if (organisaatioOids != null ? !organisaatioOids.equals(that.organisaatioOids) : that.organisaatioOids != null)
+        if (kayttoOikeusRayhmas != null
+                ? !kayttoOikeusRayhmas.equals(that.kayttoOikeusRayhmas) : that.kayttoOikeusRayhmas != null) {
             return false;
+        }
+        if (organisaatioOids != null ? !organisaatioOids.equals(that.organisaatioOids) : that.organisaatioOids != null) {
+            return false;
+        }
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return organisaatioOids != null ? organisaatioOids.hashCode() : 0;
+        int result = organisaatioOids != null ? organisaatioOids.hashCode() : 0;
+        result = HASH_FACTOR * result + (kayttoOikeusRayhmas != null ? kayttoOikeusRayhmas.hashCode() : 0);
+        return result;
     }
 }

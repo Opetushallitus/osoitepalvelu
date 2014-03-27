@@ -23,5 +23,6 @@ window.CONFIG = {
         "organisaatio.api.rest.url": "https://itest-virkailija.oph.ware.fi:443/organisaatio-service/rest/",
         "authentication-service.rest.url":"https://itest-virkailija.oph.ware.fi/authentication-service/resources/",
     },
-    "app" : {}
+    "app" : {},
+    "mode": 'dev-without-backend'
 };

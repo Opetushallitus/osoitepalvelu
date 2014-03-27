@@ -86,7 +86,6 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
                 case LETTER:
                 case SEND_LETTER:
                     setOrganisaationNimiIncluded(true);
-                    setYhteyshenkiloEmailIncluded(true);
                     setPositosoiteIncluded(true);
                     break;
                 default: break;

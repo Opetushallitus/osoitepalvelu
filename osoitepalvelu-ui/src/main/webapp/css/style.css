@@ -200,3 +200,8 @@ a {
 .rightPosition button {
     margin-left: 10px;
 }
+
+.select2-choice .placeholder, .select2-result-label .placeholder {
+    font-tyle: italic;
+    color: #666666;
+}

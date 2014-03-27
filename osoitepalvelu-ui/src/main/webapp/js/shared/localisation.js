@@ -106,9 +106,13 @@ localisation.directive('tt', ['$log', 'LocalisationService', 'i18nDefaults', fun
                         originalText = i18nDefaults[key];
                     }
 
-                    LocalisationService.createMissingTranslations(key, locale, originalText);
+                    if ( window.CONFIG.mode && window.CONFIG.mode == 'dev-without-backend' ) {
+                         translation = originalText;
+                    } else {
+                        LocalisationService.createMissingTranslations(key, locale, originalText);
 
-                    translation = "*CREATED* " + originalText;
+                        translation = "*CREATED* " + originalText;
+                    }
                 }
 
                 // $log.info("  key: '" + key + "', locale: '"+ locale + "' --> " + translation);
@@ -442,6 +446,15 @@ localisation.service('LocalisationService', function($log, $q, $http, $interval,
             if( angular.isDefined(i18nDefaults[locale])
                     && angular.isDefined(i18nDefaults[locale][key]) ) {
                 result = i18nDefaults[locale][key];
+            }
+
+            if ( window.CONFIG.mode && window.CONFIG.mode == 'dev-without-backend' ) {
+                if (params != undefined) {
+                    result = result.replace(/{(\d+)}/g, function(match, number) {
+                        return angular.isDefined(params[number]) ? params[number] : match;
+                    });
+                }
+                return result;
             }
 
             // Missing translation, create it, returns placeholder value given in

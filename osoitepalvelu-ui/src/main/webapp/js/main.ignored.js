@@ -2,6 +2,13 @@
  * Created by ratamaa on 12/4/13.
  */
 
+window.CONFIG = window.CONFIG || {};
+window.CONFIG.app = {
+    "userLanguages": ['kieli_fi', 'kieli_sv', 'kieli_en'], //default languages
+    "ui.timeout.short": 10000,
+    "ui.timeout.long": 60000
+};
+
 var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu',
         ['ngRoute', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2', 'ngGrid', 'loading',
             'localisation', 'auth', 'flash']);
@@ -30,13 +37,6 @@ if (!(window.console && console.log)) {
         }
     };
 }
-
-window.CONFIG = window.CONFIG || {};
-window.CONFIG.app = {
-    "userLanguages": ['kieli_fi', 'kieli_sv', 'kieli_en'], //default languages
-    "ui.timeout.short": 10000,
-    "ui.timeout.long": 60000
-};
 
 
 function osoitepalveluInit() {
@@ -71,24 +71,29 @@ function osoitepalveluInit() {
 		 console.log("LOG "+status+": "+xhr.status+" "+xhr.statusText, xhr);
 	}
 
-	//
-	// Preload application localisations for Osoitepalvelu
-	//
-	var localisationUrl = window.CONFIG.env.osoitepalveluLocalisationRestUrl + "?category=osoitepalvelu&value=cached";
-	console.log("** Loading localisation info; from: ", localisationUrl);
-	init_counter++;
-	jQuery.ajax(localisationUrl, {
-	    dataType: "json",
-	    crossDomain:true,
-	    complete: logRequest,
-	    success: function(xhr, status) {
-	        window.CONFIG.env["osoitepalvelu.localisations"] = xhr;
-	        initFunction("localisations", xhr, status);
-	    },
-	    error: function(xhr, status) {
-	        window.CONFIG.env["osoitepalvelu.localisations"] = [];
-	        initFail("localisations", xhr, status);
-	    }
-	});
+    if ( !(window.CONFIG.mode && window.CONFIG.mode == 'dev-without-backend') ) {
+        //
+        // Preload application localisations for Osoitepalvelu
+        //
+        var localisationUrl = window.CONFIG.env.osoitepalveluLocalisationRestUrl + "?category=osoitepalvelu&value=cached";
+        console.log("** Loading localisation info; from: ", localisationUrl);
+        init_counter++;
+        jQuery.ajax(localisationUrl, {
+            dataType: "json",
+            crossDomain:true,
+            complete: logRequest,
+            success: function(xhr, status) {
+                window.CONFIG.env["osoitepalvelu.localisations"] = xhr;
+                initFunction("localisations", xhr, status);
+            },
+            error: function(xhr, status) {
+                window.CONFIG.env["osoitepalvelu.localisations"] = [];
+                initFail("localisations", xhr, status);
+            }
+        });
+    } else {
+        init_counter++;
+        initFunction('dev', {}, 200);
+    }
 }
 

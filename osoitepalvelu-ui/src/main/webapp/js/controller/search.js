@@ -118,8 +118,6 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         SearchService.updateSelectedSearch($scope.selectedSavedSearch);
     };
 
-    $scope.nonSelectedByField = FilterHelper.extractedFieldNotInArray;
-
     $scope.handleTargetGroupSelected = function() {
         $log.info("Target gorup selection changed to: "+$scope.selectedTargetGroup);
         if( $scope.selectedTargetGroup ) {
@@ -130,12 +128,13 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
                 newGroup.options[0].selected=true;
             }
             $scope.visibleTargetGroups.push( newGroup );
+            $scope.selectedTargetGroup = "";
         }
     };
     $scope.removeTargetGroup = function(i) {
         var arr = [];
         angular.forEach($scope.selectedTargetGroupTypes, function(v,index) {
-            if( index != i ) arr.push(v);
+            if( index != i && v ) arr.push(v);
         });
         $scope.selectedTargetGroupTypes = arr;
         arr = [];
@@ -143,14 +142,23 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             if( index != i ) arr.push( angular.copy(v) );
         } );
         $scope.visibleTargetGroups = arr;
-        $scope.selectedTargetGroup = null;
+        $scope.selectedTargetGroup = "";
     };
+    $scope.visibleTargetGroupTypes = function() {
+        var visible = $filter('filter')($scope.targetGroups,
+            FilterHelper.extractedFieldNotInArray($scope.selectedTargetGroupTypes, 'type'));
+        return visible;
+    }
 
     $scope.isTermsShown = function() {
         return !!$scope.searchType;
     };
 
     $scope.isShowTargetGroup = function() {
+        return $scope.isTermsShown();
+    };
+
+    $scope.isSearchActionsVisible = function() {
         return $scope.isTermsShown();
     };
 

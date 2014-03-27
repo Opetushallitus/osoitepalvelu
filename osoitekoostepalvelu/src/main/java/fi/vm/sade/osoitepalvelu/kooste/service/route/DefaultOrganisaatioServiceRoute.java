@@ -16,13 +16,11 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
-import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import org.apache.camel.component.http.HttpOperationFailedException;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -40,6 +38,7 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
             implements  OrganisaatioServiceRoute {
     private static final String ORGANSIAATIO_OID_LIST_ENDPOINT  =  "direct:organisaatioOidList";
     private static final String ORGANSIAATIOHAKU_ENDPOINT  =  "direct:organisaatioYhteystietohakuV2";
+
     private static final String YHTEYSTIEDOT_PATH  =  "/v2/yhteystiedot/hae";
     private static final String SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT  =  "direct:singleOrganisaatioByOid";
     private static final String SINGLE_ORGANISAATIO_PATH  =  "/${in.headers.oid}";
@@ -71,8 +70,7 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
         .process(organisaatioCallInOutDebug)
         .to(trim(organisaatioServiceRestUrl))
         .process(organisaatioCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<String>>() {
-        }));
+        .process(jsonToDto(new TypeReference<List<String>>() {}));
     }
 
     protected void buildOrganisaatioHaku() {
@@ -88,8 +86,7 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
         .process(organisaatioCallInOutDebug)
         .to(trim(organisaatioServiceRestUrl))
         .process(organisaatioCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() {
-        }));
+        .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() {}));
     }
 
     protected void buildSingleOrganisaatioTiedot() {
@@ -100,14 +97,11 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                         .get()
                         .path(SINGLE_ORGANISAATIO_PATH)
                         .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
-      )
+        )
         .process(organisaatioCallInOutDebug)
         .to(trim(organisaatioServiceRestUrl))
         .process(organisaatioCallInOutDebug)
-        .process(jsonToDto(new TypeReference<OrganisaatioDetailsDto>() {
-        }))
-        .onException(HttpOperationFailedException.class)
-                .throwException(new NotFoundException("Organisaatio not found by OID."));
+        .process(jsonToDto(new TypeReference<OrganisaatioDetailsDto>() {}));
     }
 
     @Override
