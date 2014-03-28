@@ -423,14 +423,17 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      * @return
      */
     protected String debug(Message message) {
-        try {
-            return stringify(message.getBody())
-                +  " with headers: "
-                +  mapperProvider.getContext(ObjectMapper.class).writeValueAsString(message.getHeaders());
-        } catch (IOException e) {
-            return stringify(message.getBody())  +  " (Headers could not be converted to JSON cause: "
-                    +  e.getMessage()  +  ")";
+        if (log.isDebugEnabled()) {
+            try {
+                return stringify(message.getBody())
+                    +  " with headers: "
+                    +  mapperProvider.getContext(ObjectMapper.class).writeValueAsString(message.getHeaders());
+            } catch (IOException e) {
+                return stringify(message.getBody())  +  " (Headers could not be converted to JSON cause: "
+                        +  e.getMessage()  +  ")";
+            }
         }
+        return "*DEBUG LOGGING DISABLED*";
     }
 
     /**

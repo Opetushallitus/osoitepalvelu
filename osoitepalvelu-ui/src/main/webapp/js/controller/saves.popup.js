@@ -53,3 +53,7 @@ var SavesPopupController = function ($scope, $modalInstance, $modal, $filter, sa
         }, function () {});
     };
 };
+
+SavesPopupController.$inject = ["$scope", "$modalInstance", "$modal", "$filter", "saves",
+    "LocalisationService", "SavesService"];
+

@@ -72,7 +72,7 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
         // But for performance reasons, use a ticket cache implemented in ProxyAuthenticator (implementation might
         // also change):
         final Map<String, String> result  =  new HashMap<String, String>();
-        proxyAuthenticator.proxyAuthenticate(service, authMode, new ProxyAuthenticator.Callback() {
+        proxyAuthenticator.proxyAuthenticate(service, "cas", new ProxyAuthenticator.Callback() {
             @Override
             public void setRequestHeader(String key, String value) {
                 // Dirty callback solution, but the implementation is not asynchronous, so we are safe here:

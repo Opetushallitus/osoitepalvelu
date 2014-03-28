@@ -65,3 +65,7 @@ var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout,
         $scope.$broadcast("dialogOpened");
     });
 };
+
+NewSavePopupController.$inject = ["$scope", "$modalInstance", "$modal", "$timeout", "save", "LocalisationService",
+    "SavesService"];
+

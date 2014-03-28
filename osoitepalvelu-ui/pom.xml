@@ -100,8 +100,6 @@
                                 <jsSourceExclude>**/*.ignored.js</jsSourceExclude>
                             </jsSourceExcludes>
                             <jsEngine>CLOSURE</jsEngine>
-                            <!-- Can not replace variable names since AngularJS has special meaning for them: (e.g. $scope) -->
-                            <closureCompilationLevel>WHITESPACE_ONLY</closureCompilationLevel>
                         </configuration>
                     </execution>
                 </executions>

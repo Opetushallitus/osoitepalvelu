@@ -16,8 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.converter;
 
-import fi.ratamaa.dtoconverter.reflection.PropertyConversionContext;
-import fi.ratamaa.dtoconverter.reflection.TargetProperty;
+import fi.ratamaa.dtoconverter.codebuilding.CodeBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +28,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class DefaultSavedSearchDtoConverter extends AbstractDtoConverter implements SavedSearchDtoConverter {
     @Override
-    public boolean isCodeGenerationSupported(TargetProperty from, TargetProperty to, PropertyConversionContext context) {
+    protected CodeBuilder createCodeBuilder() {
         // NullPointerException at fi.ratamaa.dtoconverter.codebuilding.ReadableType$Method.getCode(ReadableType.java:384)
         // randomly occuring on first run with SavedSearch -> SavedSearchListDto conversion, => use reflection
-        return false;
+        return null;
     }
 }

@@ -41,3 +41,7 @@ var ConfirmPopupController = function ($scope, $modalInstance, $modal, $timeout,
         $scope.$broadcast("dialogOpened");
     });
 };
+
+ConfirmPopupController.$inject = ["$scope", "$modalInstance", "$modal", "$timeout", "LocalisationService", "options"];
+
+
