@@ -54,10 +54,13 @@ import java.util.Map.Entry;
  * @see HeaderBuilder
  */
 public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
-    public static final String CONTENT_TYPE_JSON  =  "application/json;charset = UTF-8";
-    private static final int DEFAULT_RETRY_LIMIT  =  2;
-    public static final String CAS_TICKET_CACHE_PROPERTY  =  "CasTicketCache";
-    public static final String URL_ENCODING = "UTF-8";
+    protected static final String CONTENT_TYPE_JSON  =  "application/json;charset = UTF-8";
+    protected static final int DEFAULT_RETRY_LIMIT  =  2;
+    protected static final String CAS_TICKET_CACHE_PROPERTY  =  "CasTicketCache";
+    protected static final String URL_ENCODING = "UTF-8";
+    // According to http://camel.apache.org/http.html
+    protected static final String HTTP_CLIENT_TIMEOUT_PARAM_NAME = "httpClient.soTimeout";
+    protected static final long DEFAULT_HTTP_TIMEOUT_MILLIS = 5000;
 
     @Value("${web.url.cas}")
     protected String casService;
@@ -140,6 +143,11 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                     CasTicketCache cache  =  exchange.getProperty(CAS_TICKET_CACHE_PROPERTY, CasTicketCache.class);
                     return new LazyCasTicketProvider(cache, ticketProvider).provideTicketHeaders(service);
                 }
+
+                @Override
+                protected String getDescription() {
+                    return "CasTicketDefinitionProcessor";
+                }
             }).process(debug);
         }
     }
@@ -182,6 +190,15 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                            + "Perhaps you added process after call to to?");
             }
             inToOut(exchange);
+        }
+
+        protected String getDescription() {
+            return "";
+        }
+
+        @Override
+        public String toString() {
+            return "setOutHeaders["+getDescription()+"]";
         }
     }
 
@@ -253,15 +270,24 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     }
 
     /**
-     * A null-safe String.trim
-     * @param value to be trimmed
-     * @return a trimmed value
+     * @param url to the endpoint
+     * @param timeoutMillis timeout in milliseconds to wait for the HTTP client response
+     * @return a URI value with given timeout
      */
-    protected String trim(String value) {
-        if (value != null) {
-            return value.trim();
+    protected String uri(String url, long timeoutMillis) {
+        if (url != null) {
+            url = url.trim();
+            url = url + "?" + HTTP_CLIENT_TIMEOUT_PARAM_NAME + "=" + timeoutMillis;
         }
-        return null;
+        return url;
+    }
+
+    /**
+     * @param url to the endpoint
+     * @return a URI value with the default timeout
+     */
+    protected String uri(String url) {
+        return uri(url, DEFAULT_HTTP_TIMEOUT_MILLIS);
     }
 
     /**
@@ -309,6 +335,11 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
          * @see Processor#process(org.apache.camel.Exchange)
          */
         public abstract void doProcess(Exchange exchange) throws Exception;
+
+        @Override
+        public String toString() {
+            return "debugger["+name+"]";
+        }
     }
 
     /**
@@ -378,6 +409,11 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             @Override
             public void process(Exchange exchange) throws Exception {
                 inToOut(exchange);
+            }
+
+            @Override
+            public String toString() {
+                return "inToOut[]";
             }
         };
     }
@@ -589,7 +625,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         private Expression body;
         private Integer retryTimes;
         private Map<String, Expression> headers  =  new HashMap<String, Expression>();
-        protected Map<String, ParameterContainer> parameters = new HashMap<String, ParameterContainer>();
+        protected Map<String, Parameter> parameters = new HashMap<String, Parameter>();
         private List<ProcessDefinitionProcessor> additionalProcessors  =  new ArrayList<ProcessDefinitionProcessor>();
 
         protected HeaderBuilder() {
@@ -666,11 +702,11 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
         /**
          * @param name of the parameter
-         * @return this ParameterContainer for building the parameter value
+         * @return this Parameter for building the parameter value
          */
-        public ParameterContainer param(String name) {
+        public Parameter param(String name) {
             if (!this.parameters.containsKey(name)) {
-                return new ParameterContainer(name);
+                return new Parameter(name);
             }
             return this.parameters.get(name);
         }
@@ -730,7 +766,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             if (!this.parameters.isEmpty()) {
                 ExpressionBuffer query = buffer(),
                                 body = buffer();
-                for (ParameterContainer param : this.parameters.values()) {
+                for (Parameter param : this.parameters.values()) {
                     if (param.bodyParameter) {
                         param.buildTo(body);
                     } else {
@@ -758,9 +794,10 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                 @SuppressWarnings("rawtypes")
                 public ProcessorDefinition process(ProcessorDefinition process) {
                     return process.onException(HttpOperationFailedException.class)
+                            .log(LoggingLevel.ERROR, "HttpOperationFailedException occured.")
                             .retryWhile(
                                     header(Exchange.REDELIVERY_COUNTER)
-                                        .isLessThan(retryTimes))
+                                            .isLessThan(retryTimes))
                        .end();
                 }
             });
@@ -774,14 +811,14 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
          * Wrapper for query URI and POST body parameters with possibility for optional parameters and multi value
          * parameters for the the sane. Applies URLEncoding to the values.
          */
-        public class ParameterContainer {
+        public class Parameter {
             private String name;
             private List<Expression> values = new ArrayList<Expression>();
-            private Expression mutiliValueContainer;
+            private Expression listValueContainer;
             private boolean optional=false;
             private boolean bodyParameter=false;
 
-            protected ParameterContainer(String name) {
+            protected Parameter(String name) {
                 this.name = name;
             }
 
@@ -789,9 +826,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
              * Marks this container optional, meaning that if the values evaluate to null, they are
              * discarded.
              *
-             * @return this ParameterContainer
+             * @return this Parameter
              */
-            public ParameterContainer optional() {
+            public Parameter optional() {
                 this.optional = true;
                 return this;
             }
@@ -801,10 +838,10 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
              * with URL encoding applied
              *
              * @param listValue the expression evaluating to a List
-             * @return this ParameterContainer
+             * @return this Parameter
              */
-            public ParameterContainer list(Expression listValue) {
-                this.mutiliValueContainer = listValue;
+            public Parameter list(Expression listValue) {
+                this.listValueContainer = listValue;
                 return this;
             }
 
@@ -813,9 +850,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
              * @see #list(org.apache.camel.Expression)
              * @see #headerInValue(String)
              *
-             * @return this ParameterContainer
+             * @return this Parameter
              */
-            public ParameterContainer listFromHeader() {
+            public Parameter listFromHeader() {
                 return list(headerInValue(this.name));
             }
 
@@ -828,9 +865,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
              * @see #list(org.apache.camel.Expression) for values that evaluate into List
              *
              * @param value to be added
-             * @return this ParameterContainer
+             * @return this Parameter
              */
-            public ParameterContainer value(Expression value) {
+            public Parameter value(Expression value) {
                 this.values.add(value);
                 return this;
             }
@@ -840,21 +877,43 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
              * @see #value(org.apache.camel.Expression)
              *
              * @param value as simple expression to
-             * @return this ParameterContainer
+             * @return this Parameter
              */
-            public ParameterContainer value(String value) {
+            public Parameter value(String value) {
                 return value(simple(value));
             }
 
             /**
-             * Adds parameter to be result of ${headers.in.<aparameterName>} evaluated into a single value
+             * Acts as a value with simple-wrapped expression:
+             * @see #value(org.apache.camel.Expression)
+             *
+             * @param value the set as constant expression first converted into a string
+             * @return this Parameter
+             */
+            public Parameter value(Object value) {
+                return value(constant(""+value));
+            }
+
+            /**
+             * Adds parameter to be result of ${in.headers.<aparameterName>} evaluated into a single value
              * @see #value(org.apache.camel.Expression)
              * @see #headerInValue(String)
              *
-             * @return this ParameterContainer
+             * @return this Parameter
              */
-            public ParameterContainer valueFromHeader() {
+            public Parameter valueFromHeader() {
                 return value(headerInValue(this.name));
+            }
+
+            /**
+             * Adds parameter to be result of ${in.body} evaluated into a single value
+             * @see #value(org.apache.camel.Expression)
+             * @see #headerInValue(String)
+             *
+             * @return this Parameter
+             */
+            public Parameter valueFromBody() {
+                return value(simple("${in.body}"));
             }
 
             /**
@@ -877,6 +936,13 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                 return attachToHeader();
             }
 
+            /**
+             * @return true iff any value is appended or list value container is set to this parameter
+             */
+            public boolean hasValue() {
+                return !this.values.isEmpty() || listValueContainer != null;
+            }
+
             private HeaderBuilder attachToHeader() {
                 if (!parameters.containsKey(this.name)) {
                     parameters.put(this.name, this);
@@ -885,7 +951,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             }
 
             /**
-             * Build the ParameterContainer to a query "string". If the query is not empty, adds & to the beginning.
+             * Build the Parameter to a query "string". If the query is not empty, adds & to the beginning.
              *
              * @param query to build this parameter to
              */
@@ -912,14 +978,14 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                         query.append(this.name).append("=").append(urlEncoded(value));
                     }
                 }
-                if (this.mutiliValueContainer != null) {
+                if (this.listValueContainer != null) {
                     ExpressionBuffer infix = buffer().append(name).append("=");
                     ExpressionBuffer begin = buffer();
                     if (!query.isEmpty()) {
                         begin.append("&");
                     }
                     begin.append(infix);
-                    query.append(concatenatedList(urlEncoded(this.mutiliValueContainer),
+                    query.append(concatenatedList(urlEncoded(this.listValueContainer),
                             buffer().append("&").append(infix), begin));
                 }
             }
@@ -1029,6 +1095,11 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                     in.setHeader(header.getKey(), header.getValue());
                 }
                 in.setBody(body);
+            }
+
+            @Override
+            public String toString() {
+                return "setInitialHeadersAndProperties[sendBodyHeadersAndProperties]";
             }
         });
         Object result  =  ExchangeHelper.extractResultBody(exchange, pattern);

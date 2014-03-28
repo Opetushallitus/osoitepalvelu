@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
+ *
+ * This program is free software: Licensed under the EUPL, Version 1.1 or - as
+ * soon as they will be approved by the European Commission - subsequent versions
+ * of the EUPL (the "Licence");
+ *
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at: http://www.osor.eu/eupl/
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * European Union Public Licence for more details.
+ */
+
 /**
  * Created by ratamaa on 12/3/13.
  */
@@ -16,7 +32,8 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
     };
 
     var getCurrentSaveDetails = function() {
-        var selectedSave = $scope.selectedSavedSearch ? $filter('filter')($scope.saves, {id: $scope.selectedSavedSearch})[0] : null;
+        var selectedSave = $scope.selectedSavedSearch ? $filter('filter')($scope.saves,
+            {id: $scope.selectedSavedSearch})[0] : null;
         return {
             id: selectedSave ? selectedSave.id : null,
             name: selectedSave ? selectedSave.name : null,
@@ -144,11 +161,8 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         $scope.visibleTargetGroups = arr;
         $scope.selectedTargetGroup = "";
     };
-    $scope.visibleTargetGroupTypes = function() {
-        var visible = $filter('filter')($scope.targetGroups,
-            FilterHelper.extractedFieldNotInArray($scope.selectedTargetGroupTypes, 'type'));
-        return visible;
-    }
+
+    $scope.selectableTargetGroupsFilter = FilterHelper.extractedFieldNotInArray;
 
     $scope.isTermsShown = function() {
         return !!$scope.searchType;
@@ -217,3 +231,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         });
     };
 }
+
+SearchController.$inject = ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
+                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "SavesService",
+                     "OptionsService", "LocalisationService"];

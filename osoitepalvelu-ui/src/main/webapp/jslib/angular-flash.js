@@ -1,58 +1,6 @@
-angular.module('flash', [])
-.factory('flash', ['$rootScope', '$timeout', function($rootScope, $timeout) {
-  var messages = [];
-
-  var reset;
-  var cleanup = function() {
-    $timeout.cancel(reset);
-    reset = $timeout(function() { messages = []; });
-  };
-
-  var emit = function() {
-    $rootScope.$emit('flash:message', messages, cleanup);
-  };
-
-  $rootScope.$on('$locationChangeSuccess', emit);
-
-  var asMessage = function(level, text) {
-    if (!text) {
-      text = level;
-      level = 'success';
-    }
-    return { level: level, text: text };
-  };
-
-  var asArrayOfMessages = function(level, text) {
-    if (level instanceof Array) return level.map(function(message) {
-      return message.text ? message : asMessage(message);
-    });
-    return text ? [{ level: level, text: text }] : [asMessage(level)];
-  };
-
-  var flash = function(level, text) {
-    emit(messages = asArrayOfMessages(level, text));
-  };
-
-  ['error', 'warning', 'info', 'success'].forEach(function (level) {
-    flash[level] = function (text) { flash(level, text); };
-  });
-
-  return flash;
-}])
-
-.directive('flashMessages', [function() {
-  var directive = { restrict: 'EA', replace: true };
-  directive.template =
-    '<ol id="flash-messages">' +
-      '<li ng-repeat="m in messages" class="{{m.level}}">{{m.text}}</li>' +
-    '</ol>';
-
-  directive.controller = ['$scope', '$rootScope', function($scope, $rootScope) {
-    $rootScope.$on('flash:message', function(_, messages, done) {
-      $scope.messages = messages;
-      done();
-    });
-  }];
-
-  return directive;
-}]);
+/**! 
+ * @license angular-flash v0.1.13
+ * Copyright (c) 2013 William L. Bunselmeyer. https://github.com/wmluke/angular-flash
+ * License: MIT
+ */
+!function(){"use strict";var a=0,b=function(c){function d(a,b){angular.forEach(j.subscribers,function(c){var d=!c.type||c.type===a,e=!j.id&&!c.id||c.id===j.id;d&&e&&c.cb(b,a)})}var e,f,g,h,i,j=angular.extend({id:null,subscribers:{},classnames:{error:[],warn:[],info:[],success:[]}},c),k=this;this.clean=function(){e=null,f=null,g=null,h=null,i=null},this.subscribe=function(b,c,d){return a+=1,j.subscribers[a]={cb:b,type:c,id:d},a},this.unsubscribe=function(a){delete j.subscribers[a]},this.to=function(a){var c=angular.copy(j);return c.id=a,new b(c)},Object.defineProperty(this,"success",{get:function(){return e},set:function(a){e=a,i="success",d(i,a)}}),Object.defineProperty(this,"info",{get:function(){return f},set:function(a){f=a,i="info",d(i,a)}}),Object.defineProperty(this,"warn",{get:function(){return g},set:function(a){g=a,i="warn",d(i,a)}}),Object.defineProperty(this,"error",{get:function(){return h},set:function(a){h=a,i="error",d(i,a)}}),Object.defineProperty(this,"type",{get:function(){return i}}),Object.defineProperty(this,"message",{get:function(){return i?k[i]:null}}),Object.defineProperty(this,"classnames",{get:function(){return j.classnames}}),Object.defineProperty(this,"id",{get:function(){return j.id}})};angular.module("angular-flash.service",[]).provider("flash",function(){var a=this;this.errorClassnames=["alert-error"],this.warnClassnames=["alert-warn"],this.infoClassnames=["alert-info"],this.successClassnames=["alert-success"],this.$get=function(){return new b({classnames:{error:a.errorClassnames,warn:a.warnClassnames,info:a.infoClassnames,success:a.successClassnames}})}})}(),function(){"use strict";function a(a){return(null===a||void 0===a)&&(a=""),/^\s*$/.test(a)}function b(b,c){return{scope:!0,link:function(d,e,f){function g(){var a=[].concat(b.classnames.error,b.classnames.warn,b.classnames.info,b.classnames.success);angular.forEach(a,function(a){e.removeClass(a)})}function h(h,j){if(i&&c.cancel(i),d.flash.type=j,d.flash.message=h,g(),angular.forEach(b.classnames[j],function(a){e.addClass(a)}),a(f.activeClass)||e.addClass(f.activeClass),!h)return void d.hide();var k=Number(f.duration||5e3);k>0&&(i=c(d.hide,k))}var i,j;d.flash={},d.hide=function(){g(),a(f.activeClass)||e.removeClass(f.activeClass)},d.$on("$destroy",function(){b.clean(),b.unsubscribe(j)}),j=b.subscribe(h,f.flashAlert,f.id),f.flashAlert&&b[f.flashAlert]&&h(b[f.flashAlert],f.flashAlert),!f.flashAlert&&b.message&&h(b.message,b.type)}}}angular.module("angular-flash.flash-alert-directive",["angular-flash.service"]).directive("flashAlert",["flash","$timeout",b])}();

@@ -3,9 +3,11 @@ package fi.vm.sade.osoitepalvelu.kooste.mvc;
 import com.wordnik.swagger.annotations.Api;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.EmailService;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,10 +32,10 @@ public class EmailController extends AbstractMvcController implements Serializab
     @Autowired
     private EmailService emailService;
 
-    @RequestMapping(value = "send.settings.json", method  =  RequestMethod.GET)
+    @RequestMapping(value = "send.settings.json", method  =  RequestMethod.POST)
     @ResponseBody
-    public EmailSendSettingsDto getEmailSendSettings() {
-        return emailService.getEmailSendSettings();
+    public EmailSendSettingsDto getEmailSendSettings(@RequestBody MyInformationDto me) {
+        return emailService.getEmailSendSettings(me);
     }
 
     @RequestMapping(value = "test.do", method  =  RequestMethod.POST)

@@ -35,11 +35,10 @@ public class UiKoodiItemDto implements Serializable {
     @DtoPath(value = "koodiArvo", withClass  =  KoodiDto.class)
     private String koodiId; // koodiArvo koodistossa
     private String koodiUri;
-
     private String nimi;
     private String kuvaus;
     private String lyhytNimi;
-    @DtoConversion
+    @DtoConversion(withClass = KoodiDto.class)
     private List<OrganisaatioviiteDto> organisaatioViite  =  new ArrayList<OrganisaatioviiteDto>();
 
     public KoodistoTyyppi getKoodistonTyyppi() {

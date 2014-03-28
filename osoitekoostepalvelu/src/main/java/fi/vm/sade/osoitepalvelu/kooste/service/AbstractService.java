@@ -21,6 +21,7 @@ import fi.vm.sade.log.model.Tapahtuma;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -82,20 +83,6 @@ public abstract class AbstractService {
     }
 
     protected String localized(Map<String, String> nimi, Locale preferredLocale, Locale defaultLocale) {
-        if (nimi == null || nimi.isEmpty()) {
-            return null;
-        }
-        if (preferredLocale != null) {
-            if (nimi.containsKey(preferredLocale.toString())) {
-                return nimi.get(preferredLocale.toString());
-            }
-            if (nimi.containsKey(preferredLocale.getLanguage())) {
-                return nimi.get(preferredLocale.getLanguage());
-            }
-        }
-        if (!EqualsHelper.equals(preferredLocale, defaultLocale)) {
-            return localized(nimi, defaultLocale, defaultLocale);
-        }
-        return null;
+        return LocaleHelper.findLocalized(nimi, preferredLocale, defaultLocale);
     }
 }

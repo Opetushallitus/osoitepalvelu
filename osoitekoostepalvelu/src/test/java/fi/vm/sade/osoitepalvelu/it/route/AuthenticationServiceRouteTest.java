@@ -21,7 +21,10 @@ import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultAuthenticationServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloListResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -74,14 +77,5 @@ public class AuthenticationServiceRouteTest {
         String oid = "1.2.246.562.24.00000000001";
         HenkiloDetailsDto details = authenticationServiceRoute.getHenkiloTiedot(oid, new DefaultCamelRequestContext());
         assertNotNull(details);
-    }
-
-    @Ignore // 401.. possibly wrong CAS service URL?
-    @Test
-    public void testMyInformation() {
-        MyInformationDto me  =  authenticationServiceRoute.getMyInformation(new DefaultCamelRequestContext());
-        assertNotNull(me);
-        assertNotNull(me.getUid());
-        assertNotNull(me.getOid());
     }
 }

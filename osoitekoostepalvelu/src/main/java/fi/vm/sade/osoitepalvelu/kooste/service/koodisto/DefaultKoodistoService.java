@@ -26,11 +26,9 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter.KoodistoDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.KoodistoRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoTila;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.UiKoodiItemByKoodiUriPredicate;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -45,12 +43,16 @@ import java.util.*;
  */
 @Service
 public class DefaultKoodistoService extends AbstractService implements KoodistoService {
+    private static final String ORGANISAATIO_TYYPPI_KOULUTUSTOIMIJA = "Koulutustoimija";
 
     @Autowired
     private KoodistoRoute koodistoRoute;
 
     @Autowired
     private AuthenticationServiceRoute authenticationServiceRoute;
+
+    @Autowired
+    private OrganisaatioServiceRoute organisaatioServiceRoute;
 
     @Autowired
     private KoodistoDtoConverter dtoConverter;
@@ -154,8 +156,19 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     @Override
-    public List<UiKoodiItemDto> findKoulutuksenJarjestejaOptions(Locale locale) {
-        return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUSTOIMIJA);
+    public List<UiKoodiItemDto> findKoulutuksenJarjestejaOptions(final Locale locale) {
+        // return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUSTOIMIJA); // out dated
+        return cached(new Cacheable<List<UiKoodiItemDto>>() {
+            @Override
+            public List<UiKoodiItemDto> get() {
+                OrganisaatioHierarchyResultsDto results = organisaatioServiceRoute
+                        .findOrganisaatioHierachyByTyyppi(ORGANISAATIO_TYYPPI_KOULUTUSTOIMIJA,
+                                new DefaultCamelRequestContext());
+                return dtoConverter.convert(results.getOrganisaatiot(),
+                        new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
+                        locale, KoodistoTyyppi.KOULUTUSTOIMIJA);
+            }
+        }, new KoodistoCache.CacheKey(KoodistoCache.KoodistoTyyppi.KOULUTUSTOIMIJA, locale));
     }
 
     @Override

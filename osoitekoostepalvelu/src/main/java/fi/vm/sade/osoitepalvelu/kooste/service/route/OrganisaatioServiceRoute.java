@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHierarchyResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 
@@ -51,4 +52,11 @@ public interface OrganisaatioServiceRoute {
      */
     OrganisaatioDetailsDto getdOrganisaatioByOid(String oid,
                                  CamelRequestContext requestContext);
+
+    /**
+     * @param tyyppi the organisaatio's tyyppi to search for.
+     * @param requestContext the context for HTTP request received by the application to operate in
+     * @return organisaatio hierarchy results containing only active results
+     */
+    OrganisaatioHierarchyResultsDto findOrganisaatioHierachyByTyyppi(String tyyppi, CamelRequestContext requestContext);
 }

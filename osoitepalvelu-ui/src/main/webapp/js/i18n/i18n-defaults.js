@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
+ *
+ * This program is free software: Licensed under the EUPL, Version 1.1 or - as
+ * soon as they will be approved by the European Commission - subsequent versions
+ * of the EUPL (the "Licence");
+ *
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at: http://www.osor.eu/eupl/
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * European Union Public Licence for more details.
+ */
+
 /**
  * Created by ratamaa on 12/3/13.
  */
@@ -126,7 +142,15 @@ angular.module("I18n", [], ["$provide", function($provider) {
 
         overwrite_save_popup_title: 'Ylikirjoita haku {0}',
         overwrite_save_popup_save: 'Ylikirjoita',
-        overwrite_save_popup_save_as: 'Tallenna nimellä'
+        overwrite_save_popup_save_as: 'Tallenna nimellä',
+
+        error_title: 'Virhetilanne',
+        internal_error: 'Odottamaton järjestelmän sisäinen virhe tapahtui.',
+        camel_http_error: 'Virhe kutsuttaessa ulkoista palvelua reitillä {0}: HTTP virhe {1} osoitteesta: {2}',
+        camel_http_call_timeout_error: 'Virhe kutsuttaessa ulkoista palvelua reitillä {0}: kutsu kesti liian kauan.',
+        camel_error: 'Odottamaton virhe kutsuttaessa ulkoista palvelua reitillä {0}.',
+        not_found_error: 'Virhe: Etsittyä tietoa ei löytynyt.',
+        not_authorized_error: 'Virhe: Ei käyttöoikeutta pyydettyyn resurssiin.'
     };
     $provider.value("i18nDefaults", defaultValues);
 }]);

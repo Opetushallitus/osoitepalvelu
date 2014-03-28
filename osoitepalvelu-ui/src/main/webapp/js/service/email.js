@@ -1,7 +1,24 @@
+/*
+ * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
+ *
+ * This program is free software: Licensed under the EUPL, Version 1.1 or - as
+ * soon as they will be approved by the European Commission - subsequent versions
+ * of the EUPL (the "Licence");
+ *
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at: http://www.osor.eu/eupl/
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * European Union Public Licence for more details.
+ */
+
 /**
  * Created by ratamaa on 12/4/13.
  */
-OsoiteKoostepalvelu.service('EmailService', function($log, $http, EmailConverter, commonErrorHandler) {
+OsoiteKoostepalvelu.service('EmailService', ["$log", "$http", "EmailConverter", "commonErrorHandler", "MyRolesModel",
+ function($log, $http, EmailConverter, commonErrorHandler, MyRolesModel) {
     var _el = function(tagName, inElement) {
         var el = document.createElement(tagName);
         if( inElement ) {
@@ -11,7 +28,7 @@ OsoiteKoostepalvelu.service('EmailService', function($log, $http, EmailConverter
     };
 
     this.sendEmail = function(searchResults) {
-        $http.get("api/email/send.settings.json").success(function(sendSettings) {
+        $http.post("api/email/send.settings.json", MyRolesModel.userinfo).success(function(sendSettings) {
             var form = _el("form", $("body").get(0)),
                 $form = $(form),
                 dataInput = _el("input", form),
@@ -32,9 +49,9 @@ OsoiteKoostepalvelu.service('EmailService', function($log, $http, EmailConverter
             $form.get(0).submit();
         }).error(commonErrorHandler);
     }
-});
+}]);
 
-OsoiteKoostepalvelu.service('EmailConverter', function($log, $http) {
+OsoiteKoostepalvelu.service('EmailConverter', ["$log", "$http", function($log, $http) {
     this.searchResultToViestipalveluEmail = function(searchResults, emailData) {
         var recipients = [];
         angular.forEach(searchResults, function(result) {
@@ -59,4 +76,4 @@ OsoiteKoostepalvelu.service('EmailConverter', function($log, $http) {
             recipient: recipients
         };
     }
-});
+}]);

@@ -23,6 +23,7 @@ import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHierarchyResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import org.junit.Ignore;
@@ -71,5 +72,21 @@ public class OrganisaatioServiceRouteTest {
                  =  organisaatioServiceRoute.getdOrganisaatioByOid(testOid, new DefaultCamelRequestContext());
         assertNotNull(tiedot);
         assertEquals(testOid, tiedot.getOid());
+    }
+
+    @Test
+    public void testFindAllOrganisaatioOids() {
+        List<String> oids = organisaatioServiceRoute.findAllOrganisaatioOids(new DefaultCamelRequestContext());
+        assertTrue(oids.size() > 0);
+    }
+
+    @Test
+    public void testFindAllActiveKoulutustoimijas() {
+        OrganisaatioHierarchyResultsDto results =
+                organisaatioServiceRoute.findOrganisaatioHierachyByTyyppi("Koulutustoimija",
+                        new DefaultCamelRequestContext());
+        assertNotNull(results);
+        assertNotNull(results.getOrganisaatiot());
+        assertTrue(results.getOrganisaatiot().size() > 0);
     }
 }

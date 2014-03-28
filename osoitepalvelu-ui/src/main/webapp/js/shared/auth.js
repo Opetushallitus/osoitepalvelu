@@ -29,7 +29,7 @@ var UPDATE = "_READ_UPDATE";
 var CRUD = "_CRUD";
 var OPH_ORG = "xxx";
 
-auth.factory('MyRolesModel', function($http, $log, Config) {
+auth.factory('MyRolesModel', ["$http", "$log", "Config", function($http, $log, Config) {
 
     //console.log("MyRolesModel()");
     OPH_ORG = Config.env["root.organisaatio.oid"];
@@ -74,9 +74,10 @@ auth.factory('MyRolesModel', function($http, $log, Config) {
     })();
 
     return factory;
-});
+}]);
 
-auth.factory('AuthService', function($q, $http, $timeout, $log, MyRolesModel, Config) {
+auth.factory('AuthService', ["$q", "$http", "$timeout", "$log", "MyRolesModel", "Config",
+        function($q, $http, $timeout, $log, MyRolesModel, Config) {
 
 	var ORGANISAATIO_URL_BASE;
 
@@ -225,5 +226,5 @@ auth.factory('AuthService', function($q, $http, $timeout, $log, MyRolesModel, Co
         }
 
     };
-});
+}]);
 

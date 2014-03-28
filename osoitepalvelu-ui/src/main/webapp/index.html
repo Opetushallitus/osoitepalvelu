@@ -13,7 +13,7 @@
         <script src="jslib/angular-1.2.3/angular.min.js"></script>
         <script src="jslib/angular-1.2.3/angular-resource.min.js"></script>
         <script src="jslib/angular-1.2.3/angular-route.min.js"></script>
-        <script src="jslib/angular-flash.js"></script>
+        <script src="jslib/angular-flash.js?__BUID_TIMESTAMP__"></script>
 		
         <!-- Bootstrap -->
         <link rel="stylesheet" href="jslib/font-awesome-4.0.3/css/font-awesome.min.css">
@@ -58,7 +58,12 @@
         <!-- PRODUCTION:<script src="js/script.min.js?__BUID_TIMESTAMP__"></script>  -->
     </head>
     <body>
-        <ol flash:messages></ol>
+        <div flash-alert active-class="in" class="alert-placeholder alert fade" duration="20000">
+            <button type="button" class="close" ng-click="hide()">&times;</button>
+            <strong class="alert-heading" tt="error_title">Virhetilanne</strong>
+            <span class="alert-message">{{flash.message}}</span>
+        </div>
+
         <div ng-animate="'animate'" ng-view>
         </div>
         <div ng-controller="LoadingCtrl">

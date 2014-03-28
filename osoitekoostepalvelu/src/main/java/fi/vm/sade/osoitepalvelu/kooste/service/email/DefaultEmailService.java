@@ -1,10 +1,9 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.email;
 
-import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.MyInformationDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,13 +35,12 @@ public class DefaultEmailService extends AbstractService implements EmailService
     private AuthenticationServiceRoute authenticationServiceRoute;
 
     @Override
-    public EmailSendSettingsDto getEmailSendSettings() {
+    public EmailSendSettingsDto getEmailSendSettings(MyInformationDto myInfo) {
         EmailSendSettingsDto settings  =  new EmailSendSettingsDto();
         settings.setEndpointUrl(emailSendEmailUrl);
         settings.getEmail().setCallingProcess(callingProcess);
         settings.getEmail().setFrom(emailFrom);
 
-        MyInformationDto myInfo  =  authenticationServiceRoute.getMyInformation(new DefaultCamelRequestContext());
         settings.getEmail().setReplyTo(myInfo.getEmail());
         if (settings.getEmail().getReplyTo() == null) {
             settings.getEmail().setReplyTo(myInfo.getFirstName() + "." + myInfo.getLastName() + "@oph.fi");

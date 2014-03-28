@@ -84,9 +84,9 @@
                 <select ui-select2 id="targetGroup" class="form-control"
                         ng-model="selectedTargetGroup"
                         ng-change="handleTargetGroupSelected()"
-                        ng-show="(targetGroups | filter:nonSelectedByField(selectedTargetGroupTypes, 'type')).length">
+                        ng-show="(targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')).length">
                     <option class="placeholder select2-disabled" value="" tt="target_group_placeholder"  class="placeholder">Valitse lisättävä kohderyhmä</option>
-                    <option ng-repeat="tg in visibleTargetGroupTypes()" value="{{tg.type}}">{{tg.name}}</option>
+                    <option ng-repeat="tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')" value="{{tg.type}}">{{tg.name}}</option>
                 </select>
             </div>
         </div>

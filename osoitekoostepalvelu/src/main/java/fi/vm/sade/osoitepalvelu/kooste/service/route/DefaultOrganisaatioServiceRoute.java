@@ -19,6 +19,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHierarchyResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import org.codehaus.jackson.type.TypeReference;
@@ -36,13 +37,21 @@ import java.util.List;
 @Service
 public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuilder
             implements  OrganisaatioServiceRoute {
+    private static final String SERVICE_CALL_ORGANSIAATIO_POSTFIX = ".OrgansiaatioServiceCall";
+
     private static final String ORGANSIAATIO_OID_LIST_ENDPOINT  =  "direct:organisaatioOidList";
+    private static final String ORGANISAATIO_OIDS_PATH  = "/";
+
     private static final String ORGANSIAATIOHAKU_ENDPOINT  =  "direct:organisaatioYhteystietohakuV2";
 
     private static final String YHTEYSTIEDOT_PATH  =  "/v2/yhteystiedot/hae";
     private static final String SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT  =  "direct:singleOrganisaatioByOid";
     private static final String SINGLE_ORGANISAATIO_PATH  =  "/${in.headers.oid}";
-    private static final String ORGANISAATIO_OIDS_PATH  = "/";
+
+    private static final String ORGANISAATIO_HIERARCHY_ENDPOINT = "direct:organisaatioHierarchyHaku";
+    private static final String ORGANISAATIO_HIERARCHY_PATH = "/hae";
+    private static final String ORGANISAATIO_HIERACHY_TYYPPI_PARAM = "organisaatiotyyppi";
+    private static final String ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM = "vainAktiiviset";
 
 
     @Value("${organisaatioService.rest.url}")
@@ -56,10 +65,11 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
         buildOrganisaatioOidList();
         buildOrganisaatioHaku();
         buildSingleOrganisaatioTiedot();
+        buildOrganisaatioHierarchyHaku();
     }
 
     protected void buildOrganisaatioOidList() {
-        Debugger organisaatioCallInOutDebug  =  debug(ORGANSIAATIO_OID_LIST_ENDPOINT  + ".OrgansiaatioServiceCall");
+        Debugger organisaatioCallInOutDebug  =  debug(ORGANSIAATIO_OID_LIST_ENDPOINT+SERVICE_CALL_ORGANSIAATIO_POSTFIX);
         headers(
                 from(ORGANSIAATIO_OID_LIST_ENDPOINT),
                 headers()
@@ -68,13 +78,13 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                         .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
         )
         .process(organisaatioCallInOutDebug)
-        .to(trim(organisaatioServiceRestUrl))
+        .to(uri(organisaatioServiceRestUrl))
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<List<String>>() {}));
     }
 
     protected void buildOrganisaatioHaku() {
-        Debugger organisaatioCallInOutDebug  =  debug(ORGANSIAATIOHAKU_ENDPOINT + ".OrgansiaatioServiceCall");
+        Debugger organisaatioCallInOutDebug  =  debug(ORGANSIAATIOHAKU_ENDPOINT + SERVICE_CALL_ORGANSIAATIO_POSTFIX);
         headers(
                 from(ORGANSIAATIOHAKU_ENDPOINT),
                 headers()
@@ -84,13 +94,14 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                         .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
         )
         .process(organisaatioCallInOutDebug)
-        .to(trim(organisaatioServiceRestUrl))
+        .to(uri(organisaatioServiceRestUrl, 10L*60L*1000L)) // wait for 10 minutes maximum
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() {}));
     }
 
     protected void buildSingleOrganisaatioTiedot() {
-        Debugger organisaatioCallInOutDebug  =  debug(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT  + ".OrgansiaatioServiceCall");
+        Debugger organisaatioCallInOutDebug  =  debug(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT
+                +SERVICE_CALL_ORGANSIAATIO_POSTFIX);
         headers(
                 from(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT),
                 headers()
@@ -99,9 +110,27 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                         .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
         )
         .process(organisaatioCallInOutDebug)
-        .to(trim(organisaatioServiceRestUrl))
+        .to(uri(organisaatioServiceRestUrl))
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<OrganisaatioDetailsDto>() {}));
+    }
+
+    protected void buildOrganisaatioHierarchyHaku() {
+        Debugger authenticationCallInOutDebug  =  debug(ORGANISAATIO_HIERARCHY_ENDPOINT
+                +SERVICE_CALL_ORGANSIAATIO_POSTFIX);
+        headers(
+                from(ORGANISAATIO_HIERARCHY_ENDPOINT),
+                headers()
+                        .get()
+                        .path(ORGANISAATIO_HIERARCHY_PATH)
+                            .param(ORGANISAATIO_HIERACHY_TYYPPI_PARAM).optional().valueFromBody().toQuery()
+                            .param(ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM).value(true).toQuery()
+                        .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
+        )
+        .process(authenticationCallInOutDebug)
+        .to(uri(organisaatioServiceRestUrl))
+        .process(authenticationCallInOutDebug)
+        .process(jsonToDto(new TypeReference<OrganisaatioHierarchyResultsDto>() {}));
     }
 
     @Override
@@ -128,5 +157,13 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                     .add("oid", oid)
                 .map(), requestContext, OrganisaatioDetailsDto.class);
 
+    }
+
+    @Override
+    public OrganisaatioHierarchyResultsDto findOrganisaatioHierachyByTyyppi(String tyyppi,
+                                                                            CamelRequestContext requestContext) {
+        return sendBodyHeadersAndProperties(getCamelTemplate(),
+                ORGANISAATIO_HIERARCHY_ENDPOINT, tyyppi,
+                headerValues().map(), requestContext, OrganisaatioHierarchyResultsDto.class);
     }
 }

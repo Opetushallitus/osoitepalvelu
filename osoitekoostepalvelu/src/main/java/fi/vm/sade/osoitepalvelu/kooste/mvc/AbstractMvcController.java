@@ -20,9 +20,14 @@ import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.SelfExplainingException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
+import org.apache.camel.Exchange;
+import org.apache.camel.RuntimeCamelException;
+import org.apache.camel.RuntimeExchangeException;
+import org.apache.camel.component.http.HttpOperationFailedException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,6 +35,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.SocketTimeoutException;
 import java.util.Locale;
 
 /**
@@ -42,35 +50,76 @@ public abstract class AbstractMvcController {
 
     protected Logger logger  =  LoggerFactory.getLogger(getClass());
 
+    @Value("${produce.error.message.stack.traces:true}")
+    protected boolean produceErrorStackTraces = true;
+
     protected Locale parseLocale(String locale) {
         return LocaleHelper.parseLocale(locale, DEFAULT_UI_LOCALE);
     }
 
     @ResponseStatus(value  =  HttpStatus.NOT_FOUND, reason  =  "Entity not found by primary key.") // 404
     @ExceptionHandler(NotFoundException.class)
-    public void notFound() {
+    public ModelAndView notFound(HttpServletRequest req, NotFoundException exception) {
+        return handeException(req, exception, "not_found_error", exception);
     }
 
     @ResponseStatus(value  =  HttpStatus.UNAUTHORIZED, reason  =  "Not authorized.") // 401
     @ExceptionHandler(AuthorizationException.class)
-    public void notAuthorized() {
+    public ModelAndView notAuthorized(HttpServletRequest req, AuthorizationException exception) {
+        return handeException(req, exception, "not_authorized_error", exception);
     }
 
     @ResponseStatus(value  =  HttpStatus.INTERNAL_SERVER_ERROR) // 500
+    @ExceptionHandler(RuntimeCamelException.class)
+    public ModelAndView camelException(HttpServletRequest req, RuntimeCamelException exception) {
+        Exchange exchange = null;
+        Throwable cause = exception.getCause();
+        if (exception instanceof RuntimeExchangeException) {
+            exchange = ((RuntimeExchangeException) exception).getExchange();
+        }
+        String service = "";
+        if (exchange != null) {
+            service = exchange.getFromEndpoint().getEndpointUri();
+        }
+        if (cause != null) {
+            if (cause instanceof HttpOperationFailedException) {
+                int statusCode = ((HttpOperationFailedException) cause).getStatusCode();
+                String url = ((HttpOperationFailedException) cause).getUri();
+                return handeException(req, exception, "camel_http_error", service, statusCode, url);
+            }
+            if (cause instanceof SocketTimeoutException) {
+                return handeException(req, exception, "camel_http_call_timeout_error", service);
+            }
+        }
+        return handeException(req, exception, "camel_error", service);
+    }
+
+
+    @ResponseStatus(value  =  HttpStatus.INTERNAL_SERVER_ERROR) // 500
     @ExceptionHandler(Throwable.class)
-    public ModelAndView otherCheckedException(HttpServletRequest req, Throwable exception) {
+    public ModelAndView otherException(HttpServletRequest req, Throwable exception) {
+        return handeException(req, exception, "internal_error");
+    }
+
+    protected ModelAndView handeException(HttpServletRequest req, Throwable exception, String defaultMessgeKey,
+                                          Object... defaultMessageParams) {
         logger.error("Request: "  +  req.getRequestURL()  +  " raised "  +  exception, exception);
         ModelAndView mav  =  new ModelAndView();
-        String messageKey  =  "internal_error";
-        Object[] params  =  new Object[0];
+        String messageKey  =  defaultMessgeKey;
+        Object[] params  =  defaultMessageParams;
         String errno  =  "";
-        if(exception instanceof SelfExplainingException) {
+        if (exception instanceof SelfExplainingException) {
             SelfExplainingException e  =  (SelfExplainingException) exception;
             messageKey  =  e.getMessageKey();
             params  =  e.getMessageParams();
             errno  =  e.getErrorCode();
         }
         mav.addObject("exceptionMessage", exception.getMessage());
+        if (produceErrorStackTraces) {
+            StringWriter stackTrace = new StringWriter();
+            exception.printStackTrace(new PrintWriter(stackTrace));
+            mav.addObject("exceptionStackTrace",stackTrace.toString());
+        }
         mav.addObject("messageKey", messageKey);
         mav.addObject("messageParams", params);
         mav.addObject("errorCode", errno);

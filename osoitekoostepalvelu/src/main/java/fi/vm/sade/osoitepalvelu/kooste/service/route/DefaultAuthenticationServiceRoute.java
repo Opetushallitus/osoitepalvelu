@@ -47,13 +47,10 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     private static final String HENKILOS_HENKILOTYYPPI_VIRKAILIJA = "VIRKAILIJA";
 
     private static final String ROUTE_HENKILO = "direct:henkilo";
-
     private static final String HENKILO_PATH = "/${in.body}";
-    private static final String ROUTE_ORGANISAATIOHENKILOS  =  "direct:organisaatioHenkilos";
 
+    private static final String ROUTE_ORGANISAATIOHENKILOS  =  "direct:organisaatioHenkilos";
     private static final String ORGANISAATIOHENKILOS_PATH  =  "/${in.body}/organisaatiohenkilo";
-    private static final String ROUTE_MY_INFORMATION  =  "direct:myInformation";
-    private static final String MY_INFORMATION_PATH  =  "/me";
 
     @Value("${authenticationService.kayttoikeusryhma.rest.url}")
     private String authenticationServiceKayttooikeusryhmasRestUrl;
@@ -71,7 +68,6 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         buildHenkilo();
         buildOrganisaatioHenkilos();
         buildHenkiloList();
-        buildMyInformation();
     }
 
     protected void buildHenkilo() {
@@ -83,7 +79,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
         .process(authenticationCallInOutDebug)
-        .to(trim(authenticationServiceHenkiloServiceRestUrl))
+        .to(uri(authenticationServiceHenkiloServiceRestUrl))
         .process(authenticationCallInOutDebug)
         .process(jsonToDto(new TypeReference<HenkiloDetailsDto>() {}));
     }
@@ -91,15 +87,15 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     protected void buildOrganisaatioHenkilos() {
         Debugger authenticationCallInOutDebug  =  debug(ROUTE_ORGANISAATIOHENKILOS + SERVICE_CALL_POSTFIX);
         headers(
-            from(ROUTE_ORGANISAATIOHENKILOS),
-            headers()
-                .get().path(ORGANISAATIOHENKILOS_PATH)
-                .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
+                from(ROUTE_ORGANISAATIOHENKILOS),
+                headers()
+                        .get().path(ORGANISAATIOHENKILOS_PATH)
+                        .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
         .process(authenticationCallInOutDebug)
-        .to(trim(authenticationServiceHenkiloServiceRestUrl))
+        .to(uri(authenticationServiceHenkiloServiceRestUrl))
         .process(authenticationCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<OrganisaatioHenkiloDto>>() { }));
+        .process(jsonToDto(new TypeReference<List<OrganisaatioHenkiloDto>>() {}));
     }
 
     protected void buildHenkiloList() {
@@ -120,9 +116,9 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
         .process(authenticationCallInOutDebug)
-        .to(trim(authenticationServiceHenkiloServiceRestUrl))
+        .to(uri(authenticationServiceHenkiloServiceRestUrl, 10L*60L*1000L)) // wait for 10 minutes maximum
         .process(authenticationCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<HenkiloListResultDto>>() { }));
+        .process(jsonToDto(new TypeReference<List<HenkiloListResultDto>>() {}));
     }
 
     protected void buildKayttoOikeusryhmas() {
@@ -134,24 +130,11 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                         .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
         .process(authenticationCallInOutDebug)
-        .to(trim(authenticationServiceKayttooikeusryhmasRestUrl))
+        .to(uri(authenticationServiceKayttooikeusryhmasRestUrl))
         .process(authenticationCallInOutDebug)
         .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
     }
 
-    protected void buildMyInformation() {
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_MY_INFORMATION + SERVICE_CALL_POSTFIX);
-        headers(
-                from(ROUTE_MY_INFORMATION),
-                headers()
-                        .get().path(MY_INFORMATION_PATH)
-                        .casAuthenticationByAuthenticatedUser(casService)
-        )
-        .process(authenticationCallInOutDebug)
-        .to(trim(casService))
-        .process(authenticationCallInOutDebug)
-        .process(jsonToDto(new TypeReference<MyInformationDto>() {}));
-    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -195,11 +178,5 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
             results.addAll(searchResults);
         }
         return results;
-    }
-
-    @Override
-    public MyInformationDto getMyInformation(CamelRequestContext requestContext) {
-        return sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_MY_INFORMATION, "",
-                new HashMap<String, Object>(), requestContext, MyInformationDto.class);
     }
 }

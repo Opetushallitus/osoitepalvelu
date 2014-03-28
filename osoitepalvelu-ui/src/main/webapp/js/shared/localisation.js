@@ -33,7 +33,7 @@ var localisation = angular.module('localisation', ['ngResource', 'config', 'I18n
 /**
  * "Localisations" factory, returns resource for operating on localisations.
  */
-localisation.factory('Localisations', function($log, $resource, Config) {
+localisation.factory('Localisations', ["$log", "$resource", "Config", function($log, $resource, Config) {
 
     var uri = Config.env.osoitepalveluLocalisationRestUrl;
     $log.info("Localisations() - uri = ", uri);
@@ -58,7 +58,7 @@ localisation.factory('Localisations', function($log, $resource, Config) {
         }
     });
 
-});
+}]);
 
 /**
  * UI-directive for using translations.
@@ -75,61 +75,62 @@ localisation.factory('Localisations', function($log, $resource, Config) {
  *   {{ tl("this.is.anotker.key", "sv", ["param", "param too"]) }}
  * </pre>
  */
-localisation.directive('tt', ['$log', 'LocalisationService', 'i18nDefaults', function($log, LocalisationService, i18nDefaults) {
-        return {
-            restrict: 'A',
-            replace: true,
-            //template: '<div tt="this.is.key" locale="fi">Default saved for the given key</div>',
-            scope: false,
-            compile: function(tElement, tAttrs, transclude) {
-                // $log.info("tt compile", tElement, tAttrs, transclude);
+localisation.directive('tt', ['$log', 'LocalisationService', 'i18nDefaults',
+            function($log, LocalisationService, i18nDefaults) {
+    return {
+        restrict: 'A',
+        replace: true,
+        //template: '<div tt="this.is.key" locale="fi">Default saved for the given key</div>',
+        scope: false,
+        compile: function(tElement, tAttrs, transclude) {
+            // $log.info("tt compile", tElement, tAttrs, transclude);
 
-                var key = tAttrs["tt"];
-                var locale = angular.isDefined(tAttrs["locale"]) ? tAttrs["locale"] : LocalisationService.getLocale();
-                var translation = "";
+            var key = tAttrs["tt"];
+            var locale = angular.isDefined(tAttrs["locale"]) ? tAttrs["locale"] : LocalisationService.getLocale();
+            var translation = "";
 
-                if (LocalisationService.hasTranslation(key, locale)) {
-                    // Existing translations, just return it
-                    translation = LocalisationService.tl(key, locale);
-                } else {
-                    // Missing / new translation
-                    // Grab the original / placeholder text in the template
-                    var originalText = "";
+            if (LocalisationService.hasTranslation(key, locale)) {
+                // Existing translations, just return it
+                translation = LocalisationService.tl(key, locale);
+            } else {
+                // Missing / new translation
+                // Grab the original / placeholder text in the template
+                var originalText = "";
 
-                    var localName = tElement[0].localName;
-                    if (localName === "input") {
-                        originalText = tAttrs["value"];
-                    } else {
-                        originalText = tElement.html();
-                    }
-                    if( !originalText ) {
-                        originalText = i18nDefaults[key];
-                    }
-
-                    if ( window.CONFIG.mode && window.CONFIG.mode == 'dev-without-backend' ) {
-                         translation = originalText;
-                    } else {
-                        LocalisationService.createMissingTranslations(key, locale, originalText);
-
-                        translation = "*CREATED* " + originalText;
-                    }
-                }
-
-                // $log.info("  key: '" + key + "', locale: '"+ locale + "' --> " + translation);
-
-                // Put translated text to DOM
+                var localName = tElement[0].localName;
                 if (localName === "input") {
-                    tElement.attr("value", translation);
+                    originalText = tAttrs["value"];
                 } else {
-                    tElement.html(translation);
+                    originalText = tElement.html();
+                }
+                if( !originalText ) {
+                    originalText = i18nDefaults[key];
                 }
 
-                return function postLink(scope, iElement, iAttrs, controller) {
-                    // $timeout(scope.$destroy.bind(scope), 0);
-                };
+                if ( window.CONFIG.mode && window.CONFIG.mode == 'dev-without-backend' ) {
+                     translation = originalText;
+                } else {
+                    LocalisationService.createMissingTranslations(key, locale, originalText);
+
+                    translation = "*CREATED* " + originalText;
+                }
             }
-        };
-    }]);
+
+            // $log.info("  key: '" + key + "', locale: '"+ locale + "' --> " + translation);
+
+            // Put translated text to DOM
+            if (localName === "input") {
+                tElement.attr("value", translation);
+            } else {
+                tElement.html(translation);
+            }
+
+            return function postLink(scope, iElement, iAttrs, controller) {
+                // $timeout(scope.$destroy.bind(scope), 0);
+            };
+        }
+    };
+}]);
 
 
 
@@ -145,7 +146,9 @@ localisation.directive('tt', ['$log', 'LocalisationService', 'i18nDefaults', fun
  * LocalisationService.tl("this.is.the.key2", "fi", ["array", "of", "values"])  == localized value in given locale
  * </pre>
  */
-localisation.service('LocalisationService', function($log, $q, $http, $interval, Localisations, Config, AuthService, i18nDefaults) {
+localisation.service('LocalisationService', ["$log", "$q", "$http", "$interval", "Localisations",
+                "Config", "AuthService", "i18nDefaults",
+        function($log, $q, $http, $interval, Localisations, Config, AuthService, i18nDefaults) {
     $log.log("LocalisationService()");
 
     // Singleton state, default current locale for the user
@@ -355,7 +358,7 @@ localisation.service('LocalisationService', function($log, $q, $http, $interval,
         });
 
         if (params != undefined) {
-            result = result.replace(/{(\d+)}/g, function(match, number) {
+            originalText = originalText.replace(/{(\d+)}/g, function(match, number) {
                 return angular.isDefined(params[number]) ? params[number] : match;
             });
         }
@@ -466,13 +469,14 @@ localisation.service('LocalisationService', function($log, $q, $http, $interval,
     this.updateLookupMap();
 
     $log.info("LocalisationService - initialising... done.");
-});
+}]);
 
 /**
  * LocalisationCtrl - a localisation controller.
  * An easy way to bind "t" function to global scope. (now attached in "body")
  */
-localisation.controller('LocalisationCtrl', function($scope, LocalisationService, $log, $interval, Config) {
+localisation.controller('LocalisationCtrl', ["$scope", "LocalisationService", "$log", "$interval", "Config",
+        function($scope, LocalisationService, $log, $interval, Config) {
     $log.info("LocalisationCtrl()");
 
     $scope.CONFIG = Config;
@@ -505,4 +509,4 @@ localisation.controller('LocalisationCtrl', function($scope, LocalisationService
         LocalisationService.updateAccessInformation();
     });
 
-});
+}]);

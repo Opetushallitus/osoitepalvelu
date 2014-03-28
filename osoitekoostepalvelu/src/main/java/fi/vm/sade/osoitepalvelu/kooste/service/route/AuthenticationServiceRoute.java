@@ -17,7 +17,10 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloListResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
 
 import java.util.List;
 
@@ -48,9 +51,4 @@ public interface AuthenticationServiceRoute {
      */
     HenkiloDetailsDto getHenkiloTiedot(String oid, CamelRequestContext requestContext);
 
-    /**
-     * @return the details for the logged in user.
-     * @param requestContext the context for HTTP request received by the application to operate in
-     */
-    MyInformationDto getMyInformation(CamelRequestContext requestContext);
 }

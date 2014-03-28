@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * User: ratamaa
@@ -71,5 +72,29 @@ public final class LocaleHelper {
         }
         return EqualsHelper.equals(StringHelper.lower(locale1.getLanguage()),
                                 StringHelper.lower(locale2.getLanguage()));
+    }
+
+    /**
+     * @param name to localize
+     * @param preferredLocale
+     * @param defaultLocale to fallback if no match for preferredLocale
+     * @return the localized String
+     */
+    public static String findLocalized(Map<String, String> name, Locale preferredLocale, Locale defaultLocale) {
+        if (name == null || name.isEmpty()) {
+            return null;
+        }
+        if (preferredLocale != null) {
+            if (name.containsKey(preferredLocale.toString())) {
+                return name.get(preferredLocale.toString());
+            }
+            if (name.containsKey(preferredLocale.getLanguage())) {
+                return name.get(preferredLocale.getLanguage());
+            }
+        }
+        if (!EqualsHelper.equals(preferredLocale, defaultLocale)) {
+            return findLocalized(name, defaultLocale, defaultLocale);
+        }
+        return null;
     }
 }

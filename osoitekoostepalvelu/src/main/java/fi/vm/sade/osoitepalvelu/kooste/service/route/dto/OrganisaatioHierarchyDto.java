@@ -16,6 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,8 +33,10 @@ import java.util.Map;
 public class OrganisaatioHierarchyDto implements Serializable {
     private String oid;
     private String parentId;
+    @DtoConversion(withClass = UiKoodiItemDto.class, path = "koodiId")
     private String ytunnus;
     private boolean match;
+    @DtoConversion(skip = true)
     private Map<String,String> nimi = new HashMap<String, String>();
     private List<String> organisaatiotyypit = new ArrayList<String>();
     private List<OrganisaatioHierarchyDto> children = new ArrayList<OrganisaatioHierarchyDto>();
