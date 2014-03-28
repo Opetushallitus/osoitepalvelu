@@ -17,15 +17,14 @@
 package fi.vm.sade.osoitepalvelu.service.koodisto;
 
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.*;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiArvoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoTila;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
+import fi.vm.sade.osoitepalvelu.service.mock.AuhenticationServiceRouteMock;
 import fi.vm.sade.osoitepalvelu.service.mock.KoodistoServiceRouteMock;
+import fi.vm.sade.osoitepalvelu.service.mock.OrganisaatioServiceRouteMock;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,8 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -77,6 +75,33 @@ public class DefaultKoodistoServiceTest {
         mock.addKuntaByMaakunta("maakunta_12", versio(KoodistoTyyppi.KUNTA, 1L), koodi("Polvijärvi"), koodi("Kontiolahti"));
 
         koodistoService.setKoodistoRoute(mock);
+
+        List<KayttooikesuryhmaDto> kayttoiskeusRyhmas = new ArrayList<KayttooikesuryhmaDto>();
+        KayttooikesuryhmaDto kayttooikeusRyhma = new KayttooikesuryhmaDto();
+        kayttooikeusRyhma.setId(10L);
+        kayttooikeusRyhma.setName("Nimi");
+        LocalizedContainerDto localizedName = new LocalizedContainerDto();
+        List<LocalizedValueDto> texts = new ArrayList<LocalizedValueDto>();
+        texts.add(new LocalizedValueDto("fi", "Nimi"));
+        localizedName.setTexts(texts);
+        kayttooikeusRyhma.setDescription(localizedName);
+        kayttoiskeusRyhmas.add(kayttooikeusRyhma);
+        koodistoService.setAuthenticationServiceRoute(new AuhenticationServiceRouteMock(kayttoiskeusRyhmas));
+
+        OrganisaatioServiceRouteMock organisaatioMock = new OrganisaatioServiceRouteMock();
+        OrganisaatioHierarchyResultsDto hierarchy = new OrganisaatioHierarchyResultsDto();
+        hierarchy.setNumHits(5);
+        List<OrganisaatioHierarchyDto> organisaatiot = new ArrayList<OrganisaatioHierarchyDto>();
+        OrganisaatioHierarchyDto organisaatio = new OrganisaatioHierarchyDto();
+        organisaatio.setYtunnus("1234856-7");
+        organisaatio.setMatch(true);
+        Map<String,String> nimi = new HashMap<String, String>();
+        nimi.put("fi", "Testiorganisaatio");
+        organisaatio.setNimi(nimi);
+        organisaatiot.add(organisaatio);
+        hierarchy.setOrganisaatiot(organisaatiot);
+        organisaatioMock.setHierarchyResults(hierarchy);
+        koodistoService.setOrganisaatioServiceRoute(organisaatioMock);
     }
 
     protected KoodistoVersioDto versio(KoodistoTyyppi tyyppi, long version) {
@@ -93,79 +118,85 @@ public class DefaultKoodistoServiceTest {
     }
 
     @Test
-    public void testHaeOppilaitosTyyppiValinnat() {
+    public void testFindKayttooikeusryhmas() {
+        List<UiKoodiItemDto> optiot  =  koodistoService.findKayttooikeusryhmas(LOCALE_FI);
+        assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.KAYTTOOIKEUSRYHMA);
+    }
+
+    @Test
+    public void testFindOppilaitosTyyppiValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findOppilaitosTyyppiOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.OPPILAITOSTYYPPI);
     }
 
     @Test
-    public void testHaeOmistajaTyyppiValinnat() {
+    public void testFindOmistajaTyyppiValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findOmistajaTyyppiOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.OMISTAJATYYPPI);
     }
 
     @Test
-    public void testHaeVuosiluokkaValinnat() {
+    public void testFindVuosiluokkaValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findVuosiluokkaOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.VUOSILUOKAT);
     }
 
     @Test
-    public void testHaeMaakuntaValinnat() {
+    public void testFindMaakuntaValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findMaakuntaOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.MAAKUNTA);
     }
 
     @Test
-    public void testHaeKuntaValinnat() {
+    public void testFindKuntaValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findKuntaOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.KUNTA);
     }
 
     @Test
-    public void testHaeTutkintoTyyppiValinnat() {
+    public void testFindTutkintoTyyppiValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findTutkintoTyyppiOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.TUTKINTOTYYPPI);
     }
 
     @Test
-    public void testHaeTutkintoValinnat() {
+    public void testFindTutkintoValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findTutkintoOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.TUTKINTO);
     }
 
     @Test
-    public void testHaeOppilaitoksenOpetuskieliValinnat() {
+    public void testFindOppilaitoksenOpetuskieliValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findOppilaitoksenOpetuskieliOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.OPPILAITOKSEN_OPETUSKIELI);
     }
 
     @Test
-    public void testHaeKoulutuksenKieliValinnat() {
+    public void testFindKoulutuksenKieliValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findKoulutuksenKieliOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.KOULUTUS_KIELIVALIKOIMA);
     }
 
     @Test
-    public void testHaeKoulutusAsteValinnat() {
+    public void testFindKoulutusAsteValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findKoulutusAsteOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.KOULUTUSASTEKELA);
     }
 
     @Test
-    public void testHaeKoulutuksenJarjestejaValinnat() {
+    public void testFindKoulutuksenJarjestejaValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findKoulutuksenJarjestejaOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.KOULUTUSTOIMIJA);
     }
 
     @Test
-    public void testHaeOpintoAlaValinnat() {
+    public void testFindOpintoAlaValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findOpintoAlaOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.OPINTOALAOPH2002);
     }
 
     @Test
-    public void testHaeAlueHallintoVirastoValinnat() {
+    public void testFindAlueHallintoVirastoValinnat() {
         List<UiKoodiItemDto> optiot  =  koodistoService.findAlueHallintoVirastoOptions(LOCALE_FI);
         assertListNonEmptyAndItemsOfType(optiot, KoodistoTyyppi.ALUEHALLINTOVIRASTO);
     }

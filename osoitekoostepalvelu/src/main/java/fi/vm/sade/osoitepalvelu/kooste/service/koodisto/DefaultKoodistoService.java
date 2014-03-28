@@ -376,4 +376,8 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     public void setAuthenticationServiceRoute(AuthenticationServiceRoute authenticationServiceRoute) {
         this.authenticationServiceRoute  =  authenticationServiceRoute;
     }
+
+    public void setOrganisaatioServiceRoute(OrganisaatioServiceRoute organisaatioServiceRoute) {
+        this.organisaatioServiceRoute = organisaatioServiceRoute;
+    }
 }

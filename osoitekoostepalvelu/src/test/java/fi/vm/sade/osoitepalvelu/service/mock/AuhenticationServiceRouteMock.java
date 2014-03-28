@@ -36,6 +36,13 @@ public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute
     private List<HenkiloListResultDto> henkilos  =  new ArrayList<HenkiloListResultDto>();
     private HenkiloDetailsDto henkiloDetails = null;
 
+    public AuhenticationServiceRouteMock(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
+        this.kayttooikesuryhmas  =  kayttooikesuryhmas;
+    }
+
+    public AuhenticationServiceRouteMock() {
+    }
+
     @Override
     public List<KayttooikesuryhmaDto> findKayttooikeusryhmas(CamelRequestContext context) {
         return kayttooikesuryhmas;
@@ -49,10 +56,6 @@ public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute
     @Override
     public HenkiloDetailsDto getHenkiloTiedot(String oid, CamelRequestContext requestContext) {
         return henkiloDetails;
-    }
-
-    public AuhenticationServiceRouteMock(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
-        this.kayttooikesuryhmas  =  kayttooikesuryhmas;
     }
 
     public void setKayttooikesuryhmas(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {

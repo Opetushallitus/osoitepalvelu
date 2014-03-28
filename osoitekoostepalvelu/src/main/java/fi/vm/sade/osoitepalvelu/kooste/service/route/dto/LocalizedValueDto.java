@@ -29,6 +29,14 @@ public class LocalizedValueDto implements Serializable {
     private String text; // Note: can be null
     private String lang; // Note: can be uppoer or lower case.
 
+    public LocalizedValueDto(String lang, String text) {
+        this.lang = lang;
+        this.text = text;
+    }
+
+    public LocalizedValueDto() {
+    }
+
     public String getText() {
         return text;
     }
