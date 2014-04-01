@@ -36,6 +36,17 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         _resultData = null,
         _searchReady=false;
 
+    var _osoite = function(osoite) {
+        if (!osoite) {
+            return "";
+        }
+        return (osoite.osoite ? osoite.osoite : "") +(osoite.osoite ? "\n":"")
+               + ( osoite.extraRivi ? osoite.extraRivi : "" ) + (osoite.extraRivi ? "\n":"")
+               + ( osoite.postilokero ? osoite.postilokero : "" ) +(osoite.postilokero ? "\n":"")
+               + ( osoite.postinumero ? osoite.postinumero : "" )
+                    + " " + ( osoite.postitoimipaikka ? osoite.postitoimipaikka : "" );
+    }
+
     var _addColumnData = function(v) {
         if( v.henkiloOid ) {
             v.oidTyyppi = 'henkilo';
@@ -46,13 +57,8 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         }
         v.organisaatioTunniste = v.oppilaitosKoodi;
         v.yhteyshenkilonNimi = v.yhteystietoNimi;
-        v.postiosoite = (v.osoite ? v.osoite : "") +(v.osoite ? "\n":"")
-                + ( v.extraRivi ? v.extraRivi : "" ) + (v.extraRivi ? "\n":"")
-                + ( v.postinumero ? v.postinumero : "" ) + " " + ( v.postitoimipaikka ? v.postitoimipaikka : "" );
-        v.katuPostinumero = ( v.osoite ? v.osoite : "" ) +(v.osoite ? ", ":"")
-                + ( v.postinumero ? v.postinumero : "" ) + " " + ( v.postitoimipaikka ? v.postitoimipaikka : "" );
-        v.plPostinumero = ( v.postilokero ? v.postilokero : "" ) +(v.postilokero ? ", ":"")
-                + ( v.postinumero ? v.postinumero : "" ) + " " + ( v.postitoimipaikka ? v.postitoimipaikka : "" );
+        v.postiosoite = _osoite(v.postiosoite);
+        v.kayntiosoite = _osoite(v.kayntiosoite);
     };
 
     this.getTerms = function() {return _terms;};

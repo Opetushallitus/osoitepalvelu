@@ -28,7 +28,7 @@ OsoiteKoostepalvelu.service('EmailService', ["$log", "$http", "EmailConverter", 
     };
 
     this.sendEmail = function(searchResults) {
-        $http.post("api/email/send.settings.json", MyRolesModel.userinfo).success(function(sendSettings) {
+        $http.post("api/email/send.settings.json", MyRolesModel).success(function(sendSettings) {
             var form = _el("form", $("body").get(0)),
                 $form = $(form),
                 dataInput = _el("input", form),

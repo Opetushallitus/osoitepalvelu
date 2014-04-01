@@ -89,6 +89,28 @@ function osoitepalveluInit() {
 		 console.log("LOG "+status+": "+xhr.status+" "+xhr.statusText, xhr);
 	}
 
+    if (window.CONFIG.env.casMeUrl) {
+        init_counter++;
+        jQuery.ajax(window.CONFIG.env.useCasMeUrl != "false" ? window.CONFIG.env.casMeUrl : "cas_me_test.json", {
+            dataType: "json",
+            crossDomain:true,
+            complete: logRequest,
+            success: function(xhr, status) {
+                window.CONFIG.env["me"] = xhr;
+                initFunction("casMe", xhr, status);
+            },
+            error: function(xhr, status) {
+                window.CONFIG.env["me"] = {};
+                if (!xhr.status && xhr.responseJSON) {
+                    // call to local JSON file:
+                    initFunction("casMe", xhr.responseJSON, status);
+                } else {
+                    initFail("casMe", xhr, status);
+                }
+            }
+        });
+    }
+
     if ( !(window.CONFIG.mode && window.CONFIG.mode == 'dev-without-backend') ) {
         //
         // Preload application localisations for Osoitepalvelu

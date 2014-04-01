@@ -99,6 +99,9 @@ public class HenkiloHakuResultDto implements Serializable {
         if (id != null ? !id.equals(that.id) : that.id != null) {
             return false;
         }
+        if (osoittees != null ? !osoittees.equals(that.osoittees) : that.osoittees != null) {
+            return false;
+        }
 
         return true;
     }

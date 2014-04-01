@@ -76,17 +76,7 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     }
 
     @Override
-    public boolean isKatuosoiteIncluded() {
-        return true;
-    }
-
-    @Override
-    public boolean isPLIncluded() {
-        return true;
-    }
-
-    @Override
-    public boolean isPostinumeroIncluded() {
+    public boolean isKayntiosoiteIncluded() {
         return true;
     }
 

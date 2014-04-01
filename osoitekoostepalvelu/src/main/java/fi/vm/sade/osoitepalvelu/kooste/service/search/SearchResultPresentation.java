@@ -39,11 +39,7 @@ public interface SearchResultPresentation {
 
     boolean isPositosoiteIncluded();
 
-    boolean isKatuosoiteIncluded();
-
-    boolean isPLIncluded();
-
-    boolean isPostinumeroIncluded();
+    boolean isKayntiosoiteIncluded();
 
     boolean isPuhelinnumeroIncluded();
 

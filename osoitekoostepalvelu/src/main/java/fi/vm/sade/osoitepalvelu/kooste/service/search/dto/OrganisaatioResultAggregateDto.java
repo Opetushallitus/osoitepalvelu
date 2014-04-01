@@ -16,9 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
-import java.io.Serializable;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
+
+import java.io.Serializable;
 
 /**
  * User: ratamaa
@@ -32,12 +32,15 @@ public class OrganisaatioResultAggregateDto implements Serializable {
     
     private OrganisaatioResultDto organisaatio;
     private OrganisaatioYhteystietoDto henkilo;
-    private OsoitteistoDto osoite;
+    private OsoitteistoDto kayntiosoite;
+    private OsoitteistoDto postiosoite;
 
-    public OrganisaatioResultAggregateDto(OrganisaatioResultDto organisaatio, OrganisaatioYhteystietoDto henkilo, OsoitteistoDto osoite) {
+    public OrganisaatioResultAggregateDto(OrganisaatioResultDto organisaatio, OrganisaatioYhteystietoDto henkilo,
+                                          OsoitteistoDto postiosoite, OsoitteistoDto kayntiosoite) {
         this.organisaatio  =  organisaatio;
         this.henkilo  =  henkilo;
-        this.osoite  =  osoite;
+        this.postiosoite  =  postiosoite;
+        this.kayntiosoite = kayntiosoite;
     }
 
     public OrganisaatioResultDto getOrganisaatio() {
@@ -48,15 +51,30 @@ public class OrganisaatioResultAggregateDto implements Serializable {
         return henkilo;
     }
 
-    public OsoitteistoDto getOsoite() {
-        return osoite;
+    public OsoitteistoDto getKayntiosoite() {
+        return kayntiosoite;
+    }
+
+    public void setKayntiosoite(OsoitteistoDto kayntiosoite) {
+        this.kayntiosoite = kayntiosoite;
+    }
+
+    public OsoitteistoDto getPostiosoite() {
+        return postiosoite;
+    }
+
+    public void setPostiosoite(OsoitteistoDto postiosoite) {
+        this.postiosoite = postiosoite;
     }
 
     @Override
     public int hashCode() {
         int result  =  (organisaatio != null && organisaatio.getOid() != null ? organisaatio.getOid().hashCode() : 0);
         result  =  HASH_FACTOR * result + (henkilo != null && henkilo.getEmail() != null ? henkilo.getEmail().hashCode() : 0);
-        result  =  HASH_FACTOR * result  +  (osoite != null && osoite.getYhteystietoOid() != null ? osoite.getYhteystietoOid().hashCode() : 0);
+        result  =  HASH_FACTOR * result  +  (postiosoite != null && postiosoite.getYhteystietoOid() != null
+                ? postiosoite.getYhteystietoOid().hashCode() : 0);
+        result  =  HASH_FACTOR * result  +  (kayntiosoite != null && kayntiosoite.getYhteystietoOid() != null
+                ? kayntiosoite.getYhteystietoOid().hashCode() : 0);
         return result;
     }
 
@@ -69,22 +87,29 @@ public class OrganisaatioResultAggregateDto implements Serializable {
             return false;
         }
         OrganisaatioResultAggregateDto that  =  (OrganisaatioResultAggregateDto) o;
-        if (EqualsHelper.differentNulls(osoite, that.osoite)
-                || (EqualsHelper.notNulls(osoite, that.osoite)
+        if (EqualsHelper.differentNulls(organisaatio, that.organisaatio)
+                || (EqualsHelper.notNulls(organisaatio, that.organisaatio)
                     && !EqualsHelper.equals(organisaatio.getOid(), that.organisaatio))) {
             return false;
         }
-        if (EqualsHelper.differentNulls(osoite, that.osoite)
-                || (EqualsHelper.notNulls(osoite, that.osoite)
+        if (EqualsHelper.differentNulls(henkilo, that.henkilo)
+                || (EqualsHelper.notNulls(henkilo, that.henkilo)
                     && !EqualsHelper.equals(henkilo.getEmail(), that.henkilo.getEmail()))) {
             return false;
         }
-        if (EqualsHelper.differentNulls(osoite, that.osoite)
-                || (EqualsHelper.notNulls(osoite, that.osoite)
+        if (EqualsHelper.differentNulls(postiosoite, that.postiosoite)
+                || (EqualsHelper.notNulls(postiosoite, that.postiosoite)
                     && !(
-                        EqualsHelper.equals(osoite.getYhteystietoOid(), that.osoite.getYhteystietoOid()))
-                        && EqualsHelper.equals(osoite.getKieli(), that.osoite.getKieli())
+                        EqualsHelper.equals(postiosoite.getYhteystietoOid(), that.postiosoite.getYhteystietoOid()))
+                        && EqualsHelper.equals(postiosoite.getKieli(), that.postiosoite.getKieli())
                   )) {
+            return false;
+        }
+        if (EqualsHelper.differentNulls(kayntiosoite, that.kayntiosoite)
+                || (EqualsHelper.notNulls(kayntiosoite, that.kayntiosoite)
+                && !(
+                EqualsHelper.equals(kayntiosoite.getYhteystietoOid(), that.kayntiosoite.getYhteystietoOid()))
+                && EqualsHelper.equals(kayntiosoite.getKieli(), that.kayntiosoite.getKieli()) )) {
             return false;
         }
         return true;

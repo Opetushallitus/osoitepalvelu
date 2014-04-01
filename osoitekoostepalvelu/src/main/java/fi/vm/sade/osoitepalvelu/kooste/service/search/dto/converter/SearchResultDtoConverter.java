@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter;
 
+import fi.ratamaa.dtoconverter.types.TypeResolver;
 import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
@@ -23,9 +24,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloYhteystietoRyhmaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloOsoiteDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OsoitteistoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +39,12 @@ import java.util.Locale;
 public class SearchResultDtoConverter extends AbstractDtoConverter {
     @Autowired
     private KoodistoService koodistoService;
+
+    @Override
+    protected void registerTypes(TypeResolver typeResolver) {
+        typeResolver.registerType("henkiloAggregate", HenkiloResultAggregateDto.class)
+                    .registerType("organisaatioAggregate", OrganisaatioResultAggregateDto.class);
+    }
 
     public OrganisaatioResultDto convert(OrganisaatioYhteystietoHakuResultDto from, OrganisaatioResultDto to,
                                          Locale locale) {
@@ -68,6 +73,7 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
     }
 
     public HenkiloOsoiteDto convert(HenkiloYhteystietoRyhmaDto from, HenkiloOsoiteDto to, Locale locale) {
+        to.setId(from.getId());
         to.setOsoite(from.findArvo(HenkiloYhteystietoDto.YHTEYSTIETO_KATUOSOITE));
         to.setPostinumero(from.findArvo(HenkiloYhteystietoDto.YHTEYSTIETO_POSTINUMERO));
         to.setPostitoimipaikka(from.findArvo(HenkiloYhteystietoDto.YHTEYSTIETO_KAUPUNKI));

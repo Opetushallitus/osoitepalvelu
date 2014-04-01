@@ -125,7 +125,10 @@ public class SearchResultTransformerServiceTest {
 
         OsoitteistoDto osoite1  =  new OsoitteistoDto(),
                 osoite2  =  new OsoitteistoDto(),
-                osoite3  =  new OsoitteistoDto();
+                osoite3  =  new OsoitteistoDto(),
+                kayntiosoite1 = new OsoitteistoDto(),
+                kayntiosoite2 = new OsoitteistoDto(),
+                kayntiosoite3 = new OsoitteistoDto();
         osoite1.setYhteystietoOid("yht1");
         osoite1.setExtraRivi("extra");
         osoite1.setKieli("sv");
@@ -137,12 +140,21 @@ public class SearchResultTransformerServiceTest {
         osoite2.setKieli("sv");
         osoite3.setYhteystietoOid("yht3");
         osoite3.setKieli("fi");
+        kayntiosoite1.setYhteystietoOid("kaynti1");
+        kayntiosoite1.setKieli("sv");
+        kayntiosoite2.setYhteystietoOid("kaynti2");
+        kayntiosoite2.setKieli("sv");
+        kayntiosoite3.setYhteystietoOid("kaynti3_ei_palauteta");
+        kayntiosoite3.setKieli("fi");
         organisaatio1.getPostiosoite().add(osoite1);
         organisaatio1.getPostiosoite().add(osoite2);
         organisaatio1.getPostiosoite().add(osoite3);
         organisaatio2.getPostiosoite().add(osoite1);
         organisaatio2.getPostiosoite().add(osoite2);
         organisaatio2.getPostiosoite().add(osoite3);
+        organisaatio1.getKayntiosoite().add(kayntiosoite1);
+        organisaatio1.getKayntiosoite().add(kayntiosoite2);
+        organisaatio1.getKayntiosoite().add(kayntiosoite3);
 
         List<OrganisaatioResultDto> list  =  Arrays.asList(organisaatio1, organisaatio2);
         SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(organisaatioResults(list),
@@ -151,25 +163,35 @@ public class SearchResultTransformerServiceTest {
         assertEquals(6, rows.size());
         assertEquals("org1", rows.get(0).getOrganisaatioOid());
         assertEquals("org1", rows.get(3).getOrganisaatioOid());
-        assertEquals("yht1", rows.get(0).getYhteystietoOid());
-        assertEquals("extra", rows.get(0).getExtraRivi());
-        assertEquals("sv", rows.get(0).getOsoiteKieli());
-        assertEquals("osoitetyyppi", rows.get(0).getOsoiteTyyppi());
-        assertEquals("Rantatie 1", rows.get(0).getOsoite());
-        assertEquals("12345", rows.get(0).getPostinumero());
-        assertEquals("TOIJALA", rows.get(0).getPostitoimipaikka());
-        assertEquals("yht1", rows.get(1).getYhteystietoOid());
-        assertEquals("yht2", rows.get(2).getYhteystietoOid());
-        assertEquals("yht2", rows.get(3).getYhteystietoOid());
+        assertNotNull(rows.get(0).getPostiosoite());
+        assertEquals("yht1", rows.get(0).getPostiosoite().getYhteystietoOid());
+        assertEquals("extra", rows.get(0).getPostiosoite().getExtraRivi());
+        assertEquals("sv", rows.get(0).getPostiosoite().getKieli());
+        assertEquals("osoitetyyppi", rows.get(0).getPostiosoite().getTyyppi());
+        assertEquals("Rantatie 1", rows.get(0).getPostiosoite().getOsoite());
+        assertEquals("12345", rows.get(0).getPostiosoite().getPostinumero());
+        assertEquals("TOIJALA", rows.get(0).getPostiosoite().getPostitoimipaikka());
+        assertEquals("yht1", rows.get(1).getPostiosoite().getYhteystietoOid());
+        assertEquals("yht2", rows.get(2).getPostiosoite().getYhteystietoOid());
+        assertEquals("yht2", rows.get(3).getPostiosoite().getYhteystietoOid());
         assertEquals("henk1", rows.get(0).getHenkiloEmail());
         assertEquals("henk2", rows.get(1).getHenkiloEmail());
         assertEquals("henk1", rows.get(2).getHenkiloEmail());
         assertEquals("henk2", rows.get(3).getHenkiloEmail());
         assertEquals("org2", rows.get(4).getOrganisaatioOid());
-        assertEquals("yht1", rows.get(4).getYhteystietoOid());
+        assertNotNull(rows.get(4).getPostiosoite());
+        assertEquals("yht1", rows.get(4).getPostiosoite().getYhteystietoOid());
         assertEquals("org2", rows.get(5).getOrganisaatioOid());
-        assertEquals("yht2", rows.get(5).getYhteystietoOid());
+        assertNotNull(rows.get(5).getPostiosoite());
+        assertEquals("yht2", rows.get(5).getPostiosoite().getYhteystietoOid());
         assertNull(rows.get(5).getHenkiloEmail());
+
+        assertEquals("kaynti1", rows.get(0).getKayntiosoite().getYhteystietoOid());
+        assertEquals("kaynti2", rows.get(1).getKayntiosoite().getYhteystietoOid());
+        assertEquals("kaynti1", rows.get(2).getKayntiosoite().getYhteystietoOid());
+        assertEquals("kaynti2", rows.get(3).getKayntiosoite().getYhteystietoOid());
+        assertNull(rows.get(4).getKayntiosoite());
+        assertNull(rows.get(5).getKayntiosoite());
     }
 
     @Test
@@ -191,7 +213,8 @@ public class SearchResultTransformerServiceTest {
                 new DefaultCamelRequestContext());
         List<SearchResultRowDto> rows  =  results.getRows();
         assertEquals(1, rows.size());
-        assertEquals("fi", rows.get(0).getOsoiteKieli());
+        assertNotNull(rows.get(0).getPostiosoite());
+        assertEquals("fi", rows.get(0).getPostiosoite().getKieli());
     }
 
     @Test
