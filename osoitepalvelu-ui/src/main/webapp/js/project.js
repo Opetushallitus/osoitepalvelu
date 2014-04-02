@@ -26,6 +26,20 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
             redirectTo:'/'
     });
 }])
+.factory('NoCacheInterceptor', function () {
+    return {
+	request: function (config) {
+	    if (config.method && config.method == 'GET' && config.url.indexOf('html') === -1){
+		    var separator = config.url.indexOf('?') === -1 ? '?' : '&';
+		    config.url = config.url+separator+'noCache=' + new Date().getTime();
+	    }
+	    return config;
+	}
+    };
+})
+.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.interceptors.push('NoCacheInterceptor');
+}])
 .config(['flashProvider',function (flashProvider) {
     flashProvider.errorClassnames.push('alert-danger');
 }])

@@ -25,9 +25,11 @@ package fi.vm.sade.osoitepalvelu.service.search;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHenkiloDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.DefaultSearchResultTransformerService;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
+import junit.framework.Assert;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Before;
@@ -255,5 +257,137 @@ public class SearchResultTransformerServiceTest {
         assertEquals("Organisaation nimi", wb.getSheetAt(0).getRow(1).getCell(0).getStringCellValue());
     }
 
-    // TODO: Test additional information by searches to Organisaatiopalvelu
+    protected SearchResultsDto henkiloResults(List<HenkiloHakuResultDto> henkiloHakuResultDtos) {
+        SearchResultsDto results = new SearchResultsDto();
+        results.setHenkilos(henkiloHakuResultDtos);
+        return results;
+    }
+
+    @Test
+    public void testEmptyResults() {
+        List<HenkiloHakuResultDto> list = new ArrayList<HenkiloHakuResultDto>();
+        SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(henkiloResults(list),
+                new AllColumnsSearchResultPresentation(new Locale("sv", "SE")),
+                new DefaultCamelRequestContext());
+        Assert.assertNotNull(results.getRows());
+        Assert.assertEquals(0, results.getRows().size());
+    }
+
+    @Test
+    public void testHenkiloResults() {
+        List<HenkiloHakuResultDto> list = list(
+            henkilo("henkilo1Oid", "Milla Makkonen",
+                    new ArrayList<OrganisaatioHenkiloDto>(),
+                    new ArrayList<HenkiloOsoiteDto>()),
+            // -> 1 result row
+            henkilo("henkilo2Oid", "Matti MAkkonen",
+                list(
+                    organisaatioHenkilo("organisaatioHenkilo1Ooid", "Opettaja"),
+                    organisaatioHenkilo("organisaatioHenkilo2Ooid", "Rehtori")
+                ),
+                list(
+                    henkiloOsoite("Mikonkuja 6", "matti.mikkonen@example.com"),
+                    henkiloOsoite("Muoniontie 7", "matti.mikkonen@muonionkylakoulu.com")
+                 )
+            ),
+            // -> 2 result rows with organisaatioHenkilös and osoittees together
+            henkilo("henkilo3Oid", "Heikki Heikkinen",
+                    new ArrayList<OrganisaatioHenkiloDto>(),
+                    list(
+                        henkiloOsoite("Heikintie 2", "heikki.heikkinen@example.com"),
+                        henkiloOsoite("Muoniontie 7", "heikki.heikkinen@muonionkylakoulu.com")
+                    )
+            ),
+            // -> 2 result rows for each osoite with empty organisaatioHenkilö details
+            henkilo("henkilo4Oid", "Matti Mikkonen",
+                    list(
+                            organisaatioHenkilo("organisaatioHenkilo3Ooid", "Opettaja"),
+                            organisaatioHenkilo("organisaatioHenkilo4Ooid", "Rehtori")
+                    ),
+                    new ArrayList<HenkiloOsoiteDto>()
+            )
+            // -> 2 result rows for each organisaatiohenkilö with empty osoittees
+        );
+        SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(henkiloResults(list),
+                new AllColumnsSearchResultPresentation(new Locale("sv", "SE")).withoutYhteyshenkiloEmail(),
+                new DefaultCamelRequestContext());
+        assertEquals(7, results.getRows().size());
+        assertEquals("henkilo1Oid", results.getRows().get(0).getHenkiloOid());
+        assertEquals("Milla Makkonen", results.getRows().get(0).getYhteystietoNimi());
+        assertNull(results.getRows().get(0).getPostiosoite());
+        assertNull(results.getRows().get(0).getKayntiosoite());
+        assertNull(results.getRows().get(0).getOrganisaatioOid());
+        assertNull(results.getRows().get(0).getNimike());
+
+        assertEquals("henkilo2Oid", results.getRows().get(1).getHenkiloOid());
+        assertEquals("Opettaja", results.getRows().get(1).getNimike());
+        assertNotNull(results.getRows().get(1).getPostiosoite());
+        assertEquals("Mikonkuja 6", results.getRows().get(1).getPostiosoite().getOsoite());
+        assertEquals("posti", results.getRows().get(1).getPostiosoite().getTyyppi());
+        assertEquals("fi", results.getRows().get(1).getPostiosoite().getKieli());
+        assertEquals("30100", results.getRows().get(1).getPostiosoite().getPostinumero());
+        assertEquals("TAMPERE", results.getRows().get(1).getPostiosoite().getPostitoimipaikka());
+        assertEquals("matti.mikkonen@example.com", results.getRows().get(1).getHenkiloEmail());
+        assertEquals("Opettaja", results.getRows().get(1).getNimike());
+        assertEquals("organisaatioHenkilo1Ooid", results.getRows().get(1).getOrganisaatioOid());
+
+        assertEquals("henkilo2Oid", results.getRows().get(2).getHenkiloOid());
+        assertEquals("matti.mikkonen@muonionkylakoulu.com", results.getRows().get(2).getHenkiloEmail());
+        assertEquals("Muoniontie 7", results.getRows().get(2).getPostiosoite().getOsoite());
+        assertEquals("Rehtori", results.getRows().get(2).getNimike());
+        assertEquals("organisaatioHenkilo2Ooid", results.getRows().get(2).getOrganisaatioOid());
+
+        assertEquals("henkilo3Oid", results.getRows().get(3).getHenkiloOid());
+        assertEquals("heikki.heikkinen@example.com", results.getRows().get(3).getHenkiloEmail());
+        assertEquals("henkilo3Oid", results.getRows().get(4).getHenkiloOid());
+        assertEquals("heikki.heikkinen@muonionkylakoulu.com", results.getRows().get(4).getHenkiloEmail());
+
+        assertEquals("henkilo4Oid", results.getRows().get(5).getHenkiloOid());
+        assertEquals("Opettaja", results.getRows().get(5).getNimike());
+        assertEquals("organisaatioHenkilo3Ooid", results.getRows().get(5).getOrganisaatioOid());
+        assertEquals("henkilo4Oid", results.getRows().get(6).getHenkiloOid());
+        assertEquals("Rehtori", results.getRows().get(6).getNimike());
+        assertEquals("organisaatioHenkilo4Ooid", results.getRows().get(6).getOrganisaatioOid());
+    }
+
+
+    protected<T> List<T> list(T...v) {
+        return new ArrayList<T>(Arrays.asList(v));
+    }
+
+    private Long id=0L;
+
+    protected HenkiloHakuResultDto henkilo(String oid, String nimi,
+                               List<OrganisaatioHenkiloDto> organisaatioHenkilos,
+                               List<HenkiloOsoiteDto> osoittees) {
+        HenkiloHakuResultDto dto = new HenkiloHakuResultDto();
+        dto.setId(++id);
+        dto.setHenkiloOid(oid);
+        dto.setNimi(nimi);
+        dto.setOrganisaatioHenkilos(organisaatioHenkilos);
+        dto.setOsoittees(osoittees);
+        return dto;
+    }
+
+    protected OrganisaatioHenkiloDto organisaatioHenkilo(String oOid, String rooli) {
+        OrganisaatioHenkiloDto dto = new OrganisaatioHenkiloDto();
+        dto.setId(++id);
+        dto.setOrganisaatioOid(oOid);
+        dto.setPassivoitu(false);
+        dto.setTehtavanimike(rooli);
+        return dto;
+    }
+
+    protected HenkiloOsoiteDto henkiloOsoite(String osoite, String email) {
+        HenkiloOsoiteDto dto = new HenkiloOsoiteDto();
+        dto.setId(++id);
+        dto.setKieli("fi");
+        dto.setOsoiteTyyppi("posti");
+        dto.setOsoite(osoite);
+        dto.setPostinumero("30100");
+        dto.setPostitoimipaikka("TAMPERE");
+        dto.setHenkiloEmail(email);
+        return dto;
+    }
+
 }

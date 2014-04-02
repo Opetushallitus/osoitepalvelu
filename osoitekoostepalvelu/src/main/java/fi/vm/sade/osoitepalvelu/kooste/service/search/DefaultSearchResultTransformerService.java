@@ -123,7 +123,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
         Set<OrganisaatioResultAggregateDto> organisaatioAggregates = new LinkedHashSet<OrganisaatioResultAggregateDto>();
         for (final OrganisaatioResultDto result : results) {
-            new Combiner<OrganisaatioResultAggregateDto>(
+            Combiner<OrganisaatioResultAggregateDto> combiner = new Combiner<OrganisaatioResultAggregateDto>(
                     new Combiner.Creator<OrganisaatioResultAggregateDto> () {
                 public OrganisaatioResultAggregateDto create(Combiner.PullSource src) {
                     return new OrganisaatioResultAggregateDto( result,
@@ -131,12 +131,23 @@ public class DefaultSearchResultTransformerService extends AbstractService
                                 src.get(OsoitteistoDto.class).orNull(),
                                 src.get(OsoitteistoDto.class).orNull() );
                 }
-            }).combinedWith(OsoitteistoDto.class,
-                        filterOsoites(result.getPostiosoite(), presentation.getLocale()))
-                .withRepeated(OsoitteistoDto.class,
-                        filterOsoites(result.getKayntiosoite(), presentation.getLocale()))
-                .combinedWith(OrganisaatioYhteystietoDto.class, result.getYhteyshenkilot())
-                .atLeastOne().to(organisaatioAggregates);
+            });
+            if (presentation.isPositosoiteIncluded()) {
+                combiner.combinedWith(OsoitteistoDto.class,
+                        filterOsoites(result.getPostiosoite(), presentation.getLocale()));
+                if (presentation.isKayntiosoiteIncluded()) {
+                    combiner.withRepeated(OsoitteistoDto.class,
+                            filterOsoites(result.getKayntiosoite(), presentation.getLocale()));
+                }
+            } else if (presentation.isKayntiosoiteIncluded()) {
+                combiner.with(OsoitteistoDto.class, new ArrayList<OsoitteistoDto>())
+                    .combinedWith(OsoitteistoDto.class,
+                        filterOsoites(result.getKayntiosoite(), presentation.getLocale()));
+            }
+            if (presentation.isYhteyshenkiloIncluded() || presentation.isYhteyshenkiloEmailIncluded()) {
+                combiner.combinedWith(OrganisaatioYhteystietoDto.class, result.getYhteyshenkilot());
+            }
+            combiner.atLeastOne().to(organisaatioAggregates);
         }
         for (OrganisaatioResultAggregateDto aggregate : organisaatioAggregates) {
             SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto());
@@ -178,7 +189,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                             src.get(HenkiloOsoiteDto.class).orNull() );
                 }
             }).combinedWith(OrganisaatioHenkiloDto.class, result.getOrganisaatioHenkilos())
-                .combinedWith(HenkiloOsoiteDto.class, result.getOsoittees())
+                .withRepeated(HenkiloOsoiteDto.class, result.getOsoittees())
                 .atLeastOne().to(henkiloAggregates);
         }
         for (HenkiloResultAggregateDto aggregate : henkiloAggregates) {
