@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu;
 
 import fi.vm.sade.generic.ui.portlet.security.SecurityTicketOutInterceptorRest;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasDisabledCasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,19 +51,21 @@ public class SpringTestAppConfig {
     @Value("${web.url.cas}")
     private String casService;
 
-    @Value("${cas.service.organisaatio-service:''}")
-    private String organisaatioCasService;
-    @Value("${osoitepalvelu.app.username.to.organisaatioservice:''}")
-    private String casOrganisaatioServiceUsername;
-    @Value("${osoitepalvelu.app.password.to.organisaatioservice:''}")
-    private String casOrganisaatioServicePassword;
-
-    @Value("${cas.service.authentication-service:''}")
+    @Value("${cas.service.authentication-service:}")
     private String authenticationCasService;
-    @Value("${osoitepalvelu.app.username.to.authenticationservice:''}")
+    @Value("${osoitepalvelu.app.username.to.authenticationservice:}")
     private String casAuthenticationServiceUsername;
-    @Value("${osoitepalvelu.app.password.to.authenticationservice:''}")
+    @Value("${osoitepalvelu.app.password.to.authenticationservice:}")
     private String casAuthenticationServicePassword;
+
+    @Value("${web.url.cas.aitu:}")
+    private String aituCasService;
+    @Value("${cas.service.aitu-service:}")
+    private String aituServiceCasServiceUrl;
+    @Value("${osoitepalvelu.app.username.to.aituservice:}")
+    private String casAituServiceUsername;
+    @Value("${osoitepalvelu.app.password.to.aituservice:}")
+    private String casAituServicePassword;
 
     @Bean
     public ResourceBundleMessageSource messageSource() {
@@ -79,18 +82,27 @@ public class SpringTestAppConfig {
 
     @Bean
     public CasTicketProvider usernamePasswordCasTicketProvider() {
-        final CasTicketProvider defaultProvider  =  new UsernamePasswordCasClientTicketProvider(
-                casService, casOrganisaatioServiceUsername, casOrganisaatioServicePassword);
+        final CasTicketProvider defaultProvider  =  new CasDisabledCasTicketProvider();
         final Map<String, CasTicketProvider> providersByService  =  new HashMap<String, CasTicketProvider>();
-        providersByService.put(organisaatioCasService, defaultProvider);
         providersByService.put(authenticationCasService, new UsernamePasswordCasClientTicketProvider(casService,
                         casAuthenticationServiceUsername, casAuthenticationServicePassword));
+        providersByService.put(authenticationCasService, new UsernamePasswordCasClientTicketProvider(casService,
+                casAuthenticationServiceUsername, casAuthenticationServicePassword));
+
+        CasTicketProvider aituCasProvider;
+        if (casAituServiceUsername != null && casAituServiceUsername.length() > 0) {
+            aituCasProvider = new UsernamePasswordCasClientTicketProvider(aituCasService, casAituServiceUsername,
+                    casAituServicePassword, false);
+        } else {
+            aituCasProvider = defaultProvider;
+        }
+        providersByService.put(aituServiceCasServiceUrl, aituCasProvider);
         // ..
 
         // Always use username and password authentication in tests (since user not logged in):
         return new CasTicketProvider() {
             @Override
-            public Map<String, String> provideTicketHeaders(String service) {
+            public Map<String, Object> provideTicketHeaders(String service) {
                 if(providersByService.containsKey(service)) {
                     return providersByService.get(service).provideTicketHeaders(service);
                 }
@@ -98,4 +110,5 @@ public class SpringTestAppConfig {
             }
         };
     }
+
 }

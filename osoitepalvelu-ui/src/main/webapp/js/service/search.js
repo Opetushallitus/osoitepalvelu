@@ -40,11 +40,8 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         if (!osoite) {
             return "";
         }
-        return (osoite.osoite ? osoite.osoite : "") +(osoite.osoite ? "\n":"")
-               + ( osoite.extraRivi ? osoite.extraRivi : "" ) + (osoite.extraRivi ? "\n":"")
-               + ( osoite.postilokero ? osoite.postilokero : "" ) +(osoite.postilokero ? "\n":"")
-               + ( osoite.postinumero ? osoite.postinumero : "" )
-                    + " " + ( osoite.postitoimipaikka ? osoite.postitoimipaikka : "" );
+        return (osoite.osoite ? osoite.osoite : "") +(osoite.extraRivi ? "\n":"")
+               + ( osoite.extraRivi ? osoite.extraRivi : "" );
     }
 
     var _addColumnData = function(v) {
@@ -57,7 +54,11 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         }
         v.organisaatioTunniste = v.oppilaitosKoodi;
         v.yhteyshenkilonNimi = v.yhteystietoNimi;
+        v.postiosoitePostinumero = v.postiosoite ? (v.postiosoite.postinumero || "") : "";
+        v.postiosoitePostitoimipaikka = v.postiosoite ? (v.postiosoite.postitoimipaikka || "") : "";
         v.postiosoite = _osoite(v.postiosoite);
+        v.kayntiosoitePostinumero = v.kayntiosoite ? (v.kayntiosoite.postinumero || "") : "";
+        v.kayntiosoitePostitoimipaikka = v.kayntiosoite ? (v.kayntiosoite.postitoimipaikka || "") : "";
         v.kayntiosoite = _osoite(v.kayntiosoite);
     };
 

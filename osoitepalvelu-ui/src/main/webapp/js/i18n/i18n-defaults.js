@@ -53,6 +53,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         address_field_puhelinnumero: 'Puhelinnumero',
         address_field_faxinumero: 'Faksinumero',
         address_field_internet_osoite: 'Internetosoite',
+        address_field_email_osoite: 'Sähköpostiosoite',
         address_field_viranomaistiedotus_email: 'Viranomaistiedotuksen sähköpostiosoite',
         address_field_koulutusneuvonnan_email: 'Koulutusneuvonnan sähköpostiosoite',
         address_field_kriisitiedotuksen_email: 'Kriisitiedotuksen sähköpostiosoite',
@@ -115,10 +116,14 @@ angular.module("I18n", [], ["$provide", function($provider) {
         column_nimi: 'Organisaatio',
         column_organisaatioTunniste: 'Oppilaitoskoodi',
         column_yhteyshenkilonNimi: 'Yhteyshenkilö',
-        column_email: 'Sähköpostiosoite',
-        column_henkiloEmail: 'Sähköpostiosoite',
+        column_henkiloEmail: 'Sähköpostiosoite (yhteyshenkilön)',
+        column_emailOsoite: 'Sähköpostiosoite (organiaation)',
         column_postiosoite: 'Postiosoite',
+        column_postiosoitePostinumero: 'Postinumero',
+        column_postiosoitePostitoimipaikka: 'Postitoimipaikka',
         column_kayntiosoite: 'Käyntiosoite',
+        column_kayntiosoitePostinumero: 'Postinumero',
+        column_kayntiosoitePostitoimipaikka: 'Postitoimipaikka',
         column_puhelinnumero: 'Puhelinnumero',
         column_faksinumero: 'Faksinumero',
         column_wwwOsoite: 'Internetosoite',
@@ -150,5 +155,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         not_found_error: 'Virhe: Etsittyä tietoa ei löytynyt.',
         not_authorized_error: 'Virhe: Ei käyttöoikeutta pyydettyyn resurssiin.'
     };
+    defaultValues['en'] = defaultValues['fi'];
+    defaultValues['sv'] = defaultValues['fi'];
     $provider.value("i18nDefaults", defaultValues);
 }]);

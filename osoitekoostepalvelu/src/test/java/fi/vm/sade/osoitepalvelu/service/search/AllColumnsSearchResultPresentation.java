@@ -112,6 +112,11 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     }
 
     @Override
+    public boolean isOrganisaatioEmailIncluded() {
+        return true;
+    }
+
+    @Override
     public boolean isOrganisaationSijaintikuntaIncluded() {
         return true;
     }

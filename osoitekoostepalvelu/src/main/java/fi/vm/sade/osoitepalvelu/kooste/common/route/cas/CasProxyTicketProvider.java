@@ -52,7 +52,7 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
     }
 
     @Override
-    public Map<String, String> provideTicketHeaders(String service) {
+    public Map<String, Object> provideTicketHeaders(String service) {
         service  =  getTargetServiceCasUri(service);
         Authentication authentication  =  SecurityContextHolder.getContext().getAuthentication();
         if(authentication != null && authentication instanceof UsernamePasswordAuthenticationToken
@@ -71,7 +71,7 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
 
         // But for performance reasons, use a ticket cache implemented in ProxyAuthenticator (implementation might
         // also change):
-        final Map<String, String> result  =  new HashMap<String, String>();
+        final Map<String, Object> result  =  new HashMap<String, Object>();
         proxyAuthenticator.proxyAuthenticate(service, "cas", new ProxyAuthenticator.Callback() {
             @Override
             public void setRequestHeader(String key, String value) {

@@ -17,7 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
-import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.DefaultCasTicketCache;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.DefaultCookieBasedCasTicketCache;
 
 /**
  * User: ratamaa
@@ -32,7 +32,7 @@ public class DefaultCamelRequestContext implements CamelRequestContext {
     }
 
     public DefaultCamelRequestContext() {
-        this.ticketCache  =  new DefaultCasTicketCache();
+        this.ticketCache  =  new DefaultCookieBasedCasTicketCache();
     }
 
     @Override

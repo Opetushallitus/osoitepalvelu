@@ -14,15 +14,14 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.scheduled;
+package fi.vm.sade.osoitepalvelu.kooste.scheduled;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasDisabledCasTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -38,9 +37,7 @@ import java.util.List;
  * Time: 11:20 AM
  */
 @Service
-public class ScheduledOrganisaatioCacheTask {
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
+public class ScheduledOrganisaatioCacheTask extends AbstractService {
     @Autowired
     private OrganisaatioService organisaatioService;
 
@@ -50,27 +47,15 @@ public class ScheduledOrganisaatioCacheTask {
     @Value("${web.url.cas}")
     protected String casService;
 
-    @Value("${osoitepalvelu.app.username.to.organisaatioservice:''}")
-    private String casOrganisaatioServiceUsername;
-    @Value("${osoitepalvelu.app.password.to.organisaatioservice:''}")
-    private String casOrganisaatioServicePassword;
-
     // Every night at 3 AM
     @Scheduled(cron = "0 0 3 * * MON-FRI")
     public void refreshOrganisaatioCache() {
         logger.info("BEGIN SCHEDULED refreshOrganisaatioCache.");
 
-        if (casOrganisaatioServiceUsername == null || casOrganisaatioServiceUsername.length() < 1) {
-            logger.warn("No property osoitepalvelu.app.username.to.organisaatioservice specified. Organisaatio "
-                + "cache's scheduled population aborted.");
-            logger.info("ABORTED SCHEDULED refreshOrganisaatioCache.");
-        }
-
         // Since this is a system call and we don't have access to SpringSecurity's context, override the usual
         // CasTicketCache by one that falls back to system user account CasTicketProvider unless there was a cache hit:
         CamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(
-                new UsernamePasswordCasClientTicketProvider(casService, casOrganisaatioServiceUsername,
-                        casOrganisaatioServicePassword)));
+                new CasDisabledCasTicketProvider()));
 
         List<String> oids = organisaatioServiceRoute.findAllOrganisaatioOids(context);
         logger.info("Found {} organisaatios to refresh.", oids.size());

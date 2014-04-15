@@ -39,6 +39,7 @@ public class UsernamePasswordCasClientTicketProvider extends AbstractCasTicketPr
     private String casService;
     private String username;
     private String password;
+    private boolean modifyUrl=true;
 
     public UsernamePasswordCasClientTicketProvider(String casService, String username, String password) {
         this.casService  =  casService;
@@ -46,10 +47,20 @@ public class UsernamePasswordCasClientTicketProvider extends AbstractCasTicketPr
         this.password  =  password;
     }
 
+    public UsernamePasswordCasClientTicketProvider(String casService,
+                       String username, String password, boolean modifyUrl) {
+        this(casService, username, password);
+        this.modifyUrl = modifyUrl;
+    }
+
     @Override
-    public Map<String, String> provideTicketHeaders(String service) {
-        Map<String, String> headers  =  new HashMap<String, String>();
-        String casHeader  =  CasClient.getTicket(casService +  "/v1/tickets", username, password, getTargetServiceCasUri(service));
+    public Map<String, Object> provideTicketHeaders(String service) {
+        Map<String, Object> headers  =  new HashMap<String, Object>();
+        String serviceUrl = service;
+        if (modifyUrl) {
+            serviceUrl = getTargetServiceCasUri(serviceUrl);
+        }
+        String casHeader  =  CasClient.getTicket(casService +  "/v1/tickets", username, password, serviceUrl);
         headers.put(CAS_HEADER, casHeader);
         return headers;
     }

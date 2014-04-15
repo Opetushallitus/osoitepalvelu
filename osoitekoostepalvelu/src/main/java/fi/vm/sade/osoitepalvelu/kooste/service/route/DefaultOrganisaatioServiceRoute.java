@@ -53,12 +53,10 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     private static final String ORGANISAATIO_HIERACHY_TYYPPI_PARAM = "organisaatiotyyppi";
     private static final String ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM = "vainAktiiviset";
 
+    private static final long HAKU_TIMEOUT_MINUTES = 10L;
 
     @Value("${organisaatioService.rest.url}")
     private String organisaatioServiceRestUrl;
-
-    @Value("${cas.service.organisaatio-service}")
-    private String organisaatioServiceCasServiceUrl;
 
     @Override
     public void configure() throws Exception {
@@ -75,7 +73,6 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 headers()
                         .get()
                         .path(ORGANISAATIO_OIDS_PATH)
-                        .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
         )
         .process(organisaatioCallInOutDebug)
         .to(uri(organisaatioServiceRestUrl))
@@ -91,10 +88,10 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                         .post()
                         .jsonRequstBody()
                         .path(YHTEYSTIEDOT_PATH)
-                        .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
         )
         .process(organisaatioCallInOutDebug)
-        .to(uri(organisaatioServiceRestUrl, 10L*60L*1000L)) // wait for 10 minutes maximum
+        // wait for 10 minutes maximum:
+        .to(uri(organisaatioServiceRestUrl, HAKU_TIMEOUT_MINUTES * SECONDS_IN_MINUTE * MILLIS_IN_SECOND))
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() {}));
     }
@@ -107,7 +104,6 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 headers()
                         .get()
                         .path(SINGLE_ORGANISAATIO_PATH)
-                        .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
         )
         .process(organisaatioCallInOutDebug)
         .to(uri(organisaatioServiceRestUrl))
@@ -125,7 +121,6 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                         .path(ORGANISAATIO_HIERARCHY_PATH)
                             .param(ORGANISAATIO_HIERACHY_TYYPPI_PARAM).optional().valueFromBody().toQuery()
                             .param(ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM).value(true).toQuery()
-                        .casAuthenticationByAuthenticatedUser(organisaatioServiceCasServiceUrl)
         )
         .process(authenticationCallInOutDebug)
         .to(uri(organisaatioServiceRestUrl))
@@ -156,7 +151,6 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 headerValues()
                     .add("oid", oid)
                 .map(), requestContext, OrganisaatioDetailsDto.class);
-
     }
 
     @Override

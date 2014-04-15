@@ -14,27 +14,13 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
+package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 
-import java.util.Map;
+import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
- * Used to store tickets for services that are called multiple times during <b>the same request</b>.
- *
- * User: ratamaa
- * Date: 3/24/14
- * Time: 12:34 PM
+ * Created by ratamaa on 15.4.2014.
  */
-public interface CasTicketCache {
-    /**
-     * @param service to get cached ticket headers for
-     * @return the cached headers or null if not cached
-     */
-    public Map<String, Object> get(String service);
-
-    /**
-     * @param service to store headers for
-     * @param headers to store
-     */
-    public void store(String service, Map<String, Object> headers);
+public interface AituToimikuntaRepository extends MongoRepository<AituToimikunta,String> {
 }

@@ -16,13 +16,17 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.config;
 
+import fi.vm.sade.osoitepalvelu.kooste.common.util.IgnorantTrustManager;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.spring.SpringCamelContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
 
 
 /**
@@ -30,7 +34,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class OsoitepalveluCamelConfig {
-
+    @Value("${ignore.self.signed.certificates:false}")
+    private boolean ignoreSelfSignedCertificates=false;
     private ProducerTemplate producerTemplate;
 
     /**
@@ -64,5 +69,13 @@ public class OsoitepalveluCamelConfig {
             producerTemplate = context.createProducerTemplate();
         }
         return producerTemplate;
+    }
+
+    @PostConstruct
+    public void setupTrustManager() {
+        if (ignoreSelfSignedCertificates) {
+            // Accept any Certificate (for self-signed dev instances):
+            IgnorantTrustManager.setup();
+        }
     }
 }

@@ -1,3 +1,4 @@
+package fi.vm.sade.osoitepalvelu.kooste.service.aitu;
 /*
  * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
  *
@@ -14,26 +15,25 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
-
-import java.util.HashMap;
-import java.util.Map;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOsoitepalveluResultsDto;
 
 /**
- * User: ratamaa
- * Date: 3/25/14
- * Time: 12:47 PM
+ * Created by ratamaa on 15.4.2014.
  */
-public class DefaultCasTicketCache implements CasTicketCache {
-    private Map<String, Map<String, String>> store  =  new HashMap<String, Map<String, String>>();
+public interface AituService {
 
-    @Override
-    public Map<String, String> get(String service) {
-        return this.store.get(service);
-    }
+    /**
+     * @param results to override the data in MongoDB with
+     */
+    void refreshData( AituOsoitepalveluResultsDto results );
 
-    @Override
-    public void store(String service, Map<String, String> headers) {
-        this.store.put(service, headers);
-    }
+    /**
+     * Refreshes the data in MongoDB repository by fetching new data
+     * from AITU route.
+     *
+     * @param requestContext for the AITU route
+     */
+    void refreshData( CamelRequestContext requestContext );
+
 }

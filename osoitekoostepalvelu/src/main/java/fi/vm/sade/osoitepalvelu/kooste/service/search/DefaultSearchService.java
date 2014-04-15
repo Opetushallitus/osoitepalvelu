@@ -25,6 +25,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.AndPredicateAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
+import fi.vm.sade.osoitepalvelu.kooste.service.aitu.AituService;
 import fi.vm.sade.osoitepalvelu.kooste.service.henkilo.HenkiloService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
@@ -59,6 +60,9 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     @Autowired
     private KoodistoService koodistoService;
+
+    @Autowired
+    private AituService aituService;
 
     @Autowired
     private SearchResultDtoConverter dtoConverter;
@@ -217,5 +221,9 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     public void setKoodistoService(KoodistoService koodistoService) {
         this.koodistoService  =  koodistoService;
+    }
+
+    public void setAituService(AituService aituService) {
+        this.aituService = aituService;
     }
 }

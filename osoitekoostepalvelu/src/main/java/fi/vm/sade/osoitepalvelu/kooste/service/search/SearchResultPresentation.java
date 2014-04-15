@@ -53,6 +53,8 @@ public interface SearchResultPresentation {
 
     boolean isKriisitiedotuksenSahkopostiosoiteIncluded();
 
+    boolean isOrganisaatioEmailIncluded();
+
     boolean isOrganisaationSijaintikuntaIncluded();
 
     boolean isYhteyshenkiloEmailIncluded();

@@ -75,7 +75,11 @@ public class AuthenticationServiceRouteTest {
     @Test
     public void testFindHenikiloByOid() {
         String oid = "1.2.246.562.24.00000000001";
-        HenkiloDetailsDto details = authenticationServiceRoute.getHenkiloTiedot(oid, new DefaultCamelRequestContext());
+        DefaultCamelRequestContext requestContext = new DefaultCamelRequestContext();
+        HenkiloDetailsDto details = authenticationServiceRoute.getHenkiloTiedot(oid, requestContext);
+        assertNotNull(details);
+
+        details = authenticationServiceRoute.getHenkiloTiedot(oid, requestContext);
         assertNotNull(details);
     }
 }

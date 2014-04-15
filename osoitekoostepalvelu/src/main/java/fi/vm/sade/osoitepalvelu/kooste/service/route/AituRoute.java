@@ -14,27 +14,22 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
+package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
-import java.util.Map;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOsoitepalveluResultsDto;
 
 /**
- * Used to store tickets for services that are called multiple times during <b>the same request</b>.
- *
  * User: ratamaa
- * Date: 3/24/14
- * Time: 12:34 PM
+ * Date: 4/9/14
+ * Time: 5:07 PM
  */
-public interface CasTicketCache {
-    /**
-     * @param service to get cached ticket headers for
-     * @return the cached headers or null if not cached
-     */
-    public Map<String, Object> get(String service);
+public interface AituRoute {
 
     /**
-     * @param service to store headers for
-     * @param headers to store
+     * @param requestContext the context for HTTP request received by the application to operate in
+     * @return the AITU results
      */
-    public void store(String service, Map<String, Object> headers);
+    AituOsoitepalveluResultsDto findAituResults(CamelRequestContext requestContext);
+
 }
