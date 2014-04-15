@@ -18,9 +18,10 @@ package fi.vm.sade.osoitepalvelu.service.mock;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloListResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.MyInformationDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +33,15 @@ import java.util.List;
  */
 public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute {
     private List<KayttooikesuryhmaDto> kayttooikesuryhmas  =  new ArrayList<KayttooikesuryhmaDto>();
-    private List<HenkiloDto> henkilos  =  new ArrayList<HenkiloDto>();
-    private MyInformationDto me;
+    private List<HenkiloListResultDto> henkilos  =  new ArrayList<HenkiloListResultDto>();
+    private HenkiloDetailsDto henkiloDetails = null;
+
+    public AuhenticationServiceRouteMock(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
+        this.kayttooikesuryhmas  =  kayttooikesuryhmas;
+    }
+
+    public AuhenticationServiceRouteMock() {
+    }
 
     @Override
     public List<KayttooikesuryhmaDto> findKayttooikeusryhmas(CamelRequestContext context) {
@@ -41,32 +49,28 @@ public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute
     }
 
     @Override
-    public List<HenkiloDto> findHenkilosByOrganisaatioOids(List<String> ooids, CamelRequestContext context) {
+    public List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext context) {
         return henkilos;
     }
 
     @Override
-    public MyInformationDto getMe() {
-        return me;
-    }
-
-    public AuhenticationServiceRouteMock(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
-        this.kayttooikesuryhmas  =  kayttooikesuryhmas;
+    public HenkiloDetailsDto getHenkiloTiedot(String oid, CamelRequestContext requestContext) {
+        return henkiloDetails;
     }
 
     public void setKayttooikesuryhmas(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
         this.kayttooikesuryhmas  =  kayttooikesuryhmas;
     }
 
-    public List<HenkiloDto> getHenkilos() {
+    public List<HenkiloListResultDto> getHenkilos() {
         return henkilos;
     }
 
-    public void setHenkilos(List<HenkiloDto> henkilos) {
+    public void setHenkilos(List<HenkiloListResultDto> henkilos) {
         this.henkilos  =  henkilos;
     }
 
-    public void setMe(MyInformationDto me) {
-        this.me  =  me;
+    public void setHenkiloDetails(HenkiloDetailsDto henkiloDetails) {
+        this.henkiloDetails = henkiloDetails;
     }
 }

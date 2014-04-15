@@ -4,7 +4,10 @@
     <div id="no-results" ng-show="searchDone && results.length < 1" tt="no_results">
         Ei lötynyt osoitteita.
     </div>
-    <div style="position:relative;" full-size-grid data-height-padding="119" data-width-padding="20">
+    <div ng-show="!searchDone" tt="loading_results">
+        Ladataan tuloksia...
+    </div>
+    <div style="position:relative;" full-size-grid data-height-padding="119" data-width-padding="20" ng-show="searchDone">
        <div id="results" ng-show="searchDone && results.length">
            <div class="resultInfo">
                {{results.length}} <span tt="total_results">osoitetta</span>

@@ -24,8 +24,8 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoit
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTargetGroupDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.DefaultSearchService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 import fi.vm.sade.osoitepalvelu.service.mock.KoodistoServiceRouteMock;
 import fi.vm.sade.osoitepalvelu.service.mock.OrganisaatioServiceMock;
@@ -73,7 +73,7 @@ public class DefaultSearchServiceTest {
     }
 
     @Test
-    public void testResultsReturned() {
+    public void testOrganisaatioResultsReturned() {
         List<OrganisaatioYhteystietoHakuResultDto> yhteystietos  =  new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
         OrganisaatioYhteystietoHakuResultDto yhteystieto  =  new OrganisaatioYhteystietoHakuResultDto();
         yhteystieto.setOid("OID");
@@ -101,17 +101,23 @@ public class DefaultSearchServiceTest {
         List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
         SearchTargetGroupDto targetGroup  =  new SearchTargetGroupDto();
         targetGroup.setType(SearchTargetGroup.GroupType.OPPILAITOKSET);
+        targetGroup.setOptions(Arrays.asList(new SearchTargetGroup.TargetType[]
+                {SearchTargetGroup.TargetType.ORGANISAATIO}));
         targetGroups.add(targetGroup);
         terms.setTargetGroups(targetGroups);
-        OrganisaatioResultsDto results  =  this.defaultSearchService.find(terms, new DefaultCamelRequestContext());
-        assertNotNull(results.getResults());
-        assertEquals(1, results.getResults().size());
-        OrganisaatioTiedotDto firstResult  =  results.getResults().get(0);
+        SearchResultsDto results  =  this.defaultSearchService.find(terms, new DefaultCamelRequestContext());
+        assertNotNull(results.getOrganisaatios());
+        assertEquals(1, results.getOrganisaatios().size());
+        OrganisaatioResultDto firstResult  =  results.getOrganisaatios().get(0);
         assertEquals("OID", firstResult.getOid());
         assertEquals("OPKOODI", firstResult.getOppilaitosKoodi());
         assertEquals(nimi, firstResult.getNimi());
         assertEquals(1, firstResult.getKayntiosoite().size());
         assertEquals("Oppijankuja 6", firstResult.getKayntiosoite().get(0).getOsoite());
         assertEquals("kaynti", firstResult.getKayntiosoite().get(0).getOsoiteTyyppi());
+
+        targetGroup.setOptions(Arrays.asList(new SearchTargetGroup.TargetType[0]));
+        results = this.defaultSearchService.find(terms, new DefaultCamelRequestContext());
+        assertEquals(0, results.getOrganisaatios().size());
     }
 }

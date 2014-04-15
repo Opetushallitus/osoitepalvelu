@@ -26,16 +26,12 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter.KoodistoDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.KoodistoRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoTila;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.UiKoodiItemByKoodiUriPredicate;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,16 +43,16 @@ import java.util.*;
  */
 @Service
 public class DefaultKoodistoService extends AbstractService implements KoodistoService {
-    public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
-    public static final int MILLIS_IN_SECOND = 1000;
-
-    private Logger logger  =  LoggerFactory.getLogger(getClass());
+    private static final String ORGANISAATIO_TYYPPI_KOULUTUSTOIMIJA = "Koulutustoimija";
 
     @Autowired
     private KoodistoRoute koodistoRoute;
 
     @Autowired
     private AuthenticationServiceRoute authenticationServiceRoute;
+
+    @Autowired
+    private OrganisaatioServiceRoute organisaatioServiceRoute;
 
     @Autowired
     private KoodistoDtoConverter dtoConverter;
@@ -160,8 +156,19 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     @Override
-    public List<UiKoodiItemDto> findKoulutuksenJarjestejaOptions(Locale locale) {
-        return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUSTOIMIJA);
+    public List<UiKoodiItemDto> findKoulutuksenJarjestejaOptions(final Locale locale) {
+        // return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUSTOIMIJA); // out dated
+        return cached(new Cacheable<List<UiKoodiItemDto>>() {
+            @Override
+            public List<UiKoodiItemDto> get() {
+                OrganisaatioHierarchyResultsDto results = organisaatioServiceRoute
+                        .findOrganisaatioHierachyByTyyppi(ORGANISAATIO_TYYPPI_KOULUTUSTOIMIJA,
+                                new DefaultCamelRequestContext());
+                return dtoConverter.convert(results.getOrganisaatiot(),
+                        new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
+                        locale, KoodistoTyyppi.KOULUTUSTOIMIJA);
+            }
+        }, new KoodistoCache.CacheKey(KoodistoCache.KoodistoTyyppi.KOULUTUSTOIMIJA, locale));
     }
 
     @Override
@@ -368,5 +375,9 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     public void setAuthenticationServiceRoute(AuthenticationServiceRoute authenticationServiceRoute) {
         this.authenticationServiceRoute  =  authenticationServiceRoute;
+    }
+
+    public void setOrganisaatioServiceRoute(OrganisaatioServiceRoute organisaatioServiceRoute) {
+        this.organisaatioServiceRoute = organisaatioServiceRoute;
     }
 }

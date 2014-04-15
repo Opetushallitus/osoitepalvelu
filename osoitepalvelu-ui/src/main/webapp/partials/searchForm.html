@@ -7,9 +7,8 @@
                 <label for="savedSearch" tt="saved_searches">Tallennetut haut</label>
             </div>
             <div class="field-cell">
-                <select ui-select2 id="savedSearch" class="form-control" ng-model="selectedSavedSearch"
-                        ng-change="handleSaveSelected()">
-                   <option class="placeholder" value=""></option>
+                <select ui-select2 id="savedSearch" class="form-control" ng-model="selectedSavedSearch" ng-change="handleSaveSelected()">
+                   <option class="placeholder select2-disabled" value="" tt="saved_searches_placeholder" class="placeholder">Valitse tallennettu haku</option>
                    <option ng-repeat="save in saves" value="{{save.id}}">{{save.name}}</option>
                 </select>
             </div>
@@ -26,7 +25,7 @@
             </div>
             <div class="field-cell">
                 <select ui-select2 id="searchType" class="form-control" ng-model="searchType">
-                    <option class="placeholder" value="" tt="search_type_placeholder">Valitse mihin tarkoitukseen tarvitset yhteystietoja</option>
+                    <option class="placeholder select2-disabled" value="" tt="search_type_placeholder" class="placeholder">Valitse mihin tarkoitukseen tarvitset yhteystietoja</option>
                     <option ng-repeat="opt in searchTypes" value="{{opt.type}}">{{opt.name}}</option>
                 </select>
             </div>
@@ -85,8 +84,9 @@
                 <select ui-select2 id="targetGroup" class="form-control"
                         ng-model="selectedTargetGroup"
                         ng-change="handleTargetGroupSelected()"
-                        ng-show="(targetGroups | filter:nonSelectedByField(selectedTargetGroupTypes, 'type')).length">
-                    <option ng-repeat="tg in targetGroups | filter:nonSelectedByField(selectedTargetGroupTypes, 'type')" value="{{tg.type}}">{{tg.name}}</option>
+                        ng-show="(targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')).length">
+                    <option class="placeholder select2-disabled" value="" tt="target_group_placeholder"  class="placeholder">Valitse lisättävä kohderyhmä</option>
+                    <option ng-repeat="tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')" value="{{tg.type}}">{{tg.name}}</option>
                 </select>
             </div>
         </div>
@@ -147,7 +147,8 @@
                     </select>
                 </div>
                 <div class="term">
-                    <select ui-select2 multiple data-disable-selectall id="koultuksenjarjestaja" class="form-control" ng-model="terms.koultuksenjarjestajas" data-placeholder="{{msg('search_term_koultuksenjarjestaja')}}">
+                    <select ui-select2 multiple data-disable-selectall id="koultuksenjarjestaja" class="form-control"
+                            ng-model="terms.koultuksenjarjestajas" data-placeholder="{{msg('search_term_koultuksenjarjestaja')}}">
                         <option ng-repeat="opt in options.koultuksenjarjestajas" value="{{opt.koodiId}}">{{opt.nimi}}</option>
                     </select>
                 </div>
@@ -166,8 +167,8 @@
         <div class="form-row">
             <div class="label-cell"></div>
             <div class="field-cell">
-                <div class="form-action" ng-if="isSearchAllowed()">
-                    <button class="btn btn-lg btn-primary" ng-click="search()" tt="search_action">Hae</button>
+                <div class="form-action" ng-if="isSearchActionsVisible()">
+                    <button class="btn btn-lg btn-primary" ng-click="search()" ng-disabled="!isSearchAllowed()" tt="search_action">Hae</button>
                     <button class="btn btn-lg" ng-click="saveSearch()" tt="save_search_action">Tallenna haku</button>
                     <button class="btn btn-lg" ng-click="clear()" tt="clear_action">Tyhjennä</button>
                 </div>

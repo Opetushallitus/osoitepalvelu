@@ -21,10 +21,14 @@ import fi.vm.sade.log.model.Tapahtuma;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * User: ratamaa
@@ -32,6 +36,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * Time: 2:25 PM
  */
 public abstract class AbstractService {
+    public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
+    public static final int MILLIS_IN_SECOND = 1000;
 
     @Autowired
     protected Logger sadeLogger;
@@ -74,5 +80,9 @@ public abstract class AbstractService {
             throw new AuthorizationException("Authenticated user "  +  getLoggedInUserOid()
                      +  " does not have access right to given entity.");
         }
+    }
+
+    protected String localized(Map<String, String> nimi, Locale preferredLocale, Locale defaultLocale) {
+        return LocaleHelper.findLocalized(nimi, preferredLocale, defaultLocale);
     }
 }

@@ -21,13 +21,13 @@ import com.googlecode.ehcache.annotations.PartialCacheKey;
 import com.googlecode.ehcache.annotations.TriggersRemove;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.dao.cache.OrganisaatioCacheRepository;
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioYksityiskohtaisetTiedot;
+import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.dto.converter.OrganisaatioDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +42,6 @@ import java.util.List;
  */
 @Service
 public class DefaultOrganisaatioService extends AbstractService implements OrganisaatioService {
-    public static final int MILLIS_IN_SECOND = 1000;
 
     @Autowired
     private OrganisaatioServiceRoute organisaatioServiceRoute;
@@ -67,21 +66,21 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
 
     @Override
     @Cacheable(cacheName = "organisaatioByOidCache")
-    public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(@PartialCacheKey String oid,
+    public OrganisaatioDetailsDto getdOrganisaatioByOid(@PartialCacheKey String oid,
                                                                         CamelRequestContext requestContext) {
         if (isCacheUsed()) {
-            OrganisaatioYksityiskohtaisetTiedot details = organisaatioCacheRepository.findOne(oid);
+            OrganisaatioDetails details = organisaatioCacheRepository.findOne(oid);
             if (details != null && isCacheUsable(details.getCachedAt())) {
                 logger.info("MongoDB cached organisaatio {}", oid);
-                return dtoConverter.convert(details, new OrganisaatioYksityiskohtaisetTiedotDto());
+                return dtoConverter.convert(details, new OrganisaatioDetailsDto());
             }
         }
-        OrganisaatioYksityiskohtaisetTiedotDto dto = organisaatioServiceRoute.getdOrganisaatioByOid(oid, requestContext);
+        OrganisaatioDetailsDto dto = organisaatioServiceRoute.getdOrganisaatioByOid(oid, requestContext);
         if (isCacheUsed()) {
-            OrganisaatioYksityiskohtaisetTiedot details = dtoConverter.convert(dto,
-                    new OrganisaatioYksityiskohtaisetTiedot());
+            OrganisaatioDetails details = dtoConverter.convert(dto,
+                    new OrganisaatioDetails());
             organisaatioCacheRepository.save(details);
-            logger.info("Persisted rganisaatio {} to MongoDB cache.", oid);
+            logger.info("Persisted organisaatio {} to MongoDB cache.", oid);
         }
         return dto;
     }
@@ -89,7 +88,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     @Override
     @TriggersRemove(cacheName = "organisaatioByOidCache")
     public void purgeOrganisaatioByOidCache(@PartialCacheKey String oid) {
-        OrganisaatioYksityiskohtaisetTiedot details = organisaatioCacheRepository.findOne(oid);
+        OrganisaatioDetails details = organisaatioCacheRepository.findOne(oid);
         if (details != null) {
             organisaatioCacheRepository.delete(details);
         }

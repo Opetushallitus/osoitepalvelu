@@ -54,14 +54,14 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
 
     protected void buildKaikkiVersiotiedot() {
         // Reitti, joka hakee koodiston versiotiedot
-        fromHttpGetToDtos(REITTI_HAE_KOODISTON_VERSIOT, trim(koodistoUri),
+        fromHttpGetToDtos(REITTI_HAE_KOODISTON_VERSIOT, uri(koodistoUri),
                 headers().path("${in.headers.koodistoTyyppi}"),
                 new TypeReference<List<KoodistoVersioDto>>() { });
     }
 
     protected void buildKoodiversioKoodis() {
         // Seuraava reitti hakee tietyn koodistoversion kaikki koodit
-        fromHttpGetToDtos(REITTI_HAE_KOODISTO_VERSION_KOODIT, trim(koodistoUri),
+        fromHttpGetToDtos(REITTI_HAE_KOODISTO_VERSION_KOODIT, uri(koodistoUri),
                 headers()
                     .path("${in.headers.koodistoTyyppi}/koodi")
                     .query("koodistoVersio = ${in.headers.koodistoVersio}"),
@@ -70,13 +70,13 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
 
     protected void buildKoodistonKoodit() {
         // Reitti, joka hakee tietyn koodiston koodit
-        fromHttpGetToDtos(REITTI_HAE_KOODISTON_KOODIT, trim(koodistoUri),
+        fromHttpGetToDtos(REITTI_HAE_KOODISTON_KOODIT, uri(koodistoUri),
                 headers().path("${in.headers.koodistoTyyppi}/koodi"),
                 new TypeReference<List<KoodiDto>>() { });
     }
 
     protected void buildSisaltyyYlakoodis() {
-        fromHttpGetToDtos(REITTI_SIALTYY_YLAKOODIS, trim(koodistoUri),
+        fromHttpGetToDtos(REITTI_SIALTYY_YLAKOODIS, uri(koodistoUri),
                 headers().path("relaatio/sisaltyy-ylakoodit/${in.headers.koodiUri}"),
                 new TypeReference<List<KoodiDto>>() { });
     }

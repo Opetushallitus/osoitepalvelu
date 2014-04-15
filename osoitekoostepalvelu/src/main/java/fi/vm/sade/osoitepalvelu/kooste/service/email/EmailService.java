@@ -1,6 +1,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.email;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
 
 /**
  * User: ratamaa
@@ -12,6 +13,6 @@ public interface EmailService {
     /**
      * @return the email send settings for Viestipalvelu.
      */
-    EmailSendSettingsDto getEmailSendSettings();
+    EmailSendSettingsDto getEmailSendSettings(MyInformationDto me);
 
 }

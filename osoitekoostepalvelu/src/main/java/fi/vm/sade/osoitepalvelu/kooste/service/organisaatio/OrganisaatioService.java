@@ -16,12 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio;
 
-import java.util.List;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
+
+import java.util.List;
 
 /**
  * User: ratamaa
@@ -44,8 +44,7 @@ public interface OrganisaatioService {
      * @param requestContext the context for HTTP request received by the application to operate in
      * @return details for the organisaatio
      */
-    OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(String oid,
-                                                                 CamelRequestContext requestContext);
+    OrganisaatioDetailsDto getdOrganisaatioByOid(String oid, CamelRequestContext requestContext);
 
     /**
      * @param oid of the organisaatio to purge from cache

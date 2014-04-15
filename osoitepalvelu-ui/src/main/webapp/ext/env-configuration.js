@@ -1,4 +1,20 @@
 /*
+ * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
+ *
+ * This program is free software: Licensed under the EUPL, Version 1.1 or - as
+ * soon as they will be approved by the European Commission - subsequent versions
+ * of the EUPL (the "Licence");
+ *
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at: http://www.osor.eu/eupl/
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * European Union Public Licence for more details.
+ */
+
+/*
  * Help:
  * Add service factory(/js/shared/config.js) to your module.
  * Module name : 'config'.
@@ -19,9 +35,11 @@ window.CONFIG = {
         "ui.timeout.short": 10000,
         "ui.timeout.long": 60000,
         "osoitepalveluLocalisationRestUrl": "https://itest-virkailija.oph.ware.fi/lokalisointi/cxf/rest/v1/localisation",
-        "casUrl": "cas_me_ophadmin.json",
+        "casMeUrl": "cas_me_test.json",
+        "useCasMeUrl": true,
         "organisaatio.api.rest.url": "https://itest-virkailija.oph.ware.fi:443/organisaatio-service/rest/",
         "authentication-service.rest.url":"https://itest-virkailija.oph.ware.fi/authentication-service/resources/",
     },
-    "app" : {}
+    "app" : {},
+    "mode": 'dev-without-backend'
 };

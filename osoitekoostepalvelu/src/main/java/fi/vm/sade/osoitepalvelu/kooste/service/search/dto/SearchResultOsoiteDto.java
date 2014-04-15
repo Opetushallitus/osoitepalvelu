@@ -14,20 +14,24 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
+package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoiteDto;
+import fi.ratamaa.dtoconverter.annotation.DtoPath;
 
 import java.io.Serializable;
 
-public class OsoitteistoDto implements Serializable {
-
-    private static final long serialVersionUID  =  6985560274560979066L;
-    
+/**
+ * User: ratamaa
+ * Date: 4/1/14
+ * Time: 12:39 PM
+ */
+@DtoConversion
+public class SearchResultOsoiteDto implements Serializable {
     private String kieli;
-    @DtoConversion(withClass  =  OrganisaatioYhteysosoiteDto.class)
-    private String osoiteTyyppi;
+    @DtoPath("osoiteTyyppi")
+    private String tyyppi;
+    @DtoConversion(skip = true, withClass = HenkiloOsoiteDto.class)
     private String yhteystietoOid;
     private String osoite;
     private String postilokero;
@@ -35,12 +39,20 @@ public class OsoitteistoDto implements Serializable {
     private String postitoimipaikka;
     private String extraRivi;
 
-    public String getOsoiteTyyppi() {
-        return osoiteTyyppi;
+    public String getKieli() {
+        return kieli;
     }
 
-    public void setOsoiteTyyppi(String osoiteTyyppi) {
-        this.osoiteTyyppi  =  osoiteTyyppi;
+    public void setKieli(String kieli) {
+        this.kieli = kieli;
+    }
+
+    public String getTyyppi() {
+        return tyyppi;
+    }
+
+    public void setTyyppi(String tyyppi) {
+        this.tyyppi = tyyppi;
     }
 
     public String getYhteystietoOid() {
@@ -48,7 +60,7 @@ public class OsoitteistoDto implements Serializable {
     }
 
     public void setYhteystietoOid(String yhteystietoOid) {
-        this.yhteystietoOid  =  yhteystietoOid;
+        this.yhteystietoOid = yhteystietoOid;
     }
 
     public String getOsoite() {
@@ -56,39 +68,7 @@ public class OsoitteistoDto implements Serializable {
     }
 
     public void setOsoite(String osoite) {
-        this.osoite  =  osoite;
-    }
-
-    public String getPostinumero() {
-        return postinumero;
-    }
-
-    public void setPostinumero(String postinumero) {
-        this.postinumero  =  postinumero;
-    }
-
-    public String getPostitoimipaikka() {
-        return postitoimipaikka;
-    }
-
-    public void setPostitoimipaikka(String postitoimipaikka) {
-        this.postitoimipaikka  =  postitoimipaikka;
-    }
-
-    public String getExtraRivi() {
-        return extraRivi;
-    }
-
-    public void setExtraRivi(String extraRivi) {
-        this.extraRivi  =  extraRivi;
-    }
-    
-    public String getKieli() {
-        return kieli;
-    }
-    
-    public void setKieli(String kieli) {
-        this.kieli  =  kieli;
+        this.osoite = osoite;
     }
 
     public String getPostilokero() {
@@ -96,6 +76,30 @@ public class OsoitteistoDto implements Serializable {
     }
 
     public void setPostilokero(String postilokero) {
-        this.postilokero  =  postilokero;
+        this.postilokero = postilokero;
+    }
+
+    public String getPostinumero() {
+        return postinumero;
+    }
+
+    public void setPostinumero(String postinumero) {
+        this.postinumero = postinumero;
+    }
+
+    public String getPostitoimipaikka() {
+        return postitoimipaikka;
+    }
+
+    public void setPostitoimipaikka(String postitoimipaikka) {
+        this.postitoimipaikka = postitoimipaikka;
+    }
+
+    public String getExtraRivi() {
+        return extraRivi;
+    }
+
+    public void setExtraRivi(String extraRivi) {
+        this.extraRivi = extraRivi;
     }
 }

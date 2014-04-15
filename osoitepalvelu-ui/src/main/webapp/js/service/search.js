@@ -1,11 +1,31 @@
+/*
+ * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
+ *
+ * This program is free software: Licensed under the EUPL, Version 1.1 or - as
+ * soon as they will be approved by the European Commission - subsequent versions
+ * of the EUPL (the "Licence");
+ *
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at: http://www.osor.eu/eupl/
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * European Union Public Licence for more details.
+ */
+
 /**
  * Created by ratamaa on 12/4/13.
  */
 
-OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $location, FilterHelper,
-                                                      AddressFields, ReceiverTypes, EmptyTerms,
-                                                      SearchResultProvider, SaveConverter,
-                                                      LocalisationService, commonErrorHandler) {
+OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$location", "FilterHelper",
+                             "AddressFields", "ReceiverTypes", "EmptyTerms",
+                             "SearchResultProvider", "SaveConverter",
+                             "LocalisationService", "commonErrorHandler",
+        function($log, $filter, $http, $location, FilterHelper,
+                      AddressFields, ReceiverTypes, EmptyTerms,
+                      SearchResultProvider, SaveConverter,
+                      LocalisationService, commonErrorHandler) {
     var _terms = angular.copy(EmptyTerms),
         _targetGroups = [],
         _searchType = null,
@@ -15,6 +35,17 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
         _selectedSearch = null,
         _resultData = null,
         _searchReady=false;
+
+    var _osoite = function(osoite) {
+        if (!osoite) {
+            return "";
+        }
+        return (osoite.osoite ? osoite.osoite : "") +(osoite.osoite ? "\n":"")
+               + ( osoite.extraRivi ? osoite.extraRivi : "" ) + (osoite.extraRivi ? "\n":"")
+               + ( osoite.postilokero ? osoite.postilokero : "" ) +(osoite.postilokero ? "\n":"")
+               + ( osoite.postinumero ? osoite.postinumero : "" )
+                    + " " + ( osoite.postitoimipaikka ? osoite.postitoimipaikka : "" );
+    }
 
     var _addColumnData = function(v) {
         if( v.henkiloOid ) {
@@ -26,13 +57,8 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
         }
         v.organisaatioTunniste = v.oppilaitosKoodi;
         v.yhteyshenkilonNimi = v.yhteystietoNimi;
-        v.postiosoite = (v.osoite ? v.osoite : "") +(v.osoite ? "\n":"")
-                + ( v.extraRivi ? v.extraRivi : "" ) + (v.extraRivi ? "\n":"")
-                + ( v.postinumero ? v.postinumero : "" ) + " " + ( v.postitoimipaikka ? v.postitoimipaikka : "" );
-        v.katuPostinumero = ( v.osoite ? v.osoite : "" ) +(v.osoite ? ", ":"")
-                + ( v.postinumero ? v.postinumero : "" ) + " " + ( v.postitoimipaikka ? v.postitoimipaikka : "" );
-        v.plPostinumero = ( v.postilokero ? v.postilokero : "" ) +(v.postilokero ? ", ":"")
-                + ( v.postinumero ? v.postinumero : "" ) + " " + ( v.postitoimipaikka ? v.postitoimipaikka : "" );
+        v.postiosoite = _osoite(v.postiosoite);
+        v.kayntiosoite = _osoite(v.kayntiosoite);
     };
 
     this.getTerms = function() {return _terms;};
@@ -184,4 +210,4 @@ OsoiteKoostepalvelu.service('SearchService', function($log, $filter, $http, $loc
     this.isSearchReady = function() {
         return _searchReady;
     };
-});
+}]);

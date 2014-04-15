@@ -19,10 +19,9 @@ package fi.vm.sade.osoitepalvelu.service.search.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.*;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
-
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioYhteystietoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OsoitteistoDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -33,35 +32,12 @@ import java.util.List;
 
 @RunWith(JUnit4.class)
 public class ApiToJsonTest {
-
-    @Test
-    public void generateSearchJsonExample() {
-        SearchQueryDto haku  =  new SearchQueryDto();
-
-        haku.addOrCriteria(new SearchKeyDto(KoodistoTyyppi.OPPILAITOKSEN_OPETUSKIELI.toString(), "TAI"),
-                new SearchValueDto("1"));
-        haku.addOrCriteria(new SearchKeyDto(KoodistoTyyppi.OPPILAITOKSEN_OPETUSKIELI.toString(), "TAI"),
-                new SearchValueDto("2"));
-
-        haku.addOrCriteria(new SearchKeyDto(KoodistoTyyppi.KUNTA.toString(), "TAI"),
-                new SearchValueDto("020"));
-        haku.addOrCriteria(new SearchKeyDto(KoodistoTyyppi.KUNTA.toString(), "TAI"),
-                new SearchValueDto("010"));
-        
-        haku.addAndCriteria(new SearchKeyDto(KoodistoTyyppi.OPPILAITOSTYYPPI.toString(), "TAI"),
-                new SearchValueDto("64"));
-        haku.addAndCriteria(new SearchKeyDto(KoodistoTyyppi.OPPILAITOSTYYPPI.toString(), "TAI"),
-                new SearchValueDto("15"));
-
-        printJson(haku);
-
-    }
     
     @Test
     public void generateResultsJsonExample() {
-        OrganisaatioResultsDto results  =  new OrganisaatioResultsDto();
+        List<OrganisaatioResultDto> results  =  new ArrayList<OrganisaatioResultDto>();
         
-        OrganisaatioTiedotDto result  =  new OrganisaatioTiedotDto();
+        OrganisaatioResultDto result  =  new OrganisaatioResultDto();
         List<String> tyypit  =  new ArrayList<String>();
         tyypit.add("Opetuspiste");
         HashMap<String, String> nimi  =  new HashMap<String, String>();
@@ -109,9 +85,9 @@ public class ApiToJsonTest {
         yhteyshenkilo.setYhteyshenkiloOid("1.3.445864.474584848");
         result.addYhteyshenkilo(yhteyshenkilo);
         
-        results.addResult(result);
+        results.add(result);
         
-        result  =  new OrganisaatioTiedotDto();
+        result  =  new OrganisaatioResultDto();
         tyypit  =  new ArrayList<String>();
         tyypit.add("Toimipiste");
         result.setTyypit(tyypit);
@@ -165,42 +141,12 @@ public class ApiToJsonTest {
         yhteyshenkilo.setYhteyshenkiloOid("1.3.445868.154845151");
         result.addYhteyshenkilo(yhteyshenkilo);
         
-        results.addResult(result);
+        results.add(result);
         
         printJson(results);
     }
 
-    
-    @Test
-    public void generateKayttajahakuResultsJsonExample() {
-        KayttajahakuResultsDto results  =  new KayttajahakuResultsDto();
-        
-        KayttajahakuResultDto result  =  new KayttajahakuResultDto();
-        result.addRooli("Opettaja");
-        result.addRooli("Opo");
-        result.setEmail("olli.opettaja@opetus.fi");
-        result.setEtunimi("Olli");
-        result.setSukunimi("Opettaja");
-        result.setOrganisaatioOid("1.2.246.562.10.388987196872");
-        result.setOid("1.2.3.4.1.4");
-        
-        results.addResult(result);
-        
-        result  =  new KayttajahakuResultDto();
-        result.addRooli("Lehtori");
-        result.setEmail("pertti.pera@koulu.fi");
-        result.setEtunimi("pertti");
-        result.setSukunimi("pera");
-        result.setOrganisaatioOid("1.2.246.562.10.38898719687");
-        result.setOid("1.2.3.4.1.5");
-        
-        results.addResult(result);
-        
-        printJson(results);
-        
-    }
-    
-    
+
     private void printJson(Object object) {
         ObjectMapper mapper  =  new ObjectMapper();
         mapper.getSerializationConfig().without(SerializationFeature.FAIL_ON_EMPTY_BEANS);

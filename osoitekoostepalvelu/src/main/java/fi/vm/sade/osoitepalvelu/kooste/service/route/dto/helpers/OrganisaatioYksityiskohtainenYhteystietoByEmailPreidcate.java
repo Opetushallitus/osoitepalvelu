@@ -18,7 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers;
 
 import com.google.common.base.Predicate;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtainenYhteystietoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsYhteystietoDto;
 
 import java.util.Locale;
 
@@ -28,7 +28,7 @@ import java.util.Locale;
  * Time: 5:13 PM
  */
 public class OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate
-            implements Predicate<OrganisaatioYksityiskohtainenYhteystietoDto> {
+            implements Predicate<OrganisaatioDetailsYhteystietoDto> {
     private Locale locale;
 
     public OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(Locale locale) {
@@ -36,7 +36,7 @@ public class OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate
     }
 
     @Override
-    public boolean apply(OrganisaatioYksityiskohtainenYhteystietoDto yhteystieto) {
+    public boolean apply(OrganisaatioDetailsYhteystietoDto yhteystieto) {
         return  yhteystieto.getEmail() != null
             && LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(yhteystieto.getKieli(), null));
     }

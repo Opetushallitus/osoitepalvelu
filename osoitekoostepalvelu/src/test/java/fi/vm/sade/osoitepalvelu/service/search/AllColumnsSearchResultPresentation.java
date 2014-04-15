@@ -32,6 +32,7 @@ import java.util.Set;
 public class AllColumnsSearchResultPresentation implements SearchResultPresentation, Serializable {
     private Locale locale;
     private Set<OidAndTyyppiPair> nonIncludedOids;
+    private boolean withYhteyshenkiloEmail =true;
 
     public AllColumnsSearchResultPresentation() {
     }
@@ -76,17 +77,7 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     }
 
     @Override
-    public boolean isKatuosoiteIncluded() {
-        return true;
-    }
-
-    @Override
-    public boolean isPLIncluded() {
-        return true;
-    }
-
-    @Override
-    public boolean isPostinumeroIncluded() {
+    public boolean isKayntiosoiteIncluded() {
         return true;
     }
 
@@ -127,6 +118,11 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
 
     @Override
     public boolean isYhteyshenkiloEmailIncluded() {
-        return true;
+        return withYhteyshenkiloEmail;
+    }
+
+    public AllColumnsSearchResultPresentation withoutYhteyshenkiloEmail() {
+        this.withYhteyshenkiloEmail = false;
+        return this;
     }
 }

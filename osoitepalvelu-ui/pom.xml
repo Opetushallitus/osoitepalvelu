@@ -37,6 +37,29 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>write buildtime.txt</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="writing target/${project.build.finalName}/buildtime.txt" />
+                                <echo file="target/${project.build.finalName}/buildtime.txt">
+                                    <![CDATA[${maven.build.timestamp}]]>
+                                </echo>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.0.1</version>
                 <executions>
@@ -77,8 +100,6 @@
                                 <jsSourceExclude>**/*.ignored.js</jsSourceExclude>
                             </jsSourceExcludes>
                             <jsEngine>CLOSURE</jsEngine>
-                            <!-- Can not replace variable names since AngularJS has special meaning for them: (e.g. $scope) -->
-                            <closureCompilationLevel>WHITESPACE_ONLY</closureCompilationLevel>
                         </configuration>
                     </execution>
                 </executions>
@@ -114,6 +135,10 @@
                         <replacement>
                             <token>&lt;!--\s*PRODUCTION:\s*(.*?)\s*--&gt;</token>
                             <value>$1</value>
+                        </replacement>
+                        <replacement>
+                            <token>__BUID_TIMESTAMP__</token>
+                            <valueFile>${project.build.directory}/${project.artifactId}/buildtime.txt</valueFile>
                         </replacement>
                     </replacements>
                 </configuration>

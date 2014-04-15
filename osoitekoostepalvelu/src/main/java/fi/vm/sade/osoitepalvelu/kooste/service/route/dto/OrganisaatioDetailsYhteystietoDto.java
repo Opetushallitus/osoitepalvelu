@@ -23,7 +23,7 @@ import java.io.Serializable;
  * Date: 3/20/14
  * Time: 4:33 PM
  */
-public class OrganisaatioYksityiskohtainenYhteystietoDto implements Serializable {
+public class OrganisaatioDetailsYhteystietoDto implements Serializable {
     private static final long serialVersionUID = -2943781431830246991L;
     
     private String osoiteTyyppi; // esim. posti, kaynti, puhein, null, ...

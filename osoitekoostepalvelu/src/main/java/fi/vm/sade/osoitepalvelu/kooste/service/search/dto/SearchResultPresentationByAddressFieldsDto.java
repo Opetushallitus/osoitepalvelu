@@ -39,10 +39,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings.add("ORGANIAATIO_TUNNISTE", "organisaatiotunnisteIncluded");
         fieldMappings.add("YHTEYSHENKILO", "yhteyshenkiloIncluded");
         fieldMappings.add("POSTIOSOITE", "positosoiteIncluded");
-        fieldMappings.add("KATU_POSTINUMERO", "katuosoiteIncluded");
-        fieldMappings.add("KATU_POSTINUMERO", "postinumeroIncluded");
-        fieldMappings.add("PL_POSTINUMERO", "pLIncluded");
-        fieldMappings.add("PL_POSTINUMERO", "postinumeroIncluded");
+        fieldMappings.add("KAYNTIOSOITE", "kayntiosoiteIncluded");
         fieldMappings.add("PUHELINNUMERO", "puhelinnumeroIncluded");
         fieldMappings.add("FAXINUMERO", "faksinumeroIncluded");
         fieldMappings.add("INTERNET_OSOITE", "wwwOsoiteIncluded");
@@ -60,9 +57,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean yhteyshenkiloIncluded;
     private boolean yhteyshenkiloEmailIncluded;
     private boolean positosoiteIncluded;
-    private boolean katuosoiteIncluded;
-    private boolean plIncluded;
-    private boolean postinumeroIncluded;
+    private boolean kayntiosoiteIncluded;
     private boolean puhelinnumeroIncluded;
     private boolean faksinumeroIncluded;
     private boolean wwwOsoiteIncluded;
@@ -72,9 +67,11 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean organisaationSijaintikuntaIncluded;
     private Locale locale;
     private Set<OidAndTyyppiPair> nonIncludedOids;
+    private SearchTermsDto.SearchType searchType;
 
     public SearchResultPresentationByAddressFieldsDto(SearchTermsDto searchTerms) {
         if(searchTerms.getSearchType() != null) {
+            this.searchType = searchTerms.getSearchType();
             switch (searchTerms.getSearchType()) {
                 case CONTACT:
                     includeAddressFields(searchTerms.getAddressFields());
@@ -86,7 +83,6 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
                 case LETTER:
                 case SEND_LETTER:
                     setOrganisaationNimiIncluded(true);
-                    setYhteyshenkiloEmailIncluded(true);
                     setPositosoiteIncluded(true);
                     break;
                 default: break;
@@ -162,30 +158,12 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     @Override
-    public boolean isKatuosoiteIncluded() {
-        return katuosoiteIncluded;
+    public boolean isKayntiosoiteIncluded() {
+        return kayntiosoiteIncluded;
     }
 
-    public void setKatuosoiteIncluded(boolean katuosoiteIncluded) {
-        this.katuosoiteIncluded  =  katuosoiteIncluded;
-    }
-
-    @Override
-    public boolean isPLIncluded() {
-        return plIncluded;
-    }
-
-    public void setPLIncluded(boolean plIncluded) {
-        this.plIncluded  =  plIncluded;
-    }
-
-    @Override
-    public boolean isPostinumeroIncluded() {
-        return postinumeroIncluded;
-    }
-
-    public void setPostinumeroIncluded(boolean postinumeroIncluded) {
-        this.postinumeroIncluded  =  postinumeroIncluded;
+    public void setKayntiosoiteIncluded(boolean kayntiosoiteIncluded) {
+        this.kayntiosoiteIncluded = kayntiosoiteIncluded;
     }
 
     @Override
@@ -258,6 +236,11 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     @Override
     public boolean isResultRowIncluded(SearchResultRowDto row) {
+        if (this.searchType != null && this.searchType == SearchTermsDto.SearchType.EMAIL) {
+            if (row.getHenkiloEmail() == null || "".equals(row.getHenkiloEmail().trim())) {
+                return false;
+            }
+        }
         return this.nonIncludedOids == null || !this.nonIncludedOids.contains(row.getOidAndTyyppiPair());
     }
 

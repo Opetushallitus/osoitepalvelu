@@ -12,9 +12,20 @@
  * - similar "implementation" for jQuery chosen plugin: http://stackoverflow.com/questions/11172269/select-all-and-remove-all-with-chosen-js#18785302
  * Tag with: data-disable-selectall attribute to disable this feature or specify a tresshold with data-selectall-tresshold
  */
-angular.module('ui.select2', ['localisation']).value('uiSelect2Config', {}).directive('uiSelect2', ['uiSelect2Config', '$timeout', 'LocalisationService',
+angular.module('ui.select2', ['localisation']).value('uiSelect2Config', {})
+    .directive('uiSelect2', ['uiSelect2Config', '$timeout', 'LocalisationService',
 function (uiSelect2Config, $timeout, LocalisationService) {
-  var options = {};
+  var format = function (option) {
+      var $originalOption = $(option.element);
+      if ($originalOption.attr("class")) {
+          return '<span class="'+$originalOption.attr("class")+'">'+option.text+'</span>';
+      }
+      return option.text;
+  };
+  var options = {
+    formatSelection: format,
+    formatResult: format
+  };
   if (uiSelect2Config) {
     angular.extend(options, uiSelect2Config);
   }

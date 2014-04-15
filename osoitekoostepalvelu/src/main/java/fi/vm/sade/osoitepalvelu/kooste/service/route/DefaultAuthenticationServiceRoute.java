@@ -18,15 +18,12 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.MyInformationDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,10 +35,22 @@ import java.util.List;
 @Component
 public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBuilder
         implements AuthenticationServiceRoute {
+    private static final String SERVICE_CALL_POSTFIX = ".AuthenticationServiceCall";
+
     private static final String ROUTE_KAYTTOOIKESURYHMAS  =  "direct:findKayttoikeusryhmas";
-    private static final String ROUTE_HENKILOS  =  "direct:henkilos";
-    private static final String ROUTE_MY_INFORMATION  =  "direct:myInformation";
-    private static final String MY_INFORMATION_PATH  =  "/me";
+
+    private static final String ROUTE_HENKILOS  =  "direct:henkiloList";
+    private static final String HENKILOS_HAKU_PATH = "/byOoids";
+    private static final String HENKILOS_ORGANISAATIOOIDS_PARAM_NAME = "ooids";
+    private static final String HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME = "kor";
+    private static final String HENKILOS_HENKILOTYYPPI_PARAM = "ht";
+    private static final String HENKILOS_HENKILOTYYPPI_VIRKAILIJA = "VIRKAILIJA";
+
+    private static final String ROUTE_HENKILO = "direct:henkilo";
+    private static final String HENKILO_PATH = "/${in.body}";
+
+    private static final String ROUTE_ORGANISAATIOHENKILOS  =  "direct:organisaatioHenkilos";
+    private static final String ORGANISAATIOHENKILOS_PATH  =  "/${in.body}/organisaatiohenkilo";
 
     @Value("${authenticationService.kayttoikeusryhma.rest.url}")
     private String authenticationServiceKayttooikeusryhmasRestUrl;
@@ -57,75 +66,117 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     public void configure() throws Exception {
         buildKayttoOikeusryhmas();
         buildHenkilo();
-        buildMyInformation();
+        buildOrganisaatioHenkilos();
+        buildHenkiloList();
     }
 
     protected void buildHenkilo() {
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_HENKILOS + ".AuthenticationServiceCall");
+        Debugger authenticationCallInOutDebug  =  debug(ROUTE_HENKILO + SERVICE_CALL_POSTFIX);
         headers(
-                from(ROUTE_HENKILOS),
-                headers()
-                    .get().path("/byOoids")
-                            .query("ht=VIRKAILIJA&ooids=${in.headers.ooids}")
-                    .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
+            from(ROUTE_HENKILO),
+            headers()
+                .get().path(HENKILO_PATH)
+                .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
         .process(authenticationCallInOutDebug)
-        .to(trim(authenticationServiceHenkiloServiceRestUrl))
+        .to(uri(authenticationServiceHenkiloServiceRestUrl))
         .process(authenticationCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<HenkiloDto>>() { }));
+        .process(jsonToDto(new TypeReference<HenkiloDetailsDto>() {}));
+    }
+
+    protected void buildOrganisaatioHenkilos() {
+        Debugger authenticationCallInOutDebug  =  debug(ROUTE_ORGANISAATIOHENKILOS + SERVICE_CALL_POSTFIX);
+        headers(
+                from(ROUTE_ORGANISAATIOHENKILOS),
+                headers()
+                        .get().path(ORGANISAATIOHENKILOS_PATH)
+                        .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
+        )
+        .process(authenticationCallInOutDebug)
+        .to(uri(authenticationServiceHenkiloServiceRestUrl))
+        .process(authenticationCallInOutDebug)
+        .process(jsonToDto(new TypeReference<List<OrganisaatioHenkiloDto>>() {}));
+    }
+
+    protected void buildHenkiloList() {
+        Debugger authenticationCallInOutDebug  =  debug(ROUTE_HENKILOS + SERVICE_CALL_POSTFIX);
+        headers(
+            from(ROUTE_HENKILOS),
+            headers()
+                 // TODO: Muuttumassa POST-pyynnöksi, jotta URL:n pituus saadaan riittämään.
+                 // Muuta silloin .get() -> .post() ja  .toQuery() -> .toBody()
+                .get()
+                .path(HENKILOS_HAKU_PATH)
+                    .param(HENKILOS_HENKILOTYYPPI_PARAM)
+                        .value(HENKILOS_HENKILOTYYPPI_VIRKAILIJA).toQuery()
+                    .param(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME)
+                        .listFromHeader().toQuery()
+                    .param(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME)
+                        .optional().valueFromHeader().toQuery()
+                .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
+        )
+        .process(authenticationCallInOutDebug)
+        .to(uri(authenticationServiceHenkiloServiceRestUrl, 10L*60L*1000L)) // wait for 10 minutes maximum
+        .process(authenticationCallInOutDebug)
+        .process(jsonToDto(new TypeReference<List<HenkiloListResultDto>>() {}));
     }
 
     protected void buildKayttoOikeusryhmas() {
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_KAYTTOOIKESURYHMAS + ".AuthenticationServiceCall");
+        Debugger authenticationCallInOutDebug  =  debug(ROUTE_KAYTTOOIKESURYHMAS + SERVICE_CALL_POSTFIX);
         headers(
                 from(ROUTE_KAYTTOOIKESURYHMAS),
                 headers()
                         .get()
                         .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
-      )
+        )
         .process(authenticationCallInOutDebug)
-        .to(trim(authenticationServiceKayttooikeusryhmasRestUrl))
+        .to(uri(authenticationServiceKayttooikeusryhmasRestUrl))
         .process(authenticationCallInOutDebug)
-        .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() { }));
-    }
-
-    protected void buildMyInformation() {
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_MY_INFORMATION + ".AuthenticationServiceCall");
-        headers(
-                from(ROUTE_MY_INFORMATION),
-                headers()
-                        .get().path(MY_INFORMATION_PATH)
-                        .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
-      )
-        .process(authenticationCallInOutDebug)
-        .to(trim(casService))
-        .process(authenticationCallInOutDebug)
-        .process(jsonToDto(new TypeReference<MyInformationDto>() {
-        }));
+        .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
     }
 
 
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     public List<KayttooikesuryhmaDto> findKayttooikeusryhmas(CamelRequestContext requestContext) {
-        return sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_KAYTTOOIKESURYHMAS, "",
-                new HashMap<String, Object>(), requestContext, List.class);
-    }
-
-    // TODO: TEST ME, does not exists in luokka yet
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<HenkiloDto> findHenkilosByOrganisaatioOids(List<String> ooids, CamelRequestContext requestContext) {
-        return sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_HENKILOS, "",
-                headerValues()
-                        .add("ooids", StringHelper.join(",", ooids.toArray(new String[0])))
-                        .map(),
-                requestContext, List.class);
+        return sendBodyHeadersAndProperties(getCamelTemplate(),
+                ROUTE_KAYTTOOIKESURYHMAS, "", new HashMap<String, Object>(), requestContext, List.class);
     }
 
     @Override
-    public MyInformationDto getMe() {
-        return sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_MY_INFORMATION, "",
-                new HashMap<String, Object>(), new DefaultCamelRequestContext(), MyInformationDto.class);
+    public HenkiloDetailsDto getHenkiloTiedot(String oid, CamelRequestContext requestContext) {
+        HenkiloDetailsDto details = sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_HENKILO, oid,
+                new HashMap<String, Object>(), requestContext, HenkiloDetailsDto.class);
+
+        @SuppressWarnings("unchecked")
+        List<OrganisaatioHenkiloDto> organisaatioHenkilos = sendBodyHeadersAndProperties(getCamelTemplate(),
+                ROUTE_ORGANISAATIOHENKILOS, oid, new HashMap<String, Object>(), requestContext, List.class);
+        details.setOrganisaatioHenkilos(organisaatioHenkilos);
+
+        return details;
+    }
+
+    @Override
+    public List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
+        HeaderValueBuilder header = headerValues()
+                .add(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, criteria.getOrganisaatioOids());
+
+        List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
+        if (!criteria.getKayttoOikeusRayhmas().isEmpty()) {
+            for (String kor : criteria.getKayttoOikeusRayhmas()) {
+                @SuppressWarnings("unchecked")
+                List<HenkiloListResultDto> korResults = sendBodyHeadersAndProperties(
+                        getCamelTemplate(), ROUTE_HENKILOS, "", header.copy()
+                            .add(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, kor).map(),
+                        requestContext, List.class);
+                results.addAll(korResults);
+            }
+        } else {
+            @SuppressWarnings("unchecked")
+            List<HenkiloListResultDto> searchResults =  sendBodyHeadersAndProperties(getCamelTemplate(),
+                    ROUTE_HENKILOS, "", header.map(), requestContext, List.class);
+            results.addAll(searchResults);
+        }
+        return results;
     }
 }

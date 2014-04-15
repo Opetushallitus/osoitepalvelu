@@ -50,4 +50,16 @@ public class SearchTargetGroupDto implements Serializable {
     public void setOptions(List<SearchTargetGroup.TargetType> options) {
         this.options  =  options;
     }
+
+    public boolean containsAnyOption(SearchTargetGroup.TargetType... targetTypes) {
+        if (targetTypes == null || targetTypes.length < 1) {
+            return true;
+        }
+        for (SearchTargetGroup.TargetType type : targetTypes) {
+            if (this.options.contains(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

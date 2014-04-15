@@ -1,12 +1,37 @@
+/*
+ * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
+ *
+ * This program is free software: Licensed under the EUPL, Version 1.1 or - as
+ * soon as they will be approved by the European Commission - subsequent versions
+ * of the EUPL (the "Licence");
+ *
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at: http://www.osor.eu/eupl/
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * European Union Public Licence for more details.
+ */
+
 /**
  * Created by ratamaa on 12/4/13.
  */
 
+window.CONFIG = window.CONFIG || {};
+window.CONFIG.app = {
+    "userLanguages": ['kieli_fi', 'kieli_sv', 'kieli_en'], //default languages
+    "ui.timeout.short": 10000,
+    "ui.timeout.long": 60000
+};
+
 var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu',
         ['ngRoute', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2', 'ngGrid', 'loading',
-            'localisation', 'auth', 'flash']);
+            'localisation', 'auth',
+            'angular-flash.service', 'angular-flash.flash-alert-directive']);
 
-OsoiteKoostepalvelu.factory('SearchResultProvider', function($http, LocalisationService) {
+OsoiteKoostepalvelu.factory('SearchResultProvider', ["$http", "LocalisationService",
+        function($http, LocalisationService) {
     return function(details) {
         $http.post('api/search/list.json', details.data, {
             params: {lang: LocalisationService.getLocale()}
@@ -14,7 +39,7 @@ OsoiteKoostepalvelu.factory('SearchResultProvider', function($http, Localisation
         .success(details.callback)
         .error(details.errorCallback);
     }
-});
+}]);
 
 if (!(window.console && console.log)) {
     console = {
@@ -30,13 +55,6 @@ if (!(window.console && console.log)) {
         }
     };
 }
-
-window.CONFIG = window.CONFIG || {};
-window.CONFIG.app = {
-    "userLanguages": ['kieli_fi', 'kieli_sv', 'kieli_en'], //default languages
-    "ui.timeout.short": 10000,
-    "ui.timeout.long": 60000
-};
 
 
 function osoitepalveluInit() {
@@ -59,7 +77,6 @@ function osoitepalveluInit() {
 	    console.log("Got ready signal from: " + id + " -> "+status+" -> IC="+init_counter/*, xhr*/);
 
 	    if (!fail && init_counter == 0) {
-
 	        angular.element(document).ready(function() {
 	            angular.module('myApp', ['OsoiteKoostepalvelu']);
 	            angular.bootstrap(document, ['myApp']);
@@ -72,24 +89,52 @@ function osoitepalveluInit() {
 		 console.log("LOG "+status+": "+xhr.status+" "+xhr.statusText, xhr);
 	}
 
-	//
-	// Preload application localisations for Osoitepalvelu
-	//
-	var localisationUrl = window.CONFIG.env.osoitepalveluLocalisationRestUrl + "?category=osoitepalvelu&value=cached";
-	console.log("** Loading localisation info; from: ", localisationUrl);
-	init_counter++;
-	jQuery.ajax(localisationUrl, {
-	    dataType: "json",
-	    crossDomain:true,
-	    complete: logRequest,
-	    success: function(xhr, status) {
-	        window.CONFIG.env["osoitepalvelu.localisations"] = xhr;
-	        initFunction("localisations", xhr, status);
-	    },
-	    error: function(xhr, status) {
-	        window.CONFIG.env["osoitepalvelu.localisations"] = [];
-	        initFail("localisations", xhr, status);
-	    }
-	});
+    if (window.CONFIG.env.casMeUrl) {
+        init_counter++;
+        jQuery.ajax(window.CONFIG.env.useCasMeUrl != "false" ? window.CONFIG.env.casMeUrl : "cas_me_test.json", {
+            dataType: "json",
+            crossDomain:true,
+            complete: logRequest,
+            success: function(xhr, status) {
+                window.CONFIG.env["me"] = xhr;
+                initFunction("casMe", xhr, status);
+            },
+            error: function(xhr, status) {
+                window.CONFIG.env["me"] = {};
+                if (!xhr.status && xhr.responseJSON) {
+                    // call to local JSON file:
+                    initFunction("casMe", xhr.responseJSON, status);
+                } else {
+                    initFail("casMe", xhr, status);
+                }
+            }
+        });
+    }
+
+    if ( !(window.CONFIG.mode && window.CONFIG.mode == 'dev-without-backend') ) {
+        //
+        // Preload application localisations for Osoitepalvelu
+        //
+        var localisationUrl = window.CONFIG.env.osoitepalveluLocalisationRestUrl
+                + "?category=osoitepalvelu&value=cached";
+        console.log("** Loading localisation info; from: ", localisationUrl);
+        init_counter++;
+        jQuery.ajax(localisationUrl, {
+            dataType: "json",
+            crossDomain:true,
+            complete: logRequest,
+            success: function(xhr, status) {
+                window.CONFIG.env["osoitepalvelu.localisations"] = xhr;
+                initFunction("localisations", xhr, status);
+            },
+            error: function(xhr, status) {
+                window.CONFIG.env["osoitepalvelu.localisations"] = [];
+                initFail("localisations", xhr, status);
+            }
+        });
+    } else {
+        init_counter++;
+        initFunction('dev', {}, 200);
+    }
 }
 

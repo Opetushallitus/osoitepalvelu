@@ -18,9 +18,9 @@ package fi.vm.sade.osoitepalvelu.service.mock;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYksityiskohtaisetTiedotDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class OrganisaatioServiceMock implements OrganisaatioService {
     private List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults  =  new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
-    private OrganisaatioYksityiskohtaisetTiedotDto yksityiskohtaisetTiedotByOid;
+    private OrganisaatioDetailsDto yksityiskohtaisetTiedotByOid;
 
     @Override
     public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(OrganisaatioYhteystietoCriteriaDto criteria,
@@ -41,7 +41,7 @@ public class OrganisaatioServiceMock implements OrganisaatioService {
     }
 
     @Override
-    public OrganisaatioYksityiskohtaisetTiedotDto getdOrganisaatioByOid(String oid,
+    public OrganisaatioDetailsDto getdOrganisaatioByOid(String oid,
                                                                         CamelRequestContext context) {
         return yksityiskohtaisetTiedotByOid;
     }
@@ -50,7 +50,7 @@ public class OrganisaatioServiceMock implements OrganisaatioService {
     public void purgeOrganisaatioByOidCache(String oid) {
     }
 
-    public void setYksityiskohtaisetTiedotByOid(OrganisaatioYksityiskohtaisetTiedotDto yksityiskohtaisetTiedotByOid) {
+    public void setYksityiskohtaisetTiedotByOid(OrganisaatioDetailsDto yksityiskohtaisetTiedotByOid) {
         this.yksityiskohtaisetTiedotByOid  =  yksityiskohtaisetTiedotByOid;
     }
 

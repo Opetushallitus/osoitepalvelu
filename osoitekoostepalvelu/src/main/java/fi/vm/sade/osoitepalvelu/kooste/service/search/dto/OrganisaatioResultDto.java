@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
+package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 
@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OrganisaatioTiedotDto implements Serializable {
+public class OrganisaatioResultDto implements Serializable {
     private static final long serialVersionUID  =  -3235512233762738508L;
     
     private String oid; // Yksikäsitteinen tunniste

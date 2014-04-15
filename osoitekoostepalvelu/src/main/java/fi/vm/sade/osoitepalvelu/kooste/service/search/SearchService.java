@@ -17,7 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioResultsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 
 /**
@@ -30,8 +30,8 @@ public interface SearchService {
     /**
      * @param terms to search with
      * @param requestContext the context for HTTP request received by the application to operate in
-     * @return organisaatio results
+     * @return results
      */
-    OrganisaatioResultsDto find(SearchTermsDto terms, CamelRequestContext requestContext);
+    SearchResultsDto find(SearchTermsDto terms, CamelRequestContext requestContext);
 
 }

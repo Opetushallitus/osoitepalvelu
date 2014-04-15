@@ -16,54 +16,78 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+import fi.ratamaa.dtoconverter.annotation.DtoPath;
+import fi.ratamaa.dtoconverter.annotation.DtoSkipped;
+
 import java.io.Serializable;
 import java.util.List;
-
-import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 
 /**
  * User: ratamaa
  * Date: 2/14/14
  * Time: 3:34 PM
  */
-@DtoConversion(path =  {"organisaatio", "henkilo", "osoite" }, withClass  =  ResultAggregateDto.class)
+@DtoConversion
 public class SearchResultRowDto implements Serializable {
     private static final long serialVersionUID  =  -1252066099444560569L;
-    
-    @DtoConversion(path = "organisaatio.oid", withClass  =  ResultAggregateDto.class)
-    private String organisaatioOid;
-    private String kotikunta;
-    private String toimipistekoodi;
-    private String oppilaitosKoodi;
-    private String wwwOsoite;
-    @DtoConversion(skip  =  true, withClass  =  ResultAggregateDto.class)
+
+    @DtoSkipped
     private String nimi;
-    private String faksinumero;
-    private String puhelinnumero;
-    private String emailOsoite;
+    @DtoConversion(path = "organisaatio.oid", with="organisaatioAggregate")
+    @DtoPath(value="organisaatioHenkilo.organisaatioOid", with="henkiloAggregate")
+    private String organisaatioOid;
+    @DtoConversion(path="organisaatio.kotikunta", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String kotikunta;
+    @DtoConversion(path="organisaatio.toimipistekoodi", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String toimipistekoodi;
+    @DtoConversion(path="organisaatio.oppilaitosKoodi", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String oppilaitosKoodi;
+    @DtoConversion(path="organisaatio.wwwOsoite", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String wwwOsoite;
+    @DtoConversion(path="organisaatio.tyypit", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
     private List<String> tyypit;
+    @DtoConversion(path="organisaatio.faksinumero", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String faksinumero;
+    @DtoConversion(path="organisaatio.puhelinnumero", with="organisaatioAggregate")
+    @DtoPath(value="osoite.puhelinnumero", with="henkiloAggregate")
+    private String puhelinnumero;
+    @DtoConversion(path="organisaatio.emailOsoite", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String emailOsoite;
+    @DtoConversion(path="organisaatio.viranomaistiedotuksenEmail", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
     private String viranomaistiedotuksenEmail;
+    @DtoConversion(path="organisaatio.koulutusneuvonnanEmail", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
     private String koulutusneuvonnanEmail;
+    @DtoConversion(path="organisaatio.kriisitiedotuksenEmail", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
     private String kriisitiedotuksenEmail;
 
-    private String nimike;
-    @DtoConversion(path = "henkilo.nimi", withClass  =  ResultAggregateDto.class)
-    private String yhteystietoNimi;
-    @DtoConversion(path = "henkilo.email", withClass  =  ResultAggregateDto.class)
-    private String henkiloEmail;
-    @DtoConversion(path = "henkilo.nimi", withClass  =  ResultAggregateDto.class)
+    @DtoConversion(path = "henkilo.yhteyshenkiloOid", with="organisaatioAggregate")
+    @DtoPath(value="henkilo.henkiloOid", with="henkiloAggregate")
     private String henkiloOid;
-
-    @DtoConversion(path = "osoite.kieli", withClass  =  ResultAggregateDto.class)
-    private String osoiteKieli;
-    private String osoiteTyyppi;
-    private String yhteystietoOid;
-    @DtoConversion(path = "osoite.osoite", withClass  =  ResultAggregateDto.class)
-    private String osoite;
-    private String postilokero;
-    private String postinumero;
-    private String postitoimipaikka;
-    private String extraRivi;
+    @DtoConversion(path="henkilo.nimi")
+    private String yhteystietoNimi;
+    @DtoConversion(path="henkilo.nimike", with="organisaatioAggregate")
+    @DtoPath(value="organisaatioHenkilo.tehtavanimike", with="henkiloAggregate")
+    private String nimike;
+    @DtoConversion(path = "henkilo.email", with="organisaatioAggregate")
+    @DtoPath(value = "osoite.henkiloEmail", with="henkiloAggregate")
+    private String henkiloEmail;
+    @DtoConversion(path = "osoite", with="henkiloAggregate")
+    @DtoPath(value = "kayntiosoite", with="organisaatioAggregate")
+    private SearchResultOsoiteDto kayntiosoite;
+    @DtoConversion(path = "osoite", with="henkiloAggregate")
+    @DtoPath(value = "postiosoite", with="organisaatioAggregate")
+    private SearchResultOsoiteDto postiosoite;
 
 
     public String getOrganisaatioOid() {
@@ -125,15 +149,15 @@ public class SearchResultRowDto implements Serializable {
     public String getNimike() {
         return nimike;
     }
-    
+
     public void setNimike(String nimike) {
         this.nimike  =  nimike;
     }
-    
+
     public String getYhteystietoNimi() {
         return yhteystietoNimi;
     }
-    
+
     public void setYhteystietoNimi(String yhteystietoNimi) {
         this.yhteystietoNimi  =  yhteystietoNimi;
     }
@@ -141,57 +165,9 @@ public class SearchResultRowDto implements Serializable {
     public String getHenkiloEmail() {
         return henkiloEmail;
     }
-    
+
     public void setHenkiloEmail(String henkiloEmail) {
         this.henkiloEmail  =  henkiloEmail;
-    }
-
-    public String getOsoiteTyyppi() {
-        return osoiteTyyppi;
-    }
-
-    public void setOsoiteTyyppi(String osoiteTyyppi) {
-        this.osoiteTyyppi  =  osoiteTyyppi;
-    }
-
-    public String getYhteystietoOid() {
-        return yhteystietoOid;
-    }
-
-    public void setYhteystietoOid(String yhteystietoOid) {
-        this.yhteystietoOid  =  yhteystietoOid;
-    }
-
-    public String getOsoite() {
-        return osoite;
-    }
-
-    public void setOsoite(String osoite) {
-        this.osoite  =  osoite;
-    }
-
-    public String getPostinumero() {
-        return postinumero;
-    }
-
-    public void setPostinumero(String postinumero) {
-        this.postinumero  =  postinumero;
-    }
-
-    public String getPostitoimipaikka() {
-        return postitoimipaikka;
-    }
-
-    public void setPostitoimipaikka(String postitoimipaikka) {
-        this.postitoimipaikka  =  postitoimipaikka;
-    }
-
-    public String getExtraRivi() {
-        return extraRivi;
-    }
-
-    public void setExtraRivi(String extraRivi) {
-        this.extraRivi  =  extraRivi;
     }
 
     public String getPuhelinnumero() {
@@ -208,14 +184,6 @@ public class SearchResultRowDto implements Serializable {
 
     public void setTyypit(List<String> tyypit) {
         this.tyypit  =  tyypit;
-    }
-
-    public String getOsoiteKieli() {
-        return osoiteKieli;
-    }
-
-    public void setOsoiteKieli(String osoiteKieli) {
-        this.osoiteKieli  =  osoiteKieli;
     }
 
     public String getViranomaistiedotuksenEmail() {
@@ -242,14 +210,6 @@ public class SearchResultRowDto implements Serializable {
         this.kriisitiedotuksenEmail  =  kriisitiedotuksenEmail;
     }
 
-    public String getPostilokero() {
-        return this.postilokero;
-    }
-
-    public void setPostilokero(String postilokero) {
-        this.postilokero  =  postilokero;
-    }
-
     public String getHenkiloOid() {
         return henkiloOid;
     }
@@ -266,6 +226,23 @@ public class SearchResultRowDto implements Serializable {
         this.oppilaitosKoodi  =  oppilaitosKoodi;
     }
 
+    public SearchResultOsoiteDto getKayntiosoite() {
+        return kayntiosoite;
+    }
+
+    public void setKayntiosoite(SearchResultOsoiteDto kayntiosoite) {
+        this.kayntiosoite = kayntiosoite;
+    }
+
+    public SearchResultOsoiteDto getPostiosoite() {
+        return postiosoite;
+    }
+
+    public void setPostiosoite(SearchResultOsoiteDto postiosoite) {
+        this.postiosoite = postiosoite;
+    }
+
+    @DtoConversion(skip = true)
     public OidAndTyyppiPair getOidAndTyyppiPair() {
         if(this.henkiloOid != null) {
             return new OidAndTyyppiPair(OidAndTyyppiPair.TYYPPI_HENKILO, this.henkiloOid);

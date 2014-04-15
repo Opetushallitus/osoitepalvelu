@@ -47,6 +47,10 @@ public class SearchTargetGroup implements Serializable {
             this.organisaatioPalveluTyyppiArvo  =  organisaatioPalveluTyyppiArvo;
         }
 
+        public static GroupType[] getHenkiloTypes() {
+            return new GroupType[] {KOULUTA_KAYTTAJAT};
+        }
+
         public String getOrganisaatioPalveluTyyppiArvo() {
             return organisaatioPalveluTyyppiArvo;
         }

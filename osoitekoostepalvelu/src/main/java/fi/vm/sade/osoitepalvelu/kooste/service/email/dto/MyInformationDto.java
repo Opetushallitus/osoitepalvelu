@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
+package fi.vm.sade.osoitepalvelu.kooste.service.email.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;

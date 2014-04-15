@@ -14,15 +14,15 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
+package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
 
-import java.io.Serializable;
+import fi.vm.sade.osoitepalvelu.kooste.domain.HenkiloDetails;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * User: ratamaa
- * Date: 3/14/14
- * Time: 1:10 PM
+ * Date: 3/26/14
+ * Time: 2:50 PM
  */
-public class HenkiloDto implements Serializable {
-    /// TODO:
+public interface HenkiloCacheRepository extends MongoRepository<HenkiloDetails, String> {
 }

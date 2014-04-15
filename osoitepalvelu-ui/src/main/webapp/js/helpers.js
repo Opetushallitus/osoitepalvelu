@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
+ *
+ * This program is free software: Licensed under the EUPL, Version 1.1 or - as
+ * soon as they will be approved by the European Commission - subsequent versions
+ * of the EUPL (the "Licence");
+ *
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at: http://www.osor.eu/eupl/
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * European Union Public Licence for more details.
+ */
+
 /**
  * Created by ratamaa on 12/4/13.
  */
@@ -31,7 +47,7 @@ angular.module('Helpers', [])
         }
     };
 })
-.service('ArrayHelper', function(ExtractHelper,EqualsHelper) {
+.service('ArrayHelper', ["ExtractHelper", "EqualsHelper", function(ExtractHelper,EqualsHelper) {
     this.extract = function(arr, fields) {
         var results = [];
         angular.forEach(arr, function(v) {
@@ -62,8 +78,8 @@ angular.module('Helpers', [])
         });
         return conditionsMet;
     };
-})
-.service('FilterHelper', function(ExtractHelper, ArrayHelper) {
+}])
+.service('FilterHelper', ["ExtractHelper", "ArrayHelper", function(ExtractHelper, ArrayHelper) {
     this.notInArray = function(arr) {
         return function(val) {
             if( !arr ) return true;
@@ -90,7 +106,7 @@ angular.module('Helpers', [])
             }
         }
     };
-})
+}])
 .directive('fullSizeGrid', ['$timeout', '$log', function ($timeout, $log) {
     $log.info("Directive called.");
     return {

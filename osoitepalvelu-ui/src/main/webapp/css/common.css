@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
+ *
+ * This program is free software: Licensed under the EUPL, Version 1.1 or - as
+ * soon as they will be approved by the European Commission - subsequent versions
+ * of the EUPL (the "Licence");
+ *
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at: http://www.osor.eu/eupl/
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * European Union Public Licence for more details.
+ */
 
 /* Select2 adjustments for virkailija.css */
 .select2-container-multi .select2-choices .select2-search-choice {
@@ -44,4 +59,53 @@
 
 input[type="checkbox"].ngSelectionCheckbox {
     top: inherit;
+}
+
+/* angular-flash.js related */
+
+/* Remove colors and add transition property */
+.alert-flash {
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    border: 1px solid transparent;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+    /* change transition property to all */
+    -webkit-transition-property: all;
+    transition-property: all;
+}
+
+.alert.alert-placeholder {
+    padding: 0px;
+    margin-bottom: 0px;
+    height: 0px;
+}
+
+.alert.alert-placeholder.alert-error {
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 20px;
+    height: inherit;
+}
+
+.alert-flash h4 {
+    margin: 0;
+}
+
+.alert-flash .close {
+    position: relative;
+    top: -2px;
+    right: -21px;
+    line-height: 20px;
+}
+
+/* add warning colors to warn class */
+.alert-warn {
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+}
+
+.alert-warn,
+.alert-warn h4 {
+    color: #c09853;
 }

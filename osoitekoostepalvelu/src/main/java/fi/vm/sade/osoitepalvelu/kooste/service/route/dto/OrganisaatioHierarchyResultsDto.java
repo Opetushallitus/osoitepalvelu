@@ -14,30 +14,34 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
+package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrganisaatioResultsDto implements Serializable {
-    private static final long serialVersionUID  =  -2063655804200866815L;
-    
-    private List<OrganisaatioTiedotDto> tulos  =  new ArrayList<OrganisaatioTiedotDto>();
+/**
+ * User: ratamaa
+ * Date: 3/27/14
+ * Time: 1:34 PM
+ */
+public class OrganisaatioHierarchyResultsDto implements Serializable {
+    private int numHits;
+    private List<OrganisaatioHierarchyDto> organisaatiot = new ArrayList<OrganisaatioHierarchyDto>();
 
-    public OrganisaatioResultsDto() {
-        tulos  =  new ArrayList<OrganisaatioTiedotDto>();
+    public int getNumHits() {
+        return numHits;
     }
-    
-    public List<OrganisaatioTiedotDto> getResults() {
-        return tulos;
+
+    public void setNumHits(int numHits) {
+        this.numHits = numHits;
     }
-    
-    public void setResults(List<OrganisaatioTiedotDto> results) {
-        this.tulos  =  results;
+
+    public List<OrganisaatioHierarchyDto> getOrganisaatiot() {
+        return organisaatiot;
     }
-    
-    public void addResult(OrganisaatioTiedotDto result) {
-        this.tulos.add(result);
+
+    public void setOrganisaatiot(List<OrganisaatioHierarchyDto> organisaatiot) {
+        this.organisaatiot = organisaatiot;
     }
 }

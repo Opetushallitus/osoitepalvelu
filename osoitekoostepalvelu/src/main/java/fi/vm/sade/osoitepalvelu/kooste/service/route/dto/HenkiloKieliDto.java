@@ -14,35 +14,32 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.search.api;
+package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
 import java.io.Serializable;
-import java.util.TreeSet;
 
-public class ConditionDto implements Serializable {
-    
-    private static final long serialVersionUID  =  3474454227186986250L;
+/**
+ * User: ratamaa
+ * Date: 3/26/14
+ * Time: 2:13 PM
+ */
+public class HenkiloKieliDto implements Serializable {
+    private String kieliKoodi; // esim. fi
+    private String KieliTyyppi; // esim. suomi
 
-    private String operaattori;
-    private TreeSet<SearchValueDto> ehdot;
-
-    public ConditionDto() {
-        this.ehdot  =  new TreeSet<SearchValueDto>();
-    }
-    
-    public String getOperaattori() {
-        return operaattori;
-    }
-    
-    public void setOperaattori(String operaattori) {
-        this.operaattori  =  operaattori;
+    public String getKieliKoodi() {
+        return kieliKoodi;
     }
 
-    public TreeSet<SearchValueDto> getEhdot() {
-        return ehdot;
+    public void setKieliKoodi(String kieliKoodi) {
+        this.kieliKoodi = kieliKoodi;
     }
-    
-    public void addEhto(SearchValueDto ehto) {
-        this.ehdot.add(ehto);
-    }   
+
+    public String getKieliTyyppi() {
+        return KieliTyyppi;
+    }
+
+    public void setKieliTyyppi(String kieliTyyppi) {
+        KieliTyyppi = kieliTyyppi;
+    }
 }

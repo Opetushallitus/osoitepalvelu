@@ -17,11 +17,9 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.api.OrganisaatioTiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
 import org.apache.poi.ss.usermodel.Workbook;
-
-import java.util.List;
 
 /**
  * User: ratamaa
@@ -31,24 +29,20 @@ import java.util.List;
 public interface SearchResultTransformerService {
 
     /**
-     * Creates a scalar product of given orgranisaatios, their yhteyshenkilos and postiosoites.
-     * Filters the postiosoites to match the possibly given locale of the presentation and localizes orgnisaatio's
-     * nimi with the same locale.
-     *
      * @param results to be transformed
      * @param presentation holding the preferred locale to filter positosoites with
      * @param requestContext the context for HTTP request received by the application to operate in
      * @return the results, rows for presentation
      */
-    SearchResultsDto transformToResultRows(List<OrganisaatioTiedotDto> results,
-                                                   SearchResultPresentation presentation,
-                                                   CamelRequestContext requestContext);
+    SearchResultsPresentationDto transformToResultRows(SearchResultsDto results,
+                                                       SearchResultPresentation presentation,
+                                                       CamelRequestContext requestContext);
 
     /**
      * @param workbook the excel workbook to produce the rows to
      * @param searchResults to produce to the workbook
      */
-    void produceExcel(Workbook workbook, SearchResultsDto searchResults);
+    void produceExcel(Workbook workbook, SearchResultsPresentationDto searchResults);
 
     /**
      * @return the currently logged in user's OID.

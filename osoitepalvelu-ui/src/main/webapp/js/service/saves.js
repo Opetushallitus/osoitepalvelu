@@ -1,8 +1,24 @@
+/*
+ * Copyright (c) 2013 The Finnish National Board of Education - Opetushallitus
+ *
+ * This program is free software: Licensed under the EUPL, Version 1.1 or - as
+ * soon as they will be approved by the European Commission - subsequent versions
+ * of the EUPL (the "Licence");
+ *
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at: http://www.osor.eu/eupl/
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * European Union Public Licence for more details.
+ */
+
 /**
  * Created by ratamaa on 12/4/13.
  */
-
-OsoiteKoostepalvelu.service('SavesService', function($log, $http, SaveConverter, commonErrorHandler) {
+OsoiteKoostepalvelu.service('SavesService', ["$log", "$http", "SaveConverter", "commonErrorHandler",
+        function($log, $http, SaveConverter, commonErrorHandler) {
 
     this.list = function(success, error) {
         $http.get('api/saves/').success(success).error(error);
@@ -33,11 +49,12 @@ OsoiteKoostepalvelu.service('SavesService', function($log, $http, SaveConverter,
         $log.info("Deleting search: " + id);
         $http['delete']("api/saves/"+id).success(success).error(error || commonErrorHandler);
     };
-});
+}]);
 
 
-OsoiteKoostepalvelu.service("SaveConverter", function($log, $filter, FilterHelper, ArrayHelper,
-                        AddressFields, ReceiverTypes, TargetGroups) {
+OsoiteKoostepalvelu.service("SaveConverter", ["$log", "$filter", "FilterHelper", "ArrayHelper",
+                   "AddressFields", "ReceiverTypes", "TargetGroups",
+        function($log, $filter, FilterHelper, ArrayHelper, AddressFields, ReceiverTypes, TargetGroups) {
     this.toDomain = function(save) {
         var domainSave = angular.copy(save);
 
@@ -102,4 +119,4 @@ OsoiteKoostepalvelu.service("SaveConverter", function($log, $filter, FilterHelpe
 
         return save;
     };
-});
+}]);
