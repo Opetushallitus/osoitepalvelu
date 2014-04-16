@@ -17,9 +17,11 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
 import fi.ratamaa.dtoconverter.reflection.Property;
+import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import scala.annotation.target.setter;
 
 import java.io.Serializable;
 import java.util.*;
@@ -43,6 +45,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings.add("PUHELINNUMERO", "puhelinnumeroIncluded");
         fieldMappings.add("FAXINUMERO", "faksinumeroIncluded");
         fieldMappings.add("INTERNET_OSOITE", "wwwOsoiteIncluded");
+        fieldMappings.add("EMAIL_OSOITE", "organisaatioEmailIncluded");
         fieldMappings.add("VIRANOMAISTIEDOTUS_EMAIL", "viranomaistiedotuksenSahkopostiosoiteIncluded");
         fieldMappings.add("KOULUTUSNEUVONNAN_EMAIL", "koulutusneuvonnanSahkopostiosoiteIncluded");
         fieldMappings.add("KRIISITIEDOTUKSEN_EMAIL", "kriisitiedotuksenSahkopostiosoiteIncluded");
@@ -65,6 +68,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean koulutusneuvonnanSahkopostiosoiteIncluded;
     private boolean kriisitiedotuksenSahkopostiosoiteIncluded;
     private boolean organisaationSijaintikuntaIncluded;
+    private boolean organisaatioEmailIncluded;
     private Locale locale;
     private Set<OidAndTyyppiPair> nonIncludedOids;
     private SearchTermsDto.SearchType searchType;
@@ -77,12 +81,16 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
                     includeAddressFields(searchTerms.getAddressFields());
                     break;
                 case EMAIL:
-                    setYhteyshenkiloIncluded(true);
-                    setYhteyshenkiloEmailIncluded(true);
+                    setOrganisaationNimiIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes()));
+                    setYhteyshenkiloIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloTypes()));
+                    setYhteyshenkiloEmailIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloTypes()));
+                    setOrganisaatioEmailIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes(),
+                                    SearchTargetGroup.TargetType.ORGANISAATIO));
                     break;
                 case LETTER:
                 case SEND_LETTER:
-                    setOrganisaationNimiIncluded(true);
+                    setOrganisaationNimiIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes()));
+                    setYhteyshenkiloIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloTypes()));
                     setPositosoiteIncluded(true);
                     break;
                 default: break;
@@ -235,9 +243,19 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     @Override
+    public boolean isOrganisaatioEmailIncluded() {
+        return organisaatioEmailIncluded;
+    }
+
+    public void setOrganisaatioEmailIncluded(boolean organisaatioEmailIncluded) {
+        this.organisaatioEmailIncluded = organisaatioEmailIncluded;
+    }
+
+    @Override
     public boolean isResultRowIncluded(SearchResultRowDto row) {
         if (this.searchType != null && this.searchType == SearchTermsDto.SearchType.EMAIL) {
-            if (row.getHenkiloEmail() == null || "".equals(row.getHenkiloEmail().trim())) {
+            if ((row.getHenkiloEmail() == null || "".equals(row.getHenkiloEmail().trim()))
+                    && (row.getEmailOsoite() == null || "".equals(row.getEmailOsoite().trim()))) {
                 return false;
             }
         }

@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
@@ -67,6 +68,15 @@ public class HenkiloDetailsDto extends HenkiloListResultDto implements Serializa
 
     public void setOrganisaatioHenkilos(List<OrganisaatioHenkiloDto> organisaatioHenkilos) {
         this.organisaatioHenkilos = organisaatioHenkilos;
+    }
+
+    public Optional<String> findFirstAktiivinenOrganisaatioOid() {
+        for (OrganisaatioHenkiloDto organisaatioHenkiloDto : this.organisaatioHenkilos) {
+            if (!organisaatioHenkiloDto.isPassivoitu()) {
+                return Optional.fromNullable(organisaatioHenkiloDto.getOrganisaatioOid());
+            }
+        }
+        return Optional.absent();
     }
 
     public Set<String> getAktiivinenOrganisaatioOids() {

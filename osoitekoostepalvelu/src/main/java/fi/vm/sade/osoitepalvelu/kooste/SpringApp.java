@@ -30,7 +30,13 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  * Time: 1:09 PM
  */
 @Configuration
-@ComponentScan(basePackageClasses  =  SpringApp.class)
+@ComponentScan(basePackages  =  {
+        "fi.vm.sade.osoitepalvelu.kooste.common",
+        "fi.vm.sade.osoitepalvelu.kooste.domain",
+        "fi.vm.sade.osoitepalvelu.kooste.dao",
+        "fi.vm.sade.osoitepalvelu.kooste.service",
+        "fi.vm.sade.osoitepalvelu.kooste.webapp"
+})
 @ImportResource("classpath:spring/application-context.xml")
 @Import(value  =  {MongoConfig.class, OsoitepalveluCamelConfig.class })
 public class SpringApp {

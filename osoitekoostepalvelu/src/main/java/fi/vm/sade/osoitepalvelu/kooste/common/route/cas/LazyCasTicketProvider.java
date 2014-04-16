@@ -33,18 +33,15 @@ public class LazyCasTicketProvider implements CasTicketProvider {
     }
 
     @Override
-    public Map<String, String> provideTicketHeaders(String service) {
-        Map<String, String> headers = null;
+    public Map<String, Object> provideTicketHeaders(String service) {
+        Map<String, Object> headers = null;
         if (this.cache != null) {
             headers  =  this.cache.get(service);
             if (headers != null) {
                 return headers;
             }
         }
-        headers  =  this.target.provideTicketHeaders(service);
-        if (this.cache != null) {
-            this.cache.store(service, headers);
-        }
+        headers = this.target.provideTicketHeaders(service);
         return headers;
     }
 }

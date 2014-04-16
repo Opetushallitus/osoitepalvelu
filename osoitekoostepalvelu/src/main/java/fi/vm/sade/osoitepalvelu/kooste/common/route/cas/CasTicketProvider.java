@@ -35,6 +35,6 @@ public interface CasTicketProvider {
      * @param service the CAS service
      * @return the headers to be used for authenticating the request
      */
-    Map<String, String> provideTicketHeaders(String service);
+    Map<String, Object> provideTicketHeaders(String service);
 
 }

@@ -29,7 +29,10 @@ import org.springframework.context.annotation.ImportResource;
  * Time: 1:16 PM
  */
 @Configuration
-@ComponentScan(basePackageClasses  =  SavesController.class)
+@ComponentScan(basePackages  =  {
+    "fi.vm.sade.osoitepalvelu.kooste.mvc",
+    "fi.vm.sade.osoitepalvelu.kooste.scheduled"
+})
 @ImportResource("classpath:spring/spring-mvc.xml")
 @Import(SpringApp.class)
 public class SpringMvcApp {

@@ -57,10 +57,14 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected static final String CONTENT_TYPE_JSON  =  "application/json;charset = UTF-8";
     protected static final int DEFAULT_RETRY_LIMIT  =  2;
     protected static final String CAS_TICKET_CACHE_PROPERTY  =  "CasTicketCache";
+    protected static final String CAS_TICKET_CACHE_SERVICE_PROPERTY  =  "CasTicketCache.service";
     protected static final String URL_ENCODING = "UTF-8";
     // According to http://camel.apache.org/http.html
     protected static final String HTTP_CLIENT_TIMEOUT_PARAM_NAME = "httpClient.soTimeout";
-    protected static final long DEFAULT_HTTP_TIMEOUT_MILLIS = 5000;
+    protected static final long MILLIS_IN_SECOND = 1000L;
+    protected static final long SECONDS_IN_MINUTE = 60L;
+    protected static final long DEFAULT_HTTP_TIMEOUT_MILLIS = 15L*MILLIS_IN_SECOND;
+
 
     @Value("${web.url.cas}")
     protected String casService;
@@ -139,8 +143,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             Debugger debug  =  debug("CasTicketDefinitionProcessor");
             return process.process(debug)
                     .process(new SetOutHeadersProcessor() {
-                protected Map<String, String> getHeaders(Exchange exchange) {
+                protected Map<String, Object> getHeaders(Exchange exchange) {
                     CasTicketCache cache  =  exchange.getProperty(CAS_TICKET_CACHE_PROPERTY, CasTicketCache.class);
+                    exchange.setProperty(CAS_TICKET_CACHE_SERVICE_PROPERTY, service);
                     return new LazyCasTicketProvider(cache, ticketProvider).provideTicketHeaders(service);
                 }
 
@@ -176,13 +181,13 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         /**
          * @return the headers to set
          */
-        protected abstract Map<String, String> getHeaders(Exchange exchange);
+        protected abstract Map<String, Object> getHeaders(Exchange exchange);
 
         @Override
         public final void process(Exchange exchange) throws Exception {
             if(exchange.getIn() != null) {
-                Map<String, String> headers  =  getHeaders(exchange);
-                for(Map.Entry<String, String> kv : headers.entrySet()) {
+                Map<String, Object> headers  =  getHeaders(exchange);
+                for(Map.Entry<String, Object> kv : headers.entrySet()) {
                     exchange.getIn().setHeader(kv.getKey(), kv.getValue());
                 }
             } else {
@@ -260,6 +265,25 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      */
     protected <T> JacksonJsonProcessor jsonToDto(TypeReference<T> targetDtoType) {
         return new JacksonJsonProcessor(mapperProvider, targetDtoType);
+    }
+
+    /**
+     * @return a processor to be applied after the response is fetched to save possible service specific HTTP session
+     * cookie to cache
+     */
+    protected Processor saveSession() {
+        return new Processor() {
+            @Override
+            public void process(Exchange exchange) throws Exception {
+                CasTicketCache cache  =  exchange.getProperty(CAS_TICKET_CACHE_PROPERTY, CasTicketCache.class);
+                if (cache != null && exchange.getIn() != null) {
+                    Map<String,Object> inHeaders = exchange.getIn().getHeaders();
+                    String service = exchange.getProperty(CAS_TICKET_CACHE_SERVICE_PROPERTY, String.class);
+                    cache.store(service, inHeaders);
+                }
+                inToOut(exchange);
+            }
+        };
     }
 
     /**
@@ -766,6 +790,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
         @Override
         public <T extends ProcessorDefinition<? extends T>> T process(T process) {
+            for (ProcessDefinitionProcessor defProcessor : additionalProcessors) {
+                process  =  defProcessor.process(process);
+            }
             if (!this.parameters.isEmpty()) {
                 ExpressionBuffer query = buffer(),
                                 body = buffer();
@@ -804,9 +831,6 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                        .end();
                 }
             });
-            for (ProcessDefinitionProcessor defProcessor : additionalProcessors) {
-                process  =  defProcessor.process(process);
-            }
             return process;
         }
 
@@ -969,7 +993,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                                 if (evaluated == null) {
                                     return (T) "";
                                 }
-                                return buffer().append(first ? "&" : "")
+                                return buffer().append(!first ? "&" : "")
                                         .append(name).append("=").append(urlEncoded(constant(evaluated)))
                                         .evaluate(exchange, type);
                             }

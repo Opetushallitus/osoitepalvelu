@@ -14,19 +14,19 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.scheduled;
+package fi.vm.sade.osoitepalvelu.kooste.scheduled;
 
 import java.util.Map;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
-import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.DefaultCasTicketCache;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.DefaultCookieBasedCasTicketCache;
 
 /**
  * User: ratamaa
  * Date: 3/25/14
  * Time: 12:51 PM
  */
-public class ProviderOverriddenCasTicketCache extends DefaultCasTicketCache {
+public class ProviderOverriddenCasTicketCache extends DefaultCookieBasedCasTicketCache {
     private CasTicketProvider ticketProvider;
 
     public ProviderOverriddenCasTicketCache(CasTicketProvider ticketProvider) {
@@ -34,8 +34,8 @@ public class ProviderOverriddenCasTicketCache extends DefaultCasTicketCache {
     }
 
     @Override
-    public Map<String, String> get(String service) {
-        Map<String, String> cached = super.get(service);
+    public Map<String, Object> get(String service) {
+        Map<String, Object> cached = super.get(service);
         if (cached == null) {
             cached = ticketProvider.provideTicketHeaders(service);
             store(service, cached);

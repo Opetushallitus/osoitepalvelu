@@ -95,6 +95,10 @@ public final class LocaleHelper {
         if (!EqualsHelper.equals(preferredLocale, defaultLocale)) {
             return findLocalized(name, defaultLocale, defaultLocale);
         }
+        if (!name.isEmpty()) {
+            // Return some name over nothing:
+            return name.values().iterator().next();
+        }
         return null;
     }
 }

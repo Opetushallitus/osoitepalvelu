@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,6 +52,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
 
     private static final String ROUTE_ORGANISAATIOHENKILOS  =  "direct:organisaatioHenkilos";
     private static final String ORGANISAATIOHENKILOS_PATH  =  "/${in.body}/organisaatiohenkilo";
+    private static final int MAX_OIDS_FOR_HENKILO_HAKU = 50;
 
     @Value("${authenticationService.kayttoikeusryhma.rest.url}")
     private String authenticationServiceKayttooikeusryhmasRestUrl;
@@ -81,6 +83,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         .process(authenticationCallInOutDebug)
         .to(uri(authenticationServiceHenkiloServiceRestUrl))
         .process(authenticationCallInOutDebug)
+        .process(saveSession())
         .process(jsonToDto(new TypeReference<HenkiloDetailsDto>() {}));
     }
 
@@ -95,6 +98,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         .process(authenticationCallInOutDebug)
         .to(uri(authenticationServiceHenkiloServiceRestUrl))
         .process(authenticationCallInOutDebug)
+        .process(saveSession())
         .process(jsonToDto(new TypeReference<List<OrganisaatioHenkiloDto>>() {}));
     }
 
@@ -118,6 +122,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         .process(authenticationCallInOutDebug)
         .to(uri(authenticationServiceHenkiloServiceRestUrl, 10L*60L*1000L)) // wait for 10 minutes maximum
         .process(authenticationCallInOutDebug)
+        .process(saveSession())
         .process(jsonToDto(new TypeReference<List<HenkiloListResultDto>>() {}));
     }
 
@@ -132,6 +137,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         .process(authenticationCallInOutDebug)
         .to(uri(authenticationServiceKayttooikeusryhmasRestUrl))
         .process(authenticationCallInOutDebug)
+        .process(saveSession())
         .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
     }
 
@@ -158,25 +164,29 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
 
     @Override
     public List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
-        HeaderValueBuilder header = headerValues()
-                .add(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, criteria.getOrganisaatioOids());
-
         List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
-        if (!criteria.getKayttoOikeusRayhmas().isEmpty()) {
-            for (String kor : criteria.getKayttoOikeusRayhmas()) {
-                @SuppressWarnings("unchecked")
-                List<HenkiloListResultDto> korResults = sendBodyHeadersAndProperties(
-                        getCamelTemplate(), ROUTE_HENKILOS, "", header.copy()
+
+        List<List<String>> oidChunks = CollectionHelper.split(criteria.getOrganisaatioOids(), MAX_OIDS_FOR_HENKILO_HAKU);
+        for (List<String> oids : oidChunks) {
+            HeaderValueBuilder header = headerValues()
+                    .add(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, oids);
+            if (!criteria.getKayttoOikeusRayhmas().isEmpty()) {
+                for (String kor : criteria.getKayttoOikeusRayhmas()) {
+                    @SuppressWarnings("unchecked")
+                    List<HenkiloListResultDto> korResults = sendBodyHeadersAndProperties(
+                            getCamelTemplate(), ROUTE_HENKILOS, "", header.copy()
                             .add(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, kor).map(),
-                        requestContext, List.class);
-                results.addAll(korResults);
+                            requestContext, List.class);
+                    results.addAll(korResults);
+                }
+            } else {
+                @SuppressWarnings("unchecked")
+                List<HenkiloListResultDto> searchResults =  sendBodyHeadersAndProperties(getCamelTemplate(),
+                        ROUTE_HENKILOS, "", header.map(), requestContext, List.class);
+                results.addAll(searchResults);
             }
-        } else {
-            @SuppressWarnings("unchecked")
-            List<HenkiloListResultDto> searchResults =  sendBodyHeadersAndProperties(getCamelTemplate(),
-                    ROUTE_HENKILOS, "", header.map(), requestContext, List.class);
-            results.addAll(searchResults);
         }
+
         return results;
     }
 }

@@ -18,11 +18,14 @@ package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
 import com.wordnik.swagger.annotations.Api;
 import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
+import fi.vm.sade.osoitepalvelu.kooste.scheduled.ScheduledAituDataFetchTask;
+import fi.vm.sade.osoitepalvelu.kooste.scheduled.ScheduledOrganisaatioCacheTask;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.AppSettingsService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,6 +50,12 @@ public class AppSettingsController extends AbstractMvcController {
     @Autowired
     private ObjectMapperProvider objectMapperProvider;
 
+    @Autowired
+    private ScheduledOrganisaatioCacheTask organisaatioCacheTask;
+
+    @Autowired
+    private ScheduledAituDataFetchTask aituDataFetchTask;
+
     @RequestMapping(value  =  "/settings.js", method  =  RequestMethod.GET,
             produces  =  "text/javascript")
     @ResponseBody
@@ -55,4 +64,23 @@ public class AppSettingsController extends AbstractMvcController {
         ObjectMapper mapper  =  objectMapperProvider.getContext(ObjectMapper.class);
         return "window.CONFIG  =  "  +  mapper.writeValueAsString(settings)  +  ";";
     }
+
+    @PreAuthorize("hasIpAddress('127.0.0.1/24')")
+    @RequestMapping(value = "/refereshOrganisaatioCache", method = RequestMethod.POST,
+        produces = "text/plain")
+    @ResponseBody
+    public String buildOrganisaatioCache() {
+        organisaatioCacheTask.refreshOrganisaatioCache();
+        return "OK";
+    }
+
+    @PreAuthorize("hasIpAddress('127.0.0.1/24')")
+    @RequestMapping(value = "/fetchAituData", method = RequestMethod.POST,
+        produces = "text/plain")
+    @ResponseBody
+    public String fetchAituData() {
+        aituDataFetchTask.refreshAituData();
+        return "OK";
+    }
+
 }
