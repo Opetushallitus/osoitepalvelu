@@ -42,7 +42,7 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
     this.listTutkintotoimikuntaRoolis = function(success, error) {
         _get('api/koodisto/tutkintotoimikuntaRoolis', function(data) {
             if (data && data.length) {
-                angular.forEach(function(koodi) {
+                angular.forEach(data, function(koodi) {
                     koodi.nimi = LocalisationService.t('tutkintotoimikunta_rooli_'+koodi.koodiId);
                     koodi.lyhytNimi = LocalisationService.t('tutkintotoimikunta_rooli_'+koodi.koodiId);
                 });
