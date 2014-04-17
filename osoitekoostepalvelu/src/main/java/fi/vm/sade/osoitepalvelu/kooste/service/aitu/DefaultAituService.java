@@ -16,15 +16,21 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.aitu;
 
+import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituOppilaitosRepository;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituToimikuntaRepository;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.aitu.dto.converter.AituDtoConverter;
+import fi.vm.sade.osoitepalvelu.kooste.service.aitu.helper.AituToimikuntaJasenyysAituToimikuntaCriteriaPredicate;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AituRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituJasenyysDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOsoitepalveluResultsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +53,28 @@ public class DefaultAituService extends AbstractService implements AituService {
 
     @Autowired
     private AituRoute aituRoute;
+
+    @Override
+    public List<String> findVoimassaOlevatRoolit() {
+        return aituToimikuntaRepository.findVoimassaOlevatRoolit();
+    }
+
+    @Override
+    public List<AituToimikuntaResultDto> findToimikuntasWithMatchinJasens(AituToimikuntaCriteria criteria,
+                                                                          AituKielisyys orderByNimiKieli) {
+        List<AituToimikuntaResultDto> results = dtoConverter.convert(
+                        aituToimikuntaRepository.findToimikuntas(criteria, orderByNimiKieli),
+                new ArrayList<AituToimikuntaResultDto>(), AituToimikuntaResultDto.class);
+        AituToimikuntaJasenyysAituToimikuntaCriteriaPredicate predicate =
+                new AituToimikuntaJasenyysAituToimikuntaCriteriaPredicate(criteria);
+        if (predicate.isUsed()) {
+            for (AituToimikuntaResultDto resultDto : results) {
+                resultDto.setJasenyydet(new ArrayList<AituJasenyysDto>(
+                        Collections2.filter(resultDto.getJasenyydet(), predicate)));
+            }
+        }
+        return results;
+    }
 
     @Override
     public void refreshData(AituOsoitepalveluResultsDto results) {

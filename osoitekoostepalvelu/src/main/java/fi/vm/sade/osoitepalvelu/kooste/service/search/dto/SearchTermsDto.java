@@ -33,8 +33,6 @@ import java.util.Locale;
 public class SearchTermsDto implements Serializable {
     private static final long serialVersionUID  =  -6050192875078360323L;
 
-
-
     public enum SearchType {
         EMAIL,
         SEND_LETTER,

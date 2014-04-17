@@ -33,11 +33,14 @@ public class SearchTermDto implements Serializable {
     public static final String TERM_MAAKUNTAS = "maakuntas";
     private static final long serialVersionUID  =  -1563200682961231758L;
 
-    public static final String TERM_ORGANISAATION_KIELIS = "organisaationKielis";
+    public static final String TERM_ORGANISAATION_OPETUSKIELIS = "organisaationKielis";
     public static final String TERM_OPPILAITOSTYYPPIS = "oppilaitostyyppis";
     public static final String TERM_VUOSILUOKKAS = "vuosiluokkas";
     public static final String TERM_KOULTUKSENJARJESTAJAS = "koultuksenjarjestajas";
     public static final String TERM_KAYTTOOIKEUSRYHMAS = "koulutaRoolis";
+    public static final String TERM_TUTKINTOIMIKUNTA_ROOLIS = "tutkintotoimikuntaRoolis";
+    public static final String TERM_TUTKINTOIMIKUNTA = "tutkintotoimikuntas";
+
 
     private String type;
     private List<String> values  =  new ArrayList<String>();

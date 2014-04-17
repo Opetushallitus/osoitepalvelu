@@ -103,7 +103,7 @@
                 </div>
                 <div class="term" ng-show="isShowTutkintotoimikuntaRooliTerm()">
                     <select ui-select2 multiple id="tutkintotoimikuntaRoolis" class="form-control" ng-model="terms.tutkintotoimikuntaRoolis" data-placeholder="{{msg('search_term_tutkintotoimikunta_rooli')}}">
-                        <option ng-repeat="opt in options.tutkintotoimikuntaRoolis" value="{{opt.type}}">{{opt.name}}</option>
+                        <option ng-repeat="opt in options.tutkintotoimikuntaRoolis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm()"></div>
@@ -114,7 +114,7 @@
                 </div>
                 <div class="term" ng-show="isShowAipalTerm()">
                     <select ui-select2 multiple id="aipalRoolis" class="form-control" ng-model="terms.aipalRoolis" data-placeholder="{{msg('search_term_aipal_rooli')}}">
-                        <option ng-repeat="opt in options.aipalRoolis" value="{{opt.id}}">{{opt.name}}</option>
+                        <option ng-repeat="opt in options.aipalRoolis" value="{{opt.koodiUri}}">{{opt.name}}</option>
                     </select>
                 </div>
                 <div class="term-separator" ng-show="isShowKoulutaTerm() || isShowAipalTerm()"></div>

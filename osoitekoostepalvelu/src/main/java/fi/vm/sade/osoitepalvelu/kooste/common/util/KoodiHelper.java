@@ -17,30 +17,39 @@
 package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by ratamaa on 15.4.2014.
+ * User: ratamaa
+ * Date: 4/17/14
+ * Time: 2:19 PM
  */
-public final class CollectionHelper {
+public final class KoodiHelper {
 
-    private CollectionHelper() {
+    private KoodiHelper() {
     }
 
-    public static<T,C extends Collection<? extends T>> List<List<T>> split(C c, int chunkSize) {
-        List<List<T>> ready = new ArrayList<List<T>>();
-        List<T> current = new ArrayList<T>();
-        if (c != null) {
-            for (T e : c) {
-                if (current.size() >= chunkSize) {
-                    ready.add(current);
-                    current = new ArrayList<T>();
-                }
-                current.add(e);
+    public static List<String> parseKoodiArvos(String uriPrefix, List<String> koodis) {
+        List<String> arvos = new ArrayList<String>();
+        for (String koodi : koodis) {
+            String arvo = parseKoodiArvo(uriPrefix, koodi);
+            if (arvo != null) {
+                arvos.add(arvo);
             }
         }
-        ready.add(current);
-        return ready;
+        return arvos;
+    }
+
+    public static String parseKoodiArvo(String uriPrefix, String koodi) {
+        if (koodi == null) {
+            return null;
+        }
+        if (!koodi.startsWith(uriPrefix)) {
+            return koodi;
+        }
+        if (!uriPrefix.endsWith("_")) {
+            uriPrefix = uriPrefix+"_";
+        }
+        return koodi.replaceAll(uriPrefix+"(.*?)"+"(#.*)?", "$1");
     }
 }

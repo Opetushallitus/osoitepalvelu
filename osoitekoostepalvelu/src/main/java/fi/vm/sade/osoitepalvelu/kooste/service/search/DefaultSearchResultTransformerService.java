@@ -28,10 +28,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsYhteystietoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHenkiloDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoElementtiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate;
@@ -79,6 +76,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
         List<SearchResultRowDto> henkiloResults = transformHenkilos(results.getHenkilos(), presentation);
         transformedResults.addAll(henkiloResults);
+
+        List<SearchResultRowDto> aituHenkiloResults = transformToimikuntaJasens(results.getAituToimikuntas(), presentation);
+        transformedResults.addAll(aituHenkiloResults);
 
         resolveMissingOrganisaatioRelatedDetails(transformedResults, presentation, context);
 
@@ -209,6 +209,28 @@ public class DefaultSearchResultTransformerService extends AbstractService
         return results;
     }
 
+    protected List<SearchResultRowDto> transformToimikuntaJasens(List<AituToimikuntaResultDto> aituToimikuntas,
+                                                                 SearchResultPresentation presentation) {
+        List<SearchResultRowDto> results = new ArrayList<SearchResultRowDto>();
+
+        Set<AituToimikuntaJasenAggregateDto> aggregates = new LinkedHashSet<AituToimikuntaJasenAggregateDto>();
+        for (final AituToimikuntaResultDto toimikunta : aituToimikuntas) {
+            new Combiner<AituToimikuntaJasenAggregateDto>(
+                new Combiner.Creator<AituToimikuntaJasenAggregateDto> () {
+                    public AituToimikuntaJasenAggregateDto create(Combiner.PullSource src) {
+                        return new AituToimikuntaJasenAggregateDto( toimikunta,
+                                src.get(AituJasenyysDto.class).orNull() );
+                }
+            }).combinedWith(AituJasenyysDto.class, toimikunta.getJasenyydet())
+                .atLeastOne().to(aggregates);
+        }
+        for (AituToimikuntaJasenAggregateDto aggregate : aggregates) {
+            SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto(), presentation.getLocale());
+            results.add(row);
+        }
+
+        return results;
+    }
 
     protected void resolveMissingOrganisaatioRelatedDetails(List<SearchResultRowDto> results,
                             SearchResultPresentation presentation, CamelRequestContext context) {

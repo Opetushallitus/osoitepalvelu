@@ -47,7 +47,7 @@ public class ScheduledAituDataFetchTask extends AbstractService {
     private String casAituServicePassword;
 
     // Every night at 4 AM
-    @Scheduled(cron = "0 14 16 * * MON-FRI")
+    @Scheduled(cron = "0 0 4 * * MON-FRI")
     public void refreshAituData() {
         logger.info("BEGIN SCHEDULED refreshAituData.");
 
@@ -60,6 +60,7 @@ public class ScheduledAituDataFetchTask extends AbstractService {
             logger.info("CAS disabled.");
             casProvider = new CasDisabledCasTicketProvider();
         }
+
         CamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(casProvider));
         aituService.refreshData(context);
 

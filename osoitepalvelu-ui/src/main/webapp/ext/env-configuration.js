@@ -30,15 +30,15 @@
  */
 window.CONFIG = {
     "env": {
-        "host.base-uri": "https://itest-virkailija.oph.ware.fi",
+        "host.base-uri": "",
         "root.organisaatio.oid":"1.2.246.562.10.00000000001",
         "ui.timeout.short": 10000,
         "ui.timeout.long": 60000,
-        "osoitepalveluLocalisationRestUrl": "https://itest-virkailija.oph.ware.fi/lokalisointi/cxf/rest/v1/localisation",
+        "osoitepalveluLocalisationRestUrl": "",
         "casMeUrl": "cas_me_test.json",
         "useCasMeUrl": true,
-        "organisaatio.api.rest.url": "https://itest-virkailija.oph.ware.fi:443/organisaatio-service/rest/",
-        "authentication-service.rest.url":"https://itest-virkailija.oph.ware.fi/authentication-service/resources/",
+        "organisaatio.api.rest.url": "",
+        "authentication-service.rest.url":"",
     },
     "app" : {},
     "mode": 'dev-without-backend'

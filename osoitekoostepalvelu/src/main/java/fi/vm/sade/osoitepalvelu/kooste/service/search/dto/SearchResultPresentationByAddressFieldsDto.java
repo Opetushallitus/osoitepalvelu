@@ -21,7 +21,6 @@ import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import scala.annotation.target.setter;
 
 import java.io.Serializable;
 import java.util.*;
@@ -78,19 +77,21 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
             this.searchType = searchTerms.getSearchType();
             switch (searchTerms.getSearchType()) {
                 case CONTACT:
+                    setOrganisaationNimiIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyOrganisaatioTypes()));
+                    setYhteyshenkiloIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyHenkiloTypes()));
                     includeAddressFields(searchTerms.getAddressFields());
                     break;
                 case EMAIL:
-                    setOrganisaationNimiIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes()));
-                    setYhteyshenkiloIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloTypes()));
-                    setYhteyshenkiloEmailIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloTypes()));
-                    setOrganisaatioEmailIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes(),
+                    setOrganisaationNimiIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyOrganisaatioTypes()));
+                    setYhteyshenkiloIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyHenkiloTypes()));
+                    setYhteyshenkiloEmailIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyHenkiloTypes()));
+                    setOrganisaatioEmailIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyOrganisaatioTypes(),
                                     SearchTargetGroup.TargetType.ORGANISAATIO));
                     break;
                 case LETTER:
                 case SEND_LETTER:
-                    setOrganisaationNimiIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes()));
-                    setYhteyshenkiloIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloTypes()));
+                    setOrganisaationNimiIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyOrganisaatioTypes()));
+                    setYhteyshenkiloIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyHenkiloTypes()));
                     setPositosoiteIncluded(true);
                     break;
                 default: break;

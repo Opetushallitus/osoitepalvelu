@@ -769,7 +769,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         }
 
         /**
-         * @param times to retry at maximum
+         * @param times to retryOnCamelError at maximum
          * @return this HeaderBuilder
          */
         public HeaderBuilder retry(int times) {

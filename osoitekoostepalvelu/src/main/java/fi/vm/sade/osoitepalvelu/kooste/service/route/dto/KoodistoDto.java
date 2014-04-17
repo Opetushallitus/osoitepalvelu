@@ -42,7 +42,9 @@ public class KoodistoDto implements Serializable {
         KOULUTUSTOIMIJA("koulutustoimija"),         // Koulutuksen järjestäjä
         OPINTOALAOPH2002("opintoalaoph2002"),       // Koulutus ja Opintoala
         ALUEHALLINTOVIRASTO("aluehallintovirasto"), // AluehallintoVIrasto (AVI)
-        KAYTTOOIKEUSRYHMA("kayttoikeusryhma"); // Ei Koodistosta, vaan auhtneitcation-servicestä
+        KAYTTOOIKEUSRYHMA("kayttoikeusryhma"),      // Ei Koodistosta, vaan auhtneitcation-servicestä
+        TUTKINTOTOIMIKUNTA_ROOLIS("tutkintoimikuntarooli"), // Ei Koodistosta, vielä
+        TUTKINTOTOIMIKUNTA("tutkintotoimikunta"); // Ei Koodistosta, vielä
 
         private String uri; // Koodiston URI
 

@@ -74,6 +74,15 @@ public class KoodistoDtoConverter extends AbstractDtoConverter {
         return to;
     }
 
+    public UiKoodiItemDto convert(AituToimikuntaResultDto from, UiKoodiItemDto to, Locale locale) {
+        to.setNimi(LocaleHelper.findLocalized(from.getNimi(), locale, DefaultKoodistoService.DEFAULT_LOCALE));
+        to.setLyhytNimi(to.getNimi());
+        to.setKoodiId(from.getId());
+        to.setKoodistonTyyppi(KoodistoDto.KoodistoTyyppi.TUTKINTOTOIMIKUNTA);
+        to.setKoodiUri(to.getKoodistonTyyppi().getUri()+"_"+to.getKoodiId());
+        return to;
+    }
+
     public UiKoodiItemDto convert(KoodiDto koodi, UiKoodiItemDto uiKoodi, Locale lokaali) {
         convertValue(koodi, uiKoodi, lokaali);
         KoodiArvoDto arvo  =  koodi.getArvoByKieli(lokaali.getLanguage());

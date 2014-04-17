@@ -16,13 +16,20 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Created by ratamaa on 15.4.2014.
@@ -38,5 +45,30 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
     @Autowired
     public DefaultAituToimikuntaRepository(MongoRepositoryFactory factory, MongoOperations mongoOperations) {
         this(factory.<AituToimikunta, String>getEntityInformation(AituToimikunta.class), mongoOperations);
+    }
+
+    @Override
+    public List<AituToimikunta> findToimikuntas(AituToimikuntaCriteria toimikuntaCriteria, AituKielisyys orberByNimi) {
+        Criteria criteria = new Criteria();
+        if (toimikuntaCriteria.isKielisyysUsed()) {
+            criteria = criteria.and("kielisyys").in(AituKielisyys.aituKielis(toimikuntaCriteria.getKielisyysIn()));
+        }
+        if (toimikuntaCriteria.isJasenRoolisUsed()) {
+            criteria = criteria.and("jasenyydet.rooli").in(toimikuntaCriteria.getJasensInRoolis());
+        }
+        if (toimikuntaCriteria.isIdsUsed()) {
+            criteria = criteria.and("id").in(toimikuntaCriteria.getIdsIn());
+        }
+        if (toimikuntaCriteria.isOnlyVoimassaOlevat()) {
+            criteria = criteria.and("jasenyydet.voimassa").is(true);
+        }
+        return getMongoOperations().find(Query.query(criteria).with(new Sort("nimi."+orberByNimi.getAituKieli())),
+                AituToimikunta.class);
+    }
+
+    @Override
+    public List<String> findVoimassaOlevatRoolit() {
+        return getMongoOperations().getCollection(AituToimikunta.class.getAnnotation(Document.class).collection())
+                .distinct("jasenyydet.rooli", Criteria.where("jasenyydet.voimassa").is(true).getCriteriaObject());
     }
 }
