@@ -101,9 +101,10 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
 }])
 .factory("TutkintotoimikuntaRoolis", ["LocalisationService", function(LocalisationService) {
     return [
-        {type: 'PUHEENJOHTAJA', name: LocalisationService.t('target_group_option_puheenjohtaja')},
-        {type: 'SIHTEERI',      name: LocalisationService.t('target_group_option_sihteeri')},
-        {type: 'JASENET',       name: LocalisationService.t('target_gorup_option_jasenet')}
+        {type: 'JASENET', name: LocalisationService.t('target_gorup_option_jasenet')}
+//        {type: 'PUHEENJOHTAJA', name: LocalisationService.t('target_group_option_puheenjohtaja')},
+//        {type: 'SIHTEERI',      name: LocalisationService.t('target_group_option_sihteeri')},
+//        {type: 'JASENET',       name: LocalisationService.t('target_gorup_option_jasenet')}
     ];
 }])
 .factory('TargetGroups', ["LocalisationService", "TutkintotoimikuntaRoolis",

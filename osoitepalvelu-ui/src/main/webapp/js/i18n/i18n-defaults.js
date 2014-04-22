@@ -153,7 +153,14 @@ angular.module("I18n", [], ["$provide", function($provider) {
         camel_http_call_timeout_error: 'Virhe kutsuttaessa ulkoista palvelua reitillä {0}: kutsu kesti liian kauan.',
         camel_error: 'Odottamaton virhe kutsuttaessa ulkoista palvelua reitillä {0}.',
         not_found_error: 'Virhe: Etsittyä tietoa ei löytynyt.',
-        not_authorized_error: 'Virhe: Ei käyttöoikeutta pyydettyyn resurssiin.'
+        not_authorized_error: 'Virhe: Ei käyttöoikeutta pyydettyyn resurssiin.',
+
+        tutkintotoimikunta_rooli_jasen: 'Jäsen',
+        tutkintotoimikunta_rooli_puheenjohtaja: 'Puheenjohtaja',
+        tutkintotoimikunta_rooli_varapuheenjohtaja: 'Varapuheenjohtaja',
+        tutkintotoimikunta_rooli_sihteeri: 'Sihteeri',
+        tutkintotoimikunta_rooli_ulkopuolinensihteeri: 'Ulkopuolinen sihteeri',
+        tutkintotoimikunta_rooli_asiantuntija: 'Asiantuntija'
     };
     defaultValues['en'] = defaultValues['fi'];
     defaultValues['sv'] = defaultValues['fi'];

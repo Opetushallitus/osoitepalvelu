@@ -16,7 +16,7 @@
     <ctx:annotation-config/>
 
     <task:annotation-driven executor="taskExecutor"/>
-    <task:executor id="taskExecutor" pool-size="1" queue-capacity="1" rejection-policy="CALLER_RUNS"/>
+    <task:executor id="taskExecutor" pool-size="1" queue-capacity="10"/>
 
     <ctx:property-placeholder
             location="classpath:osoitekoostepalvelu.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/osoitekoostepalvelu.properties, file:///${user.home:''}/oph-configuration/hakuparametrit.properties, file:///${user.home:''}/oph-configuration/override.properties"

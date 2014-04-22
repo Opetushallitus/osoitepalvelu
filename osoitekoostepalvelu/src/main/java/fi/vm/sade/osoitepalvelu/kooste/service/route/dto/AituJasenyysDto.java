@@ -27,7 +27,7 @@ public class AituJasenyysDto implements Serializable {
     private boolean voimassa;
     private String etunimi;
     private String sukunimi;
-    private String sahkkoposti;
+    private String sahkoposti;
     private String osoite;
     private String postinumero; // free text, basically 5 numbers (not koodisto value)
     private String postitoimipaikka; // free text (not koodisto value)
@@ -59,12 +59,12 @@ public class AituJasenyysDto implements Serializable {
         this.sukunimi = sukunimi;
     }
 
-    public String getSahkkoposti() {
-        return sahkkoposti;
+    public String getSahkoposti() {
+        return sahkoposti;
     }
 
-    public void setSahkkoposti(String sahkkoposti) {
-        this.sahkkoposti = sahkkoposti;
+    public void setSahkoposti(String sahkoposti) {
+        this.sahkoposti = sahkoposti;
     }
 
     public String getOsoite() {
@@ -113,5 +113,9 @@ public class AituJasenyysDto implements Serializable {
 
     public void setEdustus(String edustus) {
         this.edustus = edustus;
+    }
+
+    public String getKokoNimi() {
+        return this.etunimi + " " + this.sukunimi;
     }
 }

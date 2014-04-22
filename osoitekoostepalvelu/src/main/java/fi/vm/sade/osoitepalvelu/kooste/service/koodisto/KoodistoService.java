@@ -66,6 +66,10 @@ public interface KoodistoService {
 
     List<UiKoodiItemDto> findKayttooikeusryhmas(Locale locale);
 
+    List<UiKoodiItemDto> findTutkintotoimikuntaRooliOptions(Locale locale);
+
+    List<UiKoodiItemDto> findTutkintotoimikuntaOptions(Locale locale);
+
     /**
      * Hakee kaikkien koodistojen arvot yhdellä kertaa ja paulattaa näistä
      * mapin. Mapista halutun koodiston voi hakea KoodistoTyyppi enumin arvon

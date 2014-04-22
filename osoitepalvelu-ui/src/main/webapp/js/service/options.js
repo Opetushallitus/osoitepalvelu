@@ -36,12 +36,22 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
     };
 
     this.listTutkintotoimikuntas = function(success, error) {
-        // TODO:
-        success( [] );
+        _get('api/koodisto/tutkintotoimikuntas', success, error);
     };
 
     this.listTutkintotoimikuntaRoolis = function(success, error) {
-        success( TutkintotoimikuntaRoolis );
+        _get('api/koodisto/tutkintotoimikuntaRoolis', function(data) {
+            if (data && data.length) {
+                angular.forEach(data, function(koodi) {
+                    koodi.nimi = LocalisationService.t('tutkintotoimikunta_rooli_'+koodi.koodiId);
+                    koodi.lyhytNimi = LocalisationService.t('tutkintotoimikunta_rooli_'+koodi.koodiId);
+                });
+                success(data);
+            } else {
+                // Data not yet available:
+                success( TutkintotoimikuntaRoolis );
+            }
+        }, error);
     };
 
     this.listKoulutaRoolis = function(success, error) {

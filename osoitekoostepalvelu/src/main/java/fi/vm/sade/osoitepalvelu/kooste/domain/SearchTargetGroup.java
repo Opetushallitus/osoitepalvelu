@@ -47,8 +47,17 @@ public class SearchTargetGroup implements Serializable {
             this.organisaatioPalveluTyyppiArvo  =  organisaatioPalveluTyyppiArvo;
         }
 
-        public static GroupType[] getHenkiloTypes() {
+        public static GroupType[] getHenkiloHakuTypes() {
             return new GroupType[] {KOULUTA_KAYTTAJAT};
+        }
+
+        public static GroupType[] getAnyHenkiloTypes() {
+            return new GroupType[] {KOULUTA_KAYTTAJAT, TUTKINTOTOIMIKUNNAT, KOULUTA_KAYTTAJAT, AIPAL_KAYTTAJAT};
+        }
+
+        public static GroupType[] getAnyOrganisaatioTypes() {
+            return new GroupType[] {JARJESTAJAT_YLLAPITAJAT, OPPILAITOKSET, OPETUSPISTEET, OPPISOPIMUSTOIMPISTEET,
+                    MUUT_ORGANISAATIOT, TUTKINTOTOIMIKUNNAT};
         }
 
         public String getOrganisaatioPalveluTyyppiArvo() {
@@ -68,8 +77,8 @@ public class SearchTargetGroup implements Serializable {
 
     public enum TargetType {
         ORGANISAATIO,
-        REHTORI,
         YHTEYSHENKILO,
+        REHTORI,
         KRIISITIEDOTUS,
         KOULUTUSNEVONTA,
         PUHEENJOHTAJA,

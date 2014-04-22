@@ -56,4 +56,14 @@ public final class StringHelper {
         return str.toLowerCase();
     }
 
+    public static String capitalized(String str) {
+        if (str == null) {
+            return null;
+        }
+        if (str.length() > 0) {
+            return str.substring(0,1).toUpperCase()+str.substring(1);
+        }
+        return str;
+    }
+
 }

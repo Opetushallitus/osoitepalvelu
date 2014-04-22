@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+import fi.ratamaa.dtoconverter.annotation.DtoConversions;
 import fi.ratamaa.dtoconverter.annotation.DtoPath;
 import fi.ratamaa.dtoconverter.annotation.DtoSkipped;
 
@@ -28,7 +29,6 @@ import java.util.List;
  * Date: 2/14/14
  * Time: 3:34 PM
  */
-@DtoConversion
 public class SearchResultRowDto implements Serializable {
     private static final long serialVersionUID  =  -1252066099444560569L;
 
@@ -74,7 +74,10 @@ public class SearchResultRowDto implements Serializable {
     @DtoConversion(path = "henkilo.yhteyshenkiloOid", with="organisaatioAggregate")
     @DtoPath(value="henkilo.henkiloOid", with="henkiloAggregate")
     private String henkiloOid;
-    @DtoConversion(path="henkilo.nimi")
+    @DtoConversions({
+        @DtoConversion(path="henkilo.nimi", with="organisaatioAggregate"),
+        @DtoConversion(path="henkilo.nimi", with="henkiloAggregate")
+    })
     private String yhteystietoNimi;
     @DtoConversion(path="henkilo.nimike", with="organisaatioAggregate")
     @DtoPath(value="organisaatioHenkilo.tehtavanimike", with="henkiloAggregate")
@@ -88,7 +91,6 @@ public class SearchResultRowDto implements Serializable {
     @DtoConversion(path = "osoite", with="henkiloAggregate")
     @DtoPath(value = "postiosoite", with="organisaatioAggregate")
     private SearchResultOsoiteDto postiosoite;
-
 
     public String getOrganisaatioOid() {
         return organisaatioOid;

@@ -49,7 +49,9 @@ public class KoodistoCache implements Serializable {
             KOULUTUSTOIMIJA,
             OPINTOALAOPH2002,
             ALUEHALLINTOVIRASTO,
-            KAYTTOOIKEUSRYHMA;
+            KAYTTOOIKEUSRYHMA,
+            TUTKINTOTOIMIKUNTA,
+            TUTKINTOTOIMIKUNTA_ROOLIS;
     }
 
     public static class CacheKey implements Serializable {

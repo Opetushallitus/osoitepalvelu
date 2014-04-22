@@ -16,12 +16,30 @@ package fi.vm.sade.osoitepalvelu.kooste.service.aitu;
  */
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOsoitepalveluResultsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto;
+
+import java.util.List;
 
 /**
  * Created by ratamaa on 15.4.2014.
  */
 public interface AituService {
+
+    /**
+     * @return all the roolis with at least one jasenyys voimassa in any AITU's tutkintoimikuntas
+     */
+    List<String> findVoimassaOlevatRoolit();
+
+    /**
+     * @param criteria for toimikuntas and jasens
+     * @param orderByNimiKieli AITU's keili to order by
+     * @return AituToimikuntas with only the jasens matching the given c
+     */
+    List<AituToimikuntaResultDto> findToimikuntasWithMatchinJasens(AituToimikuntaCriteria criteria,
+                                                                   AituKielisyys orderByNimiKieli);
 
     /**
      * @param results to override the data in MongoDB with

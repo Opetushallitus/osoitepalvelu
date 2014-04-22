@@ -26,6 +26,7 @@
         <generic.version>8.0-SNAPSHOT</generic.version>
         <koodisto.api.version>8.0-SNAPSHOT</koodisto.api.version>
         <organisaatio.api.version>8.0-SNAPSHOT</organisaatio.api.version>
+        <ryhmasahkoposti.api.version>0.0.2-SNAPSHOT</ryhmasahkoposti.api.version>
 
         <ehcache.version>2.5.0</ehcache.version>
         <ehcache-jgroupsreplication.version>1.5</ehcache-jgroupsreplication.version>

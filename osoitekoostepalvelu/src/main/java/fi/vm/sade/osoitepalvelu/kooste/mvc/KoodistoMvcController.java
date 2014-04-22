@@ -131,4 +131,17 @@ public class KoodistoMvcController extends AbstractMvcController implements Seri
     public List<UiKoodiItemDto> findKayttooikeusryhmas(@RequestParam("lang") String lang) {
         return koodistoService.findKayttooikeusryhmas(parseLocale(lang));
     }
+
+    @RequestMapping(method  =  RequestMethod.GET, value  =  "/tutkintotoimikuntaRoolis")
+    @ResponseBody
+    public List<UiKoodiItemDto> findTutkintotoimikuntaRoolis(@RequestParam("lang") String lang) {
+        return koodistoService.findTutkintotoimikuntaRooliOptions(parseLocale(lang));
+    }
+
+    @RequestMapping(method  =  RequestMethod.GET, value  =  "/tutkintotoimikuntas")
+    @ResponseBody
+    public List<UiKoodiItemDto> findTutkintotoimikuntas(@RequestParam("lang") String lang) {
+        return koodistoService.findTutkintotoimikuntaOptions(parseLocale(lang));
+    }
+
 }
