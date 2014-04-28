@@ -16,6 +16,11 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.scheduled;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasDisabledCasTicketProvider;
@@ -23,10 +28,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.aitu.AituService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 
 /**
  * Created by ratamaa on 15.4.2014.
@@ -36,6 +38,9 @@ public class ScheduledAituDataFetchTask extends AbstractService {
 
     @Autowired
     private AituService aituService;
+    
+    @Autowired
+    private KoodistoService koodistoService;
 
     @Value("${web.url.cas.aitu:}")
     private String aituCasService;
@@ -63,6 +68,7 @@ public class ScheduledAituDataFetchTask extends AbstractService {
 
         CamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(casProvider));
         aituService.refreshData(context);
+        koodistoService.purgeTutkintotoimikuntaCaches();
 
         logger.info("END SCHEDULED refreshAituData.");
     }
