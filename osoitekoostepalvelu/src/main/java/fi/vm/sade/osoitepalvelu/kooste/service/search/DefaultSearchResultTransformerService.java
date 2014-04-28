@@ -132,12 +132,12 @@ public class DefaultSearchResultTransformerService extends AbstractService
         Set<OrganisaatioResultAggregateDto> organisaatioAggregates = new LinkedHashSet<OrganisaatioResultAggregateDto>();
         for (final OrganisaatioResultDto result : results) {
             Combiner<OrganisaatioResultAggregateDto> combiner = new Combiner<OrganisaatioResultAggregateDto>(
-                    new Combiner.Creator<OrganisaatioResultAggregateDto> () {
+                    new Combiner.Creator<OrganisaatioResultAggregateDto>() {
                 public OrganisaatioResultAggregateDto create(Combiner.PullSource src) {
-                    return new OrganisaatioResultAggregateDto( result,
-                                src.get(OrganisaatioYhteystietoDto.class).orNull(),
-                                src.get(OsoitteistoDto.class).orNull(),
-                                src.get(OsoitteistoDto.class).orNull() );
+                    return new OrganisaatioResultAggregateDto(result,
+                                (OrganisaatioYhteystietoDto)src.get(OrganisaatioYhteystietoDto.class).orNull(),
+                                (OsoitteistoDto)src.get(OsoitteistoDto.class).orNull(),
+                                (OsoitteistoDto)src.get(OsoitteistoDto.class).orNull());
                 }
             });
             if (presentation.isPositosoiteIncluded()) {
@@ -192,11 +192,11 @@ public class DefaultSearchResultTransformerService extends AbstractService
         Set<HenkiloResultAggregateDto> henkiloAggregates = new LinkedHashSet<HenkiloResultAggregateDto>();
         for (final HenkiloHakuResultDto result : henkilos) {
             new Combiner<HenkiloResultAggregateDto>(
-                    new Combiner.Creator<HenkiloResultAggregateDto> () {
+                    new Combiner.Creator<HenkiloResultAggregateDto>() {
                 public HenkiloResultAggregateDto create(Combiner.PullSource src) {
-                    return new HenkiloResultAggregateDto( result,
-                            src.get(OrganisaatioHenkiloDto.class).orNull(),
-                            src.get(HenkiloOsoiteDto.class).orNull() );
+                    return new HenkiloResultAggregateDto(result,
+                            (OrganisaatioHenkiloDto)src.get(OrganisaatioHenkiloDto.class).orNull(),
+                            (HenkiloOsoiteDto)src.get(HenkiloOsoiteDto.class).orNull());
                 }
             }).combinedWith(OrganisaatioHenkiloDto.class, result.getOrganisaatioHenkilos())
                 .withRepeated(HenkiloOsoiteDto.class, result.getOsoittees())
@@ -216,10 +216,10 @@ public class DefaultSearchResultTransformerService extends AbstractService
         Set<AituToimikuntaJasenAggregateDto> aggregates = new LinkedHashSet<AituToimikuntaJasenAggregateDto>();
         for (final AituToimikuntaResultDto toimikunta : aituToimikuntas) {
             new Combiner<AituToimikuntaJasenAggregateDto>(
-                new Combiner.Creator<AituToimikuntaJasenAggregateDto> () {
+                new Combiner.Creator<AituToimikuntaJasenAggregateDto>() {
                     public AituToimikuntaJasenAggregateDto create(Combiner.PullSource src) {
-                        return new AituToimikuntaJasenAggregateDto( toimikunta,
-                                src.get(AituJasenyysDto.class).orNull() );
+                        return new AituToimikuntaJasenAggregateDto(toimikunta,
+                                (AituJasenyysDto)src.get(AituJasenyysDto.class).orNull());
                 }
             }).combinedWith(AituJasenyysDto.class, toimikunta.getJasenyydet())
                 .atLeastOne().to(aggregates);
@@ -500,8 +500,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 postinumero = osoite.getPostinumero();
                 postitoimipaikka = osoite.getPostitoimipaikka();
             }
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or("") );
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or("") );
+            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or(""));
+            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or(""));
         }
         if (presentation.isKayntiosoiteIncluded()) {
             SearchResultOsoiteDto osoite = row.getKayntiosoite();
@@ -512,8 +512,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 postinumero = osoite.getPostinumero();
                 postitoimipaikka = osoite.getPostitoimipaikka();
             }
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or("") );
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or("") );
+            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or(""));
+            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or(""));
         }
         if (presentation.isPuhelinnumeroIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getPuhelinnumero());

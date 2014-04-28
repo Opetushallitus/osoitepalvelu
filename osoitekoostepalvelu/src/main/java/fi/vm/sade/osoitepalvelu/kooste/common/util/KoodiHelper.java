@@ -52,4 +52,13 @@ public final class KoodiHelper {
         }
         return koodi.replaceAll(uriPrefix+"(.*?)"+"(#.*)?", "$1");
     }
+
+    public static List<String> addDefaultVersioNumber(String versio, List<String> koodis) {
+        List<String> koodisWithVersion = new ArrayList<String>();
+        for (String koodi : koodis) {
+            String arvoWithVersion = koodi+versio;
+            koodisWithVersion.add(arvoWithVersion);
+        }
+        return koodisWithVersion;
+    }
 }

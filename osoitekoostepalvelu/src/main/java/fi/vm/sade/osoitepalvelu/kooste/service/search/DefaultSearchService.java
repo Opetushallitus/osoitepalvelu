@@ -148,9 +148,11 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         OrganisaatioYhteystietoCriteriaDto organisaatioYhteystietosCriteria  =  new OrganisaatioYhteystietoCriteriaDto();
         List<String> kuntas  =  resolveKuntaKoodis(terms);
         organisaatioYhteystietosCriteria.setKuntaList(kuntas);
-        organisaatioYhteystietosCriteria.setKieliList(terms.findTerms(SearchTermDto.TERM_ORGANISAATION_OPETUSKIELIS));
+        organisaatioYhteystietosCriteria.setKieliList(
+                KoodiHelper.addDefaultVersioNumber("#1",terms.findTerms(SearchTermDto.TERM_ORGANISAATION_OPETUSKIELIS)));
         organisaatioYhteystietosCriteria.setOppilaitostyyppiList(terms.findTerms(SearchTermDto.TERM_OPPILAITOSTYYPPIS));
-        organisaatioYhteystietosCriteria.setVuosiluokkaList(terms.findTerms(SearchTermDto.TERM_VUOSILUOKKAS));
+        organisaatioYhteystietosCriteria.setVuosiluokkaList(
+                KoodiHelper.addDefaultVersioNumber("#1",terms.findTerms(SearchTermDto.TERM_VUOSILUOKKAS)));
         organisaatioYhteystietosCriteria.setYtunnusList(terms.findTerms(SearchTermDto.TERM_KOULTUKSENJARJESTAJAS));
         return organisaatioService.findOrganisaatioYhteystietos(organisaatioYhteystietosCriteria, context);
     }
