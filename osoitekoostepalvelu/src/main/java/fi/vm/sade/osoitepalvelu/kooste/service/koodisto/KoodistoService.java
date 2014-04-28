@@ -81,4 +81,6 @@ public interface KoodistoService {
      * @return Mappi, joka sisältää kaikkien tuettujen koodistojen arvot.
      */
     Map<KoodistoTyyppi, List<UiKoodiItemDto>> findAllKoodistos(Locale locale);
+
+    void purgeTutkintotoimikuntaCaches();
 }
