@@ -35,7 +35,7 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 @Configuration
 public class MongoConfig extends AbstractMongoConfiguration {
 
-    @Value("${osoitepalvelu.mongodb.dbname")
+    @Value("${osoitepalvelu.mongodb.dbname}")
     protected String dbName;
 
     @Value("${osoitepalvelu.mongodb.uri}")

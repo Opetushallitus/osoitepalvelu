@@ -30,11 +30,10 @@ import java.util.List;
 public class KayttooikesuryhmaDto implements Serializable {
     private static final long serialVersionUID = 4868926511774703941L;
     
-    @DtoConversion(path = "koodiId")
     private Long id;
-    @DtoConversion(path = "nimi")
+    @DtoConversion(path = "koodiId")
     private String name;
-    @DtoConversion(path = "kuvaus")
+    @DtoConversion(path = "nimi")
     private LocalizedContainerDto description  =  new LocalizedContainerDto();
     private List<OrganisaatioviiteDto> organisaatioViite  =  new ArrayList<OrganisaatioviiteDto>();
     private Object rooliRajoite; /// TODO? what does this contain?
