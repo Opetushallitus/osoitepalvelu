@@ -72,6 +72,8 @@ var ResultsController = function($scope, $log, $location, $filter, $timeout,
             $scope.results = data.rows;
             $scope.searchDone = true;
             $scope.$broadcast('resultsloaded');
+        }, function() {
+            $location.path("/");
         });
     };
     $timeout(function() {

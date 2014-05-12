@@ -83,4 +83,9 @@ public interface KoodistoService {
     Map<KoodistoTyyppi, List<UiKoodiItemDto>> findAllKoodistos(Locale locale);
 
     void purgeTutkintotoimikuntaCaches();
+
+    /**
+     * Purges all koodisto related MongoDB and memory caches.
+     */
+    void purgeCaches();
 }

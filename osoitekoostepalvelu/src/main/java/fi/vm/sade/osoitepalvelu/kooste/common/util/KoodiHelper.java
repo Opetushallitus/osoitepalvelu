@@ -53,6 +53,24 @@ public final class KoodiHelper {
         return koodi.replaceAll(uriPrefix+"(.*?)"+"(#.*)?", "$1");
     }
 
+    public static String removeVersion(String koodiArvo) {
+        if (koodiArvo == null) {
+            return null;
+        }
+        return koodiArvo.replaceAll("(.*)#(\\d+)", "$1");
+    }
+
+    public static List<String> removeVersion(List<String> koodiArvos) {
+        if (koodiArvos == null) {
+            return new ArrayList<String>();
+        }
+        List<String> arvos = new ArrayList<String>();
+        for (String koodiArvo : koodiArvos) {
+            arvos.add(removeVersion(koodiArvo));
+        }
+        return arvos;
+    }
+
     public static List<String> addDefaultVersioNumber(String versio, List<String> koodis) {
         List<String> koodisWithVersion = new ArrayList<String>();
         for (String koodi : koodis) {

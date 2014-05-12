@@ -14,15 +14,20 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
+package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio;
 
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.List;
 
 /**
  * User: ratamaa
- * Date: 3/25/14
- * Time: 11:32 AM
+ * Date: 5/12/14
+ * Time: 4:42 PM
  */
-public interface OrganisaatioCacheRepository extends MongoRepository<OrganisaatioDetails, String> {
+public interface FilterableOrganisaatio {
+
+    public List<String> getTyypit();
+
+    public List<String> getKielet();
+
+    public String getKotipaikka();
 }

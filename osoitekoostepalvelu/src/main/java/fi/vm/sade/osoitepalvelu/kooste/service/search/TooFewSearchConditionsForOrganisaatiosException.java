@@ -14,25 +14,29 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.config;
+package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
-import fi.vm.sade.osoitepalvelu.kooste.SpringApp;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
+import fi.vm.sade.osoitepalvelu.kooste.common.exception.SelfExplainingException;
 
 /**
  * User: ratamaa
- * Date: 12/10/13
- * Time: 1:16 PM
+ * Date: 5/12/14
+ * Time: 4:26 PM
  */
-@Configuration
-@ComponentScan(basePackages  =  {
-    "fi.vm.sade.osoitepalvelu.kooste.mvc",
-    "fi.vm.sade.osoitepalvelu.kooste.scheduled"
-})
-@ImportResource("classpath:spring/spring-mvc.xml")
-@Import(SpringApp.class)
-public class SpringMvcApp {
+public class TooFewSearchConditionsForOrganisaatiosException extends Exception
+            implements SelfExplainingException {
+    @Override
+    public String getMessageKey() {
+        return "too_few_search_conditions_for_organisaatios";
+    }
+
+    @Override
+    public Object[] getMessageParams() {
+        return new Object[0];
+    }
+
+    @Override
+    public String getErrorCode() {
+        return "301";
+    }
 }

@@ -16,7 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.service.mock;
 
+import com.google.common.base.Predicate;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
@@ -24,6 +26,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystieto
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * User: ratamaa
@@ -35,19 +38,24 @@ public class OrganisaatioServiceMock implements OrganisaatioService {
     private OrganisaatioDetailsDto yksityiskohtaisetTiedotByOid;
 
     @Override
-    public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(OrganisaatioYhteystietoCriteriaDto criteria,
-                                                                                   CamelRequestContext context) {
+    public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
+            OrganisaatioYhteystietoCriteriaDto criteria,
+            Predicate<FilterableOrganisaatio> afterFilterOrganisaatio,
+            Locale locale, CamelRequestContext requestContext) {
         return organisaatioYhteystietoResults;
     }
 
     @Override
-    public OrganisaatioDetailsDto getdOrganisaatioByOid(String oid,
-                                                                        CamelRequestContext context) {
+    public OrganisaatioDetailsDto getdOrganisaatioByOid(String oid, CamelRequestContext context) {
         return yksityiskohtaisetTiedotByOid;
     }
 
     @Override
     public void purgeOrganisaatioByOidCache(String oid) {
+    }
+
+    @Override
+    public void updateOrganisaatioYtunnusDetails(CamelRequestContext requestContext) {
     }
 
     public void setYksityiskohtaisetTiedotByOid(OrganisaatioDetailsDto yksityiskohtaisetTiedotByOid) {

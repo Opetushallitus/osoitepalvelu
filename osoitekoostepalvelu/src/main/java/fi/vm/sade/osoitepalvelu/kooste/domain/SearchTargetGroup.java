@@ -29,7 +29,7 @@ public class SearchTargetGroup implements Serializable {
     private static final long serialVersionUID  =  -1439905791723850160L;
 
     public enum GroupType {
-        JARJESTAJAT_YLLAPITAJAT("Koulutustoimija"), // ??
+        JARJESTAJAT_YLLAPITAJAT("Koulutustoimija"),
         OPPILAITOKSET("Oppilaitos"),
         OPETUSPISTEET("Opetuspiste"),
         OPPISOPIMUSTOIMPISTEET("Oppisopimustoimipiste"),

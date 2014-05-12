@@ -47,6 +47,7 @@ public class OrganisaatioDetailsDto implements Serializable {
     private List<OrganisaatioDetailsYhteystietoDto> yhteystiedot  =  new ArrayList<OrganisaatioDetailsYhteystietoDto>();
     private List<String> vuosiluokat  =  new ArrayList<String>();
     private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos  =  new ArrayList<OrganisaatioYhteystietoElementtiDto>();
+    private boolean fresh = false;
 
     public Long getVersion() {
         return version;
@@ -182,5 +183,13 @@ public class OrganisaatioDetailsDto implements Serializable {
 
     public void setKayntiosoite(OrganisaatioOsoiteDto kayntiosoite) {
         this.kayntiosoite = kayntiosoite;
+    }
+
+    public boolean isFresh() {
+        return fresh;
+    }
+
+    public void setFresh(boolean fresh) {
+        this.fresh = fresh;
     }
 }

@@ -16,12 +16,14 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio;
 
+import com.google.common.base.Predicate;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * User: ratamaa
@@ -32,12 +34,14 @@ public interface OrganisaatioService {
 
     /**
      * @param criteria for organisaatios' yhteystietos
+     * @param locale to use when sorting results by name
      * @param requestContext the context for HTTP request received by the application to operate in
      * @return the yhteystietos for the organisaatios matching the search criteria
      */
     List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
             OrganisaatioYhteystietoCriteriaDto criteria,
-            CamelRequestContext requestContext);
+            Predicate<FilterableOrganisaatio> afterFilterOrganisaatio,
+            Locale locale, CamelRequestContext requestContext);
 
     /**
      * @param oid of the organisaatio
@@ -50,4 +54,11 @@ public interface OrganisaatioService {
      * @param oid of the organisaatio to purge from cache
      */
     void purgeOrganisaatioByOidCache(String oid);
+
+    /**
+     * Updates the ytunnus details for all aktiivinen organisaatios.
+     *
+     * @param requestContext the context for HTTP request received by the application to operate in
+     */
+    void updateOrganisaatioYtunnusDetails(CamelRequestContext requestContext);
 }

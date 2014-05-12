@@ -16,24 +16,25 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.googlecode.ehcache.annotations.Cacheable;
 import com.googlecode.ehcache.annotations.PartialCacheKey;
 import com.googlecode.ehcache.annotations.TriggersRemove;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.dao.cache.OrganisaatioCacheRepository;
+import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.dto.converter.OrganisaatioDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * User: ratamaa
@@ -47,7 +48,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     private OrganisaatioServiceRoute organisaatioServiceRoute;
 
     @Autowired(required = false)
-    private OrganisaatioCacheRepository organisaatioCacheRepository;
+    private OrganisaatioRepository organisaatioRepository;
 
     @Autowired
     private OrganisaatioDtoConverter dtoConverter;
@@ -55,13 +56,164 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     @Value("${organisaatio.cache.livetime.seconds}")
     private long cacheTimeoutSeconds;
 
+    @Override
+//    @Cacheable(cacheName = "organisaatioHakuResultsCache")
+    public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
+            /*@PartialCacheKey*/ OrganisaatioYhteystietoCriteriaDto criteria,
+            Predicate<FilterableOrganisaatio> afterFilterOrganisaatio,
+            /*@PartialCacheKey*/ Locale locale,
+            CamelRequestContext requestContext) {
+//        return organisaatioServiceRoute.findOrganisaatioYhteystietos(criteria, requestContext);
+
+        List<OrganisaatioDetails> results;
+        if (criteria.getNumberOfUsedConditions() < 1) {
+            results = organisaatioRepository.findOrganisaatios(criteria, locale);
+        } else {
+            boolean bothYtunnusAndOppilaitotyyppiUsed = criteria.isYtunnusUsed() && criteria.isOppilaitostyyppiUsed();
+            if (bothYtunnusAndOppilaitotyyppiUsed) {
+                criteria.setUseYtunnus(true);
+                criteria.setUseOppilaitotyyppi(false);
+            }
+            results = organisaatioRepository.findOrganisaatios(criteria, locale);
+
+            criteria.setUseYtunnus(false);
+            if (bothYtunnusAndOppilaitotyyppiUsed) {
+                criteria.setUseOppilaitotyyppi(true);
+                results = mergeWithChildren(results, criteria, locale, false);
+            }
+            criteria.setUseOppilaitotyyppi(false);
+            results = mergeWithChildren(results, criteria, locale, true);
+            criteria.setUseYtunnus(true);
+            criteria.setUseOppilaitotyyppi(true);
+
+            results = mergeParents(results, locale);
+        }
+
+        if (afterFilterOrganisaatio != null) {
+            results = new ArrayList<OrganisaatioDetails>(Collections2.filter(results, afterFilterOrganisaatio));
+        }
+
+        return dtoConverter.convert(results, new ArrayList<OrganisaatioYhteystietoHakuResultDto>(),
+                OrganisaatioYhteystietoHakuResultDto.class);
+    }
+
+    private class OidFromOrganisaatio implements Function<OrganisaatioDetails, String> {
+        public String apply(OrganisaatioDetails organisaatio) {
+            return organisaatio.getOid();
+        }
+    }
+
+    private List<String> extractParentOids(List<OrganisaatioDetails> organisaatios) {
+        List<String> allParents = new ArrayList<String>();
+        for (OrganisaatioDetails organisaatio : organisaatios) {
+            allParents.addAll(parserParentOidPath(organisaatio));
+        }
+        return allParents;
+    }
+
+    private List<OrganisaatioDetails> mergeWithChildren(List<OrganisaatioDetails> results,
+                                                        OrganisaatioYhteystietoCriteriaDto criteria, Locale locale,
+                                                        boolean includeParents) {
+        List<OrganisaatioDetails> allChildren = organisaatioRepository.findChildren(Collections2.transform(results,
+                new OidFromOrganisaatio()), criteria, locale);
+
+        Set<String> added = new TreeSet<String>();
+        Map<String,List<OrganisaatioDetails>> childrenByAllParents = new TreeMap<String, List<OrganisaatioDetails>>();
+        for (OrganisaatioDetails child : allChildren) {
+            List<String> parentOids = parserParentOidPath(child);
+            for (String parentOid : parentOids) {
+                List<OrganisaatioDetails> parentsChildren = childrenByAllParents.get(parentOid);
+                if (parentsChildren == null) {
+                    parentsChildren = new ArrayList<OrganisaatioDetails>();
+                    childrenByAllParents.put(parentOid, parentsChildren);
+                }
+                parentsChildren.add(child);
+            }
+        }
+
+        List<OrganisaatioDetails> mergedResults = new ArrayList<OrganisaatioDetails>();
+        for (OrganisaatioDetails result : results) {
+            if (includeParents && !added.contains(result.getOid())) {
+                mergedResults.add(result);
+                added.add(result.getOid());
+            }
+            List<OrganisaatioDetails> parentsChildren = childrenByAllParents.get(result.getOid());
+            if (parentsChildren != null) {
+                for (OrganisaatioDetails child : parentsChildren) {
+                    if (!added.contains(child.getOid())) {
+                        mergedResults.add(child);
+                        added.add(child.getOid());
+                    }
+                }
+            }
+        }
+
+        return mergedResults;
+    }
+
+    private List<OrganisaatioDetails> mergeParents(List<OrganisaatioDetails> results, Locale locale) {
+        List<OrganisaatioDetails> allParents = organisaatioRepository.findOrganisaatiosByOids(extractParentOids(results),
+                locale);
+        Map<String,OrganisaatioDetails> byOids = new TreeMap<String, OrganisaatioDetails>();
+        for (OrganisaatioDetails parent : allParents) {
+            byOids.put(parent.getOid(), parent);
+        }
+
+        Set<String> added = new TreeSet<String>();
+        List<OrganisaatioDetails> mergedResults = new ArrayList<OrganisaatioDetails>();
+        for (OrganisaatioDetails result : results) {
+            List<String> parentOids = parserParentOidPath(result);
+            for (String parentOid : parentOids) {
+                OrganisaatioDetails parent = byOids.get(parentOid);
+                if (parent != null && !added.contains(parent.getOid())) {
+                    mergedResults.add(parent);
+                    added.add(parent.getOid());
+                }
+            }
+            if (!added.contains(result.getOid())) {
+                mergedResults.add(result);
+                added.add(result.getOid());
+            }
+        }
+
+        return mergedResults;
+    }
+
+    private List<String> parserParentOidPath(OrganisaatioDetails child) {
+        List<String> parentOids = new ArrayList<String>();
+        for (String pathPart : child.getParentOidPath()) {
+            List<String> pathParts = new ArrayList<String>(Arrays.asList(pathPart.split("\\|")));
+            if (pathParts.size() > 1 && "".equals(pathParts.get(0))) {
+                pathParts.remove(0);
+            }
+            if (pathParts.size() > 1 && "".equals(pathParts.get(pathParts.size()-1))) {
+                pathParts.remove(pathParts.get(pathParts.size()-1));
+            }
+            parentOids.addAll(pathParts);
+        }
+        return parentOids;
+    }
 
     @Override
-    @Cacheable(cacheName = "organisaatioHakuResultsCache")
-    public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
-            @PartialCacheKey OrganisaatioYhteystietoCriteriaDto criteria,
-            CamelRequestContext requestContext) {
-        return organisaatioServiceRoute.findOrganisaatioYhteystietos(criteria, requestContext);
+    public void updateOrganisaatioYtunnusDetails(CamelRequestContext requestContext) {
+        OrganisaatioHierarchyResultsDto results = organisaatioServiceRoute.findOrganisaatioHierachy(requestContext);
+        logger.info("UPDATING organisaatio's ytunnus details.");
+        int count = updateYtunnusResults(results.getOrganisaatiot());
+        logger.info("UPDATED " + count + " organisaatio's ytunnus details.");
+    }
+
+    private int updateYtunnusResults(List<OrganisaatioHierarchyDto> organisaatiot) {
+        int updated = 0;
+        for (OrganisaatioHierarchyDto organisaatio : organisaatiot) {
+            OrganisaatioDetails details = organisaatioRepository.findOne(organisaatio.getOid());
+            if (details != null && organisaatio.getYtunnus() != null) {
+                details.setYtunnus(organisaatio.getYtunnus());
+                organisaatioRepository.save(details);
+                updated++;
+            }
+            updated += updateYtunnusResults(organisaatio.getChildren());
+        }
+        return updated;
     }
 
     @Override
@@ -69,28 +221,30 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     public OrganisaatioDetailsDto getdOrganisaatioByOid(@PartialCacheKey String oid,
                                                                         CamelRequestContext requestContext) {
         if (isCacheUsed()) {
-            OrganisaatioDetails details = organisaatioCacheRepository.findOne(oid);
+            OrganisaatioDetails details = organisaatioRepository.findOne(oid);
             if (details != null && isCacheUsable(details.getCachedAt())) {
-                logger.info("MongoDB cached organisaatio {}", oid);
-                return dtoConverter.convert(details, new OrganisaatioDetailsDto());
+                logger.debug("MongoDB cached organisaatio {}", oid);
+                OrganisaatioDetailsDto detailsDto = dtoConverter.convert(details, new OrganisaatioDetailsDto());
+                detailsDto.setFresh(false);
+                return detailsDto;
             }
         }
         OrganisaatioDetailsDto dto = organisaatioServiceRoute.getdOrganisaatioByOid(oid, requestContext);
         if (isCacheUsed()) {
-            OrganisaatioDetails details = dtoConverter.convert(dto,
-                    new OrganisaatioDetails());
-            organisaatioCacheRepository.save(details);
+            OrganisaatioDetails details = dtoConverter.convert(dto, new OrganisaatioDetails());
+            organisaatioRepository.save(details);
             logger.info("Persisted organisaatio {} to MongoDB cache.", oid);
         }
+        dto.setFresh(true);
         return dto;
     }
 
     @Override
     @TriggersRemove(cacheName = "organisaatioByOidCache")
     public void purgeOrganisaatioByOidCache(@PartialCacheKey String oid) {
-        OrganisaatioDetails details = organisaatioCacheRepository.findOne(oid);
+        OrganisaatioDetails details = organisaatioRepository.findOne(oid);
         if (details != null) {
-            organisaatioCacheRepository.delete(details);
+            organisaatioRepository.delete(details);
         }
     }
 
@@ -99,7 +253,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     }
 
     private boolean isCacheUsed() {
-        return organisaatioCacheRepository != null && cacheTimeoutSeconds >= 0;
+        return organisaatioRepository != null && cacheTimeoutSeconds >= 0;
     }
 
     public long getCacheTimeoutSeconds() {
@@ -109,5 +263,4 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     public void setCacheTimeoutSeconds(long cacheTimeoutSeconds) {
         this.cacheTimeoutSeconds = cacheTimeoutSeconds;
     }
-
 }

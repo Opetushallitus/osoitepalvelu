@@ -23,6 +23,8 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultKoodistoRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
+import org.apache.camel.CamelExecutionException;
+import org.apache.camel.component.http.HttpOperationFailedException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -43,31 +45,52 @@ public class KoodistoRouteTest {
 
     @Test
     public void testHaeKaikkiOppilaitosTyypit() {
-        KoodistoTyyppi tyyppi  =  KoodistoTyyppi.OPPILAITOSTYYPPI;
-        List<KoodiDto> oppilaitosTyypit  =  koodistoReitti.findKooditKoodistonTyyppilla(tyyppi);
-        Assert.assertNotNull(oppilaitosTyypit);
-        Assert.assertTrue(oppilaitosTyypit.size() > 0);
+        try {
+            KoodistoTyyppi tyyppi  =  KoodistoTyyppi.OPPILAITOSTYYPPI;
+            List<KoodiDto> oppilaitosTyypit  =  koodistoReitti.findKooditKoodistonTyyppilla(tyyppi);
+            Assert.assertNotNull(oppilaitosTyypit);
+            Assert.assertTrue(oppilaitosTyypit.size() > 0);
+        } catch(CamelExecutionException e) {
+            ignoreIf503(e);
+        }
+    }
+
+    private void ignoreIf503(CamelExecutionException e) throws CamelExecutionException {
+        if (e.getCause() != null && e.getCause() instanceof HttpOperationFailedException) {
+            if (((HttpOperationFailedException) e.getCause()).getStatusCode() == 503) {
+                return;
+            }
+        }
+        throw e;
     }
 
     @Test
     public void testHaeOppilaitosTyypitKoodistonVersiotJaKooditVersiolla() {
-        KoodistoTyyppi tyyppi  =  KoodistoTyyppi.OPPILAITOSTYYPPI;
-        List<KoodistoVersioDto> versiot  =  koodistoReitti.findKoodistonVersiot(tyyppi);
-        Assert.assertNotNull(versiot);
-        Assert.assertTrue(versiot.size() > 0);
+        try {
+            KoodistoTyyppi tyyppi  =  KoodistoTyyppi.OPPILAITOSTYYPPI;
+            List<KoodistoVersioDto> versiot  =  koodistoReitti.findKoodistonVersiot(tyyppi);
+            Assert.assertNotNull(versiot);
+            Assert.assertTrue(versiot.size() > 0);
 
-        // Testataan, toimiiko tässä haku tietylle koodiston versiolle
-        KoodistoVersioDto versio  =  versiot.get(0);
-        List<KoodiDto> oppilaitosTyypit  =  koodistoReitti.findKooditKoodistonVersiolleTyyppilla(tyyppi,
-                versio.getVersio());
-        Assert.assertNotNull(oppilaitosTyypit);
-        Assert.assertTrue(oppilaitosTyypit.size() > 0);
+            // Testataan, toimiiko tässä haku tietylle koodiston versiolle
+            KoodistoVersioDto versio  =  versiot.get(0);
+            List<KoodiDto> oppilaitosTyypit  =  koodistoReitti.findKooditKoodistonVersiolleTyyppilla(tyyppi,
+                    versio.getVersio());
+            Assert.assertNotNull(oppilaitosTyypit);
+            Assert.assertTrue(oppilaitosTyypit.size() > 0);
+        } catch(CamelExecutionException e) {
+            ignoreIf503(e);
+        }
     }
 
     @Test
     public void testFindKuntasByMaakunta() {
-        List<KoodiDto> koodis  =  koodistoReitti.findKoodisWithParent("maakunta_12");
-        Assert.assertNotNull(koodis);
-        Assert.assertTrue(koodis.size() > 0);
+        try {
+            List<KoodiDto> koodis  =  koodistoReitti.findKoodisWithParent("maakunta_12");
+            Assert.assertNotNull(koodis);
+            Assert.assertTrue(koodis.size() > 0);
+        } catch(CamelExecutionException e) {
+            ignoreIf503(e);
+        }
     }
 }

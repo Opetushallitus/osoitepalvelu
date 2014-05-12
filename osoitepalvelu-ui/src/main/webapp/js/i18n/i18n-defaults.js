@@ -154,6 +154,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         camel_error: 'Odottamaton virhe kutsuttaessa ulkoista palvelua reitillä {0}.',
         not_found_error: 'Virhe: Etsittyä tietoa ei löytynyt.',
         not_authorized_error: 'Virhe: Ei käyttöoikeutta pyydettyyn resurssiin.',
+        too_few_search_conditions_for_organisaatios: 'Hakua ei voida suorittaa, koska se johtaisi kaiken tiedon hakemiseen. Valitse vähintään yksi organisaatioita rajaava ehto.',
 
         tutkintotoimikunta_rooli_jasen: 'Jäsen',
         tutkintotoimikunta_rooli_puheenjohtaja: 'Puheenjohtaja',

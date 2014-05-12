@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,16 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     private List<String> vuosiluokkaList  =  new ArrayList<String>();
     private List<String> ytunnusList  =  new ArrayList<String>();
     private Integer limit  = HIGH_LIMIT_VALUE; // Integer.MAX_VALUE seems to result in 500 error on the remote end
+    @JsonIgnore
+    private boolean useYtunnus=true;
+    @JsonIgnore
+    private boolean useOppilaitotyyppi=true;
+    @JsonIgnore
+    private boolean useKieli=true;
+    @JsonIgnore
+    private boolean useKunta=true;
+    @JsonIgnore
+    private boolean useVuosiluokka=true;
 
     public List<String> getKieliList() {
         return kieliList;
@@ -128,5 +140,59 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         result  =  HASH_FACTOR * result  +  (ytunnusList != null ? ytunnusList.hashCode() : 0);
         result  =  HASH_FACTOR * result  +  (limit != null ? limit.hashCode() : 0);
         return result;
+    }
+
+    @JsonIgnore
+    public boolean isOpetusKieliUsed() {
+        return useKieli && this.kieliList != null && !this.kieliList.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isKuntaUsed() {
+        return useKunta && this.kuntaList != null && !this.kuntaList.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isVuosiluokkaUsed() {
+        return useVuosiluokka && this.vuosiluokkaList != null && !this.vuosiluokkaList.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isOppilaitostyyppiUsed() {
+        return useOppilaitotyyppi && this.oppilaitostyyppiList != null && !this.oppilaitostyyppiList.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isYtunnusUsed() {
+        return useYtunnus && this.ytunnusList != null && !this.ytunnusList.isEmpty();
+    }
+
+    public void setUseYtunnus(boolean useYtunnus) {
+        this.useYtunnus = useYtunnus;
+    }
+
+    public void setUseOppilaitotyyppi(boolean useOppilaitotyyppi) {
+        this.useOppilaitotyyppi = useOppilaitotyyppi;
+    }
+
+    public void setUseKieli(boolean useKieli) {
+        this.useKieli = useKieli;
+    }
+
+    public void setUseKunta(boolean useKunta) {
+        this.useKunta = useKunta;
+    }
+
+    public void setUseVuosiluokka(boolean useVuosiluokka) {
+        this.useVuosiluokka = useVuosiluokka;
+    }
+
+    @JsonIgnore
+    public int getNumberOfUsedConditions() {
+        return (isVuosiluokkaUsed() ? 1 : 0)
+                + (isYtunnusUsed() ? 1 : 0)
+                + (isOpetusKieliUsed() ? 1 : 0)
+                + (isKuntaUsed() ? 1 : 0)
+                + (isOppilaitostyyppiUsed() ? 1 : 0);
     }
 }

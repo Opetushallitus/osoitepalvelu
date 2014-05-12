@@ -20,6 +20,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.SelfExplainingException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
+import org.apache.camel.CamelExecutionException;
 import org.apache.camel.Exchange;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.RuntimeExchangeException;
@@ -73,13 +74,27 @@ public abstract class AbstractMvcController {
     @ExceptionHandler(RuntimeCamelException.class)
     public ModelAndView camelException(HttpServletRequest req, RuntimeCamelException exception) {
         Exchange exchange = null;
-        Throwable cause = exception.getCause();
         if (exception instanceof RuntimeExchangeException) {
             exchange = ((RuntimeExchangeException) exception).getExchange();
         }
-        String service = "";
+        String service = null;
         if (exchange != null) {
             service = exchange.getFromEndpoint().getEndpointUri();
+        }
+        ModelAndView byCause = handleByCause(req, exception, service);
+        if (byCause != null) {
+            return byCause;
+        }
+        return handeException(req, exception, "camel_error", service);
+    }
+
+    private ModelAndView handleByCause(HttpServletRequest req, Throwable exception, String service) {
+        Throwable cause = exception.getCause();
+        while (cause != null && cause.getCause() != null) {
+            if (service == null && cause instanceof RuntimeExchangeException) {
+                service = ((CamelExecutionException) cause).getExchange().getFromEndpoint().getEndpointUri();
+            }
+            cause = cause.getCause();
         }
         if (cause != null) {
             if (cause instanceof HttpOperationFailedException) {
@@ -91,13 +106,16 @@ public abstract class AbstractMvcController {
                 return handeException(req, exception, "camel_http_call_timeout_error", service);
             }
         }
-        return handeException(req, exception, "camel_error", service);
+        return null;
     }
-
 
     @ResponseStatus(value  =  HttpStatus.INTERNAL_SERVER_ERROR) // 500
     @ExceptionHandler(Throwable.class)
     public ModelAndView otherException(HttpServletRequest req, Throwable exception) {
+        ModelAndView byCause = handleByCause(req, exception, null);
+        if (byCause != null) {
+            return byCause;
+        }
         return handeException(req, exception, "internal_error");
     }
 

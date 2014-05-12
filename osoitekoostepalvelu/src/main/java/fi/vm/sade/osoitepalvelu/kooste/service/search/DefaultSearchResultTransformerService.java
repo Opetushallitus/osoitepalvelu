@@ -374,20 +374,30 @@ public class DefaultSearchResultTransformerService extends AbstractService
             return;
         }
 
-        for (SearchResultRowDto result : results) {
-            String oid = result.getOrganisaatioOid();
-            if (oid != null) {
-                for (DetailCopier copier : copiers) {
-                    OrganisaatioDetailsDto details;
-                    if (cache.containsKey(oid)) {
-                        details = cache.get(oid);
-                    } else {
-                        details = organisaatioService.getdOrganisaatioByOid(oid, context);
-                        cache.put(oid, details);
+        boolean newDetailsFetched = false;
+        try {
+            for (SearchResultRowDto result : results) {
+                String oid = result.getOrganisaatioOid();
+                if (oid != null) {
+                    for (DetailCopier copier : copiers) {
+                        OrganisaatioDetailsDto details;
+                        if (cache.containsKey(oid)) {
+                            details = cache.get(oid);
+                        } else {
+                            details = organisaatioService.getdOrganisaatioByOid(oid, context);
+                            if (details.isFresh()) {
+                                newDetailsFetched = true;
+                            }
+                            cache.put(oid, details);
+                        }
+                        copier.copy(details, result, locale);
                     }
-                    copier.copy(details, result, locale);
-                }
 
+                }
+            }
+        } finally {
+            if (newDetailsFetched)  {
+                organisaatioService.updateOrganisaatioYtunnusDetails(context);
             }
         }
     }

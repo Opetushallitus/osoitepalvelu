@@ -18,8 +18,11 @@ package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
 import com.wordnik.swagger.annotations.Api;
 import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.scheduled.ScheduledAituDataFetchTask;
 import fi.vm.sade.osoitepalvelu.kooste.scheduled.ScheduledOrganisaatioCacheTask;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.AppSettingsService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -56,8 +59,13 @@ public class AppSettingsController extends AbstractMvcController {
     @Autowired
     private ScheduledAituDataFetchTask aituDataFetchTask;
 
-    @RequestMapping(value  =  "/settings.js", method  =  RequestMethod.GET,
-            produces  =  "text/javascript")
+    @Autowired
+    private OrganisaatioService organisaatioService;
+
+    @Autowired
+    private KoodistoService koodistoService;
+
+    @RequestMapping(value  =  "/settings.js", method  =  RequestMethod.GET, produces  =  "text/javascript")
     @ResponseBody
     public String settingsJs() throws IOException {
         AppSettingsDto settings  =  appSettingsService.getUiSettings();
@@ -66,8 +74,7 @@ public class AppSettingsController extends AbstractMvcController {
     }
 
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
-    @RequestMapping(value = "/refereshOrganisaatioCache", method = RequestMethod.POST,
-        produces = "text/plain")
+    @RequestMapping(value = "/refereshOrganisaatioCache", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
     public String buildOrganisaatioCache() {
         organisaatioCacheTask.refreshOrganisaatioCache();
@@ -75,8 +82,31 @@ public class AppSettingsController extends AbstractMvcController {
     }
 
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
-    @RequestMapping(value = "/fetchAituData", method = RequestMethod.POST,
-        produces = "text/plain")
+    @RequestMapping(value = "/ensureOrganisaatioCacheFresh", method = RequestMethod.POST, produces = "text/plain")
+    @ResponseBody
+    public String ensureOrganisaatioCacheFresh() {
+        organisaatioCacheTask.ensureOrganisaatioCacheFresh();
+        return "OK";
+    }
+
+    @PreAuthorize("hasIpAddress('127.0.0.1/24')")
+    @RequestMapping(value = "/purgeKoodistoCaches", method = RequestMethod.POST, produces = "text/plain")
+    @ResponseBody
+    public String purgeKoodistoCaches() {
+        koodistoService.purgeCaches();
+        return "OK";
+    }
+
+    @PreAuthorize("hasIpAddress('127.0.0.1/24')")
+    @RequestMapping(value = "/updateOrganisaatioYtunnusDetails", method = RequestMethod.POST, produces = "text/plain")
+    @ResponseBody
+    public String updateYtunnusDetails() {
+        organisaatioService.updateOrganisaatioYtunnusDetails(new DefaultCamelRequestContext());
+        return "OK";
+    }
+
+    @PreAuthorize("hasIpAddress('127.0.0.1/24')")
+    @RequestMapping(value = "/fetchAituData", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
     public String fetchAituData() {
         aituDataFetchTask.refreshAituData();

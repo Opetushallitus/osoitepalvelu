@@ -72,23 +72,73 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
         }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
 
         logger.info("Found {} organisaatios to refresh.", oids.size());
-        int i = 0;
-        for (final String oid : oids) {
-            ++i;
-            // This will purge the possibly cached organisaatio from both method level memory based EH cache and
-            // and the underlying MongoDB cache:
-            organisaatioService.purgeOrganisaatioByOidCache(oid);
-            // ...and renew the cache:
-            retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
-                public OrganisaatioDetailsDto call() throws Exception {
-                    return organisaatioService.getdOrganisaatioByOid(oid, context);
-                }
-            }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
+        try {
+            int i = 0;
+            for (final String oid : oids) {
+                ++i;
+                // This will purge the possibly cached organisaatio from both method level memory based EH cache and
+                // and the underlying MongoDB cache:
+                organisaatioService.purgeOrganisaatioByOidCache(oid);
+                // ...and renew the cache:
+                retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
+                    public OrganisaatioDetailsDto call() throws Exception {
+                        return organisaatioService.getdOrganisaatioByOid(oid, context);
+                    }
+                }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
 
-            logger.info("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
+                logger.info("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
+            }
+        } finally {
+            logger.info("UPDATING y-tunnus details...");
+            organisaatioService.updateOrganisaatioYtunnusDetails(context);
+            logger.info("DONE UPDATING y-tunnus details");
         }
 
         logger.info("END SCHEDULED refreshOrganisaatioCache.");
+    }
+
+    /**
+     * Does not purge fresh cache records but ensures that all organisaatios are cached.
+     */
+    public void ensureOrganisaatioCacheFresh() {
+        logger.info("BEGIN SCHEDULED ensureOrganisaatioCacheFresh.");
+
+        // No CAS here (not needed for reading organisaatio service):
+        final CamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(
+                new CasDisabledCasTicketProvider()));
+
+        List<String> oids = retryOnCamelError(new Callable<List<String>>() {
+            public List<String> call() throws Exception {
+                return organisaatioServiceRoute.findAllOrganisaatioOids(context);
+            }
+        }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
+
+        logger.info("Found {} organisaatios to ensure cache.", oids.size());
+        boolean infoUpdated = false;
+        try {
+            int i = 0;
+            for (final String oid : oids) {
+                ++i;
+                // ...and renew the cache:
+                OrganisaatioDetailsDto details = retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
+                    public OrganisaatioDetailsDto call() throws Exception {
+                        return organisaatioService.getdOrganisaatioByOid(oid, context);
+                    }
+                }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
+                if (details.isFresh()) {
+                    infoUpdated = true;
+                    logger.info("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
+                } else if(i % 1000 == 0) {
+                    logger.info("Organisaatio ensure data fresh task status: {} / {}", new Object[]{i, oids.size()});
+                }
+            }
+        } finally {
+            logger.info("UPDATING y-tunnus details...");
+            organisaatioService.updateOrganisaatioYtunnusDetails(context);
+            logger.info("DONE UPDATING y-tunnus details");
+        }
+
+        logger.info("END SCHEDULED ensureOrganisaatioCacheFresh.");
     }
 
     /**

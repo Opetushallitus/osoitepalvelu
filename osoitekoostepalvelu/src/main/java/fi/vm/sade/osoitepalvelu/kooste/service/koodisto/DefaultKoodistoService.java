@@ -88,6 +88,14 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
              =  new HashMap<KoodistoCache.CacheKey, MemoryCacheHolder>();
 
     @Override
+    public void purgeCaches() {
+        this.memoryCache = new HashMap<CacheKey, MemoryCacheHolder>();
+        if (this.koodistoCacheRepository != null) {
+            this.koodistoCacheRepository.deleteAll();
+        }
+    }
+
+    @Override
     public List<UiKoodiItemDto> findOppilaitosTyyppiOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.OPPILAITOSTYYPPI);
     }
@@ -226,7 +234,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
                 for (String rooli : aituService.findVoimassaOlevatRoolit()) {
                     UiKoodiItemDto koodi = new UiKoodiItemDto();
                     koodi.setKoodiId(rooli);
-                    koodi.setKoodiUri(KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS.getUri()+"_"+rooli);
+                    koodi.setKoodiUri(KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS.getUri() + "_" + rooli);
                     koodi.setNimi(rooli);
                     koodi.setLyhytNimi(koodi.getNimi());
                     koodi.setKoodistonTyyppi(KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS);

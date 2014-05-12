@@ -82,7 +82,7 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
         convertValue(from, to, locale);
         if (from.getPostinumero() != null) {
             UiKoodiItemDto postinumeroKoodi  =  koodistoService
-                    .findPostinumeroByKoodiUri(locale, from.getPostinumero());
+                .findPostinumeroByKoodiUri(locale, from.getPostinumero());
             if (postinumeroKoodi != null) {
                 to.setPostinumero(postinumeroKoodi.getKoodiId());
                 to.setPostitoimipaikka(postinumeroKoodi.getNimi());

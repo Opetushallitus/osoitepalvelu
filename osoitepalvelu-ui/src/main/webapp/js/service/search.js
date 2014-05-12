@@ -158,13 +158,18 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
                 _resultData = data;
                 _transformResults(data, success);
             },
-            errorCallback: (error || commonErrorHandler)
+            errorCallback: function(data, status, headers, config) {
+                commonErrorHandler(data, status, headers, config);
+                if (error) {
+                    error(data, status, headers, config);
+                }
+            }
         });
     };
 
     this.results = function(success, error) {
         if(_resultData===null) {
-            _performSearch(success);
+            _performSearch(success, error);
         } else {
             _transformResults(_resultData, success);
         }

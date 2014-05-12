@@ -16,9 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioOsoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoElementtiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -36,7 +39,7 @@ import java.util.Map;
  * Time: 11:25 AM
  */
 @Document(collection = "organisaatio")
-public class OrganisaatioDetails implements Serializable {
+public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio {
     private static final long serialVersionUID = 442147524555663558L;
     
     private Long version;
@@ -56,8 +59,10 @@ public class OrganisaatioDetails implements Serializable {
     @Indexed
     private String oppilaitosTyyppiUri; // esim. oppilaitostyyppi_21#1
     private String oppilaitosKoodi; // esim. 10107
+    @DtoConversion(path="toimipisteKoodi", withClass = OrganisaatioYhteystietoHakuResultDto.class)
     private String toimipistekoodi;
     @Indexed
+    @DtoConversion(path="kotipaikka", withClass = OrganisaatioYhteystietoHakuResultDto.class)
     private String kotipaikkaUri; // esim. kunta_405
     private String maaUri; // esim. maatjavaltiot1_fin
     private OrganisaatioOsoiteDto postiosoite;
@@ -68,6 +73,8 @@ public class OrganisaatioDetails implements Serializable {
     private List<String> vuosiluokat = new ArrayList<String>();
     private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos
             = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
+    @Indexed
+    private String ytunnus;
 
     public Long getVersion() {
         return version;
@@ -119,6 +126,14 @@ public class OrganisaatioDetails implements Serializable {
 
     public List<String> getTyypit() {
         return tyypit;
+    }
+
+    public List<String> getKielet() {
+        return getKieletUris();
+    }
+
+    public String getKotipaikka() {
+        return getKotipaikkaUri();
     }
 
     public void setTyypit(List<String> tyypit) {
@@ -211,5 +226,13 @@ public class OrganisaatioDetails implements Serializable {
 
     public void setKayntiosoite(OrganisaatioOsoiteDto kayntiosoite) {
         this.kayntiosoite = kayntiosoite;
+    }
+
+    public String getYtunnus() {
+        return ytunnus;
+    }
+
+    public void setYtunnus(String ytunnus) {
+        this.ytunnus = ytunnus;
     }
 }
