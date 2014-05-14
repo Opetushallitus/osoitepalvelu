@@ -16,7 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio;
 
-import com.google.common.base.Predicate;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
@@ -40,7 +39,6 @@ public interface OrganisaatioService {
      */
     List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
             OrganisaatioYhteystietoCriteriaDto criteria,
-            Predicate<FilterableOrganisaatio> afterFilterOrganisaatio,
             Locale locale, CamelRequestContext requestContext);
 
     /**
@@ -61,4 +59,9 @@ public interface OrganisaatioService {
      * @param requestContext the context for HTTP request received by the application to operate in
      */
     void updateOrganisaatioYtunnusDetails(CamelRequestContext requestContext);
+
+    /**
+     * @return all organisaatios in cache
+     */
+    List<String> findAllOidsOfCachedOrganisaatios();
 }

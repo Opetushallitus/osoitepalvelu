@@ -17,12 +17,10 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.googlecode.ehcache.annotations.Cacheable;
 import com.googlecode.ehcache.annotations.PartialCacheKey;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.common.util.AndPredicateAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.KoodiHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
@@ -88,24 +86,24 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults = null;
         if (searchOrganisaatios) {
 
-            Predicate<FilterableOrganisaatio> predicate;
+            SearchTargetGroup.TargetType[] targetTypes;
             if (returnOrgansiaatios) {
                 // Only the ones with target group and ORGANISAATIO-type selected:
                 // (and apply other possible constraints):
-                predicate = filterOrganisaatioResults(terms, SearchTargetGroup.TargetType.ORGANISAATIO);
+                targetTypes = new SearchTargetGroup.TargetType[]{SearchTargetGroup.TargetType.ORGANISAATIO};
             } else {
                 // No ORGANISAATIO types selected but possibly a number of organisaatio kind target groups present,
                 // use them to filter organisaatios by which to return henkilos as well
                 // (as other possible filterin constaints):
-                predicate = filterOrganisaatioResults(terms);
+                targetTypes = new SearchTargetGroup.TargetType[0];
             }
 
-            organisaatioYhteystietoResults = findOrganisaatios(terms, predicate, context);
+            organisaatioYhteystietoResults = findOrganisaatios(terms, context, targetTypes);
             if (returnOrgansiaatios) {
                 // Convert to result DTOs (with e.g. postinumeros):
                 List<OrganisaatioResultDto> convertedResults  =  dtoConverter.convert(
-                    organisaatioYhteystietoResults, new ArrayList<OrganisaatioResultDto>(), OrganisaatioResultDto.class,
-                    terms.getLocale());
+                        organisaatioYhteystietoResults, new ArrayList<OrganisaatioResultDto>(),
+                        OrganisaatioResultDto.class, terms.getLocale());
                 results.setOrganisaatios(convertedResults);
             }
         }
@@ -149,25 +147,39 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     }
 
     protected List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatios(SearchTermsDto terms,
-                   Predicate<FilterableOrganisaatio> afterFilterPredicate, CamelRequestContext context )
+                   CamelRequestContext context, SearchTargetGroup.TargetType...targetTypes)
             throws TooFewSearchConditionsForOrganisaatiosException {
-        OrganisaatioYhteystietoCriteriaDto organisaatioYhteystietosCriteria  =  new OrganisaatioYhteystietoCriteriaDto();
+        OrganisaatioYhteystietoCriteriaDto organisaatioCriteria  =  new OrganisaatioYhteystietoCriteriaDto();
         List<String> kuntas  =  resolveKuntaKoodis(terms);
-        organisaatioYhteystietosCriteria.setKuntaList(kuntas);
-        organisaatioYhteystietosCriteria.setKieliList(terms.findTerms(SearchTermDto.TERM_ORGANISAATION_OPETUSKIELIS));
-        organisaatioYhteystietosCriteria.setOppilaitostyyppiList(terms.findTerms(SearchTermDto.TERM_OPPILAITOSTYYPPIS));
-        organisaatioYhteystietosCriteria.setVuosiluokkaList(terms.findTerms(SearchTermDto.TERM_VUOSILUOKKAS));
-        organisaatioYhteystietosCriteria.setYtunnusList(terms.findTerms(SearchTermDto.TERM_KOULTUKSENJARJESTAJAS));
+        organisaatioCriteria.setKuntaList(kuntas);
+        organisaatioCriteria.setKieliList(terms.findTerms(SearchTermDto.TERM_ORGANISAATION_OPETUSKIELIS));
+        organisaatioCriteria.setOppilaitostyyppiList(terms.findTerms(SearchTermDto.TERM_OPPILAITOSTYYPPIS));
+        organisaatioCriteria.setVuosiluokkaList(terms.findTerms(SearchTermDto.TERM_VUOSILUOKKAS));
+        organisaatioCriteria.setYtunnusList(terms.findTerms(SearchTermDto.TERM_KOULTUKSENJARJESTAJAS));
+        organisaatioCriteria.setOrganisaatioTyyppis(parseOrganisaatioTyyppis(terms, targetTypes));
 
-        int numberOfConditions = organisaatioYhteystietosCriteria.getNumberOfUsedConditions();
+        organisaatioCriteria.setUseOrganisaatioTyyppi(false);
+        int numberOfConditions = organisaatioCriteria.getNumberOfUsedConditions();
         if (numberOfConditions < 1) {
+            // If organisaatiotyyppi (kohderyhmärajaus) is the only one, require some more:
             throw new TooFewSearchConditionsForOrganisaatiosException();
         }
-        organisaatioYhteystietosCriteria.setUseKunta(false);
-        organisaatioYhteystietosCriteria.setUseKieli(false);
+        organisaatioCriteria.setUseOrganisaatioTyyppi(true);
 
-        return organisaatioService.findOrganisaatioYhteystietos(organisaatioYhteystietosCriteria, afterFilterPredicate,
-                terms.getLocale(), context);
+        return organisaatioService.findOrganisaatioYhteystietos(organisaatioCriteria, terms.getLocale(), context);
+    }
+
+    protected List<String> parseOrganisaatioTyyppis(SearchTermsDto terms, SearchTargetGroup.TargetType... targetTypes) {
+        List<String> organisaatioTyyppis  =  new ArrayList<String>();
+        for (SearchTargetGroupDto groupDto : terms.getTargetGroups()) {
+            if (groupDto.containsAnyOption(targetTypes)) {
+                SearchTargetGroup.GroupType groupType  =  groupDto.getType();
+                if (groupType.getOrganisaatioPalveluTyyppiArvo() != null) {
+                    organisaatioTyyppis.add(groupType.getOrganisaatioPalveluTyyppiArvo());
+                }
+            }
+        }
+        return organisaatioTyyppis;
     }
 
     protected List<HenkiloDetailsDto> findHenkilos(SearchTermsDto terms, final CamelRequestContext context,
@@ -203,62 +215,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         return kuntas;
     }
 
-    protected Predicate<FilterableOrganisaatio> filterOrganisaatioResults(
-            final SearchTermsDto terms,
-            SearchTargetGroup.TargetType...targetTypes) {
-        AndPredicateAdapter<FilterableOrganisaatio> predicate  =
-                new AndPredicateAdapter<FilterableOrganisaatio>();
-
-        final List<String> organisaatioTyyppis  =  new ArrayList<String>();
-        for (SearchTargetGroupDto groupDto : terms.getTargetGroups()) {
-            if (groupDto.containsAnyOption(targetTypes)) {
-                SearchTargetGroup.GroupType groupType  =  groupDto.getType();
-                if (groupType.getOrganisaatioPalveluTyyppiArvo() != null) {
-                    organisaatioTyyppis.add(groupType.getOrganisaatioPalveluTyyppiArvo());
-                }
-            }
-        }
-
-        if (!organisaatioTyyppis.isEmpty()) {
-            predicate  =  predicate.and(new Predicate<FilterableOrganisaatio>() {
-                @Override
-                public boolean apply(FilterableOrganisaatio result) {
-                    for (String tyyppi : result.getTyypit()) {
-                        if (organisaatioTyyppis.contains(tyyppi)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            });
-        }
-
-        final List<String> kuntas = resolveKuntaKoodis(terms);
-        if (!kuntas.isEmpty()) {
-            predicate = predicate.and(new Predicate<FilterableOrganisaatio>() {
-                public boolean apply(FilterableOrganisaatio organisaatio) {
-                    return kuntas.contains(organisaatio.getKotipaikka());
-                }
-            });
-        }
-
-        final List<String> kielis = terms.findTerms(SearchTermDto.TERM_ORGANISAATION_OPETUSKIELIS);
-        if (!kielis.isEmpty()) {
-            predicate = predicate.and(new Predicate<FilterableOrganisaatio>() {
-                public boolean apply(FilterableOrganisaatio organisaatio) {
-                    for (String kieli : KoodiHelper.removeVersion(organisaatio.getKielet())) {
-                        if (kielis.contains(kieli)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            });
-        }
-
-        return predicate;
-    }
-
     protected Collection<? extends String> kuntasForMaakunta(Locale locale, String maakuntaUri) {
         return Collections2.transform(koodistoService.findKuntasByMaakuntaUri(locale, maakuntaUri),
                 new Function<UiKoodiItemDto, String>() {
@@ -271,12 +227,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     protected List<String> oids(List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults) {
         return new ArrayList<String>(Collections2.transform(organisaatioYhteystietoResults,
-                new Function<OrganisaatioYhteystietoHakuResultDto, String>() {
-            @Override
-            public String apply(OrganisaatioYhteystietoHakuResultDto result) {
-                return result.getOid();
-            }
-        }));
+                FilterableOrganisaatio.GET_OID));
     }
 
     public void setOrganisaatioService(OrganisaatioService organisaatioService) {

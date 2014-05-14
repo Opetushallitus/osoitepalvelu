@@ -32,4 +32,13 @@ public interface CamelRequestContext {
      */
     CasTicketCache getTicketCache();
 
+    /**
+     * @return the request count
+     */
+    long getRequestCount();
+
+    /**
+     * Call when request is to be performed
+     */
+    void requestPerformed();
 }

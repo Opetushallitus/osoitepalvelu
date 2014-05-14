@@ -70,6 +70,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 return organisaatioServiceRoute.findAllOrganisaatioOids(context);
             }
         }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
+        removeCachedDeletedOrganisaatios(oids);
 
         logger.info("Found {} organisaatios to refresh.", oids.size());
         try {
@@ -97,6 +98,16 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
         logger.info("END SCHEDULED refreshOrganisaatioCache.");
     }
 
+    private void removeCachedDeletedOrganisaatios(List<String> oids) {
+        logger.info("REMOVING obsolete organisaatios from cache.");
+        List<String> cachedObsoleteOids = organisaatioService.findAllOidsOfCachedOrganisaatios();
+        cachedObsoleteOids.removeAll(oids);
+        for (String oid : cachedObsoleteOids) {
+            organisaatioService.purgeOrganisaatioByOidCache(oid);
+        }
+        logger.info("REMOVED {} obsolete organsiaatios from cache.", cachedObsoleteOids.size());
+    }
+
     /**
      * Does not purge fresh cache records but ensures that all organisaatios are cached.
      */
@@ -112,6 +123,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 return organisaatioServiceRoute.findAllOrganisaatioOids(context);
             }
         }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
+        removeCachedDeletedOrganisaatios(oids);
 
         logger.info("Found {} organisaatios to ensure cache.", oids.size());
         boolean infoUpdated = false;
@@ -120,12 +132,13 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
             for (final String oid : oids) {
                 ++i;
                 // ...and renew the cache:
+                long rc = context.getRequestCount();
                 OrganisaatioDetailsDto details = retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
                     public OrganisaatioDetailsDto call() throws Exception {
                         return organisaatioService.getdOrganisaatioByOid(oid, context);
                     }
                 }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
-                if (details.isFresh()) {
+                if (rc != context.getRequestCount()) {
                     infoUpdated = true;
                     logger.info("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
                 } else if(i % 1000 == 0) {
@@ -133,9 +146,11 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 }
             }
         } finally {
-            logger.info("UPDATING y-tunnus details...");
-            organisaatioService.updateOrganisaatioYtunnusDetails(context);
-            logger.info("DONE UPDATING y-tunnus details");
+            if (infoUpdated) {
+                logger.info("UPDATING y-tunnus details...");
+                organisaatioService.updateOrganisaatioYtunnusDetails(context);
+                logger.info("DONE UPDATING y-tunnus details");
+            }
         }
 
         logger.info("END SCHEDULED ensureOrganisaatioCacheFresh.");

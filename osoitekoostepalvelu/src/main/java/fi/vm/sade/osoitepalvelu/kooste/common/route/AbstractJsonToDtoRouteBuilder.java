@@ -1086,6 +1086,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         if (cache != null) {
             properties.put(CAS_TICKET_CACHE_PROPERTY, cache);
         }
+        requestContext.requestPerformed();
         return sendBodyHeadersAndProperties(template, endpointUri, body, headers, properties, type);
     }
 

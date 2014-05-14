@@ -43,6 +43,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
     private List<OrganisaatioYhteysosoiteDto> kayntiosoite  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
     private String oppilaitosTyyppiUri; // esim. oppilaitostyyppi_21#1
 
+    @Override
     public String getOid() {
         return oid;
     }
@@ -59,6 +60,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
         this.nimi  =  nimi;
     }
 
+    @Override
     public List<String> getTyypit() {
         return tyypit;
     }
@@ -67,6 +69,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
         this.tyypit  =  tyypit;
     }
 
+    @Override
     public List<String> getKielet() {
         return kielet;
     }
@@ -75,6 +78,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
         this.kielet  =  kielet;
     }
 
+    @Override
     public String getKotipaikka() {
         return kotipaikka;
     }

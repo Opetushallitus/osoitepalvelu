@@ -84,6 +84,7 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
         this.version = version;
     }
 
+    @Override
     public String getOid() {
         return oid;
     }
@@ -124,14 +125,17 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
         this.nimi = nimi;
     }
 
+    @Override
     public List<String> getTyypit() {
         return tyypit;
     }
 
+    @Override
     public List<String> getKielet() {
         return getKieletUris();
     }
 
+    @Override
     public String getKotipaikka() {
         return getKotipaikkaUri();
     }

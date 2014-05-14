@@ -155,8 +155,8 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
                 nonIncludedOrganisaatioOids: _deletedIds
             },
             callback: function(data) {
-                _resultData = data;
                 _transformResults(data, success);
+                _resultData = data;
             },
             errorCallback: function(data, status, headers, config) {
                 commonErrorHandler(data, status, headers, config);
@@ -171,7 +171,12 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         if(_resultData===null) {
             _performSearch(success, error);
         } else {
-            _transformResults(_resultData, success);
+            var filteredRows = $filter('filter')(_resultData.rows,
+                    FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi"]) );
+            success( {
+                presentation: _resultData.presentation,
+                rows: filteredRows
+            } );
         }
     };
 

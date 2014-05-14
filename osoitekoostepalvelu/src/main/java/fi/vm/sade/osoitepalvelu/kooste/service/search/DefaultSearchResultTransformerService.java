@@ -384,8 +384,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
                         if (cache.containsKey(oid)) {
                             details = cache.get(oid);
                         } else {
+                            long rc = context.getRequestCount();
                             details = organisaatioService.getdOrganisaatioByOid(oid, context);
-                            if (details.isFresh()) {
+                            if (context.getRequestCount() != rc) {
                                 newDetailsFetched = true;
                             }
                             cache.put(oid, details);

@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * JsonIgnore-annotation is applied to the getters of properties that are not present in the organisaatio-service's
+ * yhteystietohaku remote interface's search criteria's JSON.
+ *
  * User: ratamaa
  * Date: 3/14/14
  * Time: 2:08 PM
@@ -38,17 +41,14 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     private List<String> oppilaitostyyppiList  =  new ArrayList<String>();
     private List<String> vuosiluokkaList  =  new ArrayList<String>();
     private List<String> ytunnusList  =  new ArrayList<String>();
+    private List<String> organisaatioTyyppis = new ArrayList<String>();
     private Integer limit  = HIGH_LIMIT_VALUE; // Integer.MAX_VALUE seems to result in 500 error on the remote end
-    @JsonIgnore
     private boolean useYtunnus=true;
-    @JsonIgnore
     private boolean useOppilaitotyyppi=true;
-    @JsonIgnore
     private boolean useKieli=true;
-    @JsonIgnore
     private boolean useKunta=true;
-    @JsonIgnore
     private boolean useVuosiluokka=true;
+    private boolean useOrganisaatioTyyppi=true;
 
     public List<String> getKieliList() {
         return kieliList;
@@ -98,48 +98,13 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         this.ytunnusList  =  ytunnusList;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) { 
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) { 
-            return false;
-        }
-
-        OrganisaatioYhteystietoCriteriaDto that  =  (OrganisaatioYhteystietoCriteriaDto) o;
-
-        if (kieliList != null ? !kieliList.equals(that.kieliList) : that.kieliList != null) { 
-            return false;
-        }
-        if (kuntaList != null ? !kuntaList.equals(that.kuntaList) : that.kuntaList != null) { 
-            return false;
-        }
-        if (limit != null ? !limit.equals(that.limit) : that.limit != null) { 
-            return false;
-        }
-        if (oppilaitostyyppiList != null ? !oppilaitostyyppiList.equals(that.oppilaitostyyppiList) : that.oppilaitostyyppiList != null) {
-            return false;
-        }
-        if (vuosiluokkaList != null ? !vuosiluokkaList.equals(that.vuosiluokkaList) : that.vuosiluokkaList != null) {
-            return false;
-        }
-        if (ytunnusList != null ? !ytunnusList.equals(that.ytunnusList) : that.ytunnusList != null) { 
-            return false;
-        }
-
-        return true;
+    @JsonIgnore
+    public List<String> getOrganisaatioTyyppis() {
+        return organisaatioTyyppis;
     }
 
-    @Override
-    public int hashCode() {
-        int result = kuntaList != null ? kuntaList.hashCode() : 0;
-        result  =  HASH_FACTOR * result  +  (kieliList != null ? kieliList.hashCode() : 0);
-        result  =  HASH_FACTOR * result  +  (oppilaitostyyppiList != null ? oppilaitostyyppiList.hashCode() : 0);
-        result  =  HASH_FACTOR * result  +  (vuosiluokkaList != null ? vuosiluokkaList.hashCode() : 0);
-        result  =  HASH_FACTOR * result  +  (ytunnusList != null ? ytunnusList.hashCode() : 0);
-        result  =  HASH_FACTOR * result  +  (limit != null ? limit.hashCode() : 0);
-        return result;
+    public void setOrganisaatioTyyppis(List<String> organisaatioTyyppis) {
+        this.organisaatioTyyppis = organisaatioTyyppis;
     }
 
     @JsonIgnore
@@ -160,6 +125,11 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     @JsonIgnore
     public boolean isOppilaitostyyppiUsed() {
         return useOppilaitotyyppi && this.oppilaitostyyppiList != null && !this.oppilaitostyyppiList.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isOrganisaatioTyyppiUsed() {
+        return useOrganisaatioTyyppi && this.organisaatioTyyppis != null && !this.organisaatioTyyppis.isEmpty();
     }
 
     @JsonIgnore
@@ -187,12 +157,26 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         this.useVuosiluokka = useVuosiluokka;
     }
 
+    public void setUseOrganisaatioTyyppi(boolean useOrganisaatioTyyppi) {
+        this.useOrganisaatioTyyppi = useOrganisaatioTyyppi;
+    }
+
+    public void useAll() {
+        setUseYtunnus(true);
+        setUseOppilaitotyyppi(true);
+        setUseVuosiluokka(true);
+        setUseKunta(true);
+        setUseKieli(true);
+        setUseOrganisaatioTyyppi(true);
+    }
+
     @JsonIgnore
     public int getNumberOfUsedConditions() {
         return (isVuosiluokkaUsed() ? 1 : 0)
                 + (isYtunnusUsed() ? 1 : 0)
                 + (isOpetusKieliUsed() ? 1 : 0)
                 + (isKuntaUsed() ? 1 : 0)
-                + (isOppilaitostyyppiUsed() ? 1 : 0);
+                + (isOppilaitostyyppiUsed() ? 1 : 0)
+                + (isOrganisaatioTyyppiUsed() ? 1 : 0);
     }
 }

@@ -44,4 +44,6 @@ public interface OrganisaatioRepository extends MongoRepository<OrganisaatioDeta
                                            Locale orderByLocale);
 
     DateTime findOldestCachedEntry();
+
+    List<String> findAllOids();
 }

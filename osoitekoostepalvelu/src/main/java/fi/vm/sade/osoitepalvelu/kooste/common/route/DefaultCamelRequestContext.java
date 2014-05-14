@@ -26,6 +26,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.DefaultCookieBasedCasTic
  */
 public class DefaultCamelRequestContext implements CamelRequestContext {
     private CasTicketCache ticketCache;
+    private long requestCount=0;
 
     public DefaultCamelRequestContext(CasTicketCache ticketCache) {
         this.ticketCache = ticketCache;
@@ -38,5 +39,15 @@ public class DefaultCamelRequestContext implements CamelRequestContext {
     @Override
     public CasTicketCache getTicketCache() {
         return this.ticketCache;
+    }
+
+    @Override
+    public long getRequestCount() {
+        return requestCount;
+    }
+
+    @Override
+    public void requestPerformed() {
+        this.requestCount++;
     }
 }

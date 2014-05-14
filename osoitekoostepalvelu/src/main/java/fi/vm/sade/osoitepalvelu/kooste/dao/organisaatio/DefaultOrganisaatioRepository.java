@@ -16,8 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 
+import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,12 +83,11 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
 
     }
 
-    private void filterByCriteria(CriteriaHelper.Conditions conditions, OrganisaatioYhteystietoCriteriaDto organisaatioCriteria) {
-        filterByCommonConditions(conditions, organisaatioCriteria);
-    }
-
-    private void filterByCommonConditions(CriteriaHelper.Conditions conditions,
-                                          OrganisaatioYhteystietoCriteriaDto organisaatioCriteria) {
+    private void filterByCriteria(CriteriaHelper.Conditions conditions,
+                                  OrganisaatioYhteystietoCriteriaDto organisaatioCriteria) {
+        if (organisaatioCriteria.isOrganisaatioTyyppiUsed()) {
+            conditions.add(new Criteria("tyypit").in(organisaatioCriteria.getOrganisaatioTyyppis()));
+        }
         if (organisaatioCriteria.isKuntaUsed()) {
             conditions.add(new Criteria("kotipaikkaUri").in(organisaatioCriteria.getKuntaList()));
         }
@@ -116,7 +117,7 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         CriteriaHelper.Conditions conditions = new CriteriaHelper.Conditions();
 
         conditions.add(CriteriaHelper.inParentOids(new Criteria(), "parentOidPath", parentOids));
-        filterByCommonConditions(conditions, organisaatioCriteria);
+        filterByCriteria(conditions, organisaatioCriteria);
 
         return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria())).with(new Sort("nimi."
                 +orderByLocale.getLanguage().toLowerCase())), OrganisaatioDetails.class);
@@ -129,5 +130,13 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         );
         return getMongoOperations().aggregate(agg, OrganisaatioDetails.class.getAnnotation(Document.class).collection(),
                 DateTime.class).getUniqueMappedResult();
+    }
+
+    @Override
+    public List<String> findAllOids() {
+        Query q = Query.query(new Criteria());
+        q.fields().include("_id");
+        return new ArrayList<String>(Collections2.transform(getMongoOperations()
+                .find(q, OrganisaatioDetails.class), FilterableOrganisaatio.GET_OID));
     }
 }
