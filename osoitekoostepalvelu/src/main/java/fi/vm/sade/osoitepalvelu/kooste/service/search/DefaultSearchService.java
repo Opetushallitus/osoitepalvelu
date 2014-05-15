@@ -44,10 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * User: ratamaa
@@ -175,7 +172,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             if (groupDto.containsAnyOption(targetTypes)) {
                 SearchTargetGroup.GroupType groupType  =  groupDto.getType();
                 if (groupType.getOrganisaatioPalveluTyyppiArvo() != null) {
-                    organisaatioTyyppis.add(groupType.getOrganisaatioPalveluTyyppiArvo());
+                    organisaatioTyyppis.addAll(Arrays.asList(groupType.getOrganisaatioPalveluTyyppiArvo()));
                 }
             }
         }
