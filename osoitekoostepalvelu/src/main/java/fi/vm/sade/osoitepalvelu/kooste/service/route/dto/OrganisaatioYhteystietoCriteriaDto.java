@@ -162,6 +162,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         this.useOrganisaatioTyyppi = useOrganisaatioTyyppi;
     }
 
+    @JsonIgnore
     public boolean isVainAktiiviset() {
         return vainAktiiviset;
     }
