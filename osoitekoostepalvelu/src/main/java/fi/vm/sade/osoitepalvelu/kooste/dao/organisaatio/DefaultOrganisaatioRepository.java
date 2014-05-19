@@ -22,6 +22,7 @@ import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -85,6 +86,10 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
 
     private void filterByCriteria(CriteriaHelper.Conditions conditions,
                                   OrganisaatioYhteystietoCriteriaDto organisaatioCriteria) {
+        if (organisaatioCriteria.isVainAktiiviset()) {
+            conditions.add(new Criteria().orOperator( new Criteria("lakkautusPvm").is(null),
+                    new Criteria("lakkautusPvm").gt(new LocalDate().toDateTimeAtStartOfDay().toDate()) ));
+        }
         if (organisaatioCriteria.isOrganisaatioTyyppiUsed()) {
             conditions.add(new Criteria("tyypit").in(organisaatioCriteria.getOrganisaatioTyyppis()));
         }

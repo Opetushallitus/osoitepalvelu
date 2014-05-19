@@ -43,6 +43,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     private List<String> ytunnusList  =  new ArrayList<String>();
     private List<String> organisaatioTyyppis = new ArrayList<String>();
     private Integer limit  = HIGH_LIMIT_VALUE; // Integer.MAX_VALUE seems to result in 500 error on the remote end
+    private boolean vainAktiiviset = true;
     private boolean useYtunnus=true;
     private boolean useOppilaitotyyppi=true;
     private boolean useKieli=true;
@@ -159,6 +160,14 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
 
     public void setUseOrganisaatioTyyppi(boolean useOrganisaatioTyyppi) {
         this.useOrganisaatioTyyppi = useOrganisaatioTyyppi;
+    }
+
+    public boolean isVainAktiiviset() {
+        return vainAktiiviset;
+    }
+
+    public void setVainAktiiviset(boolean vainAktiiviset) {
+        this.vainAktiiviset = vainAktiiviset;
     }
 
     public void useAll() {

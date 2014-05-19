@@ -23,7 +23,9 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioOsoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoElementtiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -75,6 +77,9 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
             = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
     @Indexed
     private String ytunnus;
+    private LocalDate alkuPvm;
+    @Indexed
+    private LocalDate lakkautusPvm;
 
     public Long getVersion() {
         return version;
@@ -238,5 +243,26 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
 
     public void setYtunnus(String ytunnus) {
         this.ytunnus = ytunnus;
+    }
+
+    public LocalDate getAlkuPvm() {
+        return alkuPvm;
+    }
+
+    public void setAlkuPvm(LocalDate alkuPvm) {
+        this.alkuPvm = alkuPvm;
+    }
+
+    public LocalDate getLakkautusPvm() {
+        return lakkautusPvm;
+    }
+
+    public void setLakkautusPvm(LocalDate lakkautusPvm) {
+        this.lakkautusPvm = lakkautusPvm;
+    }
+
+    @Transient
+    public boolean isLakkautettu() {
+        return this.lakkautusPvm != null && this.lakkautusPvm.compareTo(new LocalDate()) <= 0;
     }
 }

@@ -311,17 +311,28 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     public OrganisaatioDetailsDto getdOrganisaatioByOid(@PartialCacheKey String oid, CamelRequestContext requestContext) {
         if (isCacheUsed()) {
             OrganisaatioDetails details = organisaatioRepository.findOne(oid);
-            if (details != null && isCacheUsable(details.getCachedAt())) {
+            if (details != null && isCacheUsable(details.getCachedAt(), requestContext.getCacheCheckMoment())) {
                 logger.debug("MongoDB cached organisaatio {}", oid);
                 OrganisaatioDetailsDto detailsDto = dtoConverter.convert(details, new OrganisaatioDetailsDto());
+                // Voitaisiin tehdä näin, jos saataisiin jostain lista vain aktiivista organisaatioista, mutta nyt
+                // täytyy pitää kaikki muistissa, koska muuten jouduttaisiin aina hakemaan lakkautettujen tiedot:
+//                if (details.isLakkautettu()) {
+//                    organisaatioRepository.delete(details.getOid());
+//                    logger.info("Deleted lakkautettu organisaatio {} from MongoDB.", oid);
+//                }
                 return detailsDto;
             }
         }
         OrganisaatioDetailsDto dto = organisaatioServiceRoute.getdOrganisaatioByOid(oid, requestContext);
         if (isCacheUsed()) {
             OrganisaatioDetails details = dtoConverter.convert(dto, new OrganisaatioDetails());
-            organisaatioRepository.save(details);
-            logger.info("Persisted organisaatio {} to MongoDB cache.", oid);
+//            if (!details.isLakkautettu()) {
+                organisaatioRepository.save(details);
+                logger.info("Persisted organisaatio {} to MongoDB cache.", oid);
+//            } else {
+//                organisaatioRepository.delete(details.getOid());
+//                logger.info("Ensure deleted lakkautettu organisaatio {} from MongoDB.", oid);
+//            }
         }
         return dto;
     }
@@ -335,8 +346,8 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
         }
     }
 
-    private boolean isCacheUsable(DateTime updatedAt) {
-        return updatedAt.plus(cacheTimeoutSeconds * MILLIS_IN_SECOND).compareTo(new DateTime()) > 0;
+    private boolean isCacheUsable(DateTime updatedAt, DateTime now) {
+        return updatedAt.plus(cacheTimeoutSeconds * MILLIS_IN_SECOND).compareTo(now) > 0;
     }
 
     private boolean isCacheUsed() {

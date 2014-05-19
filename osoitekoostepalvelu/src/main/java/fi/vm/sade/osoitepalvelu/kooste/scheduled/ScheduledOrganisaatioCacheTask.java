@@ -19,11 +19,14 @@ package fi.vm.sade.osoitepalvelu.kooste.scheduled;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasDisabledCasTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import org.apache.camel.RuntimeCamelException;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -53,13 +56,22 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
     @Autowired
     private OrganisaatioServiceRoute organisaatioServiceRoute;
 
+    @Autowired
+    private OrganisaatioRepository organisaatioRepository;
+
     @Value("${web.url.cas}")
     protected String casService;
+
+    @Value("${organisaatio.cache.valid.from:}")
+    private String cacheValidFrom;
+
+
 
     // Every working day night at 3 AM
     @Scheduled(cron = "0 0 3 * * MON-FRI")
     public void refreshOrganisaatioCache() {
         logger.info("BEGIN SCHEDULED refreshOrganisaatioCache.");
+        showCacheState();
 
         // No CAS here (not needed for reading organisaatio service):
         final CamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(
@@ -113,10 +125,19 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
      */
     public void ensureOrganisaatioCacheFresh() {
         logger.info("BEGIN SCHEDULED ensureOrganisaatioCacheFresh.");
+        showCacheState();
+
+        LocalDate cacheInvalidBefore = null;
+        if (cacheValidFrom != null && cacheValidFrom.length() > 0) {
+            cacheInvalidBefore = LocalDate.parse(cacheValidFrom);
+        }
 
         // No CAS here (not needed for reading organisaatio service):
-        final CamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(
+        final DefaultCamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(
                 new CasDisabledCasTicketProvider()));
+        if (cacheInvalidBefore != null && new DateTime().compareTo(cacheInvalidBefore.toDateTimeAtStartOfDay()) < 0 ) {
+            context.setOverriddenTime(cacheInvalidBefore.toDateTimeAtStartOfDay());
+        }
 
         List<String> oids = retryOnCamelError(new Callable<List<String>>() {
             public List<String> call() throws Exception {
@@ -138,6 +159,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                         return organisaatioService.getdOrganisaatioByOid(oid, context);
                     }
                 }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
+
                 if (rc != context.getRequestCount()) {
                     infoUpdated = true;
                     logger.info("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
@@ -154,6 +176,15 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
         }
 
         logger.info("END SCHEDULED ensureOrganisaatioCacheFresh.");
+    }
+
+    private void showCacheState() {
+        DateTime oldestEntry = organisaatioRepository.findOldestCachedEntry();
+        if (oldestEntry != null) {
+            logger.info("Oldest cache entry: {}", oldestEntry);
+        } else {
+            logger.info("No cache entries found.");
+        }
     }
 
     /**

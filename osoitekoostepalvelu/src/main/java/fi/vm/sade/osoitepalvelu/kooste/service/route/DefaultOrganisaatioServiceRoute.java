@@ -73,6 +73,7 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 from(ORGANSIAATIO_OID_LIST_ENDPOINT),
                 headers()
                         .get()
+
                         .path(ORGANISAATIO_OIDS_PATH)
         )
         .process(organisaatioCallInOutDebug)
