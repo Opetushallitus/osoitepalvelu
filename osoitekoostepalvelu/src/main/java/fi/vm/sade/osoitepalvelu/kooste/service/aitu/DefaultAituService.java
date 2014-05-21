@@ -60,8 +60,8 @@ public class DefaultAituService extends AbstractService implements AituService {
     }
 
     @Override
-    public List<AituToimikuntaResultDto> findToimikuntasWithMatchinJasens(AituToimikuntaCriteria criteria,
-                                                                          AituKielisyys orderByNimiKieli) {
+    public List<AituToimikuntaResultDto> findToimikuntasWithMatchingJasens(AituToimikuntaCriteria criteria,
+                                                                           AituKielisyys orderByNimiKieli) {
         List<AituToimikuntaResultDto> results = dtoConverter.convert(
                         aituToimikuntaRepository.findToimikuntas(criteria, orderByNimiKieli),
                 new ArrayList<AituToimikuntaResultDto>(), AituToimikuntaResultDto.class);

@@ -572,8 +572,10 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
                 if (List.class.isAssignableFrom(type)) {
                     List<String> values = expression.evaluate(exchange, List.class);
                     List<String> encodedValues = new ArrayList<String>();
-                    for (String value : values) {
-                        encodedValues.add(encoded(value));
+                    if (values != null) {
+                        for (String value : values) {
+                            encodedValues.add(encoded(value));
+                        }
                     }
                     return (T) encodedValues;
                 }

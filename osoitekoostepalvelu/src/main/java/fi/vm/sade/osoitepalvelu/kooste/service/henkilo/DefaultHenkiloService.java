@@ -55,7 +55,7 @@ public class DefaultHenkiloService extends AbstractService implements HenkiloSer
     private long cacheTimeoutSeconds;
 
     @Override
-//    @Cacheable(cacheName = "henkiloHakuCache")
+    @Cacheable(cacheName = "henkiloHakuCache")
     public List<HenkiloListResultDto> findHenkilos(
             @PartialCacheKey HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
         return authenticationServiceRoute.findHenkilos(criteria, requestContext);

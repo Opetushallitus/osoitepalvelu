@@ -94,4 +94,12 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
     this.listKoultuksenjarjestajas = function(success, error) {
         _get('api/koodisto/koulutuksenjarjestaja', success, error);
     };
+
+    this.listTutkintos = function(success, error) {
+        _get('api/koodisto/tutkinto', success, error);
+    };
+
+    this.listOpintoalas = function(success, error) {
+        _get('api/koodisto/opintoala', success, error);
+    };
 }]);

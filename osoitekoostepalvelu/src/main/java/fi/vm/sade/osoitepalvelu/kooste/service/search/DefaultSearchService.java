@@ -72,17 +72,20 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     @Override
     @Cacheable(cacheName  =  "osoitepalveluSearchResultsCache")
     public SearchResultsDto find(@PartialCacheKey SearchTermsDto terms, CamelRequestContext context)
-            throws TooFewSearchConditionsForOrganisaatiosException {
+            throws TooFewSearchConditionsForOrganisaatiosException,
+                    TooFewSearchConditionsForHenkilosException {
         SearchResultsDto results  =  new SearchResultsDto();
 
-        boolean searchHenkilos = terms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloHakuTypes());
-        boolean returnOrgansiaatios = terms.containsAnyTargetGroup(
-                SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes(), SearchTargetGroup.TargetType.ORGANISAATIO);
-        boolean searchOrganisaatios = returnOrgansiaatios || searchHenkilos;
+        boolean searchHenkilos = terms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloHakuTypes()),
+            returnOrgansiaatios = terms.containsAnyTargetGroup(
+                    SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes(), SearchTargetGroup.TargetType.ORGANISAATIO);
 
-        List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults = null;
+        OrganisaatioYhteystietoCriteriaDto organisaatioCriteria = produceOrganisaatioCriteria(terms);
+        boolean anyOrganisaatioRelatedConditionsUsed = organisaatioCriteria.getNumberOfUsedConditions() > 0,
+            searchOrganisaatios = returnOrgansiaatios || (searchHenkilos && anyOrganisaatioRelatedConditionsUsed);
+
+        List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
         if (searchOrganisaatios) {
-
             SearchTargetGroup.TargetType[] targetTypes;
             if (returnOrgansiaatios) {
                 // Only the ones with target group and ORGANISAATIO-type selected:
@@ -94,8 +97,10 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 // (as other possible filterin constaints):
                 targetTypes = new SearchTargetGroup.TargetType[0];
             }
-
-            organisaatioYhteystietoResults = findOrganisaatios(terms, context, targetTypes);
+            organisaatioCriteria.setOrganisaatioTyyppis(parseOrganisaatioTyyppis(terms, targetTypes));
+            ensureAtLeastOneConditionUsed(organisaatioCriteria);
+            organisaatioYhteystietoResults = organisaatioService.findOrganisaatioYhteystietos(organisaatioCriteria,
+                    terms.getLocale(), context);
             if (returnOrgansiaatios) {
                 // Convert to result DTOs (with e.g. postinumeros):
                 List<OrganisaatioResultDto> convertedResults  =  dtoConverter.convert(
@@ -113,7 +118,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 SearchTargetGroup.TargetType.PUHEENJOHTAJA)) {
             AituToimikuntaCriteria toimikuntaCriteria = produceToimikuntaCriteria(terms);
             AituKielisyys orderingKielisyys = AituKielisyys.fromLocale(terms.getLocale()).or(AituKielisyys.kieli_fi);
-            List<AituToimikuntaResultDto> toimikuntaResults = aituService.findToimikuntasWithMatchinJasens(
+            List<AituToimikuntaResultDto> toimikuntaResults = aituService.findToimikuntasWithMatchingJasens(
                     toimikuntaCriteria, orderingKielisyys);
 
             results.setAituToimikuntas(toimikuntaResults);
@@ -132,6 +137,27 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         return results;
     }
 
+    protected OrganisaatioYhteystietoCriteriaDto produceOrganisaatioCriteria(SearchTermsDto terms) {
+        OrganisaatioYhteystietoCriteriaDto organisaatioCriteria  =  new OrganisaatioYhteystietoCriteriaDto();
+        organisaatioCriteria.setKuntaList(resolveKuntaKoodis(terms));
+        organisaatioCriteria.setKieliList(terms.findTerms(SearchTermDto.TERM_ORGANISAATION_OPETUSKIELIS));
+        organisaatioCriteria.setOppilaitostyyppiList(terms.findTerms(SearchTermDto.TERM_OPPILAITOSTYYPPIS));
+        organisaatioCriteria.setVuosiluokkaList(terms.findTerms(SearchTermDto.TERM_VUOSILUOKKAS));
+        organisaatioCriteria.setYtunnusList(terms.findTerms(SearchTermDto.TERM_KOULTUKSENJARJESTAJAS));
+        return organisaatioCriteria;
+    }
+
+    protected void ensureAtLeastOneConditionUsed(OrganisaatioYhteystietoCriteriaDto organisaatioCriteria)
+            throws TooFewSearchConditionsForOrganisaatiosException {
+        organisaatioCriteria.setUseOrganisaatioTyyppi(false);
+        int numberOfConditions = organisaatioCriteria.getNumberOfUsedConditions();
+        if (numberOfConditions < 1) {
+            // If organisaatiotyyppi (kohderyhmärajaus) is the only one, require some more:
+            throw new TooFewSearchConditionsForOrganisaatiosException();
+        }
+        organisaatioCriteria.setUseOrganisaatioTyyppi(true);
+    }
+
     protected AituToimikuntaCriteria produceToimikuntaCriteria(SearchTermsDto terms) {
         AituToimikuntaCriteria criteria = new AituToimikuntaCriteria();
         criteria.setKielisyysIn(AituKielisyys.fromOppilaitoksenOpetuskieliKoodistoValues(
@@ -140,30 +166,12 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_ROOLIS)));
         criteria.setIdsIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.TUTKINTOTOIMIKUNTA.getUri(),
                 terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA)));
+        criteria.setTutkintoTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.TUTKINTO.getUri(),
+                terms.findTerms(SearchTermDto.TERM_TUTKINTO)));
+        criteria.setOpintoalaTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.OPINTOALAOPH2002.getUri(),
+                terms.findTerms(SearchTermDto.TERM_OPINTOALAS)));
+
         return criteria;
-    }
-
-    protected List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatios(SearchTermsDto terms,
-                   CamelRequestContext context, SearchTargetGroup.TargetType...targetTypes)
-            throws TooFewSearchConditionsForOrganisaatiosException {
-        OrganisaatioYhteystietoCriteriaDto organisaatioCriteria  =  new OrganisaatioYhteystietoCriteriaDto();
-        List<String> kuntas  =  resolveKuntaKoodis(terms);
-        organisaatioCriteria.setKuntaList(kuntas);
-        organisaatioCriteria.setKieliList(terms.findTerms(SearchTermDto.TERM_ORGANISAATION_OPETUSKIELIS));
-        organisaatioCriteria.setOppilaitostyyppiList(terms.findTerms(SearchTermDto.TERM_OPPILAITOSTYYPPIS));
-        organisaatioCriteria.setVuosiluokkaList(terms.findTerms(SearchTermDto.TERM_VUOSILUOKKAS));
-        organisaatioCriteria.setYtunnusList(terms.findTerms(SearchTermDto.TERM_KOULTUKSENJARJESTAJAS));
-        organisaatioCriteria.setOrganisaatioTyyppis(parseOrganisaatioTyyppis(terms, targetTypes));
-
-        organisaatioCriteria.setUseOrganisaatioTyyppi(false);
-        int numberOfConditions = organisaatioCriteria.getNumberOfUsedConditions();
-        if (numberOfConditions < 1) {
-            // If organisaatiotyyppi (kohderyhmärajaus) is the only one, require some more:
-            throw new TooFewSearchConditionsForOrganisaatiosException();
-        }
-        organisaatioCriteria.setUseOrganisaatioTyyppi(true);
-
-        return organisaatioService.findOrganisaatioYhteystietos(organisaatioCriteria, terms.getLocale(), context);
     }
 
     protected List<String> parseOrganisaatioTyyppis(SearchTermsDto terms, SearchTargetGroup.TargetType... targetTypes) {
@@ -180,13 +188,15 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     }
 
     protected List<HenkiloDetailsDto> findHenkilos(SearchTermsDto terms, final CamelRequestContext context,
-                                                List<String> organisaatioOids) {
-        if (organisaatioOids.isEmpty()) {
-            return new ArrayList<HenkiloDetailsDto>();
-        }
+                                                List<String> organisaatioOids) throws TooFewSearchConditionsForHenkilosException {
         HenkiloCriteriaDto criteria = new HenkiloCriteriaDto();
         criteria.setOrganisaatioOids(organisaatioOids);
         criteria.setKayttoOikeusRayhmas(terms.findTerms(SearchTermDto.TERM_KAYTTOOIKEUSRYHMAS));
+
+        if (criteria.getNumberOfUsedConditions() < 1) {
+            throw new TooFewSearchConditionsForHenkilosException();
+        }
+
         List<HenkiloListResultDto> henkilos = henkiloService.findHenkilos(criteria, context);
         return new ArrayList<HenkiloDetailsDto>(Collections2.transform(henkilos,
                     new Function<HenkiloListResultDto, HenkiloDetailsDto>() {

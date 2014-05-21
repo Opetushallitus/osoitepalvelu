@@ -31,7 +31,9 @@ import java.util.List;
 @DtoConversion
 public class SearchTargetGroupDto implements Serializable {
     private static final long serialVersionUID  =  191054363453587812L;
-    
+
+    private static final int HASH_FACTOR = 31;
+
     private SearchTargetGroup.GroupType type;
     private List<SearchTargetGroup.TargetType> options  =  new ArrayList<SearchTargetGroup.TargetType>();
 
@@ -61,5 +63,33 @@ public class SearchTargetGroupDto implements Serializable {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SearchTargetGroupDto)) {
+            return false;
+        }
+
+        SearchTargetGroupDto that = (SearchTargetGroupDto) o;
+
+        if (options != null ? !options.equals(that.options) : that.options != null) {
+            return false;
+        }
+        if (type != that.type) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = HASH_FACTOR * result + (options != null ? options.hashCode() : 0);
+        return result;
     }
 }

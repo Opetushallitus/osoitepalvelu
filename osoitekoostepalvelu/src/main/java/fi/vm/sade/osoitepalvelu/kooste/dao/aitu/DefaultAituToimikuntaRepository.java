@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 
+import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,21 +50,22 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
 
     @Override
     public List<AituToimikunta> findToimikuntas(AituToimikuntaCriteria toimikuntaCriteria, AituKielisyys orberByNimi) {
+        CriteriaHelper.Conditions conditions = new CriteriaHelper.Conditions();
         Criteria criteria = new Criteria();
         if (toimikuntaCriteria.isKielisyysUsed()) {
-            criteria = criteria.and("kielisyys").in(AituKielisyys.aituKielis(toimikuntaCriteria.getKielisyysIn()));
+            conditions.add(new Criteria("kielisyys").in(AituKielisyys.aituKielis(toimikuntaCriteria.getKielisyysIn())));
         }
         if (toimikuntaCriteria.isJasenRoolisUsed()) {
-            criteria = criteria.and("jasenyydet.rooli").in(toimikuntaCriteria.getJasensInRoolis());
+            conditions.add(new Criteria("jasenyydet.rooli").in(toimikuntaCriteria.getJasensInRoolis()));
         }
         if (toimikuntaCriteria.isIdsUsed()) {
-            criteria = criteria.and("id").in(toimikuntaCriteria.getIdsIn());
+            conditions.add(new Criteria("_id").in(toimikuntaCriteria.getIdsIn()));
         }
         if (toimikuntaCriteria.isOnlyVoimassaOlevat()) {
-            criteria = criteria.and("jasenyydet.voimassa").is(true);
+            conditions.add(new Criteria("jasenyydet.voimassa").is(true));
         }
-        return getMongoOperations().find(Query.query(criteria).with(new Sort("nimi."+orberByNimi.getAituKieli())),
-                AituToimikunta.class);
+        return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
+                .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
     }
 
     @Override

@@ -32,8 +32,8 @@ import java.util.List;
  */
 public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     private static final long serialVersionUID = 9152021492358122085L;
-    
     private static final int HASH_FACTOR = 31;
+
     public static final int HIGH_LIMIT_VALUE = 999999999;
 
     private List<String> kuntaList  =  new ArrayList<String>();
@@ -188,5 +188,59 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
                 + (isKuntaUsed() ? 1 : 0)
                 + (isOppilaitostyyppiUsed() ? 1 : 0)
                 + (isOrganisaatioTyyppiUsed() ? 1 : 0);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof OrganisaatioYhteystietoCriteriaDto)) {
+            return false;
+        }
+
+        OrganisaatioYhteystietoCriteriaDto that = (OrganisaatioYhteystietoCriteriaDto) o;
+
+        if (vainAktiiviset != that.vainAktiiviset) {
+            return false;
+        }
+        if (kieliList != null ? !kieliList.equals(that.kieliList) : that.kieliList != null) {
+            return false;
+        }
+        if (kuntaList != null ? !kuntaList.equals(that.kuntaList) : that.kuntaList != null) {
+            return false;
+        }
+        if (limit != null ? !limit.equals(that.limit) : that.limit != null) {
+            return false;
+        }
+        if (oppilaitostyyppiList != null
+                ? !oppilaitostyyppiList.equals(that.oppilaitostyyppiList) : that.oppilaitostyyppiList != null) {
+            return false;
+        }
+        if (organisaatioTyyppis != null
+                ? !organisaatioTyyppis.equals(that.organisaatioTyyppis) : that.organisaatioTyyppis != null) {
+            return false;
+        }
+        if (vuosiluokkaList != null ? !vuosiluokkaList.equals(that.vuosiluokkaList) : that.vuosiluokkaList != null) {
+            return false;
+        }
+        if (ytunnusList != null ? !ytunnusList.equals(that.ytunnusList) : that.ytunnusList != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = kuntaList != null ? kuntaList.hashCode() : 0;
+        result = HASH_FACTOR * result + (kieliList != null ? kieliList.hashCode() : 0);
+        result = HASH_FACTOR * result + (oppilaitostyyppiList != null ? oppilaitostyyppiList.hashCode() : 0);
+        result = HASH_FACTOR * result + (vuosiluokkaList != null ? vuosiluokkaList.hashCode() : 0);
+        result = HASH_FACTOR * result + (ytunnusList != null ? ytunnusList.hashCode() : 0);
+        result = HASH_FACTOR * result + (organisaatioTyyppis != null ? organisaatioTyyppis.hashCode() : 0);
+        result = HASH_FACTOR * result + (limit != null ? limit.hashCode() : 0);
+        result = HASH_FACTOR * result + (vainAktiiviset ? 1 : 0);
+        return result;
     }
 }

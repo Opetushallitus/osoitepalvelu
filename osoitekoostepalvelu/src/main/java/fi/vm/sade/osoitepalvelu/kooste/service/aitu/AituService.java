@@ -38,8 +38,8 @@ public interface AituService {
      * @param orderByNimiKieli AITU's keili to order by
      * @return AituToimikuntas with only the jasens matching the given c
      */
-    List<AituToimikuntaResultDto> findToimikuntasWithMatchinJasens(AituToimikuntaCriteria criteria,
-                                                                   AituKielisyys orderByNimiKieli);
+    List<AituToimikuntaResultDto> findToimikuntasWithMatchingJasens(AituToimikuntaCriteria criteria,
+                                                                    AituKielisyys orderByNimiKieli);
 
     /**
      * @param results to override the data in MongoDB with

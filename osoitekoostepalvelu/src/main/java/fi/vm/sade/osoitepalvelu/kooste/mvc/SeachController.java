@@ -21,10 +21,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.mvc.dto.FilteredSearchParametersDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultTransformerService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForOrganisaatiosException;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentationByAddressFieldsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
@@ -77,7 +74,8 @@ public class SeachController extends AbstractMvcController implements Serializab
     @RequestMapping(value = "list.json", method  =  RequestMethod.POST)
     @ResponseBody
     public SearchResultsPresentationDto list(@RequestBody FilteredSearchParametersDto searchParameters,
-                            @RequestParam("lang") String lang) throws TooFewSearchConditionsForOrganisaatiosException {
+                            @RequestParam("lang") String lang)
+            throws TooFewSearchConditionsForOrganisaatiosException, TooFewSearchConditionsForHenkilosException {
         CamelRequestContext context  =  new DefaultCamelRequestContext();
         searchParameters.getSearchTerms().setLocale(parseLocale(lang));
         SearchResultsDto results = searchService.find(searchParameters.getSearchTerms(), context);
@@ -119,7 +117,8 @@ public class SeachController extends AbstractMvcController implements Serializab
     @RequestMapping(value = "excel.do", method  =  RequestMethod.GET)
     public View downloadExcel(@RequestParam("downloadId") String downlaodId,
                    @RequestParam("lang") String lang)
-            throws NotFoundException, TooFewSearchConditionsForOrganisaatiosException {
+            throws NotFoundException, TooFewSearchConditionsForOrganisaatiosException,
+                    TooFewSearchConditionsForHenkilosException {
         String storeKey  =  resultTransformerService.getLoggeInUserOid() + "@" + downlaodId;
         FilteredSearchParametersDto searchParameters  =  storedParameters.get(storeKey);
         if(searchParameters  == null) {

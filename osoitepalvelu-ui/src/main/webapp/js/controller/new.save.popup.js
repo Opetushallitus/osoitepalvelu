@@ -18,7 +18,7 @@
  * Created by ratamaa on 12/9/13.
  */
 var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout,
-            save, LocalisationService, SavesService) {
+            save, onSaveNew, LocalisationService, SavesService) {
     var msg = function( key, params ) {
         return LocalisationService.t(key, params);
     };
@@ -29,12 +29,15 @@ var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout,
     $scope.saveAction = function() {
       if( save.id ) {
           SavesService.updateSearch($scope.save, function() {
-              $modalInstance.close();
+            $modalInstance.close();
           });
       } else {
-         SavesService.saveSearch($scope.save, function() {
-              $modalInstance.close();
-        });
+         SavesService.saveSearch($scope.save, function(id) {
+            $modalInstance.close();
+            if (onSaveNew) {
+                onSaveNew(id);
+            }
+         });
       }
     };
 
@@ -48,6 +51,9 @@ var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout,
                       id: null,
                       name: $scope.save.name + msg('save_name_copy_ending')
                   });
+              },
+              onSaveNew: function() {
+                  return onSaveNew;
               }
           }
       });
@@ -66,6 +72,6 @@ var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout,
     });
 };
 
-NewSavePopupController.$inject = ["$scope", "$modalInstance", "$modal", "$timeout", "save", "LocalisationService",
-    "SavesService"];
+NewSavePopupController.$inject = ["$scope", "$modalInstance", "$modal", "$timeout", "save", "onSaveNew",
+    "LocalisationService", "SavesService"];
 

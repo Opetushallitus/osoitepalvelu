@@ -29,9 +29,11 @@ import java.util.List;
  */
 @DtoConversion
 public class SearchTermDto implements Serializable {
+    private static final long serialVersionUID  =  -1563200682961231758L;
+    private static final int HASH_FACTOR = 31;
+
     public static final String TERM_KUNTAS = "kuntas";
     public static final String TERM_MAAKUNTAS = "maakuntas";
-    private static final long serialVersionUID  =  -1563200682961231758L;
 
     public static final String TERM_ORGANISAATION_OPETUSKIELIS = "organisaationKielis";
     public static final String TERM_OPPILAITOSTYYPPIS = "oppilaitostyyppis";
@@ -40,7 +42,8 @@ public class SearchTermDto implements Serializable {
     public static final String TERM_KAYTTOOIKEUSRYHMAS = "koulutaRoolis";
     public static final String TERM_TUTKINTOIMIKUNTA_ROOLIS = "tutkintotoimikuntaRoolis";
     public static final String TERM_TUTKINTOIMIKUNTA = "tutkintotoimikuntas";
-
+    public static final String TERM_TUTKINTO = "tutkintos";
+    public static final String TERM_OPINTOALAS = "opintoalas";
 
     private String type;
     private List<String> values  =  new ArrayList<String>();
@@ -67,5 +70,33 @@ public class SearchTermDto implements Serializable {
 
     public void setValues(List<String> values) {
         this.values  =  values;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SearchTermDto)) {
+            return false;
+        }
+
+        SearchTermDto that = (SearchTermDto) o;
+
+        if (type != null ? !type.equals(that.type) : that.type != null) {
+            return false;
+        }
+        if (values != null ? !values.equals(that.values) : that.values != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = HASH_FACTOR * result + (values != null ? values.hashCode() : 0);
+        return result;
     }
 }

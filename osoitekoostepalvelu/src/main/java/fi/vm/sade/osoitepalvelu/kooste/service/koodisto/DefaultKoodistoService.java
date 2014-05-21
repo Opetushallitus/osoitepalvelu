@@ -237,8 +237,8 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         return cached(new Cacheable<List<UiKoodiItemDto>>() {
             @Override
             public List<UiKoodiItemDto> get() {
-                List<AituToimikuntaResultDto> toimikuntas = aituService.findToimikuntasWithMatchinJasens(
-                       new AituToimikuntaCriteria(), AituKielisyys.fromLocale(locale).or(AituKielisyys.kieli_fi));
+                List<AituToimikuntaResultDto> toimikuntas = aituService.findToimikuntasWithMatchingJasens(
+                        new AituToimikuntaCriteria(), AituKielisyys.fromLocale(locale).or(AituKielisyys.kieli_fi));
                 return dtoConverter.convert(toimikuntas, new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
                         locale);
             }

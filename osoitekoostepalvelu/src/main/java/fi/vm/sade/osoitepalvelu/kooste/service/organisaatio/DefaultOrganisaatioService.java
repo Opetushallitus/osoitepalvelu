@@ -58,8 +58,10 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     private long cacheTimeoutSeconds;
 
     @Override
+    @Cacheable(cacheName = "organisaatioHakuResultsCache")
     public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
-            OrganisaatioYhteystietoCriteriaDto criteria, Locale locale, CamelRequestContext requestContext) {
+            @PartialCacheKey OrganisaatioYhteystietoCriteriaDto criteria,
+            @PartialCacheKey Locale locale, CamelRequestContext requestContext) {
         List<OrganisaatioDetails> results;
         // Previously search done by remote call to organisaatio service. Unfortunately, though, it could not serve us
         // with parent/children related searches/conditions and was also quite slow:

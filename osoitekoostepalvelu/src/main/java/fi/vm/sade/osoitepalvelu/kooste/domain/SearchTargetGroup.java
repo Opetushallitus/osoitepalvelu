@@ -84,6 +84,7 @@ public class SearchTargetGroup implements Serializable {
         PUHEENJOHTAJA,
         SIHTEERI,
         JASENET,
+        TUTKINTOTOIMIKUNTA,
         TUNNUKSENHALTIJAT;
     };
 

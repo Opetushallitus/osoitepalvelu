@@ -30,6 +30,8 @@ import java.util.List;
 public class AituToimikuntaCriteria implements Serializable {
     private List<AituKielisyys> kielisyysIn = new ArrayList<AituKielisyys>();
     private List<String> jasensInRoolis = new ArrayList<String>();
+    private List<String> opintoalaTunnusIn = new ArrayList<String>();
+    private List<String> tutkintoTunnusIn = new ArrayList<String>();
     private List<String> idsIn = new ArrayList<String>();
     private boolean onlyVoimassaOlevat = true;
 
@@ -69,11 +71,35 @@ public class AituToimikuntaCriteria implements Serializable {
         return idsIn != null && !idsIn.isEmpty();
     }
 
+    public boolean isTutkintoUsed() {
+        return this.tutkintoTunnusIn != null && !this.tutkintoTunnusIn.isEmpty();
+    }
+
+    public boolean isOpintoalaUsed() {
+        return this.opintoalaTunnusIn != null && !this.opintoalaTunnusIn.isEmpty();
+    }
+
     public boolean isOnlyVoimassaOlevat() {
         return onlyVoimassaOlevat;
     }
 
     public void setOnlyVoimassaOlevat(boolean onlyVoimassaOlevat) {
         this.onlyVoimassaOlevat = onlyVoimassaOlevat;
+    }
+
+    public List<String> getOpintoalaTunnusIn() {
+        return opintoalaTunnusIn;
+    }
+
+    public void setOpintoalaTunnusIn(List<String> opintoalaTunnusIn) {
+        this.opintoalaTunnusIn = opintoalaTunnusIn;
+    }
+
+    public List<String> getTutkintoTunnusIn() {
+        return tutkintoTunnusIn;
+    }
+
+    public void setTutkintoTunnusIn(List<String> tutkintoTunnusIn) {
+        this.tutkintoTunnusIn = tutkintoTunnusIn;
     }
 }

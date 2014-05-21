@@ -85,6 +85,8 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             //OptionsService.listOmistajatyyppis(function(data) { $scope.options.omistajatyyppis = data; });
             OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
             OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
+//            OptionsService.listOpintoalas(function(data) {$scope.options.opintoalas = data;});
+//            OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
         }
 
         $scope.terms = SearchService.getTerms();
@@ -183,23 +185,32 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
     $scope.saveSearch = function() {
         $log.info("Show save popup.");
 
+        var onSaveNew = function() { return function(newSaveId) {
+            $log.info("New save with id: " + newSaveId);
+            SearchService.updateSelectedSearch(newSaveId);
+            updateSaves();
+        } };
         var modalInstance = null;
         if( $scope.selectedSavedSearch ) {
             modalInstance = $modal.open({
                 templateUrl: 'partials/overwriteSavePopup.html',
                 controller: NewSavePopupController,
-                resolve: {save: getCurrentSaveDetails}
+                resolve: {
+                    save: getCurrentSaveDetails,
+                    onSaveNew: onSaveNew
+                }
             });
         } else {
-
             modalInstance = $modal.open({
                 templateUrl: 'partials/newSavePopup.html',
                 controller: NewSavePopupController,
-                resolve: {save: getCurrentSaveDetails}
+                resolve: {
+                    save: getCurrentSaveDetails,
+                    onSaveNew: onSaveNew
+                }
             });
         }
         modalInstance.result.then(function () {
-            updateSaves();
         }, function () {});
     };
 

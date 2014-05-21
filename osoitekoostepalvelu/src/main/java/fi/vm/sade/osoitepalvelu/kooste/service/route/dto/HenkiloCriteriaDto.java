@@ -46,6 +46,19 @@ public class HenkiloCriteriaDto implements Serializable {
         this.kayttoOikeusRayhmas = kayttoOikeusRayhmas;
     }
 
+    public boolean isOrganisaatioUsed() {
+        return this.organisaatioOids != null && !this.organisaatioOids.isEmpty();
+    }
+
+    public boolean isKayttoOikeusRyhmasUsed() {
+        return this.kayttoOikeusRayhmas != null && !this.kayttoOikeusRayhmas.isEmpty();
+    }
+
+    public int getNumberOfUsedConditions() {
+        return (isOrganisaatioUsed() ? 1 : 0)
+                + (isKayttoOikeusRyhmasUsed() ? 1 : 0);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

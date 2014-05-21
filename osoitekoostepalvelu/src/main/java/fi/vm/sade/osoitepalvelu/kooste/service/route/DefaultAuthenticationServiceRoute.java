@@ -164,29 +164,39 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
 
     @Override
     public List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
-        List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
+        if (criteria.getOrganisaatioOids() == null || criteria.getOrganisaatioOids().isEmpty()) {
+            return findByKayttoOikeusRyhmas(criteria, headerValues(), requestContext);
+        }
 
+        List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
         List<List<String>> oidChunks = CollectionHelper.split(criteria.getOrganisaatioOids(), MAX_OIDS_FOR_HENKILO_HAKU);
         for (List<String> oids : oidChunks) {
             HeaderValueBuilder header = headerValues()
                     .add(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, oids);
-            if (!criteria.getKayttoOikeusRayhmas().isEmpty()) {
-                for (String kor : criteria.getKayttoOikeusRayhmas()) {
-                    @SuppressWarnings("unchecked")
-                    List<HenkiloListResultDto> korResults = sendBodyHeadersAndProperties(
-                            getCamelTemplate(), ROUTE_HENKILOS, "", header.copy()
-                            .add(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, kor).map(),
-                            requestContext, List.class);
-                    results.addAll(korResults);
-                }
-            } else {
-                @SuppressWarnings("unchecked")
-                List<HenkiloListResultDto> searchResults =  sendBodyHeadersAndProperties(getCamelTemplate(),
-                        ROUTE_HENKILOS, "", header.map(), requestContext, List.class);
-                results.addAll(searchResults);
-            }
+            results.addAll(findByKayttoOikeusRyhmas(criteria, header, requestContext));
         }
 
+        return results;
+    }
+
+    protected List<HenkiloListResultDto> findByKayttoOikeusRyhmas(HenkiloCriteriaDto criteria, HeaderValueBuilder header,
+                                                                  CamelRequestContext requestContext) {
+        List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
+        if (!criteria.getKayttoOikeusRayhmas().isEmpty()) {
+            for (String kor : criteria.getKayttoOikeusRayhmas()) {
+                @SuppressWarnings("unchecked")
+                List<HenkiloListResultDto> korResults = sendBodyHeadersAndProperties(
+                        getCamelTemplate(), ROUTE_HENKILOS, "", header.copy()
+                        .add(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, kor).map(),
+                        requestContext, List.class);
+                results.addAll(korResults);
+            }
+        } else {
+            @SuppressWarnings("unchecked")
+            List<HenkiloListResultDto> searchResults =  sendBodyHeadersAndProperties(getCamelTemplate(),
+                    ROUTE_HENKILOS, "", header.map(), requestContext, List.class);
+            results.addAll(searchResults);
+        }
         return results;
     }
 }
