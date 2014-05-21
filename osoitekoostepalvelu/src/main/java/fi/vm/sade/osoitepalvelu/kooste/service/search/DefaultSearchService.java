@@ -84,7 +84,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         boolean anyOrganisaatioRelatedConditionsUsed = organisaatioCriteria.getNumberOfUsedConditions() > 0,
             searchOrganisaatios = returnOrgansiaatios || (searchHenkilos && anyOrganisaatioRelatedConditionsUsed);
 
-        List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
+        List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults
+                = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
         if (searchOrganisaatios) {
             SearchTargetGroup.TargetType[] targetTypes;
             if (returnOrgansiaatios) {

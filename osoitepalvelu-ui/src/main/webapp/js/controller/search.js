@@ -19,7 +19,8 @@
  */
 var SearchController = function($scope, $log, $modal, $location, $filter, SearchService,
                                 SearchTypes, TargetGroups, EmptyTerms,
-                                FilterHelper, SavesService, OptionsService, LocalisationService) {
+                                FilterHelper, ArrayHelper, KoodiHelper, SavesService,
+                                OptionsService, LocalisationService) {
     $scope.msg = function( key, params ) {
         return LocalisationService.t(key, params);
     };
@@ -120,6 +121,20 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
 
     $scope.isShowAipalTerm = function() {
         return $scope.selectedTargetGroupTypes.indexOf('AIPAL_KAYTTAJAT') != -1;
+    };
+
+    $scope.isShowVuosiluokkaTerm = function(){
+        var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
+        if (oppilaitosTyyppisWithVuosiluokkaSetting) {
+            var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
+            var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
+                oppilaitosTyyppisWithVuosiluokka);
+            if (!visible) {
+                $scope.terms.vuosiluokkas = [];
+            }
+            return visible;
+        }
+        return true;
     };
 
     $scope.handleSaveSelected = function() {
@@ -244,5 +259,5 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
 }
 
 SearchController.$inject = ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
-                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "SavesService",
-                     "OptionsService", "LocalisationService"];
+                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "KoodiHelper",
+                     "SavesService", "OptionsService", "LocalisationService"];

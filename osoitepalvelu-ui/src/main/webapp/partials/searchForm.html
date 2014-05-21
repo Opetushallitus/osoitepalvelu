@@ -152,7 +152,7 @@
                     </select>
                 </div>
                 <div class="term-separator"></div>
-                <div class="term">
+                <div class="term" ng-show="isShowVuosiluokkaTerm()">
                     <select ui-select2 multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas" data-placeholder="{{msg('search_term_vuosiluokka')}}">
                         <option ng-repeat="opt in options.vuosiluokkas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
