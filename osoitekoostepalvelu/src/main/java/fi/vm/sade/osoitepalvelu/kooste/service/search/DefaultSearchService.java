@@ -74,6 +74,9 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     public SearchResultsDto find(@PartialCacheKey SearchTermsDto terms, CamelRequestContext context)
             throws TooFewSearchConditionsForOrganisaatiosException,
                     TooFewSearchConditionsForHenkilosException {
+        
+        logger.info("Starting search by {}", getLoggedInUserOidOrNull() );
+        
         SearchResultsDto results  =  new SearchResultsDto();
 
         boolean searchHenkilos = terms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloHakuTypes()),
@@ -111,8 +114,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
         }
 
-        List<HenkiloHakuResultDto> henkilos = new ArrayList<HenkiloHakuResultDto>();
-
         if (terms.containsAnyTargetGroup(new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.TUTKINTOTOIMIKUNNAT},
                 SearchTargetGroup.TargetType.JASENET,
                 SearchTargetGroup.TargetType.SIHTEERI,
@@ -135,6 +136,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             results.setHenkilos(henkiloResults);
         }
 
+        logger.info("Search end by {}", getLoggedInUserOidOrNull() );
+        
         return results;
     }
 

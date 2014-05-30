@@ -346,7 +346,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             } else {
                 long now = System.currentTimeMillis();
                 long duration = now - beginMoment;
-                log.info(getName()  +  " execution took: "  +  duration  +  "ms since last call.");
+                log.debug(getName()  +  " execution took: "  +  duration  +  "ms since last call.");
                 exchange.setProperty("DebuggerBeginMoment_"+this.name, null);
             }
             inToOut(exchange);
@@ -406,7 +406,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      */
     protected void logIn(Exchange exchange, String name) {
         if (exchange.getIn() != null) {
-            log.info(name  +  " Exchange in: "  +  debug(exchange.getIn()));
+            log.debug(name  +  " Exchange in: "  +  debug(exchange.getIn()));
         } else {
             log.warn(name  +  " Exchange in is null!");
         }
@@ -418,7 +418,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      */
     protected void logOut(Exchange exchange, String name) {
         if (exchange.getOut() != null) {
-            log.info(name  +  " Exchange out: "  +  debug(exchange.getOut()));
+            log.debug(name  +  " Exchange out: "  +  debug(exchange.getOut()));
         } else {
             log.warn(name  +  " Exchange out is null!");
         }
