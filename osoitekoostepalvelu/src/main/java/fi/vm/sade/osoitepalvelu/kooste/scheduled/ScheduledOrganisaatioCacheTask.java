@@ -99,12 +99,12 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                     }
                 }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
 
-                logger.info("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
+                logger.debug("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
             }
         } finally {
-            logger.info("UPDATING y-tunnus details...");
+            logger.debug("UPDATING y-tunnus details...");
             organisaatioService.updateOrganisaatioYtunnusDetails(context);
-            logger.info("DONE UPDATING y-tunnus details");
+            logger.debug("DONE UPDATING y-tunnus details");
         }
 
         logger.info("END SCHEDULED refreshOrganisaatioCache.");
@@ -162,16 +162,16 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
 
                 if (rc != context.getRequestCount()) {
                     infoUpdated = true;
-                    logger.info("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
+                    logger.debug("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
                 } else if(i % 1000 == 0) {
                     logger.info("Organisaatio ensure data fresh task status: {} / {}", new Object[]{i, oids.size()});
                 }
             }
         } finally {
             if (infoUpdated) {
-                logger.info("UPDATING y-tunnus details...");
+                logger.debug("UPDATING y-tunnus details...");
                 organisaatioService.updateOrganisaatioYtunnusDetails(context);
-                logger.info("DONE UPDATING y-tunnus details");
+                logger.debug("DONE UPDATING y-tunnus details");
             }
         }
 

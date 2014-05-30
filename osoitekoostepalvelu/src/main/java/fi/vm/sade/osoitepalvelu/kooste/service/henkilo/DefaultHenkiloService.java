@@ -67,7 +67,7 @@ public class DefaultHenkiloService extends AbstractService implements HenkiloSer
         if (isCacheUsed()) {
             HenkiloDetails details = henkiloCacheRepository.findOne(oid);
             if (details != null && isCacheUsable(details.getCachedAt())) {
-                logger.info("MongoDB cached henkilo {}", oid);
+                logger.debug("MongoDB cached henkilo {}", oid);
                 return dtoConverter.convert(details, new HenkiloDetailsDto());
             }
         }
@@ -75,7 +75,7 @@ public class DefaultHenkiloService extends AbstractService implements HenkiloSer
         if (isCacheUsed()) {
             HenkiloDetails details = dtoConverter.convert(dto, new HenkiloDetails());
             henkiloCacheRepository.save(details);
-            logger.info("Persisted henkilo {} to MongoDB cache.", oid);
+            logger.debug("Persisted henkilo {} to MongoDB cache.", oid);
         }
         return dto;
     }

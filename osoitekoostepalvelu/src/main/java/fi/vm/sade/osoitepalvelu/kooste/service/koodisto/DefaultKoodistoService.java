@@ -284,7 +284,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     protected List<UiKoodiItemDto> cached(Cacheable<List<UiKoodiItemDto>> provider, KoodistoCache.CacheKey key) {
         boolean cacheUsed  =  isCacheUsed();
         if (!cacheUsed) {
-            logger.info("CACHE DISABLED.");
+            logger.debug("CACHE DISABLED.");
             return provider.get();
         }
         MemoryCacheHolder holder  =  memoryCache.get(key);
@@ -304,10 +304,10 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
             cache.setItems(dtoConverter.convert(items, new ArrayList<KoodiItem>(), KoodiItem.class));
             cache.setUpdatedAt(new DateTime());
             koodistoCacheRepository.save(cache);
-            logger.info("SAVED CACHED Koodisto items for key: "  +  key);
+            logger.debug("SAVED CACHED Koodisto items for key: "  +  key);
         } else {
             items  =  dtoConverter.convert(cache.getItems(), new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class);
-            logger.info("Got cached results for key: "  +  key +  " updated at "  +  cache.getUpdatedAt());
+            logger.debug("Got cached results for key: "  +  key +  " updated at "  +  cache.getUpdatedAt());
         }
         memoryCache.put(key, new MemoryCacheHolder(cache.getUpdatedAt(), items));
         return items;

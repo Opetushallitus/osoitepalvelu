@@ -284,9 +284,9 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     @Override
     public void updateOrganisaatioYtunnusDetails(CamelRequestContext requestContext) {
         OrganisaatioHierarchyResultsDto results = organisaatioServiceRoute.findOrganisaatioHierachy(requestContext);
-        logger.info("UPDATING organisaatio's ytunnus details.");
+        logger.debug("UPDATING organisaatio's ytunnus details.");
         int count = updateYtunnusResults(results.getOrganisaatiot());
-        logger.info("UPDATED " + count + " organisaatio's ytunnus details.");
+        logger.debug("UPDATED " + count + " organisaatio's ytunnus details.");
     }
 
     @Override
@@ -330,7 +330,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
             OrganisaatioDetails details = dtoConverter.convert(dto, new OrganisaatioDetails());
 //            if (!details.isLakkautettu()) {
                 organisaatioRepository.save(details);
-                logger.info("Persisted organisaatio {} to MongoDB cache.", oid);
+                logger.debug("Persisted organisaatio {} to MongoDB cache.", oid);
 //            } else {
 //                organisaatioRepository.delete(details.getOid());
 //                logger.info("Ensure deleted lakkautettu organisaatio {} from MongoDB.", oid);
