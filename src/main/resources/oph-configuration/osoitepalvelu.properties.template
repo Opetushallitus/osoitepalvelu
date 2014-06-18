@@ -12,6 +12,7 @@ auth.mode={{auth_mode}}
 env.loglevel={{env_loglevel}}
 host.cas={{host_cas}}
 host.ilb={{host_ilb}}
+host.ldap={{host_ldap}}
 host.virkailija={{host_virkailija}}
 mongodb.virkailija.uri=mongodb://{{mongodb_virkailija_auth}}@{{mongodb_virkailija_host}}:{{mongodb_virkailija_port}}
 osoitepalvelu.app.username.to.aituservice={{osoitepalvelu_app_username_to_aituservice}}
@@ -41,7 +42,12 @@ cas.callback.organisaatio-service=http://${server.name}:8301/organisaatio-servic
 cas.callback.authentication-service=http://${server.name}:8308/authentication-service
 cas.callback.registration-ui=http://${server.name}:8308/registration-ui
 cas.callback.osoitekoostepalvelu=https://${host.virkailija}/osoitekoostepalvelu
+cas.group-role-attribute=cn
+cas.group-search-base=ou\=groups
+cas.group-search-filter=(uniqueMember\={0})
 cas.sendRenew=false
+cas.user-search-base=ou\=people
+cas.user-search-filter=(|(mail\={0})(uid\={0}))
 cas.service.aitu-service = https://${host.virkailija}/aitu/
 cas.service.authentication-service=https\://${host.virkailija}/authentication-service
 cas.service.authentication-ui=https://${host.virkailija}/authentication-ui
