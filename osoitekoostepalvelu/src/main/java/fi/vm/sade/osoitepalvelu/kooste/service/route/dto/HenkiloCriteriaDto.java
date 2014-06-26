@@ -26,6 +26,8 @@ import java.util.List;
  * Time: 2:57 PM
  */
 public class HenkiloCriteriaDto implements Serializable {
+    private static final long serialVersionUID = -6881901596982757750L;
+    
     private static final int HASH_FACTOR = 31;
     private List<String> organisaatioOids = new ArrayList<String>();
     private List<String> kayttoOikeusRayhmas = new ArrayList<String>();

@@ -16,18 +16,17 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.webapp;
 
-import fi.vm.sade.generic.healthcheck.HealthChecker;
-import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
-import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
+import java.util.LinkedHashMap;
+
 import org.apache.camel.util.StopWatch;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
+import fi.vm.sade.generic.healthcheck.HealthChecker;
+import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
+import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 
 /**
  * User: ratamaa

@@ -21,6 +21,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Ordering;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.Combiner;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
@@ -34,7 +35,9 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYks
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto.SearchType;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
+
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -68,7 +71,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
     @Override
     public SearchResultsPresentationDto transformToResultRows(SearchResultsDto results,
-                final SearchResultPresentation presentation, CamelRequestContext context) {
+                final SearchResultPresentation presentation, CamelRequestContext context, SearchType searchType) {
         List<SearchResultRowDto> transformedResults = new ArrayList<SearchResultRowDto>();
 
         List<SearchResultRowDto> organisaatioResults = transformOrganisaatios(results.getOrganisaatios(), presentation);
@@ -80,6 +83,21 @@ public class DefaultSearchResultTransformerService extends AbstractService
         List<SearchResultRowDto> aituHenkiloResults = transformToimikuntaJasens(results.getAituToimikuntas(), presentation);
         transformedResults.addAll(aituHenkiloResults);
 
+        if( searchType == SearchType.EMAIL ) {
+            // Kyseessä email-tyyppinen haku, joten nyt suodatetaan kaikki dublikaatti-emailit pois.
+            Set<String> emails = new TreeSet<String>();
+            List<SearchResultRowDto> filtteredTransformedResults = new ArrayList<SearchResultRowDto>();
+            for (SearchResultRowDto dto : transformedResults) {
+                if( !emails.contains(dto.getEmailOsoite()) ) {
+                    emails.add(dto.getEmailOsoite());
+                    filtteredTransformedResults.add(dto);
+                }
+            }
+            
+            // Asetetaan tulosjoukoksi filtteröity listaus.
+            transformedResults = filtteredTransformedResults;
+        }
+        
         resolveMissingOrganisaatioRelatedDetails(transformedResults, presentation, context);
 
         List<SearchResultRowDto> rows = new ArrayList<SearchResultRowDto>(Collections2
@@ -238,7 +256,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
             return;
         }
 
-        Map<String, OrganisaatioDetailsDto> organisaatioByOidCache = new HashMap<String, OrganisaatioDetailsDto>();
         List<DetailCopier> copiers = new ArrayList<DetailCopier>();
 
         if (presentation.isOrganisaationNimiIncluded()) {

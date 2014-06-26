@@ -26,6 +26,8 @@ import java.util.List;
  * Time: 5:10 PM
  */
 public class AituOsoitepalveluResultsDto implements Serializable {
+    private static final long serialVersionUID = 8330815477399941813L;
+    
     private List<AituToimikuntaResultDto> toimikunnat = new ArrayList<AituToimikuntaResultDto>();
     private List<AituOppilaitosResultDto> oppilaitokset = new ArrayList<AituOppilaitosResultDto>();
 

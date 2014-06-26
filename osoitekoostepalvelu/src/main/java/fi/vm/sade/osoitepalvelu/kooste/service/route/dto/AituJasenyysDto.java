@@ -24,6 +24,8 @@ import java.io.Serializable;
  * Time: 5:22 PM
  */
 public class AituJasenyysDto implements Serializable {
+    private static final long serialVersionUID = -2899383092709470481L;
+    
     private boolean voimassa;
     private String etunimi;
     private String sukunimi;

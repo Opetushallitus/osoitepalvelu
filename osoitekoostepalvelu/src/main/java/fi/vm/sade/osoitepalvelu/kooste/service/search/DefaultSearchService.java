@@ -20,6 +20,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.googlecode.ehcache.annotations.Cacheable;
 import com.googlecode.ehcache.annotations.PartialCacheKey;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.KoodiHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
@@ -39,7 +40,9 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto.SearchType;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -135,7 +138,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                         new ArrayList<HenkiloHakuResultDto>(), HenkiloHakuResultDto.class, terms.getLocale());
             results.setHenkilos(henkiloResults);
         }
-
+        
         logger.info("Search end by {}", getLoggedInUserOidOrNull() );
         
         return results;
@@ -256,4 +259,5 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     public void setAituService(AituService aituService) {
         this.aituService = aituService;
     }
+    
 }
