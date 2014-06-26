@@ -88,7 +88,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
             Set<String> emails = new TreeSet<String>();
             List<SearchResultRowDto> filtteredTransformedResults = new ArrayList<SearchResultRowDto>();
             for (SearchResultRowDto dto : transformedResults) {
-                if( !emails.contains(dto.getEmailOsoite()) ) {
+                if(dto.getEmailOsoite() != null && !emails.contains(dto.getEmailOsoite())) {
                     emails.add(dto.getEmailOsoite());
                     filtteredTransformedResults.add(dto);
                 }
