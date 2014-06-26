@@ -25,6 +25,8 @@ import fi.vm.sade.osoitepalvelu.kooste.common.exception.SelfExplainingException;
  */
 public class TooFewSearchConditionsForHenkilosException extends Exception
         implements SelfExplainingException {
+    private static final long serialVersionUID = -8800592326716820202L;
+
     @Override
     public String getMessageKey() {
         return "too_few_search_conditions_for_henkilos";

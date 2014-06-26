@@ -25,6 +25,8 @@ import fi.vm.sade.osoitepalvelu.kooste.common.exception.SelfExplainingException;
  */
 public class TooFewSearchConditionsForOrganisaatiosException extends Exception
             implements SelfExplainingException {
+    private static final long serialVersionUID = -3059236445156201224L;
+
     @Override
     public String getMessageKey() {
         return "too_few_search_conditions_for_organisaatios";

@@ -28,6 +28,8 @@ import java.io.Serializable;
  */
 @DtoConversion
 public class SearchResultOsoiteDto implements Serializable {
+    private static final long serialVersionUID = -870758978839602041L;
+    
     private String kieli;
     @DtoPath("osoiteTyyppi")
     private String tyyppi;

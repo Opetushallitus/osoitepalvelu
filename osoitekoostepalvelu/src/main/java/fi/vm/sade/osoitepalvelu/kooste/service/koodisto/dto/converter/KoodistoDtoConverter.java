@@ -16,6 +16,11 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter;
 
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.stereotype.Component;
+
 import fi.ratamaa.dtoconverter.ConversionCall;
 import fi.ratamaa.dtoconverter.reflection.PropertyConversionContext;
 import fi.ratamaa.dtoconverter.typeconverter.TypeConversionContainer;
@@ -24,12 +29,13 @@ import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiArvoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.LocalizedContainerDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHierarchyDto;
 
 @Component
 public class KoodistoDtoConverter extends AbstractDtoConverter {

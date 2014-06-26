@@ -51,7 +51,6 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
     @Override
     public List<AituToimikunta> findToimikuntas(AituToimikuntaCriteria toimikuntaCriteria, AituKielisyys orberByNimi) {
         CriteriaHelper.Conditions conditions = new CriteriaHelper.Conditions();
-        Criteria criteria = new Criteria();
         if (toimikuntaCriteria.isKielisyysUsed()) {
             conditions.add(new Criteria("kielisyys").in(AituKielisyys.aituKielis(toimikuntaCriteria.getKielisyysIn())));
         }

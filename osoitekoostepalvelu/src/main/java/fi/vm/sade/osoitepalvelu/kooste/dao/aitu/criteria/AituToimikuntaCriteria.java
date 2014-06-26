@@ -28,6 +28,8 @@ import java.util.List;
  * Time: 4:49 PM
  */
 public class AituToimikuntaCriteria implements Serializable {
+    private static final long serialVersionUID = 5633851719629940782L;
+    
     private List<AituKielisyys> kielisyysIn = new ArrayList<AituKielisyys>();
     private List<String> jasensInRoolis = new ArrayList<String>();
     private List<String> opintoalaTunnusIn = new ArrayList<String>();

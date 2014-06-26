@@ -16,14 +16,14 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.webapp;
 
-import fi.vm.sade.generic.healthcheck.HealthChecker;
-import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituOppilaitosRepository;
-import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituToimikuntaRepository;
-import org.apache.camel.util.StopWatch;
+import java.util.LinkedHashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
+import fi.vm.sade.generic.healthcheck.HealthChecker;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituOppilaitosRepository;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituToimikuntaRepository;
 
 /**
  * Created by ratamaa on 15.4.2014.

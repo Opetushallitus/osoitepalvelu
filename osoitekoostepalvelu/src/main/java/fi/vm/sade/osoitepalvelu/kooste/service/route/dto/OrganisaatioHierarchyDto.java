@@ -31,6 +31,8 @@ import java.util.Map;
  * Time: 1:35 PM
  */
 public class OrganisaatioHierarchyDto implements Serializable {
+    private static final long serialVersionUID = -4472354752997371430L;
+    
     private String oid;
     private String parentId;
     @DtoConversion(withClass = UiKoodiItemDto.class, path = "koodiId")
@@ -38,7 +40,6 @@ public class OrganisaatioHierarchyDto implements Serializable {
     private boolean match;
     @DtoConversion(skip = true)
     private Map<String,String> nimi = new HashMap<String, String>();
-    private List<String> organisaatiotyypit = new ArrayList<String>();
     private List<OrganisaatioHierarchyDto> children = new ArrayList<OrganisaatioHierarchyDto>();
 
     public String getOid() {
