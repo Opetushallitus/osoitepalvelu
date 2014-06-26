@@ -46,6 +46,8 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     private static final String HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME = "kor";
     private static final String HENKILOS_HENKILOTYYPPI_PARAM = "ht";
     private static final String HENKILOS_HENKILOTYYPPI_VIRKAILIJA = "VIRKAILIJA";
+    private static final String HENKILOS_COUNT_PARAM = "count";
+    private static final String HENKILOS_INDEX_PARAM = "index";
 
     private static final String ROUTE_HENKILO = "direct:henkilo";
     private static final String HENKILO_PATH = "/${in.body}";
@@ -113,6 +115,10 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 .path(HENKILOS_HAKU_PATH)
                     .param(HENKILOS_HENKILOTYYPPI_PARAM)
                         .value(HENKILOS_HENKILOTYYPPI_VIRKAILIJA).toQuery()
+                    .param(HENKILOS_COUNT_PARAM)
+                        .value(0).toQuery()
+                    .param(HENKILOS_INDEX_PARAM)
+                        .value(0).toQuery()
                     .param(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME)
                         .listFromHeader().toQuery()
                     .param(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME)
