@@ -88,10 +88,22 @@ public class DefaultSearchResultTransformerService extends AbstractService
             Set<String> emails = new TreeSet<String>();
             List<SearchResultRowDto> filtteredTransformedResults = new ArrayList<SearchResultRowDto>();
             for (SearchResultRowDto dto : transformedResults) {
-                if(dto.getEmailOsoite() != null && !emails.contains(dto.getEmailOsoite())) {
+                if(dto.getHenkiloEmail() != null && !emails.contains(dto.getHenkiloEmail())) {
+                    emails.add(dto.getHenkiloEmail());
+                    filtteredTransformedResults.add(dto);
+                } else if(dto.getEmailOsoite() != null && !emails.contains(dto.getEmailOsoite())) {
                     emails.add(dto.getEmailOsoite());
                     filtteredTransformedResults.add(dto);
-                }
+                } else if(dto.getKoulutusneuvonnanEmail() != null && !emails.contains(dto.getKoulutusneuvonnanEmail())) {
+                    emails.add(dto.getKoulutusneuvonnanEmail());
+                    filtteredTransformedResults.add(dto);
+                } else if(dto.getKriisitiedotuksenEmail() != null && !emails.contains(dto.getKriisitiedotuksenEmail())) {
+                    emails.add(dto.getKriisitiedotuksenEmail());
+                    filtteredTransformedResults.add(dto);
+                } else if(dto.getViranomaistiedotuksenEmail() != null && !emails.contains(dto.getViranomaistiedotuksenEmail())) {
+                    emails.add(dto.getViranomaistiedotuksenEmail());
+                    filtteredTransformedResults.add(dto);
+                }                
             }
             
             // Asetetaan tulosjoukoksi filtteröity listaus.
