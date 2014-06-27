@@ -24,6 +24,8 @@ import java.io.Serializable;
  * Time: 2:16 PM
  */
 public class HenkiloYhteystietoDto implements Serializable {
+    private static final long serialVersionUID = 4835770949847479363L;
+    
     public static final String YHTESYTIETO_SAHKOPOSTI = "YHTEYSTIETO_SAHKOPOSTI";
     public static final String YHTEYSTIETO_PUHELINNUMERO = "YHTEYSTIETO_PUHELINNUMERO";
     public static final String YHTEYSTIETO_KATUOSOITE = "YHTEYSTIETO_KATUOSOITE";

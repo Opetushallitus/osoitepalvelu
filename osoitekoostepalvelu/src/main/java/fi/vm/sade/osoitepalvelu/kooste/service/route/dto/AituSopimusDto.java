@@ -26,6 +26,8 @@ import java.util.List;
  * Time: 5:34 PM
  */
 public class AituSopimusDto implements Serializable {
+    private static final long serialVersionUID = 7422103301591584089L;
+    
     private String toimikunta;
     private String sahkoposti;
     private String vastuuhenkilo;

@@ -28,6 +28,8 @@ import java.util.Map;
  * Time: 5:18 PM
  */
 public class AituToimikuntaResultDto implements Serializable {
+    private static final long serialVersionUID = -6099372126688701490L;
+    
     private Map<String,String> nimi = new HashMap<String, String>();
     private String sahkoposti;
     private String kielisyys; // short lower case language code, e.g. "fi", but may be also 2k (kaksikielinen = fi/sv)

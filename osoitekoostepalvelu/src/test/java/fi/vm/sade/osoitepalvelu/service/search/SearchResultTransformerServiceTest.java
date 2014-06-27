@@ -91,7 +91,7 @@ public class SearchResultTransformerServiceTest {
         List<OrganisaatioResultDto> list  =  Arrays.asList(organisaatio1, organisaatio2);
         SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(organisaatioResults(list),
                 new AllColumnsSearchResultPresentation(),
-                new DefaultCamelRequestContext());
+                new DefaultCamelRequestContext(), null);
         assertNotNull(results.getPresentation());
         List<SearchResultRowDto> rows  =  results.getRows();
         assertEquals(3, rows.size());
@@ -160,7 +160,7 @@ public class SearchResultTransformerServiceTest {
 
         List<OrganisaatioResultDto> list  =  Arrays.asList(organisaatio1, organisaatio2);
         SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(organisaatioResults(list),
-                new AllColumnsSearchResultPresentation(new Locale("sv", "SE")), new DefaultCamelRequestContext());
+                new AllColumnsSearchResultPresentation(new Locale("sv", "SE")), new DefaultCamelRequestContext(), null);
         List<SearchResultRowDto> rows  =  results.getRows();
         assertEquals(6, rows.size());
         assertEquals("org1", rows.get(0).getOrganisaatioOid());
@@ -212,7 +212,7 @@ public class SearchResultTransformerServiceTest {
         List<OrganisaatioResultDto> list  =  Arrays.asList(organisaatio);
         SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(organisaatioResults(list),
                 new AllColumnsSearchResultPresentation(new Locale("sv", "SE")),
-                new DefaultCamelRequestContext());
+                new DefaultCamelRequestContext(), null);
         List<SearchResultRowDto> rows  =  results.getRows();
         assertEquals(1, rows.size());
         assertNotNull(rows.get(0).getPostiosoite());
@@ -248,7 +248,7 @@ public class SearchResultTransformerServiceTest {
         SearchResultPresentation presentation  =  new AllColumnsSearchResultPresentation();
         SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(
                 organisaatioResults(Arrays.asList(organisaatio)),
-                presentation, new DefaultCamelRequestContext());
+                presentation, new DefaultCamelRequestContext(), null);
 
         Workbook wb  =  new HSSFWorkbook();
         resultTranformerService.produceExcel(wb, results);
@@ -268,7 +268,7 @@ public class SearchResultTransformerServiceTest {
         List<HenkiloHakuResultDto> list = new ArrayList<HenkiloHakuResultDto>();
         SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(henkiloResults(list),
                 new AllColumnsSearchResultPresentation(new Locale("sv", "SE")),
-                new DefaultCamelRequestContext());
+                new DefaultCamelRequestContext(),  null);
         Assert.assertNotNull(results.getRows());
         Assert.assertEquals(0, results.getRows().size());
     }
@@ -310,7 +310,7 @@ public class SearchResultTransformerServiceTest {
         );
         SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(henkiloResults(list),
                 new AllColumnsSearchResultPresentation(new Locale("sv", "SE")).withoutYhteyshenkiloEmail(),
-                new DefaultCamelRequestContext());
+                new DefaultCamelRequestContext(), null);
         assertEquals(7, results.getRows().size());
         assertEquals("henkilo1Oid", results.getRows().get(0).getHenkiloOid());
         assertEquals("Milla Makkonen", results.getRows().get(0).getYhteystietoNimi());

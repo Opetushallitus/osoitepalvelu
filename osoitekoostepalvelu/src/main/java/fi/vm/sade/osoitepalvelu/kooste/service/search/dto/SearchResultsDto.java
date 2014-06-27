@@ -28,6 +28,8 @@ import java.util.List;
  * Time: 3:26 PM
  */
 public class SearchResultsDto implements Serializable {
+    private static final long serialVersionUID = 6775832321069168232L;
+    
     private List<HenkiloHakuResultDto> henkilos = new ArrayList<HenkiloHakuResultDto>();
     private List<OrganisaatioResultDto> organisaatios = new ArrayList<OrganisaatioResultDto>();
     private List<AituToimikuntaResultDto> aituToimikuntas = new ArrayList<AituToimikuntaResultDto>();

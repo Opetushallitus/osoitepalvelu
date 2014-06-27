@@ -24,6 +24,8 @@ import java.io.Serializable;
  * Time: 2:13 PM
  */
 public class HenkiloKieliDto implements Serializable {
+    private static final long serialVersionUID = 2851690593549118608L;
+    
     private String kieliKoodi; // esim. fi
     private String KieliTyyppi; // esim. suomi
 

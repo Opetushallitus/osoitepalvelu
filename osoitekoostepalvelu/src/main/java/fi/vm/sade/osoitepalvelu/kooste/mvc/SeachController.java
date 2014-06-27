@@ -82,7 +82,7 @@ public class SeachController extends AbstractMvcController implements Serializab
         SearchResultPresentation presentation  =  new SearchResultPresentationByAddressFieldsDto(
                 searchParameters.getSearchTerms(),
                 searchParameters.getNonIncludedOrganisaatioOids());
-        return resultTransformerService.transformToResultRows(results, presentation, context);
+        return resultTransformerService.transformToResultRows(results, presentation, context, searchParameters.getSearchTerms().getSearchType());
     }
 
     /**
@@ -132,7 +132,7 @@ public class SeachController extends AbstractMvcController implements Serializab
                 searchParameters.getSearchTerms(),
                 searchParameters.getNonIncludedOrganisaatioOids());
         final SearchResultsPresentationDto searchResults  =  resultTransformerService
-                .transformToResultRows(results, presentation, context);
+                .transformToResultRows(results, presentation, context, searchParameters.getSearchTerms().getSearchType());
         return new AbstractExcelView() {
             @Override
             protected void buildExcelDocument(Map<String, Object> model, HSSFWorkbook workbook, HttpServletRequest request,

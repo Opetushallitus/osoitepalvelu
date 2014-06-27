@@ -33,6 +33,8 @@ import java.util.Set;
  * Time: 1:48 PM
  */
 public class HenkiloDetailsDto extends HenkiloListResultDto implements Serializable {
+    private static final long serialVersionUID = 501895048885418517L;
+    
     private Long id;
     private HenkiloKieliDto asiointiKieli;
     private List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma = new ArrayList<HenkiloYhteystietoRyhmaDto>();
