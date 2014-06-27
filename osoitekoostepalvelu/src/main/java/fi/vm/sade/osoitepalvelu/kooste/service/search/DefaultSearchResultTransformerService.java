@@ -82,12 +82,23 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
         List<SearchResultRowDto> aituHenkiloResults = transformToimikuntaJasens(results.getAituToimikuntas(), presentation);
         transformedResults.addAll(aituHenkiloResults);
+        
+        resolveMissingOrganisaatioRelatedDetails(transformedResults, presentation, context);
 
+        List<SearchResultRowDto> rows = new ArrayList<SearchResultRowDto>(Collections2
+                .filter(transformedResults, new Predicate<SearchResultRowDto>() {
+            @Override
+            public boolean apply(SearchResultRowDto result) {
+                return presentation.isResultRowIncluded(result);
+            }
+        }));
+        
+        
         if( searchType == SearchType.EMAIL ) {
             // Kyseessä email-tyyppinen haku, joten nyt suodatetaan kaikki dublikaatti-emailit pois.
             Set<String> emails = new TreeSet<String>();
             List<SearchResultRowDto> filtteredTransformedResults = new ArrayList<SearchResultRowDto>();
-            for (SearchResultRowDto dto : transformedResults) {
+            for (SearchResultRowDto dto : rows) {
                 if(dto.getHenkiloEmail() != null && !emails.contains(dto.getHenkiloEmail())) {
                     emails.add(dto.getHenkiloEmail());
                     filtteredTransformedResults.add(dto);
@@ -107,18 +118,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
             }
             
             // Asetetaan tulosjoukoksi filtteröity listaus.
-            transformedResults = filtteredTransformedResults;
+            rows = filtteredTransformedResults;
         }
         
-        resolveMissingOrganisaatioRelatedDetails(transformedResults, presentation, context);
-
-        List<SearchResultRowDto> rows = new ArrayList<SearchResultRowDto>(Collections2
-                .filter(transformedResults, new Predicate<SearchResultRowDto>() {
-            @Override
-            public boolean apply(SearchResultRowDto result) {
-                return presentation.isResultRowIncluded(result);
-            }
-        }));
         if (!organisaatioResults.isEmpty() && !henkiloResults.isEmpty()) {
             // Mix the organisation and henkilo based rows by organisaatio's oid
             rows = applyOrdering(rows);
