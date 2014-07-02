@@ -55,7 +55,7 @@ OsoiteKoostepalvelu.service('EmailConverter', ["$log", "$http", function($log, $
     this.searchResultToViestipalveluEmail = function(searchResults, emailData) {
         var recipients = [];
         angular.forEach(searchResults, function(result) {
-            if( result.henkiloOid ) {
+            if( result.henkiloOid || (!result.organisaatioOid && result.henkiloEmail) ) {
                 recipients.push({
                     oid: result.henkiloOid,
                     oidType: 'henkilo',
