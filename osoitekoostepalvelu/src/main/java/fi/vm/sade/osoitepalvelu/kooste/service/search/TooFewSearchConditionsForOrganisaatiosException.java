@@ -14,15 +14,31 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
+package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import fi.vm.sade.osoitepalvelu.kooste.common.exception.SelfExplainingException;
 
 /**
  * User: ratamaa
- * Date: 3/25/14
- * Time: 11:32 AM
+ * Date: 5/12/14
+ * Time: 4:26 PM
  */
-public interface OrganisaatioCacheRepository extends MongoRepository<OrganisaatioDetails, String> {
+public class TooFewSearchConditionsForOrganisaatiosException extends Exception
+            implements SelfExplainingException {
+    private static final long serialVersionUID = -3059236445156201224L;
+
+    @Override
+    public String getMessageKey() {
+        return "too_few_search_conditions_for_organisaatios";
+    }
+
+    @Override
+    public Object[] getMessageParams() {
+        return new Object[0];
+    }
+
+    @Override
+    public String getErrorCode() {
+        return "301";
+    }
 }

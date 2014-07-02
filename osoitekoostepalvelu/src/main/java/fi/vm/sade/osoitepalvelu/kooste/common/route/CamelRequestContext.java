@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
+import org.joda.time.DateTime;
 
 /**
  * Context for Camel requests sent during the same HTTP request.
@@ -32,4 +33,18 @@ public interface CamelRequestContext {
      */
     CasTicketCache getTicketCache();
 
+    /**
+     * @return the request count
+     */
+    long getRequestCount();
+
+    /**
+     * Call when request is to be performed
+     */
+    void requestPerformed();
+
+    /**
+     * @return current time or overridden cache check moment
+     */
+    DateTime getCacheCheckMoment();
 }

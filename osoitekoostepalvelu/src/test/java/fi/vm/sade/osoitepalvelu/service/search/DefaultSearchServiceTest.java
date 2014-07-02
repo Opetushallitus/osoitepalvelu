@@ -23,7 +23,10 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTargetGroupDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTermDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.DefaultSearchService;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForHenkilosException;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForOrganisaatiosException;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
@@ -73,7 +76,8 @@ public class DefaultSearchServiceTest {
     }
 
     @Test
-    public void testOrganisaatioResultsReturned() {
+    public void testOrganisaatioResultsReturned() throws
+                TooFewSearchConditionsForOrganisaatiosException, TooFewSearchConditionsForHenkilosException {
         List<OrganisaatioYhteystietoHakuResultDto> yhteystietos  =  new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
         OrganisaatioYhteystietoHakuResultDto yhteystieto  =  new OrganisaatioYhteystietoHakuResultDto();
         yhteystieto.setOid("OID");
@@ -105,6 +109,10 @@ public class DefaultSearchServiceTest {
                 {SearchTargetGroup.TargetType.ORGANISAATIO}));
         targetGroups.add(targetGroup);
         terms.setTargetGroups(targetGroups);
+        SearchTermDto term = new SearchTermDto();
+        term.setType(SearchTermDto.TERM_KUNTAS);
+        term.setValues(Arrays.asList(new String[] {"JOKULA"}));
+        terms.getTerms().add(term);
         SearchResultsDto results  =  this.defaultSearchService.find(terms, new DefaultCamelRequestContext());
         assertNotNull(results.getOrganisaatios());
         assertEquals(1, results.getOrganisaatios().size());

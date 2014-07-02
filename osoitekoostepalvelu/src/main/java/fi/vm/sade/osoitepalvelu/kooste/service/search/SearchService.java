@@ -31,7 +31,13 @@ public interface SearchService {
      * @param terms to search with
      * @param requestContext the context for HTTP request received by the application to operate in
      * @return results
+     * @throws TooFewSearchConditionsForOrganisaatiosException if tehere are conditions for organisaatios other than
+     * tyyppi (and organisaatios are returned by tyyppi or used as conditions for henkilös)
+     * @throws TooFewSearchConditionsForHenkilosException if no conditions for henkilös or organisaatios and
+     * henkilös are returned
      */
-    SearchResultsDto find(SearchTermsDto terms, CamelRequestContext requestContext);
+    SearchResultsDto find(SearchTermsDto terms, CamelRequestContext requestContext)
+            throws TooFewSearchConditionsForOrganisaatiosException,
+                    TooFewSearchConditionsForHenkilosException;
 
 }

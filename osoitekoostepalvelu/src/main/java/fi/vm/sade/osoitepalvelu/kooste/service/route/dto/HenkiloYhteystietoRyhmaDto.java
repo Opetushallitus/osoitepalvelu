@@ -26,6 +26,8 @@ import java.util.List;
  * Time: 2:15 PM
  */
 public class HenkiloYhteystietoRyhmaDto implements Serializable {
+    private static final long serialVersionUID = -4818147124155038149L;
+
     public static final String TYOOSOITE_KUVAUS = "yhteystietotyyppi2";
 
     private Long id;

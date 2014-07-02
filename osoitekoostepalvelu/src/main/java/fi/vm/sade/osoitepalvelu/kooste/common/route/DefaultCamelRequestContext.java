@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.DefaultCookieBasedCasTicketCache;
+import org.joda.time.DateTime;
 
 /**
  * User: ratamaa
@@ -26,6 +27,8 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.DefaultCookieBasedCasTic
  */
 public class DefaultCamelRequestContext implements CamelRequestContext {
     private CasTicketCache ticketCache;
+    private long requestCount=0;
+    private DateTime overriddenTime=null;
 
     public DefaultCamelRequestContext(CasTicketCache ticketCache) {
         this.ticketCache = ticketCache;
@@ -35,8 +38,27 @@ public class DefaultCamelRequestContext implements CamelRequestContext {
         this.ticketCache  =  new DefaultCookieBasedCasTicketCache();
     }
 
+    public void setOverriddenTime(DateTime overriddenTime) {
+        this.overriddenTime = overriddenTime;
+    }
+
     @Override
     public CasTicketCache getTicketCache() {
         return this.ticketCache;
+    }
+
+    @Override
+    public long getRequestCount() {
+        return requestCount;
+    }
+
+    @Override
+    public void requestPerformed() {
+        this.requestCount++;
+    }
+
+    @Override
+    public DateTime getCacheCheckMoment() {
+        return this.overriddenTime != null ? this.overriddenTime : new DateTime();
     }
 }

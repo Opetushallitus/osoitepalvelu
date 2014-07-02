@@ -46,6 +46,8 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     private static final String HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME = "kor";
     private static final String HENKILOS_HENKILOTYYPPI_PARAM = "ht";
     private static final String HENKILOS_HENKILOTYYPPI_VIRKAILIJA = "VIRKAILIJA";
+    private static final String HENKILOS_COUNT_PARAM = "count";
+    private static final String HENKILOS_INDEX_PARAM = "index";
 
     private static final String ROUTE_HENKILO = "direct:henkilo";
     private static final String HENKILO_PATH = "/${in.body}";
@@ -113,6 +115,10 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 .path(HENKILOS_HAKU_PATH)
                     .param(HENKILOS_HENKILOTYYPPI_PARAM)
                         .value(HENKILOS_HENKILOTYYPPI_VIRKAILIJA).toQuery()
+                    .param(HENKILOS_COUNT_PARAM)
+                        .value(0).toQuery()
+                    .param(HENKILOS_INDEX_PARAM)
+                        .value(0).toQuery()
                     .param(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME)
                         .listFromHeader().toQuery()
                     .param(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME)
@@ -164,29 +170,39 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
 
     @Override
     public List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
-        List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
+        if (criteria.getOrganisaatioOids() == null || criteria.getOrganisaatioOids().isEmpty()) {
+            return findByKayttoOikeusRyhmas(criteria, headerValues(), requestContext);
+        }
 
+        List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
         List<List<String>> oidChunks = CollectionHelper.split(criteria.getOrganisaatioOids(), MAX_OIDS_FOR_HENKILO_HAKU);
         for (List<String> oids : oidChunks) {
             HeaderValueBuilder header = headerValues()
                     .add(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, oids);
-            if (!criteria.getKayttoOikeusRayhmas().isEmpty()) {
-                for (String kor : criteria.getKayttoOikeusRayhmas()) {
-                    @SuppressWarnings("unchecked")
-                    List<HenkiloListResultDto> korResults = sendBodyHeadersAndProperties(
-                            getCamelTemplate(), ROUTE_HENKILOS, "", header.copy()
-                            .add(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, kor).map(),
-                            requestContext, List.class);
-                    results.addAll(korResults);
-                }
-            } else {
-                @SuppressWarnings("unchecked")
-                List<HenkiloListResultDto> searchResults =  sendBodyHeadersAndProperties(getCamelTemplate(),
-                        ROUTE_HENKILOS, "", header.map(), requestContext, List.class);
-                results.addAll(searchResults);
-            }
+            results.addAll(findByKayttoOikeusRyhmas(criteria, header, requestContext));
         }
 
+        return results;
+    }
+
+    protected List<HenkiloListResultDto> findByKayttoOikeusRyhmas(HenkiloCriteriaDto criteria, HeaderValueBuilder header,
+                                                                  CamelRequestContext requestContext) {
+        List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
+        if (!criteria.getKayttoOikeusRayhmas().isEmpty()) {
+            for (String kor : criteria.getKayttoOikeusRayhmas()) {
+                @SuppressWarnings("unchecked")
+                List<HenkiloListResultDto> korResults = sendBodyHeadersAndProperties(
+                        getCamelTemplate(), ROUTE_HENKILOS, "", header.copy()
+                        .add(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, kor).map(),
+                        requestContext, List.class);
+                results.addAll(korResults);
+            }
+        } else {
+            @SuppressWarnings("unchecked")
+            List<HenkiloListResultDto> searchResults =  sendBodyHeadersAndProperties(getCamelTemplate(),
+                    ROUTE_HENKILOS, "", header.map(), requestContext, List.class);
+            results.addAll(searchResults);
+        }
         return results;
     }
 }

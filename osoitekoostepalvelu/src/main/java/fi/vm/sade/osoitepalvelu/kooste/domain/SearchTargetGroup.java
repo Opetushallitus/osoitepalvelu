@@ -29,29 +29,38 @@ public class SearchTargetGroup implements Serializable {
     private static final long serialVersionUID  =  -1439905791723850160L;
 
     public enum GroupType {
-        JARJESTAJAT_YLLAPITAJAT("Koulutustoimija"), // ??
+        JARJESTAJAT_YLLAPITAJAT("Koulutustoimija"),
         OPPILAITOKSET("Oppilaitos"),
-        OPETUSPISTEET("Opetuspiste"),
+        OPETUSPISTEET("Opetuspiste", "Toimipiste"),
         OPPISOPIMUSTOIMPISTEET("Oppisopimustoimipiste"),
         MUUT_ORGANISAATIOT("Muu organisaatio"),
         TUTKINTOTOIMIKUNNAT,
         KOULUTA_KAYTTAJAT,
         AIPAL_KAYTTAJAT;
 
-        private final String organisaatioPalveluTyyppiArvo;
+        private final String[] organisaatioPalveluTyyppiArvo;
 
         private GroupType() {
             this.organisaatioPalveluTyyppiArvo  =  null;
         }
-        private GroupType(String organisaatioPalveluTyyppiArvo) {
+        private GroupType(String... organisaatioPalveluTyyppiArvo) {
             this.organisaatioPalveluTyyppiArvo  =  organisaatioPalveluTyyppiArvo;
         }
 
-        public static GroupType[] getHenkiloTypes() {
+        public static GroupType[] getHenkiloHakuTypes() {
             return new GroupType[] {KOULUTA_KAYTTAJAT};
         }
 
-        public String getOrganisaatioPalveluTyyppiArvo() {
+        public static GroupType[] getAnyHenkiloTypes() {
+            return new GroupType[] {KOULUTA_KAYTTAJAT, TUTKINTOTOIMIKUNNAT, KOULUTA_KAYTTAJAT, AIPAL_KAYTTAJAT};
+        }
+
+        public static GroupType[] getAnyOrganisaatioTypes() {
+            return new GroupType[] {JARJESTAJAT_YLLAPITAJAT, OPPILAITOKSET, OPETUSPISTEET, OPPISOPIMUSTOIMPISTEET,
+                    MUUT_ORGANISAATIOT, TUTKINTOTOIMIKUNNAT};
+        }
+
+        public String[] getOrganisaatioPalveluTyyppiArvo() {
             return organisaatioPalveluTyyppiArvo;
         }
 
@@ -68,13 +77,14 @@ public class SearchTargetGroup implements Serializable {
 
     public enum TargetType {
         ORGANISAATIO,
-        REHTORI,
         YHTEYSHENKILO,
+        REHTORI,
         KRIISITIEDOTUS,
         KOULUTUSNEVONTA,
         PUHEENJOHTAJA,
         SIHTEERI,
         JASENET,
+        TUTKINTOTOIMIKUNTA,
         TUNNUKSENHALTIJAT;
     };
 

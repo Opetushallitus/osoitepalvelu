@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +28,11 @@ import java.util.List;
  * Time: 3:26 PM
  */
 public class SearchResultsDto implements Serializable {
+    private static final long serialVersionUID = 6775832321069168232L;
+    
     private List<HenkiloHakuResultDto> henkilos = new ArrayList<HenkiloHakuResultDto>();
     private List<OrganisaatioResultDto> organisaatios = new ArrayList<OrganisaatioResultDto>();
+    private List<AituToimikuntaResultDto> aituToimikuntas = new ArrayList<AituToimikuntaResultDto>();
 
     public List<HenkiloHakuResultDto> getHenkilos() {
         return henkilos;
@@ -43,5 +48,13 @@ public class SearchResultsDto implements Serializable {
 
     public void setOrganisaatios(List<OrganisaatioResultDto> organisaatios) {
         this.organisaatios = organisaatios;
+    }
+
+    public void setAituToimikuntas(List<AituToimikuntaResultDto> aituToimikuntas) {
+        this.aituToimikuntas = aituToimikuntas;
+    }
+
+    public List<AituToimikuntaResultDto> getAituToimikuntas() {
+        return aituToimikuntas;
     }
 }

@@ -18,6 +18,8 @@ package fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter;
 
 import fi.ratamaa.dtoconverter.types.TypeResolver;
 import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloYhteystietoDto;
@@ -43,7 +45,24 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
     @Override
     protected void registerTypes(TypeResolver typeResolver) {
         typeResolver.registerType("henkiloAggregate", HenkiloResultAggregateDto.class)
-                    .registerType("organisaatioAggregate", OrganisaatioResultAggregateDto.class);
+                    .registerType("organisaatioAggregate", OrganisaatioResultAggregateDto.class)
+                    .registerType("toimikuntaJasenAggregate", AituToimikuntaJasenAggregateDto.class);
+    }
+
+    public SearchResultRowDto convert(AituToimikuntaJasenAggregateDto from, SearchResultRowDto to, Locale locale) {
+        if (from.getJasen() != null) {
+            to.setPostiosoite(new SearchResultOsoiteDto());
+            to.getPostiosoite().setOsoite(from.getJasen().getOsoite());
+            to.getPostiosoite().setPostinumero(from.getJasen().getPostinumero());
+            to.getPostiosoite().setPostitoimipaikka(from.getJasen().getPostitoimipaikka());
+            to.setNimike(from.getJasen().getEdustus());
+            to.setYhteystietoNimi(from.getJasen().getKokoNimi());
+            to.setHenkiloEmail(from.getJasen().getSahkoposti());
+        }
+        if (from.getToimikunta() != null) {
+            to.setNimi(LocaleHelper.findLocalized(from.getToimikunta().getNimi(), locale, DefaultKoodistoService.DEFAULT_LOCALE));
+        }
+        return to;
     }
 
     public OrganisaatioResultDto convert(OrganisaatioYhteystietoHakuResultDto from, OrganisaatioResultDto to,
@@ -63,7 +82,7 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
         convertValue(from, to, locale);
         if (from.getPostinumero() != null) {
             UiKoodiItemDto postinumeroKoodi  =  koodistoService
-                    .findPostinumeroByKoodiUri(locale, from.getPostinumero());
+                .findPostinumeroByKoodiUri(locale, from.getPostinumero());
             if (postinumeroKoodi != null) {
                 to.setPostinumero(postinumeroKoodi.getKoodiId());
                 to.setPostitoimipaikka(postinumeroKoodi.getNimi());

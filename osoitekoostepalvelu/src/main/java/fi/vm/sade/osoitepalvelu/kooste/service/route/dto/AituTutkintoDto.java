@@ -24,6 +24,8 @@ import java.io.Serializable;
  * Time: 5:35 PM
  */
 public class AituTutkintoDto implements Serializable {
+    private static final long serialVersionUID = 6027647418933397515L;
+    
     private String tutkintotunnus;
     private String opintoalatunnus;
     private String vastuuhenkilo;

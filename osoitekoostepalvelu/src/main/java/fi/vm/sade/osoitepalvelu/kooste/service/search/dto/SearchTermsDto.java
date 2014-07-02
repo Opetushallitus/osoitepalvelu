@@ -33,7 +33,7 @@ import java.util.Locale;
 public class SearchTermsDto implements Serializable {
     private static final long serialVersionUID  =  -6050192875078360323L;
 
-
+    private static final int HASH_FACTOR = 31;
 
     public enum SearchType {
         EMAIL,
@@ -116,5 +116,47 @@ public class SearchTermsDto implements Serializable {
             }
         }
         return new ArrayList<String>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SearchTermsDto)) {
+            return false;
+        }
+        SearchTermsDto that = (SearchTermsDto) o;
+
+        if (addressFields != null ? !addressFields.equals(that.addressFields) : that.addressFields != null) {
+            return false;
+        }
+        if (locale != null ? !locale.equals(that.locale) : that.locale != null) {
+            return false;
+        }
+        if (receiverFields != null ? !receiverFields.equals(that.receiverFields) : that.receiverFields != null) {
+            return false;
+        }
+        if (searchType != that.searchType) {
+            return false;
+        }
+        if (targetGroups != null ? !targetGroups.equals(that.targetGroups) : that.targetGroups != null) {
+            return false;
+        }
+        if (terms != null ? !terms.equals(that.terms) : that.terms != null) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = locale != null ? locale.hashCode() : 0;
+        result = HASH_FACTOR * result + (searchType != null ? searchType.hashCode() : 0);
+        result = HASH_FACTOR * result + (addressFields != null ? addressFields.hashCode() : 0);
+        result = HASH_FACTOR * result + (receiverFields != null ? receiverFields.hashCode() : 0);
+        result = HASH_FACTOR * result + (targetGroups != null ? targetGroups.hashCode() : 0);
+        result = HASH_FACTOR * result + (terms != null ? terms.hashCode() : 0);
+        return result;
     }
 }

@@ -155,18 +155,28 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
                 nonIncludedOrganisaatioOids: _deletedIds
             },
             callback: function(data) {
-                _resultData = data;
                 _transformResults(data, success);
+                _resultData = data;
             },
-            errorCallback: (error || commonErrorHandler)
+            errorCallback: function(data, status, headers, config) {
+                commonErrorHandler(data, status, headers, config);
+                if (error) {
+                    error(data, status, headers, config);
+                }
+            }
         });
     };
 
     this.results = function(success, error) {
         if(_resultData===null) {
-            _performSearch(success);
+            _performSearch(success, error);
         } else {
-            _transformResults(_resultData, success);
+            var filteredRows = $filter('filter')(_resultData.rows,
+                    FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi"]) );
+            success( {
+                presentation: _resultData.presentation,
+                rows: filteredRows
+            } );
         }
     };
 

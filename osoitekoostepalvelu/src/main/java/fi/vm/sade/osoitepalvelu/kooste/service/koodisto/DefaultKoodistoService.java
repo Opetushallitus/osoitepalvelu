@@ -18,10 +18,14 @@ package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 
 import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.dao.cache.KoodistoCacheRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodiItem;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
+import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache.CacheKey;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
+import fi.vm.sade.osoitepalvelu.kooste.service.aitu.AituService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter.KoodistoDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
@@ -55,6 +59,9 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     private OrganisaatioServiceRoute organisaatioServiceRoute;
 
     @Autowired
+    private AituService aituService;
+
+    @Autowired
     private KoodistoDtoConverter dtoConverter;
 
     @Autowired(required  =  false)
@@ -65,6 +72,14 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     private Map<KoodistoCache.CacheKey, MemoryCacheHolder> memoryCache
              =  new HashMap<KoodistoCache.CacheKey, MemoryCacheHolder>();
+
+    @Override
+    public void purgeCaches() {
+        this.memoryCache = new HashMap<CacheKey, MemoryCacheHolder>();
+        if (this.koodistoCacheRepository != null) {
+            this.koodistoCacheRepository.deleteAll();
+        }
+    }
 
     @Override
     public List<UiKoodiItemDto> findOppilaitosTyyppiOptions(Locale locale) {
@@ -96,9 +111,9 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         return cached(new Cacheable<List<UiKoodiItemDto>>() {
             @Override
             public List<UiKoodiItemDto> get() {
-                List<KoodiDto> arvot  =  koodistoRoute.findKoodisWithParent(maakuntaUri);
-                arvot  =  filterActiveKoodis(arvot, new LocalDate());
-                List<UiKoodiItemDto> optiot  =  dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
+                List<KoodiDto> arvot = koodistoRoute.findKoodisWithParent(maakuntaUri);
+                arvot = filterActiveKoodis(arvot, new LocalDate());
+                List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
                         UiKoodiItemDto.class, locale);
                 return orderNimisAsc(optiot);
             }
@@ -186,7 +201,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         return cached(new Cacheable<List<UiKoodiItemDto>>() {
             @Override
             public List<UiKoodiItemDto> get() {
-                List<KayttooikesuryhmaDto> kayttoikeusryhmas  =  authenticationServiceRoute
+                List<KayttooikesuryhmaDto> kayttoikeusryhmas = authenticationServiceRoute
                         .findKayttooikeusryhmas(new DefaultCamelRequestContext());
                 return dtoConverter.convert(kayttoikeusryhmas, new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
                         locale);
@@ -195,6 +210,55 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
                 locale));
     }
 
+    // TODO: from koodisto (somewhere in the future)
+    @Override
+    public List<UiKoodiItemDto> findTutkintotoimikuntaRooliOptions(final Locale locale) {
+        return cached(new Cacheable<List<UiKoodiItemDto>>() {
+            @Override
+            public List<UiKoodiItemDto> get() {
+                List<UiKoodiItemDto> koodis = new ArrayList<UiKoodiItemDto>();
+                for (String rooli : aituService.findVoimassaOlevatRoolit()) {
+                    UiKoodiItemDto koodi = new UiKoodiItemDto();
+                    koodi.setKoodiId(rooli);
+                    koodi.setKoodiUri(KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS.getUri() + "_" + rooli);
+                    koodi.setNimi(rooli);
+                    koodi.setLyhytNimi(koodi.getNimi());
+                    koodi.setKoodistonTyyppi(KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS);
+                    koodis.add(koodi);
+                }
+                return koodis;
+            }
+        }, new KoodistoCache.CacheKey(KoodistoCache.KoodistoTyyppi.valueOf(KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS.name()),
+                locale));
+    }
+
+    @Override
+    public List<UiKoodiItemDto> findTutkintotoimikuntaOptions(final Locale locale) {
+        return cached(new Cacheable<List<UiKoodiItemDto>>() {
+            @Override
+            public List<UiKoodiItemDto> get() {
+                List<AituToimikuntaResultDto> toimikuntas = aituService.findToimikuntasWithMatchingJasens(
+                        new AituToimikuntaCriteria(), AituKielisyys.fromLocale(locale).or(AituKielisyys.kieli_fi));
+                return dtoConverter.convert(toimikuntas, new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
+                        locale);
+            }
+        }, new KoodistoCache.CacheKey(KoodistoCache.KoodistoTyyppi.valueOf(KoodistoTyyppi.TUTKINTOTOIMIKUNTA.name()),
+                locale));
+    }
+
+    @Override
+    public void purgeTutkintotoimikuntaCaches() {
+        for (CacheKey key : new ArrayList<CacheKey>(memoryCache.keySet())) {
+            if (key.getTyyppi() == fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache.KoodistoTyyppi.TUTKINTOTOIMIKUNTA
+                    || key.getTyyppi() == fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache.KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS) {
+                memoryCache.remove(key);
+                if (koodistoCacheRepository != null) {
+                    koodistoCacheRepository.delete(key);
+                }
+            }
+        }
+    }
+    
     protected interface Cacheable<T> {
         T get();
     }
@@ -220,7 +284,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     protected List<UiKoodiItemDto> cached(Cacheable<List<UiKoodiItemDto>> provider, KoodistoCache.CacheKey key) {
         boolean cacheUsed  =  isCacheUsed();
         if (!cacheUsed) {
-            logger.info("CACHE DISABLED.");
+            logger.debug("CACHE DISABLED.");
             return provider.get();
         }
         MemoryCacheHolder holder  =  memoryCache.get(key);
@@ -240,10 +304,10 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
             cache.setItems(dtoConverter.convert(items, new ArrayList<KoodiItem>(), KoodiItem.class));
             cache.setUpdatedAt(new DateTime());
             koodistoCacheRepository.save(cache);
-            logger.info("SAVED CACHED Koodisto items for key: "  +  key);
+            logger.debug("SAVED CACHED Koodisto items for key: "  +  key);
         } else {
             items  =  dtoConverter.convert(cache.getItems(), new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class);
-            logger.info("Got cached results for key: "  +  key +  " updated at "  +  cache.getUpdatedAt());
+            logger.debug("Got cached results for key: "  +  key +  " updated at "  +  cache.getUpdatedAt());
         }
         memoryCache.put(key, new MemoryCacheHolder(cache.getUpdatedAt(), items));
         return items;
@@ -379,5 +443,9 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     public void setOrganisaatioServiceRoute(OrganisaatioServiceRoute organisaatioServiceRoute) {
         this.organisaatioServiceRoute = organisaatioServiceRoute;
+    }
+
+    public void setAituService(AituService aituService) {
+        this.aituService = aituService;
     }
 }

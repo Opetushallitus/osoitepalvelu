@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +29,7 @@ import java.util.Map;
  * Date: 3/14/14
  * Time: 2:06 PM
  */
-public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
+public class OrganisaatioYhteystietoHakuResultDto implements Serializable, FilterableOrganisaatio {
     private static final long serialVersionUID = 2642158081723050787L;
     
     private String oid;
@@ -39,7 +41,9 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
     private String toimipisteKoodi;
     private List<OrganisaatioYhteysosoiteDto> postiosoite  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
     private List<OrganisaatioYhteysosoiteDto> kayntiosoite  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
+    private String oppilaitosTyyppiUri; // esim. oppilaitostyyppi_21#1
 
+    @Override
     public String getOid() {
         return oid;
     }
@@ -56,6 +60,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
         this.nimi  =  nimi;
     }
 
+    @Override
     public List<String> getTyypit() {
         return tyypit;
     }
@@ -64,6 +69,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
         this.tyypit  =  tyypit;
     }
 
+    @Override
     public List<String> getKielet() {
         return kielet;
     }
@@ -72,6 +78,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
         this.kielet  =  kielet;
     }
 
+    @Override
     public String getKotipaikka() {
         return kotipaikka;
     }
@@ -110,5 +117,13 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable {
 
     public void setToimipisteKoodi(String toimipisteKoodi) {
         this.toimipisteKoodi  =  toimipisteKoodi;
+    }
+
+    public String getOppilaitosTyyppiUri() {
+        return oppilaitosTyyppiUri;
+    }
+
+    public void setOppilaitosTyyppiUri(String oppilaitosTyyppiUri) {
+        this.oppilaitosTyyppiUri = oppilaitosTyyppiUri;
     }
 }

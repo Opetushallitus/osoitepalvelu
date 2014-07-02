@@ -26,6 +26,8 @@ import java.util.List;
  * Time: 2:57 PM
  */
 public class HenkiloCriteriaDto implements Serializable {
+    private static final long serialVersionUID = -6881901596982757750L;
+    
     private static final int HASH_FACTOR = 31;
     private List<String> organisaatioOids = new ArrayList<String>();
     private List<String> kayttoOikeusRayhmas = new ArrayList<String>();
@@ -44,6 +46,19 @@ public class HenkiloCriteriaDto implements Serializable {
 
     public void setKayttoOikeusRayhmas(List<String> kayttoOikeusRayhmas) {
         this.kayttoOikeusRayhmas = kayttoOikeusRayhmas;
+    }
+
+    public boolean isOrganisaatioUsed() {
+        return this.organisaatioOids != null && !this.organisaatioOids.isEmpty();
+    }
+
+    public boolean isKayttoOikeusRyhmasUsed() {
+        return this.kayttoOikeusRayhmas != null && !this.kayttoOikeusRayhmas.isEmpty();
+    }
+
+    public int getNumberOfUsedConditions() {
+        return (isOrganisaatioUsed() ? 1 : 0)
+                + (isKayttoOikeusRyhmasUsed() ? 1 : 0);
     }
 
     @Override

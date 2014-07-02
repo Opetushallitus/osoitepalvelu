@@ -83,6 +83,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         target_group_kouluta_kayttajat: 'Opintopolku-käyttäjät',
         target_group_aipal_kayttajat: 'AIPAL-käyttäjät',
 
+        target_gorup_option_tutkintotoimikunta: 'tutkintotoimikunta',
         target_group_option_organisaatio: 'organisaatio',
         target_group_option_yhteyshenkilo: 'yhteyshenkilö',
         target_group_option_kriisitiedotus: 'Kriisitiedotus (vain valmiusryhmän käyttöön)',
@@ -106,6 +107,8 @@ angular.module("I18n", [], ["$provide", function($provider) {
         search_term_omistajatyyppi: 'omistajatyyppi',
         search_term_vuosiluokka: 'vuosiluokka',
         search_term_koultuksenjarjestaja: 'koulutuksen järjestäjä',
+        search_term_opintoala: 'opintoala',
+        search_term_tutkinto: 'tutkinto',
 
         show_more_terms: 'enemmän rajausehtoja',
         hide_extra_terms: 'vähemmän rajausehtoja',
@@ -153,7 +156,16 @@ angular.module("I18n", [], ["$provide", function($provider) {
         camel_http_call_timeout_error: 'Virhe kutsuttaessa ulkoista palvelua reitillä {0}: kutsu kesti liian kauan.',
         camel_error: 'Odottamaton virhe kutsuttaessa ulkoista palvelua reitillä {0}.',
         not_found_error: 'Virhe: Etsittyä tietoa ei löytynyt.',
-        not_authorized_error: 'Virhe: Ei käyttöoikeutta pyydettyyn resurssiin.'
+        not_authorized_error: 'Virhe: Ei käyttöoikeutta pyydettyyn resurssiin.',
+        too_few_search_conditions_for_organisaatios: 'Hakua ei voida suorittaa, koska se johtaisi kaikkien organisaatioiden hakemiseen. Valitse vähintään yksi organisaatioita rajaava ehto.',
+        too_few_search_conditions_for_henkilos: 'Hakua ei voida suorittaa, koska se johtaisi kaikkien Opintopolku-käyttäjien hakemiseen. Valitse vähintään yksi käyttäjiä tai organisaatioita koskeva rajausehto.',
+
+        tutkintotoimikunta_rooli_jasen: 'Jäsen',
+        tutkintotoimikunta_rooli_puheenjohtaja: 'Puheenjohtaja',
+        tutkintotoimikunta_rooli_varapuheenjohtaja: 'Varapuheenjohtaja',
+        tutkintotoimikunta_rooli_sihteeri: 'Sihteeri',
+        tutkintotoimikunta_rooli_ulkopuolinensihteeri: 'Ulkopuolinen sihteeri',
+        tutkintotoimikunta_rooli_asiantuntija: 'Asiantuntija'
     };
     defaultValues['en'] = defaultValues['fi'];
     defaultValues['sv'] = defaultValues['fi'];

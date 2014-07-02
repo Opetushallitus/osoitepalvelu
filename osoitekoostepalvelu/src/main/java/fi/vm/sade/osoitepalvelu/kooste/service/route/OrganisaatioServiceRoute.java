@@ -59,4 +59,10 @@ public interface OrganisaatioServiceRoute {
      * @return organisaatio hierarchy results containing only active results
      */
     OrganisaatioHierarchyResultsDto findOrganisaatioHierachyByTyyppi(String tyyppi, CamelRequestContext requestContext);
+
+    /**
+     * @param requestContext the context for HTTP request received by the application to operate in
+     * @return the whole organisaatio hierachy results
+     */
+    OrganisaatioHierarchyResultsDto findOrganisaatioHierachy(CamelRequestContext requestContext);
 }

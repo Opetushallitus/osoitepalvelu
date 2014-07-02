@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+
 import java.io.Serializable;
 
 /**
@@ -42,6 +44,7 @@ public class OrganisaatioYhteysosoiteDto implements Serializable {
     private String kieli; // koodiarvo
     private OsoiteTyyppi osoiteTyyppi;
     private String osoite;
+    @DtoConversion(withClass = OrganisaatioDetailsYhteystietoDto.class, path = "postinumeroUri")
     private String postinumero; // koodiarvo
 
     public String getKieli() {

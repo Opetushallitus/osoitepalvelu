@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +49,11 @@ public class OrganisaatioDetailsDto implements Serializable {
     private List<OrganisaatioDetailsYhteystietoDto> yhteystiedot  =  new ArrayList<OrganisaatioDetailsYhteystietoDto>();
     private List<String> vuosiluokat  =  new ArrayList<String>();
     private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos  =  new ArrayList<OrganisaatioYhteystietoElementtiDto>();
+    @DtoConversion
+    private String alkuPvm;
+    @DtoConversion
+    private String lakkautusPvm;
+
 
     public Long getVersion() {
         return version;
@@ -182,5 +189,21 @@ public class OrganisaatioDetailsDto implements Serializable {
 
     public void setKayntiosoite(OrganisaatioOsoiteDto kayntiosoite) {
         this.kayntiosoite = kayntiosoite;
+    }
+
+    public String getAlkuPvm() {
+        return alkuPvm;
+    }
+
+    public void setAlkuPvm(String alkuPvm) {
+        this.alkuPvm = alkuPvm;
+    }
+
+    public String getLakkautusPvm() {
+        return lakkautusPvm;
+    }
+
+    public void setLakkautusPvm(String lakkautusPvm) {
+        this.lakkautusPvm = lakkautusPvm;
     }
 }

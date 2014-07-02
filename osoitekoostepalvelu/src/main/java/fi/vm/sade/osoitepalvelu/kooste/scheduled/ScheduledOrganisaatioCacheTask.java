@@ -19,15 +19,21 @@ package fi.vm.sade.osoitepalvelu.kooste.scheduled;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasDisabledCasTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
+import org.apache.camel.RuntimeCamelException;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * Keep organisaatios in cache.
@@ -38,39 +44,185 @@ import java.util.List;
  */
 @Service
 public class ScheduledOrganisaatioCacheTask extends AbstractService {
+    // While the timeout for Camel requests is 15s with 2 retries, this should allow
+    // Organisaatio service to have over 2 minutes of downtime or couple of 500 errors at any given point
+    // (while the overall process would take about half an hour):
+    public static final int MAX_TRIES = 3;
+    public static final int WAIT_BEFORE_RETRY_MILLIS = 3000;
+
     @Autowired
     private OrganisaatioService organisaatioService;
 
     @Autowired
     private OrganisaatioServiceRoute organisaatioServiceRoute;
 
+    @Autowired
+    private OrganisaatioRepository organisaatioRepository;
+
     @Value("${web.url.cas}")
     protected String casService;
 
-    // Every night at 3 AM
+    @Value("${organisaatio.cache.valid.from:}")
+    private String cacheValidFrom;
+
+
+
+    // Every working day night at 3 AM
     @Scheduled(cron = "0 0 3 * * MON-FRI")
     public void refreshOrganisaatioCache() {
         logger.info("BEGIN SCHEDULED refreshOrganisaatioCache.");
+        showCacheState();
 
-        // Since this is a system call and we don't have access to SpringSecurity's context, override the usual
-        // CasTicketCache by one that falls back to system user account CasTicketProvider unless there was a cache hit:
-        CamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(
+        // No CAS here (not needed for reading organisaatio service):
+        final CamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(
                 new CasDisabledCasTicketProvider()));
 
-        List<String> oids = organisaatioServiceRoute.findAllOrganisaatioOids(context);
+        List<String> oids = retryOnCamelError(new Callable<List<String>>() {
+            public List<String> call() throws Exception {
+                return organisaatioServiceRoute.findAllOrganisaatioOids(context);
+            }
+        }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
+        removeCachedDeletedOrganisaatios(oids);
+
         logger.info("Found {} organisaatios to refresh.", oids.size());
-        int i = 0;
-        for (String oid : oids) {
-            ++i;
-            // This will purge the possibly cached organisaatio from both method level memory based EH cache and
-            // and the underlying MongoDB cache:
-            organisaatioService.purgeOrganisaatioByOidCache(oid);
-            // ...and renew the cache:
-            organisaatioService.getdOrganisaatioByOid(oid, context);
-            logger.info("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
+        try {
+            int i = 0;
+            for (final String oid : oids) {
+                ++i;
+                // This will purge the possibly cached organisaatio from both method level memory based EH cache and
+                // and the underlying MongoDB cache:
+                organisaatioService.purgeOrganisaatioByOidCache(oid);
+                // ...and renew the cache:
+                retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
+                    public OrganisaatioDetailsDto call() throws Exception {
+                        return organisaatioService.getdOrganisaatioByOid(oid, context);
+                    }
+                }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
+
+                logger.debug("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
+            }
+        } finally {
+            logger.debug("UPDATING y-tunnus details...");
+            organisaatioService.updateOrganisaatioYtunnusDetails(context);
+            logger.debug("DONE UPDATING y-tunnus details");
         }
 
         logger.info("END SCHEDULED refreshOrganisaatioCache.");
+    }
+
+    private void removeCachedDeletedOrganisaatios(List<String> oids) {
+        logger.info("REMOVING obsolete organisaatios from cache.");
+        List<String> cachedObsoleteOids = organisaatioService.findAllOidsOfCachedOrganisaatios();
+        cachedObsoleteOids.removeAll(oids);
+        for (String oid : cachedObsoleteOids) {
+            organisaatioService.purgeOrganisaatioByOidCache(oid);
+        }
+        logger.info("REMOVED {} obsolete organsiaatios from cache.", cachedObsoleteOids.size());
+    }
+
+    /**
+     * Does not purge fresh cache records but ensures that all organisaatios are cached.
+     */
+    public void ensureOrganisaatioCacheFresh() {
+        logger.info("BEGIN SCHEDULED ensureOrganisaatioCacheFresh.");
+        showCacheState();
+
+        LocalDate cacheInvalidBefore = null;
+        if (cacheValidFrom != null && cacheValidFrom.length() > 0) {
+            cacheInvalidBefore = LocalDate.parse(cacheValidFrom);
+        }
+
+        // No CAS here (not needed for reading organisaatio service):
+        final DefaultCamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(
+                new CasDisabledCasTicketProvider()));
+        if (cacheInvalidBefore != null && new DateTime().compareTo(cacheInvalidBefore.toDateTimeAtStartOfDay()) < 0 ) {
+            context.setOverriddenTime(cacheInvalidBefore.toDateTimeAtStartOfDay());
+        }
+
+        List<String> oids = retryOnCamelError(new Callable<List<String>>() {
+            public List<String> call() throws Exception {
+                return organisaatioServiceRoute.findAllOrganisaatioOids(context);
+            }
+        }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
+        removeCachedDeletedOrganisaatios(oids);
+
+        logger.info("Found {} organisaatios to ensure cache.", oids.size());
+        boolean infoUpdated = false;
+        try {
+            int i = 0;
+            for (final String oid : oids) {
+                ++i;
+                // ...and renew the cache:
+                long rc = context.getRequestCount();
+                OrganisaatioDetailsDto details = retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
+                    public OrganisaatioDetailsDto call() throws Exception {
+                        return organisaatioService.getdOrganisaatioByOid(oid, context);
+                    }
+                }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
+
+                if (rc != context.getRequestCount()) {
+                    infoUpdated = true;
+                    logger.debug("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
+                } else if(i % 1000 == 0) {
+                    logger.info("Organisaatio ensure data fresh task status: {} / {}", new Object[]{i, oids.size()});
+                }
+            }
+        } finally {
+            if (infoUpdated) {
+                logger.debug("UPDATING y-tunnus details...");
+                organisaatioService.updateOrganisaatioYtunnusDetails(context);
+                logger.debug("DONE UPDATING y-tunnus details");
+            }
+        }
+
+        logger.info("END SCHEDULED ensureOrganisaatioCacheFresh.");
+    }
+
+    private void showCacheState() {
+        DateTime oldestEntry = organisaatioRepository.findOldestCachedEntry();
+        if (oldestEntry != null) {
+            logger.info("Oldest cache entry: {}", oldestEntry);
+        } else {
+            logger.info("No cache entries found.");
+        }
+    }
+
+    /**
+     * Retries implemented here, not in the actual Camel routes, because we don't want them to be part of every Camel
+     * call (calls made by the user). In this scheduled task, however, it is more important to continue the process
+     * after possible downtime.
+     *
+     * @param task to call
+     * @param maxRetries max retries
+     * @param retryWaitTimeMillis millis to wait before retryOnCamelError
+     * @param <T> type to return
+     * @return the result of the successful call
+     */
+    protected<T> T retryOnCamelError(Callable<T> task, int maxRetries, long retryWaitTimeMillis) {
+        RuntimeCamelException originalError = null;
+        for (int j = 0; j < maxRetries+1; ++j) {
+            try {
+                return task.call();
+            } catch(Exception e) {
+                if (!(e instanceof RuntimeCamelException)) {
+                    // For every other error, fail:
+                    throw new IllegalStateException("Scheduled task error:"+e.getMessage(), e);
+                }
+                if (originalError == null) {
+                    originalError =(RuntimeCamelException) e;
+                }
+                logger.warn("Error fetching data: " + e.getMessage(), e);
+                try {
+                    Thread.sleep(retryWaitTimeMillis);
+                } catch(InterruptedException er) {}
+                if (j < maxRetries) {
+                    logger.info("Retrying...");
+                }
+            }
+        }
+        logger.error("SCHEDULED task exhausted after " + maxRetries
+                + " retries. Original exception: " + originalError.getMessage(), originalError);
+        throw originalError;
     }
 
 }

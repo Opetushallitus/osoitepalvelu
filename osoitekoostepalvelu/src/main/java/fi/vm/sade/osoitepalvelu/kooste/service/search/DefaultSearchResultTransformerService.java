@@ -21,6 +21,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Ordering;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.Combiner;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
@@ -28,16 +29,15 @@ import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsYhteystietoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHenkiloDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoElementtiDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto.SearchType;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
+
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -71,7 +71,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
     @Override
     public SearchResultsPresentationDto transformToResultRows(SearchResultsDto results,
-                final SearchResultPresentation presentation, CamelRequestContext context) {
+                final SearchResultPresentation presentation, CamelRequestContext context, SearchType searchType) {
         List<SearchResultRowDto> transformedResults = new ArrayList<SearchResultRowDto>();
 
         List<SearchResultRowDto> organisaatioResults = transformOrganisaatios(results.getOrganisaatios(), presentation);
@@ -80,6 +80,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
         List<SearchResultRowDto> henkiloResults = transformHenkilos(results.getHenkilos(), presentation);
         transformedResults.addAll(henkiloResults);
 
+        List<SearchResultRowDto> aituHenkiloResults = transformToimikuntaJasens(results.getAituToimikuntas(), presentation);
+        transformedResults.addAll(aituHenkiloResults);
+        
         resolveMissingOrganisaatioRelatedDetails(transformedResults, presentation, context);
 
         List<SearchResultRowDto> rows = new ArrayList<SearchResultRowDto>(Collections2
@@ -89,6 +92,35 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 return presentation.isResultRowIncluded(result);
             }
         }));
+        
+        
+        if( searchType == SearchType.EMAIL ) {
+            // Kyseessä email-tyyppinen haku, joten nyt suodatetaan kaikki dublikaatti-emailit pois.
+            Set<String> emails = new TreeSet<String>();
+            List<SearchResultRowDto> filtteredTransformedResults = new ArrayList<SearchResultRowDto>();
+            for (SearchResultRowDto dto : rows) {
+                if(dto.getHenkiloEmail() != null && !emails.contains(dto.getHenkiloEmail())) {
+                    emails.add(dto.getHenkiloEmail());
+                    filtteredTransformedResults.add(dto);
+                } else if(dto.getEmailOsoite() != null && !emails.contains(dto.getEmailOsoite())) {
+                    emails.add(dto.getEmailOsoite());
+                    filtteredTransformedResults.add(dto);
+                } else if(dto.getKoulutusneuvonnanEmail() != null && !emails.contains(dto.getKoulutusneuvonnanEmail())) {
+                    emails.add(dto.getKoulutusneuvonnanEmail());
+                    filtteredTransformedResults.add(dto);
+                } else if(dto.getKriisitiedotuksenEmail() != null && !emails.contains(dto.getKriisitiedotuksenEmail())) {
+                    emails.add(dto.getKriisitiedotuksenEmail());
+                    filtteredTransformedResults.add(dto);
+                } else if(dto.getViranomaistiedotuksenEmail() != null && !emails.contains(dto.getViranomaistiedotuksenEmail())) {
+                    emails.add(dto.getViranomaistiedotuksenEmail());
+                    filtteredTransformedResults.add(dto);
+                }                
+            }
+            
+            // Asetetaan tulosjoukoksi filtteröity listaus.
+            rows = filtteredTransformedResults;
+        }
+        
         if (!organisaatioResults.isEmpty() && !henkiloResults.isEmpty()) {
             // Mix the organisation and henkilo based rows by organisaatio's oid
             rows = applyOrdering(rows);
@@ -132,12 +164,12 @@ public class DefaultSearchResultTransformerService extends AbstractService
         Set<OrganisaatioResultAggregateDto> organisaatioAggregates = new LinkedHashSet<OrganisaatioResultAggregateDto>();
         for (final OrganisaatioResultDto result : results) {
             Combiner<OrganisaatioResultAggregateDto> combiner = new Combiner<OrganisaatioResultAggregateDto>(
-                    new Combiner.Creator<OrganisaatioResultAggregateDto> () {
+                    new Combiner.Creator<OrganisaatioResultAggregateDto>() {
                 public OrganisaatioResultAggregateDto create(Combiner.PullSource src) {
-                    return new OrganisaatioResultAggregateDto( result,
-                                src.get(OrganisaatioYhteystietoDto.class).orNull(),
-                                src.get(OsoitteistoDto.class).orNull(),
-                                src.get(OsoitteistoDto.class).orNull() );
+                    return new OrganisaatioResultAggregateDto(result,
+                                (OrganisaatioYhteystietoDto)src.get(OrganisaatioYhteystietoDto.class).orNull(),
+                                (OsoitteistoDto)src.get(OsoitteistoDto.class).orNull(),
+                                (OsoitteistoDto)src.get(OsoitteistoDto.class).orNull());
                 }
             });
             if (presentation.isPositosoiteIncluded()) {
@@ -192,11 +224,11 @@ public class DefaultSearchResultTransformerService extends AbstractService
         Set<HenkiloResultAggregateDto> henkiloAggregates = new LinkedHashSet<HenkiloResultAggregateDto>();
         for (final HenkiloHakuResultDto result : henkilos) {
             new Combiner<HenkiloResultAggregateDto>(
-                    new Combiner.Creator<HenkiloResultAggregateDto> () {
+                    new Combiner.Creator<HenkiloResultAggregateDto>() {
                 public HenkiloResultAggregateDto create(Combiner.PullSource src) {
-                    return new HenkiloResultAggregateDto( result,
-                            src.get(OrganisaatioHenkiloDto.class).orNull(),
-                            src.get(HenkiloOsoiteDto.class).orNull() );
+                    return new HenkiloResultAggregateDto(result,
+                            (OrganisaatioHenkiloDto)src.get(OrganisaatioHenkiloDto.class).orNull(),
+                            (HenkiloOsoiteDto)src.get(HenkiloOsoiteDto.class).orNull());
                 }
             }).combinedWith(OrganisaatioHenkiloDto.class, result.getOrganisaatioHenkilos())
                 .withRepeated(HenkiloOsoiteDto.class, result.getOsoittees())
@@ -209,6 +241,28 @@ public class DefaultSearchResultTransformerService extends AbstractService
         return results;
     }
 
+    protected List<SearchResultRowDto> transformToimikuntaJasens(List<AituToimikuntaResultDto> aituToimikuntas,
+                                                                 SearchResultPresentation presentation) {
+        List<SearchResultRowDto> results = new ArrayList<SearchResultRowDto>();
+
+        Set<AituToimikuntaJasenAggregateDto> aggregates = new LinkedHashSet<AituToimikuntaJasenAggregateDto>();
+        for (final AituToimikuntaResultDto toimikunta : aituToimikuntas) {
+            new Combiner<AituToimikuntaJasenAggregateDto>(
+                new Combiner.Creator<AituToimikuntaJasenAggregateDto>() {
+                    public AituToimikuntaJasenAggregateDto create(Combiner.PullSource src) {
+                        return new AituToimikuntaJasenAggregateDto(toimikunta,
+                                (AituJasenyysDto)src.get(AituJasenyysDto.class).orNull());
+                }
+            }).combinedWith(AituJasenyysDto.class, toimikunta.getJasenyydet())
+                .atLeastOne().to(aggregates);
+        }
+        for (AituToimikuntaJasenAggregateDto aggregate : aggregates) {
+            SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto(), presentation.getLocale());
+            results.add(row);
+        }
+
+        return results;
+    }
 
     protected void resolveMissingOrganisaatioRelatedDetails(List<SearchResultRowDto> results,
                             SearchResultPresentation presentation, CamelRequestContext context) {
@@ -216,7 +270,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
             return;
         }
 
-        Map<String, OrganisaatioDetailsDto> organisaatioByOidCache = new HashMap<String, OrganisaatioDetailsDto>();
         List<DetailCopier> copiers = new ArrayList<DetailCopier>();
 
         if (presentation.isOrganisaationNimiIncluded()) {
@@ -352,20 +405,31 @@ public class DefaultSearchResultTransformerService extends AbstractService
             return;
         }
 
-        for (SearchResultRowDto result : results) {
-            String oid = result.getOrganisaatioOid();
-            if (oid != null) {
-                for (DetailCopier copier : copiers) {
-                    OrganisaatioDetailsDto details;
-                    if (cache.containsKey(oid)) {
-                        details = cache.get(oid);
-                    } else {
-                        details = organisaatioService.getdOrganisaatioByOid(oid, context);
-                        cache.put(oid, details);
+        boolean newDetailsFetched = false;
+        try {
+            for (SearchResultRowDto result : results) {
+                String oid = result.getOrganisaatioOid();
+                if (oid != null) {
+                    for (DetailCopier copier : copiers) {
+                        OrganisaatioDetailsDto details;
+                        if (cache.containsKey(oid)) {
+                            details = cache.get(oid);
+                        } else {
+                            long rc = context.getRequestCount();
+                            details = organisaatioService.getdOrganisaatioByOid(oid, context);
+                            if (context.getRequestCount() != rc) {
+                                newDetailsFetched = true;
+                            }
+                            cache.put(oid, details);
+                        }
+                        copier.copy(details, result, locale);
                     }
-                    copier.copy(details, result, locale);
-                }
 
+                }
+            }
+        } finally {
+            if (newDetailsFetched)  {
+                organisaatioService.updateOrganisaatioYtunnusDetails(context);
             }
         }
     }
@@ -478,8 +542,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 postinumero = osoite.getPostinumero();
                 postitoimipaikka = osoite.getPostitoimipaikka();
             }
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or("") );
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or("") );
+            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or(""));
+            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or(""));
         }
         if (presentation.isKayntiosoiteIncluded()) {
             SearchResultOsoiteDto osoite = row.getKayntiosoite();
@@ -490,8 +554,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 postinumero = osoite.getPostinumero();
                 postitoimipaikka = osoite.getPostitoimipaikka();
             }
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or("") );
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or("") );
+            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or(""));
+            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or(""));
         }
         if (presentation.isPuhelinnumeroIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getPuhelinnumero());

@@ -21,7 +21,9 @@ import fi.ratamaa.dtoconverter.mapper.implementations.AnnotationResolvingDtoConv
 import fi.ratamaa.dtoconverter.mapper.implementations.CamelCaseResolvingDtoConversionMapper;
 import fi.ratamaa.dtoconverter.mapper.implementations.MapDtoconversionMapper;
 import fi.ratamaa.dtoconverter.mapper.implementations.ValidatorFeatureDtoConverterMapper;
-import fi.ratamaa.dtoconverter.mapper.implementations.proxy.ProxyObjectDtoConversionMapper;
+import fi.ratamaa.dtoconverter.typeconverter.TypeConversionContainer;
+import fi.ratamaa.dtoconverter.typeconverter.TypeConverterAdapter;
+import org.joda.time.LocalDate;
 
 /**
  * User: ratamaa
@@ -31,9 +33,24 @@ import fi.ratamaa.dtoconverter.mapper.implementations.proxy.ProxyObjectDtoConver
 public abstract class AbstractDtoConverter extends AbstractBaseDtoConverter {
     protected void registerMappers(fi.ratamaa.dtoconverter.mapper.resolver.MappersContainer mappers) {
         mappers
-            .add(new ProxyObjectDtoConversionMapper(getProxyMappers()))
             .add(new AnnotationResolvingDtoConversionMapper()).add(new CamelCaseResolvingDtoConversionMapper())
             .add(new MapDtoconversionMapper())
             .add(new ValidatorFeatureDtoConverterMapper(configuration().getValidationFactory()));
+    }
+
+    @Override
+    protected void registerConverters(TypeConversionContainer conversions) {
+        super.registerConverters(conversions);
+
+        conversions.add(String.class, LocalDate.class, new TypeConverterAdapter<String, LocalDate>() {
+            public LocalDate convert(String obj) {
+                // uses ISODateTimeFormat.localDateParser() that covers SQL date format
+                return LocalDate.parse(obj);
+            }
+        }).add(LocalDate.class, String.class, new TypeConverterAdapter<LocalDate, String>() {
+            public String convert(LocalDate obj) {
+                return obj.toString(); // ISO8601 format (yyyy-MM-dd)
+            }
+        });
     }
 }

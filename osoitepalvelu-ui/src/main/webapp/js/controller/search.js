@@ -19,7 +19,8 @@
  */
 var SearchController = function($scope, $log, $modal, $location, $filter, SearchService,
                                 SearchTypes, TargetGroups, EmptyTerms,
-                                FilterHelper, SavesService, OptionsService, LocalisationService) {
+                                FilterHelper, ArrayHelper, KoodiHelper, SavesService,
+                                OptionsService, LocalisationService) {
     $scope.msg = function( key, params ) {
         return LocalisationService.t(key, params);
     };
@@ -85,6 +86,8 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             //OptionsService.listOmistajatyyppis(function(data) { $scope.options.omistajatyyppis = data; });
             OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
             OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
+//            OptionsService.listOpintoalas(function(data) {$scope.options.opintoalas = data;});
+//            OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
         }
 
         $scope.terms = SearchService.getTerms();
@@ -118,6 +121,20 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
 
     $scope.isShowAipalTerm = function() {
         return $scope.selectedTargetGroupTypes.indexOf('AIPAL_KAYTTAJAT') != -1;
+    };
+
+    $scope.isShowVuosiluokkaTerm = function(){
+        var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
+        if (oppilaitosTyyppisWithVuosiluokkaSetting) {
+            var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
+            var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
+                oppilaitosTyyppisWithVuosiluokka);
+            if (!visible) {
+                $scope.terms.vuosiluokkas = [];
+            }
+            return visible;
+        }
+        return true;
     };
 
     $scope.handleSaveSelected = function() {
@@ -183,23 +200,32 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
     $scope.saveSearch = function() {
         $log.info("Show save popup.");
 
+        var onSaveNew = function() { return function(newSaveId) {
+            $log.info("New save with id: " + newSaveId);
+            SearchService.updateSelectedSearch(newSaveId);
+            updateSaves();
+        } };
         var modalInstance = null;
         if( $scope.selectedSavedSearch ) {
             modalInstance = $modal.open({
                 templateUrl: 'partials/overwriteSavePopup.html',
                 controller: NewSavePopupController,
-                resolve: {save: getCurrentSaveDetails}
+                resolve: {
+                    save: getCurrentSaveDetails,
+                    onSaveNew: onSaveNew
+                }
             });
         } else {
-
             modalInstance = $modal.open({
                 templateUrl: 'partials/newSavePopup.html',
                 controller: NewSavePopupController,
-                resolve: {save: getCurrentSaveDetails}
+                resolve: {
+                    save: getCurrentSaveDetails,
+                    onSaveNew: onSaveNew
+                }
             });
         }
         modalInstance.result.then(function () {
-            updateSaves();
         }, function () {});
     };
 
@@ -233,5 +259,5 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
 }
 
 SearchController.$inject = ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
-                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "SavesService",
-                     "OptionsService", "LocalisationService"];
+                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "KoodiHelper",
+                     "SavesService", "OptionsService", "LocalisationService"];

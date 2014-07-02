@@ -17,8 +17,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * User: ratamaa
@@ -26,6 +24,8 @@ import java.util.Map;
  * Time: 1:10 PM
  */
 public class HenkiloListResultDto implements Serializable {
+    private static final long serialVersionUID = 4343659088794094264L;
+    
     private String etunimet;
     private String kutsunanimi;
     private String sukunimi;

@@ -48,14 +48,20 @@ angular.module('Helpers', [])
     };
 })
 .service('ArrayHelper', ["ExtractHelper", "EqualsHelper", function(ExtractHelper,EqualsHelper) {
-    this.extract = function(arr, fields) {
+    var extractFn = function(arr, fn) {
         var results = [];
         angular.forEach(arr, function(v) {
-            results.push( ExtractHelper.extract(v, fields) );
+            results.push( fn(v) );
         });
         return results;
     };
-    this.containsEqual = function(arr, value) {
+    this.extract = function(arr, fields) {
+        if (fields instanceof Function) {
+            return extractFn(arr, fields);
+        }
+        return extractFn(arr, function(v) { return ExtractHelper.extract(v, fields); });
+    };
+    var containsEqual = function(arr, value) {
         for( var i in arr ) {
             if( EqualsHelper.equal(arr[i], value) ) {
                 return true;
@@ -63,12 +69,14 @@ angular.module('Helpers', [])
         }
         return false;
     };
-    this.ensureArray = function(arr) {
+    this.containsEqual = containsEqual;
+    var ensureArray = function(arr) {
         if( !(arr instanceof Array) ) {
             return [arr];
         }
         return arr;
     };
+    this.ensureArray = ensureArray;
     this.forAll = function(arr, callback) {
         var conditionsMet = true;
         angular.forEach( arr, function(item, key) {
@@ -77,6 +85,20 @@ angular.module('Helpers', [])
             }
         });
         return conditionsMet;
+    };
+    var forAny = function(arr, callback) {
+        for (var k in arr) {
+            var v = arr[k];
+            if (callback(v, k)) {
+                return true;
+            }
+        }
+        return false;
+    };
+    this.forAny = forAny;
+    this.containsAny = function(arr, toContain) {
+        toContain = ensureArray(toContain);
+        return forAny(ensureArray(arr), function(v,k) { return containsEqual(toContain, v); });
     };
 }])
 .service('FilterHelper', ["ExtractHelper", "ArrayHelper", function(ExtractHelper, ArrayHelper) {
@@ -105,6 +127,19 @@ angular.module('Helpers', [])
                 return ArrayHelper.containsEqual( arr, ExtractHelper.extract(val, fields) );
             }
         }
+    };
+}])
+.service('KoodiHelper', [function() {
+    this.koodiValue = function(v) {
+        var _Pos = v.indexOf("_");
+        if (_Pos > 0) {
+            v = v.substring(_Pos+1);
+        }
+        var hashPos = v.indexOf("#");
+        if (hashPos > 0) {
+            v = v.substring(0,hashPos);
+        }
+        return v;
     };
 }])
 .directive('fullSizeGrid', ['$timeout', '$log', function ($timeout, $log) {

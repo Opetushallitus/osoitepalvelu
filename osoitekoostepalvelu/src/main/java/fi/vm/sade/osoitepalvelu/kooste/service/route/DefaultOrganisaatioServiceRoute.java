@@ -49,6 +49,7 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     private static final String SINGLE_ORGANISAATIO_PATH  =  "/${in.headers.oid}";
 
     private static final String ORGANISAATIO_HIERARCHY_ENDPOINT = "direct:organisaatioHierarchyHaku";
+    private static final String ORGANISAATIO_HIERARCHY_BY_TYYPPI_ENDPOINT = "direct:organisaatioHierarchyByTyyppiHaku";
     private static final String ORGANISAATIO_HIERARCHY_PATH = "/hae";
     private static final String ORGANISAATIO_HIERACHY_TYYPPI_PARAM = "organisaatiotyyppi";
     private static final String ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM = "vainAktiiviset";
@@ -72,6 +73,7 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 from(ORGANSIAATIO_OID_LIST_ENDPOINT),
                 headers()
                         .get()
+
                         .path(ORGANISAATIO_OIDS_PATH)
         )
         .process(organisaatioCallInOutDebug)
@@ -112,15 +114,29 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     }
 
     protected void buildOrganisaatioHierarchyHaku() {
-        Debugger authenticationCallInOutDebug  =  debug(ORGANISAATIO_HIERARCHY_ENDPOINT
+        Debugger authenticationCallInOutDebug  =  debug(ORGANISAATIO_HIERARCHY_BY_TYYPPI_ENDPOINT
+                +SERVICE_CALL_ORGANSIAATIO_POSTFIX);
+        headers(
+                from(ORGANISAATIO_HIERARCHY_BY_TYYPPI_ENDPOINT),
+                headers()
+                        .get()
+                        .path(ORGANISAATIO_HIERARCHY_PATH)
+                            .param(ORGANISAATIO_HIERACHY_TYYPPI_PARAM).optional().valueFromBody().toQuery()
+                            .param(ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM).value(true).toQuery()
+        )
+        .process(authenticationCallInOutDebug)
+        .to(uri(organisaatioServiceRestUrl))
+        .process(authenticationCallInOutDebug)
+        .process(jsonToDto(new TypeReference<OrganisaatioHierarchyResultsDto>() {}));
+
+        authenticationCallInOutDebug  =  debug(ORGANISAATIO_HIERARCHY_ENDPOINT
                 +SERVICE_CALL_ORGANSIAATIO_POSTFIX);
         headers(
                 from(ORGANISAATIO_HIERARCHY_ENDPOINT),
                 headers()
                         .get()
                         .path(ORGANISAATIO_HIERARCHY_PATH)
-                            .param(ORGANISAATIO_HIERACHY_TYYPPI_PARAM).optional().valueFromBody().toQuery()
-                            .param(ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM).value(true).toQuery()
+                        .param(ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM).value(true).toQuery()
         )
         .process(authenticationCallInOutDebug)
         .to(uri(organisaatioServiceRestUrl))
@@ -157,7 +173,14 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     public OrganisaatioHierarchyResultsDto findOrganisaatioHierachyByTyyppi(String tyyppi,
                                                                             CamelRequestContext requestContext) {
         return sendBodyHeadersAndProperties(getCamelTemplate(),
-                ORGANISAATIO_HIERARCHY_ENDPOINT, tyyppi,
+                ORGANISAATIO_HIERARCHY_BY_TYYPPI_ENDPOINT, tyyppi,
+                headerValues().map(), requestContext, OrganisaatioHierarchyResultsDto.class);
+    }
+
+    @Override
+    public OrganisaatioHierarchyResultsDto findOrganisaatioHierachy(CamelRequestContext requestContext) {
+        return sendBodyHeadersAndProperties(getCamelTemplate(),
+                ORGANISAATIO_HIERARCHY_ENDPOINT, "",
                 headerValues().map(), requestContext, OrganisaatioHierarchyResultsDto.class);
     }
 }

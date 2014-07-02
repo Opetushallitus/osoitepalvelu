@@ -103,9 +103,20 @@
                 </div>
                 <div class="term" ng-show="isShowTutkintotoimikuntaRooliTerm()">
                     <select ui-select2 multiple id="tutkintotoimikuntaRoolis" class="form-control" ng-model="terms.tutkintotoimikuntaRoolis" data-placeholder="{{msg('search_term_tutkintotoimikunta_rooli')}}">
-                        <option ng-repeat="opt in options.tutkintotoimikuntaRoolis" value="{{opt.type}}">{{opt.name}}</option>
+                        <option ng-repeat="opt in options.tutkintotoimikuntaRoolis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
+                <!--<div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm()"></div>-->
+                <!--<div class="term" ng-show="isShowTutkintotoimikuntaTerm()">-->
+                    <!--<select ui-select2 multiple id="opintoalas" class="form-control" ng-model="terms.opintoalas" data-placeholder="{{msg('search_term_opintoala')}}">-->
+                        <!--<option ng-repeat="opt in options.opintoalas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--<div class="term" ng-show="isShowTutkintotoimikuntaTerm()">-->
+                    <!--<select ui-select2 multiple id="tutkintos" class="form-control" ng-model="terms.tutkintos" data-placeholder="{{msg('search_term_tutkinto')}}">-->
+                        <!--<option ng-repeat="opt in options.tutkintos" value="{{opt.koodiUri}}">{{opt.nimi}}</option>-->
+                    <!--</select>-->
+                <!--</div>-->
                 <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm()"></div>
                 <div class="term" ng-show="isShowKoulutaTerm()">
                     <select ui-select2 multiple id="koulutaRoolis" class="form-control" ng-model="terms.koulutaRoolis" data-placeholder="{{msg('search_term_kouluta_rooli')}}">
@@ -114,7 +125,7 @@
                 </div>
                 <div class="term" ng-show="isShowAipalTerm()">
                     <select ui-select2 multiple id="aipalRoolis" class="form-control" ng-model="terms.aipalRoolis" data-placeholder="{{msg('search_term_aipal_rooli')}}">
-                        <option ng-repeat="opt in options.aipalRoolis" value="{{opt.id}}">{{opt.name}}</option>
+                        <option ng-repeat="opt in options.aipalRoolis" value="{{opt.koodiUri}}">{{opt.name}}</option>
                     </select>
                 </div>
                 <div class="term-separator" ng-show="isShowKoulutaTerm() || isShowAipalTerm()"></div>
@@ -141,7 +152,7 @@
                     </select>
                 </div>
                 <div class="term-separator"></div>
-                <div class="term">
+                <div class="term" ng-show="isShowVuosiluokkaTerm()">
                     <select ui-select2 multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas" data-placeholder="{{msg('search_term_vuosiluokka')}}">
                         <option ng-repeat="opt in options.vuosiluokkas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>

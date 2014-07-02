@@ -17,7 +17,13 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.dto.converter;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
+import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsYhteystietoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoiteDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * User: ratamaa
@@ -26,4 +32,22 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class OrganisaatioDtoConverter extends AbstractDtoConverter {
+
+    public OrganisaatioYhteystietoHakuResultDto convert(OrganisaatioDetails from, OrganisaatioYhteystietoHakuResultDto to) {
+        convertValue(from, to);
+        for (OrganisaatioDetailsYhteystietoDto yhteystieto : from.getYhteystiedot()) {
+            List<OrganisaatioYhteysosoiteDto> target = null;
+            if (yhteystieto.getOsoiteTyyppi() != null && yhteystieto.getOsoiteTyyppi().endsWith("posti")) {
+                target = to.getPostiosoite();
+            } else if (yhteystieto.getOsoiteTyyppi() != null && yhteystieto.getOsoiteTyyppi().endsWith("kaynti")) {
+                target = to.getKayntiosoite();
+            }
+            if (target != null) {
+                OrganisaatioYhteysosoiteDto yhteystietoTargetDto = convert(yhteystieto, new OrganisaatioYhteysosoiteDto());
+                target.add(yhteystietoTargetDto);
+            }
+        }
+        return to;
+    }
+
 }

@@ -26,6 +26,8 @@ import java.util.List;
  * Time: 1:34 PM
  */
 public class OrganisaatioHierarchyResultsDto implements Serializable {
+    private static final long serialVersionUID = -1619343744450175180L;
+    
     private int numHits;
     private List<OrganisaatioHierarchyDto> organisaatiot = new ArrayList<OrganisaatioHierarchyDto>();
 

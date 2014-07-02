@@ -24,6 +24,8 @@ import java.io.Serializable;
  * Time: 2:10 PM
  */
 public class HenkiloKayttajatiedotDto implements Serializable {
+    private static final long serialVersionUID = -4770976787054761669L;
+    
     private String username;
 
     public String getUsername() {

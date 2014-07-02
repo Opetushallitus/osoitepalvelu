@@ -21,9 +21,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.mvc.dto.FilteredSearchParametersDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultTransformerService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchService;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentationByAddressFieldsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
@@ -76,14 +74,15 @@ public class SeachController extends AbstractMvcController implements Serializab
     @RequestMapping(value = "list.json", method  =  RequestMethod.POST)
     @ResponseBody
     public SearchResultsPresentationDto list(@RequestBody FilteredSearchParametersDto searchParameters,
-                                                @RequestParam("lang") String lang) {
+                            @RequestParam("lang") String lang)
+            throws TooFewSearchConditionsForOrganisaatiosException, TooFewSearchConditionsForHenkilosException {
         CamelRequestContext context  =  new DefaultCamelRequestContext();
         searchParameters.getSearchTerms().setLocale(parseLocale(lang));
         SearchResultsDto results = searchService.find(searchParameters.getSearchTerms(), context);
         SearchResultPresentation presentation  =  new SearchResultPresentationByAddressFieldsDto(
                 searchParameters.getSearchTerms(),
                 searchParameters.getNonIncludedOrganisaatioOids());
-        return resultTransformerService.transformToResultRows(results, presentation, context);
+        return resultTransformerService.transformToResultRows(results, presentation, context, searchParameters.getSearchTerms().getSearchType());
     }
 
     /**
@@ -117,7 +116,9 @@ public class SeachController extends AbstractMvcController implements Serializab
      */
     @RequestMapping(value = "excel.do", method  =  RequestMethod.GET)
     public View downloadExcel(@RequestParam("downloadId") String downlaodId,
-                               @RequestParam("lang") String lang) throws NotFoundException {
+                   @RequestParam("lang") String lang)
+            throws NotFoundException, TooFewSearchConditionsForOrganisaatiosException,
+                    TooFewSearchConditionsForHenkilosException {
         String storeKey  =  resultTransformerService.getLoggeInUserOid() + "@" + downlaodId;
         FilteredSearchParametersDto searchParameters  =  storedParameters.get(storeKey);
         if(searchParameters  == null) {
@@ -131,7 +132,7 @@ public class SeachController extends AbstractMvcController implements Serializab
                 searchParameters.getSearchTerms(),
                 searchParameters.getNonIncludedOrganisaatioOids());
         final SearchResultsPresentationDto searchResults  =  resultTransformerService
-                .transformToResultRows(results, presentation, context);
+                .transformToResultRows(results, presentation, context, searchParameters.getSearchTerms().getSearchType());
         return new AbstractExcelView() {
             @Override
             protected void buildExcelDocument(Map<String, Object> model, HSSFWorkbook workbook, HttpServletRequest request,

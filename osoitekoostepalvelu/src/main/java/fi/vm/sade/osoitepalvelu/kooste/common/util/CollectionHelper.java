@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by ratamaa on 15.4.2014.
  */
-public class CollectionHelper {
+public final class CollectionHelper {
 
     private CollectionHelper() {
     }

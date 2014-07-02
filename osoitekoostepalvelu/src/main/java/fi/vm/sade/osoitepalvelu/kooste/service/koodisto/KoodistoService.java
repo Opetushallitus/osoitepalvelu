@@ -66,6 +66,10 @@ public interface KoodistoService {
 
     List<UiKoodiItemDto> findKayttooikeusryhmas(Locale locale);
 
+    List<UiKoodiItemDto> findTutkintotoimikuntaRooliOptions(Locale locale);
+
+    List<UiKoodiItemDto> findTutkintotoimikuntaOptions(Locale locale);
+
     /**
      * Hakee kaikkien koodistojen arvot yhdellä kertaa ja paulattaa näistä
      * mapin. Mapista halutun koodiston voi hakea KoodistoTyyppi enumin arvon
@@ -77,4 +81,11 @@ public interface KoodistoService {
      * @return Mappi, joka sisältää kaikkien tuettujen koodistojen arvot.
      */
     Map<KoodistoTyyppi, List<UiKoodiItemDto>> findAllKoodistos(Locale locale);
+
+    void purgeTutkintotoimikuntaCaches();
+
+    /**
+     * Purges all koodisto related MongoDB and memory caches.
+     */
+    void purgeCaches();
 }
