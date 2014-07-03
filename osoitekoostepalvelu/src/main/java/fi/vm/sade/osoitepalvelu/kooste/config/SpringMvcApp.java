@@ -16,10 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.config;
 
-import fi.vm.sade.osoitepalvelu.kooste.SpringApp;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 /**
@@ -33,6 +31,5 @@ import org.springframework.context.annotation.ImportResource;
     "fi.vm.sade.osoitepalvelu.kooste.scheduled"
 })
 @ImportResource("classpath:spring/spring-mvc.xml")
-@Import(SpringApp.class)
 public class SpringMvcApp {
 }
