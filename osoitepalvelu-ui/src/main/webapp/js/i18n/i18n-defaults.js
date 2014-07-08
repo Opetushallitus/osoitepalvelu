@@ -78,6 +78,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         target_group_oppilaitos: 'Oppilaitos',
         target_group_opetuspisteet: 'Opetuspisteet',
         target_group_oppisopimustoimipisteet: 'Oppisopimustoimipisteet',
+        target_group_oppisopimustoimistot: 'Oppisopimustoimistot',
         target_group_muut_organisaatiot: 'Muut organisaatiot',
         target_group_tutkintotoimikunnat: 'Tutkintotoimikunnat',
         target_group_kayttajat: 'Palveluiden käyttäjät',

@@ -138,12 +138,12 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
                 //{type: "KOULUTUSNEVONTA",   name: LocalisationService.t('target_group_option_koulutusneuvonta')}
             ]
         },
-        /*{type: 'OPPISOPIMUSTOIMPISTEET',    name: LocalisationService.t('target_group_oppisopimustoimipisteet'),
+        {type: 'OPPISOPIMUSTOIMPISTEET',    name: LocalisationService.t('target_group_oppisopimustoimistot'),
             options: [
-                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')},
-                {type: "YHTEYSHENKILO",     name: LocalisationService.t('target_group_option_yhteyshenkilo')}
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')}/*,
+                {type: "YHTEYSHENKILO",     name: LocalisationService.t('target_group_option_yhteyshenkilo')}*/
             ]
-        },*/
+        },
         /*{type: 'MUUT_ORGANISAATIOT',        name: LocalisationService.t('target_group_muut_organisaatiot'),
             options: [
                 {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat')}
