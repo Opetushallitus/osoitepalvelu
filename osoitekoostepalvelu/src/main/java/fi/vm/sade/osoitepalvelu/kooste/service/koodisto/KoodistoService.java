@@ -52,6 +52,8 @@ public interface KoodistoService {
 
     List<UiKoodiItemDto> findTutkintoOptions(Locale locale);
 
+    List<UiKoodiItemDto> findKoulutusOptions(Locale locale);
+
     List<UiKoodiItemDto> findOppilaitoksenOpetuskieliOptions(Locale locale);
 
     List<UiKoodiItemDto> findKoulutuksenKieliOptions(Locale locale);

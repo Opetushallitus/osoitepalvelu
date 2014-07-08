@@ -99,6 +99,10 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
         _get('api/koodisto/tutkinto', success, error);
     };
 
+    this.listKoulutus = function(success, error) {
+        _get('api/koodisto/koulutus', success, error);
+    };
+
     this.listOpintoalas = function(success, error) {
         _get('api/koodisto/opintoala', success, error);
     };

@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria;
 
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
+import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,22 +31,49 @@ import java.util.List;
 public class AituToimikuntaCriteria implements Serializable {
     private static final long serialVersionUID = 5633851719629940782L;
     
-    private List<AituKielisyys> kielisyysIn = new ArrayList<AituKielisyys>();
+    private List<String> kielisyysIn = new ArrayList<String>();
+    private List<String> jasenKielisyysIn = new ArrayList<String>();
     private List<String> jasensInRoolis = new ArrayList<String>();
     private List<String> opintoalaTunnusIn = new ArrayList<String>();
     private List<String> tutkintoTunnusIn = new ArrayList<String>();
     private List<String> idsIn = new ArrayList<String>();
-    private boolean onlyVoimassaOlevat = true;
+    private List<AituToimikunta.AituToimikausi> toimikausisIn = new ArrayList<AituToimikunta.AituToimikausi>();
+    private boolean onlyVoimassaOlevat = true; // Jäsenyydet
+    private List<String> organisaatioOidsIn = new ArrayList<String>();
 
-    public List<AituKielisyys> getKielisyysIn() {
-        return kielisyysIn;
+    public boolean isIdsUsed() {
+        return idsIn != null && !idsIn.isEmpty();
     }
 
     public boolean isKielisyysUsed() {
         return kielisyysIn != null && !kielisyysIn.isEmpty();
     }
 
-    public void setKielisyysIn(List<AituKielisyys> kielisyysIn) {
+    public boolean isJasenKielisyysUsed() {
+        return jasenKielisyysIn != null && !jasenKielisyysIn.isEmpty();
+    }
+
+    public boolean isTutkintoUsed() {
+        return this.tutkintoTunnusIn != null && !this.tutkintoTunnusIn.isEmpty();
+    }
+
+    public boolean isOpintoalaUsed() {
+        return this.opintoalaTunnusIn != null && !this.opintoalaTunnusIn.isEmpty();
+    }
+
+    public boolean isToimikausiUsed() {
+        return this.toimikausisIn != null && !this.toimikausisIn.isEmpty();
+    }
+
+    public boolean isOrganisaatioUsed() {
+        return this.organisaatioOidsIn != null && !this.organisaatioOidsIn.isEmpty();
+    }
+
+    public List<String> getKielisyysIn() {
+        return kielisyysIn;
+    }
+
+    public void setKielisyysIn(List<String> kielisyysIn) {
         this.kielisyysIn = kielisyysIn;
     }
 
@@ -69,16 +97,12 @@ public class AituToimikuntaCriteria implements Serializable {
         this.idsIn = idsIn;
     }
 
-    public boolean isIdsUsed() {
-        return idsIn != null && !idsIn.isEmpty();
+    public List<AituToimikunta.AituToimikausi> getToimikausisIn() {
+        return toimikausisIn;
     }
 
-    public boolean isTutkintoUsed() {
-        return this.tutkintoTunnusIn != null && !this.tutkintoTunnusIn.isEmpty();
-    }
-
-    public boolean isOpintoalaUsed() {
-        return this.opintoalaTunnusIn != null && !this.opintoalaTunnusIn.isEmpty();
+    public void setToimikausisIn(List<AituToimikunta.AituToimikausi> toimikausisIn) {
+        this.toimikausisIn = toimikausisIn;
     }
 
     public boolean isOnlyVoimassaOlevat() {
@@ -103,5 +127,21 @@ public class AituToimikuntaCriteria implements Serializable {
 
     public void setTutkintoTunnusIn(List<String> tutkintoTunnusIn) {
         this.tutkintoTunnusIn = tutkintoTunnusIn;
+    }
+
+    public List<String> getJasenKielisyysIn() {
+        return jasenKielisyysIn;
+    }
+
+    public void setJasenKielisyysIn(List<String> jasenKielisyysIn) {
+        this.jasenKielisyysIn = jasenKielisyysIn;
+    }
+
+    public void setOrganisaatioOidsIn(List<String> organisaatioOidsIn) {
+        this.organisaatioOidsIn = organisaatioOidsIn;
+    }
+
+    public List<String> getOrganisaatioOidsIn() {
+        return organisaatioOidsIn;
     }
 }

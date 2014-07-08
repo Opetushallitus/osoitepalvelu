@@ -42,7 +42,10 @@ public class SearchTermDto implements Serializable {
     public static final String TERM_KAYTTOOIKEUSRYHMAS = "koulutaRoolis";
     public static final String TERM_TUTKINTOIMIKUNTA_ROOLIS = "tutkintotoimikuntaRoolis";
     public static final String TERM_TUTKINTOIMIKUNTA = "tutkintotoimikuntas";
-    public static final String TERM_TUTKINTO = "tutkintos";
+    public static final String TERM_TUTKINTOIMIKUNTA_TOIMIKAUSIS = "tutkintotoimikuntaToimikausis";
+    public static final String TERM_TUTKINTOIMIKUNTA_KIELIS = "tutkintotoimikuntaKielis";
+    public static final String TERM_TUTKINTOIMIKUNTA_JASEN_KIELIS = "tutkintotoimikuntaJasenKielis";
+    public static final String TERM_KOULUTUS = "koulutus";
     public static final String TERM_OPINTOALAS = "opintoalas";
 
     private String type;

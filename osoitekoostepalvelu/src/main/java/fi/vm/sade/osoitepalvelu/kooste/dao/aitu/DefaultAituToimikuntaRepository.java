@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
+import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -51,18 +52,37 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
     @Override
     public List<AituToimikunta> findToimikuntas(AituToimikuntaCriteria toimikuntaCriteria, AituKielisyys orberByNimi) {
         CriteriaHelper.Conditions conditions = new CriteriaHelper.Conditions();
+        if (toimikuntaCriteria.isIdsUsed()) {
+            conditions.add(new Criteria("_id").in(toimikuntaCriteria.getIdsIn()));
+        }
         if (toimikuntaCriteria.isKielisyysUsed()) {
-            conditions.add(new Criteria("kielisyys").in(AituKielisyys.aituKielis(toimikuntaCriteria.getKielisyysIn())));
+            conditions.add(new Criteria("kielisyys").in(toimikuntaCriteria.getKielisyysIn()));
+        }
+        if (toimikuntaCriteria.isJasenKielisyysUsed()) {
+            conditions.add(new Criteria("jasenyydet.aidinkieli").in(toimikuntaCriteria.getJasenKielisyysIn()));
         }
         if (toimikuntaCriteria.isJasenRoolisUsed()) {
             conditions.add(new Criteria("jasenyydet.rooli").in(toimikuntaCriteria.getJasensInRoolis()));
         }
-        if (toimikuntaCriteria.isIdsUsed()) {
-            conditions.add(new Criteria("_id").in(toimikuntaCriteria.getIdsIn()));
+        if (toimikuntaCriteria.isToimikausiUsed()) {
+            conditions.add(new Criteria("toimikausi").in(AituToimikunta.AituToimikausi.names(toimikuntaCriteria.getToimikausisIn())));
         }
         if (toimikuntaCriteria.isOnlyVoimassaOlevat()) {
             conditions.add(new Criteria("jasenyydet.voimassa").is(true));
         }
+        if (toimikuntaCriteria.isTutkintoUsed() || toimikuntaCriteria.isOpintoalaUsed() || toimikuntaCriteria.isOrganisaatioUsed()) {
+            List<String> toimikuntasBySopimusehdot = getMongoOperations().getCollection(AituOppilaitos.class.getAnnotation(Document.class).collection())
+                .distinct("sopimukset.toimikunta", new CriteriaHelper.Conditions()
+                        .addGiven(new Criteria("oid").in(toimikuntaCriteria.getOrganisaatioOidsIn()),
+                                toimikuntaCriteria.isOrganisaatioUsed())
+                        .addGiven(new Criteria("sopimukset.tutkinnot.tutkintotunnus").in(toimikuntaCriteria.getTutkintoTunnusIn()),
+                                toimikuntaCriteria.isTutkintoUsed())
+                        .addGiven(new Criteria("sopimukset.tutkinnot.opintoalatunnus").in(toimikuntaCriteria.getOpintoalaTunnusIn()),
+                                toimikuntaCriteria.isOpintoalaUsed())
+                        .applyTo(new Criteria()).getCriteriaObject());
+            conditions.add(new Criteria("_id").in(toimikuntasBySopimusehdot));
+        }
+
         return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
                 .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
     }

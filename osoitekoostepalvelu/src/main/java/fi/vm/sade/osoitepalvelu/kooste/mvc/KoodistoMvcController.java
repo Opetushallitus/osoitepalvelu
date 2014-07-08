@@ -90,6 +90,12 @@ public class KoodistoMvcController extends AbstractMvcController implements Seri
         return koodistoService.findTutkintoOptions(parseLocale(lang));
     }
 
+    @RequestMapping(method  =  RequestMethod.GET, value  =  "/koulutus")
+    @ResponseBody
+    public List<UiKoodiItemDto> findKoulutusOptions(@RequestParam("lang") String lang) {
+        return koodistoService.findKoulutusOptions(parseLocale(lang));
+    }
+
     @RequestMapping(method  =  RequestMethod.GET, value  =  "/opetuskieli")
     @ResponseBody
     public List<UiKoodiItemDto> findOppilaitoksenOpetuskieliOptions(@RequestParam("lang") String lang) {

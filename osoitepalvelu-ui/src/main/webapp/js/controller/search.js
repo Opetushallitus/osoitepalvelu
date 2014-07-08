@@ -20,7 +20,8 @@
 var SearchController = function($scope, $log, $modal, $location, $filter, SearchService,
                                 SearchTypes, TargetGroups, EmptyTerms,
                                 FilterHelper, ArrayHelper, KoodiHelper, SavesService,
-                                OptionsService, LocalisationService, Osoitekielis) {
+                                OptionsService, LocalisationService, Osoitekielis,
+                                TutkintotoimikuntaToimikausis, Aitukielis) {
     $scope.msg = function( key, params ) {
         return LocalisationService.t(key, params);
     };
@@ -91,8 +92,12 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             //OptionsService.listOmistajatyyppis(function(data) { $scope.options.omistajatyyppis = data; });
             OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
             OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
-//            OptionsService.listOpintoalas(function(data) {$scope.options.opintoalas = data;});
-//            OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
+            OptionsService.listOpintoalas(function(data) {$scope.options.opintoalas = data;});
+            //OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
+            OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
+            $scope.options.tutkintotoimikuntaToimikausis = TutkintotoimikuntaToimikausis;
+            $scope.options.tutkintotoimikuntaKielis = Aitukielis;
+            $scope.options.tutkintotoimikuntaJasenKielis = Aitukielis;
         }
 
         $scope.terms = SearchService.getTerms();
@@ -117,6 +122,18 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
     };
 
     $scope.isShowTutkintotoimikuntaRooliTerm = function() {
+        return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1;
+    };
+
+    $scope.isShowTutkintotoimikuntaKieliTerm = function() {
+        return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1;
+    };
+
+    $scope.isShowTutkintotoimikuntaJasenKieliTerm = function() {
+        return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1;
+    };
+
+    $scope.isShowTutkintotoimikuntaToimikausiTerm = function() {
         return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1;
     };
 
@@ -263,4 +280,5 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
 
 SearchController.$inject = ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
                      "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "KoodiHelper",
-                     "SavesService", "OptionsService", "LocalisationService", "Osoitekielis"];
+                     "SavesService", "OptionsService", "LocalisationService",
+                     "Osoitekielis", "TutkintotoimikuntaToimikausis", "Aitukielis"];

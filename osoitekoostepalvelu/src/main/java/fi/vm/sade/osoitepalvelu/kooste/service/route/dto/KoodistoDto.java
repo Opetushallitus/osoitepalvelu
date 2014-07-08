@@ -35,12 +35,13 @@ public class KoodistoDto implements Serializable {
         KUNTA("kunta"),
         POSTINUMERO("posti"),
         TUTKINTOTYYPPI("tutkintotyyppi"), 
-        TUTKINTO("tutkinto"), 
+        TUTKINTO("tutkinto"),
+        KOULUTUS("koulutus"), // nämä käytössä AITU:ssa
         OPPILAITOKSEN_OPETUSKIELI("oppilaitoksenopetuskieli"), 
         KOULUTUS_KIELIVALIKOIMA("kielivalikoima"),  // Koulutuksen kieli
         KOULUTUSASTEKELA("koulutusastekela"),       // Koulutusaste
         KOULUTUSTOIMIJA("koulutustoimija"),         // Koulutuksen järjestäjä
-        OPINTOALAOPH2002("opintoalaoph2002"),       // Koulutus ja Opintoala
+        OPINTOALAOPH2002("opintoalaoph2002"),       // Koulutus ja Opintoala, nämä käytössä AITU:ssa
         ALUEHALLINTOVIRASTO("aluehallintovirasto"), // AluehallintoVIrasto (AVI)
         KAYTTOOIKEUSRYHMA("kayttoikeusryhma"),      // Ei Koodistosta, vaan auhtneitcation-servicestä
         TUTKINTOTOIMIKUNTA_ROOLIS("tutkintoimikuntarooli"), // Ei Koodistosta, vielä
@@ -60,6 +61,7 @@ public class KoodistoDto implements Serializable {
                 put(POSTINUMERO.getUri(), POSTINUMERO);
                 put(TUTKINTOTYYPPI.getUri(), TUTKINTOTYYPPI);
                 put(TUTKINTO.getUri(), TUTKINTO);
+                put(KOULUTUS.getUri(), KOULUTUS);
                 put(OPPILAITOKSEN_OPETUSKIELI.getUri(), OPPILAITOKSEN_OPETUSKIELI);
                 put(KOULUTUS_KIELIVALIKOIMA.getUri(), KOULUTUS_KIELIVALIKOIMA);
                 put(KOULUTUSASTEKELA.getUri(), KOULUTUSASTEKELA);

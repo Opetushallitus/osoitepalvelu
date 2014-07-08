@@ -64,11 +64,16 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
     return {
         tutkintotoimikuntas: [],
         tutkintotoimikuntaRoolis: [],
+        tutkintotoimikuntaKielis: [],
+        tutkintotoimikuntaJasenKielis: [],
+        tutkintotoimikuntaToimikausis: [],
         koulutaRoolis: [],
         organisaationKielis: [],
         avis: [],
         maakuntas : [],
         kuntas : [],
+        opintoalas: [],
+        koulutus: [],
         oppilaitostyyppis: [],
         omistajatyyppis: [],
         vuosiluokkas: [],
@@ -80,6 +85,21 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         {code: 'fi', name: LocalisationService.t('kieli_fi')},
         {code: 'sv', name: LocalisationService.t('kieli_sv')},
         {code: 'en', name: LocalisationService.t('kieli_en')}
+    ];
+}])
+.factory('Aitukielis', ["LocalisationService", function(LocalisationService) {
+    return [
+        {code: 'fi', name: LocalisationService.t('kieli_fi')},
+        {code: 'sv', name: LocalisationService.t('kieli_sv')},
+        {code: '2k', name: LocalisationService.t('kieli_2k')},
+        {code: 'en', name: LocalisationService.t('kieli_en')}
+    ];
+}])
+.factory('TutkintotoimikuntaToimikausis', ['LocalisationService', function(LocalisationService) {
+    return [
+        {type: 'voimassa', nimi: LocalisationService.t('tutkintoimikunta_toimikausi_voimassa')},
+        {type: 'tuleva', nimi: LocalisationService.t('tutkintoimikunta_toimikausi_tuleva')},
+        {type: 'mennyt', nimi: LocalisationService.t('tutkintoimikunta_toimikausi_mennyt')}
     ];
 }])
 .factory('AddressFields', ["LocalisationService", function(LocalisationService) {

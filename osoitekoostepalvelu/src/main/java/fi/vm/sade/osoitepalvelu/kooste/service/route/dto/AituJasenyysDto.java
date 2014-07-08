@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import org.springframework.data.mongodb.core.index.Indexed;
+
 import java.io.Serializable;
 
 /**
@@ -33,7 +35,9 @@ public class AituJasenyysDto implements Serializable {
     private String osoite;
     private String postinumero; // free text, basically 5 numbers (not koodisto value)
     private String postitoimipaikka; // free text (not koodisto value)
+    @Indexed
     private String aidinkieli; // short lower case language code, e.g. "fi", but may be also 2k (kaksikielinen = fi/sv)
+    @Indexed
     private String rooli; // AITU's rooli
     private String edustus;
 

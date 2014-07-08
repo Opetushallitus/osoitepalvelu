@@ -82,6 +82,13 @@ public final class CriteriaHelper {
             return this;
         }
 
+        public Conditions addGiven(Criteria c, boolean given) {
+            if (given) {
+                this.criteria.add(c);
+            }
+            return this;
+        }
+
         public Conditions add(Optional<Criteria> c) {
             if (c.isPresent()) {
                 this.criteria.add(c.get());

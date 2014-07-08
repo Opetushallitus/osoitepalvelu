@@ -156,6 +156,11 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     @Override
+    public List<UiKoodiItemDto> findKoulutusOptions(Locale locale) {
+        return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUS);
+    }
+
+    @Override
     public List<UiKoodiItemDto> findOppilaitoksenOpetuskieliOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.OPPILAITOKSEN_OPETUSKIELI);
     }

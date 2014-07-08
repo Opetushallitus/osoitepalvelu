@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +37,8 @@ public class AituToimikuntaResultDto implements Serializable {
     private String kielisyys; // short lower case language code, e.g. "fi", but may be also 2k (kaksikielinen = fi/sv)
     private String id; // id in AITU
     private List<AituJasenyysDto> jasenyydet = new ArrayList<AituJasenyysDto>();
-    private String toimikausi; // free text
+    @DtoConversion
+    private String toimikausi; // 'tuleva' or 'voimassa' or 'mennyt'
 
     public Map<String, String> getNimi() {
         return nimi;

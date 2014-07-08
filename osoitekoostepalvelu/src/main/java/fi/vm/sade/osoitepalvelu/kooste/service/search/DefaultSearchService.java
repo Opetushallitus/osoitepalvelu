@@ -24,6 +24,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.KoodiHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
+import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.aitu.AituService;
@@ -80,12 +81,17 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         SearchResultsDto results  =  new SearchResultsDto();
 
         boolean searchHenkilos = terms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloHakuTypes()),
+                searchToimikuntas = terms.containsAnyTargetGroup(new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.TUTKINTOTOIMIKUNNAT},
+                        SearchTargetGroup.TargetType.JASENET,
+                        SearchTargetGroup.TargetType.SIHTEERI,
+                        SearchTargetGroup.TargetType.PUHEENJOHTAJA),
             returnOrgansiaatios = terms.containsAnyTargetGroup(
                     SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes(), SearchTargetGroup.TargetType.ORGANISAATIO);
 
         OrganisaatioYhteystietoCriteriaDto organisaatioCriteria = produceOrganisaatioCriteria(terms);
         boolean anyOrganisaatioRelatedConditionsUsed = organisaatioCriteria.getNumberOfUsedConditions() > 0,
-            searchOrganisaatios = returnOrgansiaatios || (searchHenkilos && anyOrganisaatioRelatedConditionsUsed);
+            searchOrganisaatios = returnOrgansiaatios || (searchHenkilos && anyOrganisaatioRelatedConditionsUsed)
+                            || (searchToimikuntas && anyOrganisaatioRelatedConditionsUsed);
 
         List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults
                 = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
@@ -114,11 +120,11 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
         }
 
-        if (terms.containsAnyTargetGroup(new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.TUTKINTOTOIMIKUNNAT},
-                SearchTargetGroup.TargetType.JASENET,
-                SearchTargetGroup.TargetType.SIHTEERI,
-                SearchTargetGroup.TargetType.PUHEENJOHTAJA)) {
+        if (searchToimikuntas) {
             AituToimikuntaCriteria toimikuntaCriteria = produceToimikuntaCriteria(terms);
+            if (anyOrganisaatioRelatedConditionsUsed) {
+                toimikuntaCriteria.setOrganisaatioOidsIn(oids(organisaatioYhteystietoResults));
+            }
             AituKielisyys orderingKielisyys = AituKielisyys.fromLocale(terms.getLocale()).or(AituKielisyys.kieli_fi);
             List<AituToimikuntaResultDto> toimikuntaResults = aituService.findToimikuntasWithMatchingJasens(
                     toimikuntaCriteria, orderingKielisyys);
@@ -164,14 +170,17 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     protected AituToimikuntaCriteria produceToimikuntaCriteria(SearchTermsDto terms) {
         AituToimikuntaCriteria criteria = new AituToimikuntaCriteria();
-        criteria.setKielisyysIn(AituKielisyys.fromOppilaitoksenOpetuskieliKoodistoValues(
-                terms.findTerms(SearchTermDto.TERM_ORGANISAATION_OPETUSKIELIS)));
+        criteria.setKielisyysIn(terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_KIELIS));
+        criteria.setJasenKielisyysIn(terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_JASEN_KIELIS));
+        criteria.setToimikausisIn(AituToimikunta.AituToimikausi.valuesOf(
+                terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_TOIMIKAUSIS)));
         criteria.setJasensInRoolis(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS.getUri(),
                 terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_ROOLIS)));
         criteria.setIdsIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.TUTKINTOTOIMIKUNTA.getUri(),
                 terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA)));
-        criteria.setTutkintoTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.TUTKINTO.getUri(),
-                terms.findTerms(SearchTermDto.TERM_TUTKINTO)));
+        criteria.setJasensInRoolis(terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_TOIMIKAUSIS));
+        criteria.setTutkintoTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.KOULUTUS.getUri(),
+                terms.findTerms(SearchTermDto.TERM_KOULUTUS)));
         criteria.setOpintoalaTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.OPINTOALAOPH2002.getUri(),
                 terms.findTerms(SearchTermDto.TERM_OPINTOALAS)));
 

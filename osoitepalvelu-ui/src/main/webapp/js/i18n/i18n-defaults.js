@@ -97,8 +97,11 @@ angular.module("I18n", [], ["$provide", function($provider) {
         search_terms: 'Rajaus',
         search_term_organisaation_kieli: 'organisaation kieli',
         search_term_tutkintotoimikunta: 'tutkintotoimikunta',
+        search_term_tutkintotoimikunta_toimikausi: 'tutkintotoimikunnan toimikausi',
+        search_term_tutkintotoimikunta_kielis: 'tutkintotoimikunnan kielisyys',
+        search_term_tutkintotoimikunta_jasen_kielis: 'tutkintotoimikunnan jäsenen kielisyys',
         search_term_tutkintotoimikunta_rooli: 'rooli tutkintotoimikunnassa',
-        search_term_kayttooikeusryhma: 'Käyttöoikeusryhmä',
+        search_term_kayttooikeusryhma: 'käyttöoikeusryhmä',
         search_term_aipal_rooli: 'AIPAL-rooli',
         search_term_avi: 'AVI',
         search_term_maakunta: 'maakunta',
@@ -166,11 +169,17 @@ angular.module("I18n", [], ["$provide", function($provider) {
         tutkintotoimikunta_rooli_sihteeri: 'Sihteeri',
         tutkintotoimikunta_rooli_ulkopuolinensihteeri: 'Ulkopuolinen sihteeri',
         tutkintotoimikunta_rooli_asiantuntija: 'Asiantuntija',
+        tutkintotoimikunta_rooli_null: 'Ei tiedossa',
+
+        tutkintoimikunta_toimikausi_voimassa: 'voimassa',
+        tutkintoimikunta_toimikausi_tuleva: 'tuleva',
+        tutkintoimikunta_toimikausi_mennyt: 'mennyt',
 
         osoitteen_esityskieli: 'Osoitteen esityskieli',
         osoitteen_esityskieli_placeholder: 'osoitteen esityskieli',
         kieli_fi: 'suomi',
         kieli_sv: 'ruotsi',
+        kieli_2k: 'suomi/ruotsi',
         kieli_en: 'englanti'
     };
     defaultValues['en'] = defaultValues['fi'];

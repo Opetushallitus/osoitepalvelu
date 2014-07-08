@@ -263,4 +263,16 @@ OsoiteKoostepalvelu.service('OptionsService', [
     this.listKoultuksenjarjestajas = function(success) {
         success( DummyKoulutuksenjarjestajas );
     };
+
+    this.listOpintoalas = function(success) {
+        success([]);
+    };
+
+    this.listKoulutus = function(success) {
+        success([]);
+    };
+
+    this.listTutkintos = function(success) {
+        success([]);
+    };
 }]);

@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.domain;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituJasenyysDto;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -30,13 +31,40 @@ import java.util.Map;
  */
 @Document(collection = "aituToimikunta")
 public class AituToimikunta {
+
+    public enum AituToimikausi {
+        mennyt,
+        voimassa,
+        tuleva;
+
+        public static List<AituToimikausi> valuesOf(List<String> values) {
+            List<AituToimikausi> toimikausis = new ArrayList<AituToimikausi>();
+            for (String value : values) {
+                toimikausis.add(AituToimikausi.valueOf(value));
+            }
+            return toimikausis;
+        }
+
+        public static List<String> names(List<AituToimikausi> toimikausis) {
+            List<String> names = new ArrayList<String>();
+            for (AituToimikausi toimikausi : toimikausis) {
+                if (toimikausi != null) {
+                    names.add(toimikausi.name());
+                }
+            }
+            return names;
+        }
+    }
+
     @Id
     private String id; // id in AITU
     private Map<String,String> nimi = new HashMap<String, String>();
     private String sahkoposti;
+    @Indexed
     private String kielisyys; // short lower case language code, e.g. "fi", but may be also 2k (kaksikielinen = fi/sv)
     private List<AituJasenyysDto> jasenyydet = new ArrayList<AituJasenyysDto>();
-    private String toimikausi; // free text
+    @Indexed
+    private AituToimikausi toimikausi;
 
     public String getId() {
         return id;
@@ -78,11 +106,11 @@ public class AituToimikunta {
         this.jasenyydet = jasenyydet;
     }
 
-    public String getToimikausi() {
+    public AituToimikausi getToimikausi() {
         return toimikausi;
     }
 
-    public void setToimikausi(String toimikausi) {
+    public void setToimikausi(AituToimikausi toimikausi) {
         this.toimikausi = toimikausi;
     }
 }

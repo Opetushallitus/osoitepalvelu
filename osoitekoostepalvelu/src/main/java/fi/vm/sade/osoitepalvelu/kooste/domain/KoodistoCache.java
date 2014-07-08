@@ -43,6 +43,7 @@ public class KoodistoCache implements Serializable {
             POSTINUMERO,
             TUTKINTOTYYPPI,
             TUTKINTO,
+            KOULUTUS,
             OPPILAITOKSEN_OPETUSKIELI,
             KOULUTUS_KIELIVALIKOIMA,
             KOULUTUSASTEKELA,

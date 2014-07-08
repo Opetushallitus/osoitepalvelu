@@ -31,7 +31,7 @@ public class AituOppilaitosResultDto implements Serializable {
     private static final long serialVersionUID = -1047608281798996986L;
     
     private String oid;
-    private String opplaitoskoodi;
+    private String oppilaitoskoodi;
     private Map<String,String> nimi = new HashMap<String, String>();
     private String osoite;
     private String postinumero;
@@ -46,12 +46,12 @@ public class AituOppilaitosResultDto implements Serializable {
         this.oid = oid;
     }
 
-    public String getOpplaitoskoodi() {
-        return opplaitoskoodi;
+    public String getOppilaitoskoodi() {
+        return oppilaitoskoodi;
     }
 
-    public void setOpplaitoskoodi(String opplaitoskoodi) {
-        this.opplaitoskoodi = opplaitoskoodi;
+    public void setOppilaitoskoodi(String oppilaitoskoodi) {
+        this.oppilaitoskoodi = oppilaitoskoodi;
     }
 
     public Map<String, String> getNimi() {
