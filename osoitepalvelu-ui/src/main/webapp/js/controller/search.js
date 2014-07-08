@@ -119,10 +119,6 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') != -1;
     };
 
-    $scope.isShowAipalTerm = function() {
-        return $scope.selectedTargetGroupTypes.indexOf('AIPAL_KAYTTAJAT') != -1;
-    };
-
     $scope.isShowVuosiluokkaTerm = function(){
         var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
         if (oppilaitosTyyppisWithVuosiluokkaSetting) {

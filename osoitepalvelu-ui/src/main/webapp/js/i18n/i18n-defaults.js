@@ -80,8 +80,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         target_group_oppisopimustoimipisteet: 'Oppisopimustoimipisteet',
         target_group_muut_organisaatiot: 'Muut organisaatiot',
         target_group_tutkintotoimikunnat: 'Tutkintotoimikunnat',
-        target_group_kouluta_kayttajat: 'Opintopolku-käyttäjät',
-        target_group_aipal_kayttajat: 'AIPAL-käyttäjät',
+        target_group_kayttajat: 'Palveluiden käyttäjät',
 
         target_gorup_option_tutkintotoimikunta: 'tutkintotoimikunta',
         target_group_option_organisaatio: 'organisaatio',
@@ -98,7 +97,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         search_term_organisaation_kieli: 'organisaation kieli',
         search_term_tutkintotoimikunta: 'tutkintotoimikunta',
         search_term_tutkintotoimikunta_rooli: 'rooli tutkintotoimikunnassa',
-        search_term_kouluta_rooli: 'Opintopolun käyttöoikeus',
+        search_term_kayttooikeusryhma: 'Käyttöoikeusryhmä',
         search_term_aipal_rooli: 'AIPAL-rooli',
         search_term_avi: 'AVI',
         search_term_maakunta: 'maakunta',

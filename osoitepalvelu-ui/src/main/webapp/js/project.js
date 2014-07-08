@@ -65,7 +65,6 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         tutkintotoimikuntas: [],
         tutkintotoimikuntaRoolis: [],
         koulutaRoolis: [],
-        aipalRoolis: [],
         organisaationKielis: [],
         avis: [],
         maakuntas : [],
@@ -146,12 +145,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         {type: 'TUTKINTOTOIMIKUNNAT',       name: LocalisationService.t('target_group_tutkintotoimikunnat'),
             options: angular.copy(TutkintotoimikuntaRoolis)
         },
-        {type: 'KOULUTA_KAYTTAJAT',         name: LocalisationService.t('target_group_kouluta_kayttajat'),
-            options: [
-                {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat')}
-            ]
-        },
-        {type: 'AIPAL_KAYTTAJAT',           name: LocalisationService.t('target_group_aipal_kayttajat'),
+        {type: 'KOULUTA_KAYTTAJAT',         name: LocalisationService.t('target_group_kayttajat'),
             options: [
                 {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat')}
             ]
