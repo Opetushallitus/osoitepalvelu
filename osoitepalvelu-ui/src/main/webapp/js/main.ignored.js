@@ -34,7 +34,7 @@ OsoiteKoostepalvelu.factory('SearchResultProvider', ["$http", "LocalisationServi
         function($http, LocalisationService) {
     return function(details) {
         $http.post('api/search/list.json', details.data, {
-            params: {lang: LocalisationService.getLocale()}
+            params: {lang: details.lang}
         })
         .success(details.callback)
         .error(details.errorCallback);

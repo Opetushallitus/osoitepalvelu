@@ -37,6 +37,7 @@ public class SavedSearchSaveDto {
     private List<String> receiverFields  =  new ArrayList<String>();
     private List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
     private List<SearchTermDto> terms  =  new ArrayList<SearchTermDto>();
+    private String lang;
 
     public String getName() {
         return name;
@@ -84,5 +85,13 @@ public class SavedSearchSaveDto {
 
     public void setTerms(List<SearchTermDto> terms) {
         this.terms  =  terms;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
     }
 }

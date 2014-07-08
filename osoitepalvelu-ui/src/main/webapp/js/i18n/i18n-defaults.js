@@ -164,7 +164,13 @@ angular.module("I18n", [], ["$provide", function($provider) {
         tutkintotoimikunta_rooli_varapuheenjohtaja: 'Varapuheenjohtaja',
         tutkintotoimikunta_rooli_sihteeri: 'Sihteeri',
         tutkintotoimikunta_rooli_ulkopuolinensihteeri: 'Ulkopuolinen sihteeri',
-        tutkintotoimikunta_rooli_asiantuntija: 'Asiantuntija'
+        tutkintotoimikunta_rooli_asiantuntija: 'Asiantuntija',
+
+        osoitteen_esityskieli: 'Osoitteen esityskieli',
+        osoitteen_esityskieli_placeholder: 'osoitteen esityskieli',
+        kieli_fi: 'suomi',
+        kieli_sv: 'ruotsi',
+        kieli_en: 'englanti'
     };
     defaultValues['en'] = defaultValues['fi'];
     defaultValues['sv'] = defaultValues['fi'];

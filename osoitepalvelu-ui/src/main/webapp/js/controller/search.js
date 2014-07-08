@@ -20,7 +20,7 @@
 var SearchController = function($scope, $log, $modal, $location, $filter, SearchService,
                                 SearchTypes, TargetGroups, EmptyTerms,
                                 FilterHelper, ArrayHelper, KoodiHelper, SavesService,
-                                OptionsService, LocalisationService) {
+                                OptionsService, LocalisationService, Osoitekielis) {
     $scope.msg = function( key, params ) {
         return LocalisationService.t(key, params);
     };
@@ -42,13 +42,16 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             targetGroups: $scope.visibleTargetGroups,
             searchType: $scope.searchType,
             addressFields: $scope.addressFields,
-            receiverFields: $scope.receiverFields
+            receiverFields: $scope.receiverFields,
+            lang: $scope.osoitekieli
         };
     };
 
     $scope.saves = [];
     $scope.selectedSavedSearch = null;
     updateSaves();
+
+    $scope.osoitekielis = Osoitekielis;
 
     $scope.updateTerms = function(updateOptions) {
         if( updateOptions === undefined ) {
@@ -62,6 +65,8 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         $scope.addressFields = SearchService.getAddressFields();
 
         $scope.receiverFields = SearchService.getReceiverFields();
+
+        $scope.osoitekieli = SearchService.getKieli();
 
         $scope.targetGroups = TargetGroups;
         $scope.selectedTargetGroup = null;
@@ -141,6 +146,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
                 SearchService.updateSearchType(save.searchType, save.addressFields, save.receiverFields);
                 SearchService.updateTargetGroups(save.targetGroups);
                 SearchService.updateTerms(save.terms);
+                SearchService.updateKieli(save.lang);
                 $scope.updateTerms(false);
                 $scope.selectedSavedSearch = selected;
             });
@@ -229,6 +235,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         SearchService.updateSearchType($scope.searchType, $scope.addressFields, $scope.receiverFields);
         SearchService.updateTargetGroups($scope.visibleTargetGroups);
         SearchService.updateTerms($scope.terms);
+        SearchService.updateKieli($scope.osoitekieli);
         SearchService.setSearchReady();
         $location.path("/results");
     };
@@ -256,4 +263,4 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
 
 SearchController.$inject = ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
                      "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "KoodiHelper",
-                     "SavesService", "OptionsService", "LocalisationService"];
+                     "SavesService", "OptionsService", "LocalisationService", "Osoitekielis"];

@@ -75,6 +75,13 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         koultuksenjarjestajas: []
     };
 })
+.factory('Osoitekielis', ["LocalisationService", function(LocalisationService) {
+    return [
+        {code: 'fi', name: LocalisationService.t('kieli_fi')},
+        {code: 'sv', name: LocalisationService.t('kieli_sv')},
+        {code: 'en', name: LocalisationService.t('kieli_en')}
+    ];
+}])
 .factory('AddressFields', ["LocalisationService", function(LocalisationService) {
     return [
         {type: 'ORGANIAATIO_NIMI',          name: LocalisationService.t('address_field_organisaatio_nimi')},

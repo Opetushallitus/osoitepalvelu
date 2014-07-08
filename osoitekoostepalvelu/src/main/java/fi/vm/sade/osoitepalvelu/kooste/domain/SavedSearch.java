@@ -52,6 +52,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     private List<String> receiverFields  =  new ArrayList<String>();
     private List<SearchTargetGroup> targetGroups  =  new ArrayList<SearchTargetGroup>();
     private List<SearchTerm> terms  =  new ArrayList<SearchTerm>();
+    private String lang;
 
     public Long getId() {
         return id;
@@ -123,6 +124,14 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
 
     public void setReceiverFields(List<String> receiverFields) {
         this.receiverFields  =  receiverFields;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
     }
 
     @Override

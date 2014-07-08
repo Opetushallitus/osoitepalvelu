@@ -42,6 +42,7 @@ public class SavedSearchViewDto implements Serializable {
     private List<String> receiverFields  =  new ArrayList<String>();
     private List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
     private List<SearchTermDto> terms  =  new ArrayList<SearchTermDto>();
+    private String lang;
 
     public DateTime getCreatedAt() {
         return createdAt;
@@ -97,5 +98,13 @@ public class SavedSearchViewDto implements Serializable {
 
     public void setReceiverFields(List<String> receiverFields) {
         this.receiverFields  =  receiverFields;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
     }
 }

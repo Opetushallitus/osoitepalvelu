@@ -34,7 +34,8 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         _deletedIds = [],
         _selectedSearch = null,
         _resultData = null,
-        _searchReady=false;
+        _searchReady=false,
+        _kieli=LocalisationService.getLocale();
 
     var _osoite = function(osoite) {
         if (!osoite) {
@@ -102,6 +103,7 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         _searchType = null;
         _addressFields = angular.copy(AddressFields);
         _deletedIds = [];
+        _kieli=LocalisationService.getLocale();
     };
 
     this.updateSearchType = function(type, addressFields, receiverFields) {
@@ -125,6 +127,15 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         _terms = angular.copy(terms);
     };
 
+    this.getKieli = function() {
+        return _kieli;
+    };
+
+    this.updateKieli = function(kieli) {
+        var kieliToUse = kieli || LocalisationService.getLocale();
+        $log.info("Kieli: " + kieli + " -> " + kieliToUse);
+        _kieli = kieliToUse;
+    };
 
     var _transformResults = function(data, success) {
         angular.forEach(data.rows, function(row) {
@@ -154,6 +165,7 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
                 }),
                 nonIncludedOrganisaatioOids: _deletedIds
             },
+            lang: _kieli,
             callback: function(data) {
                 _transformResults(data, success);
                 _resultData = data;
@@ -201,7 +213,7 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
                   nonIncludedOrganisaatioOids: _deletedIds
             } )
         .success(function(key) {
-            success('api/search/excel.do?downloadId='+key+"&lang="+LocalisationService.getLocale());
+            success('api/search/excel.do?downloadId='+key+"&lang="+_kieli);
         })
         .error( error || commonErrorHandler );
     };
