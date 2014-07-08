@@ -95,6 +95,18 @@ option.placeholder {
 .criterionOptions label {
     font-weight: normal;
 }
+.radioOptionsContainer {
+    margin-top: 3px;
+}
+.radioOptions label {
+    font-weight: normal;
+    display: inline;
+    margin-right: 10px;
+}
+.radioOptions input[type="radio"] {
+    top: -2px;
+    margin-right: 2px;
+}
 .targetGroups.selectedCriterion {
     width: 100%;
 }

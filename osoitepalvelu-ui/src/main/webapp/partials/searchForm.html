@@ -93,13 +93,16 @@
 
         <div class="form-row" ng-show="isTermsShown()">
             <div class="label-cell">
-                <label for="osoitekieli" tt="osoitteen_esityskieli">Osoitteen esityskieli</label>
+                <label tt="osoitteen_esityskieli">Osoitteen esityskieli</label>
             </div>
             <div class="field-cell">
-                <select ui-select2 id="osoitekieli" class="form-control"
-                        ng-model="osoitekieli" data-placeholder="{{msg('osoitteen_esityskieli_placeholder')}}">
-                    <option ng-repeat="opt in osoitekielis" value="{{opt.code}}">{{opt.name}}</option>
-                </select>
+                <div class="radioOptionsContainer">
+                    <span class="radioOptions" ng-repeat="opt in osoitekielis">
+                        <input id="osoitekieli_{{opt.code}}" name="osoitekieli" group="osoitekieli"
+                               type="radio" ng-model="$parent.osoitekieli" ng-value="opt.code" />
+                        <label for="osoitekieli_{{opt.code}}">{{opt.name}}</label>
+                    </span>
+                </div>
             </div>
         </div>
 

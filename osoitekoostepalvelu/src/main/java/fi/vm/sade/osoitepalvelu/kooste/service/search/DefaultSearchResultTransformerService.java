@@ -23,6 +23,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Ordering;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.Combiner;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
@@ -167,9 +168,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
                     new Combiner.Creator<OrganisaatioResultAggregateDto>() {
                 public OrganisaatioResultAggregateDto create(Combiner.PullSource src) {
                     return new OrganisaatioResultAggregateDto(result,
-                                (OrganisaatioYhteystietoDto)src.get(OrganisaatioYhteystietoDto.class).orNull(),
-                                (OsoitteistoDto)src.get(OsoitteistoDto.class).orNull(),
-                                (OsoitteistoDto)src.get(OsoitteistoDto.class).orNull());
+                                src.get(OrganisaatioYhteystietoDto.class).orNull(),
+                                src.get(OsoitteistoDto.class).orNull(),
+                                src.get(OsoitteistoDto.class).orNull());
                 }
             });
             if (presentation.isPositosoiteIncluded()) {
@@ -227,8 +228,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
                     new Combiner.Creator<HenkiloResultAggregateDto>() {
                 public HenkiloResultAggregateDto create(Combiner.PullSource src) {
                     return new HenkiloResultAggregateDto(result,
-                            (OrganisaatioHenkiloDto)src.get(OrganisaatioHenkiloDto.class).orNull(),
-                            (HenkiloOsoiteDto)src.get(HenkiloOsoiteDto.class).orNull());
+                            src.get(OrganisaatioHenkiloDto.class).orNull(),
+                            src.get(HenkiloOsoiteDto.class).orNull());
                 }
             }).combinedWith(OrganisaatioHenkiloDto.class, result.getOrganisaatioHenkilos())
                 .withRepeated(HenkiloOsoiteDto.class, result.getOsoittees())
@@ -251,7 +252,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 new Combiner.Creator<AituToimikuntaJasenAggregateDto>() {
                     public AituToimikuntaJasenAggregateDto create(Combiner.PullSource src) {
                         return new AituToimikuntaJasenAggregateDto(toimikunta,
-                                (AituJasenyysDto)src.get(AituJasenyysDto.class).orNull());
+                                src.get(AituJasenyysDto.class).orNull());
                 }
             }).combinedWith(AituJasenyysDto.class, toimikunta.getJasenyydet())
                 .atLeastOne().to(aggregates);
@@ -296,7 +297,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 @Override
                 public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
                     if (from.getKotipaikkaUri() != null) {
-                        UiKoodiItemDto kuntaKoodi  =  koodistoService.findKuntaByKoodiUri(locale, from.getKotipaikkaUri());
+                        UiKoodiItemDto kuntaKoodi = koodistoService.findKuntaByKoodiUri(locale, from.getKotipaikkaUri());
                         if (kuntaKoodi != null) {
                             to.setKotikunta(kuntaKoodi.getNimi());
                         }
@@ -329,15 +330,18 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 @Override
                 public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
                     Iterator<OrganisaatioYhteystietoElementtiDto> elementtis =
-                            Collections2.filter(from.getYhteystietoArvos(),
-                                new OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate("Www", locale))
+                            CollectionHelper.filter(from.getYhteystietoArvos(),
+                                new OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate("Www", locale),
+                                new OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate("Www", DEFAULT_LOCALE))
                                 .iterator();
                     if (elementtis.hasNext()) {
                         to.setWwwOsoite(elementtis.next().getArvo());
                     }
                     Iterator<OrganisaatioDetailsYhteystietoDto> yhteystietos =
-                            Collections2.filter(from.getYhteystiedot(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate(locale)).iterator();
+                            CollectionHelper.filter(from.getYhteystiedot(),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate(locale),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate(DEFAULT_LOCALE))
+                                    .iterator();
                     if (yhteystietos.hasNext()) {
                         to.setWwwOsoite(yhteystietos.next().getWww());
                     }
@@ -355,8 +359,10 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 @Override
                 public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
                     Iterator<OrganisaatioDetailsYhteystietoDto> yhteystietos =
-                            Collections2.filter(from.getYhteystiedot(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(locale)).iterator();
+                            CollectionHelper.filter(from.getYhteystiedot(),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(locale),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(DEFAULT_LOCALE))
+                                    .iterator();
                     if (yhteystietos.hasNext()) {
                         to.setEmailOsoite(yhteystietos.next().getEmail());
                     }
@@ -374,8 +380,10 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 @Override
                 public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
                     Iterator<OrganisaatioDetailsYhteystietoDto> yhteystietos =
-                            Collections2.filter(from.getYhteystiedot(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate(locale)).iterator();
+                            CollectionHelper.filter(from.getYhteystiedot(),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate(locale),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate(DEFAULT_LOCALE))
+                                    .iterator();
                     if (yhteystietos.hasNext()) {
                         to.setPuhelinnumero(yhteystietos.next().getNumero());
                     }

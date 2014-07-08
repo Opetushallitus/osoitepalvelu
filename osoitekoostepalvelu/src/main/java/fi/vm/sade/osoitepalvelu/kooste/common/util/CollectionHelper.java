@@ -16,6 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +31,13 @@ public final class CollectionHelper {
     private CollectionHelper() {
     }
 
+    /**
+     * @param c collection to split
+     * @param chunkSize the maximum number of elements in each chunk
+     * @param <T> contained in the collection
+     * @param <C> the collection type
+     * @return a list of chunks
+     */
     public static<T,C extends Collection<? extends T>> List<List<T>> split(C c, int chunkSize) {
         List<List<T>> ready = new ArrayList<List<T>>();
         List<T> current = new ArrayList<T>();
@@ -43,4 +53,21 @@ public final class CollectionHelper {
         ready.add(current);
         return ready;
     }
+
+    /**
+     * @param col to filter using Collections2.filter
+     * @param predicate to use
+     * @param fallbackPredicate to use if predicate resulted in empty collection
+     * @param <T> type contained in the collection
+     * @return the filtered collection
+     */
+    public static <T> Collection<T> filter(Collection<T> col, Predicate<? super T> predicate,
+                                           Predicate<? super T> fallbackPredicate ) {
+        Collection<T> result = Collections2.filter(col, predicate);
+        if (result.isEmpty()) {
+            return Collections2.filter(col, fallbackPredicate);
+        }
+        return result;
+    }
+
 }
