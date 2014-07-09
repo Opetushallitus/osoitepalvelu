@@ -16,7 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria;
 
-import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 
 import java.io.Serializable;
@@ -39,7 +38,7 @@ public class AituToimikuntaCriteria implements Serializable {
     private List<String> idsIn = new ArrayList<String>();
     private List<AituToimikunta.AituToimikausi> toimikausisIn = new ArrayList<AituToimikunta.AituToimikausi>();
     private boolean onlyVoimassaOlevat = true; // Jäsenyydet
-    private List<String> organisaatioOidsIn = new ArrayList<String>();
+    private List<String> oppilaitoskoodiIn = new ArrayList<String>();
 
     public boolean isIdsUsed() {
         return idsIn != null && !idsIn.isEmpty();
@@ -65,8 +64,8 @@ public class AituToimikuntaCriteria implements Serializable {
         return this.toimikausisIn != null && !this.toimikausisIn.isEmpty();
     }
 
-    public boolean isOrganisaatioUsed() {
-        return this.organisaatioOidsIn != null && !this.organisaatioOidsIn.isEmpty();
+    public boolean isOppilaitoskoodiUsed() {
+        return this.oppilaitoskoodiIn != null && !this.oppilaitoskoodiIn.isEmpty();
     }
 
     public List<String> getKielisyysIn() {
@@ -137,11 +136,11 @@ public class AituToimikuntaCriteria implements Serializable {
         this.jasenKielisyysIn = jasenKielisyysIn;
     }
 
-    public void setOrganisaatioOidsIn(List<String> organisaatioOidsIn) {
-        this.organisaatioOidsIn = organisaatioOidsIn;
+    public List<String> getOppilaitoskoodiIn() {
+        return oppilaitoskoodiIn;
     }
 
-    public List<String> getOrganisaatioOidsIn() {
-        return organisaatioOidsIn;
+    public void setOppilaitoskoodiIn(List<String> oppilaitoskoodiIn) {
+        this.oppilaitoskoodiIn = oppilaitoskoodiIn;
     }
 }

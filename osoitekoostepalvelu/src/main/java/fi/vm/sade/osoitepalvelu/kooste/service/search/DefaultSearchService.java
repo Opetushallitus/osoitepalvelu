@@ -123,7 +123,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         if (searchToimikuntas) {
             AituToimikuntaCriteria toimikuntaCriteria = produceToimikuntaCriteria(terms);
             if (anyOrganisaatioRelatedConditionsUsed) {
-                toimikuntaCriteria.setOrganisaatioOidsIn(oids(organisaatioYhteystietoResults));
+                toimikuntaCriteria.setOppilaitoskoodiIn(oppilaitoskoodis(organisaatioYhteystietoResults));
             }
             AituKielisyys orderingKielisyys = AituKielisyys.fromLocale(terms.getLocale()).or(AituKielisyys.kieli_fi);
             List<AituToimikuntaResultDto> toimikuntaResults = aituService.findToimikuntasWithMatchingJasens(
@@ -248,6 +248,16 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     protected List<String> oids(List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults) {
         return new ArrayList<String>(Collections2.transform(organisaatioYhteystietoResults,
                 FilterableOrganisaatio.GET_OID));
+    }
+
+    protected List<String> oppilaitoskoodis(List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults) {
+        List<String> koodis = new ArrayList<String>();
+        for (OrganisaatioYhteystietoHakuResultDto result : organisaatioYhteystietoResults) {
+            if (result.getOppilaitosKoodi() != null) {
+                koodis.add(result.getOppilaitosKoodi());
+            }
+        }
+        return koodis;
     }
 
     public void setOrganisaatioService(OrganisaatioService organisaatioService) {

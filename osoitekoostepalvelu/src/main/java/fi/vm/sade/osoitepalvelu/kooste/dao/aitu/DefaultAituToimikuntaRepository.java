@@ -70,11 +70,11 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
         if (toimikuntaCriteria.isOnlyVoimassaOlevat()) {
             conditions.add(new Criteria("jasenyydet.voimassa").is(true));
         }
-        if (toimikuntaCriteria.isTutkintoUsed() || toimikuntaCriteria.isOpintoalaUsed() || toimikuntaCriteria.isOrganisaatioUsed()) {
+        if (toimikuntaCriteria.isTutkintoUsed() || toimikuntaCriteria.isOpintoalaUsed() || toimikuntaCriteria.isOppilaitoskoodiUsed()) {
             List<String> toimikuntasBySopimusehdot = getMongoOperations().getCollection(AituOppilaitos.class.getAnnotation(Document.class).collection())
                 .distinct("sopimukset.toimikunta", new CriteriaHelper.Conditions()
-                        .addGiven(new Criteria("oid").in(toimikuntaCriteria.getOrganisaatioOidsIn()),
-                                toimikuntaCriteria.isOrganisaatioUsed())
+                        .addGiven(new Criteria("oppilaitoskoodi").in(toimikuntaCriteria.getOppilaitoskoodiIn()),
+                                toimikuntaCriteria.isOppilaitoskoodiUsed())
                         .addGiven(new Criteria("sopimukset.tutkinnot.tutkintotunnus").in(toimikuntaCriteria.getTutkintoTunnusIn()),
                                 toimikuntaCriteria.isTutkintoUsed())
                         .addGiven(new Criteria("sopimukset.tutkinnot.opintoalatunnus").in(toimikuntaCriteria.getOpintoalaTunnusIn()),
