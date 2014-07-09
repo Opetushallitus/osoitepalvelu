@@ -32,7 +32,7 @@ import java.util.Map;
 public class AituOppilaitos {
     @Id
     private String oid;
-    private String opplaitoskoodi;
+    private String oppilaitoskoodi;
     private Map<String,String> nimi = new HashMap<String, String>();
     private String osoite;
     private String postinumero;
@@ -47,12 +47,12 @@ public class AituOppilaitos {
         this.oid = oid;
     }
 
-    public String getOpplaitoskoodi() {
-        return opplaitoskoodi;
+    public String getOppilaitoskoodi() {
+        return oppilaitoskoodi;
     }
 
-    public void setOpplaitoskoodi(String opplaitoskoodi) {
-        this.opplaitoskoodi = opplaitoskoodi;
+    public void setOppilaitoskoodi(String oppilaitoskoodi) {
+        this.oppilaitoskoodi = oppilaitoskoodi;
     }
 
     public Map<String, String> getNimi() {

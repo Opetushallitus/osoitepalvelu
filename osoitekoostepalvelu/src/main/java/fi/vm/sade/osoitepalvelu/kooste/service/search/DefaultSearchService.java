@@ -178,7 +178,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_ROOLIS)));
         criteria.setIdsIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.TUTKINTOTOIMIKUNTA.getUri(),
                 terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA)));
-        criteria.setJasensInRoolis(terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_TOIMIKAUSIS));
         criteria.setTutkintoTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.KOULUTUS.getUri(),
                 terms.findTerms(SearchTermDto.TERM_KOULUTUS)));
         criteria.setOpintoalaTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.OPINTOALAOPH2002.getUri(),
