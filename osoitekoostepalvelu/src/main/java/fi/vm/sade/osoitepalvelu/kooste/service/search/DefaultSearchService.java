@@ -125,11 +125,15 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             if (anyOrganisaatioRelatedConditionsUsed) {
                 toimikuntaCriteria.setOppilaitoskoodiIn(oppilaitoskoodis(organisaatioYhteystietoResults));
             }
-            AituKielisyys orderingKielisyys = AituKielisyys.fromLocale(terms.getLocale()).or(AituKielisyys.kieli_fi);
-            List<AituToimikuntaResultDto> toimikuntaResults = aituService.findToimikuntasWithMatchingJasens(
-                    toimikuntaCriteria, orderingKielisyys);
-
-            results.setAituToimikuntas(toimikuntaResults);
+            if (!anyOrganisaatioRelatedConditionsUsed || toimikuntaCriteria.isOppilaitoskoodiUsed()) {
+                AituKielisyys orderingKielisyys = AituKielisyys.fromLocale(terms.getLocale()).or(AituKielisyys.kieli_fi);
+                List<AituToimikuntaResultDto> toimikuntaResults = aituService.findToimikuntasWithMatchingJasens(
+                        toimikuntaCriteria, orderingKielisyys);
+                results.setAituToimikuntas(toimikuntaResults);
+            } else {
+                // No organisaatio rersults but organisaatio related conditions used. Should return nothing:
+                results.setAituToimikuntas(new ArrayList<AituToimikuntaResultDto>());
+            }
         }
 
         if (searchHenkilos) {
