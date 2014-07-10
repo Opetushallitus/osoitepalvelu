@@ -24,12 +24,26 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
     // Cache here only means that user should refresh the page (or re-navigate to it) in order to referesh the options.
     // We can avoid a number of requests when going back to the search from the results.
     var _getCache = {},
+        _postCache = {},
     _get = function( url, success, error ) {
-        if( _getCache[url] ) {
-            success( _getCache[url] );
+        var lang = LocalisationService.getLocale();
+        if( _getCache[url+lang] ) {
+            success( _getCache[url+lang] );
         } else {
-            $http.get(url, {params: {lang: LocalisationService.getLocale()}} ).success(function(data) {
+            $http.get(url, {params: {lang: lang}} ).success(function(data) {
                 _getCache[url] = data;
+                success(data);
+            }).error(error || commonErrorHandler);
+        }
+    },
+    _post = function( url, params, success, error ) {
+        params.lang = LocalisationService.getLocale();
+        var k = JSON.stringify({url: url, params: params});
+        if( _postCache[k] ) {
+            success( _postCache[k] );
+        } else {
+            $http.post(url, {}, {params: params}).success(function(data) {
+                _postCache[k] = data;
                 success(data);
             }).error(error || commonErrorHandler);
         }
@@ -99,11 +113,35 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
         _get('api/koodisto/tutkinto', success, error);
     };
 
-    this.listKoulutus = function(success, error) {
-        _get('api/koodisto/koulutus', success, error);
+    this.listKoulutusalas = function(success, error) {
+        _get('api/koodisto/koulutusala', success, error);
     };
 
     this.listOpintoalas = function(success, error) {
         _get('api/koodisto/opintoala', success, error);
+    };
+
+    this.listOpintoalasByKoulutusalas = function(koulutusalas, success, error) {
+        if (!koulutusalas || koulutusalas.length < 1) {
+            _get('api/koodisto/opintoala', success, error);
+        } else {
+            $log.info("Listing opintoalas by koulutusalas.");
+            $log.info(koulutusalas);
+            _post('api/koodisto/opintoala', {koulutusala: koulutusalas}, success, error);
+        }
+    };
+
+    this.listKoulutusByOpintoalas = function(opintoalas, success, error) {
+        if (!opintoalas || opintoalas.length < 1) {
+            _get('api/koodisto/koulutus', success, error);
+        } else {
+            $log.info("Listing koulutus by opintoalas.");
+            $log.info(opintoalas);
+            _post('api/koodisto/koulutus', {opintoala: opintoalas}, success, error);
+        }
+    };
+
+    this.listKoulutus = function(success, error) {
+        _get('api/koodisto/koulutus', success, error);
     };
 }]);

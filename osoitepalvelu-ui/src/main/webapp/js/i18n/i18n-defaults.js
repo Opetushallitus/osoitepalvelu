@@ -110,6 +110,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         search_term_omistajatyyppi: 'omistajatyyppi',
         search_term_vuosiluokka: 'vuosiluokka',
         search_term_koultuksenjarjestaja: 'koulutuksen järjestäjä',
+        search_term_koulutusala: 'koulutusala',
         search_term_opintoala: 'opintoala',
         search_term_tutkinto: 'tutkinto',
 
@@ -160,6 +161,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         camel_error: 'Odottamaton virhe kutsuttaessa ulkoista palvelua reitillä {0}.',
         not_found_error: 'Virhe: Etsittyä tietoa ei löytynyt.',
         not_authorized_error: 'Virhe: Ei käyttöoikeutta pyydettyyn resurssiin.',
+        bad_request_error: 'Vihre: Käyttöliittymä suoritti virheellisen pyynnön: {1}',
         too_few_search_conditions_for_organisaatios: 'Hakua ei voida suorittaa, koska se johtaisi kaikkien organisaatioiden hakemiseen. Valitse vähintään yksi organisaatioita rajaava ehto.',
         too_few_search_conditions_for_henkilos: 'Hakua ei voida suorittaa, koska se johtaisi kaikkien Opintopolku-käyttäjien hakemiseen. Valitse vähintään yksi käyttäjiä tai organisaatioita koskeva rajausehto.',
 

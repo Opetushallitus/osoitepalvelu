@@ -86,7 +86,7 @@ public class KoodistoRouteTest {
     @Test
     public void testFindKuntasByMaakunta() {
         try {
-            List<KoodiDto> koodis  =  koodistoReitti.findKoodisWithParent("maakunta_12");
+            List<KoodiDto> koodis  =  koodistoReitti.findKoodisByParent("maakunta_12");
             Assert.assertNotNull(koodis);
             Assert.assertTrue(koodis.size() > 0);
         } catch(CamelExecutionException e) {

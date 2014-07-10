@@ -48,6 +48,7 @@ public class KoodistoCache implements Serializable {
             KOULUTUS_KIELIVALIKOIMA,
             KOULUTUSASTEKELA,
             KOULUTUSTOIMIJA,
+            KOULUTUSALAOPH2002,
             OPINTOALAOPH2002,
             ALUEHALLINTOVIRASTO,
             KAYTTOOIKEUSRYHMA,

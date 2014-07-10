@@ -39,6 +39,7 @@ public class KoodistoDto implements Serializable {
         KOULUTUS("koulutus"), // nämä käytössä AITU:ssa
         OPPILAITOKSEN_OPETUSKIELI("oppilaitoksenopetuskieli"), 
         KOULUTUS_KIELIVALIKOIMA("kielivalikoima"),  // Koulutuksen kieli
+        KOULUTUSALAOPH2002("koulutusalaoph2002"),      // Koulutusala
         KOULUTUSASTEKELA("koulutusastekela"),       // Koulutusaste
         KOULUTUSTOIMIJA("koulutustoimija"),         // Koulutuksen järjestäjä
         OPINTOALAOPH2002("opintoalaoph2002"),       // Koulutus ja Opintoala, nämä käytössä AITU:ssa
@@ -65,6 +66,7 @@ public class KoodistoDto implements Serializable {
                 put(OPPILAITOKSEN_OPETUSKIELI.getUri(), OPPILAITOKSEN_OPETUSKIELI);
                 put(KOULUTUS_KIELIVALIKOIMA.getUri(), KOULUTUS_KIELIVALIKOIMA);
                 put(KOULUTUSASTEKELA.getUri(), KOULUTUSASTEKELA);
+                put(KOULUTUSALAOPH2002.getUri(), KOULUTUSALAOPH2002);
                 put(KOULUTUSTOIMIJA.getUri(), KOULUTUSTOIMIJA);
                 put(OPINTOALAOPH2002.getUri(), OPINTOALAOPH2002);
                 put(ALUEHALLINTOVIRASTO.getUri(), ALUEHALLINTOVIRASTO);
@@ -81,10 +83,6 @@ public class KoodistoDto implements Serializable {
 
         public static KoodistoTyyppi parseTyyppi(String koodistoTyyppi) {
             KoodistoTyyppi tyyppi  =  uriToTypeMapper.get(koodistoTyyppi);
-            if (tyyppi  == null) {
-                throw new IllegalStateException("Virhe: Merkkijono->Enum mappaus: Tuntematon koodistotyyppi: "
-                         +  koodistoTyyppi);
-            }
             return tyyppi;
         }
 
@@ -96,6 +94,7 @@ public class KoodistoDto implements Serializable {
 
     private KoodistoTyyppi tyyppi;
     private OrganisaatioOid organisaatioOid;
+    private String uri;
 
     public KoodistoDto() {
     }
@@ -110,11 +109,15 @@ public class KoodistoDto implements Serializable {
     }
 
     public String getKoodistoUri() {
-        return tyyppi.getUri();
+        if (tyyppi != null) {
+            return tyyppi.getUri();
+        }
+        return this.uri;
     }
 
     public void setKoodistoUri(String koodistoUri) {
         tyyppi  =  KoodistoTyyppi.parseTyyppi(koodistoUri);
+        this.uri = koodistoUri;
     }
 
     public OrganisaatioOid getOrganisaatioOid() {
@@ -127,6 +130,6 @@ public class KoodistoDto implements Serializable {
 
     @Override
     public String toString() {
-        return tyyppi.name()  +  ", "  +  organisaatioOid;
+        return (tyyppi != null ? tyyppi.name() : tyyppi) +  ", "  +  organisaatioOid;
     }
 }

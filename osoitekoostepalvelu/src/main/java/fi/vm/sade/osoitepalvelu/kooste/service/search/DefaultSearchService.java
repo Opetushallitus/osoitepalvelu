@@ -185,8 +185,25 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         criteria.setTutkintoTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.KOULUTUS.getUri(),
                 terms.findTerms(SearchTermDto.TERM_KOULUTUS)));
         criteria.setOpintoalaTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.OPINTOALAOPH2002.getUri(),
-                terms.findTerms(SearchTermDto.TERM_OPINTOALAS)));
-
+                    terms.findTerms(SearchTermDto.TERM_OPINTOALAS)));
+        if (criteria.isToimikausiUsed()) {
+            criteria.setOnlyVoimassaOlevat(false);
+        }
+        if (!criteria.isTutkintoUsed() && !criteria.isOpintoalaUsed()) {
+            // If opintoala or tutkinto conditions used, they are (or are like to be) selected through koulutusala.
+            // However, if only koulutusalas selected, selecting the opintoalas for the selected koulutusalas
+            List<String> koulutusalas = terms.findTerms(SearchTermDto.TERM_KOULUTUSALAS);
+            if (koulutusalas != null && !koulutusalas.isEmpty()) {
+                List<String> opintoalas = new ArrayList<String>();
+                for (String koulutusala : koulutusalas) {
+                    List<UiKoodiItemDto> items = koodistoService.findOpintoalaByKoulutusalaAlaUri(terms.getLocale(), koulutusala);
+                    for (UiKoodiItemDto item : items) {
+                        opintoalas.add(item.getKoodiId());
+                    }
+                }
+                criteria.setOpintoalaTunnusIn(opintoalas);
+            }
+        }
         return criteria;
     }
 

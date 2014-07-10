@@ -35,7 +35,14 @@ angular.module('Helpers', [])
     };
 })
 .service('ExtractHelper', function() {
-    this.extract = function(val, fields) {
+    var extractFn = function(val, fields) {
+        if (val instanceof Array) {
+            var result = [];
+            angular.forEach(val, function(v) {
+                result.push(extractFn(v, fields));
+            })
+            return result;
+        }
         if( fields instanceof Array ) {
             var extracted = {};
             angular.forEach(fields, function(field) {
@@ -46,6 +53,7 @@ angular.module('Helpers', [])
             return val[fields];
         }
     };
+    this.extract = extractFn;
 })
 .service('ArrayHelper', ["ExtractHelper", "EqualsHelper", function(ExtractHelper,EqualsHelper) {
     var extractFn = function(arr, fn) {

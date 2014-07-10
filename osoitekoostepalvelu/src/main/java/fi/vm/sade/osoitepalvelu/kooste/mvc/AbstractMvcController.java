@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -58,16 +59,22 @@ public abstract class AbstractMvcController {
         return LocaleHelper.parseLocale(locale, DEFAULT_UI_LOCALE);
     }
 
-    @ResponseStatus(value  =  HttpStatus.NOT_FOUND, reason  =  "Entity not found by primary key.") // 404
+    @ResponseStatus(value  =  HttpStatus.NOT_FOUND) // 404 Entity not found by primary key.
     @ExceptionHandler(NotFoundException.class)
     public ModelAndView notFound(HttpServletRequest req, NotFoundException exception) {
         return handeException(req, exception, "not_found_error", exception);
     }
 
-    @ResponseStatus(value  =  HttpStatus.UNAUTHORIZED, reason  =  "Not authorized.") // 401
+    @ResponseStatus(value  =  HttpStatus.UNAUTHORIZED) // 401 Not authorized
     @ExceptionHandler(AuthorizationException.class)
     public ModelAndView notAuthorized(HttpServletRequest req, AuthorizationException exception) {
         return handeException(req, exception, "not_authorized_error", exception);
+    }
+
+    @ResponseStatus(value  =  HttpStatus.BAD_REQUEST) // 400 Bad request.
+    @ExceptionHandler(ServletException.class)
+    public ModelAndView badRequest(HttpServletRequest req, ServletException exception) {
+        return handeException(req, exception, "bad_request_error", exception, exception.getMessage());
     }
 
     @ResponseStatus(value  =  HttpStatus.INTERNAL_SERVER_ERROR) // 500

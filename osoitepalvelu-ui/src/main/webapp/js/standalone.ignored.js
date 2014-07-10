@@ -275,4 +275,16 @@ OsoiteKoostepalvelu.service('OptionsService', [
     this.listTutkintos = function(success) {
         success([]);
     };
+
+    this.listKoulutusalas = function(success) {
+        success([]);
+    };
+
+    this.listKoulutusByOpintoalas = function(opintoalas, success, error) {
+        success([]);
+    };
+
+    this.listOpintoalasByKoulutusalas = function(koulutusalas, success, error) {
+        success([]);
+    };
 }]);

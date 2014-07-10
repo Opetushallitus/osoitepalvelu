@@ -45,8 +45,9 @@ public class SearchTermDto implements Serializable {
     public static final String TERM_TUTKINTOIMIKUNTA_TOIMIKAUSIS = "tutkintotoimikuntaToimikausis";
     public static final String TERM_TUTKINTOIMIKUNTA_KIELIS = "tutkintotoimikuntaKielis";
     public static final String TERM_TUTKINTOIMIKUNTA_JASEN_KIELIS = "tutkintotoimikuntaJasenKielis";
-    public static final String TERM_KOULUTUS = "koulutus";
+    public static final String TERM_KOULUTUSALAS = "koulutusalas";
     public static final String TERM_OPINTOALAS = "opintoalas";
+    public static final String TERM_KOULUTUS = "koulutus";
 
     private String type;
     private List<String> values  =  new ArrayList<String>();

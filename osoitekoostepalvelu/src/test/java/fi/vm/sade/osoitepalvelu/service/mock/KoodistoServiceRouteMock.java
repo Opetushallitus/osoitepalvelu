@@ -95,12 +95,17 @@ public class KoodistoServiceRouteMock implements KoodistoRoute {
     }
 
     @Override
-    public List<KoodiDto> findKoodisWithParent(String koodiUri) {
+    public List<KoodiDto> findKoodisByParent(String koodiUri) {
         List<KoodiDto> kuntas  =  kuntasByMaakuntaUri.get(koodiUri);
         if (kuntas == null) {
             return new ArrayList<KoodiDto>();
         }
         return kuntas;
+    }
+
+    @Override
+    public List<KoodiDto> findKoodisByChild(String koodiUri) {
+        return new ArrayList<KoodiDto>();
     }
 
     protected List<KoodiDto> collect(Collection<KoodistoVersioDto> versions) {

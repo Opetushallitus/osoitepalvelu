@@ -36,6 +36,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     private static final String REITTI_HAE_KOODISTO_VERSION_KOODIT  =  "direct:haeKoodistoVersionKoodit";
     private static final String REITTI_HAE_KOODISTON_VERSIOT  =  "direct:haeKoodistonVersiot";
     private static final String REITTI_SIALTYY_YLAKOODIS  =  "direct:sisaltyYlakoodis";
+    private static final String REITTI_SIALTYY_ALAKOODIS  =  "direct:sisaltyAlakoodis";
 
     @Value("${koodiService.rest.url}")
     private String koodistoUri;
@@ -50,6 +51,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         buildKoodiversioKoodis();
         buildKaikkiVersiotiedot();
         buildSisaltyyYlakoodis();
+        buildSisaltyyAlakoodis();
     }
 
     protected void buildKaikkiVersiotiedot() {
@@ -78,6 +80,12 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     protected void buildSisaltyyYlakoodis() {
         fromHttpGetToDtos(REITTI_SIALTYY_YLAKOODIS, uri(koodistoUri),
                 headers().path("relaatio/sisaltyy-ylakoodit/${in.headers.koodiUri}"),
+                new TypeReference<List<KoodiDto>>() { });
+    }
+
+    protected void buildSisaltyyAlakoodis() {
+        fromHttpGetToDtos(REITTI_SIALTYY_ALAKOODIS, uri(koodistoUri),
+                headers().path("relaatio/sisaltyy-alakoodit/${in.headers.koodiUri}"),
                 new TypeReference<List<KoodiDto>>() { });
     }
 
@@ -112,9 +120,17 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     }
 
     @Override
-    public List<KoodiDto> findKoodisWithParent(String koodiUri) {
+    public List<KoodiDto> findKoodisByParent(String koodiUri) {
         @SuppressWarnings("unchecked")
         List<KoodiDto> koodis  =  getCamelTemplate().requestBodyAndHeader(REITTI_SIALTYY_YLAKOODIS, "",
+                "koodiUri", koodiUri, List.class);
+        return koodis;
+    }
+
+    @Override
+    public List<KoodiDto> findKoodisByChild(String koodiUri) {
+        @SuppressWarnings("unchecked")
+        List<KoodiDto> koodis  =  getCamelTemplate().requestBodyAndHeader(REITTI_SIALTYY_ALAKOODIS, "",
                 "koodiUri", koodiUri, List.class);
         return koodis;
     }

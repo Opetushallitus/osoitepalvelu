@@ -52,7 +52,13 @@ public interface KoodistoRoute {
      * @param koodiUri the koodiUri to get children for
      * @return the koodis
      */
-    List<KoodiDto> findKoodisWithParent(String koodiUri);
+    List<KoodiDto> findKoodisByParent(String koodiUri);
+
+    /**
+     * @param koodiUri the koodiUri to get parents for
+     * @return the koodis
+     */
+    List<KoodiDto> findKoodisByChild(String koodiUri);
 
     boolean isFindCounterUsed();
 

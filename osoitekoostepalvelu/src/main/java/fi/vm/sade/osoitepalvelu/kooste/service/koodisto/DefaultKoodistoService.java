@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
@@ -111,7 +112,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         return cached(new Cacheable<List<UiKoodiItemDto>>() {
             @Override
             public List<UiKoodiItemDto> get() {
-                List<KoodiDto> arvot = koodistoRoute.findKoodisWithParent(maakuntaUri);
+                List<KoodiDto> arvot = koodistoRoute.findKoodisByParent(maakuntaUri);
                 arvot = filterActiveKoodis(arvot, new LocalDate());
                 List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
                         UiKoodiItemDto.class, locale);
@@ -156,11 +157,6 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     @Override
-    public List<UiKoodiItemDto> findKoulutusOptions(Locale locale) {
-        return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUS);
-    }
-
-    @Override
     public List<UiKoodiItemDto> findOppilaitoksenOpetuskieliOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.OPPILAITOKSEN_OPETUSKIELI);
     }
@@ -192,8 +188,56 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     @Override
+    public List<UiKoodiItemDto> findKoulutusAlaOptions(Locale locale) {
+        return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUSALAOPH2002);
+    }
+
+    @Override
     public List<UiKoodiItemDto> findOpintoAlaOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.OPINTOALAOPH2002);
+    }
+
+    @Override
+    public List<UiKoodiItemDto> findOpintoalaByKoulutusalaAlaUri(final Locale locale, final String opintoalaUri) {
+        return cached(new Cacheable<List<UiKoodiItemDto>>() {
+            @Override
+            public List<UiKoodiItemDto> get() {
+                List<KoodiDto> arvot = koodistoRoute.findKoodisByChild(opintoalaUri);
+                arvot = new ArrayList<KoodiDto>(Collections2.filter(arvot, new Predicate<KoodiDto>() {
+                    public boolean apply(KoodiDto input) {
+                        return input.getKoodisto().getTyyppi() == KoodistoTyyppi.OPINTOALAOPH2002;
+                    }
+                }));
+                arvot = filterActiveKoodis(arvot, new LocalDate());
+                List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
+                        UiKoodiItemDto.class, locale);
+                return orderNimisAsc(optiot);
+            }
+        }, new KoodistoCache.CacheKey(opintoalaUri, locale));
+    }
+
+    @Override
+    public List<UiKoodiItemDto> findKoulutusOptions(Locale locale) {
+        return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUS);
+    }
+
+    @Override
+    public List<UiKoodiItemDto> findKoulutusByOpintoalaUri(final Locale locale, final String opintoalaUri) {
+        return cached(new Cacheable<List<UiKoodiItemDto>>() {
+            @Override
+            public List<UiKoodiItemDto> get() {
+                List<KoodiDto> arvot = koodistoRoute.findKoodisByParent(opintoalaUri);
+                arvot = new ArrayList<KoodiDto>(Collections2.filter(arvot, new Predicate<KoodiDto>() {
+                    public boolean apply(KoodiDto input) {
+                        return input.getKoodisto().getTyyppi() == KoodistoTyyppi.KOULUTUS;
+                    }
+                }));
+                arvot = filterActiveKoodis(arvot, new LocalDate());
+                List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
+                        UiKoodiItemDto.class, locale);
+                return orderNimisAsc(optiot);
+            }
+        }, new KoodistoCache.CacheKey(opintoalaUri, locale));
     }
 
     @Override

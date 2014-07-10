@@ -19,7 +19,7 @@
  */
 var SearchController = function($scope, $log, $modal, $location, $filter, SearchService,
                                 SearchTypes, TargetGroups, EmptyTerms,
-                                FilterHelper, ArrayHelper, KoodiHelper, SavesService,
+                                FilterHelper, ArrayHelper, ExtractHelper, KoodiHelper, SavesService,
                                 OptionsService, LocalisationService, Osoitekielis,
                                 TutkintotoimikuntaToimikausis, Aitukielis) {
     $scope.msg = function( key, params ) {
@@ -92,6 +92,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             //OptionsService.listOmistajatyyppis(function(data) { $scope.options.omistajatyyppis = data; });
             OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
             OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
+            OptionsService.listKoulutusalas(function(data) { $scope.options.koulutusalas = data; });
             OptionsService.listOpintoalas(function(data) {$scope.options.opintoalas = data;});
             //OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
             OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
@@ -111,6 +112,42 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         SearchService.clear();
         $scope.updateTerms();
         $scope.selectedSavedSearch = null;
+    };
+
+    $scope.koulutusalasChanged = function() {
+        $log.info("Koulutusalas changed.");
+        $log.info($scope.terms.koulutusalas);
+        var update = function(data) {
+            $scope.options.opintoalas = data;
+            $log.info("Updated opintoalas based on koulutusalas.");
+            $log.info(data);
+            if (!$scope.terms.opintoalas || $scope.terms.opintoalas.length < 1
+                    && $scope.options.opintoalas && $scope.options.opintoalas.length) {
+                OptionsService.listKoulutusByOpintoalas(ExtractHelper.extract($scope.options.opintoalas,"koodiUri"),
+                    function(data) {$scope.options.koulutus = data;});
+            }
+        };
+        if (!$scope.terms.koulutusalas || $scope.terms.koulutusalas.length < 1) {
+            OptionsService.listOpintoalas(update);
+        } else {
+            OptionsService.listOpintoalasByKoulutusalas($scope.terms.koulutusalas, update);
+        }
+    };
+
+    $scope.opintoalasChanged = function() {
+        $log.info("Opintoalas changed.");
+        $log.info($scope.terms.opintoalas);
+        var update = function(data) {$scope.options.koulutus = data;};
+        if (!$scope.terms.opintoalas || $scope.terms.opintoalas.length < 1) {
+            if ($scope.terms.koulutusalas || $scope.terms.koulutusalas.length > 0
+                    && $scope.options.opintoalas && $scope.options.opintoalas.length) {
+                OptionsService.listKoulutusByOpintoalas(ExtractHelper.extract($scope.options.opintoalas,"koodiUri"), update);
+            } else {
+                OptionsService.listKoulutus(update);
+            }
+        } else {
+            OptionsService.listKoulutusByOpintoalas($scope.terms.opintoalas, update);
+        }
     };
 
     $scope.toggleShowMore = function() {
@@ -279,6 +316,6 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
 }
 
 SearchController.$inject = ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
-                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "KoodiHelper",
+                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "ExtractHelper", "KoodiHelper",
                      "SavesService", "OptionsService", "LocalisationService",
                      "Osoitekielis", "TutkintotoimikuntaToimikausis", "Aitukielis"];

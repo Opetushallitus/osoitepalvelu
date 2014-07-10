@@ -72,6 +72,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         avis: [],
         maakuntas : [],
         kuntas : [],
+        koulutusalas: [],
         opintoalas: [],
         koulutus: [],
         oppilaitostyyppis: [],
