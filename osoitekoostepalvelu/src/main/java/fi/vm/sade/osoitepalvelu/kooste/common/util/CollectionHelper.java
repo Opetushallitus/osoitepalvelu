@@ -19,10 +19,9 @@ package fi.vm.sade.osoitepalvelu.kooste.common.util;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ratamaa on 15.4.2014.
@@ -86,4 +85,77 @@ public final class CollectionHelper {
         return results;
     }
 
+    /**
+     * @param map to collect
+     * @param keys to collect from map
+     * @param to add each values for given keys from given map
+     * @param <K> key type
+     * @param <T> value type
+     * @param <C> collectin type to collect result to
+     * @return the provided to collection with given keys from map appended
+     */
+    public static <K,T, C extends Collection<? super T>> C collect(Map<K,T> map, Collection<K> keys, C to) {
+        for (K key : keys) {
+            to.add(map.get(key));
+        }
+        return to;
+    }
+
+    /**
+     * @param collection to map
+     * @param map to add collection values to
+     * @param keyExtractor extracts key from collection items
+     * @param <K> key type
+     * @param <T> collection item type
+     * @param <C> collection type
+     * @param <M> map type
+     * @return the provided map with collection items mapped with their extracted keys so that first item with unique key
+     * is included in the result map
+     */
+    public static <K, T, C extends Collection<T>, M extends Map<K,T>> M singleMap(C collection, M map,
+                                              Function<T,K> keyExtractor) {
+        for (T item : collection) {
+            K key = keyExtractor.apply(item);
+            if (!map.containsKey(key)) {
+                map.put(key, item);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * @param values1 to intersect with values2
+     * @param values2 to intersect with values1
+     * @param <T> type
+     * @return the intersection of values1 and values2 with unique values ordered by values1
+     */
+    public static <T> List<T> intersection(Collection<T> values1, Collection<T> values2) {
+        Set<T>  added = new HashSet<T>(),
+                set2 = new HashSet<T>(values2);
+        List<T> results = new ArrayList<T>();
+        for (T value : values1) {
+            if (set2.contains(value) && !added.contains(value)) {
+                results.add(value);
+                added.add(value);
+            }
+        }
+        return results;
+    }
+
+    /**
+     * @param c1 to merge with c2
+     * @param c2 to merge with c1
+     * @param keyExtractor to extract the unique (and comparable) merging key with
+     * @param <K> key type
+     * @param <T> value type
+     * @return list of merged elements in c1 and c2 unique by key
+     */
+    public static <K extends Comparable<K>, T> List<T> mergeIntersected(Collection<T> c1, Collection<T> c2,
+                                                          Function<T,K> keyExtractor) {
+        Map<K, T>   items1byKeys = CollectionHelper.singleMap(c1, new TreeMap<K, T>(), keyExtractor),
+                    items2byKeys = CollectionHelper.singleMap(c2, new TreeMap<K,T>(), keyExtractor);
+        return CollectionHelper.collect(items1byKeys,
+                CollectionHelper.intersection(items1byKeys.keySet(), items2byKeys.keySet()),
+                new ArrayList<T>());
+    }
 }

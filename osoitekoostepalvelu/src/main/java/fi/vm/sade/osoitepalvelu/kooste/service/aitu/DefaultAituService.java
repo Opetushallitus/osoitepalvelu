@@ -18,9 +18,11 @@ package fi.vm.sade.osoitepalvelu.kooste.service.aitu;
 
 import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.AndPredicateAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituOppilaitosRepository;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituToimikuntaRepository;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituOppilaitosCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
@@ -28,9 +30,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.aitu.dto.converter.AituDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.service.aitu.helper.AituToimikuntaJasenyysAituToimikuntaCriteriaPredicate;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AituRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituJasenyysDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOsoitepalveluResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +71,26 @@ public class DefaultAituService extends AbstractService implements AituService {
             for (AituToimikuntaResultDto resultDto : results) {
                 resultDto.setJasenyydet(new ArrayList<AituJasenyysDto>(
                         Collections2.filter(resultDto.getJasenyydet(), predicate)));
+            }
+        }
+        return results;
+    }
+
+    @Override
+    public List<AituOppilaitosResultDto> findNayttotutkinnonJarjestajas(AituOppilaitosCriteria criteria,
+                                                                        AituKielisyys orderingKielisyys) {
+        List<AituOppilaitosResultDto> results = dtoConverter.convert(
+                aituOppilaitosRepository.findOppilaitos(criteria, orderingKielisyys),
+                new ArrayList<AituOppilaitosResultDto>(), AituOppilaitosResultDto.class);
+        List<String> matchedToimikuntas = null;
+        if (criteria.isRelatedToimikuntaResultsNeeded()) {
+            matchedToimikuntas = aituToimikuntaRepository.findToimikuntaIds(criteria.toRelatedToimikuntaCriteria());
+        }
+        AndPredicateAdapter<AituSopimusDto> sopimusPredicate = criteria.createSopimusPredicate(matchedToimikuntas);
+        if (sopimusPredicate.isFiltering()) {
+            for (AituOppilaitosResultDto resultDto : results) {
+                resultDto.setSopimukset(new ArrayList<AituSopimusDto>(
+                        Collections2.filter(resultDto.getSopimukset(), sopimusPredicate)));
             }
         }
         return results;

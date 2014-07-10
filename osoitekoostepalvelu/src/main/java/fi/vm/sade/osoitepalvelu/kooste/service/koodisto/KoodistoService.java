@@ -62,13 +62,21 @@ public interface KoodistoService {
 
     List<UiKoodiItemDto> findKoulutusAlaOptions(Locale locale);
 
-    List<UiKoodiItemDto> findOpintoalaByKoulutusalaAlaUri(Locale locale, String opintoalaUri);
+    List<UiKoodiItemDto> findOpintoalasByKoulutusalaAlaUri(Locale locale, String opintoalaUri);
+
+    List<UiKoodiItemDto> findOpintoAlasByKoulutusAlas(Locale locale, String[] koulutusalas);
 
     List<UiKoodiItemDto> findOpintoAlaOptions(Locale locale);
 
     List<UiKoodiItemDto> findKoulutusByOpintoalaUri(Locale locale, String opintoalaUri);
 
+    List<UiKoodiItemDto> findKoulutusByOpintoalasOrTyyppis(Locale locale, String[] opintoalas, String[] tyyppis);
+
     List<UiKoodiItemDto> findKoulutusOptions(Locale locale);
+
+    List<UiKoodiItemDto> findKoulutusTyyppiOptions(Locale locale);
+
+    List<UiKoodiItemDto> findKoulutusByKoulutustyyppiUri(Locale locale, String koulutustyyppiUri);
 
     List<UiKoodiItemDto> findAlueHallintoVirastoOptions(Locale locale);
 

@@ -16,13 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import com.wordnik.swagger.annotations.Api;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
+import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +27,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 
 @Api("Koodiston valintakriteerit")
@@ -104,7 +102,7 @@ public class KoodistoMvcController extends AbstractMvcController implements Seri
                              @RequestParam(value="koulutusala", required = false) String koulutusala) {
         Locale locale = parseLocale(lang);
         if (koulutusala != null) {
-            return koodistoService.findOpintoalaByKoulutusalaAlaUri(locale, koulutusala);
+            return koodistoService.findOpintoalasByKoulutusalaAlaUri(locale, koulutusala);
         }
         return koodistoService.findOpintoAlaOptions(locale);
     }
@@ -112,12 +110,8 @@ public class KoodistoMvcController extends AbstractMvcController implements Seri
     @RequestMapping(method  =  RequestMethod.POST, value  =  "/opintoala")
     @ResponseBody
     public List<UiKoodiItemDto> findOpintoAalaOptionsByKoulutusalas(@RequestParam("lang") String lang,
-                                           @RequestParam(value="koulutusala") String[] koulutusalas) {
-        List<UiKoodiItemDto> koodiItems = new ArrayList<UiKoodiItemDto>();
-        for (String koulutusala : koulutusalas) {
-            koodiItems.addAll(koodistoService.findOpintoalaByKoulutusalaAlaUri(parseLocale(lang), koulutusala));
-        }
-        return koodiItems;
+                           @RequestParam(value="koulutusala", required = false) String[] koulutusalas) {
+        return koodistoService.findOpintoAlasByKoulutusAlas(parseLocale(lang), koulutusalas);
     }
 
     @RequestMapping(method  =  RequestMethod.GET, value  =  "/koulutus")
@@ -131,15 +125,18 @@ public class KoodistoMvcController extends AbstractMvcController implements Seri
         return koodistoService.findKoulutusOptions(locale);
     }
 
+    @RequestMapping(method  =  RequestMethod.GET, value  =  "/koulutustyyppi")
+    @ResponseBody
+    public List<UiKoodiItemDto> findKoulutusTyyppiOptions(@RequestParam("lang") String lang) {
+        return koodistoService.findKoulutusTyyppiOptions(parseLocale(lang));
+    }
+
     @RequestMapping(method  =  RequestMethod.POST, value  =  "/koulutus")
     @ResponseBody
-    public List<UiKoodiItemDto> findKoulutusOptionsByOpintoalas(@RequestParam("lang") String lang,
-                                @RequestParam(value="opintoala") String[] opintoalas) {
-        List<UiKoodiItemDto> koodiItems = new ArrayList<UiKoodiItemDto>();
-        for (String opintoala : opintoalas) {
-            koodiItems.addAll(koodistoService.findKoulutusByOpintoalaUri(parseLocale(lang), opintoala));
-        }
-        return koodiItems;
+    public List<UiKoodiItemDto> findKoulutusOptionsByOpintoalasOrTyyppis(@RequestParam("lang") String lang,
+                                @RequestParam(value="opintoala", required = false) String[] opintoalas,
+                                @RequestParam(value="tyyppi", required = false) String[] tyyppis) {
+        return koodistoService.findKoulutusByOpintoalasOrTyyppis(parseLocale(lang), opintoalas, tyyppis);
     }
 
     @RequestMapping(method  =  RequestMethod.GET, value  =  "/opetuskieli")

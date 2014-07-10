@@ -81,6 +81,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         target_group_oppisopimustoimistot: 'Oppisopimustoimistot',
         target_group_muut_organisaatiot: 'Muut organisaatiot',
         target_group_tutkintotoimikunnat: 'Tutkintotoimikunnat',
+        target_group_nayttotutkinnon_jarjestajat: 'Näyttötutkinnon järjestäjät',
         target_group_kayttajat: 'Palveluiden käyttäjät',
 
         target_gorup_option_tutkintotoimikunta: 'tutkintotoimikunta',
@@ -93,6 +94,8 @@ angular.module("I18n", [], ["$provide", function($provider) {
         target_group_option_sihteeri: 'sihteeri',
         target_gorup_option_jasenet: 'jäsenet',
         target_group_option_tunnuksenhaltijat: 'tunnuksenhaltijat',
+        target_group_option_jarjestajaorganisaatio: 'koulutuksen järjestäjä',
+        target_group_option_tutkintovastaava: 'tutkintovastaava',
 
         search_terms: 'Rajaus',
         search_term_organisaation_kieli: 'organisaation kieli',
@@ -113,6 +116,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         search_term_koulutusala: 'koulutusala',
         search_term_opintoala: 'opintoala',
         search_term_tutkinto: 'tutkinto',
+        search_term_koulutustyyppi: 'tutkinnon tyyppi',
 
         show_more_terms: 'enemmän rajausehtoja',
         hide_extra_terms: 'vähemmän rajausehtoja',

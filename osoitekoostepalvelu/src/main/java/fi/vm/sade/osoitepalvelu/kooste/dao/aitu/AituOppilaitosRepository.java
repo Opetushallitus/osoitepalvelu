@@ -37,8 +37,10 @@ public interface AituOppilaitosRepository extends MongoRepository<AituOppilaitos
 
     /**
      * @param oppilaitosCriteria to filter AituOppilaitos and sopimukset with
+     * @param matchedToimikuntas toimikuntatunnus matched with toimikunta search
      * @param orberByNimi name field of AituOppilaitos to sort the results by (secondary sort order by sopimus order)
      * @return the list of mathcing AituSopimusDto from AituOppilaitos matching the criteria
      */
-    List<AituSopimusDto> findMatchingSopimukset(AituOppilaitosCriteria oppilaitosCriteria, AituKielisyys orberByNimi);
+    List<AituSopimusDto> findMatchingSopimukset(AituOppilaitosCriteria oppilaitosCriteria,
+                                    List<String> matchedToimikuntas, AituKielisyys orberByNimi);
 }

@@ -42,6 +42,9 @@ import java.util.List;
 public class DefaultAituOppilaitosRepository extends SimpleMongoRepository<AituOppilaitos, String>
         implements AituOppilaitosRepository {
 
+    @Autowired
+    private AituToimikuntaRepository aituToimikuntaRepository;
+
     public DefaultAituOppilaitosRepository(MongoEntityInformation<AituOppilaitos, String> metadata, MongoOperations mongoOperations) {
         super(metadata, mongoOperations);
     }
@@ -60,15 +63,22 @@ public class DefaultAituOppilaitosRepository extends SimpleMongoRepository<AituO
                         oppilaitosCriteria.isTutkintoUsed())
                 .addGiven(new Criteria("sopimukset.tutkinnot.opintoalatunnus").in(oppilaitosCriteria.getOpintoalaTunnusIn()),
                         oppilaitosCriteria.isOpintoalaUsed());
-        return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
-                .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituOppilaitos.class);
+        Query query = Query.query(conditions.applyTo(new Criteria()));
+        if (orberByNimi != null) {
+            query = query.with(new Sort("nimi." + orberByNimi.getAituKieli()));
+        }
+        return getMongoOperations().find(query, AituOppilaitos.class);
     }
 
     @Override
-    public List<AituSopimusDto> findMatchingSopimukset(AituOppilaitosCriteria oppilaitosCriteria, AituKielisyys orberByNimi) {
+    public List<AituSopimusDto> findMatchingSopimukset(AituOppilaitosCriteria oppilaitosCriteria, List<String> matchedToimikuntas,
+                                                       AituKielisyys orberByNimi) {
         List<AituOppilaitos> oppilaitos = findOppilaitos(oppilaitosCriteria, orberByNimi);
+        if (oppilaitosCriteria.isRelatedToimikuntaResultsNeeded() && matchedToimikuntas == null) {
+            matchedToimikuntas = aituToimikuntaRepository.findToimikuntaIds(oppilaitosCriteria.toRelatedToimikuntaCriteria());
+        }
         return new ArrayList<AituSopimusDto>(Collections2.filter( CollectionHelper.collect(oppilaitos, AituOppilaitos.SOPIMUKSET),
-                oppilaitosCriteria.createSopimusPredicate()));
+                oppilaitosCriteria.createSopimusPredicate(matchedToimikuntas)));
     }
 
 }

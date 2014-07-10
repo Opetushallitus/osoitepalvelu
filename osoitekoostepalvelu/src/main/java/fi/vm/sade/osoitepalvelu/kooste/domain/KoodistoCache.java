@@ -44,6 +44,7 @@ public class KoodistoCache implements Serializable {
             TUTKINTOTYYPPI,
             TUTKINTO,
             KOULUTUS,
+            KOULUTUSTYYPPI,
             OPPILAITOKSEN_OPETUSKIELI,
             KOULUTUS_KIELIVALIKOIMA,
             KOULUTUSASTEKELA,

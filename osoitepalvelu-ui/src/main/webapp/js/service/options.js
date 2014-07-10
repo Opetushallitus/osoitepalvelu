@@ -131,17 +131,23 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
         }
     };
 
-    this.listKoulutusByOpintoalas = function(opintoalas, success, error) {
-        if (!opintoalas || opintoalas.length < 1) {
+    this.listKoulutusByOpintoalasOrTyyppis = function(opintoalas, tyyppis, success, error) {
+        if ((!opintoalas || opintoalas.length < 1)
+                && (!tyyppis || tyyppis.length < 1)) {
             _get('api/koodisto/koulutus', success, error);
         } else {
-            $log.info("Listing koulutus by opintoalas.");
+            $log.info("Listing koulutus by opintoalas or tyyppis.");
             $log.info(opintoalas);
-            _post('api/koodisto/koulutus', {opintoala: opintoalas}, success, error);
+            $log.info(tyyppis);
+            _post('api/koodisto/koulutus', {opintoala: opintoalas, tyyppi: tyyppis}, success, error);
         }
     };
 
     this.listKoulutus = function(success, error) {
         _get('api/koodisto/koulutus', success, error);
+    };
+
+    this.listKoulutusTyyppis = function(success, error) {
+        _get('api/koodisto/koulutustyyppi', success, error);
     };
 }]);

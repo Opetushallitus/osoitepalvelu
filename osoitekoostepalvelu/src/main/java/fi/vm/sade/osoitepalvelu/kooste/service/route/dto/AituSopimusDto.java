@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
 import com.google.common.base.Function;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,7 +30,8 @@ import java.util.List;
  */
 public class AituSopimusDto implements Serializable {
     private static final long serialVersionUID = 7422103301591584089L;
-    
+
+    @Indexed
     private String toimikunta;
     private String sahkoposti;
     private String vastuuhenkilo;

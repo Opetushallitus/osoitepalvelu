@@ -94,6 +94,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
             OptionsService.listKoulutusalas(function(data) { $scope.options.koulutusalas = data; });
             OptionsService.listOpintoalas(function(data) {$scope.options.opintoalas = data;});
+            OptionsService.listKoulutusTyyppis(function(data) {$scope.options.koulutustyyppis = data;});
             //OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
             OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
             $scope.options.tutkintotoimikuntaToimikausis = TutkintotoimikuntaToimikausis;
@@ -114,6 +115,21 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         $scope.selectedSavedSearch = null;
     };
 
+    $scope.effectiveSelectedOpintoalas = function() {
+        if ((!$scope.terms.opintoalas || $scope.terms.opintoalas.length < 1)
+                && $scope.terms.koulutusalas && $scope.terms.koulutusalas.length) {
+            return ExtractHelper.extract($scope.options.opintoalas,"koodiUri");
+        }
+        return $scope.terms.opintoalas;
+    }
+
+    $scope.opintoalasChanged = function() {
+        $log.info("Opintoalas changed.");
+        $log.info($scope.terms.opintoalas);
+        OptionsService.listKoulutusByOpintoalasOrTyyppis($scope.effectiveSelectedOpintoalas(),
+            $scope.terms.koulutustyyppis, function(data) {$scope.options.koulutus = data;});
+    };
+
     $scope.koulutusalasChanged = function() {
         $log.info("Koulutusalas changed.");
         $log.info($scope.terms.koulutusalas);
@@ -121,11 +137,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             $scope.options.opintoalas = data;
             $log.info("Updated opintoalas based on koulutusalas.");
             $log.info(data);
-            if (!$scope.terms.opintoalas || $scope.terms.opintoalas.length < 1
-                    && $scope.options.opintoalas && $scope.options.opintoalas.length) {
-                OptionsService.listKoulutusByOpintoalas(ExtractHelper.extract($scope.options.opintoalas,"koodiUri"),
-                    function(data) {$scope.options.koulutus = data;});
-            }
+            $scope.opintoalasChanged();
         };
         if (!$scope.terms.koulutusalas || $scope.terms.koulutusalas.length < 1) {
             OptionsService.listOpintoalas(update);
@@ -134,20 +146,11 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         }
     };
 
-    $scope.opintoalasChanged = function() {
-        $log.info("Opintoalas changed.");
-        $log.info($scope.terms.opintoalas);
-        var update = function(data) {$scope.options.koulutus = data;};
-        if (!$scope.terms.opintoalas || $scope.terms.opintoalas.length < 1) {
-            if ($scope.terms.koulutusalas || $scope.terms.koulutusalas.length > 0
-                    && $scope.options.opintoalas && $scope.options.opintoalas.length) {
-                OptionsService.listKoulutusByOpintoalas(ExtractHelper.extract($scope.options.opintoalas,"koodiUri"), update);
-            } else {
-                OptionsService.listKoulutus(update);
-            }
-        } else {
-            OptionsService.listKoulutusByOpintoalas($scope.terms.opintoalas, update);
-        }
+    $scope.koulutusTyyppisChanged = function() {
+        $log.info("Koulutustyyppis changed.");
+        $log.info($scope.terms.koulutustyyppis);
+        OptionsService.listKoulutusByOpintoalasOrTyyppis($scope.effectiveSelectedOpintoalas(),
+            $scope.terms.koulutustyyppis, function(data) {$scope.options.koulutus = data;});
     };
 
     $scope.toggleShowMore = function() {
@@ -155,7 +158,13 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
     };
 
     $scope.isShowTutkintotoimikuntaTerm = function() {
-        return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1;
+        return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1
+            || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') != -1;
+    };
+
+    $scope.isShowTutkintohierarkiaTerms = function() {
+        return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1
+            || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') != -1;
     };
 
     $scope.isShowTutkintotoimikuntaRooliTerm = function() {
@@ -171,7 +180,12 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
     };
 
     $scope.isShowTutkintotoimikuntaToimikausiTerm = function() {
-        return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1;
+        return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1
+            || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') != -1;
+    };
+
+    $scope.isShowKoulutusTyyppiTerm = function() {
+        return $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') != -1;
     };
 
     $scope.isShowKoulutaTerm = function() {

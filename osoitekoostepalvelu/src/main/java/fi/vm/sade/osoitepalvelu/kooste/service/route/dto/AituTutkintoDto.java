@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import org.springframework.data.mongodb.core.index.Indexed;
+
 import java.io.Serializable;
 
 /**
@@ -25,8 +27,10 @@ import java.io.Serializable;
  */
 public class AituTutkintoDto implements Serializable {
     private static final long serialVersionUID = 6027647418933397515L;
-    
+
+    @Indexed
     private String tutkintotunnus;
+    @Indexed
     private String opintoalatunnus;
     private String vastuuhenkilo;
     private String sahkoposti_vastuuhenkilo;

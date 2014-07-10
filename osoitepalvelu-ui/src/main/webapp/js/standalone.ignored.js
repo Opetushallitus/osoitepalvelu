@@ -280,7 +280,11 @@ OsoiteKoostepalvelu.service('OptionsService', [
         success([]);
     };
 
-    this.listKoulutusByOpintoalas = function(opintoalas, success, error) {
+    this.listKoulutusTyyppis = function(success) {
+        success([]);
+    };
+
+    this.listKoulutusByOpintoalasOrTyyppis = function(opintoalas, tyyppis, success, error) {
         success([]);
     };
 

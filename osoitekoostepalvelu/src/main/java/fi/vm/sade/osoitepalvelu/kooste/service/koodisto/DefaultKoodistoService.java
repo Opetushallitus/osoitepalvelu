@@ -19,6 +19,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.dao.cache.KoodistoCacheRepository;
@@ -198,7 +199,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     @Override
-    public List<UiKoodiItemDto> findOpintoalaByKoulutusalaAlaUri(final Locale locale, final String opintoalaUri) {
+    public List<UiKoodiItemDto> findOpintoalasByKoulutusalaAlaUri(final Locale locale, final String opintoalaUri) {
         return cached(new Cacheable<List<UiKoodiItemDto>>() {
             @Override
             public List<UiKoodiItemDto> get() {
@@ -214,6 +215,18 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
                 return orderNimisAsc(optiot);
             }
         }, new KoodistoCache.CacheKey(opintoalaUri, locale));
+    }
+
+    @Override
+    public List<UiKoodiItemDto> findOpintoAlasByKoulutusAlas(Locale locale, String[] koulutusalas) {
+        if (koulutusalas == null) {
+            return findOpintoAlaOptions(locale);
+        }
+        List<UiKoodiItemDto> koodiItems = new ArrayList<UiKoodiItemDto>();
+        for (String koulutusala : koulutusalas) {
+            koodiItems.addAll(findOpintoalasByKoulutusalaAlaUri(locale, koulutusala));
+        }
+        return orderNimisAsc(koodiItems);
     }
 
     @Override
@@ -238,6 +251,54 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
                 return orderNimisAsc(optiot);
             }
         }, new KoodistoCache.CacheKey(opintoalaUri, locale));
+    }
+
+    @Override
+    public List<UiKoodiItemDto> findKoulutusTyyppiOptions(Locale locale) {
+        return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUSTYYPPI);
+    }
+
+    @Override
+    public List<UiKoodiItemDto> findKoulutusByKoulutustyyppiUri(final Locale locale, final String koulutustyyppiUri) {
+        return cached(new Cacheable<List<UiKoodiItemDto>>() {
+            @Override
+            public List<UiKoodiItemDto> get() {
+                List<KoodiDto> arvot = koodistoRoute.findKoodisByParent(koulutustyyppiUri);
+                arvot = new ArrayList<KoodiDto>(Collections2.filter(arvot, new Predicate<KoodiDto>() {
+                    public boolean apply(KoodiDto input) {
+                        return input.getKoodisto().getTyyppi() == KoodistoTyyppi.KOULUTUS;
+                    }
+                }));
+                arvot = filterActiveKoodis(arvot, new LocalDate());
+                List<UiKoodiItemDto> optiot = dtoConverter.convert(arvot, new ArrayList<UiKoodiItemDto>(),
+                        UiKoodiItemDto.class, locale);
+                return orderNimisAsc(optiot);
+            }
+        }, new KoodistoCache.CacheKey(koulutustyyppiUri, locale));
+    }
+
+    @Override
+    public List<UiKoodiItemDto> findKoulutusByOpintoalasOrTyyppis(Locale locale, String[] opintoalas, String[] tyyppis) {
+        if (opintoalas == null && tyyppis == null) {
+            return findKoulutusOptions(locale);
+        }
+        List<UiKoodiItemDto> itemsByOpintoala = new ArrayList<UiKoodiItemDto>();
+        if (opintoalas != null) {
+            for (String opintoala : opintoalas) {
+                itemsByOpintoala.addAll(findKoulutusByOpintoalaUri(locale, opintoala));
+            }
+        }
+        if (tyyppis != null) {
+            List<UiKoodiItemDto> itemsByTyyppi = new ArrayList<UiKoodiItemDto>();
+            for (String tyyppi : tyyppis) {
+                itemsByTyyppi.addAll(findKoulutusByKoulutustyyppiUri(locale, tyyppi));
+            }
+            if (opintoalas != null) {
+                return orderNimisAsc(CollectionHelper.mergeIntersected(itemsByOpintoala, itemsByTyyppi, UiKoodiItemDto.URI));
+            }
+            return itemsByTyyppi;
+        }
+        return itemsByOpintoala;
     }
 
     @Override

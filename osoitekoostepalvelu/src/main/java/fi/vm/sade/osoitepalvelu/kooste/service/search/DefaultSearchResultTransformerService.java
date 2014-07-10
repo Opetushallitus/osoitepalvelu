@@ -83,18 +83,20 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
         List<SearchResultRowDto> aituHenkiloResults = transformToimikuntaJasens(results.getAituToimikuntas(), presentation);
         transformedResults.addAll(aituHenkiloResults);
-        
+
+        List<SearchResultRowDto> aituOppilaitosResults = transformNayttotutkinonJarjestajaOrganisaatios(results
+                .getAituOppilaitos(), presentation);
+        transformedResults.addAll(aituOppilaitosResults);
+
         resolveMissingOrganisaatioRelatedDetails(transformedResults, presentation, context);
 
         List<SearchResultRowDto> rows = new ArrayList<SearchResultRowDto>(Collections2
                 .filter(transformedResults, new Predicate<SearchResultRowDto>() {
-            @Override
             public boolean apply(SearchResultRowDto result) {
                 return presentation.isResultRowIncluded(result);
             }
         }));
-        
-        
+
         if( searchType == SearchType.EMAIL ) {
             // Kyseessä email-tyyppinen haku, joten nyt suodatetaan kaikki dublikaatti-emailit pois.
             Set<String> emails = new TreeSet<String>();
@@ -112,7 +114,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 } else if(dto.getKriisitiedotuksenEmail() != null && !emails.contains(dto.getKriisitiedotuksenEmail())) {
                     emails.add(dto.getKriisitiedotuksenEmail());
                     filtteredTransformedResults.add(dto);
-                } else if(dto.getViranomaistiedotuksenEmail() != null && !emails.contains(dto.getViranomaistiedotuksenEmail())) {
+                } else if(dto.getViranomaistiedotuksenEmail() != null && !emails.contains(
+                        dto.getViranomaistiedotuksenEmail())) {
                     emails.add(dto.getViranomaistiedotuksenEmail());
                     filtteredTransformedResults.add(dto);
                 }                
@@ -261,6 +264,15 @@ public class DefaultSearchResultTransformerService extends AbstractService
             SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto(), presentation.getLocale());
             results.add(row);
         }
+
+        return results;
+    }
+
+    protected List<SearchResultRowDto> transformNayttotutkinonJarjestajaOrganisaatios(
+            List<AituOppilaitosResultDto> aituOppilaitos, SearchResultPresentation presentation) {
+        List<SearchResultRowDto> results = new ArrayList<SearchResultRowDto>();
+
+
 
         return results;
     }

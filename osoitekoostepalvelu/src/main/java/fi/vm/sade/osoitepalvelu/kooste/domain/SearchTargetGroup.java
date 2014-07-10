@@ -36,7 +36,8 @@ public class SearchTargetGroup implements Serializable {
         MUUT_ORGANISAATIOT("Muu organisaatio"),
         TUTKINTOTOIMIKUNNAT,
         KOULUTA_KAYTTAJAT,
-        AIPAL_KAYTTAJAT;
+        AIPAL_KAYTTAJAT,
+        NAYTTOTUTKINNON_JARJESTAJAT;
 
         private final String[] organisaatioPalveluTyyppiArvo;
 
@@ -85,6 +86,8 @@ public class SearchTargetGroup implements Serializable {
         SIHTEERI,
         JASENET,
         TUTKINTOTOIMIKUNTA,
+        JARJESTAJA_ORGANISAATIO,
+        TUTKINTOVASTAAVA,
         TUNNUKSENHALTIJAT;
     };
 

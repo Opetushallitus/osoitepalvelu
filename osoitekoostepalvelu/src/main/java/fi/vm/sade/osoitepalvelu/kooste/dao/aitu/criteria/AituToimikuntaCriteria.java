@@ -27,7 +27,7 @@ import java.util.List;
  * Date: 4/16/14
  * Time: 4:49 PM
  */
-public class AituToimikuntaCriteria implements Serializable {
+public class AituToimikuntaCriteria implements Serializable, TutkintorakenneAwareCriteria {
     private static final long serialVersionUID = 5633851719629940782L;
     
     private List<String> kielisyysIn = new ArrayList<String>();
@@ -52,10 +52,12 @@ public class AituToimikuntaCriteria implements Serializable {
         return jasenKielisyysIn != null && !jasenKielisyysIn.isEmpty();
     }
 
+    @Override
     public boolean isTutkintoUsed() {
         return this.tutkintoTunnusIn != null && !this.tutkintoTunnusIn.isEmpty();
     }
 
+    @Override
     public boolean isOpintoalaUsed() {
         return this.opintoalaTunnusIn != null && !this.opintoalaTunnusIn.isEmpty();
     }
@@ -112,18 +114,22 @@ public class AituToimikuntaCriteria implements Serializable {
         this.onlyVoimassaOlevat = onlyVoimassaOlevat;
     }
 
+    @Override
     public List<String> getOpintoalaTunnusIn() {
         return opintoalaTunnusIn;
     }
 
+    @Override
     public void setOpintoalaTunnusIn(List<String> opintoalaTunnusIn) {
         this.opintoalaTunnusIn = opintoalaTunnusIn;
     }
 
+    @Override
     public List<String> getTutkintoTunnusIn() {
         return tutkintoTunnusIn;
     }
 
+    @Override
     public void setTutkintoTunnusIn(List<String> tutkintoTunnusIn) {
         this.tutkintoTunnusIn = tutkintoTunnusIn;
     }

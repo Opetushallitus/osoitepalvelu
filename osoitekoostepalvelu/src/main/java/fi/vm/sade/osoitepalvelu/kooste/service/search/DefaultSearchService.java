@@ -23,7 +23,9 @@ import com.googlecode.ehcache.annotations.PartialCacheKey;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.KoodiHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituOppilaitosCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.TutkintorakenneAwareCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
@@ -85,13 +87,16 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                         SearchTargetGroup.TargetType.JASENET,
                         SearchTargetGroup.TargetType.SIHTEERI,
                         SearchTargetGroup.TargetType.PUHEENJOHTAJA),
+                searchNayttotutkinnonJarjestajas = terms.containsAnyTargetGroup(
+                        new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.NAYTTOTUTKINNON_JARJESTAJAT}),
             returnOrgansiaatios = terms.containsAnyTargetGroup(
                     SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes(), SearchTargetGroup.TargetType.ORGANISAATIO);
 
         OrganisaatioYhteystietoCriteriaDto organisaatioCriteria = produceOrganisaatioCriteria(terms);
         boolean anyOrganisaatioRelatedConditionsUsed = organisaatioCriteria.getNumberOfUsedConditions() > 0,
             searchOrganisaatios = returnOrgansiaatios || (searchHenkilos && anyOrganisaatioRelatedConditionsUsed)
-                            || (searchToimikuntas && anyOrganisaatioRelatedConditionsUsed);
+                            || (searchToimikuntas && anyOrganisaatioRelatedConditionsUsed)
+                            || (searchNayttotutkinnonJarjestajas && anyOrganisaatioRelatedConditionsUsed);
 
         List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults
                 = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
@@ -117,6 +122,21 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                         organisaatioYhteystietoResults, new ArrayList<OrganisaatioResultDto>(),
                         OrganisaatioResultDto.class, terms.getLocale());
                 results.setOrganisaatios(convertedResults);
+            }
+        }
+
+        if (searchNayttotutkinnonJarjestajas) {
+            AituOppilaitosCriteria oppilaitosCriteria = produceOppilaitosCriteria(terms);
+            if (anyOrganisaatioRelatedConditionsUsed) {
+                oppilaitosCriteria.setOppilaitoskoodiIn(oppilaitoskoodis(organisaatioYhteystietoResults));
+            }
+            if (!anyOrganisaatioRelatedConditionsUsed || oppilaitosCriteria.isOppilaitoskoodiUsed()) {
+                AituKielisyys orderingKielisyys = AituKielisyys.fromLocale(terms.getLocale()).or(AituKielisyys.kieli_fi);
+                List<AituOppilaitosResultDto> oppilaitosResults = aituService.findNayttotutkinnonJarjestajas(
+                        oppilaitosCriteria, orderingKielisyys);
+            } else {
+                // No organisaatio rersults but organisaatio related conditions used. Should return nothing:
+                results.setAituOppilaitos(new ArrayList<AituOppilaitosResultDto>());
             }
         }
 
@@ -182,28 +202,51 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_ROOLIS)));
         criteria.setIdsIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.TUTKINTOTOIMIKUNTA.getUri(),
                 terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA)));
+        if (criteria.isToimikausiUsed()) {
+            criteria.setOnlyVoimassaOlevat(false); // -> kaikki jasenyydet
+        }
+        return filterTutkintorakenneRelatedConditions(criteria, terms);
+    }
+
+    protected AituOppilaitosCriteria produceOppilaitosCriteria(SearchTermsDto terms) {
+        AituOppilaitosCriteria criteria = new AituOppilaitosCriteria();
+        criteria.setToimikuntaIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.TUTKINTOTOIMIKUNTA.getUri(),
+                terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA)));
+        criteria.setToimikausisIn(AituToimikunta.AituToimikausi.valuesOf(
+                terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_TOIMIKAUSIS)));
+
+        return filterTutkintorakenneRelatedConditions(criteria, terms);
+    }
+
+    protected <C extends TutkintorakenneAwareCriteria> C filterTutkintorakenneRelatedConditions(C criteria,
+                                                                                                SearchTermsDto terms) {
         criteria.setTutkintoTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.KOULUTUS.getUri(),
                 terms.findTerms(SearchTermDto.TERM_KOULUTUS)));
         criteria.setOpintoalaTunnusIn(KoodiHelper.parseKoodiArvos(KoodistoDto.KoodistoTyyppi.OPINTOALAOPH2002.getUri(),
-                    terms.findTerms(SearchTermDto.TERM_OPINTOALAS)));
-        if (criteria.isToimikausiUsed()) {
-            criteria.setOnlyVoimassaOlevat(false);
+                terms.findTerms(SearchTermDto.TERM_OPINTOALAS)));
+        boolean tutkintosWasUsed = criteria.isTutkintoUsed();
+        if (!tutkintosWasUsed) {
+            // If koulutus tyyppi is used, include all koulutus by tyyppi. In other cases, will be used to limit
+            // koulutus options (and those are more specific if given)
+            List<String> koulutustyyppis = terms.findTerms(SearchTermDto.TERM_KOULUTUSTYYPPIS);
+            if (koulutustyyppis != null && !koulutustyyppis.isEmpty()) {
+                criteria.setTutkintoTunnusIn(new ArrayList<String>(Collections2.transform(koodistoService
+                        .findKoulutusByOpintoalasOrTyyppis(terms.getLocale(), null,
+                                koulutustyyppis.toArray(new String[0])),
+                        UiKoodiItemDto.KOODI_ID)));
+            }
         }
-        if (!criteria.isTutkintoUsed() && !criteria.isOpintoalaUsed()) {
+        if (!tutkintosWasUsed && !criteria.isOpintoalaUsed()) {
             // If opintoala or tutkinto conditions used, they are (or are like to be) selected through koulutusala.
             // However, if only koulutusalas selected, selecting the opintoalas for the selected koulutusalas
             List<String> koulutusalas = terms.findTerms(SearchTermDto.TERM_KOULUTUSALAS);
             if (koulutusalas != null && !koulutusalas.isEmpty()) {
-                List<String> opintoalas = new ArrayList<String>();
-                for (String koulutusala : koulutusalas) {
-                    List<UiKoodiItemDto> items = koodistoService.findOpintoalaByKoulutusalaAlaUri(terms.getLocale(), koulutusala);
-                    for (UiKoodiItemDto item : items) {
-                        opintoalas.add(item.getKoodiId());
-                    }
-                }
-                criteria.setOpintoalaTunnusIn(opintoalas);
+                criteria.setOpintoalaTunnusIn(new ArrayList<String>(Collections2.transform(koodistoService
+                        .findOpintoAlasByKoulutusAlas(terms.getLocale(), koulutusalas.toArray(new String[0])),
+                        UiKoodiItemDto.KOODI_ID)));
             }
         }
+
         return criteria;
     }
 
@@ -233,7 +276,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         List<HenkiloListResultDto> henkilos = henkiloService.findHenkilos(criteria, context);
         return new ArrayList<HenkiloDetailsDto>(Collections2.transform(henkilos,
                     new Function<HenkiloListResultDto, HenkiloDetailsDto>() {
-            @Override
             public HenkiloDetailsDto apply(HenkiloListResultDto result) {
                 return henkiloService.getHenkiloTiedot(result.getOidHenkilo(), context);
             }
@@ -258,7 +300,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     protected Collection<? extends String> kuntasForMaakunta(Locale locale, String maakuntaUri) {
         return Collections2.transform(koodistoService.findKuntasByMaakuntaUri(locale, maakuntaUri),
                 new Function<UiKoodiItemDto, String>() {
-            @Override
             public String apply(UiKoodiItemDto koodi) {
                 return koodi.getKoodiUri();
             }

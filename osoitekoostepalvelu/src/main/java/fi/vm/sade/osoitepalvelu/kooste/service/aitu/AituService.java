@@ -17,7 +17,10 @@ package fi.vm.sade.osoitepalvelu.kooste.service.aitu;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituOppilaitosCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.TutkintorakenneAwareCriteria;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOppilaitosResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOsoitepalveluResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto;
 
@@ -42,6 +45,14 @@ public interface AituService {
                                                                     AituKielisyys orderByNimiKieli);
 
     /**
+     * @param criteria for AITU oppilaitos and sopimus
+     * @param orderingKielisyys AITU's keili to order by
+     * @return AituOppilaitosResultDto with matchins sopimus
+     */
+    List<AituOppilaitosResultDto> findNayttotutkinnonJarjestajas(AituOppilaitosCriteria criteria,
+                                                                 AituKielisyys orderingKielisyys);
+
+    /**
      * @param results to override the data in MongoDB with
      */
     void refreshData( AituOsoitepalveluResultsDto results );
@@ -53,5 +64,4 @@ public interface AituService {
      * @param requestContext for the AITU route
      */
     void refreshData( CamelRequestContext requestContext );
-
 }

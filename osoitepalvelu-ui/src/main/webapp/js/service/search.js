@@ -119,6 +119,9 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         $log.info("Update target groups");
         $log.info(targetGroups);
         _targetGroups = angular.copy(targetGroups);
+        angular.forEach(_targetGroups, function(tg) {
+            delete(tg.hideOptions);
+        });
     };
 
     this.updateTerms = function(terms) {

@@ -33,5 +33,11 @@ public interface AituToimikuntaRepository extends MongoRepository<AituToimikunta
      */
     List<AituToimikunta> findToimikuntas(AituToimikuntaCriteria toimikuntaCriteria, AituKielisyys orderByNimi);
 
+    /**
+     * @param toimikuntaCriteria
+     * @return all ids of AituToimikuntas
+     */
+    List<String> findToimikuntaIds(AituToimikuntaCriteria toimikuntaCriteria);
+
     List<String> findVoimassaOlevatRoolit();
 }

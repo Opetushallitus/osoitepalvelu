@@ -75,4 +75,8 @@ public class AndPredicateAdapter<T> implements Predicate<T> {
     public int hashCode() {
         return super.hashCode();
     }
+
+    public boolean isFiltering() {
+        return !this.predicates.isEmpty();
+    }
 }

@@ -56,6 +56,18 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
 
     @Override
     public List<AituToimikunta> findToimikuntas(AituToimikuntaCriteria toimikuntaCriteria, AituKielisyys orberByNimi) {
+        CriteriaHelper.Conditions conditions = conditions(toimikuntaCriteria);
+        return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
+                .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
+    }
+
+    @Override
+    public List<String> findToimikuntaIds(AituToimikuntaCriteria toimikuntaCriteria) {
+        return getMongoOperations().getCollection(AituToimikunta.class.getAnnotation(Document.class).collection())
+                .distinct("_id",  conditions(toimikuntaCriteria).applyTo(new Criteria()).getCriteriaObject());
+    }
+
+    protected CriteriaHelper.Conditions conditions(AituToimikuntaCriteria toimikuntaCriteria) {
         CriteriaHelper.Conditions conditions = new CriteriaHelper.Conditions();
         if (toimikuntaCriteria.isIdsUsed()) {
             conditions.add(new Criteria("_id").in(toimikuntaCriteria.getIdsIn()));
@@ -76,14 +88,13 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
             conditions.add(new Criteria("jasenyydet.voimassa").is(true));
         }
         if (toimikuntaCriteria.isTutkintoUsed() || toimikuntaCriteria.isOpintoalaUsed()
-                    || toimikuntaCriteria.isOppilaitoskoodiUsed()) {
+                || toimikuntaCriteria.isOppilaitoskoodiUsed()) {
             Collection<String> toimikuntasBySopimusehdot = Collections2.transform(
-                    aituOppilaitosRepository.findMatchingSopimukset(toimikuntaCriteria.toOppilaitosCriteria(), orberByNimi),
-                    AituSopimusDto.TOIMIKUNTA);
+                    aituOppilaitosRepository.findMatchingSopimukset(toimikuntaCriteria.toOppilaitosCriteria(),
+                            null, null), AituSopimusDto.TOIMIKUNTA);
             conditions.add(new Criteria("_id").in(toimikuntasBySopimusehdot));
         }
-        return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
-                .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
+        return conditions;
     }
 
     @Override

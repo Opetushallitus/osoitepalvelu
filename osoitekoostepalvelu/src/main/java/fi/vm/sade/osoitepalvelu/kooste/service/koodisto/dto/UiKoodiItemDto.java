@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
 
+import com.google.common.base.Function;
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.ratamaa.dtoconverter.annotation.DtoPath;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
@@ -40,6 +41,19 @@ public class UiKoodiItemDto implements Serializable {
     private String lyhytNimi;
     @DtoConversion(withClass = KoodiDto.class)
     private List<OrganisaatioviiteDto> organisaatioViite  =  new ArrayList<OrganisaatioviiteDto>();
+
+    public static final Function<UiKoodiItemDto, String> URI = new Function<UiKoodiItemDto, String>() {
+        @Override
+        public String apply(UiKoodiItemDto item) {
+            return item.getKoodiUri();
+        }
+    };
+    public static final Function<UiKoodiItemDto, String> KOODI_ID = new Function<UiKoodiItemDto, String>() {
+        @Override
+        public String apply(UiKoodiItemDto item) {
+            return item.getKoodiId();
+        }
+    };
 
     public KoodistoTyyppi getKoodistonTyyppi() {
         return koodistonTyyppi;

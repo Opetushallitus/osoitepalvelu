@@ -43,6 +43,11 @@ public class AituToimikuntaJasenyysAituToimikuntaCriteriaPredicate implements Pr
                 return false;
             }
         }
+        if (criteria.isJasenKielisyysUsed()) {
+            if (!criteria.getJasenKielisyysIn().contains(jasenyys.getAidinkieli())) {
+                return false;
+            }
+        }
         return true;
     }
 }

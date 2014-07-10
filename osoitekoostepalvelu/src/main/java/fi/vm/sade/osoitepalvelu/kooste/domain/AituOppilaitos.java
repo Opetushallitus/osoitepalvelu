@@ -19,6 +19,7 @@ package fi.vm.sade.osoitepalvelu.kooste.domain;
 import com.google.common.base.Function;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import java.util.Map;
 public class AituOppilaitos {
     @Id
     private String oid;
+    @Indexed
     private String oppilaitoskoodi;
     private Map<String,String> nimi = new HashMap<String, String>();
     private String osoite;
