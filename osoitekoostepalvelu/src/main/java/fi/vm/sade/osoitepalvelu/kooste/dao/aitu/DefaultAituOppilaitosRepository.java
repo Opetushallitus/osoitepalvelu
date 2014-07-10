@@ -16,13 +16,24 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 
+import com.google.common.collect.Collections2;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituOppilaitosCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ratamaa on 15.4.2014.
@@ -38,6 +49,26 @@ public class DefaultAituOppilaitosRepository extends SimpleMongoRepository<AituO
     @Autowired
     public DefaultAituOppilaitosRepository(MongoRepositoryFactory factory, MongoOperations mongoOperations) {
         this(factory.<AituOppilaitos, String>getEntityInformation(AituOppilaitos.class), mongoOperations);
+    }
+
+    @Override
+    public List<AituOppilaitos> findOppilaitos(AituOppilaitosCriteria oppilaitosCriteria, AituKielisyys orberByNimi) {
+        CriteriaHelper.Conditions conditions = new CriteriaHelper.Conditions()
+                .addGiven(new Criteria("oppilaitoskoodi").in(oppilaitosCriteria.getOppilaitoskoodiIn()),
+                        oppilaitosCriteria.isOppilaitoskoodiUsed())
+                .addGiven(new Criteria("sopimukset.tutkinnot.tutkintotunnus").in(oppilaitosCriteria.getTutkintoTunnusIn()),
+                        oppilaitosCriteria.isTutkintoUsed())
+                .addGiven(new Criteria("sopimukset.tutkinnot.opintoalatunnus").in(oppilaitosCriteria.getOpintoalaTunnusIn()),
+                        oppilaitosCriteria.isOpintoalaUsed());
+        return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
+                .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituOppilaitos.class);
+    }
+
+    @Override
+    public List<AituSopimusDto> findMatchingSopimukset(AituOppilaitosCriteria oppilaitosCriteria, AituKielisyys orberByNimi) {
+        List<AituOppilaitos> oppilaitos = findOppilaitos(oppilaitosCriteria, orberByNimi);
+        return new ArrayList<AituSopimusDto>(Collections2.filter( CollectionHelper.collect(oppilaitos, AituOppilaitos.SOPIMUKSET),
+                oppilaitosCriteria.createSopimusPredicate()));
     }
 
 }

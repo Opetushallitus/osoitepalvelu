@@ -16,11 +16,29 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 
+import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituOppilaitosCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
 
 /**
  * Created by ratamaa on 15.4.2014.
  */
 public interface AituOppilaitosRepository extends MongoRepository<AituOppilaitos, String> {
+
+    /**
+     * @param oppilaitosCriteria to filter AituOppilaitos with
+     * @param orberByNimi name field to order the results by
+     * @return the list of AituOppilaitos
+     */
+    List<AituOppilaitos> findOppilaitos(AituOppilaitosCriteria oppilaitosCriteria, AituKielisyys orberByNimi);
+
+    /**
+     * @param oppilaitosCriteria to filter AituOppilaitos and sopimukset with
+     * @param orberByNimi name field of AituOppilaitos to sort the results by (secondary sort order by sopimus order)
+     * @return the list of mathcing AituSopimusDto from AituOppilaitos matching the criteria
+     */
+    List<AituSopimusDto> findMatchingSopimukset(AituOppilaitosCriteria oppilaitosCriteria, AituKielisyys orberByNimi);
 }

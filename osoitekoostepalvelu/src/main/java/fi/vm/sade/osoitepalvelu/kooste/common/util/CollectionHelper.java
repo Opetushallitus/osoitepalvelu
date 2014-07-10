@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
@@ -68,6 +69,21 @@ public final class CollectionHelper {
             return Collections2.filter(col, fallbackPredicate);
         }
         return result;
+    }
+
+    /**
+     * @param collection to collect extracted values from
+     * @param extractor to transform items of collection to collections to combine
+     * @param <E> the original container type
+     * @param <T> the extracted item type
+     * @return the extracted items in a single list
+     */
+    public static <E,T, C extends Collection<T>> List<T> collect(Collection<E> collection, Function<E,C> extractor) {
+        List<T> results = new ArrayList<T>();
+        for (E item : collection) {
+            results.addAll(extractor.apply(item));
+        }
+        return results;
     }
 
 }

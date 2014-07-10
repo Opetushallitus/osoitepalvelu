@@ -143,4 +143,12 @@ public class AituToimikuntaCriteria implements Serializable {
     public void setOppilaitoskoodiIn(List<String> oppilaitoskoodiIn) {
         this.oppilaitoskoodiIn = oppilaitoskoodiIn;
     }
+
+    public AituOppilaitosCriteria toOppilaitosCriteria() {
+        AituOppilaitosCriteria oppilaitosCriteria = new AituOppilaitosCriteria();
+        oppilaitosCriteria.setOppilaitoskoodiIn(this.oppilaitoskoodiIn);
+        oppilaitosCriteria.setOpintoalaTunnusIn(this.opintoalaTunnusIn);
+        oppilaitosCriteria.setTutkintoTunnusIn(this.tutkintoTunnusIn);
+        return oppilaitosCriteria;
+    }
 }

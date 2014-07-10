@@ -16,10 +16,11 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 
+import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
-import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -31,6 +32,7 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -39,6 +41,9 @@ import java.util.List;
 @Repository
 public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituToimikunta, String>
         implements AituToimikuntaRepository {
+
+    @Autowired
+    private AituOppilaitosRepository aituOppilaitosRepository;
 
     public DefaultAituToimikuntaRepository(MongoEntityInformation<AituToimikunta, String> metadata, MongoOperations mongoOperations) {
         super(metadata, mongoOperations);
@@ -70,19 +75,13 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
         if (toimikuntaCriteria.isOnlyVoimassaOlevat()) {
             conditions.add(new Criteria("jasenyydet.voimassa").is(true));
         }
-        if (toimikuntaCriteria.isTutkintoUsed() || toimikuntaCriteria.isOpintoalaUsed() || toimikuntaCriteria.isOppilaitoskoodiUsed()) {
-            List<String> toimikuntasBySopimusehdot = getMongoOperations().getCollection(AituOppilaitos.class.getAnnotation(Document.class).collection())
-                .distinct("sopimukset.toimikunta", new CriteriaHelper.Conditions()
-                        .addGiven(new Criteria("oppilaitoskoodi").in(toimikuntaCriteria.getOppilaitoskoodiIn()),
-                                toimikuntaCriteria.isOppilaitoskoodiUsed())
-                        .addGiven(new Criteria("sopimukset.tutkinnot.tutkintotunnus").in(toimikuntaCriteria.getTutkintoTunnusIn()),
-                                toimikuntaCriteria.isTutkintoUsed())
-                        .addGiven(new Criteria("sopimukset.tutkinnot.opintoalatunnus").in(toimikuntaCriteria.getOpintoalaTunnusIn()),
-                                toimikuntaCriteria.isOpintoalaUsed())
-                        .applyTo(new Criteria()).getCriteriaObject());
+        if (toimikuntaCriteria.isTutkintoUsed() || toimikuntaCriteria.isOpintoalaUsed()
+                    || toimikuntaCriteria.isOppilaitoskoodiUsed()) {
+            Collection<String> toimikuntasBySopimusehdot = Collections2.transform(
+                    aituOppilaitosRepository.findMatchingSopimukset(toimikuntaCriteria.toOppilaitosCriteria(), orberByNimi),
+                    AituSopimusDto.TOIMIKUNTA);
             conditions.add(new Criteria("_id").in(toimikuntasBySopimusehdot));
         }
-
         return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
                 .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
     }

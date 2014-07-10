@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import com.google.common.base.Function;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,12 @@ public class AituSopimusDto implements Serializable {
     private String sahkoposti;
     private String vastuuhenkilo;
     private List<AituTutkintoDto> tutkinnot = new ArrayList<AituTutkintoDto>();
+
+    public final static Function<AituSopimusDto, String> TOIMIKUNTA = new Function<AituSopimusDto, String>() {
+        public String apply(AituSopimusDto input) {
+            return input.getToimikunta();
+        }
+    };
 
     public String getToimikunta() {
         return toimikunta;

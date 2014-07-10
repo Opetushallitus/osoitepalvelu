@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
+import com.google.common.base.Function;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -38,6 +39,12 @@ public class AituOppilaitos {
     private String postinumero;
     private String postitoimipaikka;
     private List<AituSopimusDto> sopimukset = new ArrayList<AituSopimusDto>();
+
+    public final static Function<AituOppilaitos, List<AituSopimusDto>> SOPIMUKSET = new Function<AituOppilaitos, List<AituSopimusDto>>() {
+        public List<AituSopimusDto> apply(AituOppilaitos input) {
+            return input.getSopimukset();
+        }
+    };
 
     public String getOid() {
         return oid;
