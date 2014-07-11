@@ -294,6 +294,11 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
         return organisaatioRepository.findAllOids();
     }
 
+    @Override
+    public String findOidByOppilaitoskoodi(String oppilaitosKoodi) {
+        return organisaatioRepository.findOidByOppilaitoskoodi(oppilaitosKoodi);
+    }
+
     private int updateYtunnusResults(List<OrganisaatioHierarchyDto> organisaatiot) {
         int updated = 0;
         for (OrganisaatioHierarchyDto organisaatio : organisaatiot) {

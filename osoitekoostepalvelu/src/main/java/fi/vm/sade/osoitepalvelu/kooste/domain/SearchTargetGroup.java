@@ -53,12 +53,13 @@ public class SearchTargetGroup implements Serializable {
         }
 
         public static GroupType[] getAnyHenkiloTypes() {
-            return new GroupType[] {KOULUTA_KAYTTAJAT, TUTKINTOTOIMIKUNNAT, KOULUTA_KAYTTAJAT, AIPAL_KAYTTAJAT};
+            return new GroupType[] {KOULUTA_KAYTTAJAT, TUTKINTOTOIMIKUNNAT, KOULUTA_KAYTTAJAT, AIPAL_KAYTTAJAT,
+                    NAYTTOTUTKINNON_JARJESTAJAT};
         }
 
         public static GroupType[] getAnyOrganisaatioTypes() {
             return new GroupType[] {JARJESTAJAT_YLLAPITAJAT, OPPILAITOKSET, OPETUSPISTEET, OPPISOPIMUSTOIMPISTEET,
-                    MUUT_ORGANISAATIOT, TUTKINTOTOIMIKUNNAT};
+                    MUUT_ORGANISAATIOT, TUTKINTOTOIMIKUNNAT, NAYTTOTUTKINNON_JARJESTAJAT};
         }
 
         public String[] getOrganisaatioPalveluTyyppiArvo() {
@@ -89,6 +90,28 @@ public class SearchTargetGroup implements Serializable {
         JARJESTAJA_ORGANISAATIO,
         TUTKINTOVASTAAVA,
         TUNNUKSENHALTIJAT;
+
+        public static TargetType[] allHenkiloTypes() {
+            return new TargetType[] {
+                YHTEYSHENKILO,
+                REHTORI,
+                PUHEENJOHTAJA,
+                SIHTEERI,
+                JASENET,
+                TUTKINTOVASTAAVA,
+                TUNNUKSENHALTIJAT
+            };
+        }
+
+        public static TargetType[] allOrganisaatioTypes() {
+            return new TargetType[] {
+                ORGANISAATIO,
+                KRIISITIEDOTUS,
+                KOULUTUSNEVONTA,
+                TUTKINTOTOIMIKUNTA,
+                JARJESTAJA_ORGANISAATIO
+            };
+        }
     };
 
     private GroupType type;

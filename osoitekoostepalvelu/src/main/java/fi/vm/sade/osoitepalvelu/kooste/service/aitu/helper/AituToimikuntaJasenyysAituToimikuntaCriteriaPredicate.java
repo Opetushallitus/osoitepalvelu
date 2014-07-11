@@ -33,7 +33,7 @@ public class AituToimikuntaJasenyysAituToimikuntaCriteriaPredicate implements Pr
     }
 
     public boolean isUsed() {
-        return criteria.isJasenRoolisUsed();
+        return criteria.isJasenRoolisUsed() || criteria.isJasenKielisyysUsed();
     }
 
     @Override

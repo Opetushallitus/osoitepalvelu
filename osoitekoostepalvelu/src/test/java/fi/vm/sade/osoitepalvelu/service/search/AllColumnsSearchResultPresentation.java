@@ -126,6 +126,16 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
         return withYhteyshenkiloEmail;
     }
 
+    @Override
+    public boolean isNayttotutkinnonJarjestajaVastuuhenkilosIncluded() {
+        return true;
+    }
+
+    @Override
+    public boolean isNayttotutkinnonJarjestajaOrganisaatiosIncluded() {
+        return true;
+    }
+
     public AllColumnsSearchResultPresentation withoutYhteyshenkiloEmail() {
         this.withYhteyshenkiloEmail = false;
         return this;

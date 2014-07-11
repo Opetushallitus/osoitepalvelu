@@ -22,10 +22,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloYhteystietoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloYhteystietoRyhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteysosoiteDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,7 +43,9 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
     protected void registerTypes(TypeResolver typeResolver) {
         typeResolver.registerType("henkiloAggregate", HenkiloResultAggregateDto.class)
                     .registerType("organisaatioAggregate", OrganisaatioResultAggregateDto.class)
-                    .registerType("toimikuntaJasenAggregate", AituToimikuntaJasenAggregateDto.class);
+                    .registerType("toimikuntaJasenAggregate", AituToimikuntaJasenAggregateDto.class)
+                    .registerType("aituOppilaitosAggregate", AituOppilaitosVastuuhenkiloAggregateDto.class)
+                    .registerType("aituOppilaitosResult", AituOppilaitosResultDto.class);
     }
 
     public SearchResultRowDto convert(AituToimikuntaJasenAggregateDto from, SearchResultRowDto to, Locale locale) {
@@ -61,6 +60,22 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
         }
         if (from.getToimikunta() != null) {
             to.setNimi(LocaleHelper.findLocalized(from.getToimikunta().getNimi(), locale, DefaultKoodistoService.DEFAULT_LOCALE));
+        }
+        return to;
+    }
+
+    public SearchResultRowDto convert(AituOppilaitosVastuuhenkiloAggregateDto from, SearchResultRowDto to, Locale locale) {
+        convertValue(from, to, locale);
+        if (from.getOppilaitos() != null) {
+            to.setNimi(LocaleHelper.findLocalized(from.getOppilaitos().getNimi(), locale, DefaultKoodistoService.DEFAULT_LOCALE));
+            if (from.getOppilaitos().getPostinumero() != null
+                    && to.getPostiosoite() != null) {
+                UiKoodiItemDto postinumeroKoodi  =  koodistoService
+                        .findPostinumeroByKoodiUri(locale, "posti_"+from.getOppilaitos().getPostinumero());
+                if (postinumeroKoodi != null) {
+                    to.getPostiosoite().setPostitoimipaikka(postinumeroKoodi.getNimi());
+                }
+            }
         }
         return to;
     }

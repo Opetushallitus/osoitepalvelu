@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import com.google.common.base.Function;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ import java.util.Map;
  * Time: 5:19 PM
  */
 public class AituOppilaitosResultDto implements Serializable {
+    private static final int HASH_FACTOR = 31;
     private static final long serialVersionUID = -1047608281798996986L;
     
     private String oid;
@@ -37,6 +40,12 @@ public class AituOppilaitosResultDto implements Serializable {
     private String postinumero;
     private String postitoimipaikka;
     private List<AituSopimusDto> sopimukset = new ArrayList<AituSopimusDto>();
+
+    public static final Function<AituOppilaitosResultDto, String> OPPILAITOSKOODI = new Function<AituOppilaitosResultDto, String>() {
+        public String apply(AituOppilaitosResultDto result) {
+            return result.getOppilaitoskoodi();
+        }
+    };
 
     public String getOid() {
         return oid;
@@ -92,5 +101,34 @@ public class AituOppilaitosResultDto implements Serializable {
 
     public void setSopimukset(List<AituSopimusDto> sopimukset) {
         this.sopimukset = sopimukset;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AituOppilaitosResultDto)) {
+            return false;
+        }
+
+        AituOppilaitosResultDto resultDto = (AituOppilaitosResultDto) o;
+
+        if (oid != null ? !oid.equals(resultDto.oid) : resultDto.oid != null) {
+            return false;
+        }
+        if (oppilaitoskoodi != null ? !oppilaitoskoodi.equals(resultDto.oppilaitoskoodi)
+                : resultDto.oppilaitoskoodi != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = oid != null ? oid.hashCode() : 0;
+        result = HASH_FACTOR * result + (oppilaitoskoodi != null ? oppilaitoskoodi.hashCode() : 0);
+        return result;
     }
 }

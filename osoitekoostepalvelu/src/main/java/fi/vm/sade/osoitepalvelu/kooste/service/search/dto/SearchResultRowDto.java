@@ -16,10 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
-import fi.ratamaa.dtoconverter.annotation.DtoConversion;
-import fi.ratamaa.dtoconverter.annotation.DtoConversions;
-import fi.ratamaa.dtoconverter.annotation.DtoPath;
-import fi.ratamaa.dtoconverter.annotation.DtoSkipped;
+import fi.ratamaa.dtoconverter.annotation.*;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 
 import java.io.Serializable;
 import java.util.List;
@@ -33,6 +31,8 @@ public class SearchResultRowDto implements Serializable {
     private static final long serialVersionUID  =  -1252066099444560569L;
 
     @DtoSkipped
+    private int rivinumero = 0;
+    @DtoSkipped
     private String nimi;
     @DtoConversion(path = "organisaatio.oid", with="organisaatioAggregate")
     @DtoPath(value="organisaatioHenkilo.organisaatioOid", with="henkiloAggregate")
@@ -44,6 +44,7 @@ public class SearchResultRowDto implements Serializable {
     @DtoSkipped(with="henkiloAggregate")
     private String toimipistekoodi;
     @DtoConversion(path="organisaatio.oppilaitosKoodi", with="organisaatioAggregate")
+    @DtoPath(value="oppilaitos.oppilaitoskoodi", with = "aituOppilaitosAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String oppilaitosKoodi;
     @DtoConversion(path="organisaatio.wwwOsoite", with="organisaatioAggregate")
@@ -76,20 +77,27 @@ public class SearchResultRowDto implements Serializable {
     private String henkiloOid;
     @DtoConversions({
         @DtoConversion(path="henkilo.nimi", with="organisaatioAggregate"),
-        @DtoConversion(path="henkilo.nimi", with="henkiloAggregate")
+        @DtoConversion(path="henkilo.nimi", with="henkiloAggregate"),
+        @DtoConversion(path="tutkinto.vastuuhenkilo", with = "aituOppilaitosAggregate")
     })
     private String yhteystietoNimi;
     @DtoConversion(path="henkilo.nimike", with="organisaatioAggregate")
     @DtoPath(value="organisaatioHenkilo.tehtavanimike", with="henkiloAggregate")
     private String nimike;
     @DtoConversion(path = "henkilo.email", with="organisaatioAggregate")
-    @DtoPath(value = "osoite.henkiloEmail", with="henkiloAggregate")
+    @DtoPaths({
+        @DtoPath(value = "osoite.henkiloEmail", with="henkiloAggregate"),
+        @DtoPath(value="tutkinto.sahkoposti_vastuuhenkilo",  with = "aituOppilaitosAggregate")
+    })
     private String henkiloEmail;
     @DtoConversion(path = "osoite", with="henkiloAggregate")
     @DtoPath(value = "kayntiosoite", with="organisaatioAggregate")
     private SearchResultOsoiteDto kayntiosoite;
     @DtoConversion(path = "osoite", with="henkiloAggregate")
-    @DtoPath(value = "postiosoite", with="organisaatioAggregate")
+    @DtoPaths({
+        @DtoPath(value="oppilaitos", with = "aituOppilaitosAggregate"),
+        @DtoPath(value = "postiosoite", with="organisaatioAggregate")
+    })
     private SearchResultOsoiteDto postiosoite;
 
     public String getOrganisaatioOid() {
@@ -244,11 +252,43 @@ public class SearchResultRowDto implements Serializable {
         this.postiosoite = postiosoite;
     }
 
+    public int getRivinumero() {
+        return rivinumero;
+    }
+
+    public void setRivinumero(int rivinumero) {
+        this.rivinumero = rivinumero;
+    }
+
     @DtoConversion(skip = true)
     public OidAndTyyppiPair getOidAndTyyppiPair() {
         if(this.henkiloOid != null) {
-            return new OidAndTyyppiPair(OidAndTyyppiPair.TYYPPI_HENKILO, this.henkiloOid);
+            return new OidAndTyyppiPair(OidAndTyyppiPair.TYYPPI_HENKILO, this.henkiloOid, this.rivinumero);
         }
-        return new OidAndTyyppiPair(OidAndTyyppiPair.TYYPPI_ORGANISAATIO, this.organisaatioOid);
+        return new OidAndTyyppiPair(OidAndTyyppiPair.TYYPPI_ORGANISAATIO, this.organisaatioOid, this.rivinumero);
+    }
+
+    public EqualsHelper uniqueState() {
+        return new EqualsHelper(
+                this.organisaatioOid,
+                this.oppilaitosKoodi,
+                this.emailOsoite,
+                this.henkiloOid,
+                this.henkiloEmail,
+                this.yhteystietoNimi,
+                this.nimi,
+                this.nimike,
+                this.tyypit,
+                this.postiosoite != null ? this.postiosoite.uniqueState() : null,
+                this.kayntiosoite != null ? this.kayntiosoite.uniqueState() : null,
+                this.toimipistekoodi,
+                this.puhelinnumero,
+                this.kotikunta,
+                this.wwwOsoite,
+                this.koulutusneuvonnanEmail,
+                this.kriisitiedotuksenEmail,
+                this.viranomaistiedotuksenEmail,
+                this.faksinumero
+        );
     }
 }

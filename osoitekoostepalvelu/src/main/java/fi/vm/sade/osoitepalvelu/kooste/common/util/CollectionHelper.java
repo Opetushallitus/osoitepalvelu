@@ -71,6 +71,24 @@ public final class CollectionHelper {
     }
 
     /**
+     * @param original function, result of which to filter
+     * @param filter to apply to function results
+     * @param <E>
+     * @param <T>
+     * @param <C>
+     * @return a function that wraps the given original function in a function that filters the result of it with
+     * given filter
+     */
+    public static <E, T, C extends List<T>> Function<E, List<T>> filter(final Function<E, C> original,
+                                                                        final Predicate<T> filter) {
+        return new Function<E, List<T>>() {
+            public List<T> apply(E input) {
+                return new ArrayList<T>(Collections2.filter(original.apply(input), filter));
+            }
+        };
+    }
+
+    /**
      * @param collection to collect extracted values from
      * @param extractor to transform items of collection to collections to combine
      * @param <E> the original container type
@@ -150,10 +168,10 @@ public final class CollectionHelper {
      * @param <T> value type
      * @return list of merged elements in c1 and c2 unique by key
      */
-    public static <K extends Comparable<K>, T> List<T> mergeIntersected(Collection<T> c1, Collection<T> c2,
+    public static <K, T> List<T> mergeIntersected(Collection<T> c1, Collection<T> c2,
                                                           Function<T,K> keyExtractor) {
-        Map<K, T>   items1byKeys = CollectionHelper.singleMap(c1, new TreeMap<K, T>(), keyExtractor),
-                    items2byKeys = CollectionHelper.singleMap(c2, new TreeMap<K,T>(), keyExtractor);
+        Map<K, T>   items1byKeys = CollectionHelper.singleMap(c1, new LinkedHashMap<K, T>(), keyExtractor),
+                    items2byKeys = CollectionHelper.singleMap(c2, new LinkedHashMap<K, T>(), keyExtractor);
         return CollectionHelper.collect(items1byKeys,
                 CollectionHelper.intersection(items1byKeys.keySet(), items2byKeys.keySet()),
                 new ArrayList<T>());

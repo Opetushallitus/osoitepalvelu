@@ -60,6 +60,11 @@ public class OrganisaatioServiceMock implements OrganisaatioService {
         return new ArrayList<String>();
     }
 
+    @Override
+    public String findOidByOppilaitoskoodi(String oppilaitosKoodi) {
+        return null;
+    }
+
     public void setYksityiskohtaisetTiedotByOid(OrganisaatioDetailsDto yksityiskohtaisetTiedotByOid) {
         this.yksityiskohtaisetTiedotByOid  =  yksityiskohtaisetTiedotByOid;
     }

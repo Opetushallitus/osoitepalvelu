@@ -93,26 +93,18 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
             OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
             OptionsService.listKoulutusalas(function(data) { $scope.options.koulutusalas = data; });
-            OptionsService.listOpintoalas(function(data) {$scope.options.opintoalas = data;});
+            //OptionsService.listOpintoalas(function(data) {$scope.options.opintoalas = data;});
             OptionsService.listKoulutusTyyppis(function(data) {$scope.options.koulutustyyppis = data;});
             //OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
-            OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
+            //OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
             $scope.options.tutkintotoimikuntaToimikausis = TutkintotoimikuntaToimikausis;
             $scope.options.tutkintotoimikuntaKielis = Aitukielis;
             $scope.options.tutkintotoimikuntaJasenKielis = Aitukielis;
         }
-
         $scope.terms = SearchService.getTerms();
+        $scope.koulutusalasChanged();
+
         $log.info($scope.terms);
-    };
-
-    $scope.updateTerms();
-
-    $scope.clear = function() {
-        $log.info("CLEAR");
-        SearchService.clear();
-        $scope.updateTerms();
-        $scope.selectedSavedSearch = null;
     };
 
     $scope.effectiveSelectedOpintoalas = function() {
@@ -151,6 +143,15 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         $log.info($scope.terms.koulutustyyppis);
         OptionsService.listKoulutusByOpintoalasOrTyyppis($scope.effectiveSelectedOpintoalas(),
             $scope.terms.koulutustyyppis, function(data) {$scope.options.koulutus = data;});
+    };
+
+    $scope.updateTerms();
+
+    $scope.clear = function() {
+        $log.info("CLEAR");
+        SearchService.clear();
+        $scope.updateTerms();
+        $scope.selectedSavedSearch = null;
     };
 
     $scope.toggleShowMore = function() {

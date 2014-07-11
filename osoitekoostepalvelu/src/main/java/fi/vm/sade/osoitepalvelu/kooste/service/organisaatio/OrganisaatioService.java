@@ -64,4 +64,10 @@ public interface OrganisaatioService {
      * @return all organisaatios in cache
      */
     List<String> findAllOidsOfCachedOrganisaatios();
+
+    /**
+     * @param oppilaitosKoodi to search OID for
+     * @return the first found organisaatio OID by given oppilaitoskoodi or null if not found
+     */
+    String findOidByOppilaitoskoodi(String oppilaitosKoodi);
 }

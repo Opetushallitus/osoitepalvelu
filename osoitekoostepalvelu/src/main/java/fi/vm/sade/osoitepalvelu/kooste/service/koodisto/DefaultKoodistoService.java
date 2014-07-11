@@ -20,6 +20,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.dao.cache.KoodistoCacheRepository;
@@ -139,10 +140,23 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     @Override
     public UiKoodiItemDto findPostinumeroByKoodiUri(Locale locale, String koodiUri) {
-        Iterator<UiKoodiItemDto> i  =  Collections2.filter(findPostinumeroOptions(locale),
+        if (!koodiUri.startsWith("posti_")) {
+            koodiUri = "posti_"+koodiUri;
+        }
+        Iterator<UiKoodiItemDto> i = Collections2.filter(findPostinumeroOptions(locale),
                 new UiKoodiItemByKoodiUriPredicate(koodiUri)).iterator();
         if (i.hasNext()) {
-            return i.next();
+            UiKoodiItemDto item = i.next();
+            if (item.getNimi() != null && !item.getNimi().contains("_missing!")) {
+                return item;
+            }
+        }
+        if (!EqualsHelper.equals(locale, DEFAULT_LOCALE)) {
+            i = Collections2.filter(findPostinumeroOptions(DEFAULT_LOCALE),
+                    new UiKoodiItemByKoodiUriPredicate(koodiUri)).iterator();
+            if (i.hasNext()) {
+                return i.next();
+            }
         }
         return null;
     }

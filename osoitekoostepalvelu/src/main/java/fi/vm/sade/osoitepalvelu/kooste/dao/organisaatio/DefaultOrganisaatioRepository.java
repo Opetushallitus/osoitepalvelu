@@ -16,16 +16,17 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-
+import com.google.common.collect.Collections2;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
+import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
@@ -33,12 +34,10 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.google.common.collect.Collections2;
-
-import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
-import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * User: ratamaa
@@ -155,5 +154,16 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         q.fields().include("_id");
         return new ArrayList<String>(Collections2.transform(getMongoOperations()
                 .find(q, OrganisaatioDetails.class), FilterableOrganisaatio.GET_OID));
+    }
+
+    @Override
+    public String findOidByOppilaitoskoodi(String oppilaitosKoodi) {
+        List<String> oids = getMongoOperations()
+                        .getCollection(OrganisaatioDetails.class.getAnnotation(Document.class).collection())
+                .distinct("_id", Criteria.where("oppilaitosKoodi").is(oppilaitosKoodi).getCriteriaObject());
+        if (oids == null || oids.isEmpty()) {
+            return null;
+        }
+        return oids.get(0);
     }
 }

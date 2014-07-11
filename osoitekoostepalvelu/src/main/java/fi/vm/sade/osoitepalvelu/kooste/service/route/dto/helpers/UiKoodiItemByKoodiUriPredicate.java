@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers;
 
 import com.google.common.base.Predicate;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 
 /**
@@ -33,6 +34,6 @@ public class UiKoodiItemByKoodiUriPredicate implements Predicate<UiKoodiItemDto>
 
     @Override
     public boolean apply(UiKoodiItemDto item) {
-        return uri.equals(item.getKoodiUri());
+        return EqualsHelper.equals(uri, item.getKoodiUri());
     }
 }

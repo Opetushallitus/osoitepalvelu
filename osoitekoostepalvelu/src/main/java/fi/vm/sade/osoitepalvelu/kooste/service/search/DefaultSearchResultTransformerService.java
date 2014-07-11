@@ -21,10 +21,10 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Ordering;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.Combiner;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
@@ -38,7 +38,6 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.OrganisaatioYks
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto.SearchType;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
-
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -123,6 +122,10 @@ public class DefaultSearchResultTransformerService extends AbstractService
             
             // Asetetaan tulosjoukoksi filtteröity listaus.
             rows = filtteredTransformedResults;
+        } else {
+            // Poistetaan selkeät duplikaatit (joita tulee esim. näyttötutkinnon järjestäjien eri tutkintojen vastaavista
+            // henkilöistä, joita ei voida ):
+            rows = removeDuplicatesByUniqueState(rows);
         }
         
         if (!organisaatioResults.isEmpty() && !henkiloResults.isEmpty()) {
@@ -131,6 +134,15 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
 
         return new SearchResultsPresentationDto(rows, presentation);
+    }
+
+    protected List<SearchResultRowDto> removeDuplicatesByUniqueState(List<SearchResultRowDto> rows) {
+        final Set<EqualsHelper> states = new HashSet<EqualsHelper>();
+        return new ArrayList<SearchResultRowDto>(Collections2.filter(rows, new Predicate<SearchResultRowDto>() {
+            public boolean apply(SearchResultRowDto input) {
+                return states.add(input.uniqueState());
+            }
+        }));
     }
 
     protected List<SearchResultRowDto> applyOrdering(List<SearchResultRowDto> transformedResults) {
@@ -272,7 +284,35 @@ public class DefaultSearchResultTransformerService extends AbstractService
             List<AituOppilaitosResultDto> aituOppilaitos, SearchResultPresentation presentation) {
         List<SearchResultRowDto> results = new ArrayList<SearchResultRowDto>();
 
-
+        Set<AituOppilaitosVastuuhenkiloAggregateDto> aggregates = new LinkedHashSet<AituOppilaitosVastuuhenkiloAggregateDto>();
+        for (final AituOppilaitosResultDto oppilaitos : aituOppilaitos) {
+            Combiner<AituOppilaitosVastuuhenkiloAggregateDto> combiner = new Combiner<AituOppilaitosVastuuhenkiloAggregateDto>(
+                new Combiner.Creator<AituOppilaitosVastuuhenkiloAggregateDto>() {
+                    public AituOppilaitosVastuuhenkiloAggregateDto create(Combiner.PullSource src) {
+                        return new AituOppilaitosVastuuhenkiloAggregateDto(
+                                src.get(AituOppilaitosResultDto.class).get(),
+                                src.get(AituTutkintoDto.class).orNull());
+                    }
+                }
+            ).withRepeated(AituOppilaitosResultDto.class, Arrays.asList(oppilaitos));
+            if (presentation.isNayttotutkinnonJarjestajaVastuuhenkilosIncluded()) {
+                Collection<AituTutkintoDto> tutkintos = CollectionHelper.collect(oppilaitos.getSopimukset(),
+                        CollectionHelper.filter(AituSopimusDto.TUTKINNOT,
+                                AituTutkintoDto.WITH_VASTUUHENKILO));
+                if (!presentation.isNayttotutkinnonJarjestajaOrganisaatiosIncluded() && tutkintos.isEmpty()) {
+                    continue;
+                }
+                combiner.with(AituTutkintoDto.class, tutkintos);
+            }
+            if (presentation.isNayttotutkinnonJarjestajaOrganisaatiosIncluded()) {
+                combiner.atLeastOne();
+            }
+            combiner.to(aggregates);
+        }
+        for (AituOppilaitosVastuuhenkiloAggregateDto aggregate : aggregates) {
+            SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto(), presentation.getLocale());
+            results.add(row);
+        }
 
         return results;
     }
@@ -295,6 +335,29 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 @Override
                 public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
                     to.setNimi(localized(from.getNimi(), locale, DEFAULT_LOCALE));
+                }
+            });
+        }
+
+        if (presentation.isKayntiosoiteIncluded()) {
+            copiers.add(new DetailCopier() {
+                @Override
+                public boolean isMissing(SearchResultRowDto from) {
+                    return from.getKayntiosoite() == null;
+                }
+
+                @Override
+                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
+                    to.setKayntiosoite(dtoConverter.convert(from.getKayntiosoite(), new SearchResultOsoiteDto(), locale));
+                    if (to.getKayntiosoite() != null && from.getKayntiosoite() != null
+                            && from.getKayntiosoite().getPostinumeroUri() != null) {
+                        UiKoodiItemDto postinumeroKoodi  =  koodistoService
+                                .findPostinumeroByKoodiUri(locale, from.getKayntiosoite().getPostinumeroUri());
+                        if (postinumeroKoodi != null) {
+                            to.getKayntiosoite().setPostinumero(postinumeroKoodi.getKoodiId());
+                            to.getKayntiosoite().setPostinumero(postinumeroKoodi.getNimi());
+                        }
+                    }
                 }
             });
         }
@@ -427,8 +490,16 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
         boolean newDetailsFetched = false;
         try {
+            Map<String,String> oidsByOppilaitosKoodi = new HashMap<String, String>();
             for (SearchResultRowDto result : results) {
                 String oid = result.getOrganisaatioOid();
+                if (oid == null && result.getOppilaitosKoodi() != null) {
+                    oid = oidsByOppilaitosKoodi.get(result.getOppilaitosKoodi());
+                    if (oid == null) {
+                        oid = organisaatioService.findOidByOppilaitoskoodi(result.getOppilaitosKoodi());
+                        oidsByOppilaitosKoodi.put(result.getOppilaitosKoodi(), oid);
+                    }
+                }
                 if (oid != null) {
                     for (DetailCopier copier : copiers) {
                         OrganisaatioDetailsDto details;

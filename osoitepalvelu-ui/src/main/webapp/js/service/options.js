@@ -134,7 +134,8 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
     this.listKoulutusByOpintoalasOrTyyppis = function(opintoalas, tyyppis, success, error) {
         if ((!opintoalas || opintoalas.length < 1)
                 && (!tyyppis || tyyppis.length < 1)) {
-            _get('api/koodisto/koulutus', success, error);
+            success([]);
+            //_get('api/koodisto/koulutus', success, error); // too many results -> slow UI
         } else {
             $log.info("Listing koulutus by opintoalas or tyyppis.");
             $log.info(opintoalas);

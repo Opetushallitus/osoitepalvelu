@@ -16,7 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria;
 
+import com.google.common.base.Predicate;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.AndPredicateAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituJasenyysDto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -156,5 +159,31 @@ public class AituToimikuntaCriteria implements Serializable, TutkintorakenneAwar
         oppilaitosCriteria.setOpintoalaTunnusIn(this.opintoalaTunnusIn);
         oppilaitosCriteria.setTutkintoTunnusIn(this.tutkintoTunnusIn);
         return oppilaitosCriteria;
+    }
+
+    public AndPredicateAdapter<AituJasenyysDto> createJasenyysPredicate() {
+        AndPredicateAdapter<AituJasenyysDto> and = new AndPredicateAdapter<AituJasenyysDto>();
+        if (isJasenRoolisUsed()) {
+            and = and.and(new Predicate<AituJasenyysDto>() {
+                public boolean apply(AituJasenyysDto jasenyys) {
+                    return getJasensInRoolis().contains(jasenyys.getRooli());
+                }
+            });
+        }
+        if (isJasenKielisyysUsed()) {
+            and = and.and(new Predicate<AituJasenyysDto>() {
+                public boolean apply(AituJasenyysDto jasenyys) {
+                    return getJasenKielisyysIn().contains(jasenyys.getAidinkieli());
+                }
+            });
+        }
+        if (isOnlyVoimassaOlevat()) {
+            and = and.and(new Predicate<AituJasenyysDto>() {
+                public boolean apply(AituJasenyysDto jasenyys) {
+                    return jasenyys.isVoimassa();
+                }
+            });
+        }
+        return and;
     }
 }

@@ -18,6 +18,8 @@ package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.ratamaa.dtoconverter.annotation.DtoPath;
+import fi.ratamaa.dtoconverter.annotation.DtoSkipped;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 
 import java.io.Serializable;
 
@@ -29,16 +31,21 @@ import java.io.Serializable;
 @DtoConversion
 public class SearchResultOsoiteDto implements Serializable {
     private static final long serialVersionUID = -870758978839602041L;
-    
+
+    @DtoSkipped(with = "aituOppilaitosResult")
     private String kieli;
     @DtoPath("osoiteTyyppi")
+    @DtoSkipped(with = "aituOppilaitosResult")
     private String tyyppi;
     @DtoConversion(skip = true, withClass = HenkiloOsoiteDto.class)
+    @DtoSkipped(with = "aituOppilaitosResult")
     private String yhteystietoOid;
     private String osoite;
+    @DtoSkipped(with = "aituOppilaitosResult")
     private String postilokero;
     private String postinumero;
     private String postitoimipaikka;
+    @DtoSkipped(with = "aituOppilaitosResult")
     private String extraRivi;
 
     public String getKieli() {
@@ -103,5 +110,18 @@ public class SearchResultOsoiteDto implements Serializable {
 
     public void setExtraRivi(String extraRivi) {
         this.extraRivi = extraRivi;
+    }
+
+    public EqualsHelper uniqueState() {
+        return new EqualsHelper(
+                this.yhteystietoOid,
+                this.kieli,
+                this.tyyppi,
+                this.osoite,
+                this.postinumero,
+                this.postilokero,
+                this.postitoimipaikka,
+                this.extraRivi
+        );
     }
 }

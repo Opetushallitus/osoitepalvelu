@@ -28,7 +28,6 @@ import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.aitu.dto.converter.AituDtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.service.aitu.helper.AituToimikuntaJasenyysAituToimikuntaCriteriaPredicate;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AituRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,14 +62,13 @@ public class DefaultAituService extends AbstractService implements AituService {
     public List<AituToimikuntaResultDto> findToimikuntasWithMatchingJasens(AituToimikuntaCriteria criteria,
                                                                            AituKielisyys orderByNimiKieli) {
         List<AituToimikuntaResultDto> results = dtoConverter.convert(
-                        aituToimikuntaRepository.findToimikuntas(criteria, orderByNimiKieli),
+                aituToimikuntaRepository.findToimikuntas(criteria, orderByNimiKieli),
                 new ArrayList<AituToimikuntaResultDto>(), AituToimikuntaResultDto.class);
-        AituToimikuntaJasenyysAituToimikuntaCriteriaPredicate predicate =
-                new AituToimikuntaJasenyysAituToimikuntaCriteriaPredicate(criteria);
-        if (predicate.isUsed()) {
+        AndPredicateAdapter<AituJasenyysDto> jasenyysPredicate = criteria.createJasenyysPredicate();
+        if (jasenyysPredicate.isFiltering()) {
             for (AituToimikuntaResultDto resultDto : results) {
                 resultDto.setJasenyydet(new ArrayList<AituJasenyysDto>(
-                        Collections2.filter(resultDto.getJasenyydet(), predicate)));
+                        Collections2.filter(resultDto.getJasenyydet(), jasenyysPredicate)));
             }
         }
         return results;
@@ -87,11 +85,32 @@ public class DefaultAituService extends AbstractService implements AituService {
             matchedToimikuntas = aituToimikuntaRepository.findToimikuntaIds(criteria.toRelatedToimikuntaCriteria());
         }
         AndPredicateAdapter<AituSopimusDto> sopimusPredicate = criteria.createSopimusPredicate(matchedToimikuntas);
+        AndPredicateAdapter<AituTutkintoDto> tutkintoPredicate = criteria.createTutkintoPredicate();
         if (sopimusPredicate.isFiltering()) {
+            List<AituOppilaitosResultDto> filteredResults = new ArrayList<AituOppilaitosResultDto>();
             for (AituOppilaitosResultDto resultDto : results) {
                 resultDto.setSopimukset(new ArrayList<AituSopimusDto>(
                         Collections2.filter(resultDto.getSopimukset(), sopimusPredicate)));
+                if (resultDto.getSopimukset().isEmpty()) {
+                    // No any matching sopimus
+                    continue;
+                }
+                if (tutkintoPredicate.isFiltering()) {
+                    boolean tutkintosExists = false;
+                    for (AituSopimusDto sopimus : resultDto.getSopimukset()) {
+                        sopimus.setTutkinnot(new ArrayList<AituTutkintoDto>(
+                                Collections2.filter(sopimus.getTutkinnot(), tutkintoPredicate)));
+                        if (!sopimus.getTutkinnot().isEmpty()) {
+                            tutkintosExists = true;
+                        }
+                    }
+                    if (!tutkintosExists) {
+                        continue;
+                    }
+                }
+                filteredResults.add(resultDto);
             }
+            return filteredResults;
         }
         return results;
     }

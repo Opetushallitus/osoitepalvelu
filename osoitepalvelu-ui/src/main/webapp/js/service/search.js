@@ -145,7 +145,7 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
             _addColumnData(row);
         });
         var filteredRows = $filter('filter')(data.rows,
-                FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi"]) );
+                FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi", "rivinumero"]) );
         success( {
             presentation: data.presentation,
             rows: filteredRows
@@ -172,6 +172,7 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
             callback: function(data) {
                 _transformResults(data, success);
                 _resultData = data;
+                _deletedIds = [];
             },
             errorCallback: function(data, status, headers, config) {
                 commonErrorHandler(data, status, headers, config);
@@ -187,7 +188,7 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
             _performSearch(success, error);
         } else {
             var filteredRows = $filter('filter')(_resultData.rows,
-                    FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi"]) );
+                    FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi", "rivinumero"]) );
             success( {
                 presentation: _resultData.presentation,
                 rows: filteredRows
@@ -196,6 +197,7 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
     };
 
     this.search = function(success, error) {
+        _deletedIds = [];
         _performSearch(success, error);
     };
 

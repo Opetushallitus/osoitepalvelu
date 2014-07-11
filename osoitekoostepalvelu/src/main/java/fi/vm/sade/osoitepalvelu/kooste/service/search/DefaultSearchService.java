@@ -89,6 +89,10 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                         SearchTargetGroup.TargetType.PUHEENJOHTAJA),
                 searchNayttotutkinnonJarjestajas = terms.containsAnyTargetGroup(
                         new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.NAYTTOTUTKINNON_JARJESTAJAT}),
+                returnNayttotutkinnonJarjestajas = terms.containsAnyTargetGroup(
+                        new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.NAYTTOTUTKINNON_JARJESTAJAT},
+                        SearchTargetGroup.TargetType.JARJESTAJA_ORGANISAATIO,
+                        SearchTargetGroup.TargetType.TUTKINTOVASTAAVA),
             returnOrgansiaatios = terms.containsAnyTargetGroup(
                     SearchTargetGroup.GroupType.getOrganisaatioPalveluTypes(), SearchTargetGroup.TargetType.ORGANISAATIO);
 
@@ -130,10 +134,12 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             if (anyOrganisaatioRelatedConditionsUsed) {
                 oppilaitosCriteria.setOppilaitoskoodiIn(oppilaitoskoodis(organisaatioYhteystietoResults));
             }
-            if (!anyOrganisaatioRelatedConditionsUsed || oppilaitosCriteria.isOppilaitoskoodiUsed()) {
+            if ((!anyOrganisaatioRelatedConditionsUsed || oppilaitosCriteria.isOppilaitoskoodiUsed())
+                    && returnNayttotutkinnonJarjestajas) {
                 AituKielisyys orderingKielisyys = AituKielisyys.fromLocale(terms.getLocale()).or(AituKielisyys.kieli_fi);
                 List<AituOppilaitosResultDto> oppilaitosResults = aituService.findNayttotutkinnonJarjestajas(
                         oppilaitosCriteria, orderingKielisyys);
+                results.setAituOppilaitos(oppilaitosResults);
             } else {
                 // No organisaatio rersults but organisaatio related conditions used. Should return nothing:
                 results.setAituOppilaitos(new ArrayList<AituOppilaitosResultDto>());

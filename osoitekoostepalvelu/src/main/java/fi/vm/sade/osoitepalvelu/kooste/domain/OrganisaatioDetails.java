@@ -60,6 +60,7 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
     private List<String> kieletUris = new ArrayList<String>(); // opetuskieliUis, esim. oppilaitoksenopetuskieli_1#1
     @Indexed
     private String oppilaitosTyyppiUri; // esim. oppilaitostyyppi_21#1
+    @Indexed
     private String oppilaitosKoodi; // esim. 10107
     @DtoConversion(path="toimipisteKoodi", withClass = OrganisaatioYhteystietoHakuResultDto.class)
     private String toimipistekoodi;

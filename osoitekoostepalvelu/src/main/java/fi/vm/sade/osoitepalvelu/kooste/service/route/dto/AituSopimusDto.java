@@ -42,6 +42,11 @@ public class AituSopimusDto implements Serializable {
             return input.getToimikunta();
         }
     };
+    public final static Function<AituSopimusDto, List<AituTutkintoDto>> TUTKINNOT = new Function<AituSopimusDto, List<AituTutkintoDto>>() {
+        public List<AituTutkintoDto> apply(AituSopimusDto input) {
+            return input.getTutkinnot();
+        }
+    };
 
     public String getToimikunta() {
         return toimikunta;

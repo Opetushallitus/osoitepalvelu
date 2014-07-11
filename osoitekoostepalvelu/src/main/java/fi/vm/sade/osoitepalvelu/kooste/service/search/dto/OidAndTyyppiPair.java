@@ -18,13 +18,15 @@ public class OidAndTyyppiPair implements Serializable {
 
     private String oidTyyppi;
     private String oid;
+    private int rivinumero;
 
     public OidAndTyyppiPair() {
     }
 
-    public OidAndTyyppiPair(String oidTyyppi, String oid) {
-        this.oidTyyppi  =  oidTyyppi;
-        this.oid  =  oid;
+    public OidAndTyyppiPair(String oidTyyppi, String oid, int rivinumero) {
+        this.oidTyyppi = oidTyyppi;
+        this.oid = oid;
+        this.rivinumero = rivinumero;
     }
 
     public String getOid() {
@@ -43,10 +45,18 @@ public class OidAndTyyppiPair implements Serializable {
         this.oidTyyppi  =  oidTyyppi;
     }
 
+    public int getRivinumero() {
+        return rivinumero;
+    }
+
+    public void setRivinumero(int rivinumero) {
+        this.rivinumero = rivinumero;
+    }
+
     @Override
     public int hashCode() {
-        int result  =  oid != null ? oid.hashCode() : 0;
-        result  =  HASH_FACTOR * result  +  (oidTyyppi != null ? oidTyyppi.hashCode() : 0);
+        int result = oid != null ? oid.hashCode() : 0;
+        result = HASH_FACTOR * result  +  (oidTyyppi != null ? oidTyyppi.hashCode() : 0);
         return result;
     }
 
@@ -57,6 +67,7 @@ public class OidAndTyyppiPair implements Serializable {
         }
         OidAndTyyppiPair other  =  (OidAndTyyppiPair) obj;
         return EqualsHelper.equals(this.oid, other.oid)
-                && EqualsHelper.equals(this.oidTyyppi, other.oidTyyppi);
+                && EqualsHelper.equals(this.oidTyyppi, other.oidTyyppi)
+                && ((this.oid != null && other.oid != null) || EqualsHelper.equals(this.rivinumero, other.rivinumero));
     }
 }

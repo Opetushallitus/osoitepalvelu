@@ -58,4 +58,8 @@ public interface SearchResultPresentation {
     boolean isOrganisaationSijaintikuntaIncluded();
 
     boolean isYhteyshenkiloEmailIncluded();
+
+    boolean isNayttotutkinnonJarjestajaVastuuhenkilosIncluded();
+
+    boolean isNayttotutkinnonJarjestajaOrganisaatiosIncluded();
 }

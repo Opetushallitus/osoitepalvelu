@@ -86,7 +86,7 @@ var ResultsController = function($scope, $log, $location, $filter, $timeout,
 
     $scope.deleteSelected = function() {
         $log.info($scope.resultGridOptions.selectedItems);
-        SearchService.addDeleted( ArrayHelper.extract($scope.resultGridOptions.selectedItems, ["oid", "oidTyyppi"]) );
+        SearchService.addDeleted( ArrayHelper.extract($scope.resultGridOptions.selectedItems, ["oid", "oidTyyppi", "rivinumero"]) );
         updateResults();
     };
 

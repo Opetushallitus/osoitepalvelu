@@ -46,4 +46,6 @@ public interface OrganisaatioRepository extends MongoRepository<OrganisaatioDeta
     DateTime findOldestCachedEntry();
 
     List<String> findAllOids();
+
+    String findOidByOppilaitoskoodi(String oppilaitosKoodi);
 }

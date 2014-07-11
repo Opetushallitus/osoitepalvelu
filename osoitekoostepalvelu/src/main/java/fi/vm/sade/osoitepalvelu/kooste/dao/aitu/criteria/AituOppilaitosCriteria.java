@@ -57,7 +57,7 @@ public class AituOppilaitosCriteria implements Serializable, TutkintorakenneAwar
     }
 
     public boolean isToimikausiUsed() {
-        return this.toimikausisIn != null && !this.toimikuntaIn.isEmpty();
+        return this.toimikausisIn != null && !this.toimikausisIn.isEmpty();
     }
 
     public List<String> getOppilaitoskoodiIn() {
@@ -85,12 +85,16 @@ public class AituOppilaitosCriteria implements Serializable, TutkintorakenneAwar
     }
 
     public boolean isRelatedToimikuntaResultsNeeded() {
-        return isToimikausiUsed();
+        return isToimikausiUsed() || isToimikuntaUsed();
     }
 
     public AituToimikuntaCriteria toRelatedToimikuntaCriteria() {
         AituToimikuntaCriteria toimikuntaCriteria = new AituToimikuntaCriteria();
         toimikuntaCriteria.setToimikausisIn(this.toimikausisIn);
+        if (toimikuntaCriteria.isToimikausiUsed()) {
+            toimikuntaCriteria.setOnlyVoimassaOlevat(false);
+        }
+        toimikuntaCriteria.setIdsIn(this.toimikuntaIn);
         return toimikuntaCriteria;
     }
 
@@ -114,6 +118,25 @@ public class AituOppilaitosCriteria implements Serializable, TutkintorakenneAwar
         this.tutkintoTunnusIn = tutkintoTunnusIn;
     }
 
+    public AndPredicateAdapter<AituTutkintoDto> createTutkintoPredicate() {
+        AndPredicateAdapter<AituTutkintoDto> and = new AndPredicateAdapter<AituTutkintoDto>();
+        if (isOpintoalaUsed()) {
+            and = and.and(new Predicate<AituTutkintoDto>() {
+                public boolean apply(AituTutkintoDto tutkinto) {
+                    return getOpintoalaTunnusIn().contains(tutkinto.getOpintoalatunnus());
+                }
+            });
+        }
+        if (isTutkintoUsed()) {
+            and = and.and(new Predicate<AituTutkintoDto>() {
+                public boolean apply(AituTutkintoDto tutkinto) {
+                    return getTutkintoTunnusIn().contains(tutkinto.getTutkintotunnus());
+                }
+            });
+        }
+        return and;
+    }
+
     public AndPredicateAdapter<AituSopimusDto> createSopimusPredicate(final List<String> matchedToimikuntas) {
         AndPredicateAdapter<AituSopimusDto> and = new AndPredicateAdapter<AituSopimusDto>();
         if (isToimikuntaUsed()) {
@@ -123,11 +146,12 @@ public class AituOppilaitosCriteria implements Serializable, TutkintorakenneAwar
                 }
             });
         }
-        if (isOpintoalaUsed()) {
+        final AndPredicateAdapter<AituTutkintoDto> tutkintoPredicate = createTutkintoPredicate();
+        if (tutkintoPredicate.isFiltering()) {
             and = and.and(new Predicate<AituSopimusDto>() {
                 public boolean apply(AituSopimusDto sopimus) {
                     for (AituTutkintoDto tutkinto : sopimus.getTutkinnot()) {
-                        if (getOpintoalaTunnusIn().contains(tutkinto.getOpintoalatunnus())) {
+                        if (tutkintoPredicate.apply(tutkinto)) {
                             return true;
                         }
                     }
@@ -135,26 +159,11 @@ public class AituOppilaitosCriteria implements Serializable, TutkintorakenneAwar
                 }
             });
         }
-        if (isTutkintoUsed()) {
-            and = and.and(new Predicate<AituSopimusDto>() {
-                public boolean apply(AituSopimusDto sopimus) {
-                    for (AituTutkintoDto tutkinto : sopimus.getTutkinnot()) {
-                        if (getTutkintoTunnusIn().contains(tutkinto.getTutkintotunnus())) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            });
-        }
-        if (isRelatedToimikuntaResultsNeeded()) {
-            if (matchedToimikuntas == null) {
-                throw new IllegalStateException("Matched toimikuntas needed for sopimus matching!");
-            }
+        if (isRelatedToimikuntaResultsNeeded() && matchedToimikuntas == null) {
+            throw new IllegalStateException("Matched toimikuntas needed for sopimus matching!");
         }
         if (isToimikausiUsed()) {
             and = and.and(new Predicate<AituSopimusDto>() {
-                @Override
                 public boolean apply(AituSopimusDto sopimus) {
                     return matchedToimikuntas.contains(sopimus.getToimikunta());
                 }
