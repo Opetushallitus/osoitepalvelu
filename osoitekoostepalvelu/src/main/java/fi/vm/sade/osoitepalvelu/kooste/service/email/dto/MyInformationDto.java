@@ -53,6 +53,10 @@ public class MyInformationDto implements Serializable {
     }
 
     public String getFirstName() {
+        // Jos etunimessä on välilyöntejä, palautetaan sitä ennen oleva osa
+        if( this.firstName != null && firstName.contains(" ") ) {
+            return this.firstName.substring(0, this.firstName.indexOf(" ")).trim();
+        }
         return firstName;
     }
 
