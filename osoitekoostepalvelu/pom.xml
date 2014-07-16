@@ -448,13 +448,7 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- Logging -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.0.13</version>
-        </dependency>
-        
+        <!-- Logging -->        
         <dependency>
             <groupId>fi.vm.sade.log</groupId>
             <artifactId>log-client</artifactId>
@@ -475,24 +469,13 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <!-- Seuraava sisältyy jo ch.qos.logback kirjastoon -->
-<!--         <dependency> -->
-<!--             <groupId>org.slf4j</groupId> -->
-<!--             <artifactId>slf4j-log4j12</artifactId> -->
-<!--         </dependency> -->
-
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>2.2.2</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Maven varoitus: Poistettu, jotta ei tule duplikaattia riippuvuutta -->
-<!--         <dependency> -->
-<!--         	<groupId>commons-io</groupId> -->
-<!--         	<artifactId>commons-io</artifactId> -->
-<!--         	<version>2.4</version> -->
-<!--         </dependency> -->
+
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-gson</artifactId>
