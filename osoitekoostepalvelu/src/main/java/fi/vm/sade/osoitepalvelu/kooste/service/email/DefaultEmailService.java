@@ -70,9 +70,26 @@ public class DefaultEmailService extends AbstractService implements EmailService
 
         settings.getEmail().setReplyTo(myInfo.getEmail());
         if (settings.getEmail().getReplyTo() == null) {
-            settings.getEmail().setReplyTo(myInfo.getFirstName() + "." + myInfo.getLastName() + "@oph.fi");
+            settings.getEmail().setReplyTo( replaceSpecialCharacters(myInfo.getFirstName() + "." + myInfo.getLastName() + "@oph.fi"));
         }
 
         return settings;
+    }
+
+    /**
+     * Korvaa ääkköset aalla ja oolla
+     * @param email sähköpostiosoite
+     * @return sama sähköpostiosoite, mutta muuttaa Ää=Aa ja Öö=Oo sekä laittaa kaikki pienillä kirjaimilla
+     */
+    private String replaceSpecialCharacters(String email) {
+        if( email == null ) {
+            return null;
+        }
+        // Kaikki pieniksi kirjaimiksi ja ääkköset aakkosiksi
+        email = email.toLowerCase();
+        email = email.replaceAll("ä", "a");
+        email = email.replaceAll("ö", "o");
+        
+        return email;
     }
 }
