@@ -74,6 +74,8 @@
                                 <input id="optionChecked_{{$parent.$index}}_{{$index}}" type="checkbox" ng-model="opt.selected" /> <label for="optionChecked_{{$parent.$index}}_{{$index}}">{{opt.name}}</label>
                             </div>
                         </td>
+                        <!-- Tyhjä TD, jotta sarakkeet menevät oikein -->
+                        <td class="criterionOptions" ng-hide="not tg.hideOptions"></td>
                         <td class="criterionActions">
                             <button class="btn btn-danger" ng-click="removeTargetGroup($index)">
                                 <i class="fa fa-ban fa-1x"></i>
