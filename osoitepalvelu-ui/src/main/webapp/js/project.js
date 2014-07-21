@@ -121,12 +121,6 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         {type: 'ORGANISAATIO_SIJAINTIKUNTA',name: LocalisationService.t('address_field_organisaatio_sijaintikunta')}
     ];
 }])
-.factory("ReceiverTypes", ["LocalisationService", function(LocalisationService) {
-    return [
-        {type: 'ORGANISAATIO',              name: LocalisationService.t('receiver_field_organisaatio')},
-        {type: 'YHTEYSHENKILO',             name: LocalisationService.t('receiver_field_yhteyshenkilo')}
-    ];
-}])
 .factory("TutkintotoimikuntaRoolis", ["LocalisationService", function(LocalisationService) {
     return [
         {type: 'JASENET', name: LocalisationService.t('target_gorup_option_jasenet')}

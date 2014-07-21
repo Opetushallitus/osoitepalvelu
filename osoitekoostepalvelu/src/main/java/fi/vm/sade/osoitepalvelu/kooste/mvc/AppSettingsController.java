@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.scheduled.ScheduledAituDataFetchTask;
@@ -42,7 +43,9 @@ import java.io.IOException;
  * Date: 3/18/14
  * Time: 12:41 PM
  */
-@Api("Sovelluksen asetukset")
+@Api(value="app",
+    description = "Tuottaa käyttöliittymää varten aikaisessa latausvaiheessa (mm. lokalisointipavlvelun sijainti) " +
+            "tarvittavat asetukset ja tarjoaa kehityksen tueksi toimenpiteitä välimuistin hallintaan.")
 @Controller
 @Scope(value =  WebApplicationContext.SCOPE_APPLICATION)
 @RequestMapping(value  =  "/app")
@@ -65,6 +68,9 @@ public class AppSettingsController extends AbstractMvcController {
     @Autowired
     private KoodistoService koodistoService;
 
+    @ApiOperation("Palauttaa sovelluksen polkuviittauksia sisältävät, aikaisessa käyttöliittymän alustuksen "
+            + "vaiheessa tarpeelliset asetukset käyttöliittymälle JavaScriptinä, joka tuottaa asetukset" +
+            " window.CONFIG -olioon.")
     @RequestMapping(value  =  "/settings.js", method  =  RequestMethod.GET, produces  =  "text/javascript")
     @ResponseBody
     public String settingsJs() throws IOException {
@@ -73,6 +79,8 @@ public class AppSettingsController extends AbstractMvcController {
         return "window.CONFIG  =  "  +  mapper.writeValueAsString(settings)  +  ";";
     }
 
+    @ApiOperation("Päivittää Organisaatiovälimuistin. Käytettävissä vain paikallisena pyyntönä kehityksen tukena. " +
+            "Normaalisti tätä ei ole tarpeen kutsua, sillä päivitys suoritetaan automaattisesti eräajona.")
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
     @RequestMapping(value = "/refereshOrganisaatioCache", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
@@ -81,6 +89,9 @@ public class AppSettingsController extends AbstractMvcController {
         return "OK";
     }
 
+    @ApiOperation("Päivittää Organisaatiovälimuistin siltä osin kuin tarpeellista." +
+        "Käytettävissä vain paikallisena pyyntönä kehityksen tukena. " +
+        "Normaalisti tätä ei ole tarpeen kutsua, sillä operaatio suoritetaan sovelluksen käynnistymisen yhteydessä.")
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
     @RequestMapping(value = "/ensureOrganisaatioCacheFresh", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
@@ -89,6 +100,10 @@ public class AppSettingsController extends AbstractMvcController {
         return "OK";
     }
 
+    @ApiOperation("Poistaa Koodistoon liittyvät välimuistit sovelluksen ajonaikaisesta muistista " +
+            "sekä välimuistista MongoDB-tietokannasta. Käytettävissä vain paikallisena pyyntönä kehityksen tukena. "+
+            "Normaalisti tätä ei ole tarpeen kutsua, sillä koodiston välimuistissa on elinaika ja se päivitetään " +
+            "automaattisesti.")
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
     @RequestMapping(value = "/purgeKoodistoCaches", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
@@ -97,6 +112,10 @@ public class AppSettingsController extends AbstractMvcController {
         return "OK";
     }
 
+    @ApiOperation("Käy uudelleen Y-tunnustiedot organisaatioille hierarkiahaun kautta. " +
+        "Käytettävissä vain paikallisena pyyntönä kehityksen tukena. Normaalisti tätä ei ole tarpeen kutsua, sillä " +
+        "operaatio suoritetaan automaattisesti ajastettuna organisaatiovälimuistin päivittämisen yhteydessä ja " +
+        "sovelluksen käynnistymisen yhteydessä.")
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
     @RequestMapping(value = "/updateOrganisaatioYtunnusDetails", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
@@ -105,6 +124,9 @@ public class AppSettingsController extends AbstractMvcController {
         return "OK";
     }
 
+    @ApiOperation("Noutaa tiedot AITU-palvelusta. Käytettävissä vain paikallisena pyyntönä kehityksen tukena. " +
+            "Normaalisti tätä ei ole tarpeen kutsua, sillä sovellus käy tiedot automaattisesti ajastetusti sekä " +
+            "käynnistymisen yhteydessä.")
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
     @RequestMapping(value = "/fetchAituData", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody

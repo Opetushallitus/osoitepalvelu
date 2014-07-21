@@ -36,9 +36,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import scala.actors.threadpool.Arrays;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -97,7 +96,6 @@ public class DefaultSavedSearchServiceTest {
         assertEquals(saveId, dto.getId().longValue());
         assertEquals(SavedSearch.SaveType.EMAIL, dto.getSearchType());
         assertEquals(1, dto.getAddressFields().size());
-        assertEquals(2, dto.getReceiverFields().size());
         assertEquals(1, dto.getTargetGroups().size());
         assertEquals(2, dto.getTerms().size());
     }
@@ -136,7 +134,6 @@ public class DefaultSavedSearchServiceTest {
         SavedSearchViewDto viewDto  =  savedSearchService.getSaveById(id);
         assertEquals(SavedSearch.SaveType.LETTER, viewDto.getSearchType());
         assertEquals(2, viewDto.getAddressFields().size());
-        assertEquals(2, viewDto.getReceiverFields().size());
         assertEquals(1, viewDto.getTargetGroups().size());
         assertEquals(2, viewDto.getTerms().size());
     }
@@ -166,15 +163,13 @@ public class DefaultSavedSearchServiceTest {
         assertEquals(0, dtos.size());
     }
 
-    @SuppressWarnings("unchecked")
     private SavedSearchSaveDto createSavedSearch(String name, SavedSearch.SaveType saveType) {
         SavedSearchSaveDto dto  =  new SavedSearchSaveDto();
         dto.setName(name);
         dto.setSearchType(saveType);
-        dto.setAddressFields(Arrays.asList(new String[] {"TestField"}));
-        dto.setReceiverFields(Arrays.asList(new String[] {"TestField", "TestField2"}));
-        dto.setTargetGroups(Arrays.asList(new SearchTargetGroup[] {
-                new SearchTargetGroup(SearchTargetGroup.GroupType.OPETUSPISTEET,
+        dto.setAddressFields(Arrays.asList(new String[]{"TestField"}));
+        dto.setTargetGroups(Arrays.asList(new SearchTargetGroupDto[] {
+                new SearchTargetGroupDto(SearchTargetGroup.GroupType.OPETUSPISTEET,
                     Arrays.asList(new SearchTargetGroup.TargetType[] {
                             SearchTargetGroup.TargetType.YHTEYSHENKILO
                     }))

@@ -17,6 +17,8 @@
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
@@ -48,7 +50,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Date: 2/17/14
  * Time: 2:45 PM
  */
-@Api("Haku")
+@Api(value="search",
+    description = "Tarjoaa rajapinnan osoitteiden hakuun ja osoitteiden lataamiseen Excel-muodossa.")
 @Controller
 @Scope(value =  WebApplicationContext.SCOPE_APPLICATION)
 @RequestMapping(value  =  "/search")
@@ -71,6 +74,7 @@ public class SeachController extends AbstractMvcController implements Serializab
      * @param searchParameters to use
      * @return the results
      */
+    @ApiOperation("Palauttaa osoitteet annetuilla hakuehdoilla.")
     @RequestMapping(value = "list.json", method  =  RequestMethod.POST)
     @ResponseBody
     public SearchResultsPresentationDto list(@RequestBody FilteredSearchParametersDto searchParameters,
@@ -91,6 +95,9 @@ public class SeachController extends AbstractMvcController implements Serializab
      * @param searchParameters to store
      * @return the key associated with the stored parameters to be used in the GET request for the Excel.
      */
+    @ApiOperation("Palauttaa downloadId-tunnisteen, jolla voi excel.do-operaatiota käyttäen pyyttää GET-pyyntönä" +
+            "Excel-tiedoston. Näin siksi, että hakuparametrit voitaisiin välitää URL-rajoitteen vuoksi POST-pyyntönä" +
+            "mutta itse tiedostoon voidaan käyttöliittymässä tehdä uudelleenohjaus.")
     @RequestMapping(value = "prepare.excel.do", method  =  RequestMethod.POST)
     @ResponseBody
     public String storeExcelParameters(@RequestBody FilteredSearchParametersDto searchParameters) {
@@ -114,6 +121,9 @@ public class SeachController extends AbstractMvcController implements Serializab
      * @return the Excel presentation
      * @throws NotFoundException if downloadId did not exist or already used.
      */
+    @ApiOperation("Palauttaa Excel-tiedoston hakutuloksista aiemman prepare.excel.do-operaatiokutsun palauttaman" +
+            " tunnisteen perusteella.")
+    @ApiResponse(code=404, message = "Hakua ei löytynyt downlaodId:llä.")
     @RequestMapping(value = "excel.do", method  =  RequestMethod.GET)
     public View downloadExcel(@RequestParam("downloadId") String downlaodId,
                    @RequestParam("lang") String lang)

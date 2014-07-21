@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTargetGroupDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTermDto;
@@ -30,6 +32,7 @@ import java.util.Locale;
  * Date: 2/17/14
  * Time: 2:51 PM
  */
+@ApiModel("Kuvaa hakuehtoja")
 public class SearchTermsDto implements Serializable {
     private static final long serialVersionUID  =  -6050192875078360323L;
 
@@ -42,11 +45,16 @@ public class SearchTermsDto implements Serializable {
         CONTACT;
     }
 
+    @ApiModelProperty("Lokalisointilokaali, jolla hakutulokset esitetään ja eri kieliset osoitteet " +
+            " ja postitoimipaikkojen nimet pyritään valitsemaan.")
     private Locale locale;
+    @ApiModelProperty("Haun käyttötarkoitus.")
     private SearchType searchType;
+    @ApiModelProperty("Jos haku on CONTACT-käyttötarkoitukseen, ne osoitekentät, jotka halutaan sisällytettävän hakutuloksiin.")
     private List<String> addressFields  =  new ArrayList<String>();
-    private List<String> receiverFields  =  new ArrayList<String>();
+    @ApiModelProperty("Haun kohderyhmät.")
     private List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
+    @ApiModelProperty("Haun rajausehdot, jotka pääsääntöisesti ovat ja-suhteessa toisiinsa.")
     private List<SearchTermDto> terms  =  new ArrayList<SearchTermDto>();
 
     public Locale getLocale() {
@@ -71,14 +79,6 @@ public class SearchTermsDto implements Serializable {
 
     public void setAddressFields(List<String> addressFields) {
         this.addressFields  =  addressFields;
-    }
-
-    public List<String> getReceiverFields() {
-        return receiverFields;
-    }
-
-    public void setReceiverFields(List<String> receiverFields) {
-        this.receiverFields  =  receiverFields;
     }
 
     public boolean containsAnyTargetGroup(SearchTargetGroup.GroupType[] groupTypes,
@@ -134,9 +134,6 @@ public class SearchTermsDto implements Serializable {
         if (locale != null ? !locale.equals(that.locale) : that.locale != null) {
             return false;
         }
-        if (receiverFields != null ? !receiverFields.equals(that.receiverFields) : that.receiverFields != null) {
-            return false;
-        }
         if (searchType != that.searchType) {
             return false;
         }
@@ -154,7 +151,6 @@ public class SearchTermsDto implements Serializable {
         int result = locale != null ? locale.hashCode() : 0;
         result = HASH_FACTOR * result + (searchType != null ? searchType.hashCode() : 0);
         result = HASH_FACTOR * result + (addressFields != null ? addressFields.hashCode() : 0);
-        result = HASH_FACTOR * result + (receiverFields != null ? receiverFields.hashCode() : 0);
         result = HASH_FACTOR * result + (targetGroups != null ? targetGroups.hashCode() : 0);
         result = HASH_FACTOR * result + (terms != null ? terms.hashCode() : 0);
         return result;

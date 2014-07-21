@@ -1,5 +1,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 
 import java.io.Serializable;
@@ -9,6 +11,7 @@ import java.io.Serializable;
  * Date: 2/26/14
  * Time: 1:49 PM
  */
+@ApiModel("Kuvaa organisaation/henkilön hakutuloksissa. Jos oid ei ole tiedossa, voidaan käyttää rivinumeroa.")
 public class OidAndTyyppiPair implements Serializable {
     private static final long serialVersionUID = 639768390250422033L;
     
@@ -16,8 +19,11 @@ public class OidAndTyyppiPair implements Serializable {
     public static final String TYYPPI_ORGANISAATIO  =  "organisaatio";
     public static final String TYYPPI_HENKILO  =  "henkilo";
 
+    @ApiModelProperty("Oid-tyyppi: organisaatio|henkilo")
     private String oidTyyppi;
+    @ApiModelProperty("OID:n arvo.")
     private String oid;
+    @ApiModelProperty("Rivinumero hakutuloksissa. Tätä verrataan, jos oid on null.")
     private int rivinumero;
 
     public OidAndTyyppiPair() {

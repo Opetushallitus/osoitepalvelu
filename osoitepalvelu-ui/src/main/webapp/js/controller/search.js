@@ -43,7 +43,6 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             targetGroups: $scope.visibleTargetGroups,
             searchType: $scope.searchType,
             addressFields: $scope.addressFields,
-            receiverFields: $scope.receiverFields,
             lang: $scope.osoitekieli
         };
     };
@@ -64,8 +63,6 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         $scope.searchType = SearchService.getSearchType();
 
         $scope.addressFields = SearchService.getAddressFields();
-
-        $scope.receiverFields = SearchService.getReceiverFields();
 
         $scope.osoitekieli = SearchService.getKieli();
 
@@ -212,7 +209,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             var selected = angular.copy($scope.selectedSavedSearch);
             $log.info("Selected save: " + selected);
             SavesService.getSearch($scope.selectedSavedSearch, function(save) {
-                SearchService.updateSearchType(save.searchType, save.addressFields, save.receiverFields);
+                SearchService.updateSearchType(save.searchType, save.addressFields);
                 SearchService.updateTargetGroups(save.targetGroups);
                 SearchService.updateTerms(save.terms);
                 SearchService.updateKieli(save.lang);
@@ -301,7 +298,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
     };
 
     $scope.search = function() {
-        SearchService.updateSearchType($scope.searchType, $scope.addressFields, $scope.receiverFields);
+        SearchService.updateSearchType($scope.searchType, $scope.addressFields);
         SearchService.updateTargetGroups($scope.visibleTargetGroups);
         SearchService.updateTerms($scope.terms);
         SearchService.updateKieli($scope.osoitekieli);

@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
 
 import java.util.Locale;
@@ -27,39 +28,56 @@ import java.util.Locale;
  */
 public interface SearchResultPresentation {
 
+    @ApiModelProperty("Hakutulosten esityskieli")
     Locale getLocale();
 
     boolean isResultRowIncluded(SearchResultRowDto row);
 
+    @ApiModelProperty("Näytetäänkö organisaation nimi -saraketta")
     boolean isOrganisaationNimiIncluded();
 
+    @ApiModelProperty("Näytetäänkö organisaatiotunnistesaraketta")
     boolean isOrganisaatiotunnisteIncluded();
 
+    @ApiModelProperty("Näytetäänkö yhteyshenkilösaraketta")
     boolean isYhteyshenkiloIncluded();
 
+    @ApiModelProperty("Näyteätänkö postiosoitetta")
     boolean isPositosoiteIncluded();
 
+    @ApiModelProperty("Näytetäänkö käyntiosoitetta")
     boolean isKayntiosoiteIncluded();
 
+    @ApiModelProperty("Näytetäänkö puhelinnumerosaraketta")
     boolean isPuhelinnumeroIncluded();
 
+    @ApiModelProperty("Näytetäänkö faksinumerosaraketta.")
     boolean isFaksinumeroIncluded();
 
+    @ApiModelProperty("Näytetäänkö WWW-osoite-saraketta")
     boolean isWwwOsoiteIncluded();
 
+    @ApiModelProperty("Näytetäänkö viranomaistiedotuksen sähköpostiosoite -saraketta")
     boolean isViranomaistiedotuksenSahkopostiosoiteIncluded();
 
+    @ApiModelProperty("Näytetäänkö koulutusneuvonnan sähköpostiosoite -saraketta")
     boolean isKoulutusneuvonnanSahkopostiosoiteIncluded();
 
+    @ApiModelProperty("Näytetäänkö kriisitiedotuksen sähköpostiosoite -saraketta")
     boolean isKriisitiedotuksenSahkopostiosoiteIncluded();
 
+    @ApiModelProperty("Näytetäänkö organisaation sähköpostiosoite -saraketta")
     boolean isOrganisaatioEmailIncluded();
 
+    @ApiModelProperty("Näytetäänkö organisaation sijaintikunta -saraketta")
     boolean isOrganisaationSijaintikuntaIncluded();
 
+    @ApiModelProperty("Näytetäänkö yhteyshenkilön sähköpostiosoite -saraketta")
     boolean isYhteyshenkiloEmailIncluded();
 
+    @ApiModelProperty("Onko haun kohderyhmissä näyttötutkinnon vastuuhenkilö")
     boolean isNayttotutkinnonJarjestajaVastuuhenkilosIncluded();
 
+    @ApiModelProperty("Onko haun kohderyhmissä näyttötutkinnon järjestäjän organisaatio")
     boolean isNayttotutkinnonJarjestajaOrganisaatiosIncluded();
 }

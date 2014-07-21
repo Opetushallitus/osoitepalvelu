@@ -17,7 +17,7 @@
     <task:executor id="taskExecutor" pool-size="1" queue-capacity="10"/>
 
     <ctx:property-placeholder
-            location="classpath:osoitekoostepalvelu.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/osoitekoostepalvelu.properties, file:///${user.home:''}/oph-configuration/hakuparametrit.properties, file:///${user.home:''}/oph-configuration/override.properties"
+            location="classpath:osoitekoostepalvelu.properties, classpath:swagger.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/osoitekoostepalvelu.properties, file:///${user.home:''}/oph-configuration/hakuparametrit.properties, file:///${user.home:''}/oph-configuration/override.properties"
             ignore-resource-not-found="true" properties-ref="defaultProps"/>
 
     <bean id="defaultProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -29,6 +29,15 @@
                 <prop key="cas_callback_url">${cas.callback.osoitekoostepalvelu}</prop>
                 <prop key="spring_security_default_access">hasAnyRole('ROLE_APP_OSOITE_CRUD')</prop>
             </util:properties>
+        </property>
+    </bean>
+
+    <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jacksonMessageConverter"/>
+            </list>
         </property>
     </bean>
 
