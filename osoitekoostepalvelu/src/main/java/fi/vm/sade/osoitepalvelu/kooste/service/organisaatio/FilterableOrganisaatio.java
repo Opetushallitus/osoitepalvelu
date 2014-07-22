@@ -16,9 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio;
 
-import com.google.common.base.Function;
-
 import java.util.List;
+
+import com.google.common.base.Function;
 
 /**
  * User: ratamaa
@@ -27,17 +27,17 @@ import java.util.List;
  */
 public interface FilterableOrganisaatio {
 
-    public String getOid();
+    String getOid();
 
-    public List<String> getTyypit();
+    List<String> getTyypit();
 
-    public List<String> getKielet();
+    List<String> getKielet();
 
-    public String getKotipaikka();
+    String getKotipaikka();
 
-    public static final Function<FilterableOrganisaatio, String> GET_OID = new Function<FilterableOrganisaatio, String>() {
+    Function<FilterableOrganisaatio, String> GET_OID = new Function<FilterableOrganisaatio, String>() {
         public String apply(FilterableOrganisaatio organisaatio) {
-            return organisaatio.getOid();
+            return organisaatio.getOid(); // NOSONAR
         }
     };
 }

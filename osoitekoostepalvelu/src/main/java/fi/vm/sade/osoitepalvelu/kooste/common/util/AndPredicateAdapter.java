@@ -16,10 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
-import com.google.common.base.Predicate;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.base.Predicate;
 
 /**
  * User: ratamaa
@@ -67,7 +67,7 @@ public class AndPredicateAdapter<T> implements Predicate<T> {
         if (!(obj instanceof AndPredicateAdapter)) {
             return false;
         }
-        AndPredicateAdapter other = (AndPredicateAdapter)obj;
+        AndPredicateAdapter<?> other = (AndPredicateAdapter<?>)obj;
         return this.predicates.equals(other.predicates);
     }
     
@@ -75,7 +75,7 @@ public class AndPredicateAdapter<T> implements Predicate<T> {
     public int hashCode() {
         return super.hashCode();
     }
-
+    
     public boolean isFiltering() {
         return !this.predicates.isEmpty();
     }

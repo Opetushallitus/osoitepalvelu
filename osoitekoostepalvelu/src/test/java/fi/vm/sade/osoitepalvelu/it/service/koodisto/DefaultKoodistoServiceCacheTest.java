@@ -16,6 +16,21 @@
 
 package fi.vm.sade.osoitepalvelu.it.service.koodisto;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+import java.util.Locale;
+
+import org.apache.camel.CamelExecutionException;
+import org.apache.camel.component.http.HttpOperationFailedException;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
@@ -24,19 +39,6 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultKoodistoRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto;
 import fi.vm.sade.osoitepalvelu.service.koodisto.DefaultKoodistoServiceTest;
-import org.apache.camel.CamelExecutionException;
-import org.apache.camel.component.http.HttpOperationFailedException;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.List;
-import java.util.Locale;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: ratamaa
@@ -93,7 +95,7 @@ public class DefaultKoodistoServiceCacheTest {
 
     private void ignoreIf503(CamelExecutionException e) throws CamelExecutionException {
         if (e.getCause() != null && e.getCause() instanceof HttpOperationFailedException) {
-            if (((HttpOperationFailedException) e.getCause()).getStatusCode() == 503) {
+            if (((HttpOperationFailedException) e.getCause()).getStatusCode() == HttpStatus.SERVICE_UNAVAILABLE.value()) {
                 return;
             }
         }

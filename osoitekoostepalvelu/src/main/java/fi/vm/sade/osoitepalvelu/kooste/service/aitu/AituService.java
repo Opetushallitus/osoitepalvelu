@@ -15,16 +15,15 @@ package fi.vm.sade.osoitepalvelu.kooste.service.aitu;
  * European Union Public Licence for more details.
  */
 
+import java.util.List;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituOppilaitosCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
-import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.TutkintorakenneAwareCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOppilaitosResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOsoitepalveluResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto;
-
-import java.util.List;
 
 /**
  * Created by ratamaa on 15.4.2014.
@@ -55,7 +54,7 @@ public interface AituService {
     /**
      * @param results to override the data in MongoDB with
      */
-    void refreshData( AituOsoitepalveluResultsDto results );
+    void refreshData(AituOsoitepalveluResultsDto results);
 
     /**
      * Refreshes the data in MongoDB repository by fetching new data
@@ -63,5 +62,5 @@ public interface AituService {
      *
      * @param requestContext for the AITU route
      */
-    void refreshData( CamelRequestContext requestContext );
+    void refreshData(CamelRequestContext requestContext);
 }

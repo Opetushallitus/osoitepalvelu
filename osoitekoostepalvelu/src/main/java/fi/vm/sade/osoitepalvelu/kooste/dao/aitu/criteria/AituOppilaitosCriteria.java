@@ -32,6 +32,8 @@ import java.util.List;
  * Time: 2:53 PM
  */
 public class AituOppilaitosCriteria implements Serializable, TutkintorakenneAwareCriteria {
+    private static final long serialVersionUID = 4448829574717272869L;
+    
     private List<String> oppilaitoskoodiIn = new ArrayList<String>();
     private List<String> opintoalaTunnusIn = new ArrayList<String>();
     private List<String> tutkintoTunnusIn = new ArrayList<String>();

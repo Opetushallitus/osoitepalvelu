@@ -102,8 +102,9 @@ public class KoodistoDto implements Serializable {
     }
 
     public KoodistoDto(String koodistoUri, String organisaatioOid) {
-        this.setKoodistoUri(koodistoUri);
-        this.setOrganisaatioOid(new OrganisaatioOid(organisaatioOid));
+        tyyppi  =  KoodistoTyyppi.parseTyyppi(koodistoUri);
+        this.uri = koodistoUri;
+        this.organisaatioOid  = new OrganisaatioOid(organisaatioOid);
     }
 
     public KoodistoTyyppi getTyyppi() {

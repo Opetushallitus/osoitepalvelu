@@ -16,13 +16,13 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
-import com.google.common.base.Function;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.base.Function;
 
 /**
  * User: ratamaa
@@ -43,7 +43,7 @@ public class AituOppilaitosResultDto implements Serializable {
 
     public static final Function<AituOppilaitosResultDto, String> OPPILAITOSKOODI = new Function<AituOppilaitosResultDto, String>() {
         public String apply(AituOppilaitosResultDto result) {
-            return result.getOppilaitoskoodi();
+            return result.getOppilaitoskoodi(); // NOSONAR (http://sourceforge.net/p/findbugs/bugs/1139/)
         }
     };
 

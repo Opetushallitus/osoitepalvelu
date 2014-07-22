@@ -125,7 +125,8 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
             return;
         }
         for(String addressField : addressFields) {
-            List<String> fields  =  fieldMappings.get(addressField);
+            // Sonar ei tunnista, että MultiValueMap palauttaa listan.
+            List<String> fields  =  fieldMappings.get(addressField); // NOSONAR
             if (fields == null) {
                 throw new IllegalStateException("Unknown field "  +  addressField);
             }

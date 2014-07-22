@@ -27,6 +27,8 @@ import java.io.Serializable;
  * Time: 10:31 AM
  */
 public class AituOppilaitosVastuuhenkiloAggregateDto implements Serializable {
+    private static final long serialVersionUID = -3490764493902616037L;
+
     private static final int HASH_FACTOR = 31;
 
     private AituOppilaitosResultDto oppilaitos;

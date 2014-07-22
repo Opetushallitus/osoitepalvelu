@@ -16,12 +16,17 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-
-import java.util.*;
 
 /**
  * Created by ratamaa on 15.4.2014.
@@ -62,7 +67,7 @@ public final class CollectionHelper {
      * @return the filtered collection
      */
     public static <T> Collection<T> filter(Collection<T> col, Predicate<? super T> predicate,
-                                           Predicate<? super T> fallbackPredicate ) {
+                                           Predicate<? super T> fallbackPredicate){
         Collection<T> result = Collections2.filter(col, predicate);
         if (result.isEmpty()) {
             return Collections2.filter(col, fallbackPredicate);

@@ -49,6 +49,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
     // (while the overall process would take about half an hour):
     public static final int MAX_TRIES = 3;
     public static final int WAIT_BEFORE_RETRY_MILLIS = 3000;
+    private static final int LOGGIN_INTERVAL = 1000;
 
     @Autowired
     private OrganisaatioService organisaatioService;
@@ -66,7 +67,6 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
     private String cacheValidFrom;
 
 
-
     // Every working day night at 3 AM
     @Scheduled(cron = "0 0 3 * * MON-FRI")
     public void refreshOrganisaatioCache() {
@@ -78,7 +78,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 new CasDisabledCasTicketProvider()));
 
         List<String> oids = retryOnCamelError(new Callable<List<String>>() {
-            public List<String> call() throws Exception {
+            public List<String> call() {
                 return organisaatioServiceRoute.findAllOrganisaatioOids(context);
             }
         }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
@@ -94,7 +94,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 organisaatioService.purgeOrganisaatioByOidCache(oid);
                 // ...and renew the cache:
                 retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
-                    public OrganisaatioDetailsDto call() throws Exception {
+                    public OrganisaatioDetailsDto call() {
                         return organisaatioService.getdOrganisaatioByOid(oid, context);
                     }
                 }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
@@ -135,12 +135,12 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
         // No CAS here (not needed for reading organisaatio service):
         final DefaultCamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(
                 new CasDisabledCasTicketProvider()));
-        if (cacheInvalidBefore != null && new DateTime().compareTo(cacheInvalidBefore.toDateTimeAtStartOfDay()) < 0 ) {
+        if (cacheInvalidBefore != null && new DateTime().compareTo(cacheInvalidBefore.toDateTimeAtStartOfDay()) < 0) {
             context.setOverriddenTime(cacheInvalidBefore.toDateTimeAtStartOfDay());
         }
 
         List<String> oids = retryOnCamelError(new Callable<List<String>>() {
-            public List<String> call() throws Exception {
+            public List<String> call() {
                 return organisaatioServiceRoute.findAllOrganisaatioOids(context);
             }
         }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
@@ -154,8 +154,8 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 ++i;
                 // ...and renew the cache:
                 long rc = context.getRequestCount();
-                OrganisaatioDetailsDto details = retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
-                    public OrganisaatioDetailsDto call() throws Exception {
+                retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
+                    public OrganisaatioDetailsDto call() {
                         return organisaatioService.getdOrganisaatioByOid(oid, context);
                     }
                 }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
@@ -163,7 +163,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 if (rc != context.getRequestCount()) {
                     infoUpdated = true;
                     logger.debug("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
-                } else if(i % 1000 == 0) {
+                } else if(i % LOGGIN_INTERVAL == 0) {
                     logger.info("Organisaatio ensure data fresh task status: {} / {}", new Object[]{i, oids.size()});
                 }
             }
@@ -214,7 +214,9 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 logger.warn("Error fetching data: " + e.getMessage(), e);
                 try {
                     Thread.sleep(retryWaitTimeMillis);
-                } catch(InterruptedException er) {}
+                } catch(InterruptedException er) {
+                    logger.warn("Error while sleeping: " + er.getMessage(), er);
+                }
                 if (j < maxRetries) {
                     logger.info("Retrying...");
                 }

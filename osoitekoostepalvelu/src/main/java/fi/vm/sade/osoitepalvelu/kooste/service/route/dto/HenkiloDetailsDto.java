@@ -95,7 +95,7 @@ public class HenkiloDetailsDto extends HenkiloListResultDto implements Serializa
     }
 
     public String getNimi() {
-        String kutsumanimi = getKutsunanimi();
+        String kutsumanimi = getKutsumanimi();
         if (kutsumanimi == null) {
             return this.getEtunimet() + " " + this.getSukunimi();
         } else {

@@ -20,6 +20,7 @@ import fi.vm.sade.generic.healthcheck.HealthChecker;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
+
 import org.apache.camel.util.StopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,7 +45,9 @@ public class AuthenticationServiceHealthCheck implements HealthChecker {
         final List<KayttooikesuryhmaDto> kayttoikeusryhmas  =  authenticationServiceRoute.findKayttooikeusryhmas(
                 new DefaultCamelRequestContext());
         final long resultTook  =  watch.stop();
-        return new LinkedHashMap() { {
+        return new LinkedHashMap<Object, Object>() { 
+            private static final long serialVersionUID = -8706812076630006444L;
+        {
             put("status", "OK");
             put("response-time", ""  +  resultTook  +  " ms");
             put("kayttoikeusryhmas-count", kayttoikeusryhmas.size());

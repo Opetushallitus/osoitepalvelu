@@ -108,7 +108,7 @@ public class DefaultSavedSearchServiceTest {
         } catch (NotFoundException e) {
             throw new IllegalStateException(e);
         }
-        SavedSearchViewDto dto  =  savedSearchService.getSaveById(saveId);
+        savedSearchService.getSaveById(saveId);
     }
 
     @Test(expected  =  AuthorizationException.class)

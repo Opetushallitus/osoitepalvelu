@@ -77,7 +77,7 @@ public class DefaultAituOppilaitosRepository extends SimpleMongoRepository<AituO
         if (oppilaitosCriteria.isRelatedToimikuntaResultsNeeded() && matchedToimikuntas == null) {
             matchedToimikuntas = aituToimikuntaRepository.findToimikuntaIds(oppilaitosCriteria.toRelatedToimikuntaCriteria());
         }
-        return new ArrayList<AituSopimusDto>(Collections2.filter( CollectionHelper.collect(oppilaitos, AituOppilaitos.SOPIMUKSET),
+        return new ArrayList<AituSopimusDto>(Collections2.filter(CollectionHelper.collect(oppilaitos, AituOppilaitos.SOPIMUKSET),
                 oppilaitosCriteria.createSopimusPredicate(matchedToimikuntas)));
     }
 

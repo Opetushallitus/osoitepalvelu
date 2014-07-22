@@ -27,7 +27,7 @@ public class HenkiloListResultDto implements Serializable {
     private static final long serialVersionUID = 4343659088794094264L;
     
     private String etunimet;
-    private String kutsunanimi;
+    private String kutsumanimi;
     private String sukunimi;
     private String oidHenkilo;
     private String kasittelijaOid;
@@ -44,12 +44,12 @@ public class HenkiloListResultDto implements Serializable {
         this.etunimet = etunimet;
     }
 
-    public String getKutsunanimi() {
-        return kutsunanimi;
+    public String getKutsumanimi() {
+        return kutsumanimi;
     }
-
-    public void setKutsunanimi(String kutsunanimi) {
-        this.kutsunanimi = kutsunanimi;
+    
+    public void setKutsumanimi(String kutsumanimi) {
+        this.kutsumanimi = kutsumanimi;
     }
 
     public String getSukunimi() {

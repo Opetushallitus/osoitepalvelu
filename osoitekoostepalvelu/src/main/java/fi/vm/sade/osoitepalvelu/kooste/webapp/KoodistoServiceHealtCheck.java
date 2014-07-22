@@ -20,6 +20,7 @@ import fi.vm.sade.generic.healthcheck.HealthChecker;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.KoodistoRoute;
+
 import org.apache.camel.util.StopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,7 +45,9 @@ public class KoodistoServiceHealtCheck implements HealthChecker {
         final List<KoodistoVersioDto> koodistoVersions  =  koodistoRoute.findKoodistonVersiot(
                 KoodistoDto.KoodistoTyyppi.OPPILAITOSTYYPPI);
         final long resultTook  =  watch.stop();
-        return new LinkedHashMap() { {
+        return new LinkedHashMap<Object, Object>() { 
+            private static final long serialVersionUID = -7242346189177994046L;
+        {
             put("status", "OK");
             put("response-time", "" + resultTook + " ms");
             put("oppilaitostyyppi-versions", koodistoVersions.size());

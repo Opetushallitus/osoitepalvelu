@@ -16,14 +16,16 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 
 /**
  * User: ratamaa
@@ -33,6 +35,7 @@ import java.util.List;
 @Document(collection  =  "savedSearches")
 public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     private static final long serialVersionUID  =  4164512181923649287L;
+    private static final int HASH_FACTOR = 31;
 
     public enum SaveType {
         EMAIL,
@@ -128,5 +131,29 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     @Override
     public int compareTo(SavedSearch o) {
         return this.getCreatedAt().compareTo(o.getCreatedAt());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = HASH_FACTOR * result + ((createdAt == null) ? 0 : createdAt.hashCode());
+        result = HASH_FACTOR * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {            
+            return true;
+        }
+        if (obj == null) {            
+            return false;
+        }
+        if (!(obj instanceof SavedSearch)) {
+            return false;
+        }
+        SavedSearch other = (SavedSearch) obj;
+        return EqualsHelper.areEquals(this.id, other.id)
+                && EqualsHelper.areEquals(this.createdAt, other.createdAt);
     }
 }

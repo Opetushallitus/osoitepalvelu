@@ -17,12 +17,14 @@
 package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.LazyCasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
+
 import org.apache.camel.*;
 import org.apache.camel.component.http.HttpOperationFailedException;
 import org.apache.camel.model.ProcessorDefinition;
@@ -184,7 +186,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         protected abstract Map<String, Object> getHeaders(Exchange exchange);
 
         @Override
-        public final void process(Exchange exchange) throws Exception {
+        public final void process(Exchange exchange) {
             if(exchange.getIn() != null) {
                 Map<String, Object> headers  =  getHeaders(exchange);
                 for(Map.Entry<String, Object> kv : headers.entrySet()) {
@@ -274,7 +276,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected Processor saveSession() {
         return new Processor() {
             @Override
-            public void process(Exchange exchange) throws Exception {
+            public void process(Exchange exchange) {
                 CasTicketCache cache  =  exchange.getProperty(CAS_TICKET_CACHE_PROPERTY, CasTicketCache.class);
                 if (cache != null && exchange.getIn() != null) {
                     Map<String,Object> inHeaders = exchange.getIn().getHeaders();
@@ -338,7 +340,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         }
 
         @Override
-        public final void process(Exchange exchange) throws Exception {
+        public final void process(Exchange exchange) {
             Long beginMoment = exchange.getProperty("DebuggerBeginMoment_"+this.name, Long.TYPE);
             if (beginMoment == null) {
                 beginMoment = System.currentTimeMillis();
@@ -355,10 +357,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
         /**
          * @param exchange to wrapped call to process as in a normal Camel Processor
-         * @throws Exception
          * @see Processor#process(org.apache.camel.Exchange)
          */
-        public abstract void doProcess(Exchange exchange) throws Exception;
+        public abstract void doProcess(Exchange exchange);
 
         @Override
         public String toString() {
@@ -393,7 +394,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected Debugger debug(String name) {
         return new Debugger(name) {
             @Override
-            public void doProcess(Exchange exchange) throws Exception {
+            public void doProcess(Exchange exchange) {
                 logIn(exchange, getName());
                 //logOut(exchange);
             }
@@ -431,7 +432,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected Processor inToOut() {
         return new Processor() {
             @Override
-            public void process(Exchange exchange) throws Exception {
+            public void process(Exchange exchange) {
                 inToOut(exchange);
             }
 
@@ -523,6 +524,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             return this.expressions.isEmpty();
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public <T> T evaluate(Exchange exchange, Class<T> type) {
             if (!type.isAssignableFrom(String.class)) {
@@ -537,6 +539,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         public Expression toExpression() {
             final List<Expression> buffer = new ArrayList<Expression>(this.expressions);
             return new Expression() {
+                @SuppressWarnings("unchecked")
                 @Override
                 public <T> T evaluate(Exchange exchange, Class<T> type) {
                     if (!type.isAssignableFrom(String.class)) {
@@ -567,6 +570,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      */
     protected Expression urlEncoded(final Expression expression) {
         return new Expression() {
+            @SuppressWarnings("unchecked")
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 if (List.class.isAssignableFrom(type)) {
@@ -591,7 +595,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
             private String encoded(String value) {
                 try {
-                    value = URLEncoder.encode(value.toString(), URL_ENCODING);
+                    value = URLEncoder.encode(value, URL_ENCODING);
                 } catch (UnsupportedEncodingException e) {
                     throw new IllegalStateException(e);
                 }
@@ -623,6 +627,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 ExpressionBuffer b = new ExpressionBuffer();
+                @SuppressWarnings("unchecked")
                 List<String> values = listExpression.evaluate(exchange, List.class);
                 if (values != null && !values.isEmpty()) {
                     if (begin != null) {
@@ -823,7 +828,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             }
             add(new ProcessDefinitionProcessor() {
                 @Override
-                @SuppressWarnings("rawtypes")
+                @SuppressWarnings({ "rawtypes", "unchecked" })
                 public ProcessorDefinition process(ProcessorDefinition process) {
                     return process.onException(HttpOperationFailedException.class)
                             .log(LoggingLevel.ERROR, "HttpOperationFailedException occured.")
@@ -984,11 +989,12 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
              *
              * @param query to build this parameter to
              */
-            public void buildTo( ExpressionBuffer query ) {
+            public void buildTo(ExpressionBuffer query){
                 for (final Expression value : values) {
                     final boolean first = query.isEmpty();
                     if (optional) {
                         query.append(new Expression() {
+                            @SuppressWarnings("unchecked")
                             @Override
                             public <T> T evaluate(Exchange exchange, Class<T> type) {
                                 Object evaluated = value.evaluate(exchange, type);
@@ -1116,7 +1122,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             throw new NoSuchEndpointException(endpointUri);
         }
         Exchange exchange  =  template.send(endpoint, pattern, new Processor() {
-            public void process(Exchange exchange) throws Exception {
+            public void process(Exchange exchange) {
                 for (Map.Entry<String, Object> property : properties.entrySet()) {
                     exchange.setProperty(property.getKey(), property.getValue());
                 }

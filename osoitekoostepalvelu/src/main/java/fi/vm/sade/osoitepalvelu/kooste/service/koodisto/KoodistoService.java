@@ -19,6 +19,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -28,7 +29,7 @@ import java.util.Map;
  * tyypin perusteella. Oletusarvoisesti tämä rajapinta hakee kaikista koodeista
  * viimeisimmän voimassa olevan version.
  */
-public interface KoodistoService {
+public interface KoodistoService extends Serializable {
 
     List<UiKoodiItemDto> findOppilaitosTyyppiOptions(Locale locale);
 

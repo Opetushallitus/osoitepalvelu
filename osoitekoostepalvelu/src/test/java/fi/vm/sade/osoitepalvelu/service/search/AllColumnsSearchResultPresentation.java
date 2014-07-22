@@ -30,6 +30,8 @@ import java.util.Set;
  * Time: 12:50 PM
  */
 public class AllColumnsSearchResultPresentation implements SearchResultPresentation, Serializable {
+    private static final long serialVersionUID = -2297459798041373185L;
+    
     private Locale locale;
     private Set<OidAndTyyppiPair> nonIncludedOids;
     private boolean withYhteyshenkiloEmail =true;

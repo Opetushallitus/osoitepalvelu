@@ -16,16 +16,15 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 
-import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import org.joda.time.DateTime;
-import org.springframework.data.mongodb.repository.MongoRepository;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+
+import org.joda.time.DateTime;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 
 /**
  * User: ratamaa

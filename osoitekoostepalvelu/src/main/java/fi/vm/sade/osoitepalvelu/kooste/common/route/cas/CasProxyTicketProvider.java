@@ -55,7 +55,7 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
     public Map<String, Object> provideTicketHeaders(String service) {
         service  =  getTargetServiceCasUri(service);
         Authentication authentication  =  SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null && authentication instanceof UsernamePasswordAuthenticationToken
+        if(authentication instanceof UsernamePasswordAuthenticationToken
                 && "dev".equals(authMode)) {
             // Development mode, this works provided that Spring Security's authentication manager has
             // erase-credientals = false: <authentication-manager alias = "authenticationManager"  erase-credentials = "false">

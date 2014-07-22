@@ -35,7 +35,8 @@ public class MyInformationDto implements Serializable {
     private String email; // seems to be null in some environemnts
     private String lang; // seems to be null in some environemnts
     private List<String> groups  =  new ArrayList<String>();
-
+    private String roles;
+    
     public String getUid() {
         return uid;
     }
@@ -53,13 +54,9 @@ public class MyInformationDto implements Serializable {
     }
 
     public String getFirstName() {
-        // Jos etunimessä on välilyöntejä, palautetaan sitä ennen oleva osa
-        if( this.firstName != null && firstName.contains(" ") ) {
-            return this.firstName.substring(0, this.firstName.indexOf(" ")).trim();
-        }
         return firstName;
     }
-
+    
     public void setFirstName(String firstName) {
         this.firstName  =  firstName;
     }
@@ -95,4 +92,13 @@ public class MyInformationDto implements Serializable {
     public void setGroups(List<String> groups) {
         this.groups  =  groups;
     }
+    
+    public String getRoles() {
+        return roles;
+    }
+    
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+    
 }

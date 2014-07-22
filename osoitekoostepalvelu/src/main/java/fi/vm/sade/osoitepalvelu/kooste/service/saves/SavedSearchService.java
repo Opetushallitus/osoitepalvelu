@@ -23,6 +23,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SavedSearchSaveDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SavedSearchViewDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SavedSearchListDto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ import java.util.List;
  * Date: 12/10/13
  * Time: 1:45 PM
  */
-public interface SavedSearchService {
+public interface SavedSearchService extends Serializable {
 
     /**
      * @return all saved searches for the logged in user for listing

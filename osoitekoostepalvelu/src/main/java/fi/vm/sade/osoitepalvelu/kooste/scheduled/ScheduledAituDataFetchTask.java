@@ -44,8 +44,6 @@ public class ScheduledAituDataFetchTask extends AbstractService {
 
     @Value("${web.url.cas.aitu:}")
     private String aituCasService;
-    @Value("${cas.service.aitu-service:}")
-    private String aituServiceCasServiceUrl;
     @Value("${osoitepalvelu.app.username.to.aituservice:}")
     private String casAituServiceUsername;
     @Value("${osoitepalvelu.app.password.to.aituservice:}")

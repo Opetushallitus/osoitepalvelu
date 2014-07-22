@@ -17,10 +17,12 @@
 package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 
 import com.google.common.collect.Collections2;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -61,6 +63,7 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
                 .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<String> findToimikuntaIds(AituToimikuntaCriteria toimikuntaCriteria) {
         return getMongoOperations().getCollection(AituToimikunta.class.getAnnotation(Document.class).collection())
@@ -97,6 +100,7 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
         return conditions;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<String> findVoimassaOlevatRoolit() {
         return getMongoOperations().getCollection(AituToimikunta.class.getAnnotation(Document.class).collection())

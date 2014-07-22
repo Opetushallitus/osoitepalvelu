@@ -96,7 +96,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
             }
         }));
 
-        if( searchType == SearchType.EMAIL ) {
+        if(searchType == SearchType.EMAIL) {
             // Kyseessä email-tyyppinen haku, joten nyt suodatetaan kaikki dublikaatti-emailit pois.
             Set<String> emails = new TreeSet<String>();
             List<SearchResultRowDto> filtteredTransformedResults = new ArrayList<SearchResultRowDto>();
@@ -183,9 +183,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
                     new Combiner.Creator<OrganisaatioResultAggregateDto>() {
                 public OrganisaatioResultAggregateDto create(Combiner.PullSource src) {
                     return new OrganisaatioResultAggregateDto(result,
-                                src.get(OrganisaatioYhteystietoDto.class).orNull(),
-                                src.get(OsoitteistoDto.class).orNull(),
-                                src.get(OsoitteistoDto.class).orNull());
+                                (OrganisaatioYhteystietoDto)src.get(OrganisaatioYhteystietoDto.class).orNull(),
+                                (OsoitteistoDto)src.get(OsoitteistoDto.class).orNull(),
+                                (OsoitteistoDto)src.get(OsoitteistoDto.class).orNull());
                 }
             });
             if (presentation.isPositosoiteIncluded()) {
@@ -243,8 +243,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
                     new Combiner.Creator<HenkiloResultAggregateDto>() {
                 public HenkiloResultAggregateDto create(Combiner.PullSource src) {
                     return new HenkiloResultAggregateDto(result,
-                            src.get(OrganisaatioHenkiloDto.class).orNull(),
-                            src.get(HenkiloOsoiteDto.class).orNull());
+                            (OrganisaatioHenkiloDto)src.get(OrganisaatioHenkiloDto.class).orNull(),
+                            (HenkiloOsoiteDto)src.get(HenkiloOsoiteDto.class).orNull());
                 }
             }).combinedWith(OrganisaatioHenkiloDto.class, result.getOrganisaatioHenkilos())
                 .withRepeated(HenkiloOsoiteDto.class, result.getOsoittees())
@@ -267,7 +267,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 new Combiner.Creator<AituToimikuntaJasenAggregateDto>() {
                     public AituToimikuntaJasenAggregateDto create(Combiner.PullSource src) {
                         return new AituToimikuntaJasenAggregateDto(toimikunta,
-                                src.get(AituJasenyysDto.class).orNull());
+                                (AituJasenyysDto)src.get(AituJasenyysDto.class).orNull());
                 }
             }).combinedWith(AituJasenyysDto.class, toimikunta.getJasenyydet())
                 .atLeastOne().to(aggregates);
@@ -290,8 +290,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 new Combiner.Creator<AituOppilaitosVastuuhenkiloAggregateDto>() {
                     public AituOppilaitosVastuuhenkiloAggregateDto create(Combiner.PullSource src) {
                         return new AituOppilaitosVastuuhenkiloAggregateDto(
-                                src.get(AituOppilaitosResultDto.class).get(),
-                                src.get(AituTutkintoDto.class).orNull());
+                                (AituOppilaitosResultDto)src.get(AituOppilaitosResultDto.class).get(),
+                                (AituTutkintoDto)src.get(AituTutkintoDto.class).orNull());
                     }
                 }
             ).withRepeated(AituOppilaitosResultDto.class, Arrays.asList(oppilaitos));
@@ -322,9 +322,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (organisaatioService == null) {
             return;
         }
-
         List<DetailCopier> copiers = new ArrayList<DetailCopier>();
-
         if (presentation.isOrganisaationNimiIncluded()) {
             copiers.add(new DetailCopier() {
                 @Override
@@ -464,11 +462,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
                     }
                 }
             });
-
         }
-
         // TODO: viranomaistiedotuksenEmail, koulutusneuvonnanEmail, kriisitiedotuksenEmail
-
         copyDetails(results, context, copiers, presentation.getLocale());
     }
 
@@ -596,7 +591,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         return cellNum - 1;
     }
 
-    private String osoite( SearchResultOsoiteDto osoite ) {
+    private String osoite(SearchResultOsoiteDto osoite) {
         if (osoite == null) {
             return "";
         }

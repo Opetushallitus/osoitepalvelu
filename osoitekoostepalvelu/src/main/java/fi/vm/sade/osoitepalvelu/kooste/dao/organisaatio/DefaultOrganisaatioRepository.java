@@ -17,10 +17,12 @@
 package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 
 import com.google.common.collect.Collections2;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +85,8 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
     private void filterByCriteria(CriteriaHelper.Conditions conditions,
                                   OrganisaatioYhteystietoCriteriaDto organisaatioCriteria) {
         if (organisaatioCriteria.isVainAktiiviset()) {
-            conditions.add(new Criteria().orOperator( new Criteria("lakkautusPvm").is(null),
-                    new Criteria("lakkautusPvm").gt(new LocalDate().toDateTimeAtStartOfDay().toDate()) ));
+            conditions.add(new Criteria().orOperator(new Criteria("lakkautusPvm").is(null),
+                    new Criteria("lakkautusPvm").gt(new LocalDate().toDateTimeAtStartOfDay().toDate())));
         }
         if (organisaatioCriteria.isOrganisaatioTyyppiUsed()) {
             conditions.add(new Criteria("tyypit").in(organisaatioCriteria.getOrganisaatioTyyppis()));
@@ -133,7 +135,7 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         q.limit(1);
         q.with(new Sort(Sort.Direction.ASC, "cachedAt"));
         List<OrganisaatioDetails> list = getMongoOperations().find(q, OrganisaatioDetails.class);
-        if(list.size() == 1 ) {
+        if(list.size() == 1) {
             return list.get(0).getCachedAt();
         } else {
             return null;
@@ -158,6 +160,7 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
 
     @Override
     public String findOidByOppilaitoskoodi(String oppilaitosKoodi) {
+        @SuppressWarnings("unchecked")
         List<String> oids = getMongoOperations()
                         .getCollection(OrganisaatioDetails.class.getAnnotation(Document.class).collection())
                 .distinct("_id", Criteria.where("oppilaitosKoodi").is(oppilaitosKoodi).getCriteriaObject());

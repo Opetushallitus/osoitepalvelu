@@ -89,27 +89,27 @@ public class OrganisaatioResultAggregateDto implements Serializable {
         OrganisaatioResultAggregateDto that  =  (OrganisaatioResultAggregateDto) o;
         if (EqualsHelper.differentNulls(organisaatio, that.organisaatio)
                 || (EqualsHelper.notNulls(organisaatio, that.organisaatio)
-                    && !EqualsHelper.equals(organisaatio.getOid(), that.organisaatio))) {
+                    && !EqualsHelper.areEquals(organisaatio.getOid(), that.organisaatio))) {
             return false;
         }
         if (EqualsHelper.differentNulls(henkilo, that.henkilo)
                 || (EqualsHelper.notNulls(henkilo, that.henkilo)
-                    && !EqualsHelper.equals(henkilo.getEmail(), that.henkilo.getEmail()))) {
+                    && !EqualsHelper.areEquals(henkilo.getEmail(), that.henkilo.getEmail()))) {
             return false;
         }
         if (EqualsHelper.differentNulls(postiosoite, that.postiosoite)
                 || (EqualsHelper.notNulls(postiosoite, that.postiosoite)
                     && !(
-                        EqualsHelper.equals(postiosoite.getYhteystietoOid(), that.postiosoite.getYhteystietoOid()))
-                        && EqualsHelper.equals(postiosoite.getKieli(), that.postiosoite.getKieli())
+                        EqualsHelper.areEquals(postiosoite.getYhteystietoOid(), that.postiosoite.getYhteystietoOid()))
+                        && EqualsHelper.areEquals(postiosoite.getKieli(), that.postiosoite.getKieli())
                   )) {
             return false;
         }
         if (EqualsHelper.differentNulls(kayntiosoite, that.kayntiosoite)
                 || (EqualsHelper.notNulls(kayntiosoite, that.kayntiosoite)
                 && !(
-                EqualsHelper.equals(kayntiosoite.getYhteystietoOid(), that.kayntiosoite.getYhteystietoOid()))
-                && EqualsHelper.equals(kayntiosoite.getKieli(), that.kayntiosoite.getKieli()) )) {
+                EqualsHelper.areEquals(kayntiosoite.getYhteystietoOid(), that.kayntiosoite.getYhteystietoOid()))
+                && EqualsHelper.areEquals(kayntiosoite.getKieli(), that.kayntiosoite.getKieli()))) {
             return false;
         }
         return true;

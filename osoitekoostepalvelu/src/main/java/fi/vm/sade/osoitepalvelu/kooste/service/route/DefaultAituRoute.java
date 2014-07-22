@@ -48,7 +48,7 @@ public class DefaultAituRoute extends AbstractJsonToDtoRouteBuilder
     private String aituServiceCasServiceUrl;
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         buildAituRoute();
     }
 

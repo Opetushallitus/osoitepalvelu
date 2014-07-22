@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Combiner<ResultType> {
 
-    public static interface Creator<ResultType> {
+    public interface Creator<ResultType> {
         ResultType create(PullSource src);
     }
 
@@ -84,7 +84,7 @@ public class Combiner<ResultType> {
         private List<Counter> counters = new ArrayList<Counter>();
         private Counter previousCombinedCounter;
 
-        private class Counter {
+        private static final class Counter {
             private boolean repeated;
             private boolean combined;
             private int count;
@@ -179,7 +179,8 @@ public class Combiner<ResultType> {
                                                               boolean combined, boolean repeated) {
             this.values.add(key, new ArrayList<Object>(values));
             typeIndex.put(key, new AtomicInteger(0));
-            List<Counter> indexes = this.indexes.get(key);
+            // Sonar ei tunnista, että MultiValueMap palauttaa listan.
+            List<Counter> indexes = this.indexes.get(key); // NOSONAR
             if (indexes == null) {
                 indexes = new ArrayList<Counter>();
                 this.indexes.put(key, indexes);
@@ -212,7 +213,8 @@ public class Combiner<ResultType> {
             int typeIndex = this.typeIndex.get(type).getAndAdd(1),
                 realTypeIndex = typeIndex % typeValues.size();
             List<?> currentValues = typeValues.get(realTypeIndex);
-            Integer i = indexes.get(type).get(realTypeIndex).get();
+            // Sonar ei tunnista, että MultiValueMap palauttaa listan.
+            Integer i = indexes.get(type).get(realTypeIndex).get(); // NOSONAR
             if (i >= currentValues.size()) {
                 return Optional.absent();
             }

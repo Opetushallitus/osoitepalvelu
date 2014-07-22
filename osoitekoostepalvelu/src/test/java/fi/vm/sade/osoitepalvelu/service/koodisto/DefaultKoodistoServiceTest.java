@@ -43,7 +43,7 @@ import static org.junit.Assert.assertTrue;
 public class DefaultKoodistoServiceTest {
     private static final Locale LOCALE_FI  =  new Locale("fi", "FI");
     private static final String FI = "fi";
-    private static final String SV = "sv";
+    //private static final String SV = "sv";
     private static final String EN = "en";
 
     @Autowired
