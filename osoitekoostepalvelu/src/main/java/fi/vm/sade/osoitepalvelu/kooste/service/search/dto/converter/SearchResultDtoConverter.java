@@ -36,6 +36,8 @@ import java.util.Locale;
  */
 @Component
 public class SearchResultDtoConverter extends AbstractDtoConverter {
+    private static final long serialVersionUID = -556332417179593295L;
+    
     @Autowired
     private KoodistoService koodistoService;
 

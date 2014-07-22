@@ -41,6 +41,7 @@ import java.util.List;
  */
 @Service
 public class DefaultHenkiloService extends AbstractService implements HenkiloService {
+    private static final long serialVersionUID = 2098849501877436535L;
 
     @Autowired(required = false)
     private HenkiloCacheRepository henkiloCacheRepository;

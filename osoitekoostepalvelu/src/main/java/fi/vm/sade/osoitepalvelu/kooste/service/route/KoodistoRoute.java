@@ -20,6 +20,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ import java.util.List;
  * Date: 3/12/14
  * Time: 3:13 PM
  */
-public interface KoodistoRoute {
+public interface KoodistoRoute extends Serializable {
 
     /**
      * Hakee tietyn koodiston kaikki koodit annetun koodistotyypin perusteella.

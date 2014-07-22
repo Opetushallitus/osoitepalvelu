@@ -71,7 +71,6 @@ public class AndPredicateAdapter<T> implements Predicate<T> {
         return this.predicates.equals(other.predicates);
     }
     
-    @Override
     public int hashCode() {
         return super.hashCode();
     }

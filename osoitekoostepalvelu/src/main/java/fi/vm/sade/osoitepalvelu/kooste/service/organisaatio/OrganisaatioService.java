@@ -21,6 +21,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,7 +30,7 @@ import java.util.Locale;
  * Date: 3/25/14
  * Time: 11:37 AM
  */
-public interface OrganisaatioService {
+public interface OrganisaatioService extends Serializable {
 
     /**
      * @param criteria for organisaatios' yhteystietos

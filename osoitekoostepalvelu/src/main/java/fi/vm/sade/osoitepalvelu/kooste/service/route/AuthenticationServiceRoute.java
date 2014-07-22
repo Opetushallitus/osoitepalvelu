@@ -22,6 +22,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloListResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ import java.util.List;
  * Date: 3/12/14
  * Time: 3:13 PM
  */
-public interface AuthenticationServiceRoute {
+public interface AuthenticationServiceRoute extends Serializable {
 
     /**
      * @param requestContext the context for HTTP request received by the application to operate in

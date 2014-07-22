@@ -36,6 +36,9 @@ import java.util.List;
 @Component
 public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBuilder
         implements AuthenticationServiceRoute {
+
+    private static final long serialVersionUID = -5752885878113285232L;
+
     private static final long HENKILOLIST_TIMEOUT_MILLIS = 10L*60L*1000L;
 
     private static final String SERVICE_CALL_POSTFIX = ".AuthenticationServiceCall";
@@ -69,7 +72,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
 
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         buildKayttoOikeusryhmas();
         buildHenkilo();
         buildOrganisaatioHenkilos();

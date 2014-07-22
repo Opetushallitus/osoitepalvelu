@@ -27,6 +27,7 @@ import org.springframework.web.servlet.View;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -53,7 +54,7 @@ public class Jackson2View implements View {
     }
 
     @Override
-    public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setStatus(HttpStatus.OK_200);
         response.setCharacterEncoding("UTF-8");
         response.setContentType(getContentType());

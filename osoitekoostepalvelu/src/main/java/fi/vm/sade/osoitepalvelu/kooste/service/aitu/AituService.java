@@ -15,6 +15,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.aitu;
  * European Union Public Licence for more details.
  */
 
+import java.io.Serializable;
 import java.util.List;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
@@ -28,7 +29,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto
 /**
  * Created by ratamaa on 15.4.2014.
  */
-public interface AituService {
+public interface AituService extends Serializable {
 
     /**
      * @return all the roolis with at least one jasenyys voimassa in any AITU's tutkintoimikuntas
