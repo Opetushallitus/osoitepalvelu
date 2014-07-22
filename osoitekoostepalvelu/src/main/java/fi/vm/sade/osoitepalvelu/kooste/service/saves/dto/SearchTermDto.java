@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 
 import java.io.Serializable;
@@ -27,7 +29,7 @@ import java.util.List;
  * Date: 12/10/13
  * Time: 1:30 PM
  */
-@DtoConversion
+@DtoConversion @ApiModel("Yksittäinen haun rajausehto")
 public class SearchTermDto implements Serializable {
     private static final long serialVersionUID  =  -1563200682961231758L;
     private static final int HASH_FACTOR = 31;
@@ -50,8 +52,9 @@ public class SearchTermDto implements Serializable {
     public static final String TERM_KOULUTUS = "koulutus";
     public static final String TERM_KOULUTUSTYYPPIS = "koulutustyyppis";
 
-
+    @ApiModelProperty("Rajausehtotyyppi")
     private String type;
+    @ApiModelProperty("Rajausehdolle tai-tyyppisesti sallitut arvot. Tyhjä lista tarkoittaa, että kaikki arvot käyvät.")
     private List<String> values  =  new ArrayList<String>();
 
     public SearchTermDto() {

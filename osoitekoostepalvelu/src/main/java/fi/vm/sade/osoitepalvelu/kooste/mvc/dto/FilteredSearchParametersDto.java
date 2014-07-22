@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.mvc.dto;
 
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OidAndTyyppiPair;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 
@@ -29,8 +30,10 @@ import java.util.Set;
  */
 public class FilteredSearchParametersDto implements Serializable {
     private static final long serialVersionUID  =  -8288132415175555661L;
-    
+
+    @ApiModelProperty("Hakuehdot")
     private SearchTermsDto searchTerms;
+    @ApiModelProperty("Niiden organisaatioiden/henkilöiden tunnisteet, joita ei oteta mukaan hakutuloksiin")
     private Set<OidAndTyyppiPair> nonIncludedOrganisaatioOids;
 
     public SearchTermsDto getSearchTerms() {

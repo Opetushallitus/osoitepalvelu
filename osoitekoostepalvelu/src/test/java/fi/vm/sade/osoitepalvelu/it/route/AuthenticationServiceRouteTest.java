@@ -32,8 +32,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import scala.actors.threadpool.Arrays;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
@@ -61,9 +61,9 @@ public class AuthenticationServiceRouteTest {
 
     @Test
     public void testFindHenkilos() {
-        List<String> oids = Arrays.asList(new String[] {
-            "1.2.246.562.10.93326837098",
-            "1.2.246.562.10.59574166134"
+        List<String> oids = Arrays.asList(new String[]{
+                "1.2.246.562.10.93326837098",
+                "1.2.246.562.10.59574166134"
         });
         HenkiloCriteriaDto criteria = new HenkiloCriteriaDto();
         criteria.setOrganisaatioOids(oids);

@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.ratamaa.dtoconverter.annotation.DtoNotImported;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
@@ -30,13 +32,19 @@ import java.util.List;
  */
 @DtoConversion
 @DtoNotImported
+@ApiModel("Tallennettavan haun tiedot")
 public class SavedSearchSaveDto {
+    @ApiModelProperty("Haun nimi")
     private String name;
+    @ApiModelProperty("Haun tyyppi")
     private SavedSearch.SaveType searchType;
+    @ApiModelProperty("Haun ollessa CONTACT-tyyppinen, ne osoitekentät, jotka hakutuloksiin sisällytetään.")
     private List<String> addressFields  =  new ArrayList<String>();
-    private List<String> receiverFields  =  new ArrayList<String>();
+    @ApiModelProperty("Haun kohderyhmät")
     private List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
+    @ApiModelProperty("Haun pääasiassa ja-tyyppiset rajausehdot")
     private List<SearchTermDto> terms  =  new ArrayList<SearchTermDto>();
+    @ApiModelProperty("Haun esitysmuodossa käytetty lokalisointilokaali: fi|sv|en")
     private String lang;
 
     public String getName() {
@@ -53,14 +61,6 @@ public class SavedSearchSaveDto {
 
     public void setSearchType(SavedSearch.SaveType searchType) {
         this.searchType  =  searchType;
-    }
-
-    public List<String> getReceiverFields() {
-        return receiverFields;
-    }
-
-    public void setReceiverFields(List<String> receiverFields) {
-        this.receiverFields  =  receiverFields;
     }
 
     public List<String> getAddressFields() {

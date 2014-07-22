@@ -19,18 +19,17 @@
  */
 
 OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$location", "FilterHelper",
-                             "AddressFields", "ReceiverTypes", "EmptyTerms",
+                             "AddressFields", "EmptyTerms",
                              "SearchResultProvider", "SaveConverter",
                              "LocalisationService", "commonErrorHandler",
         function($log, $filter, $http, $location, FilterHelper,
-                      AddressFields, ReceiverTypes, EmptyTerms,
+                      AddressFields, EmptyTerms,
                       SearchResultProvider, SaveConverter,
                       LocalisationService, commonErrorHandler) {
     var _terms = angular.copy(EmptyTerms),
         _targetGroups = [],
         _searchType = null,
         _addressFields = angular.copy(AddressFields),
-        _receiverFields = angular.copy(ReceiverTypes),
         _deletedIds = [],
         _selectedSearch = null,
         _resultData = null,
@@ -76,8 +75,6 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         }
         return false;
     };
-    this.getReceiverFields = function() {return _receiverFields;};
-
 
     /**
      * @param oidAndTyyppis {
@@ -106,13 +103,11 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         _kieli=LocalisationService.getLocale();
     };
 
-    this.updateSearchType = function(type, addressFields, receiverFields) {
+    this.updateSearchType = function(type, addressFields) {
         $log.info("Update search type: " + type);
         $log.info(addressFields);
-        $log.info(receiverFields);
         _searchType = type;
         _addressFields = angular.copy(addressFields);
-        _receiverFields = angular.copy(receiverFields);
     };
 
     this.updateTargetGroups = function(targetGroups) {
@@ -163,7 +158,6 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
                     searchType: _searchType,
                     terms: _terms,
                     addressFields: _addressFields,
-                    receiverFields: _receiverFields,
                     targetGroups: _targetGroups
                 }),
                 nonIncludedOrganisaatioOids: _deletedIds
@@ -212,7 +206,6 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
                       searchType: _searchType,
                       terms: _terms,
                       addressFields: _addressFields,
-                      receiverFields: _receiverFields,
                       targetGroups: _targetGroups
                   }),
                   nonIncludedOrganisaatioOids: _deletedIds

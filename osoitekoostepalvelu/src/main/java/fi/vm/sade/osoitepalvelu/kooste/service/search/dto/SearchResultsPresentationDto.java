@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 
 import java.io.Serializable;
@@ -26,10 +28,13 @@ import java.util.List;
  * Date: 2/18/14
  * Time: 9:45 AM
  */
+@ApiModel("Hakutulokset")
 public class SearchResultsPresentationDto implements Serializable {
     private static final long serialVersionUID  =  -8360101698155316476L;
-    
+
+    @ApiModelProperty("Hakutulosten rivit")
     private List<SearchResultRowDto> rows;
+    @ApiModelProperty("Hakutulosten esitystapa")
     private SearchResultPresentation presentation;
 
     public SearchResultsPresentationDto() {

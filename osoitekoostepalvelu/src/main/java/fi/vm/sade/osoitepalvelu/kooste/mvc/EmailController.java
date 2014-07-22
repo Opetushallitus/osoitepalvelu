@@ -1,6 +1,8 @@
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.EmailService;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
@@ -22,7 +24,7 @@ import java.util.Map;
  * Date: 2/26/14
  * Time: 11:22 AM
  */
-@Api("Sähköpostin lähetys")
+@Api(value="email", description = "Sähköpostin lähetys")
 @Controller
 @Scope(value =  WebApplicationContext.SCOPE_APPLICATION)
 @RequestMapping(value  =  "/email")
@@ -32,15 +34,11 @@ public class EmailController extends AbstractMvcController implements Serializab
     @Autowired
     private EmailService emailService;
 
+    @ApiOperation("Palauttaa sähköpostilähetykseen liittyvät asetukset viestintäpalvelulle")
     @RequestMapping(value = "send.settings.json", method  =  RequestMethod.POST)
     @ResponseBody
-    public EmailSendSettingsDto getEmailSendSettings(@RequestBody MyInformationDto me) {
+    public EmailSendSettingsDto getEmailSendSettings(@RequestBody @ApiParam(name="me",
+            value="Käyttäjän omat tiedot /cas/me:n palauttamassa muodossa.") MyInformationDto me) {
         return emailService.getEmailSendSettings(me);
-    }
-
-    @RequestMapping(value = "test.do", method  =  RequestMethod.POST)
-    @ResponseBody
-    public Map testPostData(HttpServletRequest request) {
-        return request.getParameterMap();
     }
 }

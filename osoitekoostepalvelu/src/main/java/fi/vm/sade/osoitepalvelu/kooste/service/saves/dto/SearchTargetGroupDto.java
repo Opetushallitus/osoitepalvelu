@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
 
@@ -28,14 +30,24 @@ import java.util.List;
  * Date: 12/10/13
  * Time: 1:34 PM
  */
-@DtoConversion
+@DtoConversion @ApiModel("Osoitepalvelun haun kohderyhmä")
 public class SearchTargetGroupDto implements Serializable {
     private static final long serialVersionUID  =  191054363453587812L;
 
     private static final int HASH_FACTOR = 31;
 
+    @ApiModelProperty("Kohderyhmän tyyppi.")
     private SearchTargetGroup.GroupType type;
+    @ApiModelProperty("Kohderyhmästä valitut kohteet. Jotta kohderyhmä on aktiivinen, vähintään yksi kohde on valittava.")
     private List<SearchTargetGroup.TargetType> options  =  new ArrayList<SearchTargetGroup.TargetType>();
+
+    public SearchTargetGroupDto() {
+    }
+
+    public SearchTargetGroupDto(SearchTargetGroup.GroupType type, List<SearchTargetGroup.TargetType> options) {
+        this.type  =  type;
+        this.options  =  options;
+    }
 
     public SearchTargetGroup.GroupType getType() {
         return type;

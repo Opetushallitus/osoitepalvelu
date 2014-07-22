@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.ratamaa.dtoconverter.annotation.DtoNotExported;
 
@@ -28,10 +30,13 @@ import java.io.Serializable;
  */
 @DtoConversion
 @DtoNotExported
+@ApiModel("Tallennettujen hakujen yksiknkertainen id-nimi-listaus")
 public class SavedSearchListDto implements Serializable {
     private static final long serialVersionUID  =  -5360150502343268907L;
-    
+
+    @ApiModelProperty("Haun yksilöivä tunnistenumero.")
     private Long id;
+    @ApiModelProperty("Haulle käyttäjän antama nimi.")
     private String name;
 
     public Long getId() {

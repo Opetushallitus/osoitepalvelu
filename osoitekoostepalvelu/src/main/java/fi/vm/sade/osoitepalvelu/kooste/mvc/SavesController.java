@@ -17,6 +17,8 @@
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.SavedSearchService;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SavedSearchEditDto;
@@ -35,7 +37,8 @@ import java.util.List;
  * Date: 12/10/13
  * Time: 2:32 PM
  */
-@Api("Tallennetut haut")
+@Api(value="saves", description = "Tarjoaa REST:n mukaiset CRUD-operaatiot käyttäjän omille " +
+        "tallennetuille hauille.")
 @Controller
 @RequestMapping(value  =  "/saves")
 public class SavesController extends AbstractMvcController implements Serializable {
@@ -44,18 +47,23 @@ public class SavesController extends AbstractMvcController implements Serializab
     @Autowired
     private SavedSearchService savedSearchService;
 
+    @ApiOperation("Palauttaa kaikki käyttäjän omat haut pelkistettynä nimi-id-listana.")
     @RequestMapping(method  =  RequestMethod.GET)
     @ResponseBody
     public List<SavedSearchListDto> list() {
         return savedSearchService.findSavedSearchesForLoggedInUser();
     }
 
+    @ApiOperation("Palauttaa yksittäisen, käyttäjän oman haun kaikki tiedot.")
+    @ApiResponse(code=404, message = "Hakua ei löytynyt id:llä.")
     @RequestMapping(value  =  "{id}", method  =  RequestMethod.GET)
     @ResponseBody
     public SavedSearchViewDto get(@PathVariable("id") long id) throws NotFoundException {
         return savedSearchService.getSaveById(id);
     }
 
+    @ApiOperation("Poistaa yksittäisen käyttäjän oman tallennetun haun.")
+    @ApiResponse(code=404, message = "Hakua ei löytynyt id:llä.")
     @RequestMapping(value  =  "{id}", method  =  RequestMethod.DELETE)
     @ResponseBody
     public String delete(@PathVariable("id") long id) throws NotFoundException {
@@ -63,13 +71,17 @@ public class SavesController extends AbstractMvcController implements Serializab
         return "OK";
     }
 
-    @RequestMapping(method  =  RequestMethod.PUT)
+    @ApiOperation("Tallentaa uuden haun.")
+    @ApiResponse(code=404, message = "Hakua ei löytynyt id:llä.")
+    @RequestMapping(method  =  RequestMethod.POST)
     @ResponseBody
     public long save(@RequestBody SavedSearchSaveDto dto) throws NotFoundException {
         return savedSearchService.saveSearch(dto);
     }
 
-    @RequestMapping(method  =  RequestMethod.POST)
+    @ApiOperation("Päivittää käyttäjän oman tallennetun haun tiedot.")
+    @ApiResponse(code=404, message = "Hakua ei löytynyt id:llä.")
+    @RequestMapping(method  =  RequestMethod.PUT)
     @ResponseBody
     public String edit(@RequestBody SavedSearchEditDto dto) throws NotFoundException {
         savedSearchService.updateSavedSearch(dto);

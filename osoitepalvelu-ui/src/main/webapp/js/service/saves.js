@@ -29,14 +29,14 @@ OsoiteKoostepalvelu.service('SavesService', ["$log", "$http", "SaveConverter", "
         save = SaveConverter.toDomain(save);
         delete(save.id);
         $log.info(save);
-        $http.put('api/saves/', save).success(success).error(error || commonErrorHandler);
+        $http.post('api/saves/', save).success(success).error(error || commonErrorHandler);
     };
 
     this.updateSearch = function(save, success, error) {
         $log.info("Updating search");
         save = SaveConverter.toDomain(save);
         $log.info(save);
-        $http.post('api/saves/', save).success(success).error(error || commonErrorHandler);
+        $http.put('api/saves/', save).success(success).error(error || commonErrorHandler);
     };
 
     this.getSearch = function(id, success, error) {
@@ -53,8 +53,8 @@ OsoiteKoostepalvelu.service('SavesService', ["$log", "$http", "SaveConverter", "
 
 
 OsoiteKoostepalvelu.service("SaveConverter", ["$log", "$filter", "FilterHelper", "ArrayHelper",
-                   "AddressFields", "ReceiverTypes", "TargetGroups",
-        function($log, $filter, FilterHelper, ArrayHelper, AddressFields, ReceiverTypes, TargetGroups) {
+                   "AddressFields", "TargetGroups",
+        function($log, $filter, FilterHelper, ArrayHelper, AddressFields, TargetGroups) {
     this.toDomain = function(save) {
         var domainSave = angular.copy(save);
 
@@ -80,11 +80,6 @@ OsoiteKoostepalvelu.service("SaveConverter", ["$log", "$filter", "FilterHelper",
             if( field.selected ) domainSave.addressFields.push(field.type);
         });
 
-        domainSave.receiverFields = [];
-        angular.forEach(save.receiverFields, function(field) {
-            if( field.selected )  domainSave.receiverFields.push(field.type);
-        });
-
         return domainSave;
     };
     this.fromDomain = function(domainSave) {
@@ -100,11 +95,6 @@ OsoiteKoostepalvelu.service("SaveConverter", ["$log", "$filter", "FilterHelper",
         save.addressFields = angular.copy(AddressFields);
         angular.forEach(domainSave.addressFields, function(v) {
             angular.forEach($filter('filter')(save.addressFields, {type:v}), function(v) {v.selected=true;});
-        });
-
-        save.receiverFields = angular.copy(ReceiverTypes);
-        angular.forEach(domainSave.receiverFields, function(v) {
-            angular.forEach($filter('filter')(save.receiverFields, {type:v}), function(v) {v.selected=true;});
         });
 
         save.targetGroups = $filter('filter')(angular.copy(TargetGroups),

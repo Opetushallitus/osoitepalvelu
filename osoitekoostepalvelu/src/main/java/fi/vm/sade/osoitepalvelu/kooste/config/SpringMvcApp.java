@@ -16,9 +16,14 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.config;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
+import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider;
+import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
+import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
+import com.wordnik.swagger.model.ApiInfo;
+import fi.vm.sade.osoitepalvelu.kooste.config.swagger.CustomSwaggerConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.*;
 
 /**
  * User: ratamaa
@@ -31,5 +36,37 @@ import org.springframework.context.annotation.ImportResource;
     "fi.vm.sade.osoitepalvelu.kooste.scheduled"
 })
 @ImportResource("classpath:spring/spring-mvc.xml")
+@Import(CustomSwaggerConfig.class) // Swagger
 public class SpringMvcApp {
+
+    private SpringSwaggerConfig springSwaggerConfig;
+
+    @Autowired
+    public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
+        this.springSwaggerConfig = springSwaggerConfig;
+    }
+
+    @Bean
+    public SwaggerSpringMvcPlugin customImplementation(){
+        RelativeSwaggerPathProvider path = new RelativeSwaggerPathProvider();
+        path.setApiResourcePrefix("api");
+        return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
+                .apiInfo(apiInfo())
+                .apiVersion("1.0")
+                .pathProvider(path);
+    }
+
+    protected ApiInfo apiInfo() {
+        return new ApiInfo(
+                "Osoitepalvelu", /* title */
+                "Osoitepalvelu on Opetushallituksen työntekijöille tarkoitettu osoitetietojen hakemista varten." +
+                        "Palvelussa on käyttöliittymä, jonka avulla työntekijä voi hakea osoitetietoja eri" +
+                        " hakukriteereillä. Hakukriteerit voi myös tallentaa haluamalleen nimelle myöhempää " +
+                        "tarvetta varten. Tiedot koostetaan muista palveluista.",
+                null, /* TOS URL */
+                null, /* Contact */
+                "EUPL", /* license */
+                "http://www.osor.eu/eupl/" /* license URL */
+        );
+    }
 }

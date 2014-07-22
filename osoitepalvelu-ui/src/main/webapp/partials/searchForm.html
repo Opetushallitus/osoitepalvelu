@@ -31,20 +31,6 @@
             </div>
         </div>
 
-        <div class="form-row" ng-show="searchType == 'SEND_LETTER'">
-            <div class="label-cell" tt="receiver_fields">
-                Vastaanottaja
-            </div>
-            <div class="field-cell">
-                <div class="criterionOptions receiverTypes">
-                    <div class="criterionOption" ng-repeat="opt in receiverFields">
-                        <input id="receiver_field_{{$index}}" type="checkbox" ng-model="opt.selected" />
-                        <label for="receiver_field_{{$index}}">{{opt.name}}</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="form-row" ng-show="searchType == 'CONTACT'">
             <div class="label-cell">
                 <label tt="address_fields">Esitettävät tiedot</label>

@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.ratamaa.dtoconverter.annotation.*;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 
@@ -27,13 +29,17 @@ import java.util.List;
  * Date: 2/14/14
  * Time: 3:34 PM
  */
+@ApiModel("Kuvaa hakutulosriviä")
 public class SearchResultRowDto implements Serializable {
     private static final long serialVersionUID  =  -1252066099444560569L;
 
+    @ApiModelProperty("Hakutuloksen rivinumero")
     @DtoSkipped
     private int rivinumero = 0;
+    @ApiModelProperty("Organisaation nimi")
     @DtoSkipped
     private String nimi;
+
     @DtoConversion(path = "organisaatio.oid", with="organisaatioAggregate")
     @DtoPath(value="organisaatioHenkilo.organisaatioOid", with="henkiloAggregate")
     private String organisaatioOid;

@@ -18,9 +18,9 @@ package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
 import com.google.common.base.Optional;
 import org.springframework.data.mongodb.core.query.Criteria;
-import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
