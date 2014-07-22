@@ -22,6 +22,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -64,10 +65,19 @@ public class DefaultEmailService extends AbstractService implements EmailService
 
         settings.getEmail().setReplyTo(myInfo.getEmail());
         if (settings.getEmail().getReplyTo() == null) {
-            settings.getEmail().setReplyTo(replaceSpecialCharacters(myInfo.getFirstName() + "." + myInfo.getLastName() + "@oph.fi"));
+            settings.getEmail().setReplyTo(replaceSpecialCharactersAndLowerCase(firstNameOf(myDetails.getKutsunanimi())
+                    + "." + myDetails.getSukunimi() + "@oph.fi"));
         }
 
         return settings;
+    }
+
+    private String firstNameOf(String nimi) {
+        // Jos etunimessä on välilyöntejä, palautetaan sitä ennen oleva osa
+        if(nimi != null && nimi.contains(" ")) {
+            return nimi.substring(0, nimi.indexOf(" ")).trim();
+        }
+        return nimi;
     }
 
     /**
@@ -75,7 +85,7 @@ public class DefaultEmailService extends AbstractService implements EmailService
      * @param email sähköpostiosoite
      * @return sama sähköpostiosoite, mutta muuttaa Ää=Aa ja Öö=Oo sekä laittaa kaikki pienillä kirjaimilla
      */
-    private String replaceSpecialCharacters(String email) {
+    private String replaceSpecialCharactersAndLowerCase(String email) {
         if(email == null) {
             return null;
         }

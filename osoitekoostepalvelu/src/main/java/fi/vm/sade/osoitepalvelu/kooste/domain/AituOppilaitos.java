@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -47,8 +45,8 @@ public class AituOppilaitos {
     private List<AituSopimusDto> sopimukset = new ArrayList<AituSopimusDto>();
 
     public static final Function<AituOppilaitos, List<AituSopimusDto>> SOPIMUKSET = new Function<AituOppilaitos, List<AituSopimusDto>>() {
-        public List<AituSopimusDto> apply(@NotNull AituOppilaitos input) {
-            return input.getSopimukset();
+        public List<AituSopimusDto> apply(AituOppilaitos input) {
+            return input.getSopimukset(); // NOSONAR
         }
     };
 
