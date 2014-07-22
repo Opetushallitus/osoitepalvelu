@@ -63,7 +63,11 @@ public class SearchTargetGroup implements Serializable {
         }
 
         public String[] getOrganisaatioPalveluTyyppiArvo() {
-            return organisaatioPalveluTyyppiArvo.clone();
+            if( this.organisaatioPalveluTyyppiArvo != null ) {
+                return organisaatioPalveluTyyppiArvo.clone();
+            } else {
+                return null;
+            }
         }
 
         public static GroupType[] getOrganisaatioPalveluTypes() {
