@@ -35,7 +35,8 @@ public class MyInformationDto implements Serializable {
     private String email; // seems to be null in some environemnts
     private String lang; // seems to be null in some environemnts
     private List<String> groups  =  new ArrayList<String>();
-
+    private List<String> roles  =  new ArrayList<String>();
+    
     public String getUid() {
         return uid;
     }
@@ -91,4 +92,13 @@ public class MyInformationDto implements Serializable {
     public void setGroups(List<String> groups) {
         this.groups  =  groups;
     }
+    
+    public List<String> getRoles() {
+        return roles;
+    }
+    
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+    
 }
