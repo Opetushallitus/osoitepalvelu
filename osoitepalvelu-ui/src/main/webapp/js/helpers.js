@@ -20,19 +20,27 @@
 
 angular.module('Helpers', [])
 .service('EqualsHelper', function() {
-    this.equal = function(a, b) {
+    var _eq = function(a, b) {
+        if (!(((a instanceof Object) || (a instanceof Array))
+                || ((b instanceof Object) || (b instanceof Array)))) {
+            return a === b;
+        }
+        if ((a == null && b != null) || (a != null && b == null)) {
+            return false;
+        }
         for( var p in a ) {
             var va = a[p],
                 vb = b[p];
-            if( va !== vb ) return false;
+            if( !_eq(va, vb) ) return false;
         }
         for( var p in b ) {
             var va = a[p],
                 vb = b[p];
-            if( va !== vb ) return false;
+            if( !_eq(va, vb) ) return false;
         }
         return true;
     };
+    this.equal = _eq;
 })
 .service('ExtractHelper', function() {
     var extractFn = function(val, fields) {
