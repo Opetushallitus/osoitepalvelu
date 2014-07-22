@@ -40,6 +40,7 @@ import java.util.List;
  */
 @Service
 public class DefaultSavedSearchService extends AbstractService implements SavedSearchService {
+    private static final long serialVersionUID = -7200048189159586281L;
 
     @Autowired
     private SavedSearchDtoConverter dtoConverter;

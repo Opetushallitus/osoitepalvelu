@@ -70,7 +70,7 @@ public final class LocaleHelper {
         if (locale1 == null || locale2 == null) {
             return false;
         }
-        return EqualsHelper.equals(StringHelper.lower(locale1.getLanguage()),
+        return EqualsHelper.areEquals(StringHelper.lower(locale1.getLanguage()),
                                 StringHelper.lower(locale2.getLanguage()));
     }
 
@@ -92,7 +92,7 @@ public final class LocaleHelper {
                 return name.get(preferredLocale.getLanguage());
             }
         }
-        if (!EqualsHelper.equals(preferredLocale, defaultLocale)) {
+        if (!EqualsHelper.areEquals(preferredLocale, defaultLocale)) {
             return findLocalized(name, defaultLocale, defaultLocale);
         }
         if (!name.isEmpty()) {

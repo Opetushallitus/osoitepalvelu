@@ -2,6 +2,7 @@ package fi.vm.sade.osoitepalvelu.kooste.webapp;
 
 import fi.vm.sade.generic.healthcheck.HealthChecker;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
+
 import org.apache.camel.util.StopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,7 +29,9 @@ public class MongoDbHealthChecker implements HealthChecker {
         final StopWatch watch  =  new StopWatch();
         final long number  =  mongoTemplate.count(Query.query(new Criteria()), SavedSearch.class);
         final long resultTook  =  watch.stop();
-        return new LinkedHashMap() { {
+        return new LinkedHashMap<Object, Object>() {
+            private static final long serialVersionUID = 1401131831791252238L;
+        {
             put("status", "OK");
             put("response-time", "" + resultTook + " ms");
             put("number-of-saved-searches", number);

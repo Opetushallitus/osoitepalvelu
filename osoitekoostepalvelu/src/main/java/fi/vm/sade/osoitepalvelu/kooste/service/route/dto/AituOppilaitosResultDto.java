@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * User: ratamaa
  * Date: 4/9/14
@@ -42,7 +44,7 @@ public class AituOppilaitosResultDto implements Serializable {
     private List<AituSopimusDto> sopimukset = new ArrayList<AituSopimusDto>();
 
     public static final Function<AituOppilaitosResultDto, String> OPPILAITOSKOODI = new Function<AituOppilaitosResultDto, String>() {
-        public String apply(AituOppilaitosResultDto result) {
+        public String apply(@NotNull AituOppilaitosResultDto result) {
             return result.getOppilaitoskoodi();
         }
     };

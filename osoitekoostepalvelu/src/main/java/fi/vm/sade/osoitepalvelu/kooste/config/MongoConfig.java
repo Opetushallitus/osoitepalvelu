@@ -16,9 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.config;
 
+import java.net.UnknownHostException;
+
 import com.mongodb.Mongo;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoURI;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,8 +47,7 @@ public class MongoConfig extends AbstractMongoConfiguration {
     @Bean
     @Override
     public MongoTemplate mongoTemplate() throws Exception {
-        MongoTemplate mongoTemplate  =  new MongoTemplate(mongoDbFactory());
-        return mongoTemplate;
+        return new MongoTemplate(mongoDbFactory());
     }
 
     @Bean
@@ -56,7 +58,7 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
     @Bean
     @Override
-    public Mongo mongo() throws Exception {
+    public Mongo mongo() throws UnknownHostException {
         return new Mongo(new MongoURI(new MongoClientURI(mongoUri)));
     }
 

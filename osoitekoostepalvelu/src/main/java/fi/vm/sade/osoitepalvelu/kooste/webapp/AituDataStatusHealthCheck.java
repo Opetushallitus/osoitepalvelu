@@ -48,7 +48,9 @@ public class AituDataStatusHealthCheck implements HealthChecker {
         if (toimikuntasCount < 1) {
             throw new IllegalStateException("AITU data not fetched. toimikuntasCount=0");
         }
-        return new LinkedHashMap() { {
+        return new LinkedHashMap<Object, Object>() { 
+            private static final long serialVersionUID = 7523073763130134460L;
+        {
             put("status", "OK");
             put("number-of-oppilaitos", oppilaitosCount);
             put("number-of-toimikuntas", toimikuntasCount);

@@ -33,7 +33,7 @@ public class EqualsHelper {
         return (x != null && y != null);
     }
 
-    public static boolean equals(Object x, Object y) {
+    public static boolean areEquals(Object x, Object y) {
         return x == y || (x != null && y != null && x.equals(y));
     }
 
@@ -53,7 +53,7 @@ public class EqualsHelper {
             return false;
         }
         for (int i  =  0; i < this.state.length; ++i) {
-            if (!equals(this.state[i], other.state[i])) {
+            if (!areEquals(this.state[i], other.state[i])) {
                 return false;
             }
         }

@@ -20,6 +20,8 @@ import com.google.common.base.Function;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * User: ratamaa
  * Date: 5/12/14
@@ -36,7 +38,7 @@ public interface FilterableOrganisaatio {
     public String getKotipaikka();
 
     public static final Function<FilterableOrganisaatio, String> GET_OID = new Function<FilterableOrganisaatio, String>() {
-        public String apply(FilterableOrganisaatio organisaatio) {
+        public String apply(@NotNull FilterableOrganisaatio organisaatio) {
             return organisaatio.getOid();
         }
     };

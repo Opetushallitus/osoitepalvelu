@@ -78,7 +78,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 new CasDisabledCasTicketProvider()));
 
         List<String> oids = retryOnCamelError(new Callable<List<String>>() {
-            public List<String> call() throws Exception {
+            public List<String> call() {
                 return organisaatioServiceRoute.findAllOrganisaatioOids(context);
             }
         }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
@@ -94,7 +94,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 organisaatioService.purgeOrganisaatioByOidCache(oid);
                 // ...and renew the cache:
                 retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
-                    public OrganisaatioDetailsDto call() throws Exception {
+                    public OrganisaatioDetailsDto call() {
                         return organisaatioService.getdOrganisaatioByOid(oid, context);
                     }
                 }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
@@ -140,7 +140,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
         }
 
         List<String> oids = retryOnCamelError(new Callable<List<String>>() {
-            public List<String> call() throws Exception {
+            public List<String> call() {
                 return organisaatioServiceRoute.findAllOrganisaatioOids(context);
             }
         }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
@@ -154,8 +154,8 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 ++i;
                 // ...and renew the cache:
                 long rc = context.getRequestCount();
-                OrganisaatioDetailsDto details = retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
-                    public OrganisaatioDetailsDto call() throws Exception {
+                retryOnCamelError(new Callable<OrganisaatioDetailsDto>() {
+                    public OrganisaatioDetailsDto call() {
                         return organisaatioService.getdOrganisaatioByOid(oid, context);
                     }
                 }, MAX_TRIES, WAIT_BEFORE_RETRY_MILLIS);
@@ -214,7 +214,9 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 logger.warn("Error fetching data: " + e.getMessage(), e);
                 try {
                     Thread.sleep(retryWaitTimeMillis);
-                } catch(InterruptedException er) {}
+                } catch(InterruptedException er) {
+                    logger.warn("Error while sleeping: " + er.getMessage(), er);
+                }
                 if (j < maxRetries) {
                     logger.info("Retrying...");
                 }

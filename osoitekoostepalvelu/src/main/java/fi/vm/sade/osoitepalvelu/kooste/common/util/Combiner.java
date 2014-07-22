@@ -84,7 +84,7 @@ public class Combiner<ResultType> {
         private List<Counter> counters = new ArrayList<Counter>();
         private Counter previousCombinedCounter;
 
-        private class Counter {
+        private static final class Counter {
             private boolean repeated;
             private boolean combined;
             private int count;

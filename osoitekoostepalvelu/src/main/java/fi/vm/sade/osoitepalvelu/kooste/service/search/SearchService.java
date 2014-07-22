@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
+import java.io.Serializable;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
@@ -25,7 +27,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
  * Date: 2/17/14
  * Time: 2:53 PM
  */
-public interface SearchService {
+public interface SearchService extends Serializable {
 
     /**
      * @param terms to search with

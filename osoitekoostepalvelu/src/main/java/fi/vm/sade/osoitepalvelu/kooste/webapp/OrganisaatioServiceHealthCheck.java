@@ -16,16 +16,16 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.webapp;
 
-import fi.vm.sade.generic.healthcheck.HealthChecker;
-import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
+import java.util.LinkedHashMap;
+
 import org.apache.camel.util.StopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
+import fi.vm.sade.generic.healthcheck.HealthChecker;
+import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
 
 /**
  * User: ratamaa
@@ -45,10 +45,12 @@ public class OrganisaatioServiceHealthCheck implements HealthChecker {
     @Override
     public Object checkHealth() throws Throwable {
         final StopWatch watch  =  new StopWatch();
-        OrganisaatioDetailsDto details =  organisaatioServiceRoute.getdOrganisaatioByOid(rootOrganisaatioOid,
+        organisaatioServiceRoute.getdOrganisaatioByOid(rootOrganisaatioOid,
                 new DefaultCamelRequestContext());
         final long resultTook  =  watch.stop();
-        return new LinkedHashMap() { {
+        return new LinkedHashMap<Object, Object>() { 
+            private static final long serialVersionUID = 6176621213520418274L;
+        {
             put("status", "OK");
             put("response-time", ""  +  resultTook  +  " ms");
         } };

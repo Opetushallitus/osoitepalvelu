@@ -43,12 +43,6 @@ public class DefaultEmailService extends AbstractService implements EmailService
     @Value("${viestipalvelu.emailsend.email.from:'oph_tiedotus@oph.fi'}")
     private String emailFrom;
 
-    @Value("${viestipalvelu.emailsend.email.subject:''}")
-    private String defaultSubject;
-
-    @Value("${viestipalvelu.emailsend.email.body:''}")
-    private String defaultBody;
-
     @Value("${viestipalvelu.emailsend.email.organisaatioOid:''}")
     private String defaultOrganisaatioOid;
 

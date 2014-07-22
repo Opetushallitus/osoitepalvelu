@@ -17,11 +17,14 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
 import com.google.common.base.Function;
+
 import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * User: ratamaa
@@ -38,12 +41,12 @@ public class AituSopimusDto implements Serializable {
     private List<AituTutkintoDto> tutkinnot = new ArrayList<AituTutkintoDto>();
 
     public final static Function<AituSopimusDto, String> TOIMIKUNTA = new Function<AituSopimusDto, String>() {
-        public String apply(AituSopimusDto input) {
+        public String apply(@NotNull AituSopimusDto input) {
             return input.getToimikunta();
         }
     };
     public final static Function<AituSopimusDto, List<AituTutkintoDto>> TUTKINNOT = new Function<AituSopimusDto, List<AituTutkintoDto>>() {
-        public List<AituTutkintoDto> apply(AituSopimusDto input) {
+        public List<AituTutkintoDto> apply(@NotNull AituSopimusDto input) {
             return input.getTutkinnot();
         }
     };

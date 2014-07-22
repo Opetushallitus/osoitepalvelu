@@ -184,7 +184,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         protected abstract Map<String, Object> getHeaders(Exchange exchange);
 
         @Override
-        public final void process(Exchange exchange) throws Exception {
+        public final void process(Exchange exchange) {
             if(exchange.getIn() != null) {
                 Map<String, Object> headers  =  getHeaders(exchange);
                 for(Map.Entry<String, Object> kv : headers.entrySet()) {
@@ -274,7 +274,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected Processor saveSession() {
         return new Processor() {
             @Override
-            public void process(Exchange exchange) throws Exception {
+            public void process(Exchange exchange) {
                 CasTicketCache cache  =  exchange.getProperty(CAS_TICKET_CACHE_PROPERTY, CasTicketCache.class);
                 if (cache != null && exchange.getIn() != null) {
                     Map<String,Object> inHeaders = exchange.getIn().getHeaders();
@@ -338,7 +338,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         }
 
         @Override
-        public final void process(Exchange exchange) throws Exception {
+        public final void process(Exchange exchange) {
             Long beginMoment = exchange.getProperty("DebuggerBeginMoment_"+this.name, Long.TYPE);
             if (beginMoment == null) {
                 beginMoment = System.currentTimeMillis();
@@ -355,10 +355,9 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
         /**
          * @param exchange to wrapped call to process as in a normal Camel Processor
-         * @throws Exception
          * @see Processor#process(org.apache.camel.Exchange)
          */
-        public abstract void doProcess(Exchange exchange) throws Exception;
+        public abstract void doProcess(Exchange exchange);
 
         @Override
         public String toString() {
@@ -393,7 +392,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected Debugger debug(String name) {
         return new Debugger(name) {
             @Override
-            public void doProcess(Exchange exchange) throws Exception {
+            public void doProcess(Exchange exchange) {
                 logIn(exchange, getName());
                 //logOut(exchange);
             }
@@ -431,7 +430,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected Processor inToOut() {
         return new Processor() {
             @Override
-            public void process(Exchange exchange) throws Exception {
+            public void process(Exchange exchange) {
                 inToOut(exchange);
             }
 
@@ -591,7 +590,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
 
             private String encoded(String value) {
                 try {
-                    value = URLEncoder.encode(value.toString(), URL_ENCODING);
+                    value = URLEncoder.encode(value, URL_ENCODING);
                 } catch (UnsupportedEncodingException e) {
                     throw new IllegalStateException(e);
                 }
@@ -1116,7 +1115,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             throw new NoSuchEndpointException(endpointUri);
         }
         Exchange exchange  =  template.send(endpoint, pattern, new Processor() {
-            public void process(Exchange exchange) throws Exception {
+            public void process(Exchange exchange) {
                 for (Map.Entry<String, Object> property : properties.entrySet()) {
                     exchange.setProperty(property.getKey(), property.getValue());
                 }

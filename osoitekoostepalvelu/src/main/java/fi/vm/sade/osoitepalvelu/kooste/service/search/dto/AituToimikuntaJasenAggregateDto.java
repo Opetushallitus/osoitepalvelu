@@ -55,13 +55,21 @@ public class AituToimikuntaJasenAggregateDto implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         AituToimikuntaJasenAggregateDto that = (AituToimikuntaJasenAggregateDto) o;
 
-        if (jasen != null ? !jasen.equals(that.jasen) : that.jasen != null) return false;
-        if (!toimikunta.getId().equals(that.toimikunta.getId())) return false;
+        if (jasen != null ? !jasen.equals(that.jasen) : that.jasen != null) {
+            return false;
+        }
+        if (!toimikunta.getId().equals(that.toimikunta.getId())) {
+            return false;
+        }
 
         return true;
     }

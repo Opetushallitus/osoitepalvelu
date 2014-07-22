@@ -27,7 +27,7 @@ public class HenkiloKieliDto implements Serializable {
     private static final long serialVersionUID = 2851690593549118608L;
     
     private String kieliKoodi; // esim. fi
-    private String KieliTyyppi; // esim. suomi
+    private String kieliTyyppi; // esim. suomi
 
     public String getKieliKoodi() {
         return kieliKoodi;
@@ -38,10 +38,10 @@ public class HenkiloKieliDto implements Serializable {
     }
 
     public String getKieliTyyppi() {
-        return KieliTyyppi;
+        return kieliTyyppi;
     }
 
     public void setKieliTyyppi(String kieliTyyppi) {
-        KieliTyyppi = kieliTyyppi;
+        this.kieliTyyppi = kieliTyyppi;
     }
 }

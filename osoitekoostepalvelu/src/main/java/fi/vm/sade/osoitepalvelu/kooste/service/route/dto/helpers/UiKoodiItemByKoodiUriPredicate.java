@@ -34,6 +34,6 @@ public class UiKoodiItemByKoodiUriPredicate implements Predicate<UiKoodiItemDto>
 
     @Override
     public boolean apply(UiKoodiItemDto item) {
-        return EqualsHelper.equals(uri, item.getKoodiUri());
+        return EqualsHelper.areEquals(uri, item.getKoodiUri());
     }
 }

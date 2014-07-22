@@ -55,10 +55,13 @@ public class OrganisaatioCacheHealthCheck extends AbstractService implements Hea
             throw new IllegalStateException("Organisaatio-cache too old. Oldest entry from " + oldestEntry);
         }
         final long resultTook  =  watch.stop();
-        return new LinkedHashMap() { {
+        return new LinkedHashMap<Object, Object>() {
+            private static final long serialVersionUID = 6709620862376707410L;
+        {
             put("status", "OK");
             put("organisaatiot-count", count);
             put("oldest-entry", oldestEntry.toString());
+            put("response-time", ""  +  resultTook  +  " ms");
         } };
     }
 
