@@ -180,8 +180,7 @@ public class Combiner<ResultType> {
             this.values.add(key, new ArrayList<Object>(values));
             typeIndex.put(key, new AtomicInteger(0));
             // Sonar ei tunnista, että MultiValueMap palauttaa listan.
-            // NOSONAR
-            List<Counter> indexes = this.indexes.get(key);
+            List<Counter> indexes = this.indexes.get(key); // NOSONAR
             if (indexes == null) {
                 indexes = new ArrayList<Counter>();
                 this.indexes.put(key, indexes);
@@ -215,8 +214,7 @@ public class Combiner<ResultType> {
                 realTypeIndex = typeIndex % typeValues.size();
             List<?> currentValues = typeValues.get(realTypeIndex);
             // Sonar ei tunnista, että MultiValueMap palauttaa listan.
-            // NOSONAR
-            Integer i = indexes.get(type).get(realTypeIndex).get();
+            Integer i = indexes.get(type).get(realTypeIndex).get(); // NOSONAR
             if (i >= currentValues.size()) {
                 return Optional.absent();
             }

@@ -16,6 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.common.base.Function;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
@@ -23,12 +27,6 @@ import fi.ratamaa.dtoconverter.annotation.DtoPath;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioviiteDto;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
 
 public class UiKoodiItemDto implements Serializable {
     private static final long serialVersionUID = 303815492103134497L;
@@ -46,15 +44,13 @@ public class UiKoodiItemDto implements Serializable {
     private List<OrganisaatioviiteDto> organisaatioViite  =  new ArrayList<OrganisaatioviiteDto>();
 
     public static final Function<UiKoodiItemDto, String> URI = new Function<UiKoodiItemDto, String>() {
-        @Override
-        public String apply(@NotNull UiKoodiItemDto item) {
-            return item.getKoodiUri();
+        public String apply(UiKoodiItemDto item) {
+            return item.getKoodiUri(); // NOSONAR (http://sourceforge.net/p/findbugs/bugs/1139/)
         }
     };
     public static final Function<UiKoodiItemDto, String> KOODI_ID = new Function<UiKoodiItemDto, String>() {
-        @Override
-        public String apply(@NotNull UiKoodiItemDto item) {
-            return item.getKoodiId();
+        public String apply(UiKoodiItemDto item) {
+            return item.getKoodiId(); // NOSONAR
         }
     };
 

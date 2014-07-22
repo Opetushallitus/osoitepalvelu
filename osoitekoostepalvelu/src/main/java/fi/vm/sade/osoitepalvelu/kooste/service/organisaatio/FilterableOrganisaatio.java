@@ -16,11 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio;
 
-import com.google.common.base.Function;
-
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import com.google.common.base.Function;
 
 /**
  * User: ratamaa
@@ -38,8 +36,8 @@ public interface FilterableOrganisaatio {
     String getKotipaikka();
 
     Function<FilterableOrganisaatio, String> GET_OID = new Function<FilterableOrganisaatio, String>() {
-        public String apply(@NotNull FilterableOrganisaatio organisaatio) {
-            return organisaatio.getOid();
+        public String apply(FilterableOrganisaatio organisaatio) {
+            return organisaatio.getOid(); // NOSONAR
         }
     };
 }

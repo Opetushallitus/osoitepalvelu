@@ -16,13 +16,11 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
-import com.google.common.base.Predicate;
+import java.io.Serializable;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 
-import java.io.Serializable;
-
-import javax.validation.constraints.NotNull;
+import com.google.common.base.Predicate;
 
 /**
  * User: ratamaa
@@ -43,8 +41,8 @@ public class AituTutkintoDto implements Serializable {
     private String sahkoposti_varavastuuhenkilo;
 
     public static final Predicate<AituTutkintoDto> WITH_VASTUUHENKILO = new Predicate<AituTutkintoDto>() {
-        public boolean apply(@NotNull AituTutkintoDto tutkinto) {
-            return tutkinto.getVastuuhenkilo() != null && tutkinto.getVastuuhenkilo().trim().length() > 0;
+        public boolean apply(AituTutkintoDto tutkinto) {
+            return tutkinto.getVastuuhenkilo() != null && tutkinto.getVastuuhenkilo().trim().length() > 0; // NOSONAR
         }
     };
 

@@ -41,12 +41,12 @@ public class ApplicationStartupTasks extends AbstractService {
         logger.info("STATRUP tasks BEGIN");
         try {
             organisaatioCacheTask.ensureOrganisaatioCacheFresh();
-        } catch(Throwable e) {
+        } catch(Exception e) {
             logger.error("Failed to ensure Organisaatio cache state: " + e.getMessage());
         }
         try {
             aituDataFetchTask.refreshAituData();
-        } catch(Throwable e) {
+        } catch(Exception e) {
             logger.error("Failed to fetch AITU data: " + e.getMessage());
         }
         logger.info("STATRUP tasks END");
