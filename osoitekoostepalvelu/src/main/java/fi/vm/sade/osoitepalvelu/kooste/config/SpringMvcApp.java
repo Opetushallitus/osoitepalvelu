@@ -16,6 +16,11 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.config;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.swagger.models.alternates.AlternateTypeRule;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,6 +34,11 @@ import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 import com.wordnik.swagger.model.ApiInfo;
 
 import fi.vm.sade.osoitepalvelu.kooste.config.swagger.CustomSwaggerConfig;
+import sun.security.util.BigInt;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Date;
 
 /**
  * User: ratamaa
@@ -54,11 +64,18 @@ public class SpringMvcApp {
     @Bean
     public SwaggerSpringMvcPlugin customImplementation(){
         RelativeSwaggerPathProvider path = new RelativeSwaggerPathProvider();
+        TypeResolver resolver = new TypeResolver();
         path.setApiResourcePrefix("api");
         return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
                 .apiInfo(apiInfo())
                 .apiVersion("1.0")
-                .pathProvider(path);
+                .pathProvider(path)
+                .alternateTypeRules(
+                    new AlternateTypeRule(resolver.resolve(BigDecimal.class), resolver.resolve(Double.class)),
+                    new AlternateTypeRule(resolver.resolve(BigInteger.class), resolver.resolve(Long.class)),
+                    new AlternateTypeRule(resolver.resolve(DateTime.class), resolver.resolve(Date.class)),
+                    new AlternateTypeRule(resolver.resolve(LocalDate.class), resolver.resolve(Date.class))
+                );
     }
 
     protected ApiInfo apiInfo() {
