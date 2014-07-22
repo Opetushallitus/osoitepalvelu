@@ -34,6 +34,7 @@ import java.util.HashMap;
 @Component
 public class DefaultAituRoute extends AbstractJsonToDtoRouteBuilder
         implements AituRoute {
+    private static final long serialVersionUID = 832138099426375308L;
     private static final String SERVICE_CALL_AITU_POSTFIX = ".AituServiceCall";
     private static final String AITU_OSOITEPALVELU_ENDPOINT = "direct:aituRoute";
     private static final String AITU_OSOITEPALVELU_PATH = "/osoitepalvelu";

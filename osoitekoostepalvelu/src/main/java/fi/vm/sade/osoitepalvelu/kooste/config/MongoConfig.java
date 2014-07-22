@@ -20,6 +20,7 @@ import java.net.UnknownHostException;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClientURI;
+import com.mongodb.MongoException;
 import com.mongodb.MongoURI;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -46,13 +47,13 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
     @Bean
     @Override
-    public MongoTemplate mongoTemplate() throws Exception {
+    public MongoTemplate mongoTemplate() throws MongoException, UnknownHostException {
         return new MongoTemplate(mongoDbFactory());
     }
 
     @Bean
     @Override
-    public SimpleMongoDbFactory mongoDbFactory() throws Exception {
+    public SimpleMongoDbFactory mongoDbFactory() throws MongoException, UnknownHostException {
         return new SimpleMongoDbFactory(new MongoURI(new MongoClientURI(mongoUri)));
     }
 
@@ -68,7 +69,7 @@ public class MongoConfig extends AbstractMongoConfiguration {
     }
 
     @Bean
-    public MongoRepositoryFactory mongoRepositoryFactory() throws Exception {
+    public MongoRepositoryFactory mongoRepositoryFactory() throws MongoException, UnknownHostException {
         return new MongoRepositoryFactory(mongoTemplate());
     }
 }

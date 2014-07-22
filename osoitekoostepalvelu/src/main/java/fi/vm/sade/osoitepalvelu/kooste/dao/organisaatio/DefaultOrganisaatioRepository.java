@@ -49,6 +49,7 @@ import java.util.Locale;
 @Repository
 public class DefaultOrganisaatioRepository extends SimpleMongoRepository<OrganisaatioDetails, String>
         implements OrganisaatioRepository {
+    private static final long serialVersionUID = 3725230640750779168L;
 
     public DefaultOrganisaatioRepository(MongoEntityInformation<OrganisaatioDetails,
             String> metadata, MongoOperations mongoOperations) {

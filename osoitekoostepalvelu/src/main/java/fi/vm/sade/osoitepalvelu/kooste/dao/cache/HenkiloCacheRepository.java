@@ -16,7 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
 
+import java.io.Serializable;
+
 import fi.vm.sade.osoitepalvelu.kooste.domain.HenkiloDetails;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
@@ -24,5 +27,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * Date: 3/26/14
  * Time: 2:50 PM
  */
-public interface HenkiloCacheRepository extends MongoRepository<HenkiloDetails, String> {
+public interface HenkiloCacheRepository extends MongoRepository<HenkiloDetails, String>, Serializable {
 }

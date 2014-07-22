@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +32,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystieto
  * Date: 3/25/14
  * Time: 11:32 AM
  */
-public interface OrganisaatioRepository extends MongoRepository<OrganisaatioDetails, String> {
+public interface OrganisaatioRepository extends MongoRepository<OrganisaatioDetails, String>, Serializable {
 
     List<OrganisaatioDetails> findOrganisaatios(OrganisaatioYhteystietoCriteriaDto criteria,
                                                 Locale orderByLocale);

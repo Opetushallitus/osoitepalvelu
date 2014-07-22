@@ -32,6 +32,7 @@ import java.util.List;
  */
 @Component
 public class OrganisaatioDtoConverter extends AbstractDtoConverter {
+    private static final long serialVersionUID = -3701212052731186195L;
 
     public OrganisaatioYhteystietoHakuResultDto convert(OrganisaatioDetails from, OrganisaatioYhteystietoHakuResultDto to) {
         convertValue(from, to);

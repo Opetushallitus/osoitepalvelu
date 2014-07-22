@@ -21,6 +21,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloListResultDto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ import java.util.List;
  * Date: 3/26/14
  * Time: 2:29 PM
  */
-public interface HenkiloService {
+public interface HenkiloService extends Serializable {
 
     /**
      * @param criteria for henkilos

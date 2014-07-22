@@ -55,6 +55,9 @@ import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
 @Service
 public class DefaultSearchResultTransformerService extends AbstractService
         implements SearchResultTransformerService {
+
+    private static final long serialVersionUID = -5456950030215538503L;
+
     private static final Locale DEFAULT_LOCALE = new Locale("fi", "FI");
 
     @Autowired

@@ -18,14 +18,16 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ratamaa on 15.4.2014.
  */
-public interface AituToimikuntaRepository extends MongoRepository<AituToimikunta,String> {
+public interface AituToimikuntaRepository extends MongoRepository<AituToimikunta,String>, Serializable {
 
     /**
      * @param toimikuntaCriteria

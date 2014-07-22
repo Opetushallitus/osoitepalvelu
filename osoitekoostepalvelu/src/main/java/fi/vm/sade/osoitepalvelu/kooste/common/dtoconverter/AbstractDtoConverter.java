@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter;
 
+import java.io.Serializable;
+
 import fi.ratamaa.dtoconverter.AbstractBaseDtoConverter;
 import fi.ratamaa.dtoconverter.mapper.implementations.AnnotationResolvingDtoConversionMapper;
 import fi.ratamaa.dtoconverter.mapper.implementations.CamelCaseResolvingDtoConversionMapper;
@@ -23,6 +25,7 @@ import fi.ratamaa.dtoconverter.mapper.implementations.MapDtoconversionMapper;
 import fi.ratamaa.dtoconverter.mapper.implementations.ValidatorFeatureDtoConverterMapper;
 import fi.ratamaa.dtoconverter.typeconverter.TypeConversionContainer;
 import fi.ratamaa.dtoconverter.typeconverter.TypeConverterAdapter;
+
 import org.joda.time.LocalDate;
 
 /**
@@ -30,7 +33,9 @@ import org.joda.time.LocalDate;
  * Date: 12/10/13
  * Time: 1:56 PM
  */
-public abstract class AbstractDtoConverter extends AbstractBaseDtoConverter {
+public abstract class AbstractDtoConverter extends AbstractBaseDtoConverter implements Serializable {
+    private static final long serialVersionUID = 4587427351950818897L;
+
     protected void registerMappers(fi.ratamaa.dtoconverter.mapper.resolver.MappersContainer mappers) {
         mappers
             .add(new AnnotationResolvingDtoConversionMapper()).add(new CamelCaseResolvingDtoConversionMapper())

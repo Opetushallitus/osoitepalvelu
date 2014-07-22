@@ -41,7 +41,8 @@ import java.util.List;
 @Repository
 public class DefaultAituOppilaitosRepository extends SimpleMongoRepository<AituOppilaitos, String>
         implements AituOppilaitosRepository {
-
+    private static final long serialVersionUID = -7348571536998063779L;
+    
     @Autowired
     private AituToimikuntaRepository aituToimikuntaRepository;
 

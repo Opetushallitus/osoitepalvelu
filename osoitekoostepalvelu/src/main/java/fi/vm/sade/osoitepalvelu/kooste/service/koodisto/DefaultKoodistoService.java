@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -403,7 +404,9 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         T get();
     }
 
-    protected static final class MemoryCacheHolder {
+    protected static final class MemoryCacheHolder implements Serializable {
+        private static final long serialVersionUID = -4046813860312365516L;
+        
         private DateTime createdAt;
         private List<UiKoodiItemDto> items;
 

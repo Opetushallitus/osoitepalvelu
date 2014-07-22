@@ -22,6 +22,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHierarchyRe
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoHakuResultDto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ import java.util.List;
  * Date: 3/14/14
  * Time: 1:54 PM
  */
-public interface OrganisaatioServiceRoute {
+public interface OrganisaatioServiceRoute extends Serializable {
 
     /**
      * @return all organisaatio OIDs

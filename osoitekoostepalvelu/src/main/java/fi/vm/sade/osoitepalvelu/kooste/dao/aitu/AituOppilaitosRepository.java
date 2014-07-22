@@ -19,14 +19,16 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituOppilaitosCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ratamaa on 15.4.2014.
  */
-public interface AituOppilaitosRepository extends MongoRepository<AituOppilaitos, String> {
+public interface AituOppilaitosRepository extends MongoRepository<AituOppilaitos, String>, Serializable {
 
     /**
      * @param oppilaitosCriteria to filter AituOppilaitos with

@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route;
 
+import java.io.Serializable;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOsoitepalveluResultsDto;
 
@@ -24,7 +26,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOsoitepalveluResult
  * Date: 4/9/14
  * Time: 5:07 PM
  */
-public interface AituRoute {
+public interface AituRoute extends Serializable {
 
     /**
      * @param requestContext the context for HTTP request received by the application to operate in

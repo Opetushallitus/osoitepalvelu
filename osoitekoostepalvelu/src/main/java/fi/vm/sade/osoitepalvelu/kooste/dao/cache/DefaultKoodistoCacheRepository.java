@@ -16,14 +16,14 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
 
-import fi.vm.sade.osoitepalvelu.kooste.dao.sequence.SequenceRepository;
-import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.stereotype.Repository;
+
+import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
 
 /**
  * User: ratamaa
@@ -33,8 +33,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class DefaultKoodistoCacheRepository extends SimpleMongoRepository<KoodistoCache, KoodistoCache.CacheKey>
         implements KoodistoCacheRepository {
-    @Autowired
-    private SequenceRepository sequenceRepository;
+
+    private static final long serialVersionUID = 643999863968770488L;
 
     public DefaultKoodistoCacheRepository(MongoEntityInformation<KoodistoCache, KoodistoCache.CacheKey> metadata,
             MongoOperations mongoOperations) {

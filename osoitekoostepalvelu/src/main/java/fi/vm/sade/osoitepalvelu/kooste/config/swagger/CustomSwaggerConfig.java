@@ -120,7 +120,6 @@ public class CustomSwaggerConfig extends SpringSwaggerConfig {
     @Bean
     @Override
     public JacksonSwaggerSupport jacksonScalaSupport() {
-        JacksonSwaggerSupport jacksonSwaggerSupport = new CustomJacksonSwaggerSupport();
-        return jacksonSwaggerSupport;
+        return new CustomJacksonSwaggerSupport();
     }
 }

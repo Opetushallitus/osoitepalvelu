@@ -41,6 +41,8 @@ import java.util.List;
  */
 @Service
 public class DefaultAituService extends AbstractService implements AituService {
+    private static final long serialVersionUID = 7522489326846677935L;
+
     @Autowired
     private AituOppilaitosRepository aituOppilaitosRepository;
 

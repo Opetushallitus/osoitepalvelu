@@ -24,4 +24,5 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AituDtoConverter extends AbstractDtoConverter {
+    private static final long serialVersionUID = -6612305315061450178L;
 }
