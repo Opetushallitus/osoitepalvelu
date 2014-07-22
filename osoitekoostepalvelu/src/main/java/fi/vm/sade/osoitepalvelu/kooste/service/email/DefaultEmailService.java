@@ -65,7 +65,7 @@ public class DefaultEmailService extends AbstractService implements EmailService
 
         settings.getEmail().setReplyTo(myInfo.getEmail());
         if (settings.getEmail().getReplyTo() == null) {
-            settings.getEmail().setReplyTo(replaceSpecialCharactersAndLowerCase(firstNameOf(myDetails.getKutsunanimi())
+            settings.getEmail().setReplyTo(replaceSpecialCharactersAndLowerCase(firstNameOf(myDetails.getKutsumanimi())
                     + "." + myDetails.getSukunimi() + "@oph.fi"));
         }
 
