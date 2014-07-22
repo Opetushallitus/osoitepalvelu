@@ -6,7 +6,7 @@
     <parent>
         <artifactId>osoitepalvelu</artifactId>
         <groupId>fi.vm.sade.osoitepalvelu</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>10.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     
@@ -141,6 +141,66 @@
                             <valueFile>${project.build.directory}/${project.artifactId}/buildtime.txt</valueFile>
                         </replacement>
                     </replacements>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.klieber</groupId>
+                <artifactId>phantomjs-maven-plugin</artifactId>
+                <version>0.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>install</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <version>1.9.2</version>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.searls</groupId>
+                <artifactId>jasmine-maven-plugin</artifactId>
+                <version>1.3.1.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
+                    <webDriverCapabilities>
+                        <capability>
+                            <name>phantomjs.binary.path</name>
+                            <value>${phantomjs.binary}</value>
+                        </capability>
+                    </webDriverCapabilities>
+                    <preloadSources>
+                        <source>jslib/jquery-1.10.1/jquery-1.10.1.min.js</source>
+                        <source>jslib/angular-1.2.3/angular.js</source>
+                        <source>jslib/angular-1.2.3/angular-mocks.js</source>
+                        <source>jslib/angular-1.2.3/angular-resource.js</source>
+                        <source>jslib/angular-1.2.3/angular-route.js</source>
+                        <source>jslib/angular-flash.js</source>
+                        <source>jslib/angular-bootstrap/ui-bootstrap-tpls-0.7.0.min.js</source>
+                        <source>jslib/select2-3.4.5/select2.min.js</source>
+                        <source>jslib/select2-3.4.5/select2_locale_fi.js</source>
+                        <source>jslib/ng-grid/ng-grid-2.0.7.min.js</source>
+                        <source>ext/env-configuration.js</source>
+                        <source>js/main.ignored.js</source>
+                        <source>js/standalone.ignored.js</source>
+                    </preloadSources>
+                    <jsSrcDir>${project.basedir}/src/main/webapp</jsSrcDir>
+                    <sourceExcludes>
+                        <exclude>**/jslib/**</exclude>
+                        <exclude>**/*.ignored.js</exclude>
+                        <exclude>**/*.min.js</exclude>
+                    </sourceExcludes>
+                    <jsTestSrcDir>${project.basedir}/src/test</jsTestSrcDir>
                 </configuration>
             </plugin>
         </plugins>
