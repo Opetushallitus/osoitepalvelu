@@ -67,7 +67,7 @@ public final class CollectionHelper {
      * @return the filtered collection
      */
     public static <T> Collection<T> filter(Collection<T> col, Predicate<? super T> predicate,
-                                           Predicate<? super T> fallbackPredicate ) {
+                                           Predicate<? super T> fallbackPredicate){
         Collection<T> result = Collections2.filter(col, predicate);
         if (result.isEmpty()) {
             return Collections2.filter(col, fallbackPredicate);

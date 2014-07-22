@@ -29,15 +29,15 @@ import javax.validation.constraints.NotNull;
  */
 public interface FilterableOrganisaatio {
 
-    public String getOid();
+    String getOid();
 
-    public List<String> getTyypit();
+    List<String> getTyypit();
 
-    public List<String> getKielet();
+    List<String> getKielet();
 
-    public String getKotipaikka();
+    String getKotipaikka();
 
-    public static final Function<FilterableOrganisaatio, String> GET_OID = new Function<FilterableOrganisaatio, String>() {
+    Function<FilterableOrganisaatio, String> GET_OID = new Function<FilterableOrganisaatio, String>() {
         public String apply(@NotNull FilterableOrganisaatio organisaatio) {
             return organisaatio.getOid();
         }

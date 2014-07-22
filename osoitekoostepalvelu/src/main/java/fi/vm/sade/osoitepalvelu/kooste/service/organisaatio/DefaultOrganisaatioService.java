@@ -103,7 +103,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
                 // to the children of previously searched koulutuksen järjestäjäs and merge the results:
                 criteria.setUseOppilaitotyyppi(true);
                 boolean includeParents = false; /* <- previous results not included  */
-                results = mergeWithChildren(results, criteria, locale, includeParents );
+                results = mergeWithChildren(results, criteria, locale, includeParents);
             }
 
             // Searching under possibly oppilaitostyyppi conditioned results by disabling it on the second(/third) round:

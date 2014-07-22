@@ -96,7 +96,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
             }
         }));
 
-        if( searchType == SearchType.EMAIL ) {
+        if(searchType == SearchType.EMAIL) {
             // Kyseessä email-tyyppinen haku, joten nyt suodatetaan kaikki dublikaatti-emailit pois.
             Set<String> emails = new TreeSet<String>();
             List<SearchResultRowDto> filtteredTransformedResults = new ArrayList<SearchResultRowDto>();
@@ -322,9 +322,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (organisaatioService == null) {
             return;
         }
-
         List<DetailCopier> copiers = new ArrayList<DetailCopier>();
-
         if (presentation.isOrganisaationNimiIncluded()) {
             copiers.add(new DetailCopier() {
                 @Override
@@ -464,11 +462,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
                     }
                 }
             });
-
         }
-
         // TODO: viranomaistiedotuksenEmail, koulutusneuvonnanEmail, kriisitiedotuksenEmail
-
         copyDetails(results, context, copiers, presentation.getLocale());
     }
 
@@ -596,7 +591,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         return cellNum - 1;
     }
 
-    private String osoite( SearchResultOsoiteDto osoite ) {
+    private String osoite(SearchResultOsoiteDto osoite) {
         if (osoite == null) {
             return "";
         }

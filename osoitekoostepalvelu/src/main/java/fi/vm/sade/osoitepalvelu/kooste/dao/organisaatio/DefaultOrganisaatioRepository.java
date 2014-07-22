@@ -85,8 +85,8 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
     private void filterByCriteria(CriteriaHelper.Conditions conditions,
                                   OrganisaatioYhteystietoCriteriaDto organisaatioCriteria) {
         if (organisaatioCriteria.isVainAktiiviset()) {
-            conditions.add(new Criteria().orOperator( new Criteria("lakkautusPvm").is(null),
-                    new Criteria("lakkautusPvm").gt(new LocalDate().toDateTimeAtStartOfDay().toDate()) ));
+            conditions.add(new Criteria().orOperator(new Criteria("lakkautusPvm").is(null),
+                    new Criteria("lakkautusPvm").gt(new LocalDate().toDateTimeAtStartOfDay().toDate())));
         }
         if (organisaatioCriteria.isOrganisaatioTyyppiUsed()) {
             conditions.add(new Criteria("tyypit").in(organisaatioCriteria.getOrganisaatioTyyppis()));
@@ -135,7 +135,7 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         q.limit(1);
         q.with(new Sort(Sort.Direction.ASC, "cachedAt"));
         List<OrganisaatioDetails> list = getMongoOperations().find(q, OrganisaatioDetails.class);
-        if(list.size() == 1 ) {
+        if(list.size() == 1) {
             return list.get(0).getCachedAt();
         } else {
             return null;

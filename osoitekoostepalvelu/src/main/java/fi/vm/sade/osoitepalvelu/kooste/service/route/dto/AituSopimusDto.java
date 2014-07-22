@@ -40,12 +40,12 @@ public class AituSopimusDto implements Serializable {
     private String vastuuhenkilo;
     private List<AituTutkintoDto> tutkinnot = new ArrayList<AituTutkintoDto>();
 
-    public final static Function<AituSopimusDto, String> TOIMIKUNTA = new Function<AituSopimusDto, String>() {
+    public static final Function<AituSopimusDto, String> TOIMIKUNTA = new Function<AituSopimusDto, String>() {
         public String apply(@NotNull AituSopimusDto input) {
             return input.getToimikunta();
         }
     };
-    public final static Function<AituSopimusDto, List<AituTutkintoDto>> TUTKINNOT = new Function<AituSopimusDto, List<AituTutkintoDto>>() {
+    public static final Function<AituSopimusDto, List<AituTutkintoDto>> TUTKINNOT = new Function<AituSopimusDto, List<AituTutkintoDto>>() {
         public List<AituTutkintoDto> apply(@NotNull AituSopimusDto input) {
             return input.getTutkinnot();
         }

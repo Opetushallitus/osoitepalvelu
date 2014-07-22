@@ -30,11 +30,11 @@ public interface CasTicketCache {
      * @param service to get cached ticket headers for
      * @return the cached headers or null if not cached
      */
-    public Map<String, Object> get(String service);
+    Map<String, Object> get(String service);
 
     /**
      * @param service to store headers for
      * @param headers to store
      */
-    public void store(String service, Map<String, Object> headers);
+    void store(String service, Map<String, Object> headers);
 }

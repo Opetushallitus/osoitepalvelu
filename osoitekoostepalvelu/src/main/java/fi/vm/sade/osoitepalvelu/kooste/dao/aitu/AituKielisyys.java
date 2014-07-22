@@ -52,7 +52,7 @@ public enum AituKielisyys {
         }
     }
 
-    public static List<AituKielisyys> fromOppilaitoksenOpetuskieliKoodistoValues( List<String> kielis ) {
+    public static List<AituKielisyys> fromOppilaitoksenOpetuskieliKoodistoValues(List<String> kielis){
         List<AituKielisyys> kielisyys = new ArrayList<AituKielisyys>();
         for (String kieli : kielis) {
             AituKielisyys aituKielisyys = fromOppilaitoksenOpetuskieliKoodiValue(kieli);

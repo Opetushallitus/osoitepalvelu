@@ -23,6 +23,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.DefaultKoodistoRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
+
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.component.http.HttpOperationFailedException;
 import org.junit.Assert;
@@ -30,6 +31,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -57,7 +59,7 @@ public class KoodistoRouteTest {
 
     private void ignoreIf503(CamelExecutionException e) throws CamelExecutionException {
         if (e.getCause() != null && e.getCause() instanceof HttpOperationFailedException) {
-            if (((HttpOperationFailedException) e.getCause()).getStatusCode() == 503) {
+            if (((HttpOperationFailedException) e.getCause()).getStatusCode() == HttpStatus.SERVICE_UNAVAILABLE.value()) {
                 return;
             }
         }

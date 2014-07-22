@@ -49,6 +49,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
     // (while the overall process would take about half an hour):
     public static final int MAX_TRIES = 3;
     public static final int WAIT_BEFORE_RETRY_MILLIS = 3000;
+    private static final int LOGGIN_INTERVAL = 1000;
 
     @Autowired
     private OrganisaatioService organisaatioService;
@@ -64,7 +65,6 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
 
     @Value("${organisaatio.cache.valid.from:}")
     private String cacheValidFrom;
-
 
 
     // Every working day night at 3 AM
@@ -135,7 +135,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
         // No CAS here (not needed for reading organisaatio service):
         final DefaultCamelRequestContext context = new DefaultCamelRequestContext(new ProviderOverriddenCasTicketCache(
                 new CasDisabledCasTicketProvider()));
-        if (cacheInvalidBefore != null && new DateTime().compareTo(cacheInvalidBefore.toDateTimeAtStartOfDay()) < 0 ) {
+        if (cacheInvalidBefore != null && new DateTime().compareTo(cacheInvalidBefore.toDateTimeAtStartOfDay()) < 0) {
             context.setOverriddenTime(cacheInvalidBefore.toDateTimeAtStartOfDay());
         }
 
@@ -163,7 +163,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 if (rc != context.getRequestCount()) {
                     infoUpdated = true;
                     logger.debug("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
-                } else if(i % 1000 == 0) {
+                } else if(i % LOGGIN_INTERVAL == 0) {
                     logger.info("Organisaatio ensure data fresh task status: {} / {}", new Object[]{i, oids.size()});
                 }
             }

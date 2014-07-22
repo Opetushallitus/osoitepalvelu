@@ -16,14 +16,19 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
+
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
-import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider;
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 import com.wordnik.swagger.model.ApiInfo;
+
 import fi.vm.sade.osoitepalvelu.kooste.config.swagger.CustomSwaggerConfig;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.*;
 
 /**
  * User: ratamaa

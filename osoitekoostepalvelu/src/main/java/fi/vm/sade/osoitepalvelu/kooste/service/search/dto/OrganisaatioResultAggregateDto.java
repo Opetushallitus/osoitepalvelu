@@ -109,7 +109,7 @@ public class OrganisaatioResultAggregateDto implements Serializable {
                 || (EqualsHelper.notNulls(kayntiosoite, that.kayntiosoite)
                 && !(
                 EqualsHelper.areEquals(kayntiosoite.getYhteystietoOid(), that.kayntiosoite.getYhteystietoOid()))
-                && EqualsHelper.areEquals(kayntiosoite.getKieli(), that.kayntiosoite.getKieli()) )) {
+                && EqualsHelper.areEquals(kayntiosoite.getKieli(), that.kayntiosoite.getKieli()))) {
             return false;
         }
         return true;

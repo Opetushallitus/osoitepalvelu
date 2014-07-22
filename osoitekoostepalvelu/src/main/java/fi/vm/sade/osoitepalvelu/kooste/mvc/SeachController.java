@@ -19,6 +19,7 @@ package fi.vm.sade.osoitepalvelu.kooste.mvc;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
@@ -28,6 +29,8 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentati
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
 import fi.vm.sade.security.SimpleCache;
+
+import org.apache.http.HttpStatus;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.exolab.castor.types.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,7 @@ import org.springframework.web.servlet.view.document.AbstractExcelView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -123,7 +127,7 @@ public class SeachController extends AbstractMvcController implements Serializab
      */
     @ApiOperation("Palauttaa Excel-tiedoston hakutuloksista aiemman prepare.excel.do-operaatiokutsun palauttaman" +
             " tunnisteen perusteella.")
-    @ApiResponse(code=404, message = "Hakua ei löytynyt downlaodId:llä.")
+    @ApiResponse(code=HttpStatus.SC_NOT_FOUND, message = "Hakua ei löytynyt downlaodId:llä.")
     @RequestMapping(value = "excel.do", method  =  RequestMethod.GET)
     public View downloadExcel(@RequestParam("downloadId") String downlaodId,
                    @RequestParam("lang") String lang)

@@ -42,7 +42,7 @@ public class AituTutkintoDto implements Serializable {
     private String varavastuuhenkilo;
     private String sahkoposti_varavastuuhenkilo;
 
-    public final static Predicate<AituTutkintoDto> WITH_VASTUUHENKILO = new Predicate<AituTutkintoDto>() {
+    public static final Predicate<AituTutkintoDto> WITH_VASTUUHENKILO = new Predicate<AituTutkintoDto>() {
         public boolean apply(@NotNull AituTutkintoDto tutkinto) {
             return tutkinto.getVastuuhenkilo() != null && tutkinto.getVastuuhenkilo().trim().length() > 0;
         }

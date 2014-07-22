@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.configuration.JacksonSwaggerSupport;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import com.wordnik.swagger.model.ResponseMessage;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,6 +52,7 @@ public class CustomSwaggerConfig extends SpringSwaggerConfig {
         return objectMapper;
     }
 
+    @SuppressWarnings("unchecked")
     @Bean
     public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
         LinkedHashMap<RequestMethod, List<ResponseMessage>> responses = newLinkedHashMap();

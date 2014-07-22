@@ -57,6 +57,8 @@ import java.util.*;
 @Service
 @Qualifier("actual")
 public class DefaultSearchService extends AbstractService implements SearchService {
+    private static final long serialVersionUID = -3383060564957835908L;
+
     @Autowired
     private OrganisaatioService organisaatioService;
 
@@ -78,7 +80,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             throws TooFewSearchConditionsForOrganisaatiosException,
                     TooFewSearchConditionsForHenkilosException {
         
-        logger.info("Starting search by {}", getLoggedInUserOidOrNull() );
+        logger.info("Starting search by {}", getLoggedInUserOidOrNull());
         
         SearchResultsDto results  =  new SearchResultsDto();
 
@@ -167,12 +169,12 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             List<HenkiloDetailsDto> henkiloDetails = findHenkilos(terms, context, organisaatioOids);
             logRead(henkiloDetails);
 
-            List<HenkiloHakuResultDto> henkiloResults = dtoConverter.convert( henkiloDetails,
+            List<HenkiloHakuResultDto> henkiloResults = dtoConverter.convert(henkiloDetails,
                         new ArrayList<HenkiloHakuResultDto>(), HenkiloHakuResultDto.class, terms.getLocale());
             results.setHenkilos(henkiloResults);
         }
         
-        logger.info("Search end by {}", getLoggedInUserOidOrNull() );
+        logger.info("Search end by {}", getLoggedInUserOidOrNull());
         
         return results;
     }

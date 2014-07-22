@@ -36,6 +36,8 @@ import java.util.List;
 @Component
 public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBuilder
         implements AuthenticationServiceRoute {
+    private static final long HENKILOLIST_TIMEOUT_MILLIS = 10L*60L*1000L;
+
     private static final String SERVICE_CALL_POSTFIX = ".AuthenticationServiceCall";
 
     private static final String ROUTE_KAYTTOOIKESURYHMAS  =  "direct:findKayttoikeusryhmas";
@@ -126,7 +128,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
         .process(authenticationCallInOutDebug)
-        .to(uri(authenticationServiceHenkiloServiceRestUrl, 10L*60L*1000L)) // wait for 10 minutes maximum
+        .to(uri(authenticationServiceHenkiloServiceRestUrl, HENKILOLIST_TIMEOUT_MILLIS)) // wait for 10 minutes maximum
         .process(authenticationCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<List<HenkiloListResultDto>>() {}));

@@ -16,20 +16,20 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
-import com.google.common.base.Function;
-
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.constraints.NotNull;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.google.common.base.Function;
+
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
 
 /**
  * Created by ratamaa on 15.4.2014.
@@ -46,7 +46,7 @@ public class AituOppilaitos {
     private String postitoimipaikka;
     private List<AituSopimusDto> sopimukset = new ArrayList<AituSopimusDto>();
 
-    public final static Function<AituOppilaitos, List<AituSopimusDto>> SOPIMUKSET = new Function<AituOppilaitos, List<AituSopimusDto>>() {
+    public static final Function<AituOppilaitos, List<AituSopimusDto>> SOPIMUKSET = new Function<AituOppilaitos, List<AituSopimusDto>>() {
         public List<AituSopimusDto> apply(@NotNull AituOppilaitos input) {
             return input.getSopimukset();
         }
