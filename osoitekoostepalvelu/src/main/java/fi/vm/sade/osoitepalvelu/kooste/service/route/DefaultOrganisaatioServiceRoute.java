@@ -37,6 +37,8 @@ import java.util.List;
 @Service
 public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuilder
             implements  OrganisaatioServiceRoute {
+    private static final long serialVersionUID = -7145790430698404115L;
+
     private static final String SERVICE_CALL_ORGANSIAATIO_POSTFIX = ".OrgansiaatioServiceCall";
 
     private static final String ORGANSIAATIO_OID_LIST_ENDPOINT  =  "direct:organisaatioOidList";
@@ -60,7 +62,7 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     private String organisaatioServiceRestUrl;
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         buildOrganisaatioOidList();
         buildOrganisaatioHaku();
         buildSingleOrganisaatioTiedot();

@@ -17,9 +17,11 @@
 package fi.vm.sade.osoitepalvelu.kooste.dao.save;
 
 import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -27,7 +29,7 @@ import java.util.List;
  * Date: 12/10/13
  * Time: 1:28 PM
  */
-public interface SavedSearchRepository extends MongoRepository<SavedSearch, Long> {
+public interface SavedSearchRepository extends MongoRepository<SavedSearch, Long>, Serializable {
 
     List<SavedSearch> findByOwnerUsername(String ownerUsername, Sort order);
 

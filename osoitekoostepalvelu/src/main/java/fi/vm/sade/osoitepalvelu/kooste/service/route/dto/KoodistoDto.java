@@ -84,8 +84,7 @@ public class KoodistoDto implements Serializable {
         }
 
         public static KoodistoTyyppi parseTyyppi(String koodistoTyyppi) {
-            KoodistoTyyppi tyyppi  =  uriToTypeMapper.get(koodistoTyyppi);
-            return tyyppi;
+            return uriToTypeMapper.get(koodistoTyyppi);
         }
 
         @Override

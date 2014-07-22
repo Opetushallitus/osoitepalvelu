@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.converter;
 
+import java.io.Serializable;
+
 import fi.ratamaa.dtoconverter.DtoConverter;
 
 /**
@@ -23,5 +25,5 @@ import fi.ratamaa.dtoconverter.DtoConverter;
  * Date: 12/10/13
  * Time: 2:08 PM
  */
-public interface SavedSearchDtoConverter extends DtoConverter {
+public interface SavedSearchDtoConverter extends DtoConverter, Serializable {
 }

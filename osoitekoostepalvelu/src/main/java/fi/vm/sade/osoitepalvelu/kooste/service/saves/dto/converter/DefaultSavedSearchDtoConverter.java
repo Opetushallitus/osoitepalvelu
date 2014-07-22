@@ -27,6 +27,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DefaultSavedSearchDtoConverter extends AbstractDtoConverter implements SavedSearchDtoConverter {
+
+    private static final long serialVersionUID = 6713503958881803346L;
+
     @Override
     protected CodeBuilder createCodeBuilder() {
         // NullPointerException at fi.ratamaa.dtoconverter.codebuilding.ReadableType$Method.getCode(ReadableType.java:384)

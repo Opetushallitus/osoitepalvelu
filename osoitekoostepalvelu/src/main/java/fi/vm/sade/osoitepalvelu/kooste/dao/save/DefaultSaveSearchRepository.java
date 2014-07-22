@@ -38,6 +38,8 @@ import java.util.List;
 @Repository
 public class DefaultSaveSearchRepository extends SimpleMongoRepository<SavedSearch, Long> implements
         SavedSearchRepository {
+    private static final long serialVersionUID = -1074205896498542579L;
+    
     @Autowired
     private SequenceRepository sequenceRepository;
 

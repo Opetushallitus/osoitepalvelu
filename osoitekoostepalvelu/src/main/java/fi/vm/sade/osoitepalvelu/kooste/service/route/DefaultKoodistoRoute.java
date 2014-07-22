@@ -32,6 +32,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Component
 public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implements KoodistoRoute {
+
+    private static final long serialVersionUID = -7002852859580790344L;
     private static final String REITTI_HAE_KOODISTON_KOODIT  =  "direct:haeKoodistonKoodit";
     private static final String REITTI_HAE_KOODISTO_VERSION_KOODIT  =  "direct:haeKoodistoVersionKoodit";
     private static final String REITTI_HAE_KOODISTON_VERSIOT  =  "direct:haeKoodistonVersiot";
@@ -46,7 +48,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     private AtomicLong findCounter  =  new AtomicLong(0L);
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         buildKoodistonKoodit();
         buildKoodiversioKoodis();
         buildKaikkiVersiotiedot();

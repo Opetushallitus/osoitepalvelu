@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.email;
 
+import java.io.Serializable;
+
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
 
@@ -24,7 +26,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
  * Date: 2/26/14
  * Time: 11:23 AM
  */
-public interface EmailService {
+public interface EmailService extends Serializable {
 
     /**
      * @return the email send settings for Viestipalvelu.

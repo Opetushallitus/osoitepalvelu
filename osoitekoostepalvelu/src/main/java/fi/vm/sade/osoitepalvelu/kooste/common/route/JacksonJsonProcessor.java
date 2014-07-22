@@ -16,8 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
+import java.io.IOException;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -48,9 +52,12 @@ public class JacksonJsonProcessor implements Processor {
     /**
      * Metodi, joka lukee Camel -viestin merkkijonona ja konvertoi JSON datan
      * TypeReference tyyppiseksi olioksi.
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonParseException 
      */
     @Override
-    public void process(Exchange exchange) throws Exception {
+    public void process(Exchange exchange) throws JsonParseException, JsonMappingException, IOException {
         ObjectMapper objectMapper  =  mapperProvider.getContext(targetClassType.getClass());
         String jsonData  =  exchange.getIn().getBody(String.class);
         exchange.getOut().setBody(objectMapper.readValue(jsonData, targetClassType));

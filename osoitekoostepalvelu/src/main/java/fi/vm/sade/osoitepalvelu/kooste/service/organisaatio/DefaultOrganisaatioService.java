@@ -44,6 +44,7 @@ import java.util.*;
  */
 @Service
 public class DefaultOrganisaatioService extends AbstractService implements OrganisaatioService {
+    private static final long serialVersionUID = 6255113288596549870L;
 
     @Autowired
     private OrganisaatioServiceRoute organisaatioServiceRoute;

@@ -39,6 +39,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHierarchyDt
 
 @Component
 public class KoodistoDtoConverter extends AbstractDtoConverter {
+    private static final long serialVersionUID = -1736348236311271016L;
 
     @Override
     protected void registerConverters(TypeConversionContainer conversions) {

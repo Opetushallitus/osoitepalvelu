@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
+import java.io.Serializable;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
@@ -28,7 +30,7 @@ import org.apache.poi.ss.usermodel.Workbook;
  * Date: 2/14/14
  * Time: 3:31 PM
  */
-public interface SearchResultTransformerService {
+public interface SearchResultTransformerService extends Serializable {
 
     /**
      * @param results to be transformed

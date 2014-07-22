@@ -16,9 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.config;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.swagger.models.alternates.AlternateTypeRule;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Date;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +29,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
+import com.mangofactory.swagger.models.alternates.AlternateTypeRule;
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 import com.wordnik.swagger.model.ApiInfo;
 
 import fi.vm.sade.osoitepalvelu.kooste.config.swagger.CustomSwaggerConfig;
-import sun.security.util.BigInt;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Date;
 
 /**
  * User: ratamaa

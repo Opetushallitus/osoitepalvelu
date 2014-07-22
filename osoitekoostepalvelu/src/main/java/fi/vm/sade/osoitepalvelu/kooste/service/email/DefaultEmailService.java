@@ -35,6 +35,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class DefaultEmailService extends AbstractService implements EmailService {
 
+    private static final long serialVersionUID = -4706566607303050449L;
+
     @Value("${viestipalvelu.emailsend.endpoint.uri}")
     private String emailSendEmailUrl;
 
@@ -75,7 +77,7 @@ public class DefaultEmailService extends AbstractService implements EmailService
     private String firstNameOf(String nimi) {
         // Jos etunimessä on välilyöntejä, palautetaan sitä ennen oleva osa
         if(nimi != null && nimi.contains(" ")) {
-            return nimi.substring(0, nimi.indexOf(" ")).trim();
+            return nimi.substring(0, nimi.indexOf(' ')).trim();
         }
         return nimi;
     }

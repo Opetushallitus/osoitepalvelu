@@ -31,6 +31,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class DefaultSequenceRepository implements SequenceRepository {
+    private static final long serialVersionUID = -8315391466293877817L;
+
     private static final String SAVED_SEARCH_ID_SEQUENCE_NAME  =  "savedSearch";
 
     @Autowired

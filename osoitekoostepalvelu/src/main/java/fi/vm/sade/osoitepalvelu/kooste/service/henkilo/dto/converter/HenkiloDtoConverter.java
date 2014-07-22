@@ -26,4 +26,5 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class HenkiloDtoConverter extends AbstractDtoConverter {
+    private static final long serialVersionUID = -7117194302177584252L;
 }

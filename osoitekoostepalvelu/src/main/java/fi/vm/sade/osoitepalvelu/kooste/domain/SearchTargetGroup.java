@@ -39,7 +39,7 @@ public class SearchTargetGroup implements Serializable {
         AIPAL_KAYTTAJAT,
         NAYTTOTUTKINNON_JARJESTAJAT;
 
-        private final String[] organisaatioPalveluTyyppiArvo;
+        private String[] organisaatioPalveluTyyppiArvo;
 
         private GroupType() {
             this.organisaatioPalveluTyyppiArvo  =  null;
