@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.route.dto;
 
+import com.google.common.base.Function;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,13 @@ public class HenkiloYhteystietoRyhmaDto implements Serializable {
     private String ryhmaAlkuperaTieto;
     private boolean readOnly;
     private List<HenkiloYhteystietoDto> yhteystiedot = new ArrayList<HenkiloYhteystietoDto>();
+
+    public static final Function<HenkiloYhteystietoRyhmaDto, String> SAHKOPOSTI
+            = new Function<HenkiloYhteystietoRyhmaDto, String>() {
+        public String apply(HenkiloYhteystietoRyhmaDto from) {
+            return from.findArvo(HenkiloYhteystietoDto.YHTESYTIETO_SAHKOPOSTI); // NOSONAR (http://sourceforge.net/p/findbugs/bugs/1139/)
+        }
+    };
 
     public Long getId() {
         return id;

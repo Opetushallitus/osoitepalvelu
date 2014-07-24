@@ -16,17 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+
+import java.util.*;
 
 /**
  * Created by ratamaa on 15.4.2014.
@@ -180,5 +175,22 @@ public final class CollectionHelper {
         return CollectionHelper.collect(items1byKeys,
                 CollectionHelper.intersection(items1byKeys.keySet(), items2byKeys.keySet()),
                 new ArrayList<T>());
+    }
+
+    /**
+     * @param values to find first extracted value from
+     * @param extract the function to extract value (returns null if not found)
+     * @param <T> type to iterate
+     * @param <E> type to extract
+     * @return the first extracted non null value (or absent)
+     */
+    public static <T,E> Optional<E> first(Collection<T> values, Function<T,E> extract) {
+        for (T v : values) {
+            E extracted = extract.apply(v);
+            if (extracted != null) {
+                return Optional.of(extracted);
+            }
+        }
+        return Optional.absent();
     }
 }

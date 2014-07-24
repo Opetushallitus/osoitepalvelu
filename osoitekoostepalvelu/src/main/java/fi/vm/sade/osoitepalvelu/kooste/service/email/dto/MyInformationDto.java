@@ -32,8 +32,8 @@ public class MyInformationDto implements Serializable {
     private String oid;
     private String firstName;
     private String lastName;
-    private String email; // seems to be null in some environemnts
-    private String lang; // seems to be null in some environemnts
+    private String email; // seems to be null in some environments
+    private String lang; // seems to be null in some environments
     private List<String> groups  =  new ArrayList<String>();
     private String roles;
     

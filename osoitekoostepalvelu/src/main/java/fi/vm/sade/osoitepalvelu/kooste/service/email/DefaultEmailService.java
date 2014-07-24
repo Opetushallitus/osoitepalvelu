@@ -16,13 +16,16 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.email;
 
+import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
-
+import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloYhteystietoRyhmaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -59,43 +62,58 @@ public class DefaultEmailService extends AbstractService implements EmailService
         settings.getEmail().setCallingProcess(callingProcess);
         settings.getEmail().setFrom(emailFrom);
 
-        HenkiloDetailsDto myDetails = authenticationServiceRoute.getHenkiloTiedot(myInfo.getOid(),
+        final HenkiloDetailsDto myHenkiloDetails = authenticationServiceRoute.getHenkiloTiedot(myInfo.getOid(),
                 new DefaultCamelRequestContext());
-        log(read("henkilo",myInfo.getOid()));
+        log(read("henkilo", myInfo.getOid()));
         settings.getEmail().setOrganizationOid(
-                myDetails.findFirstAktiivinenOrganisaatioOid().or(defaultOrganisaatioOid));
+                myHenkiloDetails.findFirstAktiivinenOrganisaatioOid().or(defaultOrganisaatioOid));
 
-        settings.getEmail().setReplyTo(myInfo.getEmail());
-        if (settings.getEmail().getReplyTo() == null) {
-            settings.getEmail().setReplyTo(replaceSpecialCharactersAndLowerCase(firstNameOf(myDetails.getKutsumanimi())
-                    + "." + myDetails.getSukunimi() + "@oph.fi"));
-        }
+        settings.getEmail().setReplyTo(
+                CollectionHelper.first(myHenkiloDetails.getTyoOsoitees(), HenkiloYhteystietoRyhmaDto.SAHKOPOSTI)
+                .or(Optional.fromNullable(myInfo.getEmail()))
+                .or(new SahkopostiByKutsumanimiAndSukunimiProvider(myHenkiloDetails)));
 
         return settings;
     }
 
-    private String firstNameOf(String nimi) {
-        // Jos etunimessä on välilyöntejä, palautetaan sitä ennen oleva osa
-        if(nimi != null && nimi.contains(" ")) {
-            return nimi.substring(0, nimi.indexOf(' ')).trim();
-        }
-        return nimi;
-    }
-
     /**
-     * Korvaa ääkköset aalla ja oolla
-     * @param email sähköpostiosoite
-     * @return sama sähköpostiosoite, mutta muuttaa Ää=Aa ja Öö=Oo sekä laittaa kaikki pienillä kirjaimilla
+     * Implementation of OSTJ-64
      */
-    private String replaceSpecialCharactersAndLowerCase(String email) {
-        if(email == null) {
-            return null;
+    protected class SahkopostiByKutsumanimiAndSukunimiProvider implements Supplier<String> {
+        private HenkiloDetailsDto details;
+
+        protected SahkopostiByKutsumanimiAndSukunimiProvider(HenkiloDetailsDto details) {
+            this.details = details;
         }
-        // Kaikki pieniksi kirjaimiksi ja ääkköset aakkosiksi
-        email = email.toLowerCase();
-        email = email.replaceAll("ä", "a");
-        email = email.replaceAll("ö", "o");
-        
-        return email;
+
+        @Override
+        public String get() {
+            return replaceSpecialCharactersAndLowerCase(
+                    firstNameOf(Optional.fromNullable(details.getKutsumanimi())
+                            .or(details.getEtunimet()))
+                            + "." + details.getSukunimi() + "@oph.fi");
+        }
+
+        private String firstNameOf(String nimi) {
+            // Jos etunimessä on välilyöntejä, palautetaan sitä ennen oleva osa
+            if(nimi != null && nimi.contains(" ")) {
+                return nimi.substring(0, nimi.indexOf(' ')).trim();
+            }
+            return nimi;
+        }
+
+        /**
+         * Korvaa ääkköset aalla ja oolla
+         * @param email sähköpostiosoite
+         * @return sama sähköpostiosoite, mutta muuttaa Ää=Aa ja Öö=Oo sekä laittaa kaikki pienillä kirjaimilla
+         */
+        private String replaceSpecialCharactersAndLowerCase(String email) {
+            // Kaikki pieniksi kirjaimiksi ja ääkköset aakkosiksi
+            email = email.toLowerCase();
+            email = email.replaceAll("ä", "a");
+            email = email.replaceAll("ö", "o");
+
+            return email;
+        }
     }
 }
