@@ -18,16 +18,7 @@
     <build>
         <finalName>${project.artifactId}</finalName>
     </build>
-    
-    <repositories>
-        <repository>
-            <id>ryh.dy.fi</id>
-            <name>Ryh.dy.fi</name>
-            <url>http://ryh.dy.fi/mvn2/public/</url>
-            <releases><enabled>true</enabled> </releases>
-        </repository>
-    </repositories>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.mangofactory</groupId>
