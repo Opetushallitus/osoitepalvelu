@@ -16,10 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloKayttajatiedotDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloKieliDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloYhteystietoRyhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHenkiloDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloKayttajatiedotDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloKieliDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloYhteystietoRyhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

@@ -17,9 +17,9 @@
 package fi.vm.sade.osoitepalvelu.kooste.webapp;
 
 import fi.vm.sade.generic.healthcheck.HealthChecker;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.KoodistoRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoVersioDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.KoodistoRoute;
 
 import org.apache.camel.util.StopWatch;
 import org.springframework.beans.factory.annotation.Autowired;

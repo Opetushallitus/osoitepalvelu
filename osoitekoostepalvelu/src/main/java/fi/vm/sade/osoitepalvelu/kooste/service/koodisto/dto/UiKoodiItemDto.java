@@ -24,9 +24,9 @@ import com.google.common.base.Function;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.ratamaa.dtoconverter.annotation.DtoPath;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioviiteDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioviiteDto;
 
 public class UiKoodiItemDto implements Serializable {
     private static final long serialVersionUID = 303815492103134497L;

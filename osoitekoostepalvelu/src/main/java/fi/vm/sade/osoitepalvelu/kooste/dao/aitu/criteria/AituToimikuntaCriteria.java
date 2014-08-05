@@ -19,7 +19,7 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria;
 import com.google.common.base.Predicate;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.AndPredicateAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituJasenyysDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituJasenyysDto;
 
 import java.io.Serializable;
 import java.util.ArrayList;

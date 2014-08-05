@@ -29,13 +29,13 @@ import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiArvoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.LocalizedContainerDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHierarchyDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituToimikuntaResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiArvoDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.LocalizedContainerDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHierarchyDto;
 
 @Component
 public class KoodistoDtoConverter extends AbstractDtoConverter {

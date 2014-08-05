@@ -28,8 +28,8 @@ import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.aitu.dto.converter.AituDtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.AituRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
+import fi.vm.sade.osoitepalvelu.kooste.route.AituRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,16 +43,16 @@ import java.util.List;
 public class DefaultAituService extends AbstractService implements AituService {
     private static final long serialVersionUID = 7522489326846677935L;
 
-    @Autowired
+    @Autowired(required = false)
     private AituOppilaitosRepository aituOppilaitosRepository;
 
-    @Autowired
+    @Autowired(required = false)
     private AituToimikuntaRepository aituToimikuntaRepository;
 
     @Autowired
     private AituDtoConverter dtoConverter;
 
-    @Autowired
+    @Autowired(required = false)
     private AituRoute aituRoute;
 
     @Override

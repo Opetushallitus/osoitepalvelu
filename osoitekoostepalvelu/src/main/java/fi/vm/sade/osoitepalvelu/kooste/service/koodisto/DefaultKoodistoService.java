@@ -48,17 +48,17 @@ import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.aitu.AituService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter.KoodistoDtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.KoodistoRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoTila;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHierarchyResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.helpers.UiKoodiItemByKoodiUriPredicate;
+import fi.vm.sade.osoitepalvelu.kooste.route.AuthenticationServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.KoodistoRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituToimikuntaResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoTila;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoVersioDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHierarchyResultsDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.UiKoodiItemByKoodiUriPredicate;
 
 /**
  * Service, jonka kautta voidaan hakea koodiston eri arvojoukkoja.
@@ -69,13 +69,13 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     private static final String ORGANISAATIO_TYYPPI_KOULUTUSTOIMIJA = "Koulutustoimija";
 
-    @Autowired
+    @Autowired(required = false)
     private KoodistoRoute koodistoRoute;
 
-    @Autowired
+    @Autowired(required = false)
     private AuthenticationServiceRoute authenticationServiceRoute;
 
-    @Autowired
+    @Autowired(required = false)
     private OrganisaatioServiceRoute organisaatioServiceRoute;
 
     @Autowired

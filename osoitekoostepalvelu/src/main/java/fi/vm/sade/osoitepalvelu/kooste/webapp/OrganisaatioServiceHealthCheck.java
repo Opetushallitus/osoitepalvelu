@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 
 import fi.vm.sade.generic.healthcheck.HealthChecker;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.OrganisaatioServiceRoute;
 
 /**
  * User: ratamaa

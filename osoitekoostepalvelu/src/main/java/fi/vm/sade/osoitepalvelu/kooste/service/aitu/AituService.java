@@ -22,9 +22,9 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituOppilaitosCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOppilaitosResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOsoitepalveluResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituToimikuntaResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituOppilaitosResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituOsoitepalveluResultsDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituToimikuntaResultDto;
 
 /**
  * Created by ratamaa on 15.4.2014.

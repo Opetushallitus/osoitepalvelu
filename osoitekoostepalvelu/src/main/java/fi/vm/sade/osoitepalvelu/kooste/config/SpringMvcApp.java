@@ -63,7 +63,7 @@ public class SpringMvcApp {
     public SwaggerSpringMvcPlugin customImplementation(){
         RelativeSwaggerPathProvider path = new RelativeSwaggerPathProvider();
         TypeResolver resolver = new TypeResolver();
-        path.setApiResourcePrefix("api");
+        path.setApiResourcePrefix("osoitekoostepalvelu/api");
         return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
                 .apiInfo(apiInfo())
                 .apiVersion("1.0")

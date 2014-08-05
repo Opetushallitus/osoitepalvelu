@@ -45,7 +45,7 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     @Autowired
     private SavedSearchDtoConverter dtoConverter;
 
-    @Autowired
+    @Autowired(required = false)
     private SavedSearchRepository savedSearchRepository;
 
     @Override

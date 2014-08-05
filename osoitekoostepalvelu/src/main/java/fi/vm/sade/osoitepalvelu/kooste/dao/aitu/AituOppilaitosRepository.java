@@ -18,7 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.aitu;
 
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituOppilaitosCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituSopimusDto;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

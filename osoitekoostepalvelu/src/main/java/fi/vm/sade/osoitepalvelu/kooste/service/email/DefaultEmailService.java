@@ -23,9 +23,9 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloYhteystietoRyhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.AuthenticationServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloYhteystietoRyhmaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -52,7 +52,7 @@ public class DefaultEmailService extends AbstractService implements EmailService
     @Value("${viestipalvelu.emailsend.email.organisaatioOid:''}")
     private String defaultOrganisaatioOid;
 
-    @Autowired
+    @Autowired(required = false)
     private AuthenticationServiceRoute authenticationServiceRoute;
 
     @Override

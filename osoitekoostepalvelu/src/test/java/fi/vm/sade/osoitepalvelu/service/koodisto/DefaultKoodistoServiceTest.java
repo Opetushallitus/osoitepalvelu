@@ -17,14 +17,14 @@
 package fi.vm.sade.osoitepalvelu.service.koodisto;
 
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
-import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.service.mock.AuhenticationServiceRouteMock;
 import fi.vm.sade.osoitepalvelu.service.mock.KoodistoServiceRouteMock;
 import fi.vm.sade.osoitepalvelu.service.mock.OrganisaatioServiceRouteMock;
+import fi.vm.sade.osoitepalvelu.util.AssertUtil;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +39,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
+@ContextConfiguration(classes = {SpringTestAppConfig.class})
 public class DefaultKoodistoServiceTest {
     private static final Locale LOCALE_FI  =  new Locale("fi", "FI");
     private static final String FI = "fi";
@@ -208,15 +208,10 @@ public class DefaultKoodistoServiceTest {
         assertTrue(options.size() > 0);
     }
 
-    public static <T> void assertListNotEmpty(List<T> arvot, String arvojoukonNimi) {
-        assertNotNull(arvot);
-        assertTrue("Virhe: Lista '"  +  arvojoukonNimi  +  "' ei saa olla tyhjä!", arvot.size() > 0);
-    }
-
-    public static void assertListNonEmptyAndItemsOfType(List<UiKoodiItemDto> optiot, KoodistoTyyppi tyyppi) {
-        assertListNotEmpty(optiot, tyyppi.getUri());
+    private static void assertListNonEmptyAndItemsOfType(List<UiKoodiItemDto> optiot, KoodistoTyyppi tyyppi) {
+        AssertUtil.assertListNotEmpty(optiot, tyyppi.getUri());
         for (UiKoodiItemDto optio : optiot) {
-            assertTrue("Virheellinen koodistotyyppi "  +  optio.getKoodistonTyyppi().name()  +  ", vaadittu arvo " 
+            assertTrue("Virheellinen koodistotyyppi "  +  optio.getKoodistonTyyppi().name()  +  ", vaadittu arvo "
                     + tyyppi.name(), optio.getKoodistonTyyppi().equals(tyyppi));
         }
     }

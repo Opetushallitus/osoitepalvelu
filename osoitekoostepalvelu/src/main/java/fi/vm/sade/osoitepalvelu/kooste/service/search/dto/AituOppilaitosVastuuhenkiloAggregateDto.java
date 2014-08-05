@@ -16,8 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituOppilaitosResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituTutkintoDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituOppilaitosResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituTutkintoDto;
 
 import java.io.Serializable;
 

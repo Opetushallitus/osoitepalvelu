@@ -28,8 +28,8 @@ import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.dto.converter.OrganisaatioDtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.*;
+import fi.vm.sade.osoitepalvelu.kooste.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +46,7 @@ import java.util.*;
 public class DefaultOrganisaatioService extends AbstractService implements OrganisaatioService {
     private static final long serialVersionUID = 6255113288596549870L;
 
-    @Autowired
+    @Autowired(required = false)
     private OrganisaatioServiceRoute organisaatioServiceRoute;
 
     @Autowired(required = false)

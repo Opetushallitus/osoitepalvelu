@@ -23,10 +23,10 @@ import fi.vm.sade.osoitepalvelu.kooste.dao.cache.HenkiloCacheRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.HenkiloDetails;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.henkilo.dto.converter.HenkiloDtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloCriteriaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloListResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.AuthenticationServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloListResultDto;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +46,7 @@ public class DefaultHenkiloService extends AbstractService implements HenkiloSer
     @Autowired(required = false)
     private HenkiloCacheRepository henkiloCacheRepository;
 
-    @Autowired
+    @Autowired(required = false)
     private AuthenticationServiceRoute authenticationServiceRoute;
 
     @Autowired

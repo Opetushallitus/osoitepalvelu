@@ -16,7 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituJasenyysDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituJasenyysDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;

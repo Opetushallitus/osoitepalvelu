@@ -17,7 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.koodisto;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto.KoodistoTyyppi;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto.KoodistoTyyppi;
 
 import java.io.Serializable;
 import java.util.List;

@@ -22,8 +22,8 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasDisabledCasTicketProv
 import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.OrganisaatioServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
 import org.apache.camel.RuntimeCamelException;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;

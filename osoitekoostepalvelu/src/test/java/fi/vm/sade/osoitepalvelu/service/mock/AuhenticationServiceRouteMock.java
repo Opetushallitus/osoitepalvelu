@@ -17,11 +17,11 @@
 package fi.vm.sade.osoitepalvelu.service.mock;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloCriteriaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloListResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.AuthenticationServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloListResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KayttooikesuryhmaDto;
 
 import java.util.ArrayList;
 import java.util.List;

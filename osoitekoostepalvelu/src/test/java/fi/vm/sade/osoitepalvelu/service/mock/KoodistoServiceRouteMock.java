@@ -18,10 +18,10 @@ package fi.vm.sade.osoitepalvelu.service.mock;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodiDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KoodistoVersioDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.KoodistoRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoVersioDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.KoodistoRoute;
 
 import java.util.*;
 

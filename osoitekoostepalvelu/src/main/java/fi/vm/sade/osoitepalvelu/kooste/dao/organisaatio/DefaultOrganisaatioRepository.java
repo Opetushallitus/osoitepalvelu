@@ -21,7 +21,7 @@ import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;

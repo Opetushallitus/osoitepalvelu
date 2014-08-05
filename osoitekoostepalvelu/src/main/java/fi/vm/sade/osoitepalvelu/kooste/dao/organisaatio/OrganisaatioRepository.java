@@ -25,7 +25,7 @@ import org.joda.time.DateTime;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioYhteystietoCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
 
 /**
  * User: ratamaa

@@ -24,8 +24,7 @@ package fi.vm.sade.osoitepalvelu.service.search;
 
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.OrganisaatioHenkiloDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.DefaultSearchResultTransformerService;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
@@ -44,7 +43,7 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes  =  { SpringTestAppConfig.class, OsoitepalveluCamelConfig.class })
+@ContextConfiguration(classes  =  {SpringTestAppConfig.class})
 public class SearchResultTransformerServiceTest {
 
     @Autowired

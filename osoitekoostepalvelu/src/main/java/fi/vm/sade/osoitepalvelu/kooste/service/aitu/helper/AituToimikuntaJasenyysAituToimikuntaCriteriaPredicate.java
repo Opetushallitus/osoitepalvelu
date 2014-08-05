@@ -18,7 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.aitu.helper;
 
 import com.google.common.base.Predicate;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituJasenyysDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituJasenyysDto;
 
 /**
  * User: ratamaa

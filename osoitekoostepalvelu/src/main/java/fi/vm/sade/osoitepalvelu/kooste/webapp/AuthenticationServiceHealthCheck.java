@@ -18,8 +18,8 @@ package fi.vm.sade.osoitepalvelu.kooste.webapp;
 
 import fi.vm.sade.generic.healthcheck.HealthChecker;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.AuthenticationServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.KayttooikesuryhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.AuthenticationServiceRoute;
 
 import org.apache.camel.util.StopWatch;
 import org.springframework.beans.factory.annotation.Autowired;

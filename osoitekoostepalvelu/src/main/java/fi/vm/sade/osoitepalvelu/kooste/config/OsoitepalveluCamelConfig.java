@@ -24,6 +24,7 @@ import org.apache.camel.spring.SpringCamelContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -33,6 +34,9 @@ import javax.annotation.PostConstruct;
  * Apache Camel ohjelmistokehyksen alustava luokka. Ajetaan, kun palvelu käynnistyy.
  */
 @Configuration
+@ComponentScan(basePackages  =  {
+        "fi.vm.sade.osoitepalvelu.kooste.route"
+})
 public class OsoitepalveluCamelConfig {
     @Value("${ignore.self.signed.certificates:false}")
     private boolean ignoreSelfSignedCertificates=false;

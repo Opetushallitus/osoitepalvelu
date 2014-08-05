@@ -21,7 +21,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituOppilaitosCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituOppilaitos;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituSopimusDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;

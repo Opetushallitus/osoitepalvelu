@@ -27,7 +27,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.common.base.Function;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.AituSopimusDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituSopimusDto;
 
 /**
  * Created by ratamaa on 15.4.2014.

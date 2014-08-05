@@ -17,9 +17,9 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.henkilo;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloCriteriaDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloDetailsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.route.dto.HenkiloListResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloListResultDto;
 
 import java.io.Serializable;
 import java.util.List;
