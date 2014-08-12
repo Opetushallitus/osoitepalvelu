@@ -33,7 +33,7 @@ import java.util.List;
  * Date: 3/12/14
  * Time: 4:42 PM
  */
-@Component
+//@Component // may require user to be logged in -> floods logs if healthcek polled without authentication
 @HealthCheckerName("authentication-service-online")
 public class AuthenticationServiceHealthCheck implements HealthChecker {
     @Autowired
