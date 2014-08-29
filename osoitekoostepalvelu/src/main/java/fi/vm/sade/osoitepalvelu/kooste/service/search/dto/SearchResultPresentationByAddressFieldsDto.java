@@ -36,8 +36,8 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private static MultiValueMap<String, String> fieldMappings;
     static {
         fieldMappings  =  new LinkedMultiValueMap<String, String>();
-        fieldMappings.add("ORGANIAATIO_NIMI", "organisaationNimiIncluded");
-        fieldMappings.add("ORGANIAATIO_TUNNISTE", "organisaatiotunnisteIncluded");
+        fieldMappings.add("ORGANISAATIO_NIMI", "organisaationNimiIncluded");
+        fieldMappings.add("ORGANISAATIO_TUNNISTE", "organisaatiotunnisteIncluded");
         fieldMappings.add("YHTEYSHENKILO", "yhteyshenkiloIncluded");
         fieldMappings.add("POSTIOSOITE", "positosoiteIncluded");
         fieldMappings.add("KAYNTIOSOITE", "kayntiosoiteIncluded");
