@@ -128,7 +128,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         column_organisaatioTunniste: 'Oppilaitoskoodi',
         column_yhteyshenkilonNimi: 'Yhteyshenkilö',
         column_henkiloEmail: 'Sähköpostiosoite (yhteyshenkilön)',
-        column_emailOsoite: 'Sähköpostiosoite (organiaation)',
+        column_emailOsoite: 'Sähköpostiosoite (organisaation)',
         column_postiosoite: 'Postiosoite',
         column_postiosoitePostinumero: 'Postinumero',
         column_postiosoitePostitoimipaikka: 'Postitoimipaikka',
