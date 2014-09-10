@@ -121,7 +121,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         show_more_terms: 'enemmän rajausehtoja',
         hide_extra_terms: 'vähemmän rajausehtoja',
 
-        back_to_search_terms: 'hakuehdot',
+        back_to_search_terms: 'Hakuehdot',
 
         total_results: 'osoitetta',
         column_nimi: 'Organisaatio',
@@ -143,7 +143,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         column_kriisitiedotuksenEmail: 'Kriisitiedotuksen sähköpostiosoite',
         column_kotikunta: 'Organisaation sijaintikunta',
 
-        no_results: 'Ei lötynyt osoitteita.',
+        no_results: 'Osoitteita ei löytynyt. Tarkista hakuehdot.',
         remove_selected: 'Poista valitut',
         save_excel: 'Tallenna excel',
         send_message: 'Lähetä viesti',

@@ -99,6 +99,20 @@ input[type="checkbox"].ngSelectionCheckbox {
     line-height: 20px;
 }
 
+/* OVT-8450 korjaukset: */
+.alert-placeholder .alert-heading {
+    display: none;
+}
+.alert-placeholder.in .alert-heading {
+    display: inline;
+}
+.alert-placeholder .alert-message {
+    display: none;
+}
+.alert-placeholder.in .alert-message {
+    display: inline;
+}
+
 /* add warning colors to warn class */
 .alert-warn {
     background-color: #fcf8e3;
