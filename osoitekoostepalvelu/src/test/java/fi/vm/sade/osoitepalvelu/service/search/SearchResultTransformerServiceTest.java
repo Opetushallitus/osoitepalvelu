@@ -86,6 +86,7 @@ public class SearchResultTransformerServiceTest {
         yhteyshenkilo2.setEmail("email2");
         organisaatio1.getYhteyshenkilot().add(yhteyshenkilo1);
         organisaatio1.getYhteyshenkilot().add(yhteyshenkilo2);
+        organisaatio1.getNimi().put("fi", "saame"); // saame < suomi, päivittety järjestys
 
         List<OrganisaatioResultDto> list  =  Arrays.asList(organisaatio1, organisaatio2);
         SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(organisaatioResults(list),
@@ -311,35 +312,38 @@ public class SearchResultTransformerServiceTest {
                 new AllColumnsSearchResultPresentation(new Locale("sv", "SE")).withoutYhteyshenkiloEmail(),
                 new DefaultCamelRequestContext(), null);
         assertEquals(7, results.getRows().size());
-        assertEquals("henkilo1Oid", results.getRows().get(0).getHenkiloOid());
-        assertEquals("Milla Makkonen", results.getRows().get(0).getYhteystietoNimi());
-        assertNull(results.getRows().get(0).getPostiosoite());
-        assertNull(results.getRows().get(0).getKayntiosoite());
-        assertNull(results.getRows().get(0).getOrganisaatioOid());
-        assertNull(results.getRows().get(0).getNimike());
 
-        assertEquals("henkilo2Oid", results.getRows().get(1).getHenkiloOid());
-        assertEquals("Opettaja", results.getRows().get(1).getNimike());
-        assertNotNull(results.getRows().get(1).getPostiosoite());
-        assertEquals("Mikonkuja 6", results.getRows().get(1).getPostiosoite().getOsoite());
-        assertEquals("posti", results.getRows().get(1).getPostiosoite().getTyyppi());
-        assertEquals("fi", results.getRows().get(1).getPostiosoite().getKieli());
-        assertEquals("30100", results.getRows().get(1).getPostiosoite().getPostinumero());
-        assertEquals("TAMPERE", results.getRows().get(1).getPostiosoite().getPostitoimipaikka());
-        assertEquals("matti.mikkonen@example.com", results.getRows().get(1).getHenkiloEmail());
-        assertEquals("Opettaja", results.getRows().get(1).getNimike());
-        assertEquals("organisaatioHenkilo1Ooid", results.getRows().get(1).getOrganisaatioOid());
+        // First those withtout organization in alpabetic order:
+        assertEquals("henkilo3Oid", results.getRows().get(0).getHenkiloOid());
+        assertEquals("heikki.heikkinen@example.com", results.getRows().get(0).getHenkiloEmail());
+        assertEquals("henkilo3Oid", results.getRows().get(1).getHenkiloOid());
+        assertEquals("heikki.heikkinen@muonionkylakoulu.com", results.getRows().get(1).getHenkiloEmail());
 
-        assertEquals("henkilo2Oid", results.getRows().get(2).getHenkiloOid());
-        assertEquals("matti.mikkonen@muonionkylakoulu.com", results.getRows().get(2).getHenkiloEmail());
-        assertEquals("Muoniontie 7", results.getRows().get(2).getPostiosoite().getOsoite());
-        assertEquals("Rehtori", results.getRows().get(2).getNimike());
-        assertEquals("organisaatioHenkilo2Ooid", results.getRows().get(2).getOrganisaatioOid());
+        assertEquals("henkilo1Oid", results.getRows().get(2).getHenkiloOid());
+        assertEquals("Milla Makkonen", results.getRows().get(2).getYhteystietoNimi());
+        assertNull(results.getRows().get(2).getPostiosoite());
+        assertNull(results.getRows().get(2).getKayntiosoite());
+        assertNull(results.getRows().get(2).getOrganisaatioOid());
+        assertNull(results.getRows().get(2).getNimike());
 
-        assertEquals("henkilo3Oid", results.getRows().get(3).getHenkiloOid());
-        assertEquals("heikki.heikkinen@example.com", results.getRows().get(3).getHenkiloEmail());
-        assertEquals("henkilo3Oid", results.getRows().get(4).getHenkiloOid());
-        assertEquals("heikki.heikkinen@muonionkylakoulu.com", results.getRows().get(4).getHenkiloEmail());
+        // Then by organisaatio OID (since organisaatio does not have name to compare against):
+        assertEquals("henkilo2Oid", results.getRows().get(3).getHenkiloOid());
+        assertEquals("Opettaja", results.getRows().get(3).getNimike());
+        assertNotNull(results.getRows().get(3).getPostiosoite());
+        assertEquals("Mikonkuja 6", results.getRows().get(3).getPostiosoite().getOsoite());
+        assertEquals("posti", results.getRows().get(3).getPostiosoite().getTyyppi());
+        assertEquals("fi", results.getRows().get(3).getPostiosoite().getKieli());
+        assertEquals("30100", results.getRows().get(3).getPostiosoite().getPostinumero());
+        assertEquals("TAMPERE", results.getRows().get(3).getPostiosoite().getPostitoimipaikka());
+        assertEquals("matti.mikkonen@example.com", results.getRows().get(3).getHenkiloEmail());
+        assertEquals("Opettaja", results.getRows().get(3).getNimike());
+        assertEquals("organisaatioHenkilo1Ooid", results.getRows().get(3).getOrganisaatioOid());
+
+        assertEquals("henkilo2Oid", results.getRows().get(4).getHenkiloOid());
+        assertEquals("matti.mikkonen@muonionkylakoulu.com", results.getRows().get(4).getHenkiloEmail());
+        assertEquals("Muoniontie 7", results.getRows().get(4).getPostiosoite().getOsoite());
+        assertEquals("Rehtori", results.getRows().get(4).getNimike());
+        assertEquals("organisaatioHenkilo2Ooid", results.getRows().get(4).getOrganisaatioOid());
 
         assertEquals("henkilo4Oid", results.getRows().get(5).getHenkiloOid());
         assertEquals("Opettaja", results.getRows().get(5).getNimike());
