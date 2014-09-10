@@ -41,6 +41,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResult
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -92,13 +93,17 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
         resolveMissingOrganisaatioRelatedDetails(transformedResults, presentation, context);
 
-        List<SearchResultRowDto> rows = new ArrayList<SearchResultRowDto>(Collections2
-                .filter(transformedResults, new Predicate<SearchResultRowDto>() {
-            public boolean apply(SearchResultRowDto result) {
-                return presentation.isResultRowIncluded(result);
-            }
-        }));
+        // OVT-8440: first remove duplicates, then delete rows:
+        List<SearchResultRowDto> rows = removeDuplicates(searchType, transformedResults);
+        rows = removeDeletedRows(presentation, transformedResults);
 
+        // Mix the organisation and henkilo based rows by organisaatio's oid
+        rows = applyOrdering(rows);
+
+        return new SearchResultsPresentationDto(rows, presentation);
+    }
+
+    protected List<SearchResultRowDto> removeDuplicates(SearchType searchType, List<SearchResultRowDto> rows) {
         if(searchType == SearchType.EMAIL) {
             // Kyseessä email-tyyppinen haku, joten nyt suodatetaan kaikki dublikaatti-emailit pois.
             Set<String> emails = new TreeSet<String>();
@@ -120,9 +125,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
                         dto.getViranomaistiedotuksenEmail())) {
                     emails.add(dto.getViranomaistiedotuksenEmail());
                     filtteredTransformedResults.add(dto);
-                }                
+                }
             }
-            
+
             // Asetetaan tulosjoukoksi filtteröity listaus.
             rows = filtteredTransformedResults;
         } else {
@@ -130,13 +135,16 @@ public class DefaultSearchResultTransformerService extends AbstractService
             // henkilöistä, joita ei voida ):
             rows = removeDuplicatesByUniqueState(rows);
         }
-        
-        if (!organisaatioResults.isEmpty() && !henkiloResults.isEmpty()) {
-            // Mix the organisation and henkilo based rows by organisaatio's oid
-            rows = applyOrdering(rows);
-        }
+        return rows;
+    }
 
-        return new SearchResultsPresentationDto(rows, presentation);
+    protected List<SearchResultRowDto> removeDeletedRows(final SearchResultPresentation presentation,
+                                                         List<SearchResultRowDto> rows) {
+        return new ArrayList<SearchResultRowDto>(Collections2.filter(rows, new Predicate<SearchResultRowDto>() {
+            public boolean apply(SearchResultRowDto result) {
+                return presentation.isResultRowIncluded(result);
+            }
+        }));
     }
 
     protected List<SearchResultRowDto> removeDuplicatesByUniqueState(List<SearchResultRowDto> rows) {
@@ -149,16 +157,30 @@ public class DefaultSearchResultTransformerService extends AbstractService
     }
 
     protected List<SearchResultRowDto> applyOrdering(List<SearchResultRowDto> transformedResults) {
+        //
         return Ordering
                 .natural().nullsLast()
                 .onResultOf(new Function<SearchResultRowDto, String>() {
                     @Override
                     public String apply(SearchResultRowDto row) {
-                        return row.getOrganisaatioOid();
+                        return row.getNimi();
                     }
                 })
-        .compound(Ordering
-                .natural().nullsFirst()
+        .compound(Ordering.natural().nullsFirst()
+                .onResultOf(new Function<SearchResultRowDto, String>() {
+                    @Override
+                    public String apply(SearchResultRowDto row) {
+                        return row.getOrganisaatioOid();
+                    }
+                }))
+        .compound(Ordering.natural().nullsFirst()
+                .onResultOf(new Function<SearchResultRowDto, String>() {
+                    @Override
+                    public String apply(SearchResultRowDto row) {
+                        return row.getYhteystietoNimi();
+                    }
+                }))
+        .compound(Ordering.natural().nullsFirst()
                 .onResultOf(new Function<SearchResultRowDto, String>() {
                     @Override
                     public String apply(SearchResultRowDto row) {
@@ -356,7 +378,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                                 .findPostinumeroByKoodiUri(locale, from.getKayntiosoite().getPostinumeroUri());
                         if (postinumeroKoodi != null) {
                             to.getKayntiosoite().setPostinumero(postinumeroKoodi.getKoodiId());
-                            to.getKayntiosoite().setPostinumero(postinumeroKoodi.getNimi());
+                            to.getKayntiosoite().setPostitoimipaikka(postinumeroKoodi.getNimi());
                         }
                     }
                 }
@@ -489,12 +511,17 @@ public class DefaultSearchResultTransformerService extends AbstractService
         boolean newDetailsFetched = false;
         try {
             Map<String,String> oidsByOppilaitosKoodi = new HashMap<String, String>();
-            for (SearchResultRowDto result : results) {
+            results: for (SearchResultRowDto result : results) {
                 String oid = result.getOrganisaatioOid();
                 if (oid == null && result.getOppilaitosKoodi() != null) {
                     oid = oidsByOppilaitosKoodi.get(result.getOppilaitosKoodi());
                     if (oid == null) {
-                        oid = organisaatioService.findOidByOppilaitoskoodi(result.getOppilaitosKoodi());
+                        try {
+                            oid = organisaatioService.findOidByOppilaitoskoodi(result.getOppilaitosKoodi());
+                        } catch(Exception e) {
+                            result.setNimi(getMessage("organisaatio_oid_not_found_by_oppilaitoskoodi", locale, result.getOppilaitosKoodi()));
+                            continue results;
+                        }
                         oidsByOppilaitosKoodi.put(result.getOppilaitosKoodi(), oid);
                     }
                 }
@@ -505,7 +532,12 @@ public class DefaultSearchResultTransformerService extends AbstractService
                             details = cache.get(oid);
                         } else {
                             long rc = context.getRequestCount();
-                            details = organisaatioService.getdOrganisaatioByOid(oid, context);
+                            try {
+                                details = organisaatioService.getdOrganisaatioByOid(oid, context);
+                            } catch(Exception e) {
+                                result.setNimi(getMessage("orgnisaatio_not_found_by_oid", locale, oid));
+                                continue results;
+                            }
                             if (context.getRequestCount() != rc) {
                                 newDetailsFetched = true;
                             }
@@ -676,12 +708,20 @@ public class DefaultSearchResultTransformerService extends AbstractService
         return cell;
     }
 
+    protected String getMessage(String key, Locale locale, Object... params) {
+        try {
+            return messageSource.getMessage(key, params, locale);
+        } catch (NoSuchMessageException e) {
+            return messageSource.getMessage(key, params, DEFAULT_LOCALE);
+        }
+    }
+
     protected Cell header(Cell cell, SearchResultPresentation presentation, String localizationKey) {
         Locale locale = presentation.getLocale();
         if (locale == null) {
             locale = DEFAULT_LOCALE;
         }
-        String value = messageSource.getMessage(localizationKey, new Object[0], locale);
+        String value = getMessage(localizationKey, locale);
         CellStyle style = cell.getSheet().getWorkbook().createCellStyle();
         Font font = cell.getSheet().getWorkbook().createFont();
         font.setBoldweight(Font.BOLDWEIGHT_BOLD);

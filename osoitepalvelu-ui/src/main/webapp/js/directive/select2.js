@@ -76,7 +76,7 @@ function (uiSelect2Config, $timeout, LocalisationService) {
               if( $field.attr("data-disable-selectall") === undefined ) {
                   $dropdown.prepend(selectAllElContainer);
               }
-              var reservedSpacePerComp = (width - 25) / 2;
+              var reservedSpacePerComp = (width - 35) / 2;
               $selectNoneElContainer.css("float", "right").css("padding", "5px 8px 5px 0px")
                   .css("max-width", reservedSpacePerComp+"px")
                   .css("max-height", "15px").css("overflow", "hidden");

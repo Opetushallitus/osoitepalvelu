@@ -52,8 +52,8 @@ public abstract class AbstractMvcController {
 
     protected Logger logger  =  LoggerFactory.getLogger(getClass());
 
-    @Value("${produce.error.message.stack.traces:true}")
-    protected boolean produceErrorStackTraces = true;
+    @Value("${produce.error.message.stack.traces:false}")
+    protected boolean produceErrorStackTraces = false;
 
     protected Locale parseLocale(String locale) {
         return LocaleHelper.parseLocale(locale, DEFAULT_UI_LOCALE);

@@ -3,3 +3,10 @@
 /.idea
 /osoitekoostepalvelu/.checkstyle
 /osoitepalvelu-ui/.checkstyle
+osoitekoostepalvelu.log
+osoitekoostepalvelu.log.*
+osoitepalvelu.iml
+osoitepalvelu.ipr
+osoitepalvelu.iws
+phantomjsdriver.log
+phantomjsdriver.log.*
