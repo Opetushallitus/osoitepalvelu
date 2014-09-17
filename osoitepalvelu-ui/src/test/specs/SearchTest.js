@@ -111,7 +111,8 @@ describe("Search Test", function() {
           "nayttotutkinnonJarjestajaOrganisaatiosIncluded":true,
           "nayttotutkinnonJarjestajaVastuuhenkilosIncluded":false,
           "locale":"sv"
-       }
+       },
+       "sourceRegisters": ["opintopolku"]
     };
 
     beforeEach(module("OsoiteKoostepalvelu"));

@@ -2,6 +2,7 @@ package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
 import java.io.Serializable;
 
+import fi.vm.sade.osoitepalvelu.kooste.mvc.dto.EmailSettingsParametersDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -34,11 +35,12 @@ public class EmailController extends AbstractMvcController implements Serializab
     @Autowired
     private EmailService emailService;
 
-    @ApiOperation("Palauttaa sähköpostilähetykseen liittyvät asetukset viestintäpalvelulle")
+    @ApiOperation("Palauttaa sähköpostilähetykseen liittyvät asetukset Viestintäpalvelulle")
     @RequestMapping(value = "send.settings.json", method  =  RequestMethod.POST)
     @ResponseBody
-    public EmailSendSettingsDto getEmailSendSettings(@RequestBody @ApiParam(name="me",
-            value="Käyttäjän omat tiedot /cas/me:n palauttamassa muodossa.") MyInformationDto me) {
-        return emailService.getEmailSendSettings(me);
+    public EmailSendSettingsDto getEmailSendSettings(@RequestBody
+            @ApiParam(name="parameters", value="Käyttäjän omat tiedot /cas/me:n palauttamassa muodossa sekä lähderekisterit.")
+            EmailSettingsParametersDto parameters) {
+        return emailService.getEmailSendSettings(parameters);
     }
 }

@@ -21,7 +21,9 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: ratamaa
@@ -36,6 +38,8 @@ public class SearchResultsPresentationDto implements Serializable {
     private List<SearchResultRowDto> rows;
     @ApiModelProperty("Hakutulosten esitystapa")
     private SearchResultPresentation presentation;
+    @ApiModelProperty("Lähderekisterit")
+    private Set<SourceRegister> sourceRegisters = new HashSet<SourceRegister>();
 
     public SearchResultsPresentationDto() {
     }
@@ -63,5 +67,13 @@ public class SearchResultsPresentationDto implements Serializable {
 
     public void setPresentation(SearchResultPresentation presentation) {
         this.presentation  =  presentation;
+    }
+
+    public Set<SourceRegister> getSourceRegisters() {
+        return sourceRegisters;
+    }
+
+    public void setSourceRegisters(Set<SourceRegister> sourceRegisters) {
+        this.sourceRegisters = sourceRegisters;
     }
 }

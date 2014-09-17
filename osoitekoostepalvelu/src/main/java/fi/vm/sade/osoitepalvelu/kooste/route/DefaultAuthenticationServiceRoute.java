@@ -40,6 +40,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     private static final long serialVersionUID = -5752885878113285232L;
 
     private static final long HENKILOLIST_TIMEOUT_MILLIS = 10L*60L*1000L;
+    private static final long HENKILO_TIMEOUT_MILLIS = 30L*MILLIS_IN_SECOND;
 
     private static final String SERVICE_CALL_POSTFIX = ".AuthenticationServiceCall";
 
@@ -88,7 +89,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
         .process(authenticationCallInOutDebug)
-        .to(uri(authenticationServiceHenkiloServiceRestUrl))
+        .to(uri(authenticationServiceHenkiloServiceRestUrl, HENKILO_TIMEOUT_MILLIS))
         .process(authenticationCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<HenkiloDetailsDto>() {}));
@@ -103,7 +104,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                         .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
         )
         .process(authenticationCallInOutDebug)
-        .to(uri(authenticationServiceHenkiloServiceRestUrl))
+        .to(uri(authenticationServiceHenkiloServiceRestUrl, HENKILO_TIMEOUT_MILLIS))
         .process(authenticationCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<List<OrganisaatioHenkiloDto>>() {}));

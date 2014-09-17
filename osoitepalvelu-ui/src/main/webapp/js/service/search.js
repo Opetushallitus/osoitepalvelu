@@ -143,7 +143,8 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
                 FilterHelper.extractedFieldNotInArray(_deletedIds, ["oid", "oidTyyppi", "rivinumero"]) );
         success( {
             presentation: data.presentation,
-            rows: filteredRows
+            rows: filteredRows,
+            sourceRegisters: data.sourceRegisters
         } );
     };
 

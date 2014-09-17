@@ -33,11 +33,15 @@ public class EmailMessageDto implements Serializable {
     
     private String callingProcess;
     private String from;
+    private String sender;
     private String organizationOid;
     private String replyTo;
     private String subject;
     private String body;
+    private String templateName;
+    private String languageCode;
     private List<Object> attachInfo  =  new ArrayList<Object>();
+    private List<EmailSourceRegisterDto> sourceRegister = new ArrayList<EmailSourceRegisterDto>();
 
     public String getCallingProcess() {
         return callingProcess;
@@ -93,5 +97,37 @@ public class EmailMessageDto implements Serializable {
 
     public void setOrganizationOid(String organizationOid) {
         this.organizationOid = organizationOid;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public List<EmailSourceRegisterDto> getSourceRegister() {
+        return sourceRegister;
+    }
+
+    public void setSourceRegister(List<EmailSourceRegisterDto> sourceRegister) {
+        this.sourceRegister = sourceRegister;
+    }
+
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
+
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 }

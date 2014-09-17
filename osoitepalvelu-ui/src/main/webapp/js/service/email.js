@@ -27,8 +27,12 @@ OsoiteKoostepalvelu.service('EmailService', ["$log", "$http", "EmailConverter", 
         return el;
     };
 
-    this.sendEmail = function(searchResults) {
-        $http.post("api/email/send.settings.json", MyRolesModel).success(function(sendSettings) {
+    this.sendEmail = function(searchResults, presentation, sourceRegisters) {
+        $http.post("api/email/send.settings.json", {
+            me: MyRolesModel,
+            language: presentation.locale,
+            sourceRegisters: sourceRegisters
+        }).success(function(sendSettings) {
             var form = _el("form", $("body").get(0)),
                 $form = $(form),
                 dataInput = _el("input", form),

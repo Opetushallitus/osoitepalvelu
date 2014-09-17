@@ -77,18 +77,35 @@ public class DefaultSearchResultTransformerService extends AbstractService
     public SearchResultsPresentationDto transformToResultRows(SearchResultsDto results,
                 final SearchResultPresentation presentation, CamelRequestContext context, SearchType searchType) {
         List<SearchResultRowDto> transformedResults = new ArrayList<SearchResultRowDto>();
+        Set<SourceRegister> sourceRegisters = new HashSet<SourceRegister>();
 
         List<SearchResultRowDto> organisaatioResults = transformOrganisaatios(results.getOrganisaatios(), presentation);
+        if (!organisaatioResults.isEmpty()) {
+            sourceRegisters.add(SourceRegister.opintopolku);
+        }
         transformedResults.addAll(organisaatioResults);
 
         List<SearchResultRowDto> henkiloResults = transformHenkilos(results.getHenkilos(), presentation);
+        if (!henkiloResults.isEmpty()) {
+            sourceRegisters.add(SourceRegister.opintopolku);
+            // Can not distinguish results originating from Aipal wihtin the results from henkilopalvelu:
+            sourceRegisters.add(SourceRegister.aipal);
+        }
         transformedResults.addAll(henkiloResults);
 
         List<SearchResultRowDto> aituHenkiloResults = transformToimikuntaJasens(results.getAituToimikuntas(), presentation);
+        if (!aituHenkiloResults.isEmpty()) {
+            sourceRegisters.add(SourceRegister.aitu);
+        }
         transformedResults.addAll(aituHenkiloResults);
 
         List<SearchResultRowDto> aituOppilaitosResults = transformNayttotutkinonJarjestajaOrganisaatios(results
                 .getAituOppilaitos(), presentation);
+        if (!aituOppilaitosResults.isEmpty()) {
+            sourceRegisters.add(SourceRegister.aitu);
+            // The actual data about the oppilaitos organisaatios may originate from organisaatio-service:
+            sourceRegisters.add(SourceRegister.opintopolku);
+        }
         transformedResults.addAll(aituOppilaitosResults);
 
         resolveMissingOrganisaatioRelatedDetails(transformedResults, presentation, context);
@@ -100,7 +117,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
         // Mix the organisation and henkilo based rows by organisaatio's oid
         rows = applyOrdering(rows);
 
-        return new SearchResultsPresentationDto(rows, presentation);
+        SearchResultsPresentationDto presentationDto = new SearchResultsPresentationDto(rows, presentation);
+        presentationDto.setSourceRegisters(sourceRegisters);
+        return presentationDto;
     }
 
     protected List<SearchResultRowDto> removeDuplicates(SearchType searchType, List<SearchResultRowDto> rows) {

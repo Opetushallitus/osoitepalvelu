@@ -26,6 +26,8 @@ var ResultsController = function($scope, $log, $location, $filter, $timeout,
     $scope.results = [];
     $scope.searchDone = false;
     $scope.customColumnDefs = [];
+    $scope.presentation = null;
+    $scope.sourceRegisters = null;
 
     var columnVisibilityMapping = {
         'nimi':                         'organisaationNimiIncluded',
@@ -65,6 +67,8 @@ var ResultsController = function($scope, $log, $location, $filter, $timeout,
         f(function(data) {
             $log.info("Got data as results.");
             $log.info(data);
+            $scope.presentation = data.presentation;
+            $scope.sourceRegisters = data.sourceRegisters;
             angular.forEach($scope.customColumnDefs, function(colDef) {
                 colDef.visible = isColumnVisible(colDef.field, data.presentation);
                 //$log.info("Column " + colDef.field + " visibility="+colDef.visible);
@@ -97,7 +101,7 @@ var ResultsController = function($scope, $log, $location, $filter, $timeout,
     };
 
     $scope.sendEmail = function() {
-        EmailService.sendEmail($scope.results);
+        EmailService.sendEmail($scope.results, $scope.presentation, $scope.sourceRegisters);
     };
 
     $scope.resultGridOptions = {
@@ -110,7 +114,7 @@ var ResultsController = function($scope, $log, $location, $filter, $timeout,
         enableCellEdit: false,
         showSelectionCheckbox: true,
         afterSelectionChange: function( rowItem, event ) {
-            $log.info(rowItem); // TODO
+            $log.info(rowItem);
         }
     };
     $log.info("SHOWING GRID.");

@@ -20,15 +20,21 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
+import fi.vm.sade.osoitepalvelu.kooste.mvc.dto.EmailSettingsParametersDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSourceRegisterDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.AuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloYhteystietoRyhmaDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SourceRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * User: ratamaa
@@ -37,7 +43,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DefaultEmailService extends AbstractService implements EmailService {
-
     private static final long serialVersionUID = -4706566607303050449L;
 
     @Value("${viestipalvelu.emailsend.endpoint.uri}")
@@ -49,18 +54,43 @@ public class DefaultEmailService extends AbstractService implements EmailService
     @Value("${viestipalvelu.emailsend.email.from:'oph_tiedotus@oph.fi'}")
     private String emailFrom;
 
+    @Value("${viestipalvelu.emailsend.email.sender:'Opetushallitus'}")
+    private String emailSender;
+
     @Value("${viestipalvelu.emailsend.email.organisaatioOid:''}")
     private String defaultOrganisaatioOid;
+
+    @Value("${viestipalvelu.emailsend.email.templateName:'osoitepalvelu_email'}")
+    private String emailTemplateName;
+
+    @Value("${viestipalvelu.emailsend.email.subject:''}")
+    private String emailDefaultSubject;
+
+    @Value("${viestipalvelu.emailsend.email.body:''}")
+    private String emailDefaultBody;
 
     @Autowired(required = false)
     private AuthenticationServiceRoute authenticationServiceRoute;
 
     @Override
-    public EmailSendSettingsDto getEmailSendSettings(MyInformationDto myInfo) {
+    public EmailSendSettingsDto getEmailSendSettings(EmailSettingsParametersDto parameters) {
+        MyInformationDto myInfo = parameters.getMe();
+        Set<SourceRegister> sourceRegisters = parameters.getSourceRegisters();
         EmailSendSettingsDto settings  =  new EmailSendSettingsDto();
         settings.setEndpointUrl(emailSendEmailUrl);
         settings.getEmail().setCallingProcess(callingProcess);
         settings.getEmail().setFrom(emailFrom);
+        settings.getEmail().setSender(emailSender);
+        settings.getEmail().setSubject(emailDefaultSubject);
+        settings.getEmail().setBody(emailDefaultBody);
+        if (emailTemplateName != null && emailTemplateName.length() > 0) {
+            settings.getEmail().setTemplateName(emailTemplateName);
+        }
+        if (parameters.getLanguage() != null) {
+            settings.getEmail().setLanguageCode(parameters.getLanguage().getLanguage().toUpperCase());
+        } else {
+            settings.getEmail().setLanguageCode(DEFAULT_LOCALE.getLanguage().toUpperCase());
+        }
 
         final HenkiloDetailsDto myHenkiloDetails = authenticationServiceRoute.getHenkiloTiedot(myInfo.getOid(),
                 new DefaultCamelRequestContext());
@@ -72,6 +102,15 @@ public class DefaultEmailService extends AbstractService implements EmailService
                 CollectionHelper.first(myHenkiloDetails.getTyoOsoitees(), HenkiloYhteystietoRyhmaDto.SAHKOPOSTI)
                 .or(Optional.fromNullable(myInfo.getEmail()))
                 .or(new SahkopostiByKutsumanimiAndSukunimiProvider(myHenkiloDetails)));
+
+        if (sourceRegisters != null) {
+            settings.getEmail().setSourceRegister(new ArrayList<EmailSourceRegisterDto>());
+            for (SourceRegister register : SourceRegister.values()) {
+                if (sourceRegisters.contains(register)) {
+                    settings.getEmail().getSourceRegister().add(new EmailSourceRegisterDto(register.name()));
+                }
+            }
+        }
 
         return settings;
     }

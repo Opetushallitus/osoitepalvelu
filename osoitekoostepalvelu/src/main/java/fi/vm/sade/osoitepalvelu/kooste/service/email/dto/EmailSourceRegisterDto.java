@@ -14,27 +14,27 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.email;
+package fi.vm.sade.osoitepalvelu.kooste.service.email.dto;
 
 import java.io.Serializable;
-import java.util.Set;
-
-import fi.vm.sade.osoitepalvelu.kooste.mvc.dto.EmailSettingsParametersDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.EmailSendSettingsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SourceRegister;
 
 /**
  * User: ratamaa
- * Date: 2/26/14
- * Time: 11:23 AM
+ * Date: 17.9.2014
+ * Time: 12:08
  */
-public interface EmailService extends Serializable {
+public class EmailSourceRegisterDto implements Serializable {
+    private String name;
 
-    /**
-     * @param parameters the email parameters
-     * @return the email send settings for Viestipalvelu.
-     */
-    EmailSendSettingsDto getEmailSendSettings(EmailSettingsParametersDto parameters);
+    public EmailSourceRegisterDto(String name) {
+        this.name = name;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
