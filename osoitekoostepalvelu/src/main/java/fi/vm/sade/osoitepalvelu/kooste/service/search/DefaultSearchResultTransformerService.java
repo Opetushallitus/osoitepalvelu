@@ -112,6 +112,10 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
         // OVT-8440: first remove duplicates, then delete rows:
         List<SearchResultRowDto> rows = removeDuplicates(searchType, transformedResults);
+        int rownum = 1;
+        for (SearchResultRowDto row : rows) {
+            row.setRivinumero(rownum++);
+        }
         rows = removeDeletedRows(presentation, rows);
 
         // Mix the organisation and henkilo based rows by organisaatio's oid
