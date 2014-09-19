@@ -41,6 +41,7 @@ OsoiteKoostepalvelu.service('EmailService', ["$log", "$http", "EmailConverter", 
                 $submit = $(submit);
             $form
                 .attr("method", "post")
+                .attr("accept-charset", "UTF-8")
                 .attr("action", sendSettings.endpointUrl)
                 .css("display", "none");
             $dataInput
@@ -64,6 +65,7 @@ OsoiteKoostepalvelu.service('EmailConverter', ["$log", "$http", function($log, $
                     oid: result.henkiloOid,
                     oidType: 'henkilo',
                     email: result.henkiloEmail,
+                    name: result.yhteyshenkilonNimi,
                     languageCode: "FI" /* <- TODO */
                 });
             } else {
@@ -71,6 +73,7 @@ OsoiteKoostepalvelu.service('EmailConverter', ["$log", "$http", function($log, $
                     oid: result.organisaatioOid,
                     oidType: 'organisaatio',
                     email: result.emailOsoite,
+                    name: result.nimi,
                     languageCode: (result.osoiteKieli || "FI").toUpperCase()
                 });
             }
