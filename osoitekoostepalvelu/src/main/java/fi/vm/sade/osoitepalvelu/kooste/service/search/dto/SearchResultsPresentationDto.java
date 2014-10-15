@@ -46,10 +46,6 @@ public class SearchResultsPresentationDto implements Serializable {
 
     public SearchResultsPresentationDto(List<SearchResultRowDto> rows, SearchResultPresentation presentation) {
         this.rows  =  rows;
-        int rownum = 1;
-        for (SearchResultRowDto row : rows) {
-            row.setRivinumero(rownum++);
-        }
         this.presentation  =  presentation;
     }
 

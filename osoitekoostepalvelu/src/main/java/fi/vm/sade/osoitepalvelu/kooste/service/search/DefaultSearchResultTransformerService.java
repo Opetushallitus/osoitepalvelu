@@ -590,9 +590,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         int rowNum = 0;
         int maxColumn = produceHeader(sheet, rowNum, 0, searchResults.getPresentation());
         for (SearchResultRowDto row : searchResults.getRows()) {
-            if (searchResults.getPresentation().isResultRowIncluded(row)) {
-                produceRow(searchResults.getPresentation(), sheet, ++rowNum, row);
-            }
+            produceRow(searchResults.getPresentation(), sheet, ++rowNum, row);
         }
         for (int i = 0; i < maxColumn; ++i) {
             sheet.autoSizeColumn(i);

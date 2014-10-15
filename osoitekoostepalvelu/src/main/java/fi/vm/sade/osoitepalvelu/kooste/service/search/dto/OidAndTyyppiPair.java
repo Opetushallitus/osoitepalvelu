@@ -74,7 +74,6 @@ public class OidAndTyyppiPair implements Serializable {
         OidAndTyyppiPair other  =  (OidAndTyyppiPair) obj;
         return EqualsHelper.areEquals(this.oid, other.oid)
                 && EqualsHelper.areEquals(this.oidTyyppi, other.oidTyyppi)
-                && this.rivinumero == other.rivinumero
-                && ((this.oid != null && other.oid != null) || EqualsHelper.areEquals(this.rivinumero, other.rivinumero));
+                && this.rivinumero == other.rivinumero;
     }
 }
