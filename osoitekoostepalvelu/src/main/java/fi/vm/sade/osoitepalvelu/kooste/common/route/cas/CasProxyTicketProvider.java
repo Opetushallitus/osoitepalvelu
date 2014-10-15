@@ -16,13 +16,16 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
 
-import fi.vm.sade.generic.ui.portlet.security.ProxyAuthenticator;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.HashMap;
-import java.util.Map;
+import fi.vm.sade.generic.ui.portlet.security.ProxyAuthenticator;
 
 /**
  * Provides the CAS authentication headers using ProxyAuthenticator by default.
@@ -42,6 +45,7 @@ import java.util.Map;
  * Time: 5:15 PM
  */
 public class CasProxyTicketProvider extends AbstractCasTicketProvider {
+    private static final Logger logger = LoggerFactory.getLogger(CasProxyTicketProvider.class);
     private ProxyAuthenticator proxyAuthenticator  =  new ProxyAuthenticator();
     private String casService;
     private String authMode;
@@ -53,7 +57,7 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
 
     @Override
     public Map<String, Object> provideTicketHeaders(String service) {
-        service  =  getTargetServiceCasUri(service);
+        final String targetService  =  getTargetServiceCasUri(service);
         Authentication authentication  =  SecurityContextHolder.getContext().getAuthentication();
         if(authentication instanceof UsernamePasswordAuthenticationToken
                 && "dev".equals(authMode)) {
@@ -61,7 +65,7 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
             // erase-credientals = false: <authentication-manager alias = "authenticationManager"  erase-credentials = "false">
             UsernamePasswordAuthenticationToken token  =  (UsernamePasswordAuthenticationToken) authentication;
             return new UsernamePasswordCasClientTicketProvider(casService, token.getName(),
-                    ""  +  token.getCredentials()).provideTicketHeaders(service);
+                    ""  +  token.getCredentials()).provideTicketHeaders(targetService);
         }
 
         // In production we basically do this
@@ -72,11 +76,16 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
         // But for performance reasons, use a ticket cache implemented in ProxyAuthenticator (implementation might
         // also change):
         final Map<String, Object> result  =  new HashMap<String, Object>();
-        proxyAuthenticator.proxyAuthenticate(service, "cas", new ProxyAuthenticator.Callback() {
+        proxyAuthenticator.proxyAuthenticate(targetService, "cas", new ProxyAuthenticator.Callback() {
             @Override
             public void setRequestHeader(String key, String value) {
+                logger.info("Set CAS request header {}={}", key, value);
                 // Dirty callback solution, but the implementation is not asynchronous, so we are safe here:
                 result.put(key, value);
+            }
+            @Override
+            public void gotNewTicket(Authentication authentication, String proxyTicket) {
+                logger.info("Got new authentication ticket for service={}", targetService);
             }
         });
         return result;
