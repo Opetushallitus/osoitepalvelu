@@ -61,6 +61,7 @@ public class DefaultAituRoute extends AbstractJsonToDtoRouteBuilder
                     .get().path(AITU_OSOITEPALVELU_PATH)
                     .param(CAS_TICKET_QUERY_PARAM).optional().value(header(CasTicketProvider.CAS_HEADER)).toQuery()
                     .casAuthenticationByAuthenticatedUser(aituServiceCasServiceUrl)
+                    .retry(2)
         )
         .process(organisaatioCallInOutDebug)
         .to(uri(aituRestUrl, TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND))

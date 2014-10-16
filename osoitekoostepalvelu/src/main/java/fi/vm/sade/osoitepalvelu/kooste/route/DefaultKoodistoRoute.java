@@ -59,7 +59,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     protected void buildKaikkiVersiotiedot() {
         // Reitti, joka hakee koodiston versiotiedot
         fromHttpGetToDtos(REITTI_HAE_KOODISTON_VERSIOT, uri(koodistoUri),
-                headers().path("${in.headers.koodistoTyyppi}"),
+                headers().path("${in.headers.koodistoTyyppi}").retry(3)                ,
                 new TypeReference<List<KoodistoVersioDto>>() { });
     }
 
@@ -68,26 +68,27 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         fromHttpGetToDtos(REITTI_HAE_KOODISTO_VERSION_KOODIT, uri(koodistoUri),
                 headers()
                     .path("${in.headers.koodistoTyyppi}/koodi")
-                    .query("koodistoVersio = ${in.headers.koodistoVersio}"),
+                    .query("koodistoVersio = ${in.headers.koodistoVersio}")
+                    .retry(3),
                 new TypeReference<List<KoodiDto>>() { });
     }
 
     protected void buildKoodistonKoodit() {
         // Reitti, joka hakee tietyn koodiston koodit
         fromHttpGetToDtos(REITTI_HAE_KOODISTON_KOODIT, uri(koodistoUri),
-                headers().path("${in.headers.koodistoTyyppi}/koodi"),
+                headers().path("${in.headers.koodistoTyyppi}/koodi").retry(3),
                 new TypeReference<List<KoodiDto>>() { });
     }
 
     protected void buildSisaltyyYlakoodis() {
         fromHttpGetToDtos(REITTI_SIALTYY_YLAKOODIS, uri(koodistoUri),
-                headers().path("relaatio/sisaltyy-ylakoodit/${in.headers.koodiUri}"),
+                headers().path("relaatio/sisaltyy-ylakoodit/${in.headers.koodiUri}").retry(3),
                 new TypeReference<List<KoodiDto>>() { });
     }
 
     protected void buildSisaltyyAlakoodis() {
         fromHttpGetToDtos(REITTI_SIALTYY_ALAKOODIS, uri(koodistoUri),
-                headers().path("relaatio/sisaltyy-alakoodit/${in.headers.koodiUri}"),
+                headers().path("relaatio/sisaltyy-alakoodit/${in.headers.koodiUri}").retry(3),
                 new TypeReference<List<KoodiDto>>() { });
     }
 
