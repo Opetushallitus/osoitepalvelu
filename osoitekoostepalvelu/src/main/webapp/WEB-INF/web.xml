@@ -28,6 +28,7 @@
     <listener>
         <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
     </listener>
+
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -44,6 +45,12 @@
             <param-name>forceEncoding</param-name>
             <param-value>true</param-value>
         </init-param>
+    </filter>
+
+    <!-- CORS (cross domain) support for rest services -->
+    <filter>
+        <filter-name>AllowAllCorsFilter</filter-name>
+        <filter-class>fi.vm.sade.generic.servlet.AllowAllCorsRequestsInDevModeServletFilter</filter-class>
     </filter>
 
     <!-- Declare a Spring MVC DispatcherServlet as usual -->

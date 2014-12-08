@@ -39,7 +39,7 @@
 
     <properties>
         <camel.version>2.12.1</camel.version>
-        <generic.version>9.0-SNAPSHOT</generic.version>
+        <generic.version>9.1-SNAPSHOT</generic.version>
 
         <ehcache.version>2.5.0</ehcache.version>
         <ehcache-jgroupsreplication.version>1.5</ehcache-jgroupsreplication.version>
