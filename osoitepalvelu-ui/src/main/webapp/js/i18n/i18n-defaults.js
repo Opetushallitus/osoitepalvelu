@@ -93,6 +93,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         target_group_option_puheenjohtaja: 'puheenjohtaja',
         target_group_option_sihteeri: 'sihteeri',
         target_gorup_option_jasenet: 'jäsenet',
+        target_group_option_viranomaissahkoposti: 'viranomaissähköposti',
         target_group_option_tunnuksenhaltijat: 'tunnuksenhaltijat',
         target_group_option_jarjestajaorganisaatio: 'koulutuksen järjestäjä',
         target_group_option_tutkintovastaava: 'tutkintovastaava',

@@ -60,11 +60,11 @@ public class DefaultAituService extends AbstractService implements AituService {
         return aituToimikuntaRepository.findVoimassaOlevatRoolit();
     }
 
-    @Override
     public List<AituToimikuntaResultDto> findToimikuntasWithMatchingJasens(AituToimikuntaCriteria criteria,
-                                                                           AituKielisyys orderByNimiKieli) {
+                                                                           AituKielisyys orderByNimiKieli,
+                                                                           List<AituToimikunta> aituToimikuntas) {
         List<AituToimikuntaResultDto> results = dtoConverter.convert(
-                aituToimikuntaRepository.findToimikuntas(criteria, orderByNimiKieli),
+                aituToimikuntas,
                 new ArrayList<AituToimikuntaResultDto>(), AituToimikuntaResultDto.class);
         AndPredicateAdapter<AituJasenyysDto> jasenyysPredicate = criteria.createJasenyysPredicate();
         if (jasenyysPredicate.isFiltering()) {
@@ -77,14 +77,22 @@ public class DefaultAituService extends AbstractService implements AituService {
     }
 
     @Override
+    public List<AituToimikuntaResultDto> findToimikuntasWithMatchingJasens(AituToimikuntaCriteria criteria,
+                                                                           AituKielisyys orderByNimiKieli) {
+        List<AituToimikunta> toimikuntas = aituToimikuntaRepository.findToimikuntas(criteria, orderByNimiKieli);
+        return findToimikuntasWithMatchingJasens(criteria, orderByNimiKieli, toimikuntas);
+    }
+
     public List<AituOppilaitosResultDto> findNayttotutkinnonJarjestajas(AituOppilaitosCriteria criteria,
-                                                                        AituKielisyys orderingKielisyys) {
+                                                                        AituKielisyys orderingKielisyys,
+                                                                        List<AituOppilaitos> oppilaitosList,
+                                                                        List<String> toimikuntaIdsList) {
         List<AituOppilaitosResultDto> results = dtoConverter.convert(
-                aituOppilaitosRepository.findOppilaitos(criteria, orderingKielisyys),
+                oppilaitosList,
                 new ArrayList<AituOppilaitosResultDto>(), AituOppilaitosResultDto.class);
         List<String> matchedToimikuntas = null;
         if (criteria.isRelatedToimikuntaResultsNeeded()) {
-            matchedToimikuntas = aituToimikuntaRepository.findToimikuntaIds(criteria.toRelatedToimikuntaCriteria());
+            matchedToimikuntas = toimikuntaIdsList;
         }
         AndPredicateAdapter<AituSopimusDto> sopimusPredicate = criteria.createSopimusPredicate(matchedToimikuntas);
         AndPredicateAdapter<AituTutkintoDto> tutkintoPredicate = criteria.createTutkintoPredicate();
@@ -118,16 +126,23 @@ public class DefaultAituService extends AbstractService implements AituService {
     }
 
     @Override
+    public List<AituOppilaitosResultDto> findNayttotutkinnonJarjestajas(AituOppilaitosCriteria criteria,
+                                                                        AituKielisyys orderingKielisyys) {
+        List<AituOppilaitos> oppilaitosList = aituOppilaitosRepository.findOppilaitos(criteria, orderingKielisyys);
+        List<String> toimikuntaIdsList = aituToimikuntaRepository.findToimikuntaIds(criteria.toRelatedToimikuntaCriteria());
+        return findNayttotutkinnonJarjestajas(criteria, orderingKielisyys, oppilaitosList, toimikuntaIdsList);
+    }
+
+    @Override
     public void refreshData(AituOsoitepalveluResultsDto results) {
         List<AituOppilaitos> newOppilaitos = dtoConverter.convert(results.getOppilaitokset(),
                 new ArrayList<AituOppilaitos>(), AituOppilaitos.class);
         List<AituToimikunta> newToimikuntas = dtoConverter.convert(results.getToimikunnat(),
                 new ArrayList<AituToimikunta>(), AituToimikunta.class);
-        aituOppilaitosRepository.deleteAll();
-        aituOppilaitosRepository.save(newOppilaitos);
-
-        aituToimikuntaRepository.deleteAll();
-        aituToimikuntaRepository.save(newToimikuntas);
+            aituOppilaitosRepository.deleteAll();
+            aituOppilaitosRepository.save(newOppilaitos);
+            aituToimikuntaRepository.deleteAll();
+            aituToimikuntaRepository.save(newToimikuntas);
     }
 
     @Override

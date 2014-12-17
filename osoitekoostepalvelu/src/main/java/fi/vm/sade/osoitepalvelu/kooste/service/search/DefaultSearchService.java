@@ -89,6 +89,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                         SearchTargetGroup.TargetType.JASENET,
                         SearchTargetGroup.TargetType.SIHTEERI,
                         SearchTargetGroup.TargetType.PUHEENJOHTAJA),
+                searchToimikuntaEmails = terms.containsAnyTargetGroup(new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.TUTKINTOTOIMIKUNNAT},
+                        SearchTargetGroup.TargetType.VIRANOMAIS_EMAIL),
                 searchNayttotutkinnonJarjestajas = terms.containsAnyTargetGroup(
                         new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.NAYTTOTUTKINNON_JARJESTAJAT}),
                 returnNayttotutkinnonJarjestajas = terms.containsAnyTargetGroup(
@@ -150,6 +152,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
         if (searchToimikuntas) {
             AituToimikuntaCriteria toimikuntaCriteria = produceToimikuntaCriteria(terms);
+            toimikuntaCriteria.setToimikuntaEmails(searchToimikuntaEmails);
             if (anyOrganisaatioRelatedConditionsUsed) {
                 toimikuntaCriteria.setOppilaitoskoodiIn(oppilaitoskoodis(organisaatioYhteystietoResults));
             }

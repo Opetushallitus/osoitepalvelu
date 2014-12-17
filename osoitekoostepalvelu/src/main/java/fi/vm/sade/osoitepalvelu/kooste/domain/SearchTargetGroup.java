@@ -93,7 +93,8 @@ public class SearchTargetGroup implements Serializable {
         TUTKINTOTOIMIKUNTA,
         JARJESTAJA_ORGANISAATIO,
         TUTKINTOVASTAAVA,
-        TUNNUKSENHALTIJAT;
+        TUNNUKSENHALTIJAT,
+        VIRANOMAIS_EMAIL;
 
         public static TargetType[] allHenkiloTypes() {
             return new TargetType[] {
@@ -113,7 +114,8 @@ public class SearchTargetGroup implements Serializable {
                 KRIISITIEDOTUS,
                 KOULUTUSNEVONTA,
                 TUTKINTOTOIMIKUNTA,
-                JARJESTAJA_ORGANISAATIO
+                JARJESTAJA_ORGANISAATIO,
+                VIRANOMAIS_EMAIL
             };
         }
     };

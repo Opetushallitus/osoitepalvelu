@@ -36,6 +36,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by ratamaa on 15.4.2014.
@@ -45,6 +47,8 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
         implements AituToimikuntaRepository {
     private static final long serialVersionUID = -1466189419172139869L;
     
+    protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private AituOppilaitosRepository aituOppilaitosRepository;
 
@@ -59,19 +63,30 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
 
     @Override
     public List<AituToimikunta> findToimikuntas(AituToimikuntaCriteria toimikuntaCriteria, AituKielisyys orberByNimi) {
-        CriteriaHelper.Conditions conditions = conditions(toimikuntaCriteria);
-        return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
+        CriteriaHelper.Conditions conditions = conditions(toimikuntaCriteria, true);
+        List<AituToimikunta> result = getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
                 .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
+        if (toimikuntaCriteria.isToimikuntaEmails()) {
+            // Haetaan myös ne toimikunnat joilla on sähköpostiosoite
+            CriteriaHelper.Conditions emailconditions = conditions(toimikuntaCriteria, false);
+            List<AituToimikunta> result2 = getMongoOperations().find(Query.query(emailconditions.applyTo(new Criteria()))
+                .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
+            if (result2.isEmpty()) {
+                logger.error("Email address not found for any toimikunta");
+            }
+            result.addAll(result2);
+        }
+        return result;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<String> findToimikuntaIds(AituToimikuntaCriteria toimikuntaCriteria) {
         return getMongoOperations().getCollection(AituToimikunta.class.getAnnotation(Document.class).collection())
-                .distinct("_id",  conditions(toimikuntaCriteria).applyTo(new Criteria()).getCriteriaObject());
+                .distinct("_id",  conditions(toimikuntaCriteria, true).applyTo(new Criteria()).getCriteriaObject());
     }
 
-    protected CriteriaHelper.Conditions conditions(AituToimikuntaCriteria toimikuntaCriteria) {
+    protected CriteriaHelper.Conditions conditions(AituToimikuntaCriteria toimikuntaCriteria, boolean jasenet) {
         CriteriaHelper.Conditions conditions = new CriteriaHelper.Conditions();
         if (toimikuntaCriteria.isIdsUsed()) {
             conditions.add(new Criteria("_id").in(toimikuntaCriteria.getIdsIn()));
@@ -79,17 +94,23 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
         if (toimikuntaCriteria.isKielisyysUsed()) {
             conditions.add(new Criteria("kielisyys").in(toimikuntaCriteria.getKielisyysIn()));
         }
-        if (toimikuntaCriteria.isJasenKielisyysUsed()) {
-            conditions.add(new Criteria("jasenyydet.aidinkieli").in(toimikuntaCriteria.getJasenKielisyysIn()));
-        }
-        if (toimikuntaCriteria.isJasenRoolisUsed()) {
-            conditions.add(new Criteria("jasenyydet.rooli").in(toimikuntaCriteria.getJasensInRoolis()));
-        }
         if (toimikuntaCriteria.isToimikausiUsed()) {
             conditions.add(new Criteria("toimikausi").in(AituToimikunta.AituToimikausi.names(toimikuntaCriteria.getToimikausisIn())));
         }
-        if (toimikuntaCriteria.isOnlyVoimassaOlevat()) {
-            conditions.add(new Criteria("jasenyydet.voimassa").is(true));
+        if (jasenet) {
+            if (toimikuntaCriteria.isJasenKielisyysUsed()) {
+                conditions.add(new Criteria("jasenyydet.aidinkieli").in(toimikuntaCriteria.getJasenKielisyysIn()));
+            }
+            if (toimikuntaCriteria.isJasenRoolisUsed()) {
+                conditions.add(new Criteria("jasenyydet.rooli").in(toimikuntaCriteria.getJasensInRoolis()));
+            }
+            if (toimikuntaCriteria.isOnlyVoimassaOlevat()) {
+                conditions.add(new Criteria("jasenyydet.voimassa").is(true));
+            }
+        } else {
+            if (toimikuntaCriteria.isToimikuntaEmails()) {
+                conditions.add(new Criteria("sahkoposti").regex(Pattern.compile(".*@.*")));
+            }
         }
         if (toimikuntaCriteria.isTutkintoUsed() || toimikuntaCriteria.isOpintoalaUsed()
                 || toimikuntaCriteria.isOppilaitoskoodiUsed()) {

@@ -42,6 +42,7 @@ public class AituToimikuntaCriteria implements Serializable, TutkintorakenneAwar
     private List<AituToimikunta.AituToimikausi> toimikausisIn = new ArrayList<AituToimikunta.AituToimikausi>();
     private boolean onlyVoimassaOlevat = true; // Jäsenyydet
     private List<String> oppilaitoskoodiIn = new ArrayList<String>();
+    private boolean toimikuntaEmail = true; // Sähköpostiosoitteet
 
     public boolean isIdsUsed() {
         return idsIn != null && !idsIn.isEmpty();
@@ -151,6 +152,14 @@ public class AituToimikuntaCriteria implements Serializable, TutkintorakenneAwar
 
     public void setOppilaitoskoodiIn(List<String> oppilaitoskoodiIn) {
         this.oppilaitoskoodiIn = oppilaitoskoodiIn;
+    }
+
+    public boolean isToimikuntaEmails() {
+        return toimikuntaEmail;
+    }
+
+    public void setToimikuntaEmails(boolean emails) {
+        this.toimikuntaEmail = emails;
     }
 
     public AituOppilaitosCriteria toOppilaitosCriteria() {

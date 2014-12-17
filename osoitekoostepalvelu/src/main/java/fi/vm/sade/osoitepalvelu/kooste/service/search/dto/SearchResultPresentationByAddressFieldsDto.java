@@ -100,7 +100,8 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
                     setYhteyshenkiloEmailIncluded(henkiloTypesIncluded);
                     setOrganisaatioEmailIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyOrganisaatioTypes(),
                                     SearchTargetGroup.TargetType.ORGANISAATIO,
-                                    SearchTargetGroup.TargetType.JARJESTAJA_ORGANISAATIO));
+                                    SearchTargetGroup.TargetType.JARJESTAJA_ORGANISAATIO,
+                                    SearchTargetGroup.TargetType.VIRANOMAIS_EMAIL));
                     break;
                 case LETTER:
                 case SEND_LETTER:
