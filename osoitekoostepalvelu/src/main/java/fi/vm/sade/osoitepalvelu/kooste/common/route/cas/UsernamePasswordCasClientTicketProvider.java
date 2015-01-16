@@ -60,7 +60,7 @@ public class UsernamePasswordCasClientTicketProvider extends AbstractCasTicketPr
         if (modifyUrl) {
             serviceUrl = getTargetServiceCasUri(serviceUrl);
         }
-        String casHeader  =  CasClient.getTicket(casService +  "/v1/tickets", username, password, serviceUrl);
+        String casHeader  =  CasClient.getTicket(casService +  "/v1/tickets", username, password, serviceUrl, false);
         headers.put(CAS_HEADER, casHeader);
         return headers;
     }
