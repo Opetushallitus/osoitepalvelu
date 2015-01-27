@@ -1,6 +1,8 @@
 /target
 /.project
 /.idea
+*~
+**/*~
 /osoitekoostepalvelu/.checkstyle
 /osoitepalvelu-ui/.checkstyle
 osoitekoostepalvelu.log
@@ -10,3 +12,4 @@ osoitepalvelu.ipr
 osoitepalvelu.iws
 phantomjsdriver.log
 phantomjsdriver.log.*
+**/pom.xml.versionsBackup
