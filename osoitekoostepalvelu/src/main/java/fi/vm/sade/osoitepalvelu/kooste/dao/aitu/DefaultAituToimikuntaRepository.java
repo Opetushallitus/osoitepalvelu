@@ -63,14 +63,19 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
 
     @Override
     public List<AituToimikunta> findToimikuntas(AituToimikuntaCriteria toimikuntaCriteria, AituKielisyys orberByNimi) {
+        // Haetaan toimikuntien jäsenet
         CriteriaHelper.Conditions conditions = conditions(toimikuntaCriteria, true);
         List<AituToimikunta> result = getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
                 .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
         if (toimikuntaCriteria.isToimikuntaEmails()) {
-            // Haetaan myös ne toimikunnat joilla on sähköpostiosoite
+            // Haetaan lisäksi pelkästään toimikunnat joilla on sähköpostiosoite
+            // Jätetään toimikuntien jäsenet ulkopuolelle, ne haettiin jo aiemmin
             CriteriaHelper.Conditions emailconditions = conditions(toimikuntaCriteria, false);
-            List<AituToimikunta> result2 = getMongoOperations().find(Query.query(emailconditions.applyTo(new Criteria()))
-                .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
+            Query toimikuntaQuery = Query.query(emailconditions.applyTo(new Criteria()))
+                .with(new Sort("nimi." + orberByNimi.getAituKieli()));
+            toimikuntaQuery.fields().exclude("jasenyydet");
+
+            List<AituToimikunta> result2 = getMongoOperations().find(toimikuntaQuery, AituToimikunta.class);
             if (result2.isEmpty()) {
                 logger.error("Email address not found for any toimikunta");
             }
