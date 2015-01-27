@@ -37,7 +37,7 @@ import java.util.Locale;
 @Component
 public class SearchResultDtoConverter extends AbstractDtoConverter {
     private static final long serialVersionUID = -556332417179593295L;
-    
+
     @Autowired
     private KoodistoService koodistoService;
 
@@ -62,6 +62,7 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
         }
         if (from.getToimikunta() != null) {
             to.setNimi(LocaleHelper.findLocalized(from.getToimikunta().getNimi(), locale, DefaultKoodistoService.DEFAULT_LOCALE));
+            to.setEmailOsoite(from.getToimikunta().getSahkoposti());
         }
         return to;
     }
