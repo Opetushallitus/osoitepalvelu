@@ -31,7 +31,7 @@ import java.util.Set;
  */
 public class AllColumnsSearchResultPresentation implements SearchResultPresentation, Serializable {
     private static final long serialVersionUID = -2297459798041373185L;
-    
+
     private Locale locale;
     private Set<OidAndTyyppiPair> nonIncludedOids;
     private boolean withYhteyshenkiloEmail =true;
@@ -141,5 +141,10 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     public AllColumnsSearchResultPresentation withoutYhteyshenkiloEmail() {
         this.withYhteyshenkiloEmail = false;
         return this;
+    }
+
+    @Override
+    public boolean isOrganisaatioEmailOnlyEmailIncluded() {
+        return false;
     }
 }

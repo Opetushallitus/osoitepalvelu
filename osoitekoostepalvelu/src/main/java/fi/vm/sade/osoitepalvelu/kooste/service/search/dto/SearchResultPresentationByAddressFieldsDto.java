@@ -32,7 +32,7 @@ import java.util.*;
  */
 public class SearchResultPresentationByAddressFieldsDto implements SearchResultPresentation, Serializable {
     private static final long serialVersionUID  =  -9202420166871480974L;
-    
+
     private static MultiValueMap<String, String> fieldMappings;
     static {
         fieldMappings  =  new LinkedMultiValueMap<String, String>();
@@ -289,7 +289,12 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     @Override
     public boolean isResultRowIncluded(SearchResultRowDto row) {
         if (this.searchType != null && this.searchType == SearchTermsDto.SearchType.EMAIL) {
-            if ((row.getHenkiloEmail() == null || "".equals(row.getHenkiloEmail().trim()))
+            // Jos vain organisaation sähköposti näytetään, niin tarkistetaan vain sen "tyhjyys"
+            if (isOrganisaatioEmailOnlyEmailIncluded()) {
+                if (row.getEmailOsoite() == null || "".equals(row.getEmailOsoite().trim())) {
+                    return false;
+                }
+            } else if ((row.getHenkiloEmail() == null || "".equals(row.getHenkiloEmail().trim()))
                     && (row.getEmailOsoite() == null || "".equals(row.getEmailOsoite().trim()))) {
                 return false;
             }
@@ -299,5 +304,16 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     public void setLocale(Locale locale) {
         this.locale  =  locale;
+    }
+
+    @Override
+    public boolean isOrganisaatioEmailOnlyEmailIncluded() {
+        if (isKoulutusneuvonnanSahkopostiosoiteIncluded() ||
+            isKriisitiedotuksenSahkopostiosoiteIncluded() ||
+            isViranomaistiedotuksenSahkopostiosoiteIncluded() ||
+            isYhteyshenkiloEmailIncluded()) {
+            return false;
+        }
+        return true;
     }
 }

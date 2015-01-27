@@ -111,7 +111,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         resolveMissingOrganisaatioRelatedDetails(transformedResults, presentation, context);
 
         // OVT-8440: first remove duplicates, then delete rows:
-        List<SearchResultRowDto> rows = removeDuplicates(searchType, transformedResults);
+        List<SearchResultRowDto> rows = removeDuplicates(searchType, presentation, transformedResults);
         int rownum = 1;
         for (SearchResultRowDto row : rows) {
             row.setRivinumero(rownum++);
@@ -126,31 +126,41 @@ public class DefaultSearchResultTransformerService extends AbstractService
         return presentationDto;
     }
 
-    protected List<SearchResultRowDto> removeDuplicates(SearchType searchType, List<SearchResultRowDto> rows) {
+    protected List<SearchResultRowDto> removeDuplicates(SearchType searchType, final SearchResultPresentation presentation,
+            List<SearchResultRowDto> rows) {
         if(searchType == SearchType.EMAIL) {
             // Kyseessä email-tyyppinen haku, joten nyt suodatetaan kaikki dublikaatti-emailit pois.
             Set<String> emails = new TreeSet<String>();
             List<SearchResultRowDto> filtteredTransformedResults = new ArrayList<SearchResultRowDto>();
-            for (SearchResultRowDto dto : rows) {
-                if(dto.getHenkiloEmail() != null && !emails.contains(dto.getHenkiloEmail())) {
-                    emails.add(dto.getHenkiloEmail());
-                    filtteredTransformedResults.add(dto);
-                } else if(dto.getEmailOsoite() != null && !emails.contains(dto.getEmailOsoite())) {
-                    emails.add(dto.getEmailOsoite());
-                    filtteredTransformedResults.add(dto);
-                } else if(dto.getKoulutusneuvonnanEmail() != null && !emails.contains(dto.getKoulutusneuvonnanEmail())) {
-                    emails.add(dto.getKoulutusneuvonnanEmail());
-                    filtteredTransformedResults.add(dto);
-                } else if(dto.getKriisitiedotuksenEmail() != null && !emails.contains(dto.getKriisitiedotuksenEmail())) {
-                    emails.add(dto.getKriisitiedotuksenEmail());
-                    filtteredTransformedResults.add(dto);
-                } else if(dto.getViranomaistiedotuksenEmail() != null && !emails.contains(
-                        dto.getViranomaistiedotuksenEmail())) {
-                    emails.add(dto.getViranomaistiedotuksenEmail());
-                    filtteredTransformedResults.add(dto);
+
+            if (presentation.isOrganisaatioEmailOnlyEmailIncluded()) {
+                for (SearchResultRowDto dto : rows) {
+                    if(dto.getEmailOsoite() != null && !emails.contains(dto.getEmailOsoite())) {
+                        emails.add(dto.getEmailOsoite());
+                        filtteredTransformedResults.add(dto);
+                    }
+                }
+            } else {
+                for (SearchResultRowDto dto : rows) {
+                    if(dto.getHenkiloEmail() != null && !emails.contains(dto.getHenkiloEmail())) {
+                        emails.add(dto.getHenkiloEmail());
+                        filtteredTransformedResults.add(dto);
+                    } else if(dto.getEmailOsoite() != null && !emails.contains(dto.getEmailOsoite())) {
+                        emails.add(dto.getEmailOsoite());
+                        filtteredTransformedResults.add(dto);
+                    } else if(dto.getKoulutusneuvonnanEmail() != null && !emails.contains(dto.getKoulutusneuvonnanEmail())) {
+                        emails.add(dto.getKoulutusneuvonnanEmail());
+                        filtteredTransformedResults.add(dto);
+                    } else if(dto.getKriisitiedotuksenEmail() != null && !emails.contains(dto.getKriisitiedotuksenEmail())) {
+                        emails.add(dto.getKriisitiedotuksenEmail());
+                        filtteredTransformedResults.add(dto);
+                    } else if(dto.getViranomaistiedotuksenEmail() != null && !emails.contains(
+                            dto.getViranomaistiedotuksenEmail())) {
+                        emails.add(dto.getViranomaistiedotuksenEmail());
+                        filtteredTransformedResults.add(dto);
+                    }
                 }
             }
-
             // Asetetaan tulosjoukoksi filtteröity listaus.
             rows = filtteredTransformedResults;
         } else {

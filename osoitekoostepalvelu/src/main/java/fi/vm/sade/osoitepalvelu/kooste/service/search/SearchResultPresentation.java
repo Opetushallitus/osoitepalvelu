@@ -33,6 +33,8 @@ public interface SearchResultPresentation {
 
     boolean isResultRowIncluded(SearchResultRowDto row);
 
+    boolean isOrganisaatioEmailOnlyEmailIncluded();
+
     @ApiModelProperty("Näytetäänkö organisaation nimi -saraketta")
     boolean isOrganisaationNimiIncluded();
 

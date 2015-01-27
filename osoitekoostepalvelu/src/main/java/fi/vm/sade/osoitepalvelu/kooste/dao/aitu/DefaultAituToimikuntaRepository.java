@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituToimikunta, String>
         implements AituToimikuntaRepository {
     private static final long serialVersionUID = -1466189419172139869L;
-    
+
     protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
