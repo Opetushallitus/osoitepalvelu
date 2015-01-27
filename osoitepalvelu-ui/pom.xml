@@ -21,14 +21,14 @@
     <parent>
         <artifactId>osoitepalvelu</artifactId>
         <groupId>fi.vm.sade.osoitepalvelu</groupId>
-        <version>10.0-SNAPSHOT</version>
+        <version>2015-05-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     
     <groupId>fi.vm.sade.osoitepalvelu</groupId>
     <artifactId>osoitepalvelu-ui</artifactId>
     <name>Osoitepalvelu :: UI</name>
-    <version>10.0-SNAPSHOT</version>
+    <version>2015-05-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <build>
