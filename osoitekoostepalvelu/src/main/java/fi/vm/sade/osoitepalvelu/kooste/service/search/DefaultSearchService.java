@@ -79,9 +79,9 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     public SearchResultsDto find(@PartialCacheKey SearchTermsDto terms, CamelRequestContext context)
             throws TooFewSearchConditionsForOrganisaatiosException,
                     TooFewSearchConditionsForHenkilosException {
-        
+
         logger.info("Starting search by {}", getLoggedInUserOidOrNull());
-        
+
         SearchResultsDto results  =  new SearchResultsDto();
 
         boolean searchHenkilos = terms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getHenkiloHakuTypes()),
@@ -150,7 +150,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
         }
 
-        if (searchToimikuntas) {
+        if (searchToimikuntas || searchToimikuntaEmails) {
             AituToimikuntaCriteria toimikuntaCriteria = produceToimikuntaCriteria(terms);
             toimikuntaCriteria.setToimikuntaEmails(searchToimikuntaEmails);
             if (anyOrganisaatioRelatedConditionsUsed) {
@@ -176,9 +176,9 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                         new ArrayList<HenkiloHakuResultDto>(), HenkiloHakuResultDto.class, terms.getLocale());
             results.setHenkilos(henkiloResults);
         }
-        
+
         logger.info("Search end by {}", getLoggedInUserOidOrNull());
-        
+
         return results;
     }
 
@@ -347,5 +347,5 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     public void setAituService(AituService aituService) {
         this.aituService = aituService;
     }
-    
+
 }
