@@ -152,7 +152,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
         if (searchToimikuntas || searchToimikuntaEmails) {
             AituToimikuntaCriteria toimikuntaCriteria = produceToimikuntaCriteria(terms);
-            toimikuntaCriteria.setToimikuntaEmails(searchToimikuntaEmails);
             if (anyOrganisaatioRelatedConditionsUsed) {
                 toimikuntaCriteria.setOppilaitoskoodiIn(oppilaitoskoodis(organisaatioYhteystietoResults));
             }
@@ -205,6 +204,10 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     protected AituToimikuntaCriteria produceToimikuntaCriteria(SearchTermsDto terms) {
         AituToimikuntaCriteria criteria = new AituToimikuntaCriteria();
+        criteria.setJasenet(terms.containsAnyTargetGroup(new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.TUTKINTOTOIMIKUNNAT},
+                        SearchTargetGroup.TargetType.JASENET));
+        criteria.setViranomaisEmail(terms.containsAnyTargetGroup(new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.TUTKINTOTOIMIKUNNAT},
+                        SearchTargetGroup.TargetType.VIRANOMAIS_EMAIL));
         criteria.setKielisyysIn(terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_KIELIS));
         criteria.setJasenKielisyysIn(terms.findTerms(SearchTermDto.TERM_TUTKINTOIMIKUNTA_JASEN_KIELIS));
         criteria.setToimikausisIn(AituToimikunta.AituToimikausi.valuesOf(

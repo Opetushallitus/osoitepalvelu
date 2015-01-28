@@ -22,6 +22,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.domain.AituToimikunta;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituSopimusDto;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -63,12 +64,20 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
 
     @Override
     public List<AituToimikunta> findToimikuntas(AituToimikuntaCriteria toimikuntaCriteria, AituKielisyys orberByNimi) {
+        List<AituToimikunta> result = new ArrayList<AituToimikunta>();
+
         // Haetaan toimikuntien jäsenet
-        CriteriaHelper.Conditions conditions = conditions(toimikuntaCriteria, true);
-        List<AituToimikunta> result = getMongoOperations().find(Query.query(conditions.applyTo(new Criteria()))
-                .with(new Sort("nimi." + orberByNimi.getAituKieli())), AituToimikunta.class);
-        if (toimikuntaCriteria.isToimikuntaEmails()) {
-            // Haetaan lisäksi pelkästään toimikunnat joilla on sähköpostiosoite
+        if (toimikuntaCriteria.isJasenet()) {
+            CriteriaHelper.Conditions conditions = conditions(toimikuntaCriteria, true);
+            Query jasenetQuery = Query.query(conditions.applyTo(new Criteria()))
+                .with(new Sort("nimi." + orberByNimi.getAituKieli()));
+
+            result = getMongoOperations().find(jasenetQuery, AituToimikunta.class);
+        }
+
+        // Haetaan toimikunnat (ilman jäseniä)
+        if (toimikuntaCriteria.isViranomaisEmail()) {
+            // Haetaan pelkästään toimikunnat joilla on sähköpostiosoite
             // Jätetään toimikuntien jäsenet ulkopuolelle, ne haettiin jo aiemmin
             CriteriaHelper.Conditions emailconditions = conditions(toimikuntaCriteria, false);
             Query toimikuntaQuery = Query.query(emailconditions.applyTo(new Criteria()))
@@ -113,7 +122,7 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
                 conditions.add(new Criteria("jasenyydet.voimassa").is(true));
             }
         } else {
-            if (toimikuntaCriteria.isToimikuntaEmails()) {
+            if (toimikuntaCriteria.isViranomaisEmail()) {
                 conditions.add(new Criteria("sahkoposti").regex(Pattern.compile(".*@.*")));
             }
         }
