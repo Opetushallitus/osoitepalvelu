@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class AituToimikuntaCriteria implements Serializable, TutkintorakenneAwareCriteria {
     private static final long serialVersionUID = 5633851719629940782L;
-    
+
     private List<String> kielisyysIn = new ArrayList<String>();
     private List<String> jasenKielisyysIn = new ArrayList<String>();
     private List<String> jasensInRoolis = new ArrayList<String>();
@@ -42,7 +42,9 @@ public class AituToimikuntaCriteria implements Serializable, TutkintorakenneAwar
     private List<AituToimikunta.AituToimikausi> toimikausisIn = new ArrayList<AituToimikunta.AituToimikausi>();
     private boolean onlyVoimassaOlevat = true; // Jäsenyydet
     private List<String> oppilaitoskoodiIn = new ArrayList<String>();
-    private boolean toimikuntaEmail = true; // Sähköpostiosoitteet
+
+    private boolean viranomaisEmail = true; // viranomaissähköposti
+    private boolean jasenet = true;         // Sähköpostiosoitteet
 
     public boolean isIdsUsed() {
         return idsIn != null && !idsIn.isEmpty();
@@ -154,12 +156,12 @@ public class AituToimikuntaCriteria implements Serializable, TutkintorakenneAwar
         this.oppilaitoskoodiIn = oppilaitoskoodiIn;
     }
 
-    public boolean isToimikuntaEmails() {
-        return toimikuntaEmail;
+    public boolean isViranomaisEmail() {
+        return viranomaisEmail;
     }
 
-    public void setToimikuntaEmails(boolean emails) {
-        this.toimikuntaEmail = emails;
+    public void setViranomaisEmail(boolean viranomaisEmail) {
+        this.viranomaisEmail = viranomaisEmail;
     }
 
     public AituOppilaitosCriteria toOppilaitosCriteria() {
@@ -194,5 +196,19 @@ public class AituToimikuntaCriteria implements Serializable, TutkintorakenneAwar
             });
         }
         return and;
+    }
+
+    /**
+     * @return the jasenet
+     */
+    public boolean isJasenet() {
+        return jasenet;
+    }
+
+    /**
+     * @param jasenet the jasenet to set
+     */
+    public void setJasenet(boolean jasenet) {
+        this.jasenet = jasenet;
     }
 }
