@@ -1,6 +1,6 @@
 #
 # TÄHÄN TIEDOSTOON EI SAA TALLENTAA YMPÄRISTÖKOHTAISIA ARVOJA MUUTOIN KUIN MUUTTUJINA!!!
-# 
+#
 # Tämä tiedosto toimii pohjana oph-configuration/common.properties tiedostolle,
 # joka asettaa tomcatin ympäristökohtaiset arvot.
 #
@@ -86,7 +86,7 @@ osoitepalvelu.osoiteService.rest.url=
 root.organisaatio.oid=1.2.246.562.10.00000000001
 user.home.conf=${user.home}/oph-configuration
 user.webservice.url.backend=https\://${host.virkailija}/authentication-service/services/userService
-viestipalvelu.emailsend.endpoint.uri=https://${host.virkailija}/viestintapalvelu-ui/
+viestipalvelu.emailsend.endpoint.uri=https://${host.virkailija}/viestintapalvelu-ui/#/email
 viestipalvelu.emailsend.email.from=oph_tiedotus@oph.fi
 viestipalvelu.emailsend.email.sender=Opetushallitus
 viestipalvelu.emailsend.calling.process=Osoitetietojarjestelma
