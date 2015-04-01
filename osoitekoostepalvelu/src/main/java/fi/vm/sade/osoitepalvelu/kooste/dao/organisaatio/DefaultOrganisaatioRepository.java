@@ -92,6 +92,9 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         if (organisaatioCriteria.isOrganisaatioTyyppiUsed()) {
             conditions.add(new Criteria("tyypit").in(organisaatioCriteria.getOrganisaatioTyyppis()));
         }
+        if (organisaatioCriteria.isOidUsed()) {
+            conditions.add(new Criteria("oid").in(organisaatioCriteria.getOidList()));
+        }
         if (organisaatioCriteria.isKuntaUsed()) {
             conditions.add(new Criteria("kotipaikkaUri").in(organisaatioCriteria.getKuntaList()));
         }
@@ -129,7 +132,7 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
 
     @Override
     public DateTime findOldestCachedEntry() {
-        
+
         // Tehty ihan kyselyllä järjestäen cachedAt. Jostain syystä alempi alkuperäinen ei palauta tietoja oikein.
         Query q = Query.query(new Criteria());
         q.fields().include("cachedAt");
@@ -145,7 +148,7 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         Aggregation agg = newAggregation(
             group("oid").min("cachedAt").as("oldestCacheTime")
         );
-        
+
         return getMongoOperations().aggregate(agg, OrganisaatioDetails.class.getAnnotation(Document.class).collection(),
                 DateTime.class).getUniqueMappedResult();
          */
