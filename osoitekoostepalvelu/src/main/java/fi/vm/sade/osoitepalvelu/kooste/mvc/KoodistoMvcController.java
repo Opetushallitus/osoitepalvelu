@@ -88,6 +88,14 @@ public class KoodistoMvcController extends AbstractMvcController implements Seri
         return koodistoService.findKuntaOptions(parseLocale(lang));
     }
 
+    @ApiOperation("Palauttaa kielet.")
+    @RequestMapping(method  =  RequestMethod.GET, value  =  "/kieli")
+    @ResponseBody
+    public List<UiKoodiItemDto> findKieliOptions(@RequestParam("lang") String lang) {
+        return koodistoService.findKieliOptions(parseLocale(lang));
+    }
+
+
     @ApiOperation("Palauttaa tutkintotyypit.")
     @RequestMapping(method  =  RequestMethod.GET, value  =  "/tutkintotyyppi")
     @ResponseBody
@@ -135,6 +143,13 @@ public class KoodistoMvcController extends AbstractMvcController implements Seri
     @ResponseBody
     public List<UiKoodiItemDto> findKoulutusTyyppiOptions(@RequestParam("lang") String lang) {
         return koodistoService.findKoulutusTyyppiOptions(parseLocale(lang));
+    }
+
+    @ApiOperation("Palauttaa koulutuslajit.")
+    @RequestMapping(method  =  RequestMethod.GET, value  =  "/koulutuslaji")
+    @ResponseBody
+    public List<UiKoodiItemDto> findKoulutusLajiOptions(@RequestParam("lang") String lang) {
+        return koodistoService.findKoulutusLajiOptions(parseLocale(lang));
     }
 
     @ApiOperation("Palauttaa koulutukset haluttaessa rajattuna yhteen opintoalaan.")

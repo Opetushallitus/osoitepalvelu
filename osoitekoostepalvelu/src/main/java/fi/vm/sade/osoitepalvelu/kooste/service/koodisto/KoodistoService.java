@@ -55,6 +55,8 @@ public interface KoodistoService extends Serializable {
 
     List<UiKoodiItemDto> findOppilaitoksenOpetuskieliOptions(Locale locale);
 
+    List<UiKoodiItemDto> findKieliOptions(Locale locale);
+
     List<UiKoodiItemDto> findKoulutuksenKieliOptions(Locale locale);
 
     List<UiKoodiItemDto> findKoulutusAsteOptions(Locale locale);
@@ -77,6 +79,8 @@ public interface KoodistoService extends Serializable {
 
     List<UiKoodiItemDto> findKoulutusTyyppiOptions(Locale locale);
 
+    List<UiKoodiItemDto> findKoulutusLajiOptions(Locale locale);
+
     List<UiKoodiItemDto> findKoulutusByKoulutustyyppiUri(Locale locale, String koulutustyyppiUri);
 
     List<UiKoodiItemDto> findAlueHallintoVirastoOptions(Locale locale);
@@ -92,7 +96,7 @@ public interface KoodistoService extends Serializable {
      * mapin. Mapista halutun koodiston voi hakea KoodistoTyyppi enumin arvon
      * perustella. Huom: Metodi suorittaa useita kutsuja ulkoiseen
      * koodistopalveluun.
-     * 
+     *
      * @param locale
      *            Koodistojen arvojen nimien ja kuvauksen lokalisoinnin locale.
      * @return Mappi, joka sisältää kaikkien tuettujen koodistojen arvot.
