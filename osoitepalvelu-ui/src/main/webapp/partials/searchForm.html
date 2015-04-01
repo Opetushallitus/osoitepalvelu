@@ -109,7 +109,18 @@
                         <option ng-repeat="opt in options.tutkintotoimikuntaRoolis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
-                <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm()"></div>
+                <div class="term-separator" ng-show="isShowKoulutusTerms() && (isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm())"></div>
+                <div class="term" ng-show="isShowKoulutusTerms()" title="{{msg('search_term_koulutuslaji')}}">
+                    <select ui-select2 multiple id="koulutuslajis" class="form-control" ng-model="terms.koulutuslajis" data-placeholder="{{msg('search_term_koulutuslaji')}}">
+                        <option ng-repeat="opt in options.koulutuslajis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
+                    </select>
+                </div>
+               <div class="term" ng-show="isShowKoulutusTerms()" title="{{msg('search_term_opetuskieli')}}">
+                    <select ui-select2 multiple id="opetusKielis" class="form-control" ng-model="terms.opetusKielis" data-placeholder="{{msg('search_term_opetuskieli')}}">
+                        <option ng-repeat="opt in options.kielis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
+                    </select>
+                </div>
+                <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm() || isShowKoulutusTerms()"></div>
                 <div class="term" ng-show="isShowTutkintohierarkiaTerms()" title="{{msg('search_term_koulutusala')}}">
                     <select ui-select2 multiple id="koulutusalas" class="form-control" ng-model="terms.koulutusalas"
                             ng-change="koulutusalasChanged()" data-placeholder="{{msg('search_term_koulutusala')}}">

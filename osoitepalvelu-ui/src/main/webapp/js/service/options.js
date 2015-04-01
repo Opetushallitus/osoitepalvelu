@@ -151,4 +151,13 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
     this.listKoulutusTyyppis = function(success, error) {
         _get('api/koodisto/koulutustyyppi', success, error);
     };
+
+    this.listKoulutusLajis = function(success, error) {
+        _get('api/koodisto/koulutuslaji', success, error);
+    };
+
+    this.listKielis = function(success, error) {
+        _get('api/koodisto/kieli', success, error);
+    };
+
 }]);

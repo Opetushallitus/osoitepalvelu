@@ -92,6 +92,8 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             OptionsService.listKoulutusalas(function(data) { $scope.options.koulutusalas = data; });
             //OptionsService.listOpintoalas(function(data) {$scope.options.opintoalas = data;});
             OptionsService.listKoulutusTyyppis(function(data) {$scope.options.koulutustyyppis = data;});
+            OptionsService.listKoulutusLajis(function(data) {$scope.options.koulutuslajis = data;});
+            OptionsService.listKielis(function(data) {$scope.options.kielis = data;});
             //OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
             //OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
             $scope.options.tutkintotoimikuntaToimikausis = TutkintotoimikuntaToimikausis;
@@ -162,7 +164,8 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
 
     $scope.isShowTutkintohierarkiaTerms = function() {
         return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') != -1
-            || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') != -1;
+            || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') != -1
+            || $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') != -1;
     };
 
     $scope.isShowTutkintotoimikuntaRooliTerm = function() {
@@ -183,11 +186,16 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
     };
 
     $scope.isShowKoulutusTyyppiTerm = function() {
-        return $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') != -1;
+        return $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') != -1
+            || $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') != -1;
     };
 
     $scope.isShowKoulutaTerm = function() {
         return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') != -1;
+    };
+
+    $scope.isShowKoulutusTerms = function() {
+        return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') != -1;
     };
 
     $scope.isShowVuosiluokkaTerm = function(){
