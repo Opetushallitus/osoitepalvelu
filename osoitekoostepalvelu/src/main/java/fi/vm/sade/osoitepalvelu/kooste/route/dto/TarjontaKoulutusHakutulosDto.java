@@ -39,10 +39,11 @@ public class TarjontaKoulutusHakutulosDto implements Serializable {
     }
 
     public enum KoulutusmoduuliTyyppi {
-
+        TUTKINTO_OHJELMA,
         TUTKINNON_OSA,
         TUTKINTO,
-        TUTKINTO_OHJELMA;
+        OPINTOJAKSO,
+        OPINTOKOKONAISUUS;
     }
 
     public enum ToteutustyyppiEnum {
@@ -94,14 +95,18 @@ public class TarjontaKoulutusHakutulosDto implements Serializable {
     private String koulutuslajiUri;
     private TarjontaTila tila;
 
-    /// @TODO: Tätä varmaan ei tarvita...
-    private ToteutustyyppiEnum toteutustyyppiEnum;
+    // Jätetään huomiotta JSON to Dto konversiossa
+    // enum sisältö voi muuttua ja toteutustyyppiä ei tarvita
+    //private ToteutustyyppiEnum toteutustyyppiEnum;
     private Map<String, String> pohjakoulutusvaatimus;
     private String koulutuskoodi;
     private Date koulutuksenAlkamisPvmMin = null;
     private Date koulutuksenAlkamisPvmMax = null;
     private ArrayList<String> tarjoajat;
-    private KoulutusmoduuliTyyppi koulutusmoduuliTyyppi;
+
+    // Jätetään huomiotta JSON to Dto konversiossa (ei tarvita)
+    // enum sisältö voi muuttua ja koulutusmoduulityyppiä ei tarvita
+    //private KoulutusmoduuliTyyppi koulutusmoduuliTyyppi;
 
     private String komoOid;
 
@@ -218,20 +223,6 @@ public class TarjontaKoulutusHakutulosDto implements Serializable {
     }
 
     /**
-     * @return the toteutustyyppiEnum
-     */
-    public ToteutustyyppiEnum getToteutustyyppiEnum() {
-        return toteutustyyppiEnum;
-    }
-
-    /**
-     * @param toteutustyyppiEnum the toteutustyyppiEnum to set
-     */
-    public void setToteutustyyppiEnum(ToteutustyyppiEnum toteutustyyppiEnum) {
-        this.toteutustyyppiEnum = toteutustyyppiEnum;
-    }
-
-    /**
      * @return the pohjakoulutusvaatimus
      */
     public Map<String, String> getPohjakoulutusvaatimus() {
@@ -299,20 +290,6 @@ public class TarjontaKoulutusHakutulosDto implements Serializable {
      */
     public void setTarjoajat(ArrayList<String> tarjoajat) {
         this.tarjoajat = tarjoajat;
-    }
-
-    /**
-     * @return the koulutusmoduuliTyyppi
-     */
-    public KoulutusmoduuliTyyppi getKoulutusmoduuliTyyppi() {
-        return koulutusmoduuliTyyppi;
-    }
-
-    /**
-     * @param koulutusmoduuliTyyppi the koulutusmoduuliTyyppi to set
-     */
-    public void setKoulutusmoduuliTyyppi(KoulutusmoduuliTyyppi koulutusmoduuliTyyppi) {
-        this.koulutusmoduuliTyyppi = koulutusmoduuliTyyppi;
     }
 
     /**

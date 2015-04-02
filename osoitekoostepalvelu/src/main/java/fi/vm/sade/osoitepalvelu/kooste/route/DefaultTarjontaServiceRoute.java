@@ -40,10 +40,10 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
 
     private static final String TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM   = "koulutuslaji";
     private static final String TARJONTA_KOULUTUS_OPETUSKIELET_PARAM   = "opetuskielet";
-    private static final String TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM   = "koulutusalakoodis";
-    private static final String TARJONTA_KOULUTUS_OPINTOALAS_PARAM     = "opintoalakoodis";
+    private static final String TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM   = "koulutusalakoodi";
+    private static final String TARJONTA_KOULUTUS_OPINTOALAS_PARAM     = "opintoalakoodi";
     private static final String TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM = "koulutustyyppi";
-    private static final String TARJONTA_KOULUTUS_KOULUTUS_PARAM       = "koulutuskoodis";
+    private static final String TARJONTA_KOULUTUS_KOULUTUS_PARAM       = "koulutuskoodi";
 
     private static final long TIMEOUT_MINUTES = 30L;
 

@@ -93,6 +93,15 @@ public class SearchTermsDto implements Serializable {
         return false;
     }
 
+    public SearchTargetGroupDto getTargetGroup(SearchTargetGroup.GroupType groupType) {
+        for (SearchTargetGroupDto targetGroup : targetGroups) {
+            if (groupType == targetGroup.getType()) {
+                return targetGroup;
+            }
+        }
+        return null;
+    }
+
     public List<SearchTargetGroupDto> getTargetGroups() {
         return targetGroups;
     }

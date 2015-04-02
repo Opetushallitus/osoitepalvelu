@@ -88,9 +88,9 @@ public class SearchTargetGroup implements Serializable {
 
     public enum TargetType {
         ORGANISAATIO,
-        KOULUTUSTOIMIJA,
-        OPPILAITOS,
-        TOIMIPISTE,
+        KOULUTUSTOIMIJA("Koulutustoimija"),
+        OPPILAITOS("Oppilaitos"),
+        TOIMIPISTE("Opetuspiste", "Toimipiste"),
         YHTEYSHENKILO,
         REHTORI,
         KRIISITIEDOTUS,
@@ -103,6 +103,15 @@ public class SearchTargetGroup implements Serializable {
         TUTKINTOVASTAAVA,
         TUNNUKSENHALTIJAT,
         VIRANOMAIS_EMAIL;
+
+        private String[] organisaatioPalveluTyyppiArvo;
+
+        private TargetType() {
+            this.organisaatioPalveluTyyppiArvo  =  null;
+        }
+        private TargetType(String... organisaatioPalveluTyyppiArvo) {
+            this.organisaatioPalveluTyyppiArvo  =  organisaatioPalveluTyyppiArvo;
+        }
 
         public static TargetType[] allHenkiloTypes() {
             return new TargetType[] {
@@ -128,6 +137,24 @@ public class SearchTargetGroup implements Serializable {
                 JARJESTAJA_ORGANISAATIO,
                 VIRANOMAIS_EMAIL
             };
+        }
+
+        public String[] getOrganisaatioPalveluTyyppiArvo() {
+            if( this.organisaatioPalveluTyyppiArvo != null ) {
+                return organisaatioPalveluTyyppiArvo.clone();
+            } else {
+                return null;
+            }
+        }
+
+        public static TargetType[] getOrganisaatioPalveluTypes() {
+            List<TargetType> types  =  new ArrayList<TargetType>();
+            for (TargetType type : values()) {
+                if (type.getOrganisaatioPalveluTyyppiArvo() != null) {
+                    types.add(type);
+                }
+            }
+            return types.toArray(new TargetType[0]);
         }
     };
 

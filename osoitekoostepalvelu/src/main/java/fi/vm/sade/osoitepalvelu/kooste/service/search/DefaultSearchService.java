@@ -114,7 +114,41 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
         List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults
                 = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
-        if (searchOrganisaatios || searchKoulutuksenTarjoajat) {
+
+        if (searchKoulutuksenTarjoajat) {
+            // Otetaan organisaatiotyypit "KOULUTUKSEN_TARJOAJAT" optioista
+            organisaatioCriteria.setOrganisaatioTyyppis(
+                    parseOrganisaatioTyyppis(terms, SearchTargetGroup.GroupType.KOULUTUKSEN_TARJOAJAT));
+
+            logger.info("Organisaatiotyypit: " + organisaatioCriteria.getOrganisaatioTyyppis());
+
+            ensureAtLeastOneConditionUsed(organisaatioCriteria);
+
+            // Käsitellään koulutuskriteerit
+            KoulutusCriteriaDto koulutusCriteria = produceKoulutusCriteria(terms);
+            List<String> oidList = tarjontaService.findOrganisaatios(koulutusCriteria, context);
+
+            if (oidList.isEmpty()) {
+                logger.info("Oid list of KOULUTUKSEN_TARJOAJA empty --> no organisations found with koulutus criteria!");
+            }
+            else {
+                // Haetaan koulutusten tarjoajaorganisaatioiden yhteystiedot
+                organisaatioCriteria.setOidList(oidList);
+
+                organisaatioYhteystietoResults = organisaatioService.findOrganisaatioYhteystietos(organisaatioCriteria,
+                        terms.getLocale(), context);
+
+                logger.info("organisaatioYhteystietoResults size: " + organisaatioYhteystietoResults.size());
+
+                // Convert to result DTOs (with e.g. postinumeros):
+                List<OrganisaatioResultDto> convertedResults  =  dtoConverter.convert(
+                        organisaatioYhteystietoResults, new ArrayList<OrganisaatioResultDto>(),
+                        OrganisaatioResultDto.class, terms.getLocale());
+                results.setOrganisaatios(convertedResults);
+            }
+        }
+
+        if (searchOrganisaatios) {
             SearchTargetGroup.TargetType[] targetTypes;
             if (returnOrgansiaatios) {
                 // Only the ones with target group and ORGANISAATIO-type selected:
@@ -127,13 +161,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 targetTypes = new SearchTargetGroup.TargetType[0];
             }
             organisaatioCriteria.setOrganisaatioTyyppis(parseOrganisaatioTyyppis(terms, targetTypes));
-
-            // Jos mukana koulutuskriteereitä
-            if (searchKoulutuksenTarjoajat) {
-                KoulutusCriteriaDto koulutusCriteria = produceKoulutusCriteria(terms);
-                List<String> oidList = tarjontaService.findOrganisaatios(koulutusCriteria, context);
-                organisaatioCriteria.setOidList(oidList);
-            }
 
             ensureAtLeastOneConditionUsed(organisaatioCriteria);
             organisaatioYhteystietoResults = organisaatioService.findOrganisaatioYhteystietos(organisaatioCriteria,
@@ -302,6 +329,22 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         }
 
         return criteria;
+    }
+
+    protected List<String> parseOrganisaatioTyyppis(SearchTermsDto terms, SearchTargetGroup.GroupType groupType) {
+        List<String> organisaatioTyyppis  =  new ArrayList<String>();
+        SearchTargetGroupDto groupDto = terms.getTargetGroup(groupType);
+
+        if (groupDto == null) {
+            return organisaatioTyyppis;
+        }
+
+        for (SearchTargetGroup.TargetType option : groupDto.getOptions()) {
+            if (Arrays.asList(SearchTargetGroup.TargetType.getOrganisaatioPalveluTypes()).contains(option)) {
+                organisaatioTyyppis.addAll(Arrays.asList(option.getOrganisaatioPalveluTyyppiArvo()));
+            }
+        }
+        return organisaatioTyyppis;
     }
 
     protected List<String> parseOrganisaatioTyyppis(SearchTermsDto terms, SearchTargetGroup.TargetType... targetTypes) {
