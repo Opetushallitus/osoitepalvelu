@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.route.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -150,5 +151,45 @@ public class KoulutusCriteriaDto implements Serializable {
      */
     public void setKoulutusalakoodis(List<String> koulutusalakoodis) {
         this.koulutusalakoodis = koulutusalakoodis;
+    }
+
+    @JsonIgnore
+    public boolean isKoulutustyyppisUsed() {
+        return this.koulutustyyppis != null && !this.koulutustyyppis.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isOpetuskieletUsed() {
+        return this.opetuskielet != null && !this.opetuskielet.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isKoulutuslajiUsed() {
+        return this.koulutuslaji != null && !this.koulutuslaji.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isKoulutuskoodisUsed() {
+        return this.koulutuskoodis != null && !this.koulutuskoodis.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isOpintoalakoodisUsed() {
+        return this.opintoalakoodis != null && !this.opintoalakoodis.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isKoulutusalakoodisUsed() {
+        return this.koulutusalakoodis != null && !this.koulutusalakoodis.isEmpty();
+    }
+
+    @JsonIgnore
+    public int getNumberOfUsedConditions() {
+        return (isKoulutustyyppisUsed() ? 1 : 0)
+                + (isOpetuskieletUsed() ? 1 : 0)
+                + (isKoulutuslajiUsed() ? 1 : 0)
+                + (isKoulutuskoodisUsed() ? 1 : 0)
+                + (isOpintoalakoodisUsed() ? 1 : 0)
+                + (isKoulutusalakoodisUsed() ? 1 : 0);
     }
 }

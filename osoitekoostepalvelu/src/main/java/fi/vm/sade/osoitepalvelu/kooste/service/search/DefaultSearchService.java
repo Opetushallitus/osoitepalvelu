@@ -83,7 +83,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     @Cacheable(cacheName  =  "osoitepalveluSearchResultsCache")
     public SearchResultsDto find(@PartialCacheKey SearchTermsDto terms, CamelRequestContext context)
             throws TooFewSearchConditionsForOrganisaatiosException,
-                    TooFewSearchConditionsForHenkilosException {
+                    TooFewSearchConditionsForHenkilosException,
+                    TooFewSearchConditionsForKoulutusException {
 
         logger.info("Starting search by {}", getLoggedInUserOidOrNull());
 
@@ -122,10 +123,15 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
             logger.info("Organisaatiotyypit: " + organisaatioCriteria.getOrganisaatioTyyppis());
 
+            // Tarkistetaan, että riittävästi organisaatioiden hakuriteerejä
             ensureAtLeastOneConditionUsed(organisaatioCriteria);
 
-            // Käsitellään koulutuskriteerit
+            // Luodaan koulutuskriteerit
             KoulutusCriteriaDto koulutusCriteria = produceKoulutusCriteria(terms);
+
+            // Tarkistetaan, että riittävästi koulutuksen hakuriteerejä
+            ensureAtLeastOneConditionUsed(koulutusCriteria);
+
             List<String> oidList = tarjontaService.findOrganisaatios(koulutusCriteria, context);
 
             if (oidList.isEmpty()) {
@@ -241,6 +247,14 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             throw new TooFewSearchConditionsForOrganisaatiosException();
         }
         organisaatioCriteria.setUseOrganisaatioTyyppi(true);
+    }
+
+    protected void ensureAtLeastOneConditionUsed(KoulutusCriteriaDto koulutusCriteria)
+            throws TooFewSearchConditionsForKoulutusException {
+        int numberOfConditions = koulutusCriteria.getNumberOfUsedConditions();
+        if (numberOfConditions < 1) {
+            throw new TooFewSearchConditionsForKoulutusException();
+        }
     }
 
     protected AituToimikuntaCriteria produceToimikuntaCriteria(SearchTermsDto terms) {
