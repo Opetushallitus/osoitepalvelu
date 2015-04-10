@@ -117,14 +117,16 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
 
         if (searchKoulutuksenTarjoajat) {
+            OrganisaatioYhteystietoCriteriaDto ktOrgCriteria = produceOrganisaatioCriteria(terms);
+
             // Otetaan organisaatiotyypit "KOULUTUKSEN_TARJOAJAT" optioista
-            organisaatioCriteria.setOrganisaatioTyyppis(
+            ktOrgCriteria.setOrganisaatioTyyppis(
                     parseOrganisaatioTyyppis(terms, SearchTargetGroup.GroupType.KOULUTUKSEN_TARJOAJAT));
 
-            logger.info("Organisaatiotyypit: " + organisaatioCriteria.getOrganisaatioTyyppis());
+            logger.info("Koulutuksen tarjoajat, Organisaatiotyypit: " + ktOrgCriteria.getOrganisaatioTyyppis());
 
             // Tarkistetaan, että riittävästi organisaatioiden hakuriteerejä
-            ensureAtLeastOneConditionUsed(organisaatioCriteria);
+            ensureAtLeastOneConditionUsed(ktOrgCriteria);
 
             // Luodaan koulutuskriteerit
             KoulutusCriteriaDto koulutusCriteria = produceKoulutusCriteria(terms);
@@ -139,18 +141,23 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
             else {
                 // Haetaan koulutusten tarjoajaorganisaatioiden yhteystiedot
-                organisaatioCriteria.setOidList(oidList);
+                ktOrgCriteria.setOidList(oidList);
 
-                organisaatioYhteystietoResults = organisaatioService.findOrganisaatioYhteystietos(organisaatioCriteria,
+                List<OrganisaatioYhteystietoHakuResultDto> ktOrgYhteystietoResults;
+
+                ktOrgYhteystietoResults = organisaatioService.findOrganisaatioYhteystietos(ktOrgCriteria,
                         terms.getLocale(), context);
 
-                logger.info("organisaatioYhteystietoResults size: " + organisaatioYhteystietoResults.size());
+                // Lisätään koulutusten tarjoajaorganisaatioiden yhteystiedot muiden organisaatioyhteystietojen joukkoon
+                organisaatioYhteystietoResults.addAll(ktOrgYhteystietoResults);
+
+                logger.info("Koulutuksen tarjoajat, organisaatioiden yhteystiedot size: " + ktOrgYhteystietoResults.size());
 
                 // Convert to result DTOs (with e.g. postinumeros):
                 List<OrganisaatioResultDto> convertedResults  =  dtoConverter.convert(
-                        organisaatioYhteystietoResults, new ArrayList<OrganisaatioResultDto>(),
+                        ktOrgYhteystietoResults, new ArrayList<OrganisaatioResultDto>(),
                         OrganisaatioResultDto.class, terms.getLocale());
-                results.setOrganisaatios(convertedResults);
+                results.addOrganisaatios(convertedResults);
             }
         }
 
@@ -169,14 +176,20 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             organisaatioCriteria.setOrganisaatioTyyppis(parseOrganisaatioTyyppis(terms, targetTypes));
 
             ensureAtLeastOneConditionUsed(organisaatioCriteria);
-            organisaatioYhteystietoResults = organisaatioService.findOrganisaatioYhteystietos(organisaatioCriteria,
+
+            List<OrganisaatioYhteystietoHakuResultDto> orgYhteystietoResults;
+
+            orgYhteystietoResults = organisaatioService.findOrganisaatioYhteystietos(organisaatioCriteria,
                     terms.getLocale(), context);
+
+            organisaatioYhteystietoResults.addAll(orgYhteystietoResults);
+
             if (returnOrgansiaatios) {
                 // Convert to result DTOs (with e.g. postinumeros):
                 List<OrganisaatioResultDto> convertedResults  =  dtoConverter.convert(
-                        organisaatioYhteystietoResults, new ArrayList<OrganisaatioResultDto>(),
+                        orgYhteystietoResults, new ArrayList<OrganisaatioResultDto>(),
                         OrganisaatioResultDto.class, terms.getLocale());
-                results.setOrganisaatios(convertedResults);
+                results.addOrganisaatios(convertedResults);
             }
         }
 

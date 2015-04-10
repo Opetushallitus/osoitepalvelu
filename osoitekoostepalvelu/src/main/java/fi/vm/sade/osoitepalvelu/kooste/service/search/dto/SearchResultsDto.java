@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class SearchResultsDto implements Serializable {
     private static final long serialVersionUID = 6775832321069168232L;
-    
+
     private List<HenkiloHakuResultDto> henkilos = new ArrayList<HenkiloHakuResultDto>();
     private List<OrganisaatioResultDto> organisaatios = new ArrayList<OrganisaatioResultDto>();
     private List<AituToimikuntaResultDto> aituToimikuntas = new ArrayList<AituToimikuntaResultDto>();
@@ -50,6 +50,10 @@ public class SearchResultsDto implements Serializable {
 
     public void setOrganisaatios(List<OrganisaatioResultDto> organisaatios) {
         this.organisaatios = organisaatios;
+    }
+
+    public void addOrganisaatios(List<OrganisaatioResultDto> organisaatios) {
+        this.organisaatios.addAll(organisaatios);
     }
 
     public void setAituToimikuntas(List<AituToimikuntaResultDto> aituToimikuntas) {
