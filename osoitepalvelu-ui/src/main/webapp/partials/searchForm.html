@@ -54,6 +54,11 @@
                     <table class="criterionTable">
                         <th class="selectedCriterionName">
                             {{tg.name}}
+                        <div ng-if="!isOptionSelected(tg.options)" ng-hide="tg.hideOptions">
+                            <span class="text-error">
+                                Kohderyhmän tarkennus puuttuu!
+                            </span>
+                        </div>
                         </th>
                         <td class="criterionOptions" ng-hide="tg.hideOptions">
                             <div class="criterionOption" ng-repeat="opt in tg.options">
@@ -61,7 +66,7 @@
                             </div>
                         </td>
                         <!-- Tyhjä TD, jotta sarakkeet menevät oikein -->
-                        <td class="criterionOptions" ng-hide="not tg.hideOptions"></td>
+                        <td class="criterionOptions" ng-hide="tg.hideOptions === false"></td>
                         <td class="criterionActions">
                             <button class="btn btn-danger" ng-click="removeTargetGroup($index)">
                                 <i class="fa fa-ban fa-1x"></i>

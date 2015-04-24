@@ -269,6 +269,22 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         return $scope.isTermsShown();
     };
 
+    $scope.isOptionSelected = function(options) {
+        var result = false;
+
+        if (angular.isArray(options) === false) {
+            $log.warn("Target group options array invalid! ", options);
+            return false;
+        };
+        angular.forEach(options, function(option) {
+            if(option.selected === true) {
+                result = true;
+                return;
+            }
+        });
+        return result;
+    };
+
     $scope.isSearchAllowed = function() {
         return $scope.isTermsShown() && $scope.visibleTargetGroups.length > 0;
     };
