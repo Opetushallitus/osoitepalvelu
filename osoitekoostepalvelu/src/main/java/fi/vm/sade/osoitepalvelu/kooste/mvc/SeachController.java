@@ -81,6 +81,7 @@ public class SeachController extends AbstractMvcController implements Serializab
      * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForOrganisaatiosException
      * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForHenkilosException
      * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForKoulutusException
+     * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.OrganisaatioTyyppiMissingForOrganisaatiosException
      */
     @ApiOperation("Palauttaa osoitteet annetuilla hakuehdoilla.")
     @RequestMapping(value = "list.json", method  =  RequestMethod.POST)
@@ -89,7 +90,8 @@ public class SeachController extends AbstractMvcController implements Serializab
                             @RequestParam("lang") String lang)
             throws TooFewSearchConditionsForOrganisaatiosException,
             TooFewSearchConditionsForHenkilosException,
-            TooFewSearchConditionsForKoulutusException {
+            TooFewSearchConditionsForKoulutusException,
+            OrganisaatioTyyppiMissingForOrganisaatiosException {
         CamelRequestContext context  =  new DefaultCamelRequestContext();
         searchParameters.getSearchTerms().setLocale(parseLocale(lang));
         SearchResultsDto results = searchService.find(searchParameters.getSearchTerms(), context);
@@ -125,6 +127,7 @@ public class SeachController extends AbstractMvcController implements Serializab
      * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForOrganisaatiosException
      * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForHenkilosException
      * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForKoulutusException
+     * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.OrganisaatioTyyppiMissingForOrganisaatiosException
      * @see #storeExcelParameters(fi.vm.sade.osoitepalvelu.kooste.mvc.dto.FilteredSearchParametersDto)
      * There might be a better way around. Done this way so that we can avoid too long GET-request and redirect
      * borwser to the download action without the need to store data on disk/db.
@@ -142,7 +145,8 @@ public class SeachController extends AbstractMvcController implements Serializab
                    @RequestParam("lang") String lang)
             throws NotFoundException, TooFewSearchConditionsForOrganisaatiosException,
                     TooFewSearchConditionsForHenkilosException,
-                    TooFewSearchConditionsForKoulutusException {
+                    TooFewSearchConditionsForKoulutusException,
+                    OrganisaatioTyyppiMissingForOrganisaatiosException {
         String storeKey  =  resultTransformerService.getLoggeInUserOid() + "@" + downlaodId;
         FilteredSearchParametersDto searchParameters  =  storedParameters.get(storeKey);
         if(searchParameters  == null) {

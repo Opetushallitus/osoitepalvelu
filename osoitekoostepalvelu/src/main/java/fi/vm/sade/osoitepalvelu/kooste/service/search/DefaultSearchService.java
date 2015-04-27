@@ -49,6 +49,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * User: ratamaa
@@ -84,7 +85,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     public SearchResultsDto find(@PartialCacheKey SearchTermsDto terms, CamelRequestContext context)
             throws TooFewSearchConditionsForOrganisaatiosException,
                     TooFewSearchConditionsForHenkilosException,
-                    TooFewSearchConditionsForKoulutusException {
+                    TooFewSearchConditionsForKoulutusException,
+                    OrganisaatioTyyppiMissingForOrganisaatiosException {
 
         logger.info("Starting search by {}", getLoggedInUserOidOrNull());
 
@@ -115,6 +117,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
         List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults
                 = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
+
+        logger.info("searchKoulutuksenTarjoajat == " + searchKoulutuksenTarjoajat);
 
         if (searchKoulutuksenTarjoajat) {
             OrganisaatioYhteystietoCriteriaDto ktOrgCriteria = produceOrganisaatioCriteria(terms);
@@ -151,6 +155,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 // Lisätään koulutusten tarjoajaorganisaatioiden yhteystiedot muiden organisaatioyhteystietojen joukkoon
                 organisaatioYhteystietoResults.addAll(ktOrgYhteystietoResults);
 
+                logger.info("Organisaatioiden haku kriteerit: " + ToStringBuilder.reflectionToString(ktOrgCriteria));
                 logger.info("Koulutuksen tarjoajat, organisaatioiden yhteystiedot size: " + ktOrgYhteystietoResults.size());
 
                 // Convert to result DTOs (with e.g. postinumeros):
@@ -160,6 +165,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 results.addOrganisaatios(convertedResults);
             }
         }
+
+        logger.info("searchOrganisaatios == " + searchOrganisaatios);
 
         if (searchOrganisaatios) {
             SearchTargetGroup.TargetType[] targetTypes;
@@ -193,6 +200,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
         }
 
+        logger.info("searchNayttotutkinnonJarjestajas == " + searchNayttotutkinnonJarjestajas);
+
         if (searchNayttotutkinnonJarjestajas) {
             AituOppilaitosCriteria oppilaitosCriteria = produceOppilaitosCriteria(terms);
             if (anyOrganisaatioRelatedConditionsUsed) {
@@ -210,6 +219,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
         }
 
+        logger.info("searchToimikuntas || searchToimikuntaEmails == " + (searchToimikuntas || searchToimikuntaEmails));
+
         if (searchToimikuntas || searchToimikuntaEmails) {
             AituToimikuntaCriteria toimikuntaCriteria = produceToimikuntaCriteria(terms);
             if (anyOrganisaatioRelatedConditionsUsed) {
@@ -225,6 +236,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 results.setAituToimikuntas(new ArrayList<AituToimikuntaResultDto>());
             }
         }
+
+        logger.info("searchHenkilos == " + searchHenkilos);
 
         if (searchHenkilos) {
             List<String> organisaatioOids = oids(organisaatioYhteystietoResults);
@@ -252,7 +265,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     }
 
     protected void ensureAtLeastOneConditionUsed(OrganisaatioYhteystietoCriteriaDto organisaatioCriteria)
-            throws TooFewSearchConditionsForOrganisaatiosException {
+            throws TooFewSearchConditionsForOrganisaatiosException, OrganisaatioTyyppiMissingForOrganisaatiosException {
         organisaatioCriteria.setUseOrganisaatioTyyppi(false);
         int numberOfConditions = organisaatioCriteria.getNumberOfUsedConditions();
         if (numberOfConditions < 1) {
@@ -260,6 +273,13 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             throw new TooFewSearchConditionsForOrganisaatiosException();
         }
         organisaatioCriteria.setUseOrganisaatioTyyppi(true);
+
+        logger.info("Organisaatio criteria tyypit:" + organisaatioCriteria.getOrganisaatioTyyppis());
+
+        if (organisaatioCriteria.getOrganisaatioTyyppis().isEmpty()) {
+            // If organisaatiotyyppi is missing, require it:
+            throw new OrganisaatioTyyppiMissingForOrganisaatiosException();
+        }
     }
 
     protected void ensureAtLeastOneConditionUsed(KoulutusCriteriaDto koulutusCriteria)

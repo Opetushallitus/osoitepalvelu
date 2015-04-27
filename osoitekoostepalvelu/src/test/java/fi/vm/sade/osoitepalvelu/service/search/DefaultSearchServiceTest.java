@@ -30,6 +30,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.aitu.DefaultAituService;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTargetGroupDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTermDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.DefaultSearchService;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.OrganisaatioTyyppiMissingForOrganisaatiosException;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForHenkilosException;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForKoulutusException;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForOrganisaatiosException;
@@ -131,7 +132,10 @@ public class DefaultSearchServiceTest {
 
     @Test
     public void testAituToimikuntaJasenet() throws
-                TooFewSearchConditionsForOrganisaatiosException, TooFewSearchConditionsForHenkilosException, TooFewSearchConditionsForKoulutusException {
+            TooFewSearchConditionsForOrganisaatiosException,
+            TooFewSearchConditionsForHenkilosException,
+            TooFewSearchConditionsForKoulutusException,
+            OrganisaatioTyyppiMissingForOrganisaatiosException {
         // Lisätään oppilaitos-testidata
         List<AituOppilaitos> oppilaitokses = new LinkedList<AituOppilaitos>();
         oppilaitokses.add(createAituOppilaitos(1));
@@ -185,7 +189,10 @@ public class DefaultSearchServiceTest {
 
     @Test
     public void testAituToimikuntaSahkoposti() throws
-                TooFewSearchConditionsForOrganisaatiosException, TooFewSearchConditionsForHenkilosException, TooFewSearchConditionsForKoulutusException {
+            TooFewSearchConditionsForOrganisaatiosException,
+            TooFewSearchConditionsForHenkilosException,
+            TooFewSearchConditionsForKoulutusException,
+            OrganisaatioTyyppiMissingForOrganisaatiosException {
         // Lisätään oppilaitos-testidata
         List<AituOppilaitos> oppilaitokses = new LinkedList<AituOppilaitos>();
         oppilaitokses.add(createAituOppilaitos(1));
@@ -246,7 +253,10 @@ public class DefaultSearchServiceTest {
 
     @Test
     public void testOrganisaatioResultsReturned() throws
-                TooFewSearchConditionsForOrganisaatiosException, TooFewSearchConditionsForHenkilosException, TooFewSearchConditionsForKoulutusException {
+            TooFewSearchConditionsForOrganisaatiosException,
+            TooFewSearchConditionsForHenkilosException,
+            TooFewSearchConditionsForKoulutusException,
+            OrganisaatioTyyppiMissingForOrganisaatiosException {
         List<OrganisaatioYhteystietoHakuResultDto> yhteystietos  =  new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
         OrganisaatioYhteystietoHakuResultDto yhteystieto  =  new OrganisaatioYhteystietoHakuResultDto();
         yhteystieto.setOid("OID");

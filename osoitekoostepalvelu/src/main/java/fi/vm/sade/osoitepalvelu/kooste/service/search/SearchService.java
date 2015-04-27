@@ -38,10 +38,12 @@ public interface SearchService extends Serializable {
      * @throws TooFewSearchConditionsForHenkilosException if no conditions for henkilös or organisaatios and
      * henkilös are returned
      * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForKoulutusException
+     * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.OrganisaatioTyyppiMissingForOrganisaatiosException
      */
     SearchResultsDto find(SearchTermsDto terms, CamelRequestContext requestContext)
             throws TooFewSearchConditionsForOrganisaatiosException,
                     TooFewSearchConditionsForHenkilosException,
-                    TooFewSearchConditionsForKoulutusException;
+                    TooFewSearchConditionsForKoulutusException,
+                    OrganisaatioTyyppiMissingForOrganisaatiosException;
 
 }
