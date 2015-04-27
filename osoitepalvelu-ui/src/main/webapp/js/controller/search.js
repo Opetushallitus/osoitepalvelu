@@ -47,6 +47,10 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         };
     };
 
+    $scope.allowClearConfig = {
+        allowClear : true
+    };
+
     $scope.saves = [];
     $scope.selectedSavedSearch = null;
     updateSaves();

@@ -327,6 +327,9 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         if (terms.findTerms(SearchTermDto.TERM_KOULUTUSLAJIS).size() == 1) {
             criteria.setKoulutuslaji(terms.findTerms(SearchTermDto.TERM_KOULUTUSLAJIS).get(0));
         }
+        if (terms.findTerms(SearchTermDto.TERM_KOULUTUSLAJIS).size() > 1) {
+            logger.error("Too many terms for koulutuslaji, only one can be defined!");
+        }
 
         // Opetuskieli
         criteria.setOpetuskielet(terms.findTerms(SearchTermDto.TERM_OPETUSKIELIS));
