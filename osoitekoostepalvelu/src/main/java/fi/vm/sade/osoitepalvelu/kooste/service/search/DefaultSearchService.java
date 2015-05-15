@@ -321,7 +321,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         KoulutusCriteriaDto criteria = new KoulutusCriteriaDto();
 
         // Koulutuslaji --> There can be only one koulutuslaji
-        if (terms.findTerms(SearchTermDto.TERM_KOULUTUSLAJIS).size() == 1) {
+        if (terms.findTerms(SearchTermDto.TERM_KOULUTUSLAJIS).size() == 1 &&
+                terms.findTerms(SearchTermDto.TERM_KOULUTUSLAJIS).get(0).isEmpty() == false) {
             criteria.setKoulutuslaji(terms.findTerms(SearchTermDto.TERM_KOULUTUSLAJIS).get(0));
         }
         if (terms.findTerms(SearchTermDto.TERM_KOULUTUSLAJIS).size() > 1) {
