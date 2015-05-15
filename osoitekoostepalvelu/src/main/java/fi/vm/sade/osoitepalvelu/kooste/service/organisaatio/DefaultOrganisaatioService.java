@@ -88,6 +88,9 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
             // If both ytunnus and oppilaitostyyppi conditions are used, first search by ytunnus (koulutuksen järjestäjä)
             // and secondly search their children by oppilaitostyyppi:
             boolean bothYtunnusAndOppilaitotyyppiUsed = criteria.isYtunnusUsed() && criteria.isOppilaitostyyppiUsed();
+            boolean oidListUsed = criteria.isOidUsed();
+            criteria.setUseOid(false);
+
             if (bothYtunnusAndOppilaitotyyppiUsed) {
                 criteria.setUseYtunnus(true);
                 criteria.setUseOppilaitotyyppi(false);
@@ -105,6 +108,12 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
                 criteria.setUseOppilaitotyyppi(true);
                 boolean includeParents = false; /* <- previous results not included  */
                 results = mergeWithChildren(results, criteria, locale, includeParents);
+            }
+
+            // Merge results from oid list search
+            if (oidListUsed) {
+                criteria.setUseOid(true);
+                results = mergeWithChildren(results, criteria, locale, false);
             }
 
             // Searching under possibly oppilaitostyyppi conditioned results by disabling it on the second(/third) round:
