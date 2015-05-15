@@ -129,9 +129,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
             logger.info("Koulutuksen tarjoajat, Organisaatiotyypit: " + ktOrgCriteria.getOrganisaatioTyyppis());
 
-            // Tarkistetaan, että riittävästi organisaatioiden hakuriteerejä
-            ensureAtLeastOneConditionUsed(ktOrgCriteria);
-
             // Luodaan koulutuskriteerit
             KoulutusCriteriaDto koulutusCriteria = produceKoulutusCriteria(terms);
 
