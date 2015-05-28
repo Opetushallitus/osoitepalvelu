@@ -113,6 +113,8 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
             // Merge results from oid list search
             if (oidListUsed) {
                 criteria.setUseOid(true);
+                criteria.setUseOppilaitotyyppi(false);
+
                 results = mergeWithChildren(results, criteria, locale, false);
             }
 
