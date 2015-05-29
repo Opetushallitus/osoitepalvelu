@@ -132,9 +132,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             // Luodaan koulutuskriteerit
             KoulutusCriteriaDto koulutusCriteria = produceKoulutusCriteria(terms);
 
-            // Tarkistetaan, että riittävästi koulutuksen hakuriteerejä
-            ensureAtLeastOneConditionUsed(koulutusCriteria);
-
             List<String> oidList = tarjontaService.findOrganisaatios(koulutusCriteria, context);
 
             if (oidList.isEmpty()) {
@@ -276,14 +273,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         if (organisaatioCriteria.getOrganisaatioTyyppis().isEmpty()) {
             // If organisaatiotyyppi is missing, require it:
             throw new OrganisaatioTyyppiMissingForOrganisaatiosException();
-        }
-    }
-
-    protected void ensureAtLeastOneConditionUsed(KoulutusCriteriaDto koulutusCriteria)
-            throws TooFewSearchConditionsForKoulutusException {
-        int numberOfConditions = koulutusCriteria.getNumberOfUsedConditions();
-        if (numberOfConditions < 1) {
-            throw new TooFewSearchConditionsForKoulutusException();
         }
     }
 
