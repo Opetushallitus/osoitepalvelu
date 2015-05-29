@@ -26,6 +26,7 @@ import fi.vm.sade.osoitepalvelu.kooste.route.dto.TarjontaKoulutusHakutulosDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.TarjontaTarjoajaHakutulosDto;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,12 +64,15 @@ public class DefaultTarjontaService extends AbstractService implements TarjontaS
         // Otetaan kaikkien organisaatioiden oidit
         // - jotka tarjoavat kriteerien mukaista koulutusta
         // - joiden koulutus on tilassa JULKAISTU tai VALMIS
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         for (TarjontaTarjoajaHakutulosDto tarjoajaHakutulos :
                 tarjontaKoulutusHakuResult.getResult().getTulokset()) {
             for (TarjontaKoulutusHakutulosDto koulutusHakutulos : tarjoajaHakutulos.getTulokset()) {
                 if (koulutusHakutulos.getTila() == TarjontaKoulutusHakutulosDto.TarjontaTila.JULKAISTU ||
                         koulutusHakutulos.getTila() == TarjontaKoulutusHakutulosDto.TarjontaTila.VALMIS) {
-                    oids.add(tarjoajaHakutulos.getOid());
+                    if (currentYear==koulutusHakutulos.getVuosi()) {
+                        oids.add(tarjoajaHakutulos.getOid());
+                    }
                     break;
                 }
             }
