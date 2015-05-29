@@ -232,3 +232,11 @@ a {
     font-tyle: italic;
     color: #666666;
 }
+
+di > div.title {
+}
+
+div > div.title > span {
+        font-size:150%;
+        font-weight:bold;
+}
