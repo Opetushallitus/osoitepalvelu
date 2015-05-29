@@ -64,17 +64,8 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
             @PartialCacheKey OrganisaatioYhteystietoCriteriaDto criteria,
             @PartialCacheKey Locale locale, CamelRequestContext requestContext) {
         List<OrganisaatioDetails> results;
-        // Previously search done by remote call to organisaatio service. Unfortunately, though, it could not serve us
-        // with parent/children related searches/conditions and was also quite slow:
-//        results = organisaatioServiceRoute.findOrganisaatioYhteystietos(criteria, requestContext);
-//        results = new ArrayList<OrganisaatioDetails>(Collections2.filter(results, createResultAfterFilter(criteria)));
-//        return results;
-
-        // So instead, we search from the "local" MongoDB where all the organisaatios are cached.
-
-
-        // Disabling the conditions that should not effect searches by parent/children relation and only applied in the
-        // end results:
+        // Disabling the conditions that should not effect searches by parent/children relation
+        // These are only applied in the end results:
         criteria.setUseKieli(false);
         criteria.setUseKunta(false);
         criteria.setUseOrganisaatioTyyppi(false);
@@ -85,30 +76,65 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
             criteria.useAll();
             results = organisaatioRepository.findOrganisaatios(criteria, locale);
         } else {
-            // If both ytunnus and oppilaitostyyppi conditions are used, first search by ytunnus (koulutuksen järjestäjä)
-            // and secondly search their children by oppilaitostyyppi:
-            boolean bothYtunnusAndOppilaitotyyppiUsed = criteria.isYtunnusUsed() && criteria.isOppilaitostyyppiUsed();
-            if (bothYtunnusAndOppilaitotyyppiUsed) {
-                criteria.setUseYtunnus(true);
-                criteria.setUseOppilaitotyyppi(false);
-            }
+            // Search is done so that only one condiction is on at the same time.
+            boolean yTunnusUsed = criteria.isYtunnusUsed();
+            boolean oppilaitostyyppiUsed = criteria.isOppilaitostyyppiUsed();
+            boolean oidListUsed = criteria.isOidUsed();
 
-            // First search for oranisaatios and then their children:
+            criteria.setUseYtunnus(false);
+            criteria.setUseOppilaitotyyppi(false);
+            criteria.setUseOid(false);
+
+            // Order of search:
+            // 1. YTunnus / koulutuksen järjestäjä
+            // 2. Oppilaitostyyppi
+            // 3. Oid -list
+            // 4. Last round --> parents on
+
+            // First round
+            // One of these on: ytunnus, oppilaitostyyppi, oidlist
+            if (yTunnusUsed) {
+                // Three rounds possible (ytunnus, oppilaitostyyppi, oidlist)
+                criteria.setUseYtunnus(true);
+            }
+            else if (oppilaitostyyppiUsed) {
+                // Two rounds possible (oppilaitostyyppi, oidlist)
+                criteria.setUseOppilaitotyyppi(true);
+            }
+            else if (oidListUsed) {
+                // One round possible (oidlist)
+                criteria.setUseOid(true);
+            }
             results = organisaatioRepository.findOrganisaatios(criteria, locale);
 
-            // Searching under possibly koulutuksen järjestäjä conditioned results by disabling y-tunnus
-            // on the second (and possible third) round:
             criteria.setUseYtunnus(false);
-            if (bothYtunnusAndOppilaitotyyppiUsed) {
-                // if both y-tunnus and oppilaitostyyppi were meant to be used, apply oopilaitostyyppi condition
-                // to the children of previously searched koulutuksen järjestäjäs and merge the results:
+            criteria.setUseOppilaitotyyppi(false);
+            criteria.setUseOid(false);
+
+            // Second round
+            // One of these on: oppilaitostyyppi, oidlist
+            if (yTunnusUsed && oppilaitostyyppiUsed) {
                 criteria.setUseOppilaitotyyppi(true);
-                boolean includeParents = false; /* <- previous results not included  */
-                results = mergeWithChildren(results, criteria, locale, includeParents);
+                results = mergeWithChildren(results, criteria, locale, false);
+            }
+            else if (oppilaitostyyppiUsed && oidListUsed) {
+                criteria.setUseOid(true);
+                results = mergeWithChildren(results, criteria, locale, false);
             }
 
-            // Searching under possibly oppilaitostyyppi conditioned results by disabling it on the second(/third) round:
+            criteria.setUseYtunnus(false);
             criteria.setUseOppilaitotyyppi(false);
+            criteria.setUseOid(false);
+
+            // Third round
+            // One of these on: oidlist
+            if (yTunnusUsed && oppilaitostyyppiUsed && oidListUsed) {
+                criteria.setUseOid(true);
+                results = mergeWithChildren(results, criteria, locale, false);
+            }
+
+            // Last round round --> include parents
+            criteria.setUseOid(false);
             results = mergeWithChildren(results, criteria, locale, true);
 
             // we need to merge parents to the search results as well:

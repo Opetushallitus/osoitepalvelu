@@ -37,7 +37,8 @@ public class SearchTargetGroup implements Serializable {
         TUTKINTOTOIMIKUNNAT,
         KOULUTA_KAYTTAJAT,
         AIPAL_KAYTTAJAT,
-        NAYTTOTUTKINNON_JARJESTAJAT;
+        NAYTTOTUTKINNON_JARJESTAJAT,
+        KOULUTUKSEN_TARJOAJAT;
 
         private String[] organisaatioPalveluTyyppiArvo;
 
@@ -46,6 +47,10 @@ public class SearchTargetGroup implements Serializable {
         }
         private GroupType(String... organisaatioPalveluTyyppiArvo) {
             this.organisaatioPalveluTyyppiArvo  =  organisaatioPalveluTyyppiArvo;
+        }
+
+        public static GroupType[] getKoulutusHakuTypes() {
+            return new GroupType[] {KOULUTUKSEN_TARJOAJAT};
         }
 
         public static GroupType[] getHenkiloHakuTypes() {
@@ -59,7 +64,7 @@ public class SearchTargetGroup implements Serializable {
 
         public static GroupType[] getAnyOrganisaatioTypes() {
             return new GroupType[] {JARJESTAJAT_YLLAPITAJAT, OPPILAITOKSET, OPETUSPISTEET, OPPISOPIMUSTOIMPISTEET,
-                    MUUT_ORGANISAATIOT, TUTKINTOTOIMIKUNNAT, NAYTTOTUTKINNON_JARJESTAJAT};
+                    MUUT_ORGANISAATIOT, TUTKINTOTOIMIKUNNAT, NAYTTOTUTKINNON_JARJESTAJAT, KOULUTUKSEN_TARJOAJAT};
         }
 
         public String[] getOrganisaatioPalveluTyyppiArvo() {
@@ -83,6 +88,9 @@ public class SearchTargetGroup implements Serializable {
 
     public enum TargetType {
         ORGANISAATIO,
+        KOULUTUSTOIMIJA("Koulutustoimija"),
+        OPPILAITOS("Oppilaitos"),
+        TOIMIPISTE("Opetuspiste", "Toimipiste"),
         YHTEYSHENKILO,
         REHTORI,
         KRIISITIEDOTUS,
@@ -95,6 +103,15 @@ public class SearchTargetGroup implements Serializable {
         TUTKINTOVASTAAVA,
         TUNNUKSENHALTIJAT,
         VIRANOMAIS_EMAIL;
+
+        private String[] organisaatioPalveluTyyppiArvo;
+
+        private TargetType() {
+            this.organisaatioPalveluTyyppiArvo  =  null;
+        }
+        private TargetType(String... organisaatioPalveluTyyppiArvo) {
+            this.organisaatioPalveluTyyppiArvo  =  organisaatioPalveluTyyppiArvo;
+        }
 
         public static TargetType[] allHenkiloTypes() {
             return new TargetType[] {
@@ -111,12 +128,33 @@ public class SearchTargetGroup implements Serializable {
         public static TargetType[] allOrganisaatioTypes() {
             return new TargetType[] {
                 ORGANISAATIO,
+                KOULUTUSTOIMIJA,
+                OPPILAITOS,
+                TOIMIPISTE,
                 KRIISITIEDOTUS,
                 KOULUTUSNEVONTA,
                 TUTKINTOTOIMIKUNTA,
                 JARJESTAJA_ORGANISAATIO,
                 VIRANOMAIS_EMAIL
             };
+        }
+
+        public String[] getOrganisaatioPalveluTyyppiArvo() {
+            if( this.organisaatioPalveluTyyppiArvo != null ) {
+                return organisaatioPalveluTyyppiArvo.clone();
+            } else {
+                return null;
+            }
+        }
+
+        public static TargetType[] getOrganisaatioPalveluTypes() {
+            List<TargetType> types  =  new ArrayList<TargetType>();
+            for (TargetType type : values()) {
+                if (type.getOrganisaatioPalveluTyyppiArvo() != null) {
+                    types.add(type);
+                }
+            }
+            return types.toArray(new TargetType[0]);
         }
     };
 

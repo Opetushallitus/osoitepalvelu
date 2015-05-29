@@ -70,6 +70,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean organisaatioEmailIncluded;
     private boolean nayttotutkinnonJarjestajaOrganisaatiosIncluded;
     private boolean nayttotutkinnonJarjestajaVastuuhenkilosIncluded;
+    private boolean koulutuksenTarjoajatIncluded;
     private Locale locale;
     private Set<OidAndTyyppiPair> nonIncludedOids;
     private SearchTermsDto.SearchType searchType;
@@ -87,6 +88,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
             this.nayttotutkinnonJarjestajaVastuuhenkilosIncluded = searchTerms.containsAnyTargetGroup(
                     new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.NAYTTOTUTKINNON_JARJESTAJAT},
                         SearchTargetGroup.TargetType.TUTKINTOVASTAAVA);
+            this.koulutuksenTarjoajatIncluded = searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getKoulutusHakuTypes());
 
             switch (searchTerms.getSearchType()) {
                 case CONTACT:
@@ -101,7 +103,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
                     setOrganisaatioEmailIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyOrganisaatioTypes(),
                                     SearchTargetGroup.TargetType.ORGANISAATIO,
                                     SearchTargetGroup.TargetType.JARJESTAJA_ORGANISAATIO,
-                                    SearchTargetGroup.TargetType.VIRANOMAIS_EMAIL));
+                                    SearchTargetGroup.TargetType.VIRANOMAIS_EMAIL) || koulutuksenTarjoajatIncluded);
                     break;
                 case LETTER:
                 case SEND_LETTER:

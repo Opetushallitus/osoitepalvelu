@@ -45,7 +45,9 @@ public class KoodistoCache implements Serializable {
             TUTKINTO,
             KOULUTUS,
             KOULUTUSTYYPPI,
+            KOULUTUSLAJI,
             OPPILAITOKSEN_OPETUSKIELI,
+            KIELI,
             KOULUTUS_KIELIVALIKOIMA,
             KOULUTUSASTEKELA,
             KOULUTUSTOIMIJA,
@@ -61,7 +63,7 @@ public class KoodistoCache implements Serializable {
         private static final int HASH_FACTOR = 31;
 
         private static final long serialVersionUID  =  -1966991269006762979L;
-        
+
         private KoodistoTyyppi tyyppi;
         private Locale locale;
         private String parentUri;

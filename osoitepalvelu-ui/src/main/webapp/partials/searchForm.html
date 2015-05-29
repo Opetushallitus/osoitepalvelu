@@ -54,6 +54,11 @@
                     <table class="criterionTable">
                         <th class="selectedCriterionName">
                             {{tg.name}}
+                        <div ng-if="!isOptionSelected(tg.options)" ng-hide="tg.hideOptions">
+                            <span class="text-error">
+                                Kohderyhmän tarkennus puuttuu!
+                            </span>
+                        </div>
                         </th>
                         <td class="criterionOptions" ng-hide="tg.hideOptions">
                             <div class="criterionOption" ng-repeat="opt in tg.options">
@@ -61,7 +66,7 @@
                             </div>
                         </td>
                         <!-- Tyhjä TD, jotta sarakkeet menevät oikein -->
-                        <td class="criterionOptions" ng-hide="not tg.hideOptions"></td>
+                        <td class="criterionOptions" ng-hide="tg.hideOptions === false"></td>
                         <td class="criterionActions">
                             <button class="btn btn-danger" ng-click="removeTargetGroup($index)">
                                 <i class="fa fa-ban fa-1x"></i>
@@ -109,7 +114,19 @@
                         <option ng-repeat="opt in options.tutkintotoimikuntaRoolis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
-                <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm()"></div>
+                <div class="term-separator" ng-show="isShowKoulutusTerms() && (isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm())"></div>
+                <div class="term" ng-show="isShowKoulutusTerms()" title="{{msg('search_term_koulutuslaji')}}">
+                    <select ui-select2="allowClearConfig" id="koulutuslajis" class="form-control" ng-model="terms.koulutuslajis[0]" data-placeholder="{{msg('search_term_koulutuslaji')}}">
+                        <option value=""></option>
+                        <option ng-repeat="opt in options.koulutuslajis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
+                    </select>
+                </div>
+               <div class="term" ng-show="isShowKoulutusTerms()" title="{{msg('search_term_opetuskieli')}}">
+                    <select ui-select2 multiple id="opetusKielis" class="form-control" ng-model="terms.opetusKielis" data-placeholder="{{msg('search_term_opetuskieli')}}">
+                        <option ng-repeat="opt in options.kielis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
+                    </select>
+                </div>
+                <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm() || isShowKoulutusTerms()"></div>
                 <div class="term" ng-show="isShowTutkintohierarkiaTerms()" title="{{msg('search_term_koulutusala')}}">
                     <select ui-select2 multiple id="koulutusalas" class="form-control" ng-model="terms.koulutusalas"
                             ng-change="koulutusalasChanged()" data-placeholder="{{msg('search_term_koulutusala')}}">

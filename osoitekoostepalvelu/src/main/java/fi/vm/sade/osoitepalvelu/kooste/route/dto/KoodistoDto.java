@@ -28,17 +28,19 @@ public class KoodistoDto implements Serializable {
         //
         // Muista päivittää uriToTypeMapper -cache, jos lisäät arvoja tähän
         // enumiin
-        OPPILAITOSTYYPPI("oppilaitostyyppi"), 
-        OMISTAJATYYPPI("omistajatyyppi"), 
-        VUOSILUOKAT("vuosiluokat"), 
-        MAAKUNTA("maakunta"), 
+        OPPILAITOSTYYPPI("oppilaitostyyppi"),
+        OMISTAJATYYPPI("omistajatyyppi"),
+        VUOSILUOKAT("vuosiluokat"),
+        MAAKUNTA("maakunta"),
         KUNTA("kunta"),
         POSTINUMERO("posti"),
-        TUTKINTOTYYPPI("tutkintotyyppi"), 
+        TUTKINTOTYYPPI("tutkintotyyppi"),
         KOULUTUSTYYPPI("koulutustyyppi"),
+        KOULUTUSLAJI("koulutuslaji"),
         TUTKINTO("tutkinto"),
         KOULUTUS("koulutus"), // nämä käytössä AITU:ssa
         OPPILAITOKSEN_OPETUSKIELI("oppilaitoksenopetuskieli"),
+        KIELI("kieli"),
         KOULUTUS_KIELIVALIKOIMA("kielivalikoima"),  // Koulutuksen kieli
         KOULUTUSALAOPH2002("koulutusalaoph2002"),      // Koulutusala
         KOULUTUSASTEKELA("koulutusastekela"),       // Koulutusaste
@@ -63,9 +65,11 @@ public class KoodistoDto implements Serializable {
                 put(POSTINUMERO.getUri(), POSTINUMERO);
                 put(TUTKINTOTYYPPI.getUri(), TUTKINTOTYYPPI);
                 put(KOULUTUSTYYPPI.getUri(), KOULUTUSTYYPPI);
+                put(KOULUTUSLAJI.getUri(), KOULUTUSLAJI);
                 put(TUTKINTO.getUri(), TUTKINTO);
                 put(KOULUTUS.getUri(), KOULUTUS);
                 put(OPPILAITOKSEN_OPETUSKIELI.getUri(), OPPILAITOKSEN_OPETUSKIELI);
+                put(KIELI.getUri(), KIELI);
                 put(KOULUTUS_KIELIVALIKOIMA.getUri(), KOULUTUS_KIELIVALIKOIMA);
                 put(KOULUTUSASTEKELA.getUri(), KOULUTUSASTEKELA);
                 put(KOULUTUSALAOPH2002.getUri(), KOULUTUSALAOPH2002);

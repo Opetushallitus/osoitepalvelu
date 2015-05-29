@@ -76,6 +76,8 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         opintoalas: [],
         koulutus: [],
         koulutustyyppis: [],
+        koulutuslajis: [],
+        opetusKielis: [],
         oppilaitostyyppis: [],
         omistajatyyppis: [],
         vuosiluokkas: [],
@@ -153,6 +155,13 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
                 {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')}//,
                 //{type: "YHTEYSHENKILO",     name: LocalisationService.t('target_group_option_yhteyshenkilo')},
                 //{type: "KOULUTUSNEVONTA",   name: LocalisationService.t('target_group_option_koulutusneuvonta')}
+            ]
+        },
+        {type: 'KOULUTUKSEN_TARJOAJAT', name: LocalisationService.t("target_group_koulutuksen_tarjoajat"),
+            options: [
+                {type: 'KOULUTUSTOIMIJA', name: LocalisationService.t("target_group_option_koulutustoimija"), selected: true},
+                {type: 'OPPILAITOS', name: LocalisationService.t("target_group_option_oppilaitos"), selected: true},
+                {type: 'TOIMIPISTE',  name: LocalisationService.t('target_group_option_toimipiste'), selected: true}
             ]
         },
         {type: 'OPPISOPIMUSTOIMPISTEET',    name: LocalisationService.t('target_group_oppisopimustoimistot'),

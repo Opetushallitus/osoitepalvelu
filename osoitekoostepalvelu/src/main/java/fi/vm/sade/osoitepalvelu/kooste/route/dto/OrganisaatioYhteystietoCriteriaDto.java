@@ -36,6 +36,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
 
     public static final int HIGH_LIMIT_VALUE = 999999999;
 
+    private List<String> oidList  =  new ArrayList<String>();
     private List<String> kuntaList  =  new ArrayList<String>();
     private List<String> kieliList  =  new ArrayList<String>();
     private List<String> oppilaitostyyppiList  =  new ArrayList<String>();
@@ -50,6 +51,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     private boolean useKunta=true;
     private boolean useVuosiluokka=true;
     private boolean useOrganisaatioTyyppi=true;
+    private boolean useOid=true;
 
     public List<String> getKieliList() {
         return kieliList;
@@ -57,6 +59,14 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
 
     public void setKieliList(List<String> kieliList) {
         this.kieliList  =  kieliList;
+    }
+
+    public List<String> getOidList() {
+        return oidList;
+    }
+
+    public void setOidList(List<String> oidList) {
+        this.oidList = oidList;
     }
 
     public List<String> getKuntaList() {
@@ -109,6 +119,11 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     }
 
     @JsonIgnore
+    public boolean isOidUsed() {
+        return useOid && this.getOidList() != null && !this.oidList.isEmpty();
+    }
+
+    @JsonIgnore
     public boolean isOpetusKieliUsed() {
         return useKieli && this.kieliList != null && !this.kieliList.isEmpty();
     }
@@ -150,6 +165,10 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         this.useKieli = useKieli;
     }
 
+    public void setUseOid(boolean useOid) {
+        this.useOid = useOid;
+    }
+
     public void setUseKunta(boolean useKunta) {
         this.useKunta = useKunta;
     }
@@ -175,6 +194,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         setUseYtunnus(true);
         setUseOppilaitotyyppi(true);
         setUseVuosiluokka(true);
+        setUseOid(true);
         setUseKunta(true);
         setUseKieli(true);
         setUseOrganisaatioTyyppi(true);
@@ -185,6 +205,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         return (isVuosiluokkaUsed() ? 1 : 0)
                 + (isYtunnusUsed() ? 1 : 0)
                 + (isOpetusKieliUsed() ? 1 : 0)
+                + (isOidUsed() ? 1 : 0)
                 + (isKuntaUsed() ? 1 : 0)
                 + (isOppilaitostyyppiUsed() ? 1 : 0)
                 + (isOrganisaatioTyyppiUsed() ? 1 : 0);
@@ -205,6 +226,9 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
             return false;
         }
         if (kieliList != null ? !kieliList.equals(that.kieliList) : that.kieliList != null) {
+            return false;
+        }
+        if (oidList != null ? !oidList.equals(that.oidList) : that.oidList != null) {
             return false;
         }
         if (kuntaList != null ? !kuntaList.equals(that.kuntaList) : that.kuntaList != null) {
@@ -234,6 +258,7 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     @Override
     public int hashCode() {
         int result = kuntaList != null ? kuntaList.hashCode() : 0;
+        result = HASH_FACTOR * result + (oidList != null ? oidList.hashCode() : 0);
         result = HASH_FACTOR * result + (kieliList != null ? kieliList.hashCode() : 0);
         result = HASH_FACTOR * result + (oppilaitostyyppiList != null ? oppilaitostyyppiList.hashCode() : 0);
         result = HASH_FACTOR * result + (vuosiluokkaList != null ? vuosiluokkaList.hashCode() : 0);

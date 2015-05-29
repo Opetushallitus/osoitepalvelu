@@ -194,6 +194,11 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     @Override
+    public List<UiKoodiItemDto> findKieliOptions(Locale locale) {
+        return findKoodistoByTyyppi(locale, KoodistoTyyppi.KIELI);
+    }
+
+    @Override
     public List<UiKoodiItemDto> findKoulutuksenKieliOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUS_KIELIVALIKOIMA);
     }
@@ -333,6 +338,11 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     @Override
+    public List<UiKoodiItemDto> findKoulutusLajiOptions(Locale locale) {
+        return findKoodistoByTyyppi(locale, KoodistoTyyppi.KOULUTUSLAJI);
+    }
+
+    @Override
     public List<UiKoodiItemDto> findAlueHallintoVirastoOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.ALUEHALLINTOVIRASTO);
     }
@@ -399,14 +409,14 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
             }
         }
     }
-    
+
     protected interface Cacheable<T> {
         T get();
     }
 
     protected static final class MemoryCacheHolder implements Serializable {
         private static final long serialVersionUID = -4046813860312365516L;
-        
+
         private DateTime createdAt;
         private List<UiKoodiItemDto> items;
 
@@ -486,7 +496,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     /**
      * Filtteröi (eli poimii) kaikista koodiston arvoista uusimmat ja aktiiviset
      * versiot.
-     * 
+     *
      * @param koodit
      *            Koodilista, joka filtteröi
      * @param voimassaPvm
@@ -514,7 +524,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     /**
      * Järjestää koodiston arvot nimen perusteella nousevasti.
-     * 
+     *
      * @param values
      *            Koodiston arvot, jotka tulisi järjestää.
      * @return
@@ -542,7 +552,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     /**
      * Hakee viimeisimmän tänään voimassa olevan koodiston versiotiedot.
-     * 
+     *
      * @param tyyppi
      *            Koodiston tyyppi, eli koodiston tunniste.
      * @return Voimassa oleva koodiston versio tai null, jos tällaista versiota
