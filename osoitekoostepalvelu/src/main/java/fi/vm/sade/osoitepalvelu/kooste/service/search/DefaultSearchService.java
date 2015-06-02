@@ -132,9 +132,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             // Luodaan koulutuskriteerit
             KoulutusCriteriaDto koulutusCriteria = produceKoulutusCriteria(terms);
 
-            // Tarkistetaan, että riittävästi koulutuksen hakuriteerejä
-            ensureAtLeastOneConditionUsed(koulutusCriteria);
-
             List<String> oidList = tarjontaService.findOrganisaatios(koulutusCriteria, context);
 
             if (oidList.isEmpty()) {
@@ -263,12 +260,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     protected void ensureAtLeastOneConditionUsed(OrganisaatioYhteystietoCriteriaDto organisaatioCriteria)
             throws TooFewSearchConditionsForOrganisaatiosException, OrganisaatioTyyppiMissingForOrganisaatiosException {
-        organisaatioCriteria.setUseOrganisaatioTyyppi(false);
-        int numberOfConditions = organisaatioCriteria.getNumberOfUsedConditions();
-        if (numberOfConditions < 1) {
-            // If organisaatiotyyppi (kohderyhmärajaus) is the only one, require some more:
-            throw new TooFewSearchConditionsForOrganisaatiosException();
-        }
         organisaatioCriteria.setUseOrganisaatioTyyppi(true);
 
         logger.info("Organisaatio criteria tyypit:" + organisaatioCriteria.getOrganisaatioTyyppis());
@@ -276,14 +267,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         if (organisaatioCriteria.getOrganisaatioTyyppis().isEmpty()) {
             // If organisaatiotyyppi is missing, require it:
             throw new OrganisaatioTyyppiMissingForOrganisaatiosException();
-        }
-    }
-
-    protected void ensureAtLeastOneConditionUsed(KoulutusCriteriaDto koulutusCriteria)
-            throws TooFewSearchConditionsForKoulutusException {
-        int numberOfConditions = koulutusCriteria.getNumberOfUsedConditions();
-        if (numberOfConditions < 1) {
-            throw new TooFewSearchConditionsForKoulutusException();
         }
     }
 
