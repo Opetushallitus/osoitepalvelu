@@ -260,12 +260,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     protected void ensureAtLeastOneConditionUsed(OrganisaatioYhteystietoCriteriaDto organisaatioCriteria)
             throws TooFewSearchConditionsForOrganisaatiosException, OrganisaatioTyyppiMissingForOrganisaatiosException {
-        organisaatioCriteria.setUseOrganisaatioTyyppi(false);
-        int numberOfConditions = organisaatioCriteria.getNumberOfUsedConditions();
-        if (numberOfConditions < 1) {
-            // If organisaatiotyyppi (kohderyhmärajaus) is the only one, require some more:
-            throw new TooFewSearchConditionsForOrganisaatiosException();
-        }
         organisaatioCriteria.setUseOrganisaatioTyyppi(true);
 
         logger.info("Organisaatio criteria tyypit:" + organisaatioCriteria.getOrganisaatioTyyppis());
