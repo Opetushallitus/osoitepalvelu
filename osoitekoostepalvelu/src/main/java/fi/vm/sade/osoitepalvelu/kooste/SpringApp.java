@@ -22,7 +22,7 @@ import fi.vm.sade.osoitepalvelu.kooste.config.MongoConfig;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 /**
  * User: ratamaa
@@ -49,8 +49,8 @@ public class SpringApp {
     private String authMode;
 
     @Bean
-    public ResourceBundleMessageSource messageSource() {
-        ResourceBundleMessageSource messageSource  =  new ResourceBundleMessageSource();
+    public ReloadableResourceBundleMessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource  =  new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("Messages");
         messageSource.setCacheSeconds(SECONDS_IN_HOUR);
         return messageSource;
