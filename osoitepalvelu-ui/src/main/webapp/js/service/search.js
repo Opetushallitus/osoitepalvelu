@@ -42,7 +42,7 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         }
         return (osoite.osoite ? osoite.osoite : "") +(osoite.extraRivi ? "\n":"")
                + ( osoite.extraRivi ? osoite.extraRivi : "" );
-    }
+    };
 
     var _addColumnData = function(v) {
         if( v.henkiloOid ) {
