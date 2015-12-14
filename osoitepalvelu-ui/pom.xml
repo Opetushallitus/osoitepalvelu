@@ -200,6 +200,7 @@
                         <source>jslib/angular-1.2.3/angular-mocks.js</source>
                         <source>jslib/angular-1.2.3/angular-resource.js</source>
                         <source>jslib/angular-1.2.3/angular-route.js</source>
+                        <source>jslib/angular-1.2.3/angular-sanitize.js</source>
                         <source>jslib/angular-flash.js</source>
                         <source>jslib/angular-bootstrap/ui-bootstrap-tpls-0.7.0.min.js</source>
                         <source>jslib/select2-3.4.5/select2.min.js</source>
