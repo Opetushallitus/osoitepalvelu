@@ -38,14 +38,16 @@
     </profiles>
 
     <properties>
-        <camel.version>2.12.1</camel.version>
         <generic.version>9.1-SNAPSHOT</generic.version>
+        <log-client.version>8.0-SNAPSHOT</log-client.version>
 
+        <camel.version>2.12.1</camel.version>
         <ehcache.version>2.5.0</ehcache.version>
         <ehcache-jgroupsreplication.version>1.5</ehcache-jgroupsreplication.version>
         <jgroups.version>2.10.0.GA</jgroups.version>
         <cas-client-core.version>3.1.12</cas-client-core.version>
-        <log-client.version>8.0-SNAPSHOT</log-client.version>
+        <spring.version>3.2.16.RELEASE</spring.version>
+        <spring.security.version>3.1.3.RELEASE</spring.security.version>
 
         <run-itests>false</run-itests>
     </properties>
@@ -290,11 +292,11 @@
                 <artifactId>spring-aspects</artifactId>
                 <version>${spring.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-asm</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.springframework</groupId>-->
+                <!--<artifactId>spring-asm</artifactId>-->
+                <!--<version>${spring.version}</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aop</artifactId>
@@ -369,27 +371,27 @@
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-core</artifactId>
-                <version>${spring.version}</version>
+                <version>${spring.security.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-config</artifactId>
-                <version>${spring.version}</version>
+                <version>${spring.security.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-web</artifactId>
-                <version>${spring.version}</version>
+                <version>${spring.security.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-cas</artifactId>
-                <version>${spring.version}</version>
+                <version>${spring.security.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-ldap</artifactId>
-                <version>${spring.version}</version>
+                <version>${spring.security.version}</version>
             </dependency>
 
             <!-- CAS ticket cache replication -->
