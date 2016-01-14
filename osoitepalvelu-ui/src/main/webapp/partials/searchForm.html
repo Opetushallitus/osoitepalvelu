@@ -85,7 +85,9 @@
                         ng-change="handleTargetGroupSelected()"
                         ng-show="(targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')).length">
                     <option class="placeholder select2-disabled" value="" tt="target_group_placeholder"  class="placeholder">Valitse lisättävä kohderyhmä</option>
-                    <option ng-repeat="tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')" value="{{tg.type}}">{{tg.name}}</option>
+                    <option ng-repeat="tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')" value="{{tg.type}}"
+                    ng-hide="searchType=='LETTER' && tg.type=='KOULUTA_KAYTTAJAT'">{{tg.name}}</option>
+                    <option ng-disabled="true" ng-show="searchType == 'LETTER'" value="fff">{{(targetGroups|filter:{type:'KOULUTA_KAYTTAJAT'}:true)[0].name}}</option>
                 </select>
             </div>
         </div>
