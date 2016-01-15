@@ -229,14 +229,18 @@ a {
 }
 
 .select2-choice .placeholder, .select2-result-label .placeholder {
-    font-tyle: italic;
+    font-style: italic;
     color: #666666;
 }
 
-di > div.title {
+li.select2-results-dept-0.select2-result.select2-result-unselectable.select2-disabled.ng-scope.ng-binding {
+    background: #D0D0D0;
+}
+
+div > div.title {
 }
 
 div > div.title > span {
-        font-size:150%;
-        font-weight:bold;
+    font-size:150%;
+    font-weight:bold;
 }

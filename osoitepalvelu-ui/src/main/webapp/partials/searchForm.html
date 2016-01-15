@@ -32,7 +32,9 @@
             <div class="field-cell">
                 <select ui-select2 id="searchType" class="form-control" ng-model="searchType">
                     <option class="placeholder select2-disabled" value="" tt="search_type_placeholder" class="placeholder">Valitse mihin tarkoitukseen tarvitset yhteystietoja</option>
-                    <option ng-repeat="opt in searchTypes" value="{{opt.type}}">{{opt.name}}</option>
+                    <option ng-repeat="opt in searchTypes" value="{{opt.type}}"
+                            ng-disabled="(selectedTargetGroupTypes|filter:'KOULUTA_KAYTTAJAT':true).length
+                            && opt.type == 'LETTER'">{{opt.name}}</option>
                 </select>
             </div>
         </div>
