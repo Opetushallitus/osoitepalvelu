@@ -26,7 +26,7 @@ window.CONFIG.app = {
 };
 
 var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu',
-        ['ngRoute', 'ngSanitize', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2', 'ngGrid', 'loading',
+        ['ngRoute', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2', 'ngGrid', 'loading',
             'localisation', 'auth',
             'angular-flash.service', 'angular-flash.flash-alert-directive']);
 

@@ -8,7 +8,7 @@
     <table class="saveList" ng-show="saves.length">
         <tr class="save" ng-repeat="save in saves">
             <td class="saveName">
-                <span ng-bind="save.name"></span>
+                {{save.name}}
             </td>
             <td>
                 <a ng-click="deleteSave(save.id)" tt="saves_popup_delete">poista</a>
