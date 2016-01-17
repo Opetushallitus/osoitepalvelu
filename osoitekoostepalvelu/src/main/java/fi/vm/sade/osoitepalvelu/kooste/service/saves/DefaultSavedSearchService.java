@@ -29,7 +29,6 @@ import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.converter.SavedSearchDt
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,20 +50,15 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
 
     @Override
     public List<SavedSearchListDto> findSavedSearchesForLoggedInUser() {
-        List<SavedSearchListDto> list = dtoConverter.convert(savedSearchRepository.findByOwnerUsername(getLoggedInUserOid(),
+        return dtoConverter.convert(savedSearchRepository.findByOwnerUsername(getLoggedInUserOid(),
                         new Sort(Sort.Direction.ASC, "name")),
                         new ArrayList<SavedSearchListDto>(), SavedSearchListDto.class);
-        for (SavedSearchListDto s : list) {
-            s.setName(HtmlUtils.htmlEscape(s.getName()));
-        }
-        return list;
     }
 
     @Override
     public SavedSearchViewDto getSaveById(long id) throws NotFoundException, AuthorizationException {
         SavedSearch save  =  found(savedSearchRepository.findOne(id));
         ensureLoggedInUser(save.getOwnerUserOid());
-        save.setName(HtmlUtils.htmlEscape(save.getName()));
         return dtoConverter.convert(save, new SavedSearchViewDto());
     }
 
@@ -79,14 +73,12 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     public long saveSearch(SavedSearchSaveDto dto) {
         SavedSearch search  =  dtoConverter.convert(dto, new SavedSearch());
         search.setOwnerUserOid(getLoggedInUserOid());
-        search.setName(HtmlUtils.htmlEscape(search.getName()));
         return savedSearchRepository.saveNew(search).getId();
     }
 
     @Override
     public void updateSavedSearch(SavedSearchEditDto dto) throws NotFoundException, AuthorizationException {
         SavedSearch save  =  found(savedSearchRepository.findOne(dto.getId()));
-        save.setName(HtmlUtils.htmlEscape(save.getName()));
         dtoConverter.convert(dto, save);
         savedSearchRepository.save(save);
     }
