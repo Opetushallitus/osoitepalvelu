@@ -17,7 +17,7 @@
 package fi.vm.sade.osoitepalvelu;
 
 import org.springframework.context.annotation.*;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
  * User: ratamaa
@@ -35,8 +35,8 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 public class SpringTestAppConfig {
 
     @Bean
-    public ReloadableResourceBundleMessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource  =  new ReloadableResourceBundleMessageSource();
+    public ResourceBundleMessageSource messageSource() {
+        ResourceBundleMessageSource messageSource  =  new ResourceBundleMessageSource();
         messageSource.setBasename("Messages");
         messageSource.setCacheSeconds(3600);
         return messageSource;
