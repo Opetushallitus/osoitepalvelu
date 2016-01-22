@@ -1,16 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration> 
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-        <pattern>%d{HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
-    </encoder>
-  </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
   
-  <logger name="org.springframework" level="WARN"/>
-  <logger name="org.apache.camel" level="WARN"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.apache.camel" level="WARN"/>
   
-  <root level="info">
-    <appender-ref ref="STDOUT" />
-  </root>
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <!--auditlogger-->
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>auditlog.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>auditlog.%i.log.zip</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%date AUDIT %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="fi.vm.sade.auditlog.Audit" level="INFO">
+        <appender-ref ref="ROLLING" />
+    </logger>
+
 </configuration>
