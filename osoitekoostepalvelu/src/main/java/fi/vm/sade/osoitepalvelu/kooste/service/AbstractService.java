@@ -16,8 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service;
 
-import fi.vm.sade.log.client.Logger;
-import fi.vm.sade.log.model.Tapahtuma;
+//import fi.vm.sade.log.client.Logger;
+//import fi.vm.sade.log.model.Tapahtuma;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
@@ -39,18 +39,18 @@ public abstract class AbstractService {
     public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
     public static final int MILLIS_IN_SECOND = 1000;
 
-    @Autowired
-    protected Logger sadeLogger;
+//    @Autowired
+//    protected Logger sadeLogger;
 
     protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected Tapahtuma read(String oidType, String oid) {
-        return Tapahtuma.createREAD("osoitepalvelu", getLoggedInUserOidOrNull(), oidType, oid);
-    }
-
-    protected void log(Tapahtuma tapahtuma) {
-        sadeLogger.log(tapahtuma);
-    }
+//    protected Tapahtuma read(String oidType, String oid) {
+//        return Tapahtuma.createREAD("osoitepalvelu", getLoggedInUserOidOrNull(), oidType, oid);
+//    }
+//
+//    protected void log(Tapahtuma tapahtuma) {
+//        sadeLogger.log(tapahtuma);
+//    }
 
     protected String getLoggedInUserOid() {
         Authentication auth  =  SecurityContextHolder.getContext().getAuthentication();

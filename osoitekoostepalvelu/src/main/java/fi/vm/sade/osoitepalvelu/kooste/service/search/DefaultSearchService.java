@@ -410,11 +410,11 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         }));
     }
 
-    protected void logRead(List<HenkiloDetailsDto> henkiloDetailsList) {
-        for (HenkiloDetailsDto henkiloDetails : henkiloDetailsList) {
-            log(read("henkilo", henkiloDetails.getOidHenkilo()));
-        }
-    }
+//    protected void logRead(List<HenkiloDetailsDto> henkiloDetailsList) {
+//        for (HenkiloDetailsDto henkiloDetails : henkiloDetailsList) {
+//            log(read("henkilo", henkiloDetails.getOidHenkilo()));
+//        }
+//    }
 
     protected List<String> resolveKuntaKoodis(SearchTermsDto terms) {
         List<String> kuntas  =  new ArrayList<String>();

@@ -37,6 +37,6 @@
     <bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
 
     <!-- Lokituspalvelun käyttöönotto -->
-    <import resource="classpath:META-INF/spring/logger-context.xml" />
+    <!--<import resource="classpath:META-INF/spring/logger-context.xml" />-->
 
 </beans>

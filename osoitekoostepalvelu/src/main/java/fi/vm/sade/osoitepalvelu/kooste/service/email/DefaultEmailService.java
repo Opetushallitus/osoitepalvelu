@@ -94,7 +94,7 @@ public class DefaultEmailService extends AbstractService implements EmailService
 
         final HenkiloDetailsDto myHenkiloDetails = authenticationServiceRoute.getHenkiloTiedot(myInfo.getOid(),
                 new DefaultCamelRequestContext());
-        log(read("henkilo", myInfo.getOid()));
+//        log(read("henkilo", myInfo.getOid()));
         settings.getEmail().setOrganizationOid(
                 myHenkiloDetails.findFirstAktiivinenOrganisaatioOid().or(defaultOrganisaatioOid));
 
