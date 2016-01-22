@@ -13,10 +13,12 @@
                 <label for="savedSearch" tt="saved_searches">Tallennetut haut</label>
             </div>
             <div class="field-cell">
-                <select ui-select2 id="savedSearch" class="form-control" ng-model="selectedSavedSearch" ng-change="handleSaveSelected()">
-                   <option class="placeholder select2-disabled" value="" tt="saved_searches_placeholder" class="placeholder">Valitse tallennettu haku</option>
-                   <option ng-repeat="save in saves" value="{{save.id}}">{{save.name}}</option>
-                </select>
+                <ui-select theme="select2" id="savedSearch" ng-model="selectedSavedSearch.selected" on-select="handleSaveSelected($select.selected)">
+                    <ui-select-match placeholder={{msg('saved_searches_placeholder')}}>{{$select.selected.name}}</ui-select-match>
+                    <ui-select-choices repeat="save in (saves | filter: $select.search) track by save.id">
+                        <span ng-bind="save.name"></span>
+                    </ui-select-choices>
+                </ui-select>
             </div>
             <div class="actions">
                 <button class="btn" ng-click="showSaveSearchPopup()">
@@ -30,12 +32,16 @@
                 <label for="searchType" tt="search_type">Haku</label>
             </div>
             <div class="field-cell">
-                <select ui-select2 id="searchType" class="form-control" ng-model="searchType">
-                    <option class="placeholder select2-disabled" value="" tt="search_type_placeholder" class="placeholder">Valitse mihin tarkoitukseen tarvitset yhteystietoja</option>
-                    <option ng-repeat="opt in searchTypes" value="{{opt.type}}"
-                            ng-disabled="(selectedTargetGroupTypes|filter:'KOULUTA_KAYTTAJAT':true).length
-                            && (opt.type == 'LETTER' || opt.type == 'CONTACT')">{{opt.name}}</option>
-                </select>
+                <ui-select theme="select2" id="searchType" ng-model="searchType.selected">
+                    <ui-select-match placeholder={{msg('search_type_placeholder')}}>
+                        <span ng-bind="$select.selected.name"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="opt in (searchTypes | filter: $select.search) track by opt.type"
+                                       ng-disabled="(selectedTargetGroupTypes|filter:'KOULUTA_KAYTTAJAT':true).length
+                            && (opt.type == 'LETTER' || opt.type == 'CONTACT')">
+                        <span ng-bind="opt.name"></span>
+                    </ui-select-choices>
+                </ui-select>
             </div>
         </div>
 
@@ -82,14 +88,16 @@
                         </td>
                     </table>
                 </div>
-                <select ui-select2 id="targetGroup" class="form-control"
-                        ng-model="selectedTargetGroup"
-                        ng-change="handleTargetGroupSelected()"
-                        ng-show="(targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')).length">
-                    <option class="placeholder select2-disabled" value="" tt="target_group_placeholder"  class="placeholder">Valitse lisättävä kohderyhmä</option>
-                    <option ng-repeat="tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')" value="{{tg.type}}"
-                    ng-disabled="(searchType == 'LETTER' || searchType == 'CONTACT') && tg.type == 'KOULUTA_KAYTTAJAT'">{{tg.name}}</option>
-                </select>
+                <ui-select ng-model="selectedTargetGroup"
+                           theme="select2"
+                           on-select="handleTargetGroupSelected($select.selected)"
+                           ng-show="(targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')).length">
+                    <ui-select-match placeholder="{{msg('target_group_placeholder')}}">{{$item.name}}</ui-select-match>
+                    <ui-select-choices repeat="tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')"
+                                       ng-disabled="(searchType == 'LETTER' || searchType == 'CONTACT') && tg.type == 'KOULUTA_KAYTTAJAT'">
+                        {{tg.name}}
+                    </ui-select-choices>
+                </ui-select>
             </div>
         </div>
 
@@ -115,121 +123,178 @@
             <!-- tutkintotoimikuntien kriteerit-->
             <div class="field-cell">
                 <div class="term" ng-show="isShowTutkintotoimikuntaTerm()" title="{{msg('search_term_tutkintotoimikunta')}}">
-                    <ui-select multiple id="tutkintotoimikuntas" class="form-control" ng-model="terms.tutkintotoimikuntas"
-                               theme="select2" ng-disabled="disabled">
+                    <ui-select multiple="true" id="tutkintotoimikuntas" ng-model="terms.tutkintotoimikuntas"
+                               theme="select2">
                         <ui-select-match placeholder="{{msg('search_term_tutkintotoimikunta')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices repeat="opt in options.tutkintotoimikuntas | filter: $select.search">
                             {{opt.nimi}}
                         </ui-select-choices>
                     </ui-select>
-                    <select ui-select2 multiple id="tutkintotoimikuntas" class="form-control" ng-model="terms.tutkintotoimikuntas"
-                            data-placeholder="{{msg('search_term_tutkintotoimikunta')}}">
-                        <option ng-repeat="opt in options.tutkintotoimikuntas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
                 </div>
                 <div class="term" ng-show="isShowTutkintotoimikuntaRooliTerm()" title="{{msg('search_term_tutkintotoimikunta_rooli')}}">
-                    <select ui-select2 multiple id="tutkintotoimikuntaRoolis" class="form-control" ng-model="terms.tutkintotoimikuntaRoolis" data-placeholder="{{msg('search_term_tutkintotoimikunta_rooli')}}">
-                        <option ng-repeat="opt in options.tutkintotoimikuntaRoolis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
-                </div>
+                    <ui-select multiple="true" id="tutkintotoimikuntaRoolis" ng-model="terms.tutkintotoimikuntaRoolis"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_tutkintotoimikunta_rooli')}}">{{$item.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.tutkintotoimikuntaRoolis | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
+                 </div>
                 <div class="term-separator" ng-show="isShowKoulutusTerms() && (isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm())"></div>
                 <div class="term" ng-show="isShowKoulutusTerms()" title="{{msg('search_term_koulutuslaji')}}">
-                    <select ui-select2="allowClearConfig" id="koulutuslajis" class="form-control" ng-model="terms.koulutuslajis[0]" data-placeholder="{{msg('search_term_koulutuslaji')}}">
-                        <option value=""></option>
-                        <option ng-repeat="opt in options.koulutuslajis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select allow-clear id="koulutuslajis" ng-model="terms.koulutuslajis[0]"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_koulutuslaji')}}">{{$selected.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.koulutuslajis | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                <div class="term" ng-show="isShowKoulutusTerms()" title="{{msg('search_term_opetuskieli')}}">
-                    <select ui-select2 multiple id="opetusKielis" class="form-control" ng-model="terms.opetusKielis" data-placeholder="{{msg('search_term_opetuskieli')}}">
-                        <option ng-repeat="opt in options.kielis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                   <ui-select multiple="true" id="opetusKielis" ng-model="terms.opetusKielis"
+                              theme="select2">
+                       <ui-select-match placeholder="{{msg('search_term_opetuskieli')}}">{{$item.nimi}}</ui-select-match>
+                       <ui-select-choices repeat="opt in (options.kielis | filter: $select.search) track by opt.koodiUri">
+                           {{opt.nimi}}
+                       </ui-select-choices>
+                   </ui-select>
                 </div>
                 <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm() || isShowKoulutusTerms()"></div>
                 <div class="term" ng-show="isShowTutkintohierarkiaTerms()" title="{{msg('search_term_koulutusala')}}">
-                    <select ui-select2 multiple id="koulutusalas" class="form-control" ng-model="terms.koulutusalas"
-                            ng-change="koulutusalasChanged()" data-placeholder="{{msg('search_term_koulutusala')}}">
-                        <option ng-repeat="opt in options.koulutusalas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="koulutusalas" ng-model="terms.koulutusalas"
+                               theme="select2" on-select="koulutusalasChanged($item, $model)">
+                        <ui-select-match placeholder="{{msg('search_term_koulutusala')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.koulutusalas | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term" ng-show="isShowTutkintohierarkiaTerms()" title="{{msg('search_term_opintoala')}}">
-                    <select ui-select2 multiple id="opintoalas" class="form-control" ng-model="terms.opintoalas"
-                            ng-change="opintoalasChanged()" data-placeholder="{{msg('search_term_opintoala')}}">
-                        <option ng-repeat="opt in options.opintoalas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="opintoalas" ng-model="terms.opintoalas"
+                               theme="select2" on-select="opintoalasChanged($item, $model)">
+                        <ui-select-match placeholder="{{msg('search_term_opintoala')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.opintoalas | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term-separator" ng-show="isShowTutkintohierarkiaTerms()"></div>
                 <div class="term" ng-show="isShowKoulutusTyyppiTerm()" title="{{msg('search_term_koulutustyyppi')}}">
-                    <select ui-select2 multiple id="koulutustyyppi" class="form-control" ng-model="terms.koulutustyyppis"
-                            ng-change="koulutusTyyppisChanged()" data-placeholder="{{msg('search_term_koulutustyyppi')}}">
-                        <option ng-repeat="opt in options.koulutustyyppis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="koulutustyyppi" ng-model="terms.koulutustyyppis"
+                               theme="select2" on-select="koulutusTyyppisChanged($item, $model)">
+                        <ui-select-match placeholder="{{msg('search_term_koulutustyyppi')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.koulutustyyppis | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term" ng-show="isShowTutkintohierarkiaTerms() &amp;&amp; options.koulutus" title="{{msg('search_term_tutkinto')}}">
-                    <select ui-select2 multiple id="koulutus" class="form-control" ng-model="terms.koulutus" data-placeholder="{{msg('search_term_tutkinto')}}">
-                        <option ng-repeat="opt in options.koulutus" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="koulutus" ng-model="terms.koulutus"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_tutkinto')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.koulutus | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term-separator" ng-show="isShowKoulutusTyyppiTerm() || (isShowTutkintotoimikuntaTerm() &amp;&amp; options.koulutus)"></div>
                 <div class="term" ng-show="isShowTutkintotoimikuntaKieliTerm()" title="{{msg('search_term_tutkintotoimikunta_kielis')}}">
-                    <select ui-select2 multiple id="tutkintotoimikuntaKielis" class="form-control" ng-model="terms.tutkintotoimikuntaKielis"
-                                data-placeholder="{{msg('search_term_tutkintotoimikunta_kielis')}}">
-                        <option ng-repeat="opt in options.tutkintotoimikuntaKielis" value="{{opt.code}}">{{opt.name}}</option>
-                    </select>
+                    <ui-select multiple="true" id="tutkintotoimikuntaKielis" ng-model="terms.tutkintotoimikuntaKielis"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_tutkintotoimikunta_kielis')}}">{{$opt.name}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.tutkintotoimikuntaKielis | filter: $select.search) track by opt.code">
+                            {{opt.name}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term" ng-show="isShowTutkintotoimikuntaJasenKieliTerm()" title="{{msg('search_term_tutkintotoimikunta_jasen_kielis')}}">
-                    <select ui-select2 multiple id="tutkintotoimikuntaJasenKielis" class="form-control" ng-model="terms.tutkintotoimikuntaJasenKielis"
-                                data-placeholder="{{msg('search_term_tutkintotoimikunta_jasen_kielis')}}">
-                        <option ng-repeat="opt in options.tutkintotoimikuntaJasenKielis" value="{{opt.code}}">{{opt.name}}</option>
-                    </select>
+                    <ui-select multiple="true" id="tutkintotoimikuntaJasenKielis" ng-model="terms.tutkintotoimikuntaJasenKielis"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_tutkintotoimikunta_jasen_kielis')}}">{{$opt.name}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.tutkintotoimikuntaJasenKielis | filter: $select.search) track by opt.code">
+                            {{opt.name}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term-separator" ng-show="isShowTutkintotoimikuntaKieliTerm() || isShowTutkintotoimikuntaJasenKieliTerm()"></div>
                 <div class="term" ng-show="isShowTutkintotoimikuntaToimikausiTerm()" title="{{msg('search_term_tutkintotoimikunta_toimikausi')}}">
-                    <select ui-select2 multiple id="tutkintotoimikuntaToimikausis" class="form-control" ng-model="terms.tutkintotoimikuntaToimikausis"
-                            data-placeholder="{{msg('search_term_tutkintotoimikunta_toimikausi')}}">
-                        <option ng-repeat="opt in options.tutkintotoimikuntaToimikausis" value="{{opt.type}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="tutkintotoimikuntaToimikausis" ng-model="terms.tutkintotoimikuntaToimikausis"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_tutkintotoimikunta_toimikausi')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.tutkintotoimikuntaToimikausis | filter: $select.search) track by opt.type">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term-separator" ng-show="isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm()"></div>
                 <div class="term" ng-show="isShowKoulutaTerm()" title="{{msg('search_term_kayttooikeusryhma')}}">
-                    <select ui-select2 multiple id="koulutaRoolis" class="form-control" ng-model="terms.koulutaRoolis" data-placeholder="{{msg('search_term_kayttooikeusryhma')}}">
-                        <option ng-repeat="opt in options.koulutaRoolis" value="{{opt.koodiId}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="koulutaRoolis" ng-model="terms.koulutaRoolis"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_kayttooikeusryhma')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.koulutaRoolis | filter: $select.search) track by opt.koodiId">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <!-- organisaatiokriteerit-->
                 <div class="term-separator" ng-show="isShowKoulutaTerm()"></div>
                 <div class="term term-full-width" title="{{msg('search_term_organisaation_kieli')}}">
-                    <select ui-select2 multiple id="organisaationKielis" class="form-control" ng-model="terms.organisaationKielis" data-placeholder="{{msg('search_term_organisaation_kieli')}}">
-                        <option ng-repeat="opt in options.organisaationKielis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="organisaationKielis" ng-model="terms.organisaationKielis"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_organisaation_kieli')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.organisaationKielis | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term-separator"></div>
                 <div class="term" title="{{msg('search_term_maakunta')}}">
-                    <select ui-select2 multiple id="maakunta" class="form-control" ng-model="terms.maakuntas" data-placeholder="{{msg('search_term_maakunta')}}">
-                        <option ng-repeat="opt in options.maakuntas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="maakunta" ng-model="terms.maakuntas"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_maakunta')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.maakuntas | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term" title="{{msg('search_term_kunta')}}">
-                    <select ui-select2 multiple data-disable-selectall id="kunta" class="form-control" ng-model="terms.kuntas" data-placeholder="{{msg('search_term_kunta')}}">
-                        <option ng-repeat="opt in options.kuntas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="kunta" ng-model="terms.kuntas"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_kunta')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.kuntas | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term-separator"></div>
                 <div class="term term-full-width" title="{{msg('search_term_oppilaitostyyppi')}}">
-                    <select ui-select2 multiple id="oppilaitostyyppi" class="form-control" ng-model="terms.oppilaitostyyppis" data-placeholder="{{msg('search_term_oppilaitostyyppi')}}">
-                        <option ng-repeat="opt in options.oppilaitostyyppis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="oppilaitostyyppi" ng-model="terms.oppilaitostyyppis"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_oppilaitostyyppi')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.oppilaitostyyppis | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term" ng-show="isShowVuosiluokkaTerm()" title="{{msg('search_term_vuosiluokka')}}">
-                    <select ui-select2 multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas" data-placeholder="{{msg('search_term_vuosiluokka')}}">
-                        <option ng-repeat="opt in options.vuosiluokkas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="vuosiluokka" ng-model="terms.vuosiluokkas"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_vuosiluokka')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.vuosiluokkas | filter: $select.search) track by opt.koodiUri">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="term-separator"></div>
                 <div class="term term-full-width" title="{{msg('search_term_koultuksenjarjestaja')}}">
-                    <select ui-select2 multiple data-disable-selectall id="koultuksenjarjestaja" class="form-control"
-                            ng-model="terms.koultuksenjarjestajas" data-placeholder="{{msg('search_term_koultuksenjarjestaja')}}">
-                        <option ng-repeat="opt in options.koultuksenjarjestajas" value="{{opt.koodiId}}">{{opt.nimi}}</option>
-                    </select>
+                    <ui-select multiple="true" id="koultuksenjarjestaja" ng-model="terms.koultuksenjarjestajas"
+                               theme="select2">
+                        <ui-select-match placeholder="{{msg('search_term_koultuksenjarjestaja')}}">{{$opt.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt in (options.koultuksenjarjestajas | filter: $select.search) track by opt.koodiId">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
+
                 </div>
                 <div class="term-separator"></div>
 
