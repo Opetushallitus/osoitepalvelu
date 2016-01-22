@@ -236,7 +236,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         if (searchHenkilos) {
             List<String> organisaatioOids = oids(organisaatioYhteystietoResults);
             List<HenkiloDetailsDto> henkiloDetails = findHenkilos(terms, context, organisaatioOids);
-            logRead(henkiloDetails);
+//            logRead(henkiloDetails);
 
             List<HenkiloHakuResultDto> henkiloResults = dtoConverter.convert(henkiloDetails,
                         new ArrayList<HenkiloHakuResultDto>(), HenkiloHakuResultDto.class, terms.getLocale());
