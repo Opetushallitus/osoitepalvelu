@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves;
 
+import fi.vm.sade.auditlog.osoitepalvelu.OsoitepalveluOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.dao.save.SavedSearchRepository;
@@ -29,6 +30,8 @@ import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.converter.SavedSearchDt
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import fi.vm.sade.auditlog.osoitepalvelu.LogMessage;
+import static fi.vm.sade.auditlog.osoitepalvelu.LogMessage.builder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,12 +70,18 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
         SavedSearch save  =  found(savedSearchRepository.findOne(id));
         ensureLoggedInUser(save.getOwnerUserOid());
         savedSearchRepository.delete(id);
+        LogMessage logMessage = builder().id(getLoggedInUserOid()).setOperaatio(OsoitepalveluOperation.DELETE_SAVE)
+                .build();
+        audit.log(logMessage);
     }
 
     @Override
     public long saveSearch(SavedSearchSaveDto dto) {
         SavedSearch search  =  dtoConverter.convert(dto, new SavedSearch());
         search.setOwnerUserOid(getLoggedInUserOid());
+        LogMessage logMessage = builder().id(getLoggedInUserOid()).setOperaatio(OsoitepalveluOperation.NEW_SAVE)
+                .build();
+        audit.log(logMessage);
         return savedSearchRepository.saveNew(search).getId();
     }
 
@@ -81,5 +90,8 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
         SavedSearch save  =  found(savedSearchRepository.findOne(dto.getId()));
         dtoConverter.convert(dto, save);
         savedSearchRepository.save(save);
+        LogMessage logMessage = builder().id(getLoggedInUserOid()).setOperaatio(OsoitepalveluOperation.UPDATE_SAVE)
+                .build();
+        audit.log(logMessage);
     }
 }

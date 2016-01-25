@@ -202,8 +202,8 @@
                         <source>jslib/angular-1.2.3/angular-route.js</source>
                         <source>jslib/angular-flash.js</source>
                         <source>jslib/angular-bootstrap/ui-bootstrap-tpls-0.7.0.min.js</source>
-                        <source>jslib/select2-3.4.5/select2.min.js</source>
-                        <source>jslib/select2-3.4.5/select2_locale_fi.js</source>
+                        <source>jslib/select2-3.5.4/select2.min.js</source>
+                        <source>jslib/select2-3.5.4/select2_locale_fi.js</source>
                         <source>jslib/ng-grid/ng-grid-2.0.7.min.js</source>
                         <source>ext/env-configuration.js</source>
                         <source>js/main.ignored.js</source>
