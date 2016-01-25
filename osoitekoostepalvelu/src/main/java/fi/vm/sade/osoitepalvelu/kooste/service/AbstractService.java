@@ -18,7 +18,8 @@ package fi.vm.sade.osoitepalvelu.kooste.service;
 
 //import fi.vm.sade.log.client.Logger;
 //import fi.vm.sade.log.model.Tapahtuma;
-//import static fi.vm.sade.auditlog.henkilo.LogMessage.builder;
+import fi.vm.sade.auditlog.ApplicationType;
+import fi.vm.sade.auditlog.Audit;
 
 import fi.vm.sade.auditlog.ApplicationType;
 import fi.vm.sade.auditlog.Audit;
@@ -48,7 +49,7 @@ public abstract class AbstractService {
 
     protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
-    Audit audit = new Audit("osoitepalvelu", ApplicationType.VIRKAILIJA);
+    protected Audit audit = new Audit("osoitepalvelu", ApplicationType.VIRKAILIJA);
 
 //    protected Tapahtuma read(String oidType, String oid) {
 //        return Tapahtuma.createREAD("osoitepalvelu", getLoggedInUserOidOrNull(), oidType, oid);
