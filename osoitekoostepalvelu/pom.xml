@@ -440,9 +440,14 @@
         </dependency>
         
         <!-- Logging -->        
+        <!--<dependency>-->
+            <!--<groupId>fi.vm.sade.log</groupId>-->
+            <!--<artifactId>log-client</artifactId>-->
+            <!--<version>${log-client.version}</version>-->
+        <!--</dependency>-->
         <dependency>
-            <groupId>fi.vm.sade.log</groupId>
-            <artifactId>log-client</artifactId>
+            <groupId>fi.vm.sade</groupId>
+            <artifactId>auditlogger</artifactId>
             <version>${log-client.version}</version>
         </dependency>
 
@@ -450,15 +455,22 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
 
         <!-- Commons-Logging on loggaus jarjestelma siina missa SLF4J
         jos halutaan logitus SLF4J:lla niin taytyy kayttaa JCL-OVER-SLF4J:ta
         eli java commons logging over slf4j !!! -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>jcl-over-slf4j</artifactId>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>cglib</groupId>
