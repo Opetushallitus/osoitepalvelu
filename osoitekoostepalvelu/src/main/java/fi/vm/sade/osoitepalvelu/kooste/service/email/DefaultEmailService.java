@@ -99,6 +99,7 @@ public class DefaultEmailService extends AbstractService implements EmailService
         final HenkiloDetailsDto myHenkiloDetails = authenticationServiceRoute.getHenkiloTiedot(myInfo.getOid(),
                 new DefaultCamelRequestContext());
         LogMessage logMessage = builder().id(myInfo.getOid()).henkiloOidList(myHenkiloDetails.getOidHenkilo())
+                .setOperaatio(OsoitepalveluOperation.EMAIL_SERVICE)
                 .message("EmailService: Send email details to viestintäpalvelu").build();
         audit.log(logMessage);
         settings.getEmail().setOrganizationOid(
