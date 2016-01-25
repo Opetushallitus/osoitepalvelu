@@ -16,19 +16,14 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service;
 
-//import fi.vm.sade.log.client.Logger;
-//import fi.vm.sade.log.model.Tapahtuma;
 import fi.vm.sade.auditlog.ApplicationType;
 import fi.vm.sade.auditlog.Audit;
 
-import fi.vm.sade.auditlog.ApplicationType;
-import fi.vm.sade.auditlog.Audit;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -44,20 +39,9 @@ public abstract class AbstractService {
     public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
     public static final int MILLIS_IN_SECOND = 1000;
 
-//    @Autowired
-//    protected Logger sadeLogger;
-
     protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
     protected Audit audit = new Audit("osoitepalvelu", ApplicationType.VIRKAILIJA);
-
-//    protected Tapahtuma read(String oidType, String oid) {
-//        return Tapahtuma.createREAD("osoitepalvelu", getLoggedInUserOidOrNull(), oidType, oid);
-//    }
-//
-//    protected void log(Tapahtuma tapahtuma) {
-//        sadeLogger.log(tapahtuma);
-//    }
 
     protected String getLoggedInUserOid() {
         Authentication auth  =  SecurityContextHolder.getContext().getAuthentication();

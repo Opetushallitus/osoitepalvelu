@@ -415,16 +415,15 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         }));
     }
 
+    // Combine fetched henkiloOids into single string and log what was fetched.
     protected void logRead(List<HenkiloDetailsDto> henkiloDetailsList) {
-//        Audit audit = new Audit("osoitepalvelu", ApplicationType.VIRKAILIJA);
 
         String henkiloOids = "";
         for (HenkiloDetailsDto henkiloDetails : henkiloDetailsList) {
-//            log(read("henkilo", henkiloDetails.getOidHenkilo()));
             henkiloOids += henkiloDetails.getOidHenkilo() + ";";
         }
         LogMessage logMessage = builder().id(getLoggedInUserOidOrNull()).henkiloOidList(henkiloOids)
-                .setOperaatio(OsoitepalveluOperation.HENKILO_HAKU).message("Teki henkilöhaun").build();
+                .setOperaatio(OsoitepalveluOperation.HENKILO_HAKU).build();
         audit.log(logMessage);
     }
 
