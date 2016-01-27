@@ -17,6 +17,7 @@
 /**
  * Created by ratamaa on 12/4/13.
  */
+var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu');
 OsoiteKoostepalvelu.service('SavesService', ["$log", "$http", "SaveConverter", "commonErrorHandler",
         function($log, $http, SaveConverter, commonErrorHandler) {
 
@@ -49,10 +50,9 @@ OsoiteKoostepalvelu.service('SavesService', ["$log", "$http", "SaveConverter", "
         $log.info("Deleting search: " + id);
         $http['delete']("api/saves/"+id).success(success).error(error || commonErrorHandler);
     };
-}]);
+}])
 
-
-OsoiteKoostepalvelu.service("SaveConverter", ["$log", "$filter", "FilterHelper", "ArrayHelper",
+.service("SaveConverter", ["$log", "$filter", "FilterHelper", "ArrayHelper",
                    "AddressFields", "TargetGroups",
         function($log, $filter, FilterHelper, ArrayHelper, AddressFields, TargetGroups) {
     this.toDomain = function(save) {

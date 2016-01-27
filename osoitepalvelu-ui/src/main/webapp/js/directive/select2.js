@@ -48,12 +48,12 @@ function (uiSelect2Config, $timeout, LocalisationService) {
               var container = document.createElement("div");
               container.appendChild(el);
               return container;
-          }
+          };
           var width = $dropdown.width();
           var showBtnsTresshold = $field.attr("data-selectall-tresshold") || 0;
-          optionsCount = $field.children().length,
-              selectAllText = LocalisationService.t('select_all'),
-              selectNoneText = LocalisationService.t('select_none');
+          optionsCount = $field.children().length;
+          selectAllText = LocalisationService.t('select_all');
+          selectNoneText = LocalisationService.t('select_none');
           if( $field.attr("multiple") !== undefined
                     && !( $field.attr("data-disable-selectall") !== undefined && $field.attr("data-disable-selectnone") !== undefined )
                     && optionsCount >= showBtnsTresshold ) {

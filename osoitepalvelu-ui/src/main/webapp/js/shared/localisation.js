@@ -203,7 +203,7 @@ localisation.service('LocalisationService', ["$log", "$q", "$http", "$interval",
                 $log.info("failed!");
             });
         }
-    }
+    };
 
     // Localisations: MAP[locale][key] = {key, locale, value};
     // This map is used for quick access to the localisation (which are in list)
