@@ -17,7 +17,9 @@
 /**
  * Created by ratamaa on 12/12/13.
  */
-var ConfirmPopupController = function ($scope, $modalInstance, $modal, $timeout, LocalisationService, options) {
+OsoiteKoostepalvelu.controller('ConfirmPopupController',
+    ["$scope", "$modalInstance", "$modal", "$timeout", "LocalisationService", "options",
+    function ($scope, $modalInstance, $modal, $timeout, LocalisationService, options) {
     var msg = function( key, params ) {
         return LocalisationService.t(key, params);
     };
@@ -40,8 +42,7 @@ var ConfirmPopupController = function ($scope, $modalInstance, $modal, $timeout,
     $timeout(function() {
         $scope.$broadcast("dialogOpened");
     });
-};
+}]);
 
-ConfirmPopupController.$inject = ["$scope", "$modalInstance", "$modal", "$timeout", "LocalisationService", "options"];
 
 

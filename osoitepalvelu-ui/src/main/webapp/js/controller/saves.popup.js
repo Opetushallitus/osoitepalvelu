@@ -17,7 +17,9 @@
 /**
  * Created by ratamaa on 12/4/13.
  */
-var SavesPopupController = function ($scope, $modalInstance, $modal, $filter, saves,
+OsoiteKoostepalvelu.controller('SavesPopupController', ["$scope", "$modalInstance", "$modal", "$filter", "saves",
+    "LocalisationService", "SavesService",
+    function ($scope, $modalInstance, $modal, $filter, saves,
             LocalisationService, SavesService) {
     var msg = function( key, params ) {
         return LocalisationService.t(key, params);
@@ -52,8 +54,4 @@ var SavesPopupController = function ($scope, $modalInstance, $modal, $filter, sa
             })
         }, function () {});
     };
-};
-
-SavesPopupController.$inject = ["$scope", "$modalInstance", "$modal", "$filter", "saves",
-    "LocalisationService", "SavesService"];
-
+}]);
