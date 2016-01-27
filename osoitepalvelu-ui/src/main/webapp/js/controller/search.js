@@ -206,19 +206,19 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
     };
 
-    $scope.isShowVuosiluokkaTerm = function(){
-        var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
-        if (oppilaitosTyyppisWithVuosiluokkaSetting) {
-            var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
-            var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
-                oppilaitosTyyppisWithVuosiluokka);
-            if (!visible) {
-                $scope.terms.vuosiluokkas = [];
-            }
-            return visible;
-        }
-        return true;
-    };
+    //$scope.isShowVuosiluokkaTerm = function(){
+    //    var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
+    //    if (oppilaitosTyyppisWithVuosiluokkaSetting) {
+    //        var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
+    //        var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
+    //            oppilaitosTyyppisWithVuosiluokka);
+    //        if (!visible) {
+    //            $scope.terms.vuosiluokkas = [];
+    //        }
+    //        return visible;
+    //    }
+    //    return true;
+    //};
 
     $scope.handleSaveSelected = function() {
         if( $scope.selectedSavedSearch ) {
