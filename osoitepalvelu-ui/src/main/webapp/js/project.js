@@ -16,11 +16,11 @@
 
 OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvider, $provide) {
     $routeProvider.when('/results', {
-            controller:'ResultsController',
-            templateUrl:'partials/results.html'
+            controller: 'ResultsController',
+            templateUrl: 'partials/results.html'
     }).when('/', {
-            controller:'SearchController',
-            templateUrl:'partials/searchForm.html'
+            controller: 'SearchController',
+            templateUrl: 'partials/searchForm.html'
     })
     .otherwise({
             redirectTo:'/'
@@ -28,13 +28,13 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
 }])
 .factory('NoCacheInterceptor', function () {
     return {
-	request: function (config) {
-	    if (config.method && config.method == 'GET' && config.url.indexOf('html') === -1){
-		    var separator = config.url.indexOf('?') === -1 ? '?' : '&';
-		    config.url = config.url+separator+'noCache=' + new Date().getTime();
-	    }
-	    return config;
-	}
+        request: function (config) {
+            if (config.method && config.method == 'GET' && config.url.indexOf('html') === -1){
+                var separator = config.url.indexOf('?') === -1 ? '?' : '&';
+                config.url = config.url+separator+'noCache=' + new Date().getTime();
+            }
+            return config;
+        }
     };
 })
 .config(['$httpProvider', function($httpProvider) {

@@ -17,17 +17,21 @@
 /**
  * Created by ratamaa on 12/3/13.
  */
-var SearchController = function($scope, $log, $modal, $location, $filter, SearchService,
-                                SearchTypes, TargetGroups, EmptyTerms,
-                                FilterHelper, ArrayHelper, ExtractHelper, KoodiHelper, SavesService,
-                                OptionsService, LocalisationService, Osoitekielis,
-                                TutkintotoimikuntaToimikausis, Aitukielis) {
+var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu');
+OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
+                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "ExtractHelper", "KoodiHelper",
+                     "SavesService", "OptionsService", "LocalisationService", "Osoitekielis",
+                     "TutkintotoimikuntaToimikausis", "Aitukielis",
+                    function($scope, $log, $modal, $location, $filter, SearchService,
+                    SearchTypes, TargetGroups, EmptyTerms, FilterHelper, ArrayHelper, ExtractHelper, KoodiHelper,
+                    SavesService, OptionsService, LocalisationService, Osoitekielis,
+                    TutkintotoimikuntaToimikausis, Aitukielis) {
     $scope.msg = function( key, params ) {
         return LocalisationService.t(key, params);
     };
 
     var updateSaves = function() {
-        SavesService.list(function(data) {
+        SavesService.listSearch(function(data) {
             $scope.saves = data;
             $scope.selectedSavedSearch = SearchService.getSelectedSearch();
         });
@@ -53,6 +57,8 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
 
     $scope.saves = [];
     $scope.selectedSavedSearch = null;
+    // TODO: Find better way to do this
+    // http://stackoverflow.com/questions/28960094/loading-data-at-startup-and-displaying-via-controller-in-angularjs
     updateSaves();
 
     $scope.osoitekielis = Osoitekielis;
@@ -202,19 +208,20 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
     };
 
-    $scope.isShowVuosiluokkaTerm = function(){
-        var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
-        if (oppilaitosTyyppisWithVuosiluokkaSetting) {
-            var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
-            var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
-                oppilaitosTyyppisWithVuosiluokka);
-            if (!visible) {
-                $scope.terms.vuosiluokkas = [];
-            }
-            return visible;
-        }
-        return true;
-    };
+    // WARNING: Causes infinite digest loop error. Do not use if you don't know what you're doing.
+    //$scope.isShowVuosiluokkaTerm = function(){
+    //    var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
+    //    if (oppilaitosTyyppisWithVuosiluokkaSetting) {
+    //        var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
+    //        var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
+    //            oppilaitosTyyppisWithVuosiluokka);
+    //        if (!visible) {
+    //            $scope.terms.vuosiluokkas = [];
+    //        }
+    //        return visible;
+    //    }
+    //    return true;
+    //};
 
     $scope.handleSaveSelected = function() {
         if( $scope.selectedSavedSearch ) {
@@ -279,7 +286,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         if (angular.isArray(options) === false) {
             $log.warn("Target group options array invalid! ", options);
             return false;
-        };
+        }
         angular.forEach(options, function(option) {
             if(option.selected === true) {
                 result = true;
@@ -312,7 +319,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         if( $scope.selectedSavedSearch ) {
             modalInstance = $modal.open({
                 templateUrl: 'partials/overwriteSavePopup.html',
-                controller: NewSavePopupController,
+                controller: 'NewSavePopupController',
                 resolve: {
                     save: getCurrentSaveDetails,
                     onSaveNew: onSaveNew
@@ -321,7 +328,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         } else {
             modalInstance = $modal.open({
                 templateUrl: 'partials/newSavePopup.html',
-                controller: NewSavePopupController,
+                controller: 'NewSavePopupController',
                 resolve: {
                     save: getCurrentSaveDetails,
                     onSaveNew: onSaveNew
@@ -345,7 +352,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         $log.info("Show saved searches popup.");
         var modalInstance = $modal.open({
             templateUrl: 'partials/savesPopup.html',
-            controller: SavesPopupController,
+            controller: 'SavesPopupController',
             resolve: {
                 saves: function () {
                     return $scope.saves;
@@ -360,9 +367,4 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             updateSaves();
         });
     };
-};
-
-SearchController.$inject = ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
-                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "ExtractHelper", "KoodiHelper",
-                     "SavesService", "OptionsService", "LocalisationService",
-                     "Osoitekielis", "TutkintotoimikuntaToimikausis", "Aitukielis"];
+}]);

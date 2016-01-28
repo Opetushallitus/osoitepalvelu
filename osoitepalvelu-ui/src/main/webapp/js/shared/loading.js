@@ -34,21 +34,20 @@ mod.factory('onStartInterceptor', ["loadingService", function(loadingService) {
 }]);
 
 mod.factory('onCompleteInterceptor', ["loadingService", "$q", function(loadingService, $q) {
-  return function(promise) {
-    var decrementRequestCountSuccess = function(response) {
-        loadingService.requestCount--;
-        return response;
-    };
-    var decrementRequestCountError = function(response) {
-        loadingService.requestCount--;
-        return $q.reject(response);
-    };
-    return promise.then(decrementRequestCountSuccess, decrementRequestCountError);
-  };
+  return {
+      response: function(response) {
+          loadingService.requestCount--;
+          return response;
+      },
+      responseError: function(response) {
+          loadingService.requestCount--;
+          return $q.reject(response);
+      }
+  }
 }]);
 
 mod.config(["$httpProvider", function($httpProvider) {
-    $httpProvider.responseInterceptors.push('onCompleteInterceptor');
+    $httpProvider.interceptors.push('onCompleteInterceptor');
 }]);
 
 mod.run(["$http", "onStartInterceptor", function($http, onStartInterceptor) {

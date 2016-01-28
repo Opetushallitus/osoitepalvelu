@@ -17,7 +17,9 @@
 /**
  * Created by ratamaa on 12/4/13.
  */
-var SavesPopupController = function ($scope, $modalInstance, $modal, $filter, saves,
+OsoiteKoostepalvelu.controller('SavesPopupController', ["$scope", "$modalInstance", "$modal", "$filter", "saves",
+    "LocalisationService", "SavesService",
+    function ($scope, $modalInstance, $modal, $filter, saves,
             LocalisationService, SavesService) {
     var msg = function( key, params ) {
         return LocalisationService.t(key, params);
@@ -34,7 +36,7 @@ var SavesPopupController = function ($scope, $modalInstance, $modal, $filter, sa
     $scope.deleteSave = function(id) {
         var modalInstance = $modal.open({
             templateUrl: 'partials/confirmPopup.html',
-            controller: ConfirmPopupController,
+            controller: 'ConfirmPopupController',
             resolve: {options: function() {
                 return {
                     title: msg('saves_popup_delete_confirm_title', [$filter('filter')($scope.saves, {id: id})[0].name] ),
@@ -46,14 +48,10 @@ var SavesPopupController = function ($scope, $modalInstance, $modal, $filter, sa
         });
         modalInstance.result.then(function () {
             SavesService.deleteSearch(id, function() {
-                SavesService.list(function(data) {
+                SavesService.listSearch(function(data) {
                     $scope.saves = data;
                 });
             })
         }, function () {});
     };
-};
-
-SavesPopupController.$inject = ["$scope", "$modalInstance", "$modal", "$filter", "saves",
-    "LocalisationService", "SavesService"];
-
+}]);
