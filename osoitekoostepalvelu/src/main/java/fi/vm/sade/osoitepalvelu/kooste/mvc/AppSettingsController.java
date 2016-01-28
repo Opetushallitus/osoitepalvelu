@@ -29,11 +29,13 @@ import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.apache.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
@@ -84,9 +86,9 @@ public class AppSettingsController extends AbstractMvcController {
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
     @RequestMapping(value = "/refereshOrganisaatioCache", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
-    public String buildOrganisaatioCache() {
+    public int buildOrganisaatioCache() {
         organisaatioCacheTask.refreshOrganisaatioCache();
-        return "OK";
+        return HttpStatus.SC_OK;
     }
 
     @ApiOperation("Päivittää Organisaatiovälimuistin siltä osin kuin tarpeellista." +
@@ -95,9 +97,9 @@ public class AppSettingsController extends AbstractMvcController {
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
     @RequestMapping(value = "/ensureOrganisaatioCacheFresh", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
-    public String ensureOrganisaatioCacheFresh() {
+    public int ensureOrganisaatioCacheFresh() {
         organisaatioCacheTask.ensureOrganisaatioCacheFresh();
-        return "OK";
+        return HttpStatus.SC_OK;
     }
 
     @ApiOperation("Poistaa Koodistoon liittyvät välimuistit sovelluksen ajonaikaisesta muistista " +
@@ -107,9 +109,9 @@ public class AppSettingsController extends AbstractMvcController {
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
     @RequestMapping(value = "/purgeKoodistoCaches", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
-    public String purgeKoodistoCaches() {
+    public int purgeKoodistoCaches() {
         koodistoService.purgeCaches();
-        return "OK";
+        return HttpStatus.SC_OK;
     }
 
     @ApiOperation("Käy uudelleen Y-tunnustiedot organisaatioille hierarkiahaun kautta. " +
@@ -119,9 +121,9 @@ public class AppSettingsController extends AbstractMvcController {
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
     @RequestMapping(value = "/updateOrganisaatioYtunnusDetails", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
-    public String updateYtunnusDetails() {
+    public int updateYtunnusDetails() {
         organisaatioService.updateOrganisaatioYtunnusDetails(new DefaultCamelRequestContext());
-        return "OK";
+        return HttpStatus.SC_OK;
     }
 
     @ApiOperation("Noutaa tiedot AITU-palvelusta. Käytettävissä vain paikallisena pyyntönä kehityksen tukena. " +
@@ -130,9 +132,9 @@ public class AppSettingsController extends AbstractMvcController {
     @PreAuthorize("hasIpAddress('127.0.0.1/24')")
     @RequestMapping(value = "/fetchAituData", method = RequestMethod.POST, produces = "text/plain")
     @ResponseBody
-    public String fetchAituData() {
+    public int fetchAituData() {
         aituDataFetchTask.refreshAituData();
-        return "OK";
+        return HttpStatus.SC_OK;
     }
 
 }

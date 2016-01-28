@@ -36,7 +36,7 @@ OsoiteKoostepalvelu.controller('SavesPopupController', ["$scope", "$modalInstanc
     $scope.deleteSave = function(id) {
         var modalInstance = $modal.open({
             templateUrl: 'partials/confirmPopup.html',
-            controller: ConfirmPopupController,
+            controller: 'ConfirmPopupController',
             resolve: {options: function() {
                 return {
                     title: msg('saves_popup_delete_confirm_title', [$filter('filter')($scope.saves, {id: id})[0].name] ),
@@ -48,7 +48,7 @@ OsoiteKoostepalvelu.controller('SavesPopupController', ["$scope", "$modalInstanc
         });
         modalInstance.result.then(function () {
             SavesService.deleteSearch(id, function() {
-                SavesService.list(function(data) {
+                SavesService.listSearch(function(data) {
                     $scope.saves = data;
                 });
             })

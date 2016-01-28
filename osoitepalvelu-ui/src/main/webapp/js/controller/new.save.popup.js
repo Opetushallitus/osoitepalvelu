@@ -17,8 +17,8 @@
 /**
  * Created by ratamaa on 12/9/13.
  */
-OsoiteKoostepalvelu.controller('NewSavePopupController', ["$scope", "$modalInstance", "$modal", "$timeout", "save", "onSaveNew",
-    "LocalisationService", "SavesService",
+OsoiteKoostepalvelu.controller('NewSavePopupController', ["$scope", "$modalInstance", "$modal", "$timeout",
+    "save", "onSaveNew", "LocalisationService", "SavesService",
     function ($scope, $modalInstance, $modal, $timeout,
             save, onSaveNew, LocalisationService, SavesService) {
     var msg = function( key, params ) {
@@ -46,7 +46,7 @@ OsoiteKoostepalvelu.controller('NewSavePopupController', ["$scope", "$modalInsta
     $scope.saveAs = function() {
       var modalInstance = $modal.open({
           templateUrl: 'partials/newSavePopup.html',
-          controller: NewSavePopupController,
+          controller: 'NewSavePopupController',
           resolve: {
               save: function() {
                   return angular.extend({}, $scope.save, {

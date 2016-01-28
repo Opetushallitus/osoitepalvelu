@@ -31,7 +31,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
     };
 
     var updateSaves = function() {
-        SavesService.list(function(data) {
+        SavesService.listSearch(function(data) {
             $scope.saves = data;
             $scope.selectedSavedSearch = SearchService.getSelectedSearch();
         });
@@ -57,7 +57,9 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
 
     $scope.saves = [];
     $scope.selectedSavedSearch = null;
-    //updateSaves();
+    // TODO: Find better way to do this
+    // http://stackoverflow.com/questions/28960094/loading-data-at-startup-and-displaying-via-controller-in-angularjs
+    updateSaves();
 
     $scope.osoitekielis = Osoitekielis;
 
@@ -206,6 +208,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
     };
 
+    // WARNING: Causes infinite digest loop error. Do not use if you don't know what you're doing.
     //$scope.isShowVuosiluokkaTerm = function(){
     //    var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
     //    if (oppilaitosTyyppisWithVuosiluokkaSetting) {
@@ -316,7 +319,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         if( $scope.selectedSavedSearch ) {
             modalInstance = $modal.open({
                 templateUrl: 'partials/overwriteSavePopup.html',
-                controller: NewSavePopupController,
+                controller: 'NewSavePopupController',
                 resolve: {
                     save: getCurrentSaveDetails,
                     onSaveNew: onSaveNew
@@ -325,7 +328,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         } else {
             modalInstance = $modal.open({
                 templateUrl: 'partials/newSavePopup.html',
-                controller: NewSavePopupController,
+                controller: 'NewSavePopupController',
                 resolve: {
                     save: getCurrentSaveDetails,
                     onSaveNew: onSaveNew
@@ -349,7 +352,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         $log.info("Show saved searches popup.");
         var modalInstance = $modal.open({
             templateUrl: 'partials/savesPopup.html',
-            controller: SavesPopupController,
+            controller: 'SavesPopupController',
             resolve: {
                 saves: function () {
                     return $scope.saves;
