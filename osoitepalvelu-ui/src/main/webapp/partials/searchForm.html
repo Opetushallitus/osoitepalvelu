@@ -36,7 +36,7 @@
                     <ui-select-match placeholder={{msg('search_type_placeholder')}}>
                         <span ng-bind="$select.selected.name"></span>
                     </ui-select-match>
-                    <ui-select-choices repeat="opt in searchTypes track by opt.type"
+                    <ui-select-choices repeat="opt in (searchTypes | filter: $select.search) track by opt.type"
                                        ng-disabled="(selectedTargetGroupTypes|filter:'KOULUTA_KAYTTAJAT':true).length
                             && (opt.type == 'LETTER' || opt.type == 'CONTACT')">
                         <span ng-bind="opt.name"></span>
@@ -135,7 +135,7 @@
                     <ui-select multiple="true" id="tutkintotoimikuntaRoolis" ng-model="terms.tutkintotoimikuntaRoolis"
                                theme="select2">
                         <ui-select-match placeholder="{{msg('search_term_tutkintotoimikunta_rooli')}}">{{$item.nimi}}</ui-select-match>
-                        <ui-select-choices repeat="opt in (options.tutkintotoimikuntaRoolis | filter: $select.search) track by opt.koodiUri">
+                        <ui-select-choices repeat="opt in (options.tutkintotoimikuntaRoolis | filter: $select.search)">
                             {{opt.nimi}}
                         </ui-select-choices>
                     </ui-select>
@@ -145,7 +145,7 @@
                     <ui-select allow-clear id="koulutuslajis" ng-model="terms.koulutuslajis[0]"
                                theme="select2">
                         <ui-select-match placeholder="{{msg('search_term_koulutuslaji')}}">{{$selected.nimi}}</ui-select-match>
-                        <ui-select-choices repeat="opt in (options.koulutuslajis | filter: $select.search) track by opt.koodiUri">
+                        <ui-select-choices repeat="opt in (options.koulutuslajis | filter: $select.search)">
                             {{opt.nimi}}
                         </ui-select-choices>
                     </ui-select>
@@ -164,7 +164,7 @@
                     <ui-select multiple="true" id="koulutusalas" ng-model="terms.koulutusalas"
                                theme="select2" on-select="koulutusalasChanged($item, $model)">
                         <ui-select-match placeholder="{{msg('search_term_koulutusala')}}">{{$opt.nimi}}</ui-select-match>
-                        <ui-select-choices repeat="opt in (options.koulutusalas | filter: $select.search) track by opt.koodiUri">
+                        <ui-select-choices repeat="opt in (options.koulutusalas | filter: $select.search)">
                             {{opt.nimi}}
                         </ui-select-choices>
                     </ui-select>
