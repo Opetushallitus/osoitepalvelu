@@ -223,7 +223,8 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
     //    return true;
     //};
 
-    $scope.handleSaveSelected = function() {
+    $scope.handleSaveSelected = function(selectedSearch) {
+        $scope.selectedSavedSearch = selectedSearch;
         if( $scope.selectedSavedSearch ) {
             var selected = angular.copy($scope.selectedSavedSearch);
             $log.info("Selected save: " + selected);
@@ -239,8 +240,12 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         SearchService.updateSelectedSearch($scope.selectedSavedSearch);
     };
 
+    $scope.handleSearchTypeSelected = function(selectedSearchType) {
+        $scope.searchType = selectedSearchType;
+    };
+
     $scope.handleTargetGroupSelected = function() {
-        $log.info("Target gorup selection changed to: "+$scope.selectedTargetGroup);
+        $log.info("Target group selection changed to: "+$scope.selectedTargetGroup);
         if( $scope.selectedTargetGroup ) {
             $scope.selectedTargetGroupTypes.push($scope.selectedTargetGroup);
             var newGroup = angular.copy(
