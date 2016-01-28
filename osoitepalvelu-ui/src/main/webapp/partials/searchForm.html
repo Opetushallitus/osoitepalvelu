@@ -36,7 +36,7 @@
                     <ui-select-match placeholder={{msg('search_type_placeholder')}}>
                         <span ng-bind="$select.selected.name"></span>
                     </ui-select-match>
-                    <ui-select-choices repeat="opt in (searchTypes | filter: $select.search) track by opt.type"
+                    <ui-select-choices repeat="opt in searchTypes track by opt.type"
                                        ng-disabled="(selectedTargetGroupTypes|filter:'KOULUTA_KAYTTAJAT':true).length
                             && (opt.type == 'LETTER' || opt.type == 'CONTACT')">
                         <span ng-bind="opt.name"></span>
