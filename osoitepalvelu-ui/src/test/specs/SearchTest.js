@@ -122,34 +122,34 @@ describe("Search Test", function() {
             createSearchController, createResultsController;
 
         beforeEach(inject(function($injector) {
-            //$httpBackend = $injector.get('$httpBackend');
-            //$httpBackend.when('GET').respond([]);
-            //$httpBackend.when('POST','api/search/list.json?lang=fi').respond(dummyResults);
-            //
-            //$timeout = $injector.get("$timeout");
-            //$rootScope = $injector.get('$rootScope');
-            //var $controller = $injector.get('$controller');
-            //SearchService = $injector.get("SearchService");
-            //
-            //createSearchController = function() {
-            //    return $controller('SearchController', {'$scope' : $rootScope });
-            //};
-            //createResultsController = function() {
-            //    return $controller('ResultsController', {'$scope' : $rootScope });
-            //}
+            $httpBackend = $injector.get('$httpBackend');
+            $httpBackend.when('GET').respond([]);
+            $httpBackend.when('POST','api/search/list.json?lang=fi').respond(dummyResults);
+
+            $timeout = $injector.get("$timeout");
+            $rootScope = $injector.get('$rootScope');
+            var $controller = $injector.get('$controller');
+            SearchService = $injector.get("SearchService");
+
+            createSearchController = function() {
+                return $controller('SearchController', {'$scope' : $rootScope });
+            };
+            createResultsController = function() {
+                return $controller('ResultsController', {'$scope' : $rootScope });
+            }
         }));
 
         it("results found", function() {
-            //var searchController = createSearchController();
-            //$httpBackend.flush();
-            //$rootScope.searchType = 'CONTACT';
-            //$rootScope.search();
-            //expect(SearchService.isSearchReady()).toEqual(true);
-            //
-            //var resultsController = createResultsController();
-            //$timeout.flush();
-            //$httpBackend.flush();
-            //expect($rootScope.results.length).toEqual(2);
+            var searchController = createSearchController();
+            $httpBackend.flush();
+            $rootScope.searchType = 'CONTACT';
+            $rootScope.search();
+            expect(SearchService.isSearchReady()).toEqual(true);
+
+            var resultsController = createResultsController();
+            $timeout.flush();
+            $httpBackend.flush();
+            expect($rootScope.results.length).toEqual(2);
         });
     });
 });
