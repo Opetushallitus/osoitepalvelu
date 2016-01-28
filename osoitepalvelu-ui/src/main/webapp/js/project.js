@@ -16,11 +16,11 @@
 
 OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvider, $provide) {
     $routeProvider.when('/results', {
-            controller:'ResultsController',
-            templateUrl:'partials/results.html'
+            controller: 'ResultsController',
+            templateUrl: 'partials/results.html'
     }).when('/', {
-            controller:'SearchController',
-            templateUrl:'partials/searchForm.html'
+            controller: 'SearchController',
+            templateUrl: 'partials/searchForm.html'
     })
     .otherwise({
             redirectTo:'/'

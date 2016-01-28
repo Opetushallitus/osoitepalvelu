@@ -83,7 +83,7 @@ function osoitepalveluInit() {
 		    	loader.toggleClass("pre-init", false);
 	        });
 	    }
-	};
+	}
 
 	function logRequest(xhr, status) {
 		 console.log("LOG "+status+": "+xhr.status+" "+xhr.statusText, xhr);
