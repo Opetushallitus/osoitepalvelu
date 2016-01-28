@@ -20,6 +20,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.googlecode.ehcache.annotations.Cacheable;
 import com.googlecode.ehcache.annotations.PartialCacheKey;
+import fi.vm.sade.auditlog.osoitepalvelu.OsoitepalveluOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.KoodiHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
@@ -47,6 +48,9 @@ import fi.vm.sade.osoitepalvelu.kooste.service.tarjonta.TarjontaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import static fi.vm.sade.auditlog.osoitepalvelu.LogMessage.builder;
+import fi.vm.sade.auditlog.osoitepalvelu.LogMessage;
 
 import java.util.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -236,6 +240,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         if (searchHenkilos) {
             List<String> organisaatioOids = oids(organisaatioYhteystietoResults);
             List<HenkiloDetailsDto> henkiloDetails = findHenkilos(terms, context, organisaatioOids);
+            // Searching individuals may contain sensitive content so it is logged.
             logRead(henkiloDetails);
 
             List<HenkiloHakuResultDto> henkiloResults = dtoConverter.convert(henkiloDetails,
@@ -410,10 +415,16 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         }));
     }
 
+    // Combine fetched henkiloOids into single string and log what was fetched.
     protected void logRead(List<HenkiloDetailsDto> henkiloDetailsList) {
+
+        String henkiloOids = "";
         for (HenkiloDetailsDto henkiloDetails : henkiloDetailsList) {
-            log(read("henkilo", henkiloDetails.getOidHenkilo()));
+            henkiloOids += henkiloDetails.getOidHenkilo() + ";";
         }
+        LogMessage logMessage = builder().id(getLoggedInUserOidOrNull()).henkiloOidList(henkiloOids)
+                .setOperaatio(OsoitepalveluOperation.HENKILO_HAKU).build();
+        audit.log(logMessage);
     }
 
     protected List<String> resolveKuntaKoodis(SearchTermsDto terms) {

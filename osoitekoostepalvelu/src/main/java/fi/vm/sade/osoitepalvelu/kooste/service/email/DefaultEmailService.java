@@ -18,6 +18,10 @@ package fi.vm.sade.osoitepalvelu.kooste.service.email;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
+import fi.vm.sade.auditlog.osoitepalvelu.LogMessage;
+import static fi.vm.sade.auditlog.osoitepalvelu.LogMessage.builder;
+
+import fi.vm.sade.auditlog.osoitepalvelu.OsoitepalveluOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.mvc.dto.EmailSettingsParametersDto;
@@ -94,7 +98,10 @@ public class DefaultEmailService extends AbstractService implements EmailService
 
         final HenkiloDetailsDto myHenkiloDetails = authenticationServiceRoute.getHenkiloTiedot(myInfo.getOid(),
                 new DefaultCamelRequestContext());
-        log(read("henkilo", myInfo.getOid()));
+        LogMessage logMessage = builder().id(myInfo.getOid()).henkiloOidList(myHenkiloDetails.getOidHenkilo())
+                .setOperaatio(OsoitepalveluOperation.EMAIL_SERVICE)
+                .message("EmailService: Send email details to viestintäpalvelu").build();
+        audit.log(logMessage);
         settings.getEmail().setOrganizationOid(
                 myHenkiloDetails.findFirstAktiivinenOrganisaatioOid().or(defaultOrganisaatioOid));
 

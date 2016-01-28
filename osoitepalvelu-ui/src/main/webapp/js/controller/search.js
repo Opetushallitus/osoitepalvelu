@@ -17,11 +17,15 @@
 /**
  * Created by ratamaa on 12/3/13.
  */
-var SearchController = function($scope, $log, $modal, $location, $filter, SearchService,
-                                SearchTypes, TargetGroups, EmptyTerms,
-                                FilterHelper, ArrayHelper, ExtractHelper, KoodiHelper, SavesService,
-                                OptionsService, LocalisationService, Osoitekielis,
-                                TutkintotoimikuntaToimikausis, Aitukielis) {
+var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu');
+OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
+                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "ExtractHelper", "KoodiHelper",
+                     "SavesService", "OptionsService", "LocalisationService", "Osoitekielis",
+                     "TutkintotoimikuntaToimikausis", "Aitukielis",
+                    function($scope, $log, $modal, $location, $filter, SearchService,
+                    SearchTypes, TargetGroups, EmptyTerms, FilterHelper, ArrayHelper, ExtractHelper, KoodiHelper,
+                    SavesService, OptionsService, LocalisationService, Osoitekielis,
+                    TutkintotoimikuntaToimikausis, Aitukielis) {
     $scope.msg = function( key, params ) {
         return LocalisationService.t(key, params);
     };
@@ -53,7 +57,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
 
     $scope.saves = [];
     $scope.selectedSavedSearch = null;
-    updateSaves();
+    //updateSaves();
 
     $scope.osoitekielis = Osoitekielis;
 
@@ -202,19 +206,19 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
     };
 
-    $scope.isShowVuosiluokkaTerm = function(){
-        var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
-        if (oppilaitosTyyppisWithVuosiluokkaSetting) {
-            var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
-            var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
-                oppilaitosTyyppisWithVuosiluokka);
-            if (!visible) {
-                $scope.terms.vuosiluokkas = [];
-            }
-            return visible;
-        }
-        return true;
-    };
+    //$scope.isShowVuosiluokkaTerm = function(){
+    //    var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
+    //    if (oppilaitosTyyppisWithVuosiluokkaSetting) {
+    //        var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
+    //        var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
+    //            oppilaitosTyyppisWithVuosiluokka);
+    //        if (!visible) {
+    //            $scope.terms.vuosiluokkas = [];
+    //        }
+    //        return visible;
+    //    }
+    //    return true;
+    //};
 
     $scope.handleSaveSelected = function() {
         if( $scope.selectedSavedSearch ) {
@@ -279,7 +283,7 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
         if (angular.isArray(options) === false) {
             $log.warn("Target group options array invalid! ", options);
             return false;
-        };
+        }
         angular.forEach(options, function(option) {
             if(option.selected === true) {
                 result = true;
@@ -360,9 +364,4 @@ var SearchController = function($scope, $log, $modal, $location, $filter, Search
             updateSaves();
         });
     };
-};
-
-SearchController.$inject = ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
-                     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "ExtractHelper", "KoodiHelper",
-                     "SavesService", "OptionsService", "LocalisationService",
-                     "Osoitekielis", "TutkintotoimikuntaToimikausis", "Aitukielis"];
+}]);
