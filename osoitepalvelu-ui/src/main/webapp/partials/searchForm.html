@@ -69,8 +69,10 @@
                         </div>
                         </th>
                         <td class="criterionOptions" ng-hide="tg.hideOptions">
-                            <div class="criterionOption" ng-repeat="opt in tg.options">
-                                <input id="optionChecked_{{$parent.$index}}_{{$index}}" type="checkbox" ng-model="opt.selected" /> <label for="optionChecked_{{$parent.$index}}_{{$index}}">{{opt.name}}</label>
+                            <div class="criterionOption" ng-repeat="opt in tg.options" ng-hide="opt.hide">
+                                <input id="optionChecked_{{$parent.$index}}_{{$index}}" type="checkbox"
+                                       ng-model="opt.selected"/>
+                                <label for="optionChecked_{{$parent.$index}}_{{$index}}">{{opt.name}}</label>
                             </div>
                         </td>
                         <!-- Tyhjä TD, jotta sarakkeet menevät oikein -->
@@ -130,7 +132,7 @@
                         <option ng-repeat="opt in options.koulutuslajis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
-               <div class="term" ng-show="isShowKoulutusTerms()" title="{{msg('search_term_opetuskieli')}}">
+                <div class="term" ng-show="isShowKoulutusTerms()" title="{{msg('search_term_opetuskieli')}}">
                     <select ui-select2 multiple id="opetusKielis" class="form-control" ng-model="terms.opetusKielis" data-placeholder="{{msg('search_term_opetuskieli')}}">
                         <option ng-repeat="opt in options.kielis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
@@ -163,13 +165,13 @@
                 <div class="term-separator" ng-show="isShowKoulutusTyyppiTerm() || (isShowTutkintotoimikuntaTerm() &amp;&amp; options.koulutus)"></div>
                 <div class="term" ng-show="isShowTutkintotoimikuntaKieliTerm()" title="{{msg('search_term_tutkintotoimikunta_kielis')}}">
                     <select ui-select2 multiple id="tutkintotoimikuntaKielis" class="form-control" ng-model="terms.tutkintotoimikuntaKielis"
-                                data-placeholder="{{msg('search_term_tutkintotoimikunta_kielis')}}">
+                            data-placeholder="{{msg('search_term_tutkintotoimikunta_kielis')}}">
                         <option ng-repeat="opt in options.tutkintotoimikuntaKielis" value="{{opt.code}}">{{opt.name}}</option>
                     </select>
                 </div>
                 <div class="term" ng-show="isShowTutkintotoimikuntaJasenKieliTerm()" title="{{msg('search_term_tutkintotoimikunta_jasen_kielis')}}">
                     <select ui-select2 multiple id="tutkintotoimikuntaJasenKielis" class="form-control" ng-model="terms.tutkintotoimikuntaJasenKielis"
-                                data-placeholder="{{msg('search_term_tutkintotoimikunta_jasen_kielis')}}">
+                            data-placeholder="{{msg('search_term_tutkintotoimikunta_jasen_kielis')}}">
                         <option ng-repeat="opt in options.tutkintotoimikuntaJasenKielis" value="{{opt.code}}">{{opt.name}}</option>
                     </select>
                 </div>
@@ -187,35 +189,44 @@
                     </select>
                 </div>
                 <div class="term-separator" ng-show="isShowKoulutaTerm()"></div>
-                <div class="term term-full-width" title="{{msg('search_term_organisaation_kieli')}}">
+                <!--Organisaation kieli term-->
+                <div class="term term-full-width" ng-show="isShowOppilaitoksetToimipisteetTerms() || isShowKoulutustoimijaOppisopimustoimisto()"
+                     title="{{msg('search_term_organisaation_kieli')}}">
                     <select ui-select2 multiple id="organisaationKielis" class="form-control" ng-model="terms.organisaationKielis" data-placeholder="{{msg('search_term_organisaation_kieli')}}">
                         <option ng-repeat="opt in options.organisaationKielis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term-separator"></div>
-                <div class="term" title="{{msg('search_term_maakunta')}}">
+                <!--Maakunta term-->
+                <div class="term" ng-show="isShowOppilaitoksetToimipisteetTerms() || isShowKoulutustoimijaOppisopimustoimisto()"
+                     title="{{msg('search_term_maakunta')}}">
                     <select ui-select2 multiple id="maakunta" class="form-control" ng-model="terms.maakuntas" data-placeholder="{{msg('search_term_maakunta')}}">
                         <option ng-repeat="opt in options.maakuntas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
-                <div class="term" title="{{msg('search_term_kunta')}}">
+                <!--Kunta term-->
+                <div class="term" ng-show="isShowOppilaitoksetToimipisteetTerms() || isShowKoulutustoimijaOppisopimustoimisto()"
+                     title="{{msg('search_term_kunta')}}">
                     <select ui-select2 multiple data-disable-selectall id="kunta" class="form-control" ng-model="terms.kuntas" data-placeholder="{{msg('search_term_kunta')}}">
                         <option ng-repeat="opt in options.kuntas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <div class="term-separator"></div>
-                <div class="term term-full-width" title="{{msg('search_term_oppilaitostyyppi')}}">
+                <!--Oppilaitostyyppi term-->
+                <div class="term term-full-width" ng-show="isShowOppilaitoksetToimipisteetTerms() || isShowKoulutustoimijaOppisopimustoimisto()"
+                     title="{{msg('search_term_oppilaitostyyppi')}}">
                     <select ui-select2 multiple id="oppilaitostyyppi" class="form-control" ng-model="terms.oppilaitostyyppis" data-placeholder="{{msg('search_term_oppilaitostyyppi')}}">
                         <option ng-repeat="opt in options.oppilaitostyyppis" value="{{opt.koodiUri}}">{{opt.nimi}}</option>
                     </select>
                 </div>
                 <!--<div class="term" ng-show="isShowVuosiluokkaTerm()" title="{{msg('search_term_vuosiluokka')}}">-->
-                    <!--<select ui-select2 multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas" data-placeholder="{{msg('search_term_vuosiluokka')}}">-->
-                        <!--<option ng-repeat="opt in options.vuosiluokkas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>-->
-                    <!--</select>-->
+                <!--<select ui-select2 multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas" data-placeholder="{{msg('search_term_vuosiluokka')}}">-->
+                <!--<option ng-repeat="opt in options.vuosiluokkas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>-->
+                <!--</select>-->
                 <!--</div>-->
                 <div class="term-separator"></div>
-                <div class="term term-full-width" title="{{msg('search_term_koultuksenjarjestaja')}}">
+                <!--Koulutustoimija term-->
+                <div class="term term-full-width" ng-show="isShowOppilaitoksetToimipisteetTerms()" title="{{msg('search_term_koultuksenjarjestaja')}}">
                     <select ui-select2 multiple data-disable-selectall id="koultuksenjarjestaja" class="form-control"
                             ng-model="terms.koultuksenjarjestajas" data-placeholder="{{msg('search_term_koultuksenjarjestaja')}}">
                         <option ng-repeat="opt in options.koultuksenjarjestajas" value="{{opt.koodiId}}">{{opt.nimi}}</option>
