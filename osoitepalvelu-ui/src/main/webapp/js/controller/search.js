@@ -207,6 +207,11 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
     $scope.isShowKoulutusTerms = function() {
         return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
     };
+    // Oppilaitos tai toimipiste
+    $scope.isShowOppilaitoksetToimipisteetTerms = function () {
+        return $scope.selectedTargetGroupTypes.indexOf('OPPILAITOKSET') !== -1
+        || $scope.selectedTargetGroupTypes.indexOf('OPETUSPISTEET') !== -1;
+    };
 
     // WARNING: Causes infinite digest loop error. Do not use if you don't know what you're doing.
     //$scope.isShowVuosiluokkaTerm = function(){
