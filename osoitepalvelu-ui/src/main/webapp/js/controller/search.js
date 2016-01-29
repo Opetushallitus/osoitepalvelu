@@ -244,7 +244,8 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         $scope.searchType = selectedSearchType;
     };
 
-    $scope.handleTargetGroupSelected = function() {
+    $scope.handleTargetGroupSelected = function(selectedTargetGroup) {
+        $scope.selectedTargetGroup = selectedTargetGroup;
         $log.info("Target group selection changed to: "+$scope.selectedTargetGroup);
         if( $scope.selectedTargetGroup ) {
             $scope.selectedTargetGroupTypes.push($scope.selectedTargetGroup);

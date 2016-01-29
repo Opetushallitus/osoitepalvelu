@@ -13,7 +13,7 @@
                 <label for="savedSearch" tt="saved_searches">Tallennetut haut</label>
             </div>
             <div class="field-cell">
-                <ui-select theme="select2" id="savedSearch" ng-model="selectedSavedSearch" on-select="handleSaveSelected($select.selected)">
+                <ui-select theme="select2" id="savedSearch" ng-model="selectedSavedSearch" on-select="handleSaveSelected($select.selected.id)">
                     <ui-select-match placeholder={{msg('saved_searches_placeholder')}}>{{$select.selected.name}}</ui-select-match>
                     <ui-select-choices repeat="save in (saves | filter: $select.search) track by save.id">
                         <span ng-bind="save.name"></span>
@@ -32,7 +32,7 @@
                 <label for="searchType" tt="search_type">Haku</label>
             </div>
             <div class="field-cell">
-                <ui-select theme="select2" id="searchType" ng-model="searchType">
+                <ui-select theme="select2" id="searchType" ng-model="searchType" on-select="handleSearchTypeSelected($select.selected.type)">
                     <ui-select-match placeholder={{msg('search_type_placeholder')}}>
                         <span ng-bind="$select.selected.name"></span>
                     </ui-select-match>
@@ -90,7 +90,7 @@
                 </div>
                 <ui-select ng-model="selectedTargetGroup"
                            theme="select2"
-                           on-select="handleTargetGroupSelected($select.selected)"
+                           on-select="handleTargetGroupSelected($select.selected.type)"
                            ng-show="(targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')).length">
                     <ui-select-match placeholder="{{msg('target_group_placeholder')}}">{{$item.name}}</ui-select-match>
                     <ui-select-choices repeat="tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type') track by tg.type"
