@@ -200,16 +200,12 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 || $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
         };
 
-        $scope.isShowKoulutaTerm = function() {
-            return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') !== -1;
-        };
-
         $scope.isShowKoulutusTerms = function() {
             return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
         };
 
         // Oppilaitos or toimipiste
-        $scope.isShowOppilaitoksetToimipisteetTerms = function () {
+        $scope.isShowOppilaitoksetToimipisteet = function () {
             return $scope.selectedTargetGroupTypes.indexOf('OPPILAITOKSET') !== -1
             || $scope.selectedTargetGroupTypes.indexOf('OPETUSPISTEET') !== -1;
         };
@@ -218,6 +214,11 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         $scope.isShowKoulutustoimijaOppisopimustoimisto = function() {
             return $scope.selectedTargetGroupTypes.indexOf('JARJESTAJAT_YLLAPITAJAT') !== -1
                 || $scope.selectedTargetGroupTypes.indexOf('OPPISOPIMUSTOIMPISTEET') !== -1;
+        };
+
+        // Palveluiden käyttäjät
+        $scope.isShowPalveluidenKayttajat = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') !== -1;
         };
 
         // WARNING: Causes infinite digest loop error. Do not use if you don't know what you're doing.
