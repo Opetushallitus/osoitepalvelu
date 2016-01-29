@@ -31,10 +31,10 @@
             </div>
             <div class="field-cell">
                 <select ui-select2 id="searchType" class="form-control" ng-model="searchType">
-                    <option class="placeholder select2-disabled" value="" tt="search_type_placeholder" class="placeholder">Valitse mihin tarkoitukseen tarvitset yhteystietoja</option>
+                    <option class="placeholder select2-disabled" value="" tt="search_type_placeholder"
+                            class="placeholder">Valitse mihin tarkoitukseen tarvitset yhteystietoja</option>
                     <option ng-repeat="opt in searchTypes" value="{{opt.type}}"
-                            ng-disabled="(selectedTargetGroupTypes|filter:'KOULUTA_KAYTTAJAT':true).length
-                            && (opt.type == 'LETTER' || opt.type == 'CONTACT')">{{opt.name}}</option>
+                            ng-disabled="searchtypesDisableLogic(opt.type)">{{opt.name}}</option>
                 </select>
             </div>
         </div>
@@ -90,7 +90,7 @@
                         ng-show="(targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')).length">
                     <option class="placeholder select2-disabled" value="" tt="target_group_placeholder"  class="placeholder">Valitse lisättävä kohderyhmä</option>
                     <option ng-repeat="tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')" value="{{tg.type}}"
-                    ng-disabled="(searchType == 'LETTER' || searchType == 'CONTACT') && tg.type == 'KOULUTA_KAYTTAJAT'">{{tg.name}}</option>
+                    ng-disabled="targetgroupsDisableLogic(tg.type)">{{tg.name}}</option>
                 </select>
             </div>
         </div>
