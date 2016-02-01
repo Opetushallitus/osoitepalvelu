@@ -247,6 +247,10 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             || tgType == 'NAYTTOTUTKINNON_JARJESTAJAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'TUTKINTOTOIMIKUNNAT')).length
+                || tgType == 'TUTKINTOTOIMIKUNNAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
             return false;
         };
 
