@@ -238,11 +238,13 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 return true;
             }
             // Palveluiden käyttäjä can't be combined to other targetgroups.
-            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTA_KAYTTAJAT')).length) {
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTA_KAYTTAJAT')).length
+            || tgType == 'KOULUTA_KAYTTAJAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
-            // Palveluiden käyttäjä can't be combined to other targetgroups.
-            if(tgType == 'KOULUTA_KAYTTAJAT' && $scope.selectedTargetGroupTypes.length) {
+            // Näyttötutkinnon järjestäjät can't be combined to other targetgroups.
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'NAYTTOTUTKINNON_JARJESTAJAT')).length
+            || tgType == 'NAYTTOTUTKINNON_JARJESTAJAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
             return false;
