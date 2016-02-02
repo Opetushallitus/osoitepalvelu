@@ -41,12 +41,12 @@ ul,ol {
     top: 7px;
 }
 
-.select2-choises {
+.select2-container {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
 }
 
-.select2-choises:hover, .select2-search-field:hover, .select2-choises input:hover, .select2-choice:hover {
+.select2-container:hover, .select2-search-field:hover, .select2-container input:hover, .select2-choice:hover {
     background: #FFF5DA;
 }
 
