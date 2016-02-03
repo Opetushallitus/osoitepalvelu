@@ -41,7 +41,7 @@
                         {{$select.selected.name}}
                     </ui-select-match>
                     <ui-select-choices repeat="opt.type as opt in searchTypes | filter: $select.search"
-                                       ng-disabled="searchtypesDisableLogic(opt.type)">
+                                       ui-disable-choice="searchtypesDisableLogic(opt.type)">
                         <div ng-bind-html="opt.name | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
@@ -99,7 +99,7 @@
                            ng-show="(targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')).length">
                     <ui-select-match placeholder="{{msg('target_group_placeholder')}}">{{$select.selected.name}}</ui-select-match>
                     <ui-select-choices repeat="tg.type as tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')"
-                                       ng-disabled="targetgroupsDisableLogic(tg.type)">
+                                       ui-disable-choice="targetgroupsDisableLogic(tg.type)">
                         <div ng-bind-html="tg.name | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
