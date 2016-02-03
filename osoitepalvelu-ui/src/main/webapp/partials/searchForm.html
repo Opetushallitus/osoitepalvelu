@@ -13,10 +13,13 @@
                 <label for="savedSearch" tt="saved_searches">Tallennetut haut</label>
             </div>
             <div class="field-cell">
-                <ui-select theme="select2" id="savedSearch" ng-model="selectedSavedSearch" on-select="handleSaveSelected($select.selected.id)">
-                    <ui-select-match placeholder={{msg('saved_searches_placeholder')}}>{{$select.selected.name}}</ui-select-match>
-                    <ui-select-choices repeat="save in saves | filter: $select.search">
-                        <span ng-bind="save.name"></span>
+                <ui-select theme="select2" id="savedSearch" ng-model="$parent.selectedSavedSearch"
+                           ng-change="handleSaveSelected()">
+                    <ui-select-match placeholder={{msg('saved_searches_placeholder')}}>
+                        {{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="save.id as save in saves | filter: $select.search">
+                        <span ng-bind="save.name | highlight: $select.search"></span>
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -32,14 +35,15 @@
                 <label for="searchType" tt="search_type">Haku</label>
             </div>
             <div class="field-cell">
-                <ui-select theme="select2" id="searchType" ng-model="searchType" on-select="handleSearchTypeSelected($select.selected.type)">
+                <!--Yhteystietotyypit dropdown menu-->
+                <ui-select theme="select2" id="searchType" ng-model="$parent.searchType">
                     <ui-select-match placeholder={{msg('search_type_placeholder')}}>
-                        <span ng-bind="$select.selected.name"></span>
+                        {{$select.selected.name}}
                     </ui-select-match>
-                    <ui-select-choices repeat="opt.koodiUri as opt in searchTypes | filter: $select.search"
+                    <ui-select-choices repeat="opt.type as opt in searchTypes | filter: $select.search"
                                        ng-disabled="(selectedTargetGroupTypes|filter:'KOULUTA_KAYTTAJAT':true).length
                             && (opt.type == 'LETTER' || opt.type == 'CONTACT')">
-                        <span ng-bind="opt.name"></span>
+                        <div ng-bind-html="opt.name | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -88,14 +92,14 @@
                         </td>
                     </table>
                 </div>
-                <ui-select ng-model="selectedTargetGroup"
-                           theme="select2"
-                           on-select="handleTargetGroupSelected($select.selected.type)"
+                <!--Kohderyhmä dropdown menu-->
+                <ui-select ng-model="$parent.selectedTargetGroup" theme="select2" id="targetGroup"
+                           ng-change="handleTargetGroupSelected()"
                            ng-show="(targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')).length">
-                    <ui-select-match placeholder="{{msg('target_group_placeholder')}}">{{$item.name}}</ui-select-match>
-                    <ui-select-choices repeat="tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type') track by tg.type"
+                    <ui-select-match placeholder="{{msg('target_group_placeholder')}}">{{$select.selected.name}}</ui-select-match>
+                    <ui-select-choices repeat="tg.type as tg in targetGroups | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type')"
                                        ng-disabled="(searchType == 'LETTER' || searchType == 'CONTACT') && tg.type == 'KOULUTA_KAYTTAJAT'">
-                        {{tg.name}}
+                        <div ng-bind-html="tg.name | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
             </div>

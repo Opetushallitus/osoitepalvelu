@@ -77,7 +77,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         $scope.osoitekieli = SearchService.getKieli();
 
         $scope.targetGroups = TargetGroups;
-        $scope.selectedTargetGroup = null;
+        $scope.selectedTargetGroup = undefined;
         $scope.visibleTargetGroups = SearchService.getTargetGroups();
         $scope.selectedTargetGroupTypes = [];
         angular.forEach($scope.visibleTargetGroups, function(v) {
@@ -223,8 +223,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
     //    return true;
     //};
 
-    $scope.handleSaveSelected = function(selectedSearch) {
-        $scope.selectedSavedSearch = selectedSearch;
+    $scope.handleSaveSelected = function() {
         if( $scope.selectedSavedSearch ) {
             var selected = angular.copy($scope.selectedSavedSearch);
             $log.info("Selected save: " + selected);
@@ -240,12 +239,8 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         SearchService.updateSelectedSearch($scope.selectedSavedSearch);
     };
 
-    $scope.handleSearchTypeSelected = function(selectedSearchType) {
-        $scope.searchType = selectedSearchType;
-    };
-
-    $scope.handleTargetGroupSelected = function(selectedTargetGroup) {
-        $scope.selectedTargetGroup = selectedTargetGroup;
+    $scope.handleTargetGroupSelected = function() {
+        //$scope.selectedTargetGroup = tg;
         $log.info("Target group selection changed to: "+$scope.selectedTargetGroup);
         if( $scope.selectedTargetGroup ) {
             $scope.selectedTargetGroupTypes.push($scope.selectedTargetGroup);
