@@ -248,124 +248,386 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 $filter('filter')($scope.targetGroups, {type: $scope.selectedTargetGroup})[0]);
             if( newGroup.options.length === 1 ) {
                 newGroup.options[0].selected=true;
+=======
+    "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "ExtractHelper", "KoodiHelper",
+    "SavesService", "OptionsService", "LocalisationService", "Osoitekielis",
+    "TutkintotoimikuntaToimikausis", "Aitukielis",
+    function($scope, $log, $modal, $location, $filter, SearchService,
+    SearchTypes, TargetGroups, EmptyTerms, FilterHelper, ArrayHelper, ExtractHelper, KoodiHelper,
+    SavesService, OptionsService, LocalisationService, Osoitekielis,
+    TutkintotoimikuntaToimikausis, Aitukielis) {
+        $scope.msg = function( key, params ) {
+            return LocalisationService.t(key, params);
+        };
+
+        var updateSaves = function() {
+            SavesService.listSearch(function(data) {
+                $scope.saves = data;
+                $scope.selectedSavedSearch = SearchService.getSelectedSearch();
+            });
+        };
+
+        var getCurrentSaveDetails = function() {
+            var selectedSave = $scope.selectedSavedSearch ? $filter('filter')($scope.saves,
+                {id: $scope.selectedSavedSearch})[0] : null;
+            return {
+                id: selectedSave ? selectedSave.id : null,
+                name: selectedSave ? selectedSave.name : null,
+                terms: $scope.terms,
+                targetGroups: $scope.visibleTargetGroups,
+                searchType: $scope.searchType,
+                addressFields: $scope.addressFields,
+                lang: $scope.osoitekieli
+            };
+        };
+
+        $scope.allowClearConfig = {
+            allowClear : true
+        };
+
+        $scope.saves = [];
+        $scope.selectedSavedSearch = null;
+        // TODO: Find better way to do this
+        // http://stackoverflow.com/questions/28960094/loading-data-at-startup-and-displaying-via-controller-in-angularjs
+        updateSaves();
+
+        $scope.osoitekielis = Osoitekielis;
+
+        $scope.updateTerms = function(updateOptions) {
+            if( updateOptions === undefined ) {
+                updateOptions = true;
             }
-            $scope.visibleTargetGroups.push( newGroup );
-            $scope.selectedTargetGroup = "";
-        }
-    };
-    $scope.removeTargetGroup = function(i) {
-        var arr = [];
-        angular.forEach($scope.selectedTargetGroupTypes, function(v,index) {
-            if( index !== i && v ) arr.push(v);
-        });
-        $scope.selectedTargetGroupTypes = arr;
-        arr = [];
-        angular.forEach( $scope.visibleTargetGroups, function (v, index) {
-            if( index !== i ) arr.push( angular.copy(v) );
-        } );
-        $scope.visibleTargetGroups = arr;
-        $scope.selectedTargetGroup = "";
-    };
+            $log.info("Update search terms");
 
-    $scope.selectableTargetGroupsFilter = FilterHelper.extractedFieldNotInArray;
+            $scope.searchTypes = SearchTypes;
+            $scope.searchType = SearchService.getSearchType();
 
-    $scope.isTermsShown = function() {
-        return !!$scope.searchType;
-    };
+            $scope.addressFields = SearchService.getAddressFields();
 
-    $scope.isShowTargetGroup = function() {
-        return $scope.isTermsShown();
-    };
+            $scope.osoitekieli = SearchService.getKieli();
 
-    $scope.isSearchActionsVisible = function() {
-        return $scope.isTermsShown();
-    };
+            $scope.targetGroups = TargetGroups;
+            $scope.selectedTargetGroup = null;
+            $scope.visibleTargetGroups = SearchService.getTargetGroups();
+            $scope.selectedTargetGroupTypes = [];
+            angular.forEach($scope.visibleTargetGroups, function(v) {
+                $scope.selectedTargetGroupTypes.push(v.type);
+            } );
+            $scope.showExtraTerms = false;
 
-    $scope.isOptionSelected = function(options) {
-        var result = false;
+            if( updateOptions ) {
+                $scope.options = angular.copy(EmptyTerms);
+                OptionsService.listTutkintotoimikuntas(function(data) { $scope.options.tutkintotoimikuntas = data; });
+                OptionsService.listTutkintotoimikuntaRoolis(function(data) { $scope.options.tutkintotoimikuntaRoolis = data; });
+                OptionsService.listKoulutaRoolis(function(data) { $scope.options.koulutaRoolis = data; });
+                OptionsService.listAipalRoolis(function(data) { $scope.options.aipalRoolis = data; });
+                OptionsService.listOrganisaationKielis(function(data) { $scope.options.organisaationKielis = data; });
+                //OptionsService.listAvis(function(data) { $scope.options.avis = data; });
+                OptionsService.listMaakuntas(function(data) { $scope.options.maakuntas = data; });
+                OptionsService.listKuntas(function(data) { $scope.options.kuntas = data; });
+                OptionsService.listOppilaitostyyppis(function(data) { $scope.options.oppilaitostyyppis = data; });
+                //OptionsService.listOmistajatyyppis(function(data) { $scope.options.omistajatyyppis = data; });
+                OptionsService.listVuosiluokkas(function(data) { $scope.options.vuosiluokkas = data; });
+                OptionsService.listKoultuksenjarjestajas(function(data) { $scope.options.koultuksenjarjestajas = data; });
+                OptionsService.listKoulutusalas(function(data) { $scope.options.koulutusalas = data; });
+                //OptionsService.listOpintoalas(function(data) {$scope.options.opintoalas = data;});
+                OptionsService.listKoulutusTyyppis(function(data) {$scope.options.koulutustyyppis = data;});
+                OptionsService.listKoulutusLajis(function(data) {$scope.options.koulutuslajis = data;});
+                OptionsService.listKielis(function(data) {$scope.options.kielis = data;});
+                //OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
+                //OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
+                $scope.options.tutkintotoimikuntaToimikausis = TutkintotoimikuntaToimikausis;
+                $scope.options.tutkintotoimikuntaKielis = Aitukielis;
+                $scope.options.tutkintotoimikuntaJasenKielis = Aitukielis;
+            }
+            $scope.terms = SearchService.getTerms();
+            $scope.koulutusalasChanged();
 
-        if (angular.isArray(options) === false) {
-            $log.warn("Target group options array invalid! ", options);
+            $log.info($scope.terms);
+        };
+
+        $scope.effectiveSelectedOpintoalas = function() {
+            if ((!$scope.terms.opintoalas || $scope.terms.opintoalas.length < 1)
+                    && $scope.terms.koulutusalas && $scope.terms.koulutusalas.length) {
+                return ExtractHelper.extract($scope.options.opintoalas,"koodiUri");
+            }
+            return $scope.terms.opintoalas;
+        };
+
+        $scope.opintoalasChanged = function() {
+            $log.info("Opintoalas changed.");
+            $log.info($scope.terms.opintoalas);
+            OptionsService.listKoulutusByOpintoalasOrTyyppis($scope.effectiveSelectedOpintoalas(),
+                $scope.terms.koulutustyyppis, function(data) {$scope.options.koulutus = data;});
+        };
+
+        $scope.koulutusalasChanged = function() {
+            $log.info("Koulutusalas changed.");
+            $log.info($scope.terms.koulutusalas);
+            var update = function(data) {
+                $scope.options.opintoalas = data;
+                $log.info("Updated opintoalas based on koulutusalas.");
+                $log.info(data);
+                $scope.opintoalasChanged();
+            };
+            if (!$scope.terms.koulutusalas || $scope.terms.koulutusalas.length < 1) {
+                OptionsService.listOpintoalas(update);
+            } else {
+                OptionsService.listOpintoalasByKoulutusalas($scope.terms.koulutusalas, update);
+            }
+        };
+
+        $scope.koulutusTyyppisChanged = function() {
+            $log.info("Koulutustyyppis changed.");
+            $log.info($scope.terms.koulutustyyppis);
+            OptionsService.listKoulutusByOpintoalasOrTyyppis($scope.effectiveSelectedOpintoalas(),
+                $scope.terms.koulutustyyppis, function(data) {$scope.options.koulutus = data;});
+        };
+
+        $scope.updateTerms();
+
+        $scope.clear = function() {
+            $log.info("CLEAR");
+            SearchService.clear();
+            $scope.updateTerms();
+            $scope.selectedSavedSearch = null;
+        };
+
+        $scope.toggleShowMore = function() {
+            $scope.showExtraTerms = !$scope.showExtraTerms;
+        };
+
+        $scope.isShowTutkintotoimikuntaTerm = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1
+                || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') !== -1;
+        };
+
+        $scope.isShowTutkintohierarkiaTerms = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1
+                || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') !== -1
+                || $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
+        };
+
+        $scope.isShowTutkintotoimikuntaRooliTerm = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1;
+        };
+
+        $scope.isShowTutkintotoimikuntaKieliTerm = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1;
+        };
+
+        $scope.isShowTutkintotoimikuntaJasenKieliTerm = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1;
+        };
+
+        $scope.isShowTutkintotoimikuntaToimikausiTerm = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1
+                || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') !== -1;
+        };
+
+        $scope.isShowKoulutusTyyppiTerm = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') !== -1
+                || $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
+        };
+
+        $scope.isShowKoulutusTerms = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
+        };
+
+        // Oppilaitos or toimipiste
+        $scope.isShowOppilaitoksetToimipisteet = function () {
+            return $scope.selectedTargetGroupTypes.indexOf('OPPILAITOKSET') !== -1
+            || $scope.selectedTargetGroupTypes.indexOf('OPETUSPISTEET') !== -1;
+        };
+
+        // Koulutustoimija or Oppisopimustoimisto
+        $scope.isShowKoulutustoimijaOppisopimustoimisto = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('JARJESTAJAT_YLLAPITAJAT') !== -1
+                || $scope.selectedTargetGroupTypes.indexOf('OPPISOPIMUSTOIMPISTEET') !== -1;
+        };
+
+        // Palveluiden käyttäjät
+        $scope.isShowPalveluidenKayttajat = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') !== -1;
+        };
+
+        // Handle the disable logic caused by relations of searchTypes and targetGroups.
+        $scope.searchtypesDisableLogic = function(optType) {
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTA_KAYTTAJAT')).length
+            && (optType == 'LETTER' || optType == 'CONTACT')) {
+                return true;
+>>>>>>> develop
+            }
             return false;
-        }
-        angular.forEach(options, function(option) {
-            if(option.selected === true) {
-                result = true;
-                return;
-            }
-        });
-        return result;
-    };
+        };
 
-    $scope.isSearchAllowed = function() {
-        // Lets check that one option is checked in every visible target group
-        for(var i=0; i < $scope.visibleTargetGroups.length; i++) {
-            if ($scope.isOptionSelected($scope.visibleTargetGroups[i].options) === false) {
+        // Handle targetGroups search logic.
+        $scope.targetgroupsDisableLogic = function(tgType) {
+            // Don't allow these search types for Palveluiden käyttäjä targetgroup.
+            if(($scope.searchType == 'LETTER' || $scope.searchType  == 'CONTACT')
+                && tgType == 'KOULUTA_KAYTTAJAT') {
+                return true;
+            }
+            // Palveluiden käyttäjä can't be combined to other targetgroups.
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTA_KAYTTAJAT')).length
+            || tgType == 'KOULUTA_KAYTTAJAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            // Näyttötutkinnon järjestäjät can't be combined to other targetgroups.
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'NAYTTOTUTKINNON_JARJESTAJAT')).length
+            || tgType == 'NAYTTOTUTKINNON_JARJESTAJAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'TUTKINTOTOIMIKUNNAT')).length
+                || tgType == 'TUTKINTOTOIMIKUNNAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            return false;
+        };
+
+        $scope.handleSaveSelected = function() {
+            if( $scope.selectedSavedSearch ) {
+                var selected = angular.copy($scope.selectedSavedSearch);
+                $log.info("Selected save: " + selected);
+                SavesService.getSearch($scope.selectedSavedSearch, function(save) {
+                    SearchService.updateSearchType(save.searchType, save.addressFields);
+                    SearchService.updateTargetGroups(save.targetGroups);
+                    SearchService.updateTerms(save.terms);
+                    SearchService.updateKieli(save.lang);
+                    $scope.updateTerms(false);
+                    $scope.selectedSavedSearch = selected;
+                });
+            }
+            SearchService.updateSelectedSearch($scope.selectedSavedSearch);
+        };
+
+        $scope.handleTargetGroupSelected = function() {
+            $log.info("Target gorup selection changed to: "+$scope.selectedTargetGroup);
+            if( $scope.selectedTargetGroup ) {
+                $scope.selectedTargetGroupTypes.push($scope.selectedTargetGroup);
+                var newGroup = angular.copy(
+                    $filter('filter')($scope.targetGroups, {type: $scope.selectedTargetGroup})[0]);
+                if( newGroup.options.length === 1 ) {
+                    newGroup.options[0].selected=true;
+                }
+                $scope.visibleTargetGroups.push( newGroup );
+                $scope.selectedTargetGroup = "";
+            }
+        };
+        $scope.removeTargetGroup = function(i) {
+            var arr = [];
+            angular.forEach($scope.selectedTargetGroupTypes, function(v,index) {
+                if( index !== i && v ) arr.push(v);
+            });
+            $scope.selectedTargetGroupTypes = arr;
+            arr = [];
+            angular.forEach( $scope.visibleTargetGroups, function (v, index) {
+                if( index !== i ) arr.push( angular.copy(v) );
+            } );
+            $scope.visibleTargetGroups = arr;
+            $scope.selectedTargetGroup = "";
+        };
+
+        $scope.selectableTargetGroupsFilter = FilterHelper.extractedFieldNotInArray;
+
+        $scope.isTermsShown = function() {
+            return !!$scope.searchType;
+        };
+
+        $scope.isShowTargetGroup = function() {
+            return $scope.isTermsShown();
+        };
+
+        $scope.isSearchActionsVisible = function() {
+            return $scope.isTermsShown();
+        };
+
+        $scope.isOptionSelected = function(options) {
+            var result = false;
+
+            if (angular.isArray(options) === false) {
+                $log.warn("Target group options array invalid! ", options);
                 return false;
             }
-        }
-
-        return $scope.isTermsShown() && $scope.visibleTargetGroups.length > 0;
-    };
-
-    $scope.saveSearch = function() {
-        $log.info("Show save popup.");
-
-        var onSaveNew = function() { return function(newSaveId) {
-            $log.info("New save with id: " + newSaveId);
-            SearchService.updateSelectedSearch(newSaveId);
-            updateSaves();
-        }; };
-        var modalInstance = null;
-        if( $scope.selectedSavedSearch ) {
-            modalInstance = $modal.open({
-                templateUrl: 'partials/overwriteSavePopup.html',
-                controller: 'NewSavePopupController',
-                resolve: {
-                    save: getCurrentSaveDetails,
-                    onSaveNew: onSaveNew
+            angular.forEach(options, function(option) {
+                if(option.selected === true) {
+                    result = true;
+                    return;
                 }
             });
-        } else {
-            modalInstance = $modal.open({
-                templateUrl: 'partials/newSavePopup.html',
-                controller: 'NewSavePopupController',
-                resolve: {
-                    save: getCurrentSaveDetails,
-                    onSaveNew: onSaveNew
-                }
-            });
-        }
-        modalInstance.result.then(function () {
-        }, function () {});
-    };
+            return result;
+        };
 
-    $scope.search = function() {
-        SearchService.updateSearchType($scope.searchType, $scope.addressFields);
-        SearchService.updateTargetGroups($scope.visibleTargetGroups);
-        SearchService.updateTerms($scope.terms);
-        SearchService.updateKieli($scope.osoitekieli);
-        SearchService.setSearchReady();
-        $location.path("/results");
-    };
-
-    $scope.showSaveSearchPopup = function() {
-        $log.info("Show saved searches popup.");
-        var modalInstance = $modal.open({
-            templateUrl: 'partials/savesPopup.html',
-            controller: 'SavesPopupController',
-            resolve: {
-                saves: function () {
-                    return $scope.saves;
+        $scope.isSearchAllowed = function() {
+            // Lets check that one option is checked in every visible target group
+            for(var i=0; i < $scope.visibleTargetGroups.length; i++) {
+                if ($scope.isOptionSelected($scope.visibleTargetGroups[i].options) === false) {
+                    return false;
                 }
             }
-        });
-        modalInstance.result.then(function () {
-            $log.info("Closed.");
-            updateSaves();
-        }, function () {
-            $log.info('Modal dismissed at: ' + new Date());
-            updateSaves();
-        });
-    };
-}]);
+
+            return $scope.isTermsShown() && $scope.visibleTargetGroups.length > 0;
+        };
+
+        $scope.saveSearch = function() {
+            $log.info("Show save popup.");
+
+            var onSaveNew = function() { return function(newSaveId) {
+                $log.info("New save with id: " + newSaveId);
+                SearchService.updateSelectedSearch(newSaveId);
+                updateSaves();
+            }; };
+            var modalInstance = null;
+            if( $scope.selectedSavedSearch ) {
+                modalInstance = $modal.open({
+                    templateUrl: 'partials/overwriteSavePopup.html',
+                    controller: 'NewSavePopupController',
+                    resolve: {
+                        save: getCurrentSaveDetails,
+                        onSaveNew: onSaveNew
+                    }
+                });
+            } else {
+                modalInstance = $modal.open({
+                    templateUrl: 'partials/newSavePopup.html',
+                    controller: 'NewSavePopupController',
+                    resolve: {
+                        save: getCurrentSaveDetails,
+                        onSaveNew: onSaveNew
+                    }
+                });
+            }
+            modalInstance.result.then(function () {
+            }, function () {});
+        };
+
+        $scope.search = function() {
+            SearchService.updateSearchType($scope.searchType, $scope.addressFields);
+            SearchService.updateTargetGroups($scope.visibleTargetGroups);
+            SearchService.updateTerms($scope.terms);
+            SearchService.updateKieli($scope.osoitekieli);
+            SearchService.setSearchReady();
+            $location.path("/results");
+        };
+
+        $scope.showSaveSearchPopup = function() {
+            $log.info("Show saved searches popup.");
+            var modalInstance = $modal.open({
+                templateUrl: 'partials/savesPopup.html',
+                controller: 'SavesPopupController',
+                resolve: {
+                    saves: function () {
+                        return $scope.saves;
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                $log.info("Closed.");
+                updateSaves();
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+                updateSaves();
+            });
+        };
+    }
+]);

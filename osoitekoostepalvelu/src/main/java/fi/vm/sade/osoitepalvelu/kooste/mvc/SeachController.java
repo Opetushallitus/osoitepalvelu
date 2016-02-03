@@ -110,7 +110,7 @@ public class SeachController extends AbstractMvcController implements Serializab
     @ApiOperation("Palauttaa downloadId-tunnisteen, jolla voi excel.do-operaatiota käyttäen pyyttää GET-pyyntönä" +
             "Excel-tiedoston. Näin siksi, että hakuparametrit voitaisiin välitää URL-rajoitteen vuoksi POST-pyyntönä" +
             "mutta itse tiedostoon voidaan käyttöliittymässä tehdä uudelleenohjaus.")
-    @RequestMapping(value = "prepare.excel.do", method  =  RequestMethod.POST)
+    @RequestMapping(value = "prepare.excel.do", method  =  RequestMethod.POST, produces = "text/plain")
     @ResponseBody
     public String storeExcelParameters(@RequestBody FilteredSearchParametersDto searchParameters) {
         String key  =  (i.incrementAndGet() + "." + new DateTime().toDate().getTime());
@@ -130,7 +130,7 @@ public class SeachController extends AbstractMvcController implements Serializab
      * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.OrganisaatioTyyppiMissingForOrganisaatiosException
      * @see #storeExcelParameters(fi.vm.sade.osoitepalvelu.kooste.mvc.dto.FilteredSearchParametersDto)
      * There might be a better way around. Done this way so that we can avoid too long GET-request and redirect
-     * borwser to the download action without the need to store data on disk/db.
+     * browser to the download action without the need to store data on disk/db.
      *
      * @param downlaodId id returned form a prepare.excel.do call (associated with stored parameters)
      * @param lang the language to use
