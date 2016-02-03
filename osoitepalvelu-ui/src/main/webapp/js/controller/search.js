@@ -200,16 +200,12 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 || $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
         };
 
-        $scope.isShowKoulutaTerm = function() {
-            return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') !== -1;
-        };
-
         $scope.isShowKoulutusTerms = function() {
             return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
         };
 
         // Oppilaitos or toimipiste
-        $scope.isShowOppilaitoksetToimipisteetTerms = function () {
+        $scope.isShowOppilaitoksetToimipisteet = function () {
             return $scope.selectedTargetGroupTypes.indexOf('OPPILAITOKSET') !== -1
             || $scope.selectedTargetGroupTypes.indexOf('OPETUSPISTEET') !== -1;
         };
@@ -220,20 +216,43 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 || $scope.selectedTargetGroupTypes.indexOf('OPPISOPIMUSTOIMPISTEET') !== -1;
         };
 
-        // WARNING: Causes infinite digest loop error. Do not use if you don't know what you're doing.
-        //$scope.isShowVuosiluokkaTerm = function(){
-        //    var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
-        //    if (oppilaitosTyyppisWithVuosiluokkaSetting) {
-        //        var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
-        //        var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
-        //            oppilaitosTyyppisWithVuosiluokka);
-        //        if (!visible) {
-        //            $scope.terms.vuosiluokkas = [];
-        //        }
-        //        return visible;
-        //    }
-        //    return true;
-        //};
+        // Palveluiden käyttäjät
+        $scope.isShowPalveluidenKayttajat = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') !== -1;
+        };
+
+        // Handle the disable logic caused by relations of searchTypes and targetGroups.
+        $scope.searchtypesDisableLogic = function(optType) {
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTA_KAYTTAJAT')).length
+            && (optType == 'LETTER' || optType == 'CONTACT')) {
+                return true;
+            }
+            return false;
+        };
+
+        // Handle targetGroups search logic.
+        $scope.targetgroupsDisableLogic = function(tgType) {
+            // Don't allow these search types for Palveluiden käyttäjä targetgroup.
+            if(($scope.searchType == 'LETTER' || $scope.searchType  == 'CONTACT')
+                && tgType == 'KOULUTA_KAYTTAJAT') {
+                return true;
+            }
+            // Palveluiden käyttäjä can't be combined to other targetgroups.
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTA_KAYTTAJAT')).length
+            || tgType == 'KOULUTA_KAYTTAJAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            // Näyttötutkinnon järjestäjät can't be combined to other targetgroups.
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'NAYTTOTUTKINNON_JARJESTAJAT')).length
+            || tgType == 'NAYTTOTUTKINNON_JARJESTAJAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'TUTKINTOTOIMIKUNNAT')).length
+                || tgType == 'TUTKINTOTOIMIKUNNAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            return false;
+        };
 
         $scope.handleSaveSelected = function() {
             if( $scope.selectedSavedSearch ) {
