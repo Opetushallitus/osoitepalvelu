@@ -21,6 +21,26 @@ ul,ol {
 }
 
 /* Select2 adjustments for virkailija.css */
+
+.select2-results .select2-disabled, .select2-results .select2-disabled.select2-highlighted {
+    background: #ababab;
+    color: inherit;
+}
+
+/*!*Overwrite default (selected) hightlight behaviour*!*/
+.select2-results .select2-highlighted {
+background: initial;
+color: initial;
+}
+
+.select2-container:hover, .select2-search-field:hover, .select2-container input:hover, .select2-choice:hover {
+    background: #FFF5DA;
+}
+
+.ui-select-choices-row:hover {
+    background-color: #e99f00;
+}
+
 .select2-container-multi .select2-choices .select2-search-choice {
     color: #333333;
     cursor: default;
@@ -41,17 +61,12 @@ ul,ol {
     top: 7px;
 }
 
+li.select2-search-field {
+    line-height: normal;
+}
+
 .select2-container {
     background-color: #FFFFFF;
-    /*border: 1px solid #CCCCCC;*/
-}
-
-.select2-container:hover, .select2-search-field:hover, .select2-container input:hover, .select2-choice:hover {
-    background: #FFF5DA;
-}
-
-.select2-results .select2-highlighted {
-    background: none repeat scroll 0 0 #E99F00;
 }
 
 .topCournerInfoMessage {
