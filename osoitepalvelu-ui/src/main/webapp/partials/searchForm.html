@@ -19,7 +19,7 @@
                         {{$select.selected.name}}
                     </ui-select-match>
                     <ui-select-choices repeat="save.id as save in saves | filter: {name: $select.search}">
-                        <span ng-bind="save.name | highlight: $select.search"></span>
+                        <span ng-bind-html="save.name | highlight: $select.search"></span>
                     </ui-select-choices>
                 </ui-select>
             </div>
