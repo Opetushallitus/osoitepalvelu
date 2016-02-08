@@ -209,7 +209,7 @@
                     <ui-select multiple="true" id="tutkintotoimikuntaKielis" ng-model="terms.tutkintotoimikuntaKielis"
                                theme="select2">
                         <ui-select-match placeholder="{{msg('search_term_tutkintotoimikunta_kielis')}}">{{$item.name}}</ui-select-match>
-                        <ui-select-choices repeat="opt.koodiUri as opt in options.tutkintotoimikuntaKielis | filter: $select.search">
+                        <ui-select-choices repeat="opt.code as opt in options.tutkintotoimikuntaKielis | filter: $select.search">
                             {{opt.name}}
                         </ui-select-choices>
                     </ui-select>
@@ -218,7 +218,7 @@
                     <ui-select multiple="true" id="tutkintotoimikuntaJasenKielis" ng-model="terms.tutkintotoimikuntaJasenKielis"
                                theme="select2">
                         <ui-select-match placeholder="{{msg('search_term_tutkintotoimikunta_jasen_kielis')}}">{{$item.name}}</ui-select-match>
-                        <ui-select-choices repeat="opt.koodiUri as opt in options.tutkintotoimikuntaJasenKielis | filter: $select.search">
+                        <ui-select-choices repeat="opt.code as opt in options.tutkintotoimikuntaJasenKielis | filter: $select.search">
                             {{opt.name}}
                         </ui-select-choices>
                     </ui-select>
@@ -228,7 +228,7 @@
                     <ui-select multiple="true" id="tutkintotoimikuntaToimikausis" ng-model="terms.tutkintotoimikuntaToimikausis"
                                theme="select2">
                         <ui-select-match placeholder="{{msg('search_term_tutkintotoimikunta_toimikausi')}}">{{$item.nimi}}</ui-select-match>
-                        <ui-select-choices repeat="opt.koodiUri as opt in options.tutkintotoimikuntaToimikausis | filter: $select.search">
+                        <ui-select-choices repeat="opt.type as opt in options.tutkintotoimikuntaToimikausis | filter: $select.search">
                             {{opt.nimi}}
                         </ui-select-choices>
                     </ui-select>
@@ -238,7 +238,7 @@
                     <ui-select multiple="true" id="koulutaRoolis" ng-model="terms.koulutaRoolis"
                                theme="select2">
                         <ui-select-match placeholder="{{msg('search_term_kayttooikeusryhma')}}">{{$item.nimi}}</ui-select-match>
-                        <ui-select-choices repeat="opt.koodiUri as opt in options.koulutaRoolis | filter: $select.search">
+                        <ui-select-choices repeat="opt.koodiId as opt in options.koulutaRoolis | filter: $select.search">
                             {{opt.nimi}}
                         </ui-select-choices>
                     </ui-select>
