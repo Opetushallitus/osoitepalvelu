@@ -68,6 +68,7 @@ OsoiteKoostepalvelu.service("SaveConverter", ["$log", "$filter", "FilterHelper",
         angular.forEach(domainSave.targetGroups, function(group) {
             delete(group.name);
             delete(group.hideOptions);
+            delete(group._uiSelectChoiceDisabled);
             var opts = [];
             angular.forEach ( $filter('filter')(group.options, {selected:true}), function(option) {
                 opts.push(option.type);

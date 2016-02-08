@@ -10,7 +10,7 @@
         </div>
         <div class="form-row">
             <div class="label-cell">
-                <label for="savedSearch" tt="saved_searches">Tallennetut haut</label>
+                <label tt="saved_searches">Tallennetut haut</label>
             </div>
             <div class="field-cell">
                 <ui-select theme="select2" id="savedSearch" ng-model="$parent.selectedSavedSearch"
@@ -32,7 +32,7 @@
 
         <div class="form-row">
             <div class="label-cell">
-                <label for="searchType" tt="search_type">Haku</label>
+                <label tt="search_type">Haku</label>
             </div>
             <div class="field-cell">
                 <!--Yhteystietotyypit dropdown menu-->
@@ -64,7 +64,7 @@
 
         <div class="form-row" ng-show="isShowTargetGroup()">
             <div class="label-cell">
-                <label for="targetGroup" tt="target_group">Kohderyhmä</label>
+                <label tt="target_group">Kohderyhmä</label>
             </div>
             <div class="field-cell">
                 <div ng-repeat="tg in visibleTargetGroups" class="selectedCriterion targetGroups">
