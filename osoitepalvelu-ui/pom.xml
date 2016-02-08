@@ -210,6 +210,7 @@
                     <preloadSources>
                         <source>jslib/jquery-1.10.1/jquery-1.10.1.min.js</source>
                         <source>jslib/angular-1.2.3/angular.js</source>
+                        <source>jslib/angular-1.2.3/angular-cookies.js</source>
                         <source>jslib/angular-1.2.3/angular-mocks.js</source>
                         <source>jslib/angular-1.2.3/angular-resource.js</source>
                         <source>jslib/angular-1.2.3/angular-route.js</source>
