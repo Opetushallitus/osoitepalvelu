@@ -26,9 +26,16 @@ window.CONFIG.app = {
 };
 
 var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu',
-        ['ngRoute', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2', 'ngGrid', 'loading',
+        ['ngRoute', 'ngCookies', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2', 'ngGrid', 'loading',
             'localisation', 'auth',
             'angular-flash.service', 'angular-flash.flash-alert-directive']);
+
+OsoiteKoostepalvelu.run(function($http, $cookies) {
+    $http.defaults.headers.common['clientSubSystemCode'] = "osoitekoostepalvelu.osoitepalvelu-ui.frontend";
+    if($cookies['CSRF']) {
+        $http.defaults.headers.common['CSRF'] = $cookies['CSRF'];
+    }
+})
 
 OsoiteKoostepalvelu.factory('SearchResultProvider', ["$http", "LocalisationService",
         function($http, LocalisationService) {
