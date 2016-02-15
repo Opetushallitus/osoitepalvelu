@@ -17,11 +17,12 @@
 /**
  * Created by ratamaa on 12/4/13.
  */
+var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu');
 OsoiteKoostepalvelu.service('SavesService', ["$log", "$http", "SaveConverter", "commonErrorHandler",
         function($log, $http, SaveConverter, commonErrorHandler) {
 
-    this.list = function(success, error) {
-        $http.get('api/saves/').success(success).error(error);
+    this.listSearch = function(success, error) {
+        $http.get('api/saves/').success(success).error(error ||commonErrorHandler);
     };
 
     this.saveSearch = function(save, success, error) {
@@ -47,10 +48,9 @@ OsoiteKoostepalvelu.service('SavesService', ["$log", "$http", "SaveConverter", "
 
     this.deleteSearch = function(id, success, error) {
         $log.info("Deleting search: " + id);
-        $http['delete']("api/saves/"+id).success(success).error(error || commonErrorHandler);
+        $http.delete('api/saves/'+id).success(success).error(error || commonErrorHandler);
     };
 }]);
-
 
 OsoiteKoostepalvelu.service("SaveConverter", ["$log", "$filter", "FilterHelper", "ArrayHelper",
                    "AddressFields", "TargetGroups",

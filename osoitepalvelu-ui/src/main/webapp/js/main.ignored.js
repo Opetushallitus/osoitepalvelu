@@ -26,7 +26,7 @@ window.CONFIG.app = {
 };
 
 var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu',
-        ['ngRoute', 'ngCookies', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2', 'ngGrid', 'loading',
+        ['ngRoute', 'ngSanitize', 'ngCookies', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select2', 'ngGrid', 'loading',
             'localisation', 'auth',
             'angular-flash.service', 'angular-flash.flash-alert-directive']);
 
@@ -35,7 +35,7 @@ OsoiteKoostepalvelu.run(function($http, $cookies) {
     if($cookies['CSRF']) {
         $http.defaults.headers.common['CSRF'] = $cookies['CSRF'];
     }
-})
+});
 
 OsoiteKoostepalvelu.factory('SearchResultProvider', ["$http", "LocalisationService",
         function($http, LocalisationService) {
@@ -90,7 +90,7 @@ function osoitepalveluInit() {
 		    	loader.toggleClass("pre-init", false);
 	        });
 	    }
-	};
+	}
 
 	function logRequest(xhr, status) {
 		 console.log("LOG "+status+": "+xhr.status+" "+xhr.statusText, xhr);

@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -67,11 +68,12 @@ public class SavesController extends AbstractMvcController implements Serializab
 
     @ApiOperation("Poistaa yksittäisen käyttäjän oman tallennetun haun.")
     @ApiResponse(code=HttpStatus.SC_NOT_FOUND, message = "Hakua ei löytynyt id:llä.")
+//    @ResponseStatus(value = HttpStatus.SC_OK)
     @RequestMapping(value  =  "{id}", method  =  RequestMethod.DELETE)
     @ResponseBody
-    public String delete(@PathVariable("id") long id) throws NotFoundException {
+    public int delete(@PathVariable("id") long id) throws NotFoundException {
         savedSearchService.deleteSavedSearch(id);
-        return "OK";
+        return HttpStatus.SC_OK;
     }
 
     @ApiOperation("Tallentaa uuden haun.")
@@ -86,8 +88,8 @@ public class SavesController extends AbstractMvcController implements Serializab
     @ApiResponse(code=HttpStatus.SC_NOT_FOUND, message = "Hakua ei löytynyt id:llä.")
     @RequestMapping(method  =  RequestMethod.PUT)
     @ResponseBody
-    public String edit(@RequestBody SavedSearchEditDto dto) throws NotFoundException {
+    public int edit(@RequestBody SavedSearchEditDto dto) throws NotFoundException {
         savedSearchService.updateSavedSearch(dto);
-        return "OK";
+        return HttpStatus.SC_OK;
     }
 }

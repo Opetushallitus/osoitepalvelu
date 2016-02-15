@@ -16,11 +16,11 @@
 
 OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvider, $provide) {
     $routeProvider.when('/results', {
-            controller:'ResultsController',
-            templateUrl:'partials/results.html'
+            controller: 'ResultsController',
+            templateUrl: 'partials/results.html'
     }).when('/', {
-            controller:'SearchController',
-            templateUrl:'partials/searchForm.html'
+            controller: 'SearchController',
+            templateUrl: 'partials/searchForm.html'
     })
     .otherwise({
             redirectTo:'/'
@@ -28,13 +28,13 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
 }])
 .factory('NoCacheInterceptor', function () {
     return {
-	request: function (config) {
-	    if (config.method && config.method == 'GET' && config.url.indexOf('html') === -1){
-		    var separator = config.url.indexOf('?') === -1 ? '?' : '&';
-		    config.url = config.url+separator+'noCache=' + new Date().getTime();
-	    }
-	    return config;
-	}
+        request: function (config) {
+            if (config.method && config.method == 'GET' && config.url.indexOf('html') === -1){
+                var separator = config.url.indexOf('?') === -1 ? '?' : '&';
+                config.url = config.url+separator+'noCache=' + new Date().getTime();
+            }
+            return config;
+        }
     };
 })
 .config(['$httpProvider', function($httpProvider) {
@@ -138,21 +138,24 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
     return [
         {type: 'JARJESTAJAT_YLLAPITAJAT',   name: LocalisationService.t('target_group_jarjestajat_yllapitajat'),
             options: [
-                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')}//,
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio'),
+                hide: true}//,
                 //{type: "YHTEYSHENKILO",     name: LocalisationService.t('target_group_option_yhteyshenkilo')},
                 //{type: "KRIISITIEDOTUS",    name: LocalisationService.t('target_group_option_kriisitiedotus')}
             ]
         },
         {type: 'OPPILAITOKSET',             name: LocalisationService.t('target_group_oppilaitos'),
             options: [
-                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')}//,
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio'),
+                hide: true}//,
                 //{type: "REHTORI",           name: LocalisationService.t('target_group_option_rehtori')},
                 //{type: "KOULUTUSNEVONTA",   name: LocalisationService.t('target_group_option_koulutusneuvonta')}
             ]
         },
         {type: 'OPETUSPISTEET',             name: LocalisationService.t('target_group_opetuspisteet'),
             options: [
-                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')}//,
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio'),
+                hide: true}//,
                 //{type: "YHTEYSHENKILO",     name: LocalisationService.t('target_group_option_yhteyshenkilo')},
                 //{type: "KOULUTUSNEVONTA",   name: LocalisationService.t('target_group_option_koulutusneuvonta')}
             ]
@@ -166,7 +169,8 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         },
         {type: 'OPPISOPIMUSTOIMPISTEET',    name: LocalisationService.t('target_group_oppisopimustoimistot'),
             options: [
-                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio')}/*,
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio'),
+                hide: true}/*,
                 {type: "YHTEYSHENKILO",     name: LocalisationService.t('target_group_option_yhteyshenkilo')}*/
             ]
         },
@@ -181,7 +185,8 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         },
         {type: 'NAYTTOTUTKINNON_JARJESTAJAT', name: LocalisationService.t("target_group_nayttotutkinnon_jarjestajat"),
             options: [
-                {type: 'JARJESTAJA_ORGANISAATIO', name: LocalisationService.t("target_group_option_jarjestajaorganisaatio")},
+                {type: 'JARJESTAJA_ORGANISAATIO', name: LocalisationService.t("target_group_option_jarjestajaorganisaatio"),
+                selected: true},
                 {type: 'TUTKINTOVASTAAVA',  name: LocalisationService.t('target_group_option_tutkintovastaava')}
             ]
         },

@@ -17,7 +17,9 @@
 /**
  * Created by ratamaa on 12/9/13.
  */
-var ResultsController = function($scope, $log, $location, $filter, $timeout,
+OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$location", "$filter", "$timeout",
+    "SearchService", "EmailService", "ArrayHelper", "LocalisationService",
+    function($scope, $log, $location, $filter, $timeout,
                 SearchService, EmailService, ArrayHelper, LocalisationService) {
     var msg = function( key, params ) {
         return LocalisationService.t(key, params);
@@ -133,8 +135,6 @@ var ResultsController = function($scope, $log, $location, $filter, $timeout,
         $location.path("/");
         return;
     }
-};
+}]);
 
-ResultsController.$inject = ["$scope", "$log", "$location", "$filter", "$timeout",
-          "SearchService", "EmailService", "ArrayHelper", "LocalisationService"];
 

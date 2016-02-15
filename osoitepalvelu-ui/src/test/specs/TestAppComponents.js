@@ -16,6 +16,11 @@ describe("Application Components Test", function() {
         AddressFields, TutkintotoimikuntaRoolis,
         TargetGroups;
 
+    var searchController, savesPopupController,
+        confirmPopupController, newSavePopupController,
+        resultsController;
+
+
     beforeEach(module("OsoiteKoostepalvelu"));
     beforeEach(function() {
         inject(function($injector, $rootScope) {
@@ -56,16 +61,26 @@ describe("Application Components Test", function() {
             AddressFields = $injector.get("AddressFields");
             TutkintotoimikuntaRoolis = $injector.get("TutkintotoimikuntaRoolis");
             TargetGroups = $injector.get("TargetGroups");
-        });
 
+        });
+        inject(function($injector, $rootScope) {
+            scope = $rootScope;
+            var $controller = $injector.get('$controller');
+
+            searchController = $controller('SearchController', {'$scope' : scope });
+            savesPopupController = $controller('SearchController', {'$scope' : scope });
+            confirmPopupController = $controller('SearchController', {'$scope' : scope });
+            newSavePopupController = $controller('SearchController', {'$scope' : scope });
+            resultsController = $controller('ResultsController', {'$scope' : scope });
+        });
     });
 
     it("controllers are defined", function() {
-       expect(SearchController).toBeDefined();
-       expect(SavesPopupController).toBeDefined();
-       expect(ConfirmPopupController).toBeDefined();
-       expect(NewSavePopupController).toBeDefined();
-       expect(ResultsController).toBeDefined();
+       expect(searchController).toBeDefined();
+       expect(savesPopupController).toBeDefined();
+       expect(confirmPopupController).toBeDefined();
+       expect(newSavePopupController).toBeDefined();
+       expect(resultsController).toBeDefined();
     });
 
     it("util services are defined", function() {

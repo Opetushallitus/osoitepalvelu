@@ -17,7 +17,9 @@
 /**
  * Created by ratamaa on 12/9/13.
  */
-var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout,
+OsoiteKoostepalvelu.controller('NewSavePopupController', ["$scope", "$modalInstance", "$modal", "$timeout",
+    "save", "onSaveNew", "LocalisationService", "SavesService",
+    function ($scope, $modalInstance, $modal, $timeout,
             save, onSaveNew, LocalisationService, SavesService) {
     var msg = function( key, params ) {
         return LocalisationService.t(key, params);
@@ -44,7 +46,7 @@ var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout,
     $scope.saveAs = function() {
       var modalInstance = $modal.open({
           templateUrl: 'partials/newSavePopup.html',
-          controller: NewSavePopupController,
+          controller: 'NewSavePopupController',
           resolve: {
               save: function() {
                   return angular.extend({}, $scope.save, {
@@ -70,8 +72,6 @@ var NewSavePopupController = function ($scope, $modalInstance, $modal, $timeout,
     $timeout(function() {
         $scope.$broadcast("dialogOpened");
     });
-};
+}]);
 
-NewSavePopupController.$inject = ["$scope", "$modalInstance", "$modal", "$timeout", "save", "onSaveNew",
-    "LocalisationService", "SavesService"];
 
