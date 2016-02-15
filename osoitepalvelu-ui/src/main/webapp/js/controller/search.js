@@ -251,6 +251,15 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 || tgType == 'TUTKINTOTOIMIKUNNAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
+            // Koulutuksen tarjoajat can't be combined to other targetgroups.
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTUKSEN_TARJOAJAT')).length
+                || tgType == 'KOULUTUKSEN_TARJOAJAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTUKSEN_TARJOAJAT')).length
+                || tgType == 'KOULUTUKSEN_TARJOAJAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
             return false;
         };
 

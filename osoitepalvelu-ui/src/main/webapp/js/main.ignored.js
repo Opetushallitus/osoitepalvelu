@@ -35,7 +35,7 @@ OsoiteKoostepalvelu.run(function($http, $cookies) {
     if($cookies['CSRF']) {
         $http.defaults.headers.common['CSRF'] = $cookies['CSRF'];
     }
-})
+});
 
 OsoiteKoostepalvelu.factory('SearchResultProvider', ["$http", "LocalisationService",
         function($http, LocalisationService) {
