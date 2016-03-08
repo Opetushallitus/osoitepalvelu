@@ -56,7 +56,6 @@ color: initial;
 .select2-container-multi .select2-choices    .select2-search-choice-focus {
    background-color: rgb(159, 219, 240);
    color: #FFFFFF;
-    margin-bottom:
 }
 
 .select2-search-choice-close {
@@ -66,6 +65,7 @@ color: initial;
 .ui-select-button {
     padding-left: 8px;
     padding-right: 8px;
+    padding-top: 4px;
     border-bottom: 1px solid black;
 }
 
