@@ -315,7 +315,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         $scope.removeTargetGroup = function(i) {
             var arr = [];
             angular.forEach($scope.selectedTargetGroupTypes, function(v,index) {
-                if( index !== i && v ) arr.push(v);
+                if( index !== i && v ) arr.push(v);
             });
             $scope.selectedTargetGroupTypes = arr;
             arr = [];
