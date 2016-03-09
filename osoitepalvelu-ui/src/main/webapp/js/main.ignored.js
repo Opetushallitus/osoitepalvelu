@@ -14,9 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-/**
- * Created by ratamaa on 12/4/13.
- */
 
 window.CONFIG = window.CONFIG || {};
 window.CONFIG.app = {
@@ -26,9 +23,15 @@ window.CONFIG.app = {
 };
 
 var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu',
-        ['ngRoute', 'ngSanitize', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select', 'ngGrid', 'loading',
-            'localisation', 'auth',
-            'angular-flash.service', 'angular-flash.flash-alert-directive']);
+        ['ngRoute', 'ngSanitize', 'ngCookies', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select', 'ngGrid', 'loading',
+            'localisation', 'auth', 'angular-flash.service', 'angular-flash.flash-alert-directive']);
+
+OsoiteKoostepalvelu.run(function($http, $cookies) {
+    $http.defaults.headers.common['clientSubSystemCode'] = "osoitekoostepalvelu.osoitepalvelu-ui.frontend";
+    if($cookies['CSRF']) {
+        $http.defaults.headers.common['CSRF'] = $cookies['CSRF'];
+    }
+});
 
 OsoiteKoostepalvelu.factory('SearchResultProvider', ["$http", "LocalisationService",
         function($http, LocalisationService) {

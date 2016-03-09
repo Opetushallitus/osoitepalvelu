@@ -221,6 +221,23 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') !== -1;
         };
 
+        // Vuosiluokka term which is shown when certain oppilaitostyyppi(s) are selected.
+        $scope.isShowVuosiluokkaTerm = function() {
+            var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
+            if (oppilaitosTyyppisWithVuosiluokkaSetting) {
+                var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
+                var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
+                    oppilaitosTyyppisWithVuosiluokka);
+                if (!visible) {
+                    // TODO: fix this with angular ui-select when merged.
+                    // causes infinite digest because it messes directly with ngmodel
+                    //$scope.terms.vuosiluokkas = [];
+                }
+                return visible;
+            }
+            return true;
+        };
+
         // Handle the disable logic caused by relations of searchTypes and targetGroups.
         $scope.searchtypesDisableLogic = function(optType) {
             if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTA_KAYTTAJAT')).length
@@ -278,6 +295,15 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             }
             if(($filter('filter')($scope.selectedTargetGroupTypes, 'TUTKINTOTOIMIKUNNAT')).length
                 || tgType == 'TUTKINTOTOIMIKUNNAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            // Koulutuksen tarjoajat can't be combined to other targetgroups.
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTUKSEN_TARJOAJAT')).length
+                || tgType == 'KOULUTUKSEN_TARJOAJAT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTUKSEN_TARJOAJAT')).length
+                || tgType == 'KOULUTUKSEN_TARJOAJAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
             return false;

@@ -192,7 +192,8 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         },
         {type: 'KOULUTA_KAYTTAJAT',         name: LocalisationService.t('target_group_kayttajat'),
             options: [
-                {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat')}
+                {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat'),
+                hide: true}
             ]
         }
     ];
