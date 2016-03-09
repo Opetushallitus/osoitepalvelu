@@ -24,7 +24,7 @@ window.CONFIG.app = {
 
 var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu',
         ['ngRoute', 'ngSanitize', 'ngCookies', 'Helpers', 'I18n', 'ui.bootstrap', 'ui.select', 'ngGrid', 'loading',
-            'localisation', 'auth', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'taiPlaceholder']);
+            'localisation', 'auth', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'ng.shims.placeholder']);
 
 OsoiteKoostepalvelu.run(function($http, $cookies) {
     $http.defaults.headers.common['clientSubSystemCode'] = "osoitekoostepalvelu.osoitepalvelu-ui.frontend";
