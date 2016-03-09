@@ -205,6 +205,7 @@
                         <source>jslib/angular-flash.js</source>
                         <source>jslib/angular-bootstrap/ui-bootstrap-tpls-0.7.0.min.js</source>
                         <source>jslib/ui-select-0.14.9/dist(modified)/select.min.js</source>
+                        <source>jslib/angular-placeholder-1.0.2/tai-placeholder.js</source>
                         <source>jslib/ng-grid/ng-grid-2.0.14.min.js</source>
                         <source>ext/env-configuration.js</source>
                         <source>js/main.ignored.js</source>
