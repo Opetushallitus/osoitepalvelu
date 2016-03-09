@@ -1,2 +1,2 @@
-require('./dist/select.js');
+require('./dist(modified)/select.js');
 module.exports = 'ui.select';
