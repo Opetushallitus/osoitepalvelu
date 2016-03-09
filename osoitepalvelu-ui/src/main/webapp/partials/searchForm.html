@@ -280,8 +280,8 @@
                 <div class="term term-full-width" ng-show="isShowOppilaitoksetToimipisteet()
                 || isShowKoulutustoimijaOppisopimustoimisto() || isShowPalveluidenKayttajat()"
                      title="{{msg('search_term_oppilaitostyyppi')}}">
-                    <ui-select multiple id="oppilaitostyyppi" ng-model="terms.oppilaitostyyppis"
-                                 theme="select2" select-all="true" clear-all="true" ng-disabled="!!$parent.terms.koultuksenjarjestajas.length">
+                    <ui-select multiple id="oppilaitostyyppi" ng-model="terms.oppilaitostyyppis" on-remove="clearVuosiluokka($item, $model)"
+                               theme="select2" select-all="true" clear-all="true" ng-disabled="!!$parent.terms.koultuksenjarjestajas.length">
                         <ui-select-match placeholder="{{msg('search_term_oppilaitostyyppi')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices repeat="opt.koodiUri as opt in options.oppilaitostyyppis | filter: $select.search track by $index">
                             {{opt.nimi}}
@@ -290,20 +290,17 @@
                 </div>
                 <div class="term-separator"></div>
 
-                <!--TODO: Update this to ui-select-->
+                <!--perusopetuksen vuosiluokkatieto term-->
                 <div class="term" ng-show="isShowKoulutustoimijaOppisopimustoimisto && isShowVuosiluokkaTerm()"
                      title="{{msg('search_term_vuosiluokka')}}">
-                <ui-select multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas">
-                    <ui-select-match placeholder="{{msg('search_term_vuosiluokka')}}">{{$item.nimi}}</ui-select-match>
-                    <ui-select-choices repeat="opt.koodiUri as opt in options.vuosiluokkas | filter: $select.search track by $index">
-                        {{opt.nimi}}
-                    </ui-select-choices>
-                </ui-select>
-                <!--<select ui-select2 multiple id="vuosiluokka" class="form-control" ng-model="terms.vuosiluokkas"-->
-                        <!--data-placeholder="{{msg('search_term_vuosiluokka')}}">-->
-                    <!--<option ng-repeat="opt in options.vuosiluokkas" value="{{opt.koodiUri}}">{{opt.nimi}}</option>-->
-                <!--</select>-->
-                <!--</div>-->
+                    <ui-select multiple id="vuosiluokka" ng-model="terms.vuosiluokkas"
+                               theme="select2" select-all="true" clear-all="true">
+                        <ui-select-match placeholder="{{msg('search_term_vuosiluokka')}}">{{$item.nimi}}</ui-select-match>
+                        <ui-select-choices repeat="opt.koodiUri as opt in options.vuosiluokkas | filter: $select.search track by $index">
+                            {{opt.nimi}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
 
                 <!--Koulutustoimija term-->
                 <div class="term term-full-width" ng-show="isShowOppilaitoksetToimipisteet() || isShowPalveluidenKayttajat()"

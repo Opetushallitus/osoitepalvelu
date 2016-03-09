@@ -226,16 +226,16 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
             if (oppilaitosTyyppisWithVuosiluokkaSetting) {
                 var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
-                var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
+                return ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
                     oppilaitosTyyppisWithVuosiluokka);
-                if (!visible) {
-                    // TODO: fix this with angular ui-select when merged.
-                    // causes infinite digest because it messes directly with ngmodel
-                    //$scope.terms.vuosiluokkas = [];
-                }
-                return visible;
             }
             return true;
+        };
+
+        $scope.clearVuosiluokka = function($item, $model) {
+            if(!$scope.isShowVuosiluokkaTerm()) {
+                $scope.terms.vuosiluokkas = [];
+            }
         };
 
         // Handle the disable logic caused by relations of searchTypes and targetGroups.
