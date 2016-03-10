@@ -27,19 +27,19 @@ ul,ol {
     color: inherit;
 }
 
-/*!*Overwrite default (selected) hightlight behaviour*!*/
+/*Overwrite default (selected) hightlight behaviour*! (has to be hard values because IE)*/
 .select2-results .select2-highlighted {
-background: initial;
-color: initial;
+    background: white;
+    color: black;
+}
+
+.ui-select-choices-row:hover, .select2-results .select2-highlighted:hover {
+    background-color: #e99f00;
+    color: white;
 }
 
 .select2-container:hover, .select2-search-field:hover, .select2-container input:hover, .select2-choice:hover {
     background: #FFF5DA;
-}
-
-.ui-select-choices-row:hover {
-    background-color: #e99f00;
-    color: white;
 }
 
 .select2-container-multi .select2-choices .select2-search-choice {

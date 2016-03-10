@@ -19,7 +19,7 @@
                         {{$select.selected.name}}
                     </ui-select-match>
                     <ui-select-choices repeat="save.id as save in saves | filter: {name: $select.search}">
-                        <span ng-bind-html="save.name | highlight: $select.search"></span>
+                        {{save.name}}
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -42,7 +42,7 @@
                     </ui-select-match>
                     <ui-select-choices repeat="opt.type as opt in searchTypes | filter: {name:$select.search}"
                                        ui-disable-choice="searchtypesDisableLogic(opt.type)">
-                        <div ng-bind-html="opt.name | highlight: $select.search"></div>
+                        {{opt.name}}
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -101,7 +101,7 @@
                     <ui-select-choices repeat="tg.type as tg in targetGroups
                     | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type') | filter: {name: $select.search}"
                                        ui-disable-choice="targetgroupsDisableLogic(tg.type)">
-                        <div ng-bind-html="tg.name | highlight: $select.search"></div>
+                        {{tg.name}}
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -256,7 +256,7 @@
                                  theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{msg('search_term_organisaation_kieli')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices repeat="opt.koodiUri as opt in options.organisaationKielis | filter:$select.search track by $index">
-                            <div ng-bind-html="opt.nimi | highlight: $select.search"></div>
+                            {{opt.nimi}}
                         </ui-select-choices>
                     </ui-select>
                 </div>
