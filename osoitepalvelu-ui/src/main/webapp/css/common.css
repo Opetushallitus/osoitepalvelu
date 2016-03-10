@@ -23,7 +23,7 @@ ul,ol {
 /* Select2 adjustments for virkailija.css */
 
 .select2-results .select2-disabled, .select2-results .select2-disabled.select2-highlighted {
-    background: #ababab;
+    background: #bdbdbd;
     color: inherit;
 }
 
