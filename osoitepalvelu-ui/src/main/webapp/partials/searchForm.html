@@ -19,7 +19,7 @@
                         {{$select.selected.name}}
                     </ui-select-match>
                     <ui-select-choices position='down' repeat="save.id as save in saves | filter: {name: $select.search}">
-                        {{::save.name}}
+                        <div ng-bind-html="save.name  | highlight : $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -42,7 +42,7 @@
                     </ui-select-match>
                     <ui-select-choices position='down' repeat="opt.type as opt in searchTypes | filter: {name:$select.search}"
                                        ui-disable-choice="searchtypesDisableLogic(opt.type)">
-                        {{::opt.name}}
+                        <div ng-bind-html="opt.name  | highlight : $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -101,7 +101,7 @@
                     <ui-select-choices position='down' repeat="tg.type as tg in targetGroups
                     | filter:selectableTargetGroupsFilter(selectedTargetGroupTypes, 'type') | filter: {name: $select.search}"
                                        ui-disable-choice="targetgroupsDisableLogic(tg.type)">
-                        {{::tg.name}}
+                        <div ng-bind-html="tg.name  | highlight : $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -134,7 +134,7 @@
                                 theme="select2" select-all="false" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.tutkintotoimikuntas | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -143,7 +143,7 @@
                                 theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_rooli')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.tutkintotoimikuntaRoolis | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                  </div>
@@ -153,7 +153,7 @@
                                 theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_koulutuslaji')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.koulutuslajis | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -163,7 +163,7 @@
                                theme="select2" select-all="false" clear-all="true">
                        <ui-select-match placeholder="{{::msg('search_term_opetuskieli')}}">{{$item.nimi}}</ui-select-match>
                        <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.kielis | filter: $select.search track by $index">
-                           {{::opt.nimi}}
+                           <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                        </ui-select-choices>
                    </ui-select>
                 </div>
@@ -174,7 +174,7 @@
                                  theme="select2" select-all="false" clear-all="true" on-select="koulutusalasChanged($item, $model)">
                         <ui-select-match placeholder="{{::msg('search_term_koulutusala')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.koulutusalas | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -183,7 +183,7 @@
                                  theme="select2" select-all="false" clear-all="true" on-select="opintoalasChanged($item, $model)">
                         <ui-select-match placeholder="{{::msg('search_term_opintoala')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.opintoalas | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -194,7 +194,7 @@
                                  theme="select2" select-all="false" clear-all="true" on-select="koulutusTyyppisChanged($item, $model)">
                         <ui-select-match placeholder="{{::msg('search_term_koulutustyyppi')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.koulutustyyppis | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -204,7 +204,7 @@
                                  theme="select2" select-all="false" clear-all="true" ng-disabled="!$parent.terms.koulutusalas.length && !$parent.terms.opintoalas.length">
                         <ui-select-match placeholder="{{::msg('search_term_tutkinto')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.koulutus | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -214,7 +214,7 @@
                                  theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_kielis')}}">{{$item.name}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.code as opt in options.tutkintotoimikuntaKielis | filter: $select.search track by $index">
-                            {{::opt.name}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -223,7 +223,7 @@
                                  theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_jasen_kielis')}}">{{$item.name}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.code as opt in options.tutkintotoimikuntaJasenKielis | filter: $select.search track by $index">
-                            {{::opt.name}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -233,7 +233,7 @@
                                  theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_toimikausi')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.type as opt in options.tutkintotoimikuntaToimikausis | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -244,7 +244,7 @@
                                  theme="select2" select-all="false" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_kayttooikeusryhma')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiId as opt in options.koulutaRoolis | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -256,7 +256,7 @@
                                  theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_organisaation_kieli')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.organisaationKielis | filter:$select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -267,7 +267,7 @@
                                  theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_maakunta')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.maakuntas | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -278,7 +278,7 @@
                                  theme="select2" select-all="false" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_kunta')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.kuntas | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -290,7 +290,7 @@
                                theme="select2" select-all="true" clear-all="true" ng-disabled="!!$parent.terms.koultuksenjarjestajas.length">
                         <ui-select-match placeholder="{{::msg('search_term_oppilaitostyyppi')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.oppilaitostyyppis | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -303,7 +303,7 @@
                                theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_vuosiluokka')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.vuosiluokkas | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -315,7 +315,7 @@
                                  theme="select2" select-all="false" clear-all="true" ng-disabled="!!$parent.terms.koulutaRoolis.length">
                         <ui-select-match placeholder="{{::msg('search_term_koultuksenjarjestaja')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.koultuksenjarjestajas | filter: $select.search track by $index">
-                            {{::opt.nimi}}
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
 
