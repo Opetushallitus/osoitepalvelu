@@ -74,6 +74,10 @@ li.select2-search-field {
     line-height: normal;
 }
 
+.select2-chosen.ng-binding {
+    font-style: italic;
+}
+
 .select2-container {
     background-color: #FFFFFF;
 }
