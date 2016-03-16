@@ -139,11 +139,12 @@
                     </ui-select>
                 </div>
                 <div class="term" ng-if="isShowTutkintotoimikuntaRooliTerm()" title="{{::msg('search_term_tutkintotoimikunta_rooli')}}">
+                    <!--rooli tutkintotoimikunnassa term-->
                     <ui-select multiple id="tutkintotoimikuntaRoolis" ng-model="terms.tutkintotoimikuntaRoolis"
                                 theme="select2" select-all="true" clear-all="true">
-                        <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_rooli')}}">{{$item.nimi}}</ui-select-match>
-                        <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.tutkintotoimikuntaRoolis | filter: $select.search track by $index">
-                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
+                        <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_rooli')}}">{{$item.name}}</ui-select-match>
+                        <ui-select-choices position='down' repeat="opt.type as opt in options.tutkintotoimikuntaRoolis | filter: $select.search track by $index">
+                            <div ng-bind-html="opt.name | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                  </div>
@@ -210,25 +211,28 @@
                 </div>
                 <div class="term-separator" ng-if="isShowKoulutusTyyppiTerm() || (isShowTutkintotoimikuntaTerm() && options.koulutus)"></div>
                 <div class="term" ng-if="isShowTutkintotoimikuntaKieliTerm()" title="{{::msg('search_term_tutkintotoimikunta_kielis')}}">
+                    <!--tutkintotoimikunnan kielisyys term-->
                     <ui-select multiple id="tutkintotoimikuntaKielis" ng-model="terms.tutkintotoimikuntaKielis"
                                  theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_kielis')}}">{{$item.name}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.code as opt in options.tutkintotoimikuntaKielis | filter: $select.search track by $index">
-                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
+                            <div ng-bind-html="opt.name | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
                 <div class="term" ng-if="isShowTutkintotoimikuntaJasenKieliTerm()" title="{{::msg('search_term_tutkintotoimikunta_jasen_kielis')}}">
+                    <!--tutkintotoimikunnan jäsenen kielisyys term-->
                     <ui-select multiple id="tutkintotoimikuntaJasenKielis" ng-model="terms.tutkintotoimikuntaJasenKielis"
                                  theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_jasen_kielis')}}">{{$item.name}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.code as opt in options.tutkintotoimikuntaJasenKielis | filter: $select.search track by $index">
-                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
+                            <div ng-bind-html="opt.name | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
                 <div class="term-separator" ng-if="isShowTutkintotoimikuntaKieliTerm() || isShowTutkintotoimikuntaJasenKieliTerm()"></div>
                 <div class="term" ng-if="isShowTutkintotoimikuntaToimikausiTerm()" title="{{::msg('search_term_tutkintotoimikunta_toimikausi')}}">
+                    <!--tutkintotoimikunnan toimikausi term-->
                     <ui-select multiple id="tutkintotoimikuntaToimikausis" ng-model="terms.tutkintotoimikuntaToimikausis"
                                  theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_toimikausi')}}">{{$item.nimi}}</ui-select-match>
