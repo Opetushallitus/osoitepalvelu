@@ -142,9 +142,9 @@
                     <!--rooli tutkintotoimikunnassa term-->
                     <ui-select multiple id="tutkintotoimikuntaRoolis" ng-model="terms.tutkintotoimikuntaRoolis"
                                 theme="select2" select-all="true" clear-all="true">
-                        <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_rooli')}}">{{$item.name}}</ui-select-match>
-                        <ui-select-choices position='down' repeat="opt.type as opt in options.tutkintotoimikuntaRoolis | filter: $select.search track by $index">
-                            <div ng-bind-html="opt.name | highlight : $select.search"></div>
+                        <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_rooli')}}">{{$item.nimi}}</ui-select-match>
+                        <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.tutkintotoimikuntaRoolis | filter: $select.search track by $index">
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                  </div>
