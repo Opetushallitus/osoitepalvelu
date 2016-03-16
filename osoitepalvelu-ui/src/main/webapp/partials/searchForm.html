@@ -301,7 +301,7 @@
                 <div class="term-separator"></div>
 
                 <!--perusopetuksen vuosiluokkatieto term-->
-                <div class="term" ng-if="isShowKoulutustoimijaOppisopimustoimisto && isShowVuosiluokkaTerm()"
+                <div class="term" ng-if="isShowKoulutustoimijaOppisopimustoimisto() && isShowVuosiluokkaTerm()"
                      title="{{::msg('search_term_vuosiluokka')}}">
                     <ui-select multiple id="vuosiluokka" ng-model="terms.vuosiluokkas"
                                theme="select2" select-all="true" clear-all="true">
