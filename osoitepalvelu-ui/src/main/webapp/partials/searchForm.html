@@ -150,7 +150,7 @@
                  </div>
                 <div class="term-separator" ng-if="isShowKoulutusTerms() && (isShowTutkintotoimikuntaTerm() || isShowTutkintotoimikuntaRooliTerm())"></div>
                 <div class="term" ng-if="isShowKoulutusTerms()" title="{{::msg('search_term_koulutuslaji')}}">
-                    <ui-select multiple allow-clear id="koulutuslajis" ng-model="terms.koulutuslajis[0]"
+                    <ui-select multiple allow-clear id="koulutuslajis" ng-model="terms.koulutuslajis"
                                 theme="select2" select-all="true" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_koulutuslaji')}}">{{$item.nimi}}</ui-select-match>
                         <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.koulutuslajis | filter: $select.search track by $index">
