@@ -116,6 +116,8 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         _targetGroups = angular.copy(targetGroups);
         angular.forEach(_targetGroups, function(tg) {
             delete(tg.hideOptions);
+            delete(tg._uiSelectChoiceDisabled);
+            delete(tg.options.hide);
         });
     };
 

@@ -226,16 +226,16 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
             if (oppilaitosTyyppisWithVuosiluokkaSetting) {
                 var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
-                var visible = ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
+                return ArrayHelper.containsAny(ArrayHelper.extract($scope.terms.oppilaitostyyppis, KoodiHelper.koodiValue),
                     oppilaitosTyyppisWithVuosiluokka);
-                if (!visible) {
-                    // TODO: fix this with angular ui-select when merged.
-                    // causes infinite digest because it messes directly with ngmodel
-                    //$scope.terms.vuosiluokkas = [];
-                }
-                return visible;
             }
             return true;
+        };
+
+        $scope.clearVuosiluokka = function($item, $model) {
+            if(!$scope.isShowVuosiluokkaTerm()) {
+                $scope.terms.vuosiluokkas = [];
+            }
         };
 
         // Handle the disable logic caused by relations of searchTypes and targetGroups.
@@ -244,7 +244,36 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             && (optType == 'LETTER' || optType == 'CONTACT')) {
                 return true;
             }
-            return false;
+        };
+
+        $scope.handleSaveSelected = function() {
+            if( $scope.selectedSavedSearch ) {
+                var selected = angular.copy($scope.selectedSavedSearch);
+                $log.info("Selected save: " + selected);
+                SavesService.getSearch($scope.selectedSavedSearch, function(save) {
+                    SearchService.updateSearchType(save.searchType, save.addressFields);
+                    SearchService.updateTargetGroups(save.targetGroups);
+                    SearchService.updateTerms(save.terms);
+                    SearchService.updateKieli(save.lang);
+                    $scope.updateTerms(false);
+                    $scope.selectedSavedSearch = selected;
+                });
+            }
+            SearchService.updateSelectedSearch($scope.selectedSavedSearch);
+        };
+
+        $scope.handleTargetGroupSelected = function() {
+            //$scope.selectedTargetGroup = tg;
+            $log.info("Target group selection changed to: " + $scope.selectedTargetGroup);
+            if ($scope.selectedTargetGroup) {
+                $scope.selectedTargetGroupTypes.push($scope.selectedTargetGroup);
+                var newGroup = angular.copy(
+                    $filter('filter')($scope.targetGroups, {type: $scope.selectedTargetGroup})[0]);
+                if (newGroup.options.length === 1) {
+                    newGroup.options[0].selected = true;
+                }
+                return false;
+            }
         };
 
         // Handle targetGroups search logic.
@@ -312,7 +341,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         $scope.removeTargetGroup = function(i) {
             var arr = [];
             angular.forEach($scope.selectedTargetGroupTypes, function(v,index) {
-                if( index !== i && v ) arr.push(v);
+                if( index !== i && v ) arr.push(v);
             });
             $scope.selectedTargetGroupTypes = arr;
             arr = [];

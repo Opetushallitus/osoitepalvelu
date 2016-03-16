@@ -14,7 +14,34 @@
  * European Union Public Licence for more details.
  */
 
+/* Overwrite bootstrap default list style*/
+ul,ol {
+    padding: 0;
+    margin: 0;
+}
+
 /* Select2 adjustments for virkailija.css */
+
+.select2-results .select2-disabled, .select2-results .select2-disabled.select2-highlighted {
+    background: #bdbdbd;
+    color: inherit;
+}
+
+/*Overwrite default (selected) hightlight behaviour*! (has to be hard values because IE)*/
+.select2-results .select2-highlighted {
+    background: white;
+    color: black;
+}
+
+.ui-select-choices-row:hover, .select2-results .select2-highlighted:hover {
+    background-color: #e99f00;
+    color: white;
+}
+
+.select2-container:hover, .select2-search-field:hover, .select2-container input:hover, .select2-choice:hover {
+    background: #FFF5DA;
+}
+
 .select2-container-multi .select2-choices .select2-search-choice {
     color: #333333;
     cursor: default;
@@ -35,17 +62,24 @@
     top: 7px;
 }
 
+.ui-select-button {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 4px;
+    border-bottom: 1px solid black;
+    overflow: hidden;
+}
+
+li.select2-search-field {
+    line-height: normal;
+}
+
+.select2-chosen.ng-binding {
+    font-style: italic;
+}
+
 .select2-container {
     background-color: #FFFFFF;
-    border: 1px solid #CCCCCC;
-}
-
-.select2-container:hover, .select2-search-field:hover, .select2-container input:hover, .select2-choice:hover {
-    background: #FFF5DA;
-}
-
-.select2-results .select2-highlighted {
-    background: none repeat scroll 0 0 #E99F00;
 }
 
 .topCournerInfoMessage {
