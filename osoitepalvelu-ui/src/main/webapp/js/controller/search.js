@@ -223,6 +223,9 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
 
         // Vuosiluokka term which is shown when certain oppilaitostyyppi(s) are selected.
         $scope.isShowVuosiluokkaTerm = function() {
+            if($scope.selectedTargetGroupTypes.indexOf('OPPISOPIMUSTOIMPISTEET') !== -1) {
+                return false;
+            }
             var oppilaitosTyyppisWithVuosiluokkaSetting = window.CONFIG.env["vuosiluokka.for.oppilaitostyyppis"];
             if (oppilaitosTyyppisWithVuosiluokkaSetting) {
                 var oppilaitosTyyppisWithVuosiluokka = oppilaitosTyyppisWithVuosiluokkaSetting.split(",");
