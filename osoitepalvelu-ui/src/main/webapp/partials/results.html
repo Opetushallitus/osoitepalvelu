@@ -1,5 +1,7 @@
 <div class="resultsContainer">
-    <button class="btn btn-lg" ng-click="back()"><i ng-click="back()" class="fa fa-arrow-up"></i> <span ng-click="back()" tt="back_to_search_terms">Hakuehdot</span></button>
+    <button class="btn btn-lg" ng-click="back()">
+        <i class="fa fa-arrow-left"></i> <span tt="back_to_search_terms">Hakuehdot</span>
+    </button>
 
     <div id="no-results" ng-show="searchDone && results.length < 1" tt="no_results">
         Osoitteita ei löytynyt. Tarkista hakuehdot.
@@ -23,8 +25,12 @@
                        ng-disabled="!resultGridOptions.selectedItems.length || !results.length" tt="remove_selected">Poista valitut</button>
            </div>
            <div class="rightPosition">
-               <button class="btn btn-lg" ng-click="downloadExcel()" ng-disabled="!results.length" tt="save_excel">Tallenna excel</button>
-               <button class="btn btn-lg btn-primary" ng-click="sendEmail()" ng-disabled="!results.length" tt="send_message">Lähetä viesti</button>
+               <button class="btn btn-lg" ng-click="downloadExcel()" ng-disabled="!results.length">
+                   <i class="fa fa-file-excel-o"></i> <span tt="save_excel">Tallenna Exceliin</span>
+               </button>
+               <button class="btn btn-lg btn-primary" ng-click="sendEmail()" ng-disabled="!results.length">
+                   <i class="fa fa-envelope"></i> <span tt="send_message">Lähetä viesti</span>
+               </button>
            </div>
        </div>
        <div style="clear:both;"></div>

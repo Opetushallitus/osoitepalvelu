@@ -25,7 +25,7 @@
             </div>
             <div class="actions">
                 <button class="btn" ng-click="showSaveSearchPopup()">
-                    <i class="fa fa-trash-o fa-1x"></i>
+                    <i class="fa fa-trash-o fa-lg"></i>
                 </button>
             </div>
         </div>
@@ -88,7 +88,7 @@
                         <td class="criterionOptions" ng-hide="tg.hideOptions === false"></td>
                         <td class="criterionActions">
                             <button class="btn btn-danger" ng-click="removeTargetGroup($index)">
-                                <i class="fa fa-ban fa-1x"></i>
+                                <i class="fa fa-times-circle-o fa-lg"></i>
                             </button>
                         </td>
                     </table>
@@ -301,7 +301,8 @@
                 <div class="term-separator"></div>
 
                 <!--perusopetuksen vuosiluokkatieto term-->
-                <div class="term" ng-if="isShowKoulutustoimijaOppisopimustoimisto() && isShowVuosiluokkaTerm()"
+                <div class="term" ng-if="(isShowKoulutustoimijaOppisopimustoimisto() || isShowOppilaitoksetToimipisteet())
+                && isShowVuosiluokkaTerm()"
                      title="{{::msg('search_term_vuosiluokka')}}">
                     <ui-select multiple id="vuosiluokka" ng-model="terms.vuosiluokkas"
                                theme="select2" select-all="true" clear-all="true">
@@ -340,8 +341,12 @@
             <div class="label-cell"></div>
             <div class="field-cell">
                 <div class="form-action" ng-if="isSearchActionsVisible()">
-                    <button class="btn btn-lg btn-primary" ng-click="search()" ng-disabled="!isSearchAllowed()" tt="search_action">Hae</button>
-                    <button class="btn btn-lg" ng-click="saveSearch()" tt="save_search_action">Tallenna haku</button>
+                    <button class="btn btn-lg btn-primary" ng-click="search()" ng-disabled="!isSearchAllowed()">
+                        <i class="fa fa-search"></i> <span tt="search_action">Hae</span>
+                    </button>
+                    <button class="btn btn-lg" ng-click="saveSearch()">
+                        <i class="fa fa-floppy-o"></i> <span tt="save_search_action">Tallenna haku</span>
+                    </button>
                     <button class="btn btn-lg" ng-click="clear()" tt="clear_action">Tyhjennä</button>
                 </div>
             </div>
