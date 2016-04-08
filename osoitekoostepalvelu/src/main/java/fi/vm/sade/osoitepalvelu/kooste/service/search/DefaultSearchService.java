@@ -177,6 +177,13 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 // use them to filter organisaatios by which to return henkilos as well
                 // (as other possible filterin constaints):
                 targetTypes = new SearchTargetGroup.TargetType[0];
+                // Searching koulutustoimijas.
+                if(searchHenkilos) {
+                    List<SearchTargetGroupDto> tGroups = terms.getTargetGroups();
+                    tGroups.add(new SearchTargetGroupDto(SearchTargetGroup.GroupType.JARJESTAJAT_YLLAPITAJAT,
+                            new ArrayList<SearchTargetGroup.TargetType>(){{add(SearchTargetGroup.TargetType.ORGANISAATIO);}}));
+                    terms.setTargetGroups(tGroups);
+                }
             }
             organisaatioCriteria.setOrganisaatioTyyppis(parseOrganisaatioTyyppis(terms, targetTypes));
 
