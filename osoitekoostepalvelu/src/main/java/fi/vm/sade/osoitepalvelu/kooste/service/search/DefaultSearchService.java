@@ -178,16 +178,19 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 // (as other possible filterin constaints):
                 targetTypes = new SearchTargetGroup.TargetType[0];
                 // Searching koulutustoimijas.
-                if(searchHenkilos) {
-                    List<SearchTargetGroupDto> tGroups = terms.getTargetGroups();
-                    tGroups.add(new SearchTargetGroupDto(SearchTargetGroup.GroupType.JARJESTAJAT_YLLAPITAJAT,
-                            new ArrayList<SearchTargetGroup.TargetType>(){{add(SearchTargetGroup.TargetType.ORGANISAATIO);}}));
-                    terms.setTargetGroups(tGroups);
-                }
+//                if(searchHenkilos) {
+//                    List<SearchTargetGroupDto> tGroups = terms.getTargetGroups();
+//                    tGroups.add(new SearchTargetGroupDto(SearchTargetGroup.GroupType.JARJESTAJAT_YLLAPITAJAT,
+//                            new ArrayList<SearchTargetGroup.TargetType>(){{add(SearchTargetGroup.TargetType.ORGANISAATIO);}}));
+//                    terms.setTargetGroups(tGroups);
+//                }
             }
             organisaatioCriteria.setOrganisaatioTyyppis(parseOrganisaatioTyyppis(terms, targetTypes));
 
-            ensureAtLeastOneConditionUsed(organisaatioCriteria);
+            // When searching henkilös we don't want to limit the search.
+            if(!searchHenkilos) {
+                ensureAtLeastOneConditionUsed(organisaatioCriteria);
+            }
 
             List<OrganisaatioYhteystietoHakuResultDto> orgYhteystietoResults;
 
