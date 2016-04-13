@@ -177,13 +177,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 // use them to filter organisaatios by which to return henkilos as well
                 // (as other possible filterin constaints):
                 targetTypes = new SearchTargetGroup.TargetType[0];
-                // Searching koulutustoimijas.
-//                if(searchHenkilos) {
-//                    List<SearchTargetGroupDto> tGroups = terms.getTargetGroups();
-//                    tGroups.add(new SearchTargetGroupDto(SearchTargetGroup.GroupType.JARJESTAJAT_YLLAPITAJAT,
-//                            new ArrayList<SearchTargetGroup.TargetType>(){{add(SearchTargetGroup.TargetType.ORGANISAATIO);}}));
-//                    terms.setTargetGroups(tGroups);
-//                }
             }
             organisaatioCriteria.setOrganisaatioTyyppis(parseOrganisaatioTyyppis(terms, targetTypes));
 
@@ -456,8 +449,11 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     }
 
     protected List<String> oids(List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults) {
-        return new ArrayList<String>(Collections2.transform(organisaatioYhteystietoResults,
+        List<String> oidList = new ArrayList<String>(Collections2.transform(organisaatioYhteystietoResults,
                 FilterableOrganisaatio.GET_OID));
+        // Remove opetushallitus since it's included as root organisation of koulutustoimijas.
+        oidList.remove("1.2.246.562.10.00000000001");
+        return oidList;
     }
 
     protected List<String> oppilaitoskoodis(List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults) {
