@@ -75,6 +75,6 @@
         <http:client Connection="Keep-Alive" ConnectionTimeout="0" ReceiveTimeout="0" AllowChunking="false"/>
     </http:conduit>
 
-    <bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
+    <bean id="jacksonMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
 
 </beans>
