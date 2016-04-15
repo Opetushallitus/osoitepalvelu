@@ -17,11 +17,8 @@
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsYhteystietoDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioOsoiteDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Id;
@@ -74,6 +71,8 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
             = new ArrayList<OrganisaatioDetailsYhteystietoDto>();
     @Indexed
     private List<String> vuosiluokat = new ArrayList<String>();
+
+    private OrganisaatioYhteystietoElementtiDto kriisitiedotuksenEmail;
     private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos
             = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
     @Indexed
@@ -220,6 +219,14 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
 
     public void setVuosiluokat(List<String> vuosiluokat) {
         this.vuosiluokat = vuosiluokat;
+    }
+
+    public OrganisaatioYhteystietoElementtiDto getKriisitiedotuksenEmail() {
+        return kriisitiedotuksenEmail;
+    }
+
+    public void setKriisitiedotuksenEmail(OrganisaatioYhteystietoElementtiDto kriisitiedotuksenEmail) {
+        this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
     }
 
     public List<OrganisaatioYhteystietoElementtiDto> getYhteystietoArvos() {

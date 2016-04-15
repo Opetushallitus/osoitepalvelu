@@ -20,6 +20,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteysosoiteDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,7 @@ import java.util.List;
 public class OrganisaatioDtoConverter extends AbstractDtoConverter {
     private static final long serialVersionUID = -3701212052731186195L;
 
+    // TODO Kommentti
     public OrganisaatioYhteystietoHakuResultDto convert(OrganisaatioDetails from, OrganisaatioYhteystietoHakuResultDto to) {
         convertValue(from, to);
         for (OrganisaatioDetailsYhteystietoDto yhteystieto : from.getYhteystiedot()) {
@@ -46,6 +48,17 @@ public class OrganisaatioDtoConverter extends AbstractDtoConverter {
             if (target != null) {
                 OrganisaatioYhteysosoiteDto yhteystietoTargetDto = convert(yhteystieto, new OrganisaatioYhteysosoiteDto());
                 target.add(yhteystietoTargetDto);
+            }
+        }
+        for (OrganisaatioYhteystietoElementtiDto yhteystietoElementtiDto : from.getYhteystietoArvos()) {
+            List<OrganisaatioYhteystietoElementtiDto> target = null;
+            // Kriisiviestintä
+            if(yhteystietoElementtiDto.getElementtiTyyppi() != null
+                    && yhteystietoElementtiDto.getTyyppiNimi().endsWith("Kriisitiedotuksen sähköpostiosoite")) {
+                target = to.getKriisitiedotuksenEmail();
+            }
+            if(target != null) {
+                target.add(yhteystietoElementtiDto);
             }
         }
         return to;

@@ -19,6 +19,7 @@ package fi.vm.sade.osoitepalvelu.service.search.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OsoitteistoDto;
@@ -55,8 +56,10 @@ public class ApiToJsonTest {
         result.setWwwOsoite("http://www.kimitoon.fi/barn-och-utbildning/skolor/svenskaskolor/kimitoonsgymnasi");
         result.setViranomaistiedotuksenEmail("viranomaisille@email.com");
         result.setKoulutusneuvonnanEmail("Koulutusneuvonta@email.com");
-        result.setKriisitiedotuksenEmail("kriisitiedotus@email.com");
-        
+
+        OrganisaatioYhteystietoElementtiDto kriisiEmail = new OrganisaatioYhteystietoElementtiDto();
+        kriisiEmail.setArvo("kriisitiedotus@email.com");
+        result.addKriisitiedotuksenEmail(kriisiEmail);
         
         OsoitteistoDto kayntiosoite  =  new OsoitteistoDto();
         kayntiosoite.setKieli("fi");
@@ -105,9 +108,11 @@ public class ApiToJsonTest {
         result.setWwwOsoite("http://www.organisaatio.ab");
         result.setViranomaistiedotuksenEmail("viranomaiset@email.com");
         result.setKoulutusneuvonnanEmail("kouutus@email.com");
-        result.setKriisitiedotuksenEmail("kriisi@email.com");
 
-        
+        kriisiEmail = new OrganisaatioYhteystietoElementtiDto();
+        kriisiEmail.setArvo("kriisi@email.com");
+        result.addKriisitiedotuksenEmail(kriisiEmail);
+
         kayntiosoite  =  new OsoitteistoDto();
         kayntiosoite.setKieli("fi");
         kayntiosoite.setOsoite("Yliopistonkatu 58 B");

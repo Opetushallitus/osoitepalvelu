@@ -42,6 +42,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
     private List<OrganisaatioYhteysosoiteDto> postiosoite  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
     private List<OrganisaatioYhteysosoiteDto> kayntiosoite  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
     private String oppilaitosTyyppiUri; // esim. oppilaitostyyppi_21#1
+    private List<OrganisaatioYhteystietoElementtiDto> kriisitiedotuksenEmail = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
 
     @Override
     public String getOid() {
@@ -125,5 +126,13 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
 
     public void setOppilaitosTyyppiUri(String oppilaitosTyyppiUri) {
         this.oppilaitosTyyppiUri = oppilaitosTyyppiUri;
+    }
+
+    public List<OrganisaatioYhteystietoElementtiDto> getKriisitiedotuksenEmail() {
+        return kriisitiedotuksenEmail;
+    }
+
+    public void setKriisitiedotuksenEmail(List<OrganisaatioYhteystietoElementtiDto> kriisitiedotuksenEmail) {
+        this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
     }
 }
