@@ -180,7 +180,10 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
             organisaatioCriteria.setOrganisaatioTyyppis(parseOrganisaatioTyyppis(terms, targetTypes));
 
-            ensureAtLeastOneConditionUsed(organisaatioCriteria);
+            // When searching henkilös we don't want to limit the search.
+            if(!searchHenkilos) {
+                ensureAtLeastOneConditionUsed(organisaatioCriteria);
+            }
 
             List<OrganisaatioYhteystietoHakuResultDto> orgYhteystietoResults;
 
@@ -446,8 +449,11 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     }
 
     protected List<String> oids(List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults) {
-        return new ArrayList<String>(Collections2.transform(organisaatioYhteystietoResults,
+        List<String> oidList = new ArrayList<String>(Collections2.transform(organisaatioYhteystietoResults,
                 FilterableOrganisaatio.GET_OID));
+        // Remove opetushallitus since it's included as root organisation of koulutustoimijas.
+        oidList.remove("1.2.246.562.10.00000000001");
+        return oidList;
     }
 
     protected List<String> oppilaitoskoodis(List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults) {
