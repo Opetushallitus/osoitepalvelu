@@ -49,16 +49,12 @@
                 <version>${jetty.version}</version>
                 <configuration>
                     <scanIntervalSeconds>0</scanIntervalSeconds>
-                    <connectors>
-                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                            <port>${webapp.port}</port>
-                            <requestHeaderSize>8192</requestHeaderSize>
-                        </connector>
-                    </connectors>
+                    <httpConnector>
+                            <port>8180</port>
+                    </httpConnector>
                     <stopKey>stop</stopKey>
-                    <stopPort>1${webapp.port}</stopPort>
+                    <stopPort>18180</stopPort>
                     <webAppConfig>
-                        <jettyEnvXml>src/main/webapp/META-INF/jetty-env.xml</jettyEnvXml>
                         <contextPath>/${project.artifactId}</contextPath>
                     </webAppConfig>
                 </configuration>
