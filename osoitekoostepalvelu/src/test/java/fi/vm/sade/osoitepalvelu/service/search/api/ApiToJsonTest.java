@@ -56,10 +56,7 @@ public class ApiToJsonTest {
         result.setWwwOsoite("http://www.kimitoon.fi/barn-och-utbildning/skolor/svenskaskolor/kimitoonsgymnasi");
         result.setViranomaistiedotuksenEmail("viranomaisille@email.com");
         result.setKoulutusneuvonnanEmail("Koulutusneuvonta@email.com");
-
-        OrganisaatioYhteystietoElementtiDto kriisiEmail = new OrganisaatioYhteystietoElementtiDto();
-        kriisiEmail.setArvo("kriisitiedotus@email.com");
-        result.addKriisitiedotuksenEmail(kriisiEmail);
+        result.setKriisitiedotuksenEmail("kriisitiedotus@email.com");
         
         OsoitteistoDto kayntiosoite  =  new OsoitteistoDto();
         kayntiosoite.setKieli("fi");
@@ -108,10 +105,7 @@ public class ApiToJsonTest {
         result.setWwwOsoite("http://www.organisaatio.ab");
         result.setViranomaistiedotuksenEmail("viranomaiset@email.com");
         result.setKoulutusneuvonnanEmail("kouutus@email.com");
-
-        kriisiEmail = new OrganisaatioYhteystietoElementtiDto();
-        kriisiEmail.setArvo("kriisi@email.com");
-        result.addKriisitiedotuksenEmail(kriisiEmail);
+        result.setKriisitiedotuksenEmail("kriisi@email.com");
 
         kayntiosoite  =  new OsoitteistoDto();
         kayntiosoite.setKieli("fi");

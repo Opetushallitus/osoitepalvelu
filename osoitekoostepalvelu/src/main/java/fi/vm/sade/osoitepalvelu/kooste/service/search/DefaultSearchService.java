@@ -80,7 +80,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
     @Autowired
     private TarjontaService tarjontaService;
 
-
     @Autowired
     private SearchResultDtoConverter dtoConverter;
 

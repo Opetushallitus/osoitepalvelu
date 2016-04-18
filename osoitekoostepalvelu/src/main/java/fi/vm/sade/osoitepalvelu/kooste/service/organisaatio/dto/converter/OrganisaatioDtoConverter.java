@@ -35,7 +35,7 @@ import java.util.List;
 public class OrganisaatioDtoConverter extends AbstractDtoConverter {
     private static final long serialVersionUID = -3701212052731186195L;
 
-    // TODO Kommentti
+    // Custom converter in order to map yhteystieto and yhteystietoarvo fields.
     public OrganisaatioYhteystietoHakuResultDto convert(OrganisaatioDetails from, OrganisaatioYhteystietoHakuResultDto to) {
         convertValue(from, to);
         for (OrganisaatioDetailsYhteystietoDto yhteystieto : from.getYhteystiedot()) {
@@ -50,15 +50,12 @@ public class OrganisaatioDtoConverter extends AbstractDtoConverter {
                 target.add(yhteystietoTargetDto);
             }
         }
-        for (OrganisaatioYhteystietoElementtiDto yhteystietoElementtiDto : from.getYhteystietoArvos()) {
-            List<OrganisaatioYhteystietoElementtiDto> target = null;
+        for (OrganisaatioYhteystietoElementtiDto yhteystietoArvoElementtiDto : from.getYhteystietoArvos()) {
             // Kriisiviestintä
-            if(yhteystietoElementtiDto.getElementtiTyyppi() != null
-                    && yhteystietoElementtiDto.getTyyppiNimi().endsWith("Kriisitiedotuksen sähköpostiosoite")) {
-                target = to.getKriisitiedotuksenEmail();
-            }
-            if(target != null) {
-                target.add(yhteystietoElementtiDto);
+            if(yhteystietoArvoElementtiDto.getElementtiTyyppi() != null
+                    && yhteystietoArvoElementtiDto.getTyyppiNimi().endsWith("Kriisitiedotuksen sähköpostiosoite")
+                    && yhteystietoArvoElementtiDto.getArvo() != null) {
+                to.setKriisitiedotuksenEmail(yhteystietoArvoElementtiDto.getArvo());
             }
         }
         return to;

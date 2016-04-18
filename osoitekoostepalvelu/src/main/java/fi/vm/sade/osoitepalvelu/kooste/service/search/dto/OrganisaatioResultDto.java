@@ -45,7 +45,7 @@ public class OrganisaatioResultDto implements Serializable {
     private List<OrganisaatioYhteystietoDto> yhteyshenkilot  =  new ArrayList<OrganisaatioYhteystietoDto>();
     private String viranomaistiedotuksenEmail;
     private String koulutusneuvonnanEmail;
-    private List<OrganisaatioYhteystietoElementtiDto> kriisitiedotuksenEmail = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
+    private String kriisitiedotuksenEmail;
 
     public String getOid() {
         return oid;
@@ -163,16 +163,12 @@ public class OrganisaatioResultDto implements Serializable {
         this.koulutusneuvonnanEmail  =  koulutusneuvonnanEmail;
     }
 
-    public List<OrganisaatioYhteystietoElementtiDto> getKriisitiedotuksenEmail() {
+    public String getKriisitiedotuksenEmail() {
         return kriisitiedotuksenEmail;
     }
 
-    public void setKriisitiedotuksenEmail(List<OrganisaatioYhteystietoElementtiDto> kriisitiedotuksenEmail) {
+    public void setKriisitiedotuksenEmail(String kriisitiedotuksenEmail) {
         this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
-    }
-
-    public void addKriisitiedotuksenEmail(OrganisaatioYhteystietoElementtiDto kriisitiedotuksenEmail) {
-        this.kriisitiedotuksenEmail.add(kriisitiedotuksenEmail);
     }
 
     public String getOppilaitosKoodi() {

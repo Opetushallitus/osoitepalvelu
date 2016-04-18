@@ -72,7 +72,7 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
     @Indexed
     private List<String> vuosiluokat = new ArrayList<String>();
 
-    private OrganisaatioYhteystietoElementtiDto kriisitiedotuksenEmail;
+    private String kriisitiedotuksenEmail;
     private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos
             = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
     @Indexed
@@ -221,11 +221,11 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
         this.vuosiluokat = vuosiluokat;
     }
 
-    public OrganisaatioYhteystietoElementtiDto getKriisitiedotuksenEmail() {
+    public String getKriisitiedotuksenEmail() {
         return kriisitiedotuksenEmail;
     }
 
-    public void setKriisitiedotuksenEmail(OrganisaatioYhteystietoElementtiDto kriisitiedotuksenEmail) {
+    public void setKriisitiedotuksenEmail(String kriisitiedotuksenEmail) {
         this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
     }
 
