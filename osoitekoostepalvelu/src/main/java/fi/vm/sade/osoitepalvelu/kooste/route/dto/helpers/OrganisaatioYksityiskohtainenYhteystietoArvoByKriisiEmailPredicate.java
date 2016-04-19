@@ -18,21 +18,22 @@ package fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers;
 
 import com.google.common.base.Predicate;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsYhteystietoDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
 
 import java.util.Locale;
 
-public class OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate
-        implements Predicate<OrganisaatioDetailsYhteystietoDto> {
+public class OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate
+            implements Predicate<OrganisaatioYhteystietoElementtiDto> {
     private Locale locale;
 
-    public OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate(Locale locale) {
+    public OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate(Locale locale) {
         this.locale  =  locale;
     }
 
     @Override
-    public boolean apply(OrganisaatioDetailsYhteystietoDto yhteystieto) {
-        return  ("puhelin".equals(yhteystieto.getOsoiteTyyppi()) || yhteystieto.getNumero() != null)
-            && LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(yhteystieto.getKieli(), null));
+    public boolean apply(OrganisaatioYhteystietoElementtiDto yhteystietoArvo) {
+        return  ("Kriisitiedotuksen sähköpostiosoite".equals(yhteystietoArvo.getTyyppiNimi())
+                && yhteystietoArvo.getArvo() != null)
+            && LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(yhteystietoArvo.getKieli(), null));
     }
 }

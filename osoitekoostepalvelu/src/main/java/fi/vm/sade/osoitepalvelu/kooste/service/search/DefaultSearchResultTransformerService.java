@@ -26,15 +26,12 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.Combiner;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto.SearchType;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
@@ -523,7 +520,28 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 }
             });
         }
-        // TODO: viranomaistiedotuksenEmail, koulutusneuvonnanEmail, kriisitiedotuksenEmail
+
+        if(presentation.isKriisitiedotuksenSahkopostiosoiteIncluded()) {
+            copiers.add(new DetailCopier() {
+                @Override
+                public boolean isMissing(SearchResultRowDto from) {
+                    return from.getKriisitiedotuksenEmail() == null;
+                }
+
+                @Override
+                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
+                    Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
+                            CollectionHelper.filter(from.getYhteystietoArvos(),
+                                    new OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate(locale),
+                                    new OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate(DEFAULT_LOCALE))
+                                    .iterator();
+                    if(yhteystietoArvos.hasNext()) {
+                        to.setKriisitiedotuksenEmail(yhteystietoArvos.next().getArvo());
+                    }
+                }
+            });
+        }
+        // TODO: viranomaistiedotuksenEmail, koulutusneuvonnanEmail
         copyDetails(results, context, copiers, presentation.getLocale());
     }
 
