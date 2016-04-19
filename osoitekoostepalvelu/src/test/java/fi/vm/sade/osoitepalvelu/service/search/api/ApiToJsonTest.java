@@ -19,6 +19,7 @@ package fi.vm.sade.osoitepalvelu.service.search.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OsoitteistoDto;
@@ -56,7 +57,6 @@ public class ApiToJsonTest {
         result.setViranomaistiedotuksenEmail("viranomaisille@email.com");
         result.setKoulutusneuvonnanEmail("Koulutusneuvonta@email.com");
         result.setKriisitiedotuksenEmail("kriisitiedotus@email.com");
-        
         
         OsoitteistoDto kayntiosoite  =  new OsoitteistoDto();
         kayntiosoite.setKieli("fi");
@@ -107,7 +107,6 @@ public class ApiToJsonTest {
         result.setKoulutusneuvonnanEmail("kouutus@email.com");
         result.setKriisitiedotuksenEmail("kriisi@email.com");
 
-        
         kayntiosoite  =  new OsoitteistoDto();
         kayntiosoite.setKieli("fi");
         kayntiosoite.setOsoite("Yliopistonkatu 58 B");

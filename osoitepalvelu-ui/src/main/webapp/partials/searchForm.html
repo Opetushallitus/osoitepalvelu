@@ -55,7 +55,8 @@
             <div class="field-cell">
                 <div class="criterionOptions addressTypes">
                     <div class="criterionOption" ng-repeat="opt in addressFields">
-                        <input id="address_field_{{::$index}}" type="checkbox" ng-model="opt.selected" />
+                        <input id="address_field_{{::$index}}" type="checkbox" ng-model="opt.selected"
+                               ng-disabled="addressFieldDisableLogic(opt)" />
                         <label for="address_field_{{::$index}}">{{::opt.name}}</label>
                     </div>
                 </div>

@@ -22,8 +22,10 @@ package fi.vm.sade.osoitepalvelu.kooste.common;
  * Time: 18.03
  */
 
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.ext.ContextResolver;
@@ -37,8 +39,9 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
     public ObjectMapperProvider() {
         objectMapper  =  new ObjectMapper();
-        objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.configure(DeserializationConfig.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+        objectMapper.registerModule(new JodaModule());
     }
 
     @Override

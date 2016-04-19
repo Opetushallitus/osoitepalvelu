@@ -247,6 +247,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             && (optType == 'LETTER' || optType == 'CONTACT')) {
                 return true;
             }
+            return false;
         };
 
         $scope.handleSaveSelected = function() {
@@ -305,8 +306,24 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 || tgType == 'KOULUTUKSEN_TARJOAJAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
-            if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTUKSEN_TARJOAJAT')).length
-                || tgType == 'KOULUTUKSEN_TARJOAJAT' && $scope.selectedTargetGroupTypes.length) {
+            if($scope.searchType === 'CONTACT' && tgType !== 'JARJESTAJAT_YLLAPITAJAT') {
+                for(var i in $scope.addressFields) {
+                    var addressfield = $scope.addressFields[i];
+                    // kriisitiedotuksen_sähköpostiosoite can only be used with Koulutustoimijas
+                    if(addressfield.type === 'KRIISITIEDOTUKSEN_EMAIL' && addressfield.selected) {
+                        return true;
+                    }
+                }
+
+            }
+            return false;
+        };
+
+        // Logic when address fields are allowed to use.
+        $scope.addressFieldDisableLogic = function(addressField) {
+            if(addressField.type === 'KRIISITIEDOTUKSEN_EMAIL'
+                && !($filter('filter')($scope.selectedTargetGroupTypes, 'JARJESTAJAT_YLLAPITAJAT')).length
+                && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
             return false;
