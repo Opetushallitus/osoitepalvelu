@@ -22,11 +22,6 @@ import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsYhteystietoD
 
 import java.util.Locale;
 
-/**
- * User: ratamaa
- * Date: 3/20/14
- * Time: 5:13 PM
- */
 public class OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate
             implements Predicate<OrganisaatioDetailsYhteystietoDto> {
     private Locale locale;

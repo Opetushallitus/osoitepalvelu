@@ -32,6 +32,8 @@ public class OrganisaatioYhteystietoElementtiDto implements Serializable {
     private String elementtiOid;
     @JsonProperty("YhteystietoElementti.tyyppi")
     private String elementtiTyyppi;
+    @JsonProperty("YhteystietojenTyyppi.nimi.fi")
+    private String tyyppiNimi;
     @JsonProperty("YhteystietojenTyyppi.oid")
     private String tyyppiOid;
     @JsonProperty("YhteystietoArvo.kieli")
@@ -53,6 +55,14 @@ public class OrganisaatioYhteystietoElementtiDto implements Serializable {
 
     public void setElementtiTyyppi(String elementtiTyyppi) {
         this.elementtiTyyppi  =  elementtiTyyppi;
+    }
+
+    public String getTyyppiNimi() {
+        return tyyppiNimi;
+    }
+
+    public void setTyyppiNimi(String tyyppiNimi) {
+        this.tyyppiNimi = tyyppiNimi;
     }
 
     public String getTyyppiOid() {

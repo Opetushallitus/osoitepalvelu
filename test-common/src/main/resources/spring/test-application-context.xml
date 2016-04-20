@@ -34,6 +34,6 @@
         </property>
     </bean>
 
-    <bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
+    <bean id="jacksonMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
 
 </beans>

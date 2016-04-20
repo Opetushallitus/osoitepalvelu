@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -167,7 +168,7 @@ public class OrganisaatioResultDto implements Serializable {
     }
 
     public void setKriisitiedotuksenEmail(String kriisitiedotuksenEmail) {
-        this.kriisitiedotuksenEmail  =  kriisitiedotuksenEmail;
+        this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
     }
 
     public String getOppilaitosKoodi() {

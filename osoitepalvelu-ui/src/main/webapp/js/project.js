@@ -119,7 +119,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         {type: 'EMAIL_OSOITE',              name: LocalisationService.t('address_field_email_osoite')},
         //{type: 'VIRANOMAISTIEDOTUS_EMAIL',  name: LocalisationService.t('address_field_viranomaistiedotus_email')},
         //{type: 'KOULUTUSNEUVONNAN_EMAIL',   name: LocalisationService.t('address_field_koulutusneuvonnan_email')},
-        //{type: 'KRIISITIEDOTUKSEN_EMAIL',   name: LocalisationService.t('address_field_kriisitiedotuksen_email')},
+        {type: 'KRIISITIEDOTUKSEN_EMAIL',   name: LocalisationService.t('address_field_kriisitiedotuksen_email')},
         {type: 'ORGANISAATIO_SIJAINTIKUNTA',name: LocalisationService.t('address_field_organisaatio_sijaintikunta')}
     ];
 }])

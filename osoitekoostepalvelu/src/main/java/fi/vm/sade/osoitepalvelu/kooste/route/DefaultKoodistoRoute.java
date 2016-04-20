@@ -20,7 +20,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilde
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoVersioDto;
-import org.codehaus.jackson.type.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

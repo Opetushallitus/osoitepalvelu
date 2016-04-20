@@ -33,7 +33,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -153,7 +153,7 @@ public abstract class AbstractMvcController {
         mav.addObject("url", req.getRequestURL());
         mav.addObject("method", req.getMethod());
         mav.addObject("parameters", req.getParameterMap());
-        mav.setView(new MappingJacksonJsonView());
+        mav.setView(new MappingJackson2JsonView());
         return mav;
     }
 }
