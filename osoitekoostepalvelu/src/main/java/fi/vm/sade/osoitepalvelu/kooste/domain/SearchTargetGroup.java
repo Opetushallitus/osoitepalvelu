@@ -38,7 +38,8 @@ public class SearchTargetGroup implements Serializable {
         KOULUTA_KAYTTAJAT,
         AIPAL_KAYTTAJAT,
         NAYTTOTUTKINNON_JARJESTAJAT,
-        KOULUTUKSEN_TARJOAJAT;
+        KOULUTUKSEN_TARJOAJAT,
+        TYOELAMAPALVELUT("Tyoelamajarjesto");
 
         private String[] organisaatioPalveluTyyppiArvo;
 
@@ -64,7 +65,8 @@ public class SearchTargetGroup implements Serializable {
 
         public static GroupType[] getAnyOrganisaatioTypes() {
             return new GroupType[] {JARJESTAJAT_YLLAPITAJAT, OPPILAITOKSET, OPETUSPISTEET, OPPISOPIMUSTOIMPISTEET,
-                    MUUT_ORGANISAATIOT, TUTKINTOTOIMIKUNNAT, NAYTTOTUTKINNON_JARJESTAJAT, KOULUTUKSEN_TARJOAJAT};
+                    MUUT_ORGANISAATIOT, TUTKINTOTOIMIKUNNAT, NAYTTOTUTKINNON_JARJESTAJAT, KOULUTUKSEN_TARJOAJAT,
+                    TYOELAMAPALVELUT};
         }
 
         public String[] getOrganisaatioPalveluTyyppiArvo() {
