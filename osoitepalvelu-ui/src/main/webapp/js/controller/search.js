@@ -221,6 +221,11 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') !== -1;
         };
 
+        // Työelämäjärjestö
+        $scope.isShowTyoelamajarjesto = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('TYOELAMAPALVELUT') !== -1;
+        };
+
         // Vuosiluokka term which is shown when certain oppilaitostyyppi(s) are selected.
         $scope.isShowVuosiluokkaTerm = function() {
             if($scope.selectedTargetGroupTypes.indexOf('OPPISOPIMUSTOIMPISTEET') !== -1) {
