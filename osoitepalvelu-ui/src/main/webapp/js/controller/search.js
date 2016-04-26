@@ -221,6 +221,11 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             return $scope.selectedTargetGroupTypes.indexOf('KOULUTA_KAYTTAJAT') !== -1;
         };
 
+        // Työelämäjärjestö
+        $scope.isShowTyoelamajarjesto = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('TYOELAMAPALVELUT') !== -1;
+        };
+
         // Vuosiluokka term which is shown when certain oppilaitostyyppi(s) are selected.
         $scope.isShowVuosiluokkaTerm = function() {
             if($scope.selectedTargetGroupTypes.indexOf('OPPISOPIMUSTOIMPISTEET') !== -1) {
@@ -242,9 +247,13 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         };
 
         // Handle the disable logic caused by relations of searchTypes and targetGroups.
-        $scope.searchtypesDisableLogic = function(optType) {
+        $scope.searchtypesDisableLogic = function(toDisable) {
             if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTA_KAYTTAJAT')).length
-            && (optType == 'LETTER' || optType == 'CONTACT')) {
+            && (toDisable == 'LETTER' || toDisable == 'CONTACT')) {
+                return true;
+            }
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'TYOELAMAPALVELUT')).length
+                && (toDisable == 'CONTACT')) {
                 return true;
             }
             return false;
@@ -281,32 +290,37 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         };
 
         // Handle targetGroups search logic.
-        $scope.targetgroupsDisableLogic = function(tgType) {
+        $scope.targetgroupsDisableLogic = function(typeToDisable) {
             // Don't allow these search types for Palveluiden käyttäjä targetgroup.
             if(($scope.searchType == 'LETTER' || $scope.searchType  == 'CONTACT')
-                && tgType == 'KOULUTA_KAYTTAJAT') {
+                && typeToDisable == 'KOULUTA_KAYTTAJAT') {
                 return true;
             }
             // Palveluiden käyttäjä can't be combined to other targetgroups.
             if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTA_KAYTTAJAT')).length
-            || tgType == 'KOULUTA_KAYTTAJAT' && $scope.selectedTargetGroupTypes.length) {
+            || typeToDisable == 'KOULUTA_KAYTTAJAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
             // Näyttötutkinnon järjestäjät can't be combined to other targetgroups.
             if(($filter('filter')($scope.selectedTargetGroupTypes, 'NAYTTOTUTKINNON_JARJESTAJAT')).length
-            || tgType == 'NAYTTOTUTKINNON_JARJESTAJAT' && $scope.selectedTargetGroupTypes.length) {
+            || typeToDisable == 'NAYTTOTUTKINNON_JARJESTAJAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
             if(($filter('filter')($scope.selectedTargetGroupTypes, 'TUTKINTOTOIMIKUNNAT')).length
-                || tgType == 'TUTKINTOTOIMIKUNNAT' && $scope.selectedTargetGroupTypes.length) {
+                || typeToDisable == 'TUTKINTOTOIMIKUNNAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
             // Koulutuksen tarjoajat can't be combined to other targetgroups.
             if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTUKSEN_TARJOAJAT')).length
-                || tgType == 'KOULUTUKSEN_TARJOAJAT' && $scope.selectedTargetGroupTypes.length) {
+                || typeToDisable == 'KOULUTUKSEN_TARJOAJAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
-            if($scope.searchType === 'CONTACT' && tgType !== 'JARJESTAJAT_YLLAPITAJAT') {
+            // Työelämäpalvelut can't be combined to other targetgroups.
+            if(($filter('filter')($scope.selectedTargetGroupTypes, 'TYOELAMAPALVELUT')).length
+                || typeToDisable == 'TYOELAMAPALVELUT' && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            if($scope.searchType === 'CONTACT' && typeToDisable !== 'JARJESTAJAT_YLLAPITAJAT') {
                 for(var i in $scope.addressFields) {
                     var addressfield = $scope.addressFields[i];
                     // kriisitiedotuksen_sähköpostiosoite can only be used with Koulutustoimijas
@@ -314,7 +328,6 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                         return true;
                     }
                 }
-
             }
             return false;
         };
