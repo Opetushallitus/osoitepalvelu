@@ -14,9 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-/**
- * Created by ratamaa on 12/3/13.
- */
+
 angular.module("I18n", [], ["$provide", function($provider) {
     var defaultValues = {};
     defaultValues['fi'] = {
@@ -83,6 +81,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         target_group_tutkintotoimikunnat: 'Tutkintotoimikunnat',
         target_group_nayttotutkinnon_jarjestajat: 'Näyttötutkinnon järjestäjät',
         target_group_kayttajat: 'Palveluiden käyttäjät',
+        target_group_tyoelamapalvelut: 'Työelämäpalvelut',
 
         target_gorup_option_tutkintotoimikunta: 'tutkintotoimikunta',
         target_group_option_organisaatio: 'organisaatio',

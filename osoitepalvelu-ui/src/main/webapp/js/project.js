@@ -195,6 +195,12 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
                 {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat'),
                 hide: true}
             ]
+        },
+        {type: 'TYOELAMAPALVELUT', name: LocalisationService.t('target_group_tyoelamapalvelut'),
+            options: [
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio'),
+                    hide: true}
+            ]
         }
     ];
 }]);
