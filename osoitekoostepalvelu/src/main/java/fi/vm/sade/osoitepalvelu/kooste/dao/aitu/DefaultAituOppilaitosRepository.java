@@ -42,12 +42,15 @@ import java.util.List;
 public class DefaultAituOppilaitosRepository extends SimpleMongoRepository<AituOppilaitos, String>
         implements AituOppilaitosRepository {
     private static final long serialVersionUID = -7348571536998063779L;
+
+    private final MongoOperations mongoOperations;
     
     @Autowired
     private AituToimikuntaRepository aituToimikuntaRepository;
 
     public DefaultAituOppilaitosRepository(MongoEntityInformation<AituOppilaitos, String> metadata, MongoOperations mongoOperations) {
         super(metadata, mongoOperations);
+        this.mongoOperations = mongoOperations;
     }
 
     @Autowired
@@ -68,7 +71,7 @@ public class DefaultAituOppilaitosRepository extends SimpleMongoRepository<AituO
         if (orberByNimi != null) {
             query = query.with(new Sort("nimi." + orberByNimi.getAituKieli()));
         }
-        return getMongoOperations().find(query, AituOppilaitos.class);
+        return mongoOperations.find(query, AituOppilaitos.class);
     }
 
     @Override
