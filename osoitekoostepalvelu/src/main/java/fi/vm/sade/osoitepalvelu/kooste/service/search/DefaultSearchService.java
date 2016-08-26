@@ -121,7 +121,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         List<OrganisaatioYhteystietoHakuResultDto> organisaatioYhteystietoResults
                 = new ArrayList<OrganisaatioYhteystietoHakuResultDto>();
 
-        logger.info("searchKoulutuksenTarjoajat == " + searchKoulutuksenTarjoajat);
+        logger.debug("searchKoulutuksenTarjoajat == " + searchKoulutuksenTarjoajat);
 
         if (searchKoulutuksenTarjoajat) {
             OrganisaatioYhteystietoCriteriaDto ktOrgCriteria = produceOrganisaatioCriteria(terms);
@@ -130,7 +130,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             ktOrgCriteria.setOrganisaatioTyyppis(
                     parseOrganisaatioTyyppis(terms, SearchTargetGroup.GroupType.KOULUTUKSEN_TARJOAJAT));
 
-            logger.info("Koulutuksen tarjoajat, Organisaatiotyypit: " + ktOrgCriteria.getOrganisaatioTyyppis());
+            logger.debug("Koulutuksen tarjoajat, Organisaatiotyypit: " + ktOrgCriteria.getOrganisaatioTyyppis());
 
             // Luodaan koulutuskriteerit
             KoulutusCriteriaDto koulutusCriteria = produceKoulutusCriteria(terms);
@@ -152,8 +152,8 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 // Lisätään koulutusten tarjoajaorganisaatioiden yhteystiedot muiden organisaatioyhteystietojen joukkoon
                 organisaatioYhteystietoResults.addAll(ktOrgYhteystietoResults);
 
-                logger.info("Organisaatioiden haku kriteerit: " + ToStringBuilder.reflectionToString(ktOrgCriteria));
-                logger.info("Koulutuksen tarjoajat, organisaatioiden yhteystiedot size: " + ktOrgYhteystietoResults.size());
+                logger.debug("Organisaatioiden haku kriteerit: " + ToStringBuilder.reflectionToString(ktOrgCriteria));
+                logger.debug("Koulutuksen tarjoajat, organisaatioiden yhteystiedot size: " + ktOrgYhteystietoResults.size());
 
                 // Convert to result DTOs (with e.g. postinumeros):
                 List<OrganisaatioResultDto> convertedResults  =  dtoConverter.convert(
@@ -163,7 +163,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
         }
 
-        logger.info("searchOrganisaatios == " + searchOrganisaatios);
+        logger.debug("searchOrganisaatios == " + searchOrganisaatios);
 
         if (searchOrganisaatios) {
             SearchTargetGroup.TargetType[] targetTypes;
@@ -200,7 +200,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
         }
 
-        logger.info("searchNayttotutkinnonJarjestajas == " + searchNayttotutkinnonJarjestajas);
+        logger.debug("searchNayttotutkinnonJarjestajas == " + searchNayttotutkinnonJarjestajas);
 
         if (searchNayttotutkinnonJarjestajas) {
             AituOppilaitosCriteria oppilaitosCriteria = produceOppilaitosCriteria(terms);
@@ -219,7 +219,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
         }
 
-        logger.info("searchToimikuntas || searchToimikuntaEmails == " + (searchToimikuntas || searchToimikuntaEmails));
+        logger.debug("searchToimikuntas || searchToimikuntaEmails == " + (searchToimikuntas || searchToimikuntaEmails));
 
         if (searchToimikuntas || searchToimikuntaEmails) {
             AituToimikuntaCriteria toimikuntaCriteria = produceToimikuntaCriteria(terms);
@@ -237,7 +237,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             }
         }
 
-        logger.info("searchHenkilos == " + searchHenkilos);
+        logger.debug("searchHenkilos == " + searchHenkilos);
 
         if (searchHenkilos) {
             List<String> organisaatioOids = oids(organisaatioYhteystietoResults);
@@ -250,7 +250,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             results.setHenkilos(henkiloResults);
         }
 
-        logger.info("Search end by {}", getLoggedInUserOidOrNull());
+        logger.debug("Search end by {}", getLoggedInUserOidOrNull());
 
         return results;
     }

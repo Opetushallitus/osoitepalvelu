@@ -79,13 +79,13 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
         proxyAuthenticator.proxyAuthenticate(targetService, "cas", new ProxyAuthenticator.Callback() {
             @Override
             public void setRequestHeader(String key, String value) {
-                logger.info("Set CAS request header {}={}", key, value);
+                logger.debug("Set CAS request header {}={}", key, value);
                 // Dirty callback solution, but the implementation is not asynchronous, so we are safe here:
                 result.put(key, value);
             }
             @Override
             public void gotNewTicket(Authentication authentication, String proxyTicket) {
-                logger.info("Got new authentication ticket for service={}", targetService);
+                logger.debug("Got new authentication ticket for service={}", targetService);
             }
         });
         return result;
