@@ -1,6 +1,7 @@
 /target
 /.project
 /.idea
+/itest/itest.iml
 *~
 **/*~
 /osoitekoostepalvelu/.checkstyle
