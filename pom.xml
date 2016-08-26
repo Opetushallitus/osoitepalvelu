@@ -13,7 +13,7 @@
     <parent>
         <groupId>fi.vm.sade.generic</groupId>
         <artifactId>build-parent</artifactId>
-        <version>13.0-SNAPSHOT</version>
+        <version>15.0-SNAPSHOT</version>
     </parent>
 
     <modules>
@@ -23,7 +23,7 @@
     </modules>
 
     <properties>
-        <generic.version>9.1-SNAPSHOT</generic.version>
+        <generic.version>9.4-SNAPSHOT</generic.version>
         <log-client.version>5.0.0-SNAPSHOT</log-client.version>
 
         <camel.version>2.12.1</camel.version>
