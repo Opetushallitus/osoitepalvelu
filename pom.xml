@@ -66,12 +66,6 @@
                         <version>${slf4j.version}</version>
                         <scope>compile</scope>
                     </dependency>
-                    <dependency>
-                        <groupId>postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${postgresql.version}</version>
-                        <scope>compile</scope>
-                    </dependency>
                 </dependencies>
             </plugin>
         </plugins>
