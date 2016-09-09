@@ -39,6 +39,8 @@ import java.util.List;
 public class DefaultSaveSearchRepository extends SimpleMongoRepository<SavedSearch, Long> implements
         SavedSearchRepository {
     private static final long serialVersionUID = -1074205896498542579L;
+
+    private final MongoOperations mongoOperations;
     
     @Autowired
     private SequenceRepository sequenceRepository;
@@ -46,6 +48,7 @@ public class DefaultSaveSearchRepository extends SimpleMongoRepository<SavedSear
     public DefaultSaveSearchRepository(MongoEntityInformation<SavedSearch, Long> metadata,
             MongoOperations mongoOperations) {
         super(metadata, mongoOperations);
+        this.mongoOperations = mongoOperations;
     }
 
     @Autowired
@@ -57,7 +60,7 @@ public class DefaultSaveSearchRepository extends SimpleMongoRepository<SavedSear
     public List<SavedSearch> findByOwnerUsername(String ownerUsername, Sort order) {
         Criteria criteria  =  Criteria.where("ownerUserOid")
                                     .is(ownerUsername);
-        return getMongoOperations().find(Query.query(criteria).with(order), SavedSearch.class);
+        return mongoOperations.find(Query.query(criteria).with(order), SavedSearch.class);
     }
 
     @Override

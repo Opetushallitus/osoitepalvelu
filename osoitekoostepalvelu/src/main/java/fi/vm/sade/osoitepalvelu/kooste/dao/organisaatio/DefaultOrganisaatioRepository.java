@@ -51,9 +51,12 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         implements OrganisaatioRepository {
     private static final long serialVersionUID = 3725230640750779168L;
 
+    private final MongoOperations mongoOperations;
+
     public DefaultOrganisaatioRepository(MongoEntityInformation<OrganisaatioDetails,
             String> metadata, MongoOperations mongoOperations) {
         super(metadata, mongoOperations);
+        this.mongoOperations = mongoOperations;
     }
 
     @Autowired
@@ -69,7 +72,7 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
 
         filterByCriteria(conditions, organisaatioCriteria);
 
-        return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria())).with(new Sort("nimi."
+        return mongoOperations.find(Query.query(conditions.applyTo(new Criteria())).with(new Sort("nimi."
                         +orderByLocale.getLanguage().toLowerCase())), OrganisaatioDetails.class);
     }
 
@@ -78,7 +81,7 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         if (oids == null || oids.isEmpty()) {
             return new ArrayList<OrganisaatioDetails>();
         }
-        return getMongoOperations().find(Query.query(new Criteria("oid").in(oids)).with(new Sort("nimi."
+        return mongoOperations.find(Query.query(new Criteria("oid").in(oids)).with(new Sort("nimi."
                 +orderByLocale.getLanguage().toLowerCase())), OrganisaatioDetails.class);
 
     }
@@ -126,7 +129,7 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         conditions.add(CriteriaHelper.inParentOids(new Criteria(), "parentOidPath", parentOids));
         filterByCriteria(conditions, organisaatioCriteria);
 
-        return getMongoOperations().find(Query.query(conditions.applyTo(new Criteria())).with(new Sort("nimi."
+        return mongoOperations.find(Query.query(conditions.applyTo(new Criteria())).with(new Sort("nimi."
                 +orderByLocale.getLanguage().toLowerCase())), OrganisaatioDetails.class);
     }
 
@@ -138,7 +141,7 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         q.fields().include("cachedAt");
         q.limit(1);
         q.with(new Sort(Sort.Direction.ASC, "cachedAt"));
-        List<OrganisaatioDetails> list = getMongoOperations().find(q, OrganisaatioDetails.class);
+        List<OrganisaatioDetails> list = mongoOperations.find(q, OrganisaatioDetails.class);
         if(list.size() == 1) {
             return list.get(0).getCachedAt();
         } else {
@@ -158,14 +161,14 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
     public List<String> findAllOids() {
         Query q = Query.query(new Criteria());
         q.fields().include("_id");
-        return new ArrayList<String>(Collections2.transform(getMongoOperations()
+        return new ArrayList<String>(Collections2.transform(mongoOperations
                 .find(q, OrganisaatioDetails.class), FilterableOrganisaatio.GET_OID));
     }
 
     @Override
     public String findOidByOppilaitoskoodi(String oppilaitosKoodi) {
         @SuppressWarnings("unchecked")
-        List<String> oids = getMongoOperations()
+        List<String> oids = mongoOperations
                         .getCollection(OrganisaatioDetails.class.getAnnotation(Document.class).collection())
                 .distinct("_id", Criteria.where("oppilaitosKoodi").is(oppilaitosKoodi).getCriteriaObject());
         if (oids == null || oids.isEmpty()) {

@@ -50,11 +50,14 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
 
     protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
+    private final MongoOperations mongoOperations;
+
     @Autowired
     private AituOppilaitosRepository aituOppilaitosRepository;
 
     public DefaultAituToimikuntaRepository(MongoEntityInformation<AituToimikunta, String> metadata, MongoOperations mongoOperations) {
         super(metadata, mongoOperations);
+        this.mongoOperations = mongoOperations;
     }
 
     @Autowired
@@ -72,7 +75,7 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
             Query jasenetQuery = Query.query(conditions.applyTo(new Criteria()))
                 .with(new Sort("nimi." + orberByNimi.getAituKieli()));
 
-            result = getMongoOperations().find(jasenetQuery, AituToimikunta.class);
+            result = mongoOperations.find(jasenetQuery, AituToimikunta.class);
         }
 
         // Haetaan toimikunnat (ilman jäseniä)
@@ -84,7 +87,7 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
                 .with(new Sort("nimi." + orberByNimi.getAituKieli()));
             toimikuntaQuery.fields().exclude("jasenyydet");
 
-            List<AituToimikunta> result2 = getMongoOperations().find(toimikuntaQuery, AituToimikunta.class);
+            List<AituToimikunta> result2 = mongoOperations.find(toimikuntaQuery, AituToimikunta.class);
             if (result2.isEmpty()) {
                 logger.error("Email address not found for any toimikunta");
             }
@@ -96,7 +99,7 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
     @SuppressWarnings("unchecked")
     @Override
     public List<String> findToimikuntaIds(AituToimikuntaCriteria toimikuntaCriteria) {
-        return getMongoOperations().getCollection(AituToimikunta.class.getAnnotation(Document.class).collection())
+        return mongoOperations.getCollection(AituToimikunta.class.getAnnotation(Document.class).collection())
                 .distinct("_id",  conditions(toimikuntaCriteria, true).applyTo(new Criteria()).getCriteriaObject());
     }
 
@@ -139,7 +142,7 @@ public class DefaultAituToimikuntaRepository extends SimpleMongoRepository<AituT
     @SuppressWarnings("unchecked")
     @Override
     public List<String> findVoimassaOlevatRoolit() {
-        return getMongoOperations().getCollection(AituToimikunta.class.getAnnotation(Document.class).collection())
+        return mongoOperations.getCollection(AituToimikunta.class.getAnnotation(Document.class).collection())
                 .distinct("jasenyydet.rooli", Criteria.where("jasenyydet.voimassa").is(true).getCriteriaObject());
     }
 }
