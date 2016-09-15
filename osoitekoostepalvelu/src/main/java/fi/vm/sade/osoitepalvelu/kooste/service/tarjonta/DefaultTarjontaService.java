@@ -72,8 +72,8 @@ public class DefaultTarjontaService extends AbstractService implements TarjontaS
                         koulutusHakutulos.getTila() == TarjontaKoulutusHakutulosDto.TarjontaTila.VALMIS) {
                     if (currentYear==koulutusHakutulos.getVuosi()) {
                         oids.add(tarjoajaHakutulos.getOid());
+                        break;
                     }
-                    break;
                 }
             }
         }
