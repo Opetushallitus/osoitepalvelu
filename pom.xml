@@ -96,6 +96,11 @@
                 <artifactId>generic-common</artifactId>
                 <version>${generic.version}</version>
             </dependency>
+            <dependency>
+                <groupId>fi.vm.sade.java-utils</groupId>
+                <artifactId>java-properties</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
 
             <!-- Testing -->
             <dependency>
