@@ -19,8 +19,10 @@ package fi.vm.sade.osoitepalvelu.kooste.route;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
+import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -71,6 +73,8 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     @Value("${cas.service.authentication-service}")
     private String authenticationServiceCasServiceUrl;
 
+    @Autowired
+    private UrlConfiguration urlConfiguration;
 
     @Override
     public void configure() {
@@ -85,12 +89,14 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         headers(
             from(ROUTE_HENKILO),
             headers()
-                .get().path(HENKILO_PATH)
-                .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
+//                .get().path(HENKILO_PATH)
+//                .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
+                .casAuthenticationByAuthenticatedUser(urlConfiguration.getProperty("cas.service.authentication-service"))
                 .retry(3)
         )
         .process(authenticationCallInOutDebug)
-        .to(uri(authenticationServiceHenkiloServiceRestUrl, HENKILO_TIMEOUT_MILLIS))
+//        .to(uri(authenticationServiceHenkiloServiceRestUrl, HENKILO_TIMEOUT_MILLIS))
+        .to(uri(urlConfiguration.getProperty("henkiloService.rest.henkiloByOid", "${in.body}"), HENKILO_TIMEOUT_MILLIS))
         .process(authenticationCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<HenkiloDetailsDto>() {}));
