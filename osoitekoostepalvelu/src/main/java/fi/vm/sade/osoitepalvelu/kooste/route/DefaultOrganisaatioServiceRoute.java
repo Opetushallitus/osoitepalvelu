@@ -104,7 +104,7 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 .retry(3)
         )
         .process(organisaatioCallInOutDebug)
-        .to(uri(urlConfiguration.getProperty("organisaatioService.rest.OrgByOid", "$simple{in.headers.oid}")))
+        .recipientList(simple(uri(urlConfiguration.getProperty("organisaatioService.rest.OrgByOid", "$simple{in.headers.oid}"))))
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<OrganisaatioDetailsDto>() {}));
     }
@@ -119,8 +119,8 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 .retry(3)
         )
         .process(authenticationCallInOutDebug)
-        .to(uri(urlConfiguration.getProperty("organisaatioService.rest.SearchActiveOrgsOnly.byOrgType",
-                "$simple{in.headers.organisaatiotyyppi}")))
+        .recipientList(simple(uri(urlConfiguration.getProperty("organisaatioService.rest.SearchActiveOrgsOnly.byOrgType",
+                "$simple{in.headers.organisaatiotyyppi}"))))
         .process(authenticationCallInOutDebug)
         .process(jsonToDto(new TypeReference<OrganisaatioHierarchyResultsDto>() {}));
 
