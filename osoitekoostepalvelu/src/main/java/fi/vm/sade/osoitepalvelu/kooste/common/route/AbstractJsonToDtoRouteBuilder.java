@@ -303,7 +303,12 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected String uri(String url, long timeoutMillis) {
         if (url != null) {
             url = url.trim();
-            url = url + "?" + HTTP_CLIENT_TIMEOUT_PARAM_NAME + "=" + timeoutMillis;
+            if (url.contains("?")) {
+                url = url + "&" + HTTP_CLIENT_TIMEOUT_PARAM_NAME + "=" + timeoutMillis;
+            }
+            else {
+                url = url + "?" + HTTP_CLIENT_TIMEOUT_PARAM_NAME + "=" + timeoutMillis;
+            }
         }
         return url;
     }

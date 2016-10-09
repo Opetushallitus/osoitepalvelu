@@ -23,12 +23,12 @@ import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * User: ratamaa
@@ -50,19 +50,12 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
 
     private static final String ROUTE_HENKILOS  =  "direct:henkiloList";
 
-    private static final String HENKILOS_HAKU_PATH = "/byOoids";
     private static final String HENKILOS_ORGANISAATIOOIDS_PARAM_NAME = "ooids";
     private static final String HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME = "kor";
-    private static final String HENKILOS_HENKILOTYYPPI_PARAM = "ht";
-    private static final String HENKILOS_HENKILOTYYPPI_VIRKAILIJA = "VIRKAILIJA";
-    private static final String HENKILOS_COUNT_PARAM = "count";
-    private static final String HENKILOS_INDEX_PARAM = "index";
 
     private static final String ROUTE_HENKILO = "direct:henkilo";
-    private static final String HENKILO_PATH = "/${in.body}";
 
     private static final String ROUTE_ORGANISAATIOHENKILOS  =  "direct:organisaatioHenkilos";
-    private static final String ORGANISAATIOHENKILOS_PATH  =  "/${in.body}/organisaatiohenkilo";
     private static final int MAX_OIDS_FOR_HENKILO_HAKU = 50;
 
     @Autowired
@@ -82,15 +75,12 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
             from(ROUTE_HENKILO),
             headers()
                 .get()
-//                .path(HENKILO_PATH)
-//                .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
                 .casAuthenticationByAuthenticatedUser(
                         urlConfiguration.getProperty("cas.service.authentication-service")
                 )
                 .retry(3)
         )
         .process(authenticationCallInOutDebug)
-//        .to(uri(authenticationServiceHenkiloServiceRestUrl, HENKILO_TIMEOUT_MILLIS))
         .recipientList(simple(uri(urlConfiguration.getProperty("henkiloService.rest.henkiloByOid", "$simple{in.body}"),
                 HENKILO_TIMEOUT_MILLIS)))
         .process(authenticationCallInOutDebug)
@@ -104,17 +94,15 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 from(ROUTE_ORGANISAATIOHENKILOS),
                 headers()
                         .get()
-//                        .path(ORGANISAATIOHENKILOS_PATH)
-//                        .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
                         .casAuthenticationByAuthenticatedUser(
                                 urlConfiguration.getProperty("cas.service.authentication-service")
                         )
                 .retry(3)
         )
         .process(authenticationCallInOutDebug)
-//        .to(uri(authenticationServiceHenkiloServiceRestUrl, HENKILO_TIMEOUT_MILLIS))
-        .recipientList(simple(uri(urlConfiguration.getProperty("henkiloService.rest.henkiloByOid.orgHenkilos", "$simple{in.body}"),
-                HENKILO_TIMEOUT_MILLIS)))
+        .recipientList(simple(uri(urlConfiguration.getProperty("henkiloService.rest.henkiloByOid.orgHenkilos",
+                "$simple{in.body}"),
+                    HENKILO_TIMEOUT_MILLIS)))
         .process(authenticationCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<List<OrganisaatioHenkiloDto>>() {}));
@@ -122,6 +110,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
 
     // TODO: check that list of ooids gets serialized properly
     protected void buildHenkiloList() {
+
         Debugger authenticationCallInOutDebug  =  debug(ROUTE_HENKILOS + SERVICE_CALL_POSTFIX);
         headers(
             from(ROUTE_HENKILOS),
@@ -129,27 +118,14 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                  // TODO: Muuttumassa POST-pyynnöksi, jotta URL:n pituus saadaan riittämään.
                  // Muuta silloin .get() -> .post() ja  .toQuery() -> .toBody()
                 .get()
-//                .path(HENKILOS_HAKU_PATH)
-//                    .param(HENKILOS_HENKILOTYYPPI_PARAM)
-//                        .value(HENKILOS_HENKILOTYYPPI_VIRKAILIJA).toQuery()
-//                    .param(HENKILOS_COUNT_PARAM)
-//                        .value(0).toQuery()
-//                    .param(HENKILOS_INDEX_PARAM)
-//                        .value(0).toQuery()
-//                    .param(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME)
-//                        .listFromHeader().toQuery()
-//                    .param(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME)
-//                        .optional().valueFromHeader().toQuery()
-//                .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
                 .casAuthenticationByAuthenticatedUser(
                         urlConfiguration.getProperty("cas.service.authentication-service")
                 )
                 .retry(3)
         )
         .process(authenticationCallInOutDebug)
-//        .to(uri(authenticationServiceHenkiloServiceRestUrl, HENKILOLIST_TIMEOUT_MILLIS)) // wait for 10 minutes maximum
-        .recipientList(simple(uri(urlConfiguration.getProperty("henkiloService.rest.henkilosByOids", "$simple{in.headers.ooids}",
-                                                "$simple{in.headers.kor}"),
+        .recipientList(simple(uri(urlConfiguration.getProperty("henkiloService.rest.henkilosByOids",
+                    "$simple{in.headers.kor}", "$simple{in.headers.ooids}"),
                 HENKILOLIST_TIMEOUT_MILLIS))) // wait for 10 minutes maximum
         .process(authenticationCallInOutDebug)
         .process(saveSession())
@@ -162,14 +138,12 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 from(ROUTE_KAYTTOOIKESURYHMAS),
                 headers()
                         .get()
-//                        .casAuthenticationByAuthenticatedUser(authenticationServiceCasServiceUrl)
                         .casAuthenticationByAuthenticatedUser(
                                 urlConfiguration.getProperty("cas.service.authentication-service")
                         )
                 .retry(3)
         )
         .process(authenticationCallInOutDebug)
-//        .to(uri(authenticationServiceKayttooikeusryhmasRestUrl))
         .to(uri(urlConfiguration.getProperty("henkiloService.rest.kayttoikeusryhma")))
         .process(authenticationCallInOutDebug)
         .process(saveSession())
@@ -206,8 +180,8 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
         List<List<String>> oidChunks = CollectionHelper.split(criteria.getOrganisaatioOids(), MAX_OIDS_FOR_HENKILO_HAKU);
         for (List<String> oids : oidChunks) {
-            HeaderValueBuilder header = headerValues()
-                    .add(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, oids);
+            String oidList = oids.stream().map(oid -> "ooids=" + oid).collect(Collectors.joining("&"));
+            HeaderValueBuilder header = headerValues().add(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, oidList);
             results.addAll(findByKayttoOikeusRyhmas(criteria, header, requestContext));
         }
 
