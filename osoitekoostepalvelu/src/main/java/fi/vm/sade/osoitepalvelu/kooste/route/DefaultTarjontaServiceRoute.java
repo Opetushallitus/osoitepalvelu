@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoulutusCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.TarjontaKoulutusHakuResultDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -51,11 +52,8 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
 
     private static final long TIMEOUT_MINUTES = 30L;
 
-    @Value("${tarjontaService.rest.url}")
-    private String tarjontaRestUrl;
-
     @Autowired
-    private OphProperties ophProperties;
+    private UrlConfiguration urlConfiguration;
 
     @Override
     public void configure() {
@@ -69,17 +67,10 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
         headers(from(TARJONTA_KOULUTUS_SEARCH_ENDPOINT),
             headers()
                     .get().path(TARJONTA_KOULUTUS_SEARCH_PATH)
-//                    .param(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM).optional().valueFromHeader().toQuery()
-//                    .param(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM).optional().listFromHeader().toQuery()
-//                    .param(TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM).optional().listFromHeader().toQuery()
-//                    .param(TARJONTA_KOULUTUS_OPINTOALAS_PARAM).optional().listFromHeader().toQuery()
-//                    .param(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM).optional().listFromHeader().toQuery()
-//                    .param(TARJONTA_KOULUTUS_KOULUTUS_PARAM).optional().listFromHeader().toQuery()
                     .retry(2)
         )
         .process(tarjontaCallInOutDebug)
-//        .to(uri(tarjontaRestUrl, TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND))
-        .recipientList(simple(ophProperties.getProperty("tarjontaService.rest.koulutusHaku",
+        .recipientList(simple(urlConfiguration.getProperty("tarjontaService.rest.koulutusHaku",
                 "$simple{in.headers.koulutuslaji}", "$simple{in.headers.opetuskielet}",
                 "$simple{in.headers.koulutusalakoodi}", "$simple{in.headers.opintoalakoodi}",
                 "$simple{in.headers.koulutustyyppi}", "$simple{in.headers.koulutuskoodi}")))
@@ -91,8 +82,7 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
     @SuppressWarnings("unchecked")
     public TarjontaKoulutusHakuResultDto findKoulutukset(KoulutusCriteriaDto criteria,
             CamelRequestContext requestContext) {
-        return sendBodyHeadersAndProperties(getCamelTemplate(),
-                TARJONTA_KOULUTUS_SEARCH_ENDPOINT, "",
+        return sendBodyHeadersAndProperties(getCamelTemplate(), TARJONTA_KOULUTUS_SEARCH_ENDPOINT, "",
                 headerValues()
                     .add(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM,
                             criteria.getKoulutuslaji() != null && !criteria.getKoulutuslaji().isEmpty() ?
