@@ -17,11 +17,13 @@
 package fi.vm.sade.osoitepalvelu.kooste.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
+import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoVersioDto;
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -40,8 +42,11 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     private static final String REITTI_SIALTYY_YLAKOODIS  =  "direct:sisaltyYlakoodis";
     private static final String REITTI_SIALTYY_ALAKOODIS  =  "direct:sisaltyAlakoodis";
 
-    @Value("${koodiService.rest.url}")
-    private String koodistoUri;
+//    @Value("${koodiService.rest.url}")
+//    private String koodistoUri;
+
+    @Autowired
+    private UrlConfiguration urlConfiguration;
 
     // For cache testing:
     private boolean findCounterUsed  =  false;
@@ -58,37 +63,74 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
 
     protected void buildKaikkiVersiotiedot() {
         // Reitti, joka hakee koodiston versiotiedot
-        fromHttpGetToDtos(REITTI_HAE_KOODISTON_VERSIOT, uri(koodistoUri),
-                headers().path("${in.headers.koodistoTyyppi}").retry(3)                ,
-                new TypeReference<List<KoodistoVersioDto>>() { });
+//        fromHttpGetToDtos(
+//                REITTI_HAE_KOODISTON_VERSIOT,
+//                uri(koodistoUri),
+//                headers()
+//                        .path("${in.headers.koodistoTyyppi}")
+//                        .retry(3),
+//                new TypeReference<List<KoodistoVersioDto>>() { }
+//        );
+        fromHttpGetToDtosWithRecipientList(
+                REITTI_HAE_KOODISTON_VERSIOT,
+                uri(urlConfiguration.getProperty("koodiService.rest.url",
+                        "$simple{in.headers.koodistoTyyppi}")),
+                headers().retry(3),
+                new TypeReference<List<KoodistoVersioDto>>() { }
+        );
     }
 
     protected void buildKoodiversioKoodis() {
         // Seuraava reitti hakee tietyn koodistoversion kaikki koodit
-        fromHttpGetToDtos(REITTI_HAE_KOODISTO_VERSION_KOODIT, uri(koodistoUri),
-                headers()
-                    .path("${in.headers.koodistoTyyppi}/koodi")
-                    .query("koodistoVersio = ${in.headers.koodistoVersio}")
-                    .retry(3),
-                new TypeReference<List<KoodiDto>>() { });
+//        fromHttpGetToDtos(REITTI_HAE_KOODISTO_VERSION_KOODIT,
+//                uri(koodistoUri),
+//                headers()
+//                    .path("${in.headers.koodistoTyyppi}/koodi")
+//                    .query("koodistoVersio = ${in.headers.koodistoVersio}")
+//                    .retry(3),
+//                new TypeReference<List<KoodiDto>>() { });
+        fromHttpGetToDtosWithRecipientList(
+                REITTI_HAE_KOODISTO_VERSION_KOODIT,
+                uri(urlConfiguration.getProperty("koodiService.rest.url.koodi",
+                        "$simple{in.headers.koodistoTyyppi}", "$simple{in.headers.koodistoVersio}")),
+                headers().retry(3),
+                new TypeReference<List<KoodiDto>>() { }
+        );
     }
 
     protected void buildKoodistonKoodit() {
         // Reitti, joka hakee tietyn koodiston koodit
-        fromHttpGetToDtos(REITTI_HAE_KOODISTON_KOODIT, uri(koodistoUri),
-                headers().path("${in.headers.koodistoTyyppi}/koodi").retry(3),
-                new TypeReference<List<KoodiDto>>() { });
+//        fromHttpGetToDtos(REITTI_HAE_KOODISTON_KOODIT, uri(koodistoUri),
+//                headers().path("${in.headers.koodistoTyyppi}/koodi").retry(3),
+//                new TypeReference<List<KoodiDto>>() { });
+        fromHttpGetToDtosWithRecipientList(
+                REITTI_HAE_KOODISTON_KOODIT,
+                uri(urlConfiguration.getProperty("koodiService.rest.url.koodi",
+                        "$simple{in.headers.koodistoTyyppi}")),
+                headers().retry(3),
+                new TypeReference<List<KoodiDto>>() { }
+        );
     }
 
     protected void buildSisaltyyYlakoodis() {
-        fromHttpGetToDtos(REITTI_SIALTYY_YLAKOODIS, uri(koodistoUri),
-                headers().path("relaatio/sisaltyy-ylakoodit/${in.headers.koodiUri}").retry(3),
+//        fromHttpGetToDtos(REITTI_SIALTYY_YLAKOODIS, uri(koodistoUri),
+//                headers().path("relaatio/sisaltyy-ylakoodit/${in.headers.koodiUri}").retry(3),
+//                new TypeReference<List<KoodiDto>>() { });
+        fromHttpGetToDtosWithRecipientList(REITTI_SIALTYY_YLAKOODIS,
+                uri(urlConfiguration.getProperty("koodiService.rest.url.ylakoodi",
+                        "$simple{in.headers.koodiUri}")),
+                headers().retry(3),
                 new TypeReference<List<KoodiDto>>() { });
     }
 
     protected void buildSisaltyyAlakoodis() {
-        fromHttpGetToDtos(REITTI_SIALTYY_ALAKOODIS, uri(koodistoUri),
-                headers().path("relaatio/sisaltyy-alakoodit/${in.headers.koodiUri}").retry(3),
+//        fromHttpGetToDtos(REITTI_SIALTYY_ALAKOODIS, uri(koodistoUri),
+//                headers().path("relaatio/sisaltyy-alakoodit/${in.headers.koodiUri}").retry(3),
+//                new TypeReference<List<KoodiDto>>() { });
+        fromHttpGetToDtosWithRecipientList(REITTI_SIALTYY_ALAKOODIS,
+                uri(urlConfiguration.getProperty("koodiService.rest.url.alakoodi",
+                        "$simple{in.headers.koodiUri}")),
+                headers().retry(3),
                 new TypeReference<List<KoodiDto>>() { });
     }
 

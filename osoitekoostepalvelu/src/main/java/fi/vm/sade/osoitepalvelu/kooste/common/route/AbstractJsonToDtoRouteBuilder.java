@@ -26,7 +26,10 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClien
 import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
 
 import org.apache.camel.*;
+import org.apache.camel.builder.BuilderSupport;
+import org.apache.camel.builder.SimpleBuilder;
 import org.apache.camel.component.http.HttpOperationFailedException;
+import org.apache.camel.model.ExpressionNode;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.dataformat.JsonLibrary;
@@ -256,6 +259,33 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             .to(url)
             .process(debug)
             .process(jsonToDto(targetDtoType));
+    }
+
+    /**
+     * @param routeId the route id for from(URI)
+     * @param url the target URL for the RouteDefinition#to(URI) call
+     * @param headers to apply
+     * @param targetDtoType the target DTO type to convert to (use anonymous style)
+     * @param <T>
+     * @return the Camel route with BET method to the given URL processed to given DTO type from JSON with
+     * Debugging enabled with routeId.ServiceCall name
+     * @see #from(String)
+     * @see RouteDefinition#to(String)
+     * @see HeaderBuilder
+     * @see #debug(String)
+     */
+    protected <T> ExpressionNode fromHttpGetToDtosWithRecipientList(String routeId, String url, HeaderBuilder headers,
+                                                                    TypeReference<T> targetDtoType) {
+        Debugger debug  =  debug(routeId  +  ".ServiceCall");
+        return headers(
+                    from(routeId),
+                    headers
+                            .get()
+        )
+        .process(debug)
+        .recipientList(simple(url))
+        .process(debug)
+        .process(jsonToDto(targetDtoType));
     }
 
     /**

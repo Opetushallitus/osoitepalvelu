@@ -39,16 +39,8 @@ public class DefaultAituRoute extends AbstractJsonToDtoRouteBuilder
     private static final long serialVersionUID = 832138099426375308L;
     private static final String SERVICE_CALL_AITU_POSTFIX = ".AituServiceCall";
     private static final String AITU_OSOITEPALVELU_ENDPOINT = "direct:aituRoute";
-    private static final String AITU_OSOITEPALVELU_PATH = "/osoitepalvelu";
 
-    private static final String CAS_TICKET_QUERY_PARAM = "ticket";
     private static final long TIMEOUT_MINUTES = 30L;
-
-//    @Value("${aitu.rest.uri}")
-//    private String aituRestUrl;
-
-//    @Value("${cas.service.aitu-service}")
-//    private String aituServiceCasServiceUrl;
 
     @Autowired
     private UrlConfiguration urlConfiguration;
@@ -63,14 +55,11 @@ public class DefaultAituRoute extends AbstractJsonToDtoRouteBuilder
         headers(
             from(AITU_OSOITEPALVELU_ENDPOINT),
             headers()
-                    .get().path(AITU_OSOITEPALVELU_PATH)
-//                    .param(CAS_TICKET_QUERY_PARAM).optional().value(header(CasTicketProvider.CAS_HEADER)).toQuery()
-//                    .casAuthenticationByAuthenticatedUser(aituServiceCasServiceUrl)
+                    .get()
                     .casAuthenticationByAuthenticatedUser(urlConfiguration.getProperty("cas.service.aitu-service"))
                     .retry(2)
         )
         .process(organisaatioCallInOutDebug)
-//        .to(uri(aituRestUrl, TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND))
         .recipientList(simple(uri(urlConfiguration.getProperty("aitu.rest.uri"),
                 TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND)))
         .process(organisaatioCallInOutDebug)
