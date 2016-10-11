@@ -14,24 +14,24 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.service.settings;
+package fi.vm.sade.osoitepalvelu.kooste.service.settings.dto;
 
-import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.UrlPropertiesDto;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * User: ratamaa
- * Date: 3/18/14
- * Time: 12:52 PM
- */
-public interface AppSettingsService {
-    /**
-     * @return the env and app settings for UI
-     */
-    AppSettingsDto getUiSettings();
+public class UrlPropertiesDto implements Serializable {
+    private static final long serialVersionUID = 817543818821400959L;
 
-    /**
-     * @return the url properties for UI
-     */
-    UrlPropertiesDto getUrlProperties();
+    private Map<String, Object> urls  =  new HashMap<String, Object>();
+
+    public UrlPropertiesDto() {}
+
+    public Map<String, Object> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(Map<String, Object> urls) {
+        this.urls  =  urls;
+    }
 }

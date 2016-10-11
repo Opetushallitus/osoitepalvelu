@@ -35,6 +35,15 @@
         </property>
     </bean>
 
+    <bean id="uiUrlProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <!--<property name="ignoreUnresolvablePlaceholders" value="true" />-->
+        <property name="locations">
+            <list>
+                <value>classpath:osoitepalvelu-ui-oph.properties</value>
+            </list>
+        </property>
+    </bean>
+
     <bean id="defaultProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="properties">
             <util:properties local-override="true">

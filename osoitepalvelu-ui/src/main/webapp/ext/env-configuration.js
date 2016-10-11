@@ -30,15 +30,15 @@
  */
 window.CONFIG = {
     "env": {
-        "host.base-uri": "",
+//        "host.base-uri": "",
         "root.organisaatio.oid":"1.2.246.562.10.00000000001",
         "ui.timeout.short": 10000,
         "ui.timeout.long": 60000,
-        "osoitepalveluLocalisationRestUrl": "",
-        "casMeUrl": "cas_me_test.json",
+//        "osoitepalveluLocalisationRestUrl": "",
+//        "casMeUrl": "cas_me_test.json",
         "useCasMeUrl": true,
-        "organisaatio.api.rest.url": "",
-        "authentication-service.rest.url":"",
+//        "organisaatio.api.rest.url": "",
+//        "authentication-service.rest.url":"",
     },
     "app" : {},
     "mode": 'dev-without-backend'
