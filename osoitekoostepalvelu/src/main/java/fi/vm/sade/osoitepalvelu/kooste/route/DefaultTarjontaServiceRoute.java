@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,7 +42,6 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
 
     private static final String SERVICE_CALL_TARJONTA_POSTFIX = ".TarjontaServiceCall";
     private static final String TARJONTA_KOULUTUS_SEARCH_ENDPOINT = "direct:tarjontaKoulutusRoute";
-    private static final String TARJONTA_KOULUTUS_SEARCH_PATH = "/v1/koulutus/search";
 
     private static final String TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM   = "koulutuslaji";
     private static final String TARJONTA_KOULUTUS_OPETUSKIELET_PARAM   = "opetuskielet";
@@ -49,8 +49,6 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
     private static final String TARJONTA_KOULUTUS_OPINTOALAS_PARAM     = "opintoalakoodi";
     private static final String TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM = "koulutustyyppi";
     private static final String TARJONTA_KOULUTUS_KOULUTUS_PARAM       = "koulutuskoodi";
-
-    private static final long TIMEOUT_MINUTES = 30L;
 
     @Autowired
     private UrlConfiguration urlConfiguration;
@@ -65,15 +63,11 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
                 SERVICE_CALL_TARJONTA_POSTFIX);
 
         headers(from(TARJONTA_KOULUTUS_SEARCH_ENDPOINT),
-            headers()
-                    .get().path(TARJONTA_KOULUTUS_SEARCH_PATH)
-                    .retry(2)
+            headers().get().retry(2)
         )
         .process(tarjontaCallInOutDebug)
-        .recipientList(simple(urlConfiguration.getProperty("tarjontaService.rest.koulutusHaku",
-                "$simple{in.headers.koulutuslaji}", "$simple{in.headers.opetuskielet}",
-                "$simple{in.headers.koulutusalakoodi}", "$simple{in.headers.opintoalakoodi}",
-                "$simple{in.headers.koulutustyyppi}", "$simple{in.headers.koulutuskoodi}")))
+        .recipientList(simple(urlConfiguration.getProperty("tarjonta-service.koulutus.search",
+                "$simple{in.headers.searchparams}")))
         .process(tarjontaCallInOutDebug)
         .process(jsonToDto(new TypeReference<TarjontaKoulutusHakuResultDto>() {}));
     }
@@ -82,33 +76,59 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
     @SuppressWarnings("unchecked")
     public TarjontaKoulutusHakuResultDto findKoulutukset(KoulutusCriteriaDto criteria,
             CamelRequestContext requestContext) {
+
+        List<String> headers = Arrays.asList(
+                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM,
+                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM, criteria)),
+                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM,
+                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM, criteria)),
+                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM,
+                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM, criteria)),
+                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_OPINTOALAS_PARAM,
+                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_OPINTOALAS_PARAM, criteria)),
+                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM,
+                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM, criteria)),
+                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_KOULUTUS_PARAM,
+                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_KOULUTUS_PARAM, criteria))
+        );
+
         return sendBodyHeadersAndProperties(getCamelTemplate(), TARJONTA_KOULUTUS_SEARCH_ENDPOINT, "",
                 headerValues()
-                    .add(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM,
-                            criteria.getKoulutuslaji() != null && !criteria.getKoulutuslaji().isEmpty() ?
-                                    TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM + "=" + criteria.getKoulutuslaji() : "")
-                    .add(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM,
-                            criteria.getOpetuskielet().size() > 0 ? "&" + criteria.getOpetuskielet().stream()
-                                    .map(x -> TARJONTA_KOULUTUS_OPETUSKIELET_PARAM + "=" + x)
-                                    .collect(Collectors.joining("&")) : "")
-                    .add(TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM,
-                            criteria.getKoulutusalakoodis().size() > 0 ? "&" + criteria.getKoulutusalakoodis().stream()
-                                    .map(x -> TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM + "=" + x)
-                                    .collect(Collectors.joining("&")) : "")
-                    .add(TARJONTA_KOULUTUS_OPINTOALAS_PARAM,
-                            criteria.getOpintoalakoodis().size() > 0 ? "&" + criteria.getOpintoalakoodis().stream()
-                                    .map(x -> TARJONTA_KOULUTUS_OPINTOALAS_PARAM + "=" + x)
-                                    .collect(Collectors.joining("&")) : "")
-                    .add(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM,
-                            criteria.getKoulutustyyppis().size() > 0 ? "&" + criteria.getKoulutustyyppis().stream()
-                                    .map(x -> TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM + "=" + x)
-                                    .collect(Collectors.joining("&")) : "")
-                    .add(TARJONTA_KOULUTUS_KOULUTUS_PARAM,
-                            criteria.getKoulutuskoodis().size() > 0 ? "&" + criteria.getKoulutuskoodis().stream()
-                                    .map(x -> TARJONTA_KOULUTUS_KOULUTUS_PARAM + "=" + x)
-                                    .collect(Collectors.joining("&")) : "")
+                        .add("searchparams", headers.stream()
+                                .filter(value -> !value.isEmpty())
+                                .collect(Collectors.joining("&")))
                 .map(),
                 requestContext, TarjontaKoulutusHakuResultDto.class);
     }
 
+    private String createHttpGetQueryListParamsforHeader(String headerParamName, List<String> list) {
+        if (list == null && list.size() < 1) return "";
+
+        return list.stream()
+                .map(value -> formatSingleQueryParam(headerParamName, value))
+                .collect(Collectors.joining("&"));
+    }
+
+    private String formatSingleQueryParam(String name, String value) {
+        return name + "=" + value;
+    }
+
+    private List<String> getHeaderValuesFromCriteria(String headerName, KoulutusCriteriaDto criteria) {
+        switch (headerName) {
+            case TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM:
+                return new ArrayList<String>() {{ criteria.getKoulutuslaji(); }};
+            case TARJONTA_KOULUTUS_OPETUSKIELET_PARAM:
+                return criteria.getOpetuskielet();
+            case TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM:
+                return criteria.getKoulutusalakoodis();
+            case TARJONTA_KOULUTUS_OPINTOALAS_PARAM:
+                return criteria.getOpintoalakoodis();
+            case TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM:
+                return criteria.getKoulutustyyppis();
+            case TARJONTA_KOULUTUS_KOULUTUS_PARAM:
+                return criteria.getKoulutuskoodis();
+            default:
+                return new ArrayList<>();
+        }
+    }
 }

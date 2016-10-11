@@ -262,17 +262,8 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     }
 
     /**
-     * @param routeId the route id for from(URI)
-     * @param url the target URL for the RouteDefinition#to(URI) call
-     * @param headers to apply
-     * @param targetDtoType the target DTO type to convert to (use anonymous style)
-     * @param <T>
-     * @return the Camel route with BET method to the given URL processed to given DTO type from JSON with
-     * Debugging enabled with routeId.ServiceCall name
-     * @see #from(String)
-     * @see RouteDefinition#to(String)
-     * @see HeaderBuilder
-     * @see #debug(String)
+     * Alternative to {fromHttpGetToDtos} that uses recipientList EIP pattern that allows dynamically specified
+     * recipients. Used for enabling Simple Expression in URLs.
      */
     protected <T> ExpressionNode fromHttpGetToDtosWithRecipientList(String routeId, String url, HeaderBuilder headers,
                                                                     TypeReference<T> targetDtoType) {
