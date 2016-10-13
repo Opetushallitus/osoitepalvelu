@@ -1,4 +1,8 @@
 describe("Search Test", function() {
+    // mock url props
+    window.url = function(url, param) {
+        return 'api/search/' + param;
+    }
 
     var dummyResults = {
        "rows":[

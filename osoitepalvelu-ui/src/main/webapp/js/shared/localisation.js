@@ -190,7 +190,7 @@ localisation.service('LocalisationService', ["$log", "$q", "$http", "$interval",
     this.updateAccessedById = {};
 
     this.updateAccessInformation = function() {
-        var uri = window.url('osoitepalveluLocalisationRestUrl', '/access');
+        var uri = window.urls().noEncode().url('osoitepalveluLocalisationRestUrl', '/access');
 
         var ids = Object.keys(this.updateAccessedById);
         this.updateAccessedById = {};

@@ -75,9 +75,8 @@
             <div ng-show="loading" class="topCournerInfoMessage" ng-cloak tt="loading">Ladataan...</div>
         </div>
         <script>
-            window.urls.loadFromUrls("api/app/url-props.json").success(function() {
+            window.urls.debugLog().loadFromUrls("api/app/url-props.json").success(function() {
                 osoitepalveluInit();
-                console.log('testing', window.url('osoitepalvelu-service.saves', 'parametri'))
             })
         </script>
     </body>

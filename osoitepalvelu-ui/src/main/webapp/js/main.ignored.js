@@ -118,7 +118,7 @@ function osoitepalveluInit() {
         //
         // Preload application localisations for Osoitepalvelu
         //
-        var localisationUrl = window.url('osoitepalveluLocalisationRestUrl',
+        var localisationUrl = window.urls().noEncode().url('osoitepalveluLocalisationRestUrl',
                 '?category=osoitepalvelu&value=cached');
         console.log("** Loading localisation info; from: ", localisationUrl);
         init_counter++;
