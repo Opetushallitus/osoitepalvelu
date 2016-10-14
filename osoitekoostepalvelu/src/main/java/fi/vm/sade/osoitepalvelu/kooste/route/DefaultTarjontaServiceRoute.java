@@ -18,11 +18,17 @@ package fi.vm.sade.osoitepalvelu.kooste.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoulutusCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.TarjontaKoulutusHakuResultDto;
 import com.fasterxml.jackson.core.type.TypeReference;
+import fi.vm.sade.properties.OphProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: simok
@@ -36,7 +42,6 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
 
     private static final String SERVICE_CALL_TARJONTA_POSTFIX = ".TarjontaServiceCall";
     private static final String TARJONTA_KOULUTUS_SEARCH_ENDPOINT = "direct:tarjontaKoulutusRoute";
-    private static final String TARJONTA_KOULUTUS_SEARCH_PATH = "/v1/koulutus/search";
 
     private static final String TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM   = "koulutuslaji";
     private static final String TARJONTA_KOULUTUS_OPETUSKIELET_PARAM   = "opetuskielet";
@@ -47,9 +52,8 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
 
     private static final long TIMEOUT_MINUTES = 30L;
 
-    @Value("${tarjontaService.rest.url}")
-    private String tarjontaRestUrl;
-
+    @Autowired
+    private UrlConfiguration urlConfiguration;
 
     @Override
     public void configure() {
@@ -57,21 +61,23 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
     }
 
     protected void buildTarjontaKoulutusRoute() {
-        AbstractJsonToDtoRouteBuilder.Debugger tarjontaCallInOutDebug = debug(TARJONTA_KOULUTUS_SEARCH_ENDPOINT + SERVICE_CALL_TARJONTA_POSTFIX);
+        AbstractJsonToDtoRouteBuilder.Debugger tarjontaCallInOutDebug = debug(TARJONTA_KOULUTUS_SEARCH_ENDPOINT +
+                SERVICE_CALL_TARJONTA_POSTFIX);
 
         headers(from(TARJONTA_KOULUTUS_SEARCH_ENDPOINT),
             headers()
-                    .get().path(TARJONTA_KOULUTUS_SEARCH_PATH)
-                    .param(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM).optional().valueFromHeader().toQuery()
-                    .param(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM).optional().listFromHeader().toQuery()
-                    .param(TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM).optional().listFromHeader().toQuery()
-                    .param(TARJONTA_KOULUTUS_OPINTOALAS_PARAM).optional().listFromHeader().toQuery()
-                    .param(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM).optional().listFromHeader().toQuery()
-                    .param(TARJONTA_KOULUTUS_KOULUTUS_PARAM).optional().listFromHeader().toQuery()
-                    .retry(2)
+                .get()
+                .param(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM).optional().valueFromHeader().toQuery()
+                .param(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM).optional().listFromHeader().toQuery()
+                .param(TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM).optional().listFromHeader().toQuery()
+                .param(TARJONTA_KOULUTUS_OPINTOALAS_PARAM).optional().listFromHeader().toQuery()
+                .param(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM).optional().listFromHeader().toQuery()
+                .param(TARJONTA_KOULUTUS_KOULUTUS_PARAM).optional().listFromHeader().toQuery()
+                .retry(2)
         )
         .process(tarjontaCallInOutDebug)
-        .to(uri(tarjontaRestUrl, TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND))
+        .to(uri(urlConfiguration.getProperty("tarjonta-service.koulutus.search"),
+                TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND))
         .process(tarjontaCallInOutDebug)
         .process(jsonToDto(new TypeReference<TarjontaKoulutusHakuResultDto>() {}));
     }
@@ -80,8 +86,7 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
     @SuppressWarnings("unchecked")
     public TarjontaKoulutusHakuResultDto findKoulutukset(KoulutusCriteriaDto criteria,
             CamelRequestContext requestContext) {
-        return sendBodyHeadersAndProperties(getCamelTemplate(),
-                TARJONTA_KOULUTUS_SEARCH_ENDPOINT, "",
+        return sendBodyHeadersAndProperties(getCamelTemplate(), TARJONTA_KOULUTUS_SEARCH_ENDPOINT, "",
                 headerValues()
                     .add(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM,   criteria.getKoulutuslaji())
                     .add(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM,   criteria.getOpetuskielet())
@@ -89,7 +94,6 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
                     .add(TARJONTA_KOULUTUS_OPINTOALAS_PARAM,     criteria.getOpintoalakoodis())
                     .add(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM, criteria.getKoulutustyyppis())
                     .add(TARJONTA_KOULUTUS_KOULUTUS_PARAM,       criteria.getKoulutuskoodis())
-
                 .map(),
                 requestContext, TarjontaKoulutusHakuResultDto.class);
     }

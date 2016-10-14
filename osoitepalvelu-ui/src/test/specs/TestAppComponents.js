@@ -99,7 +99,7 @@ describe("Application Components Test", function() {
         expect(commonErrorHandler).toBeDefined();
     });
 
-    it("shared services are defined", function($injector) {
+    it("shared services are defined", function() {
         expect(MyRolesModel).toBeDefined();
         expect(AuthService).toBeDefined();
         expect(Config).toBeDefined();
@@ -108,7 +108,7 @@ describe("Application Components Test", function() {
         expect(Localisations).toBeDefined();
     });
 
-    it("static options are defined", function($injector) {
+    it("static options are defined", function() {
         expect(SearchTypes).toBeDefined();
         expect(EmptyTerms).toBeDefined();
         expect(Osoitekielis).toBeDefined();

@@ -204,7 +204,7 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         $log.info(_targetGroups);
         $log.info(_terms);
         $log.info(_deletedIds);
-        $http.post('api/search/prepare.excel.do', {
+        $http.post(window.urls().noEncode().url('osoitepalvelu-service.search', 'prepare.excel.do'), {
                   searchTerms: SaveConverter.toDomain({
                       searchType: _searchType,
                       terms: _terms,
@@ -214,7 +214,8 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
                   nonIncludedOrganisaatioOids: _deletedIds
             } )
         .success(function(key) {
-            success('api/search/excel.do?downloadId='+key+"&lang="+_kieli);
+            success(window.urls().noEncode().url('osoitepalvelu-service.search',
+                'excel.do?downloadId='+key+'&lang='+_kieli));
         })
         .error( error || commonErrorHandler );
     };

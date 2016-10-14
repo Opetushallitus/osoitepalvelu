@@ -36,7 +36,7 @@ OsoiteKoostepalvelu.run(function($http, $cookies) {
 OsoiteKoostepalvelu.factory('SearchResultProvider', ["$http", "LocalisationService",
         function($http, LocalisationService) {
     return function(details) {
-        $http.post('api/search/list.json', details.data, {
+        $http.post(window.url('osoitepalvelu-service.search', 'list.json'), details.data, {
             params: {lang: details.lang}
         })
         .success(details.callback)
@@ -92,9 +92,9 @@ function osoitepalveluInit() {
 		 console.log("LOG "+status+": "+xhr.status+" "+xhr.statusText, xhr);
 	}
 
-    if (window.CONFIG.env.casMeUrl) {
+    if (window.url('casMeUrl')) {
         init_counter++;
-        jQuery.ajax(window.CONFIG.env.useCasMeUrl != "false" ? window.CONFIG.env.casMeUrl : "cas_me_test.json", {
+        jQuery.ajax(window.CONFIG.env.useCasMeUrl != "false" ? window.url('casMeUrl') : "cas_me_test.json", {
             dataType: "json",
             crossDomain:true,
             complete: logRequest,
@@ -118,8 +118,8 @@ function osoitepalveluInit() {
         //
         // Preload application localisations for Osoitepalvelu
         //
-        var localisationUrl = window.CONFIG.env.osoitepalveluLocalisationRestUrl
-                + "?category=osoitepalvelu&value=cached";
+        var localisationUrl = window.urls().noEncode().url('osoitepalveluLocalisationRestUrl',
+                '?category=osoitepalvelu&value=cached');
         console.log("** Loading localisation info; from: ", localisationUrl);
         init_counter++;
         jQuery.ajax(localisationUrl, {

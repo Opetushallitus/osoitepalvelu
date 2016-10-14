@@ -3,6 +3,8 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
 
+        <script type="text/javascript" src="jslib/oph_urls.js"></script>
+
         <!-- jQuery -->
         <script src="jslib/jquery-1.10.1/jquery-1.10.1.min.js"></script>
 
@@ -72,6 +74,10 @@
         <div ng-controller="LoadingCtrl">
             <div ng-show="loading" class="topCournerInfoMessage" ng-cloak tt="loading">Ladataan...</div>
         </div>
-        <script> osoitepalveluInit(); </script>
+        <script>
+            window.urls.debugLog().loadFromUrls("api/app/url-props.json").success(function() {
+                osoitepalveluInit();
+            })
+        </script>
     </body>
 </html>

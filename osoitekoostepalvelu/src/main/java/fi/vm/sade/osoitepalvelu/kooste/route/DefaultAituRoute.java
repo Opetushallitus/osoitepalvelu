@@ -19,8 +19,10 @@ package fi.vm.sade.osoitepalvelu.kooste.route;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituOsoitepalveluResultsDto;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -37,16 +39,13 @@ public class DefaultAituRoute extends AbstractJsonToDtoRouteBuilder
     private static final long serialVersionUID = 832138099426375308L;
     private static final String SERVICE_CALL_AITU_POSTFIX = ".AituServiceCall";
     private static final String AITU_OSOITEPALVELU_ENDPOINT = "direct:aituRoute";
-    private static final String AITU_OSOITEPALVELU_PATH = "/osoitepalvelu";
 
     private static final String CAS_TICKET_QUERY_PARAM = "ticket";
+
     private static final long TIMEOUT_MINUTES = 30L;
 
-    @Value("${aitu.rest.uri}")
-    private String aituRestUrl;
-
-    @Value("${cas.service.aitu-service}")
-    private String aituServiceCasServiceUrl;
+    @Autowired
+    private UrlConfiguration urlConfiguration;
 
     @Override
     public void configure() {
@@ -58,13 +57,13 @@ public class DefaultAituRoute extends AbstractJsonToDtoRouteBuilder
         headers(
             from(AITU_OSOITEPALVELU_ENDPOINT),
             headers()
-                    .get().path(AITU_OSOITEPALVELU_PATH)
+                    .get()
                     .param(CAS_TICKET_QUERY_PARAM).optional().value(header(CasTicketProvider.CAS_HEADER)).toQuery()
-                    .casAuthenticationByAuthenticatedUser(aituServiceCasServiceUrl)
+                    .casAuthenticationByAuthenticatedUser(urlConfiguration.getProperty("cas.service.aitu-service"))
                     .retry(2)
         )
         .process(organisaatioCallInOutDebug)
-        .to(uri(aituRestUrl, TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND))
+        .to(uri(urlConfiguration.getProperty("aitu.rest.uri"), TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND))
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<AituOsoitepalveluResultsDto>() {}));
     }

@@ -27,6 +27,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.AppSettingsService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.UrlPropertiesDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.apache.http.HttpStatus;
@@ -79,6 +80,15 @@ public class AppSettingsController extends AbstractMvcController {
         AppSettingsDto settings  =  appSettingsService.getUiSettings();
         ObjectMapper mapper  =  objectMapperProvider.getContext(ObjectMapper.class);
         return "window.CONFIG  =  "  +  mapper.writeValueAsString(settings)  +  ";";
+    }
+
+    @ApiOperation("Palauttaa URL-propertyt JSON-muodossa.")
+    @RequestMapping(value  =  "/url-props.json", method  =  RequestMethod.GET, produces  =  "text/json")
+    @ResponseBody
+    public String urlProperties() throws IOException {
+        UrlPropertiesDto urlPropertiesDto = appSettingsService.getUrlProperties();
+        ObjectMapper mapper  =  objectMapperProvider.getContext(ObjectMapper.class);
+        return mapper.writeValueAsString(urlPropertiesDto.getUrls());
     }
 
     @ApiOperation("Päivittää Organisaatiovälimuistin. Käytettävissä vain paikallisena pyyntönä kehityksen tukena. " +

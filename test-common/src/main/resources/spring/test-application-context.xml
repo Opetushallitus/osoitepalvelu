@@ -34,6 +34,13 @@
         </property>
     </bean>
 
+    <bean id="uiUrlProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+            </list>
+        </property>
+    </bean>
+
     <bean id="jacksonMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
 
 </beans>

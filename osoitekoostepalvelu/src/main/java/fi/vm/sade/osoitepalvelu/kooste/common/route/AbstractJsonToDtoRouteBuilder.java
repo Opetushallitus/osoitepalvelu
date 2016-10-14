@@ -26,7 +26,10 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClien
 import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
 
 import org.apache.camel.*;
+import org.apache.camel.builder.BuilderSupport;
+import org.apache.camel.builder.SimpleBuilder;
 import org.apache.camel.component.http.HttpOperationFailedException;
+import org.apache.camel.model.ExpressionNode;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.dataformat.JsonLibrary;
@@ -258,6 +261,24 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             .process(jsonToDto(targetDtoType));
     }
 
+    /*
+     * Alternative to {fromHttpGetToDtos} that uses recipientList EIP pattern that allows dynamically specified
+     * recipients. Used for enabling Simple Expression in URLs.
+     */
+    protected <T> ExpressionNode fromHttpGetToDtosWithRecipientList(String routeId, String url, HeaderBuilder headers,
+                                                                    TypeReference<T> targetDtoType) {
+        Debugger debug  =  debug(routeId  +  ".ServiceCall");
+        return headers(
+                    from(routeId),
+                    headers
+                            .get()
+        )
+        .process(debug)
+        .recipientList(simple(url))
+        .process(debug)
+        .process(jsonToDto(targetDtoType));
+    }
+
     /**
      * @param targetDtoType the type to convert JSON to
      * @param <T> the type
@@ -303,7 +324,12 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected String uri(String url, long timeoutMillis) {
         if (url != null) {
             url = url.trim();
-            url = url + "?" + HTTP_CLIENT_TIMEOUT_PARAM_NAME + "=" + timeoutMillis;
+            if (url.contains("?")) {
+                url = url + "&" + HTTP_CLIENT_TIMEOUT_PARAM_NAME + "=" + timeoutMillis;
+            }
+            else {
+                url = url + "?" + HTTP_CLIENT_TIMEOUT_PARAM_NAME + "=" + timeoutMillis;
+            }
         }
         return url;
     }

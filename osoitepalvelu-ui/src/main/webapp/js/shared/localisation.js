@@ -35,7 +35,7 @@ var localisation = angular.module('localisation', ['ngResource', 'config', 'I18n
  */
 localisation.factory('Localisations', ["$log", "$resource", "Config", function($log, $resource, Config) {
 
-    var uri = Config.env.osoitepalveluLocalisationRestUrl;
+    var uri = window.url('osoitepalveluLocalisationRestUrl', '');
     $log.info("Localisations() - uri = ", uri);
 
     return $resource(uri + "/:id", {
@@ -190,7 +190,7 @@ localisation.service('LocalisationService', ["$log", "$q", "$http", "$interval",
     this.updateAccessedById = {};
 
     this.updateAccessInformation = function() {
-        var uri = Config.env.osoitepalveluLocalisationRestUrl + "/access";
+        var uri = window.urls().noEncode().url('osoitepalveluLocalisationRestUrl', '/access');
 
         var ids = Object.keys(this.updateAccessedById);
         this.updateAccessedById = {};

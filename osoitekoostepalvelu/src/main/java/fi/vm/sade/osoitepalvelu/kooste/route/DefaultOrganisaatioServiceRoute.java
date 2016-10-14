@@ -18,11 +18,13 @@ package fi.vm.sade.osoitepalvelu.kooste.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
+import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHierarchyResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -42,24 +44,18 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     private static final String SERVICE_CALL_ORGANSIAATIO_POSTFIX = ".OrgansiaatioServiceCall";
 
     private static final String ORGANSIAATIO_OID_LIST_ENDPOINT  =  "direct:organisaatioOidList";
-    private static final String ORGANISAATIO_OIDS_PATH  = "/";
-
     private static final String ORGANSIAATIOHAKU_ENDPOINT  =  "direct:organisaatioYhteystietohakuV2";
-
-    private static final String YHTEYSTIEDOT_PATH  =  "/v2/yhteystiedot/hae";
     private static final String SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT  =  "direct:singleOrganisaatioByOid";
-    private static final String SINGLE_ORGANISAATIO_PATH  =  "/${in.headers.oid}";
-
     private static final String ORGANISAATIO_HIERARCHY_ENDPOINT = "direct:organisaatioHierarchyHaku";
     private static final String ORGANISAATIO_HIERARCHY_BY_TYYPPI_ENDPOINT = "direct:organisaatioHierarchyByTyyppiHaku";
-    private static final String ORGANISAATIO_HIERARCHY_PATH = "/hae";
+
     private static final String ORGANISAATIO_HIERACHY_TYYPPI_PARAM = "organisaatiotyyppi";
     private static final String ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM = "vainAktiiviset";
 
     private static final long HAKU_TIMEOUT_MINUTES = 10L;
 
-    @Value("${organisaatioService.rest.url}")
-    private String organisaatioServiceRestUrl;
+    @Autowired
+    private UrlConfiguration urlConfiguration;
 
     @Override
     public void configure() {
@@ -70,17 +66,16 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     }
 
     protected void buildOrganisaatioOidList() {
-        Debugger organisaatioCallInOutDebug  =  debug(ORGANSIAATIO_OID_LIST_ENDPOINT+SERVICE_CALL_ORGANSIAATIO_POSTFIX);
+        Debugger organisaatioCallInOutDebug  =  debug(ORGANSIAATIO_OID_LIST_ENDPOINT +
+                SERVICE_CALL_ORGANSIAATIO_POSTFIX);
         headers(
                 from(ORGANSIAATIO_OID_LIST_ENDPOINT),
                 headers()
                         .get()
-
-                        .path(ORGANISAATIO_OIDS_PATH)
                 .retry(3)
         )
         .process(organisaatioCallInOutDebug)
-        .to(uri(organisaatioServiceRestUrl))
+        .to(uri(urlConfiguration.getProperty("organisaatio-service.organisaatio")))
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<List<String>>() {}));
     }
@@ -92,12 +87,12 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 headers()
                         .post()
                         .jsonRequstBody()
-                        .path(YHTEYSTIEDOT_PATH)
                 .retry(3)
         )
         .process(organisaatioCallInOutDebug)
-        // wait for 10 minutes maximum:
-        .to(uri(organisaatioServiceRestUrl, HAKU_TIMEOUT_MINUTES * SECONDS_IN_MINUTE * MILLIS_IN_SECOND))
+        .to(uri(urlConfiguration.getProperty("organisaatio-service.organisaatio.yhteystiedot.search"),
+                // wait for 10 minutes maximum:
+                HAKU_TIMEOUT_MINUTES * SECONDS_IN_MINUTE * MILLIS_IN_SECOND))
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<List<OrganisaatioYhteystietoHakuResultDto>>() {}));
     }
@@ -109,11 +104,11 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 from(SINGLE_ORGANSIAATIO_BY_OID_ENDPOINT),
                 headers()
                         .get()
-                        .path(SINGLE_ORGANISAATIO_PATH)
                 .retry(3)
         )
         .process(organisaatioCallInOutDebug)
-        .to(uri(organisaatioServiceRestUrl))
+        .recipientList(simple(uri(urlConfiguration.getProperty("organisaatio-service.organisaatio.byOid",
+                "$simple{in.headers.oid}"))))
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<OrganisaatioDetailsDto>() {}));
     }
@@ -125,13 +120,12 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 from(ORGANISAATIO_HIERARCHY_BY_TYYPPI_ENDPOINT),
                 headers()
                         .get()
-                        .path(ORGANISAATIO_HIERARCHY_PATH)
-                            .param(ORGANISAATIO_HIERACHY_TYYPPI_PARAM).optional().valueFromBody().toQuery()
-                            .param(ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM).value(true).toQuery()
+                        .param(ORGANISAATIO_HIERACHY_TYYPPI_PARAM).optional().valueFromBody().toQuery()
+                        .param(ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM).value(true).toQuery()
                 .retry(3)
         )
         .process(authenticationCallInOutDebug)
-        .to(uri(organisaatioServiceRestUrl))
+        .to(uri(urlConfiguration.getProperty("organisaatio-service.organisaatio.search")))
         .process(authenticationCallInOutDebug)
         .process(jsonToDto(new TypeReference<OrganisaatioHierarchyResultsDto>() {}));
 
@@ -141,12 +135,11 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 from(ORGANISAATIO_HIERARCHY_ENDPOINT),
                 headers()
                         .get()
-                        .path(ORGANISAATIO_HIERARCHY_PATH)
                         .param(ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM).value(true).toQuery()
                 .retry(3)
         )
         .process(authenticationCallInOutDebug)
-        .to(uri(organisaatioServiceRestUrl))
+        .to(uri(urlConfiguration.getProperty("organisaatio-service.organisaatio.search")))
         .process(authenticationCallInOutDebug)
         .process(jsonToDto(new TypeReference<OrganisaatioHierarchyResultsDto>() {}));
     }
