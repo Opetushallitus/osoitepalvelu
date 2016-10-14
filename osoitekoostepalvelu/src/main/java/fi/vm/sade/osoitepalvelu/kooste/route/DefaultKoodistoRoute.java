@@ -72,9 +72,11 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         // Seuraava reitti hakee tietyn koodistoversion kaikki koodit
         fromHttpGetToDtosWithRecipientList(
                 REITTI_HAE_KOODISTO_VERSION_KOODIT,
-                uri(urlConfiguration.getProperty("koodisto-service.byUri.koodiByKoodistoversio",
-                        "$simple{in.headers.koodistoTyyppi}", "$simple{in.headers.koodistoVersio}")),
-                headers().retry(3),
+                uri(urlConfiguration.getProperty("koodisto-service.byUri.koodi",
+                        "$simple{in.headers.koodistoTyyppi}")),
+                headers()
+                        .query("koodistoVersio = ${in.headers.koodistoVersio}")
+                        .retry(3),
                 new TypeReference<List<KoodiDto>>() { }
         );
     }

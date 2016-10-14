@@ -50,6 +50,8 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
     private static final String TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM = "koulutustyyppi";
     private static final String TARJONTA_KOULUTUS_KOULUTUS_PARAM       = "koulutuskoodi";
 
+    private static final long TIMEOUT_MINUTES = 30L;
+
     @Autowired
     private UrlConfiguration urlConfiguration;
 
@@ -63,11 +65,19 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
                 SERVICE_CALL_TARJONTA_POSTFIX);
 
         headers(from(TARJONTA_KOULUTUS_SEARCH_ENDPOINT),
-            headers().get().retry(2)
+            headers()
+                .get()
+                .param(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM).optional().valueFromHeader().toQuery()
+                .param(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM).optional().listFromHeader().toQuery()
+                .param(TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM).optional().listFromHeader().toQuery()
+                .param(TARJONTA_KOULUTUS_OPINTOALAS_PARAM).optional().listFromHeader().toQuery()
+                .param(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM).optional().listFromHeader().toQuery()
+                .param(TARJONTA_KOULUTUS_KOULUTUS_PARAM).optional().listFromHeader().toQuery()
+                .retry(2)
         )
         .process(tarjontaCallInOutDebug)
-        .recipientList(simple(urlConfiguration.getProperty("tarjonta-service.koulutus.search",
-                "$simple{in.headers.searchparams}")))
+        .to(uri(urlConfiguration.getProperty("tarjonta-service.koulutus.search"),
+                TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND))
         .process(tarjontaCallInOutDebug)
         .process(jsonToDto(new TypeReference<TarjontaKoulutusHakuResultDto>() {}));
     }
@@ -76,59 +86,16 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
     @SuppressWarnings("unchecked")
     public TarjontaKoulutusHakuResultDto findKoulutukset(KoulutusCriteriaDto criteria,
             CamelRequestContext requestContext) {
-
-        List<String> headers = Arrays.asList(
-                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM,
-                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM, criteria)),
-                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM,
-                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM, criteria)),
-                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM,
-                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM, criteria)),
-                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_OPINTOALAS_PARAM,
-                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_OPINTOALAS_PARAM, criteria)),
-                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM,
-                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM, criteria)),
-                createHttpGetQueryListParamsforHeader(TARJONTA_KOULUTUS_KOULUTUS_PARAM,
-                        getHeaderValuesFromCriteria(TARJONTA_KOULUTUS_KOULUTUS_PARAM, criteria))
-        );
-
         return sendBodyHeadersAndProperties(getCamelTemplate(), TARJONTA_KOULUTUS_SEARCH_ENDPOINT, "",
                 headerValues()
-                        .add("searchparams", headers.stream()
-                                .filter(value -> !value.isEmpty())
-                                .collect(Collectors.joining("&")))
+                    .add(TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM,   criteria.getKoulutuslaji())
+                    .add(TARJONTA_KOULUTUS_OPETUSKIELET_PARAM,   criteria.getOpetuskielet())
+                    .add(TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM,   criteria.getKoulutusalakoodis())
+                    .add(TARJONTA_KOULUTUS_OPINTOALAS_PARAM,     criteria.getOpintoalakoodis())
+                    .add(TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM, criteria.getKoulutustyyppis())
+                    .add(TARJONTA_KOULUTUS_KOULUTUS_PARAM,       criteria.getKoulutuskoodis())
                 .map(),
                 requestContext, TarjontaKoulutusHakuResultDto.class);
     }
 
-    private String createHttpGetQueryListParamsforHeader(String headerParamName, List<String> list) {
-        if (list == null && list.size() < 1) return "";
-
-        return list.stream()
-                .map(value -> formatSingleQueryParam(headerParamName, value))
-                .collect(Collectors.joining("&"));
-    }
-
-    private String formatSingleQueryParam(String name, String value) {
-        return name + "=" + value;
-    }
-
-    private List<String> getHeaderValuesFromCriteria(String headerName, KoulutusCriteriaDto criteria) {
-        switch (headerName) {
-            case TARJONTA_KOULUTUS_KOULUTUSLAJI_PARAM:
-                return new ArrayList<String>() {{ criteria.getKoulutuslaji(); }};
-            case TARJONTA_KOULUTUS_OPETUSKIELET_PARAM:
-                return criteria.getOpetuskielet();
-            case TARJONTA_KOULUTUS_KOULUTUSALAS_PARAM:
-                return criteria.getKoulutusalakoodis();
-            case TARJONTA_KOULUTUS_OPINTOALAS_PARAM:
-                return criteria.getOpintoalakoodis();
-            case TARJONTA_KOULUTUS_KOULUTUSTYYPPI_PARAM:
-                return criteria.getKoulutustyyppis();
-            case TARJONTA_KOULUTUS_KOULUTUS_PARAM:
-                return criteria.getKoulutuskoodis();
-            default:
-                return new ArrayList<>();
-        }
-    }
 }

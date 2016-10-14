@@ -40,6 +40,8 @@ public class DefaultAituRoute extends AbstractJsonToDtoRouteBuilder
     private static final String SERVICE_CALL_AITU_POSTFIX = ".AituServiceCall";
     private static final String AITU_OSOITEPALVELU_ENDPOINT = "direct:aituRoute";
 
+    private static final String CAS_TICKET_QUERY_PARAM = "ticket";
+
     private static final long TIMEOUT_MINUTES = 30L;
 
     @Autowired
@@ -56,12 +58,12 @@ public class DefaultAituRoute extends AbstractJsonToDtoRouteBuilder
             from(AITU_OSOITEPALVELU_ENDPOINT),
             headers()
                     .get()
+                    .param(CAS_TICKET_QUERY_PARAM).optional().value(header(CasTicketProvider.CAS_HEADER)).toQuery()
                     .casAuthenticationByAuthenticatedUser(urlConfiguration.getProperty("cas.service.aitu-service"))
                     .retry(2)
         )
         .process(organisaatioCallInOutDebug)
-        .recipientList(simple(uri(urlConfiguration.getProperty("aitu.rest.uri"),
-                TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND)))
+        .to(uri(urlConfiguration.getProperty("aitu.rest.uri"), TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND))
         .process(organisaatioCallInOutDebug)
         .process(jsonToDto(new TypeReference<AituOsoitepalveluResultsDto>() {}));
     }

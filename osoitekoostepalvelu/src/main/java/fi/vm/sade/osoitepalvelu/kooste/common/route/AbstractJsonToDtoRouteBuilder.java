@@ -261,7 +261,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
             .process(jsonToDto(targetDtoType));
     }
 
-    /**
+    /*
      * Alternative to {fromHttpGetToDtos} that uses recipientList EIP pattern that allows dynamically specified
      * recipients. Used for enabling Simple Expression in URLs.
      */

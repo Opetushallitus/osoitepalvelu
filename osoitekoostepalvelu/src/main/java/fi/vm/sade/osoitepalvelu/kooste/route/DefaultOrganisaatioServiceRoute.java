@@ -49,6 +49,9 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     private static final String ORGANISAATIO_HIERARCHY_ENDPOINT = "direct:organisaatioHierarchyHaku";
     private static final String ORGANISAATIO_HIERARCHY_BY_TYYPPI_ENDPOINT = "direct:organisaatioHierarchyByTyyppiHaku";
 
+    private static final String ORGANISAATIO_HIERACHY_TYYPPI_PARAM = "organisaatiotyyppi";
+    private static final String ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM = "vainAktiiviset";
+
     private static final long HAKU_TIMEOUT_MINUTES = 10L;
 
     @Autowired
@@ -117,11 +120,12 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 from(ORGANISAATIO_HIERARCHY_BY_TYYPPI_ENDPOINT),
                 headers()
                         .get()
+                        .param(ORGANISAATIO_HIERACHY_TYYPPI_PARAM).optional().valueFromBody().toQuery()
+                        .param(ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM).value(true).toQuery()
                 .retry(3)
         )
         .process(authenticationCallInOutDebug)
-        .recipientList(simple(uri(urlConfiguration.getProperty("organisaatio-service.organisaatio.searchAktiiviset.byOrgType",
-                "$simple{in.headers.organisaatiotyyppi}"))))
+        .to(uri(urlConfiguration.getProperty("organisaatio-service.organisaatio.search")))
         .process(authenticationCallInOutDebug)
         .process(jsonToDto(new TypeReference<OrganisaatioHierarchyResultsDto>() {}));
 
@@ -131,10 +135,11 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
                 from(ORGANISAATIO_HIERARCHY_ENDPOINT),
                 headers()
                         .get()
+                        .param(ORGANISAATIO_HIERACHY_VAIN_AKTIIVISET_PARAM).value(true).toQuery()
                 .retry(3)
         )
         .process(authenticationCallInOutDebug)
-        .to(uri(urlConfiguration.getProperty("organisaatio-service.organisaatio.searchAktiiviset")))
+        .to(uri(urlConfiguration.getProperty("organisaatio-service.organisaatio.search")))
         .process(authenticationCallInOutDebug)
         .process(jsonToDto(new TypeReference<OrganisaatioHierarchyResultsDto>() {}));
     }
