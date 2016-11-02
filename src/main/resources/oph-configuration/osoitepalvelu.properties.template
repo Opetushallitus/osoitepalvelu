@@ -40,10 +40,10 @@ activeMq.targetDestinationPublic.tarjonta=fi.vm.sade.tarjonta.public.service
 aitu.rest.uri = https://${host.virkailija}/aitu/api
 authenticationService.kayttoikeusryhma.rest.url=https://${host.virkailija}/authentication-service/resources/kayttooikeusryhma
 authenticationService.henkilo.rest.url=https://${host.virkailija}/authentication-service/resources/henkilo
-cas.callback.organisaatio-app=http://${server.name}:8301/organisaatio-app
-cas.callback.organisaatio-service=http://${server.name}:8301/organisaatio-service
-cas.callback.authentication-service=http://${server.name}:8308/authentication-service
-cas.callback.registration-ui=http://${server.name}:8308/registration-ui
+cas.callback.organisaatio-app=http://{{ cluster_organisaatio_host | default("${server.name}") }}:{{ cluster_organisaatio_port | default("8301") }}/organisaatio-app
+cas.callback.organisaatio-service=http://{{ cluster_organisaatio_host | default("${server.name}") }}:{{ cluster_organisaatio_port | default("8301") }}/organisaatio-service
+cas.callback.authentication-service=http://{{ cluster_authentication_host | default("${server.name}") }}:{{ cluster_authentication_port | default("8308") }}/authentication-service
+cas.callback.registration-ui=http://{{ cluster_authentication_host | default("${server.name}") }}:{{ cluster_authentication_port | default("8308") }}/registration-ui
 cas.callback.osoitekoostepalvelu=https://${host.virkailija}/osoitekoostepalvelu
 cas.group-role-attribute=cn
 cas.group-search-base=ou\=groups
