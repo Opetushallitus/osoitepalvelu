@@ -17,7 +17,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.settings;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.UrlPropertiesDto;
 
 /**
  * User: ratamaa
@@ -29,9 +28,4 @@ public interface AppSettingsService {
      * @return the env and app settings for UI
      */
     AppSettingsDto getUiSettings();
-
-    /**
-     * @return the url properties for UI
-     */
-    UrlPropertiesDto getUrlProperties();
 }

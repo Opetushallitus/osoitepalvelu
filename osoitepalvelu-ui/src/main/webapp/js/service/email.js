@@ -28,7 +28,7 @@ OsoiteKoostepalvelu.service('EmailService', ["$log", "$http", "EmailConverter", 
     };
 
     this.sendEmail = function(searchResults, presentation, sourceRegisters) {
-        $http.post("api/email/send.settings.json", {
+        $http.post(window.url("osoitekoostepalvelu.api.email.send.settings.json"), {
             me: MyRolesModel,
             language: presentation.locale,
             sourceRegisters: sourceRegisters

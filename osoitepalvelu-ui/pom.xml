@@ -195,7 +195,7 @@
                         </capability>
                     </webDriverCapabilities>
                     <preloadSources>
-                        <source>jslib/oph_urls.js</source>
+                        <source>jslib/oph_urls.js/index.js</source>
                         <source>jslib/jquery-1.10.1/jquery-1.10.1.min.js</source>
                         <source>jslib/angular-1.3.20/angular.js</source>
                         <source>jslib/angular-1.3.20/angular-mocks.js</source>

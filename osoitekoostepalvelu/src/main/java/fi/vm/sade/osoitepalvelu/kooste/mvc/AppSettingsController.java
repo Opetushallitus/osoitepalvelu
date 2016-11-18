@@ -27,7 +27,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.AppSettingsService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.UrlPropertiesDto;
+import fi.vm.sade.properties.OphProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.apache.http.HttpStatus;
@@ -36,7 +36,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
@@ -70,6 +69,7 @@ public class AppSettingsController extends AbstractMvcController {
 
     @Autowired
     private KoodistoService koodistoService;
+    private OphProperties ophProperties= new OphProperties();
 
     @ApiOperation("Palauttaa sovelluksen polkuviittauksia sisältävät, aikaisessa käyttöliittymän alustuksen "
             + "vaiheessa tarpeelliset asetukset käyttöliittymälle JavaScriptinä, joka tuottaa asetukset" +
@@ -82,13 +82,11 @@ public class AppSettingsController extends AbstractMvcController {
         return "window.CONFIG  =  "  +  mapper.writeValueAsString(settings)  +  ";";
     }
 
-    @ApiOperation("Palauttaa URL-propertyt JSON-muodossa.")
+    @ApiOperation("Palauttaa URL-propertyt javascript-muodossa.")
     @RequestMapping(value  =  "/url-props.json", method  =  RequestMethod.GET, produces  =  "text/json")
     @ResponseBody
     public String urlProperties() throws IOException {
-        UrlPropertiesDto urlPropertiesDto = appSettingsService.getUrlProperties();
-        ObjectMapper mapper  =  objectMapperProvider.getContext(ObjectMapper.class);
-        return mapper.writeValueAsString(urlPropertiesDto.getUrls());
+        return "window.urls.addOverrides("+ ophProperties.frontPropertiesToJson()+")";
     }
 
     @ApiOperation("Päivittää Organisaatiovälimuistin. Käytettävissä vain paikallisena pyyntönä kehityksen tukena. " +
