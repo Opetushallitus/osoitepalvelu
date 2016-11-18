@@ -1,14 +1,9 @@
 {
-  "name": "osoitepalvelu",
+  "name": "osoitekoostepalvelu",
 
   "Makefile": "no",
 
   "velka": "js-riipuvuudet git-repossa (packages.json käyttöön)",
 
-  "csrf": "front: ok, backend: ?",
-
-  "projects": [
-    {"name": "osoitekoostepalvelu-web", "uses": "osoitekoostepalvelu-rest lokalisointi-rest"},
-    {"name": "osoitekoostepalvelu-rest", "uses": ""}
-  ]
+  "csrf": "front: ok, backend: ?"
 }
