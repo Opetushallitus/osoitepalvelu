@@ -113,6 +113,7 @@
                                 <jsSourceExclude>target/${project.artifactId}/jslib/*.js</jsSourceExclude>
                                 <jsSourceExclude>**/*.min.js</jsSourceExclude>
                                 <jsSourceExclude>**/*.ignored.js</jsSourceExclude>
+                                <jsSourceExclude>**/osoitepalvelu-ui-oph.js</jsSourceExclude>
                             </jsSourceExcludes>
                             <jsEngine>CLOSURE</jsEngine>
                         </configuration>
