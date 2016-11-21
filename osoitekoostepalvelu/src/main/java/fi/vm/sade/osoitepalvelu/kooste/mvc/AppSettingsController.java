@@ -83,7 +83,7 @@ public class AppSettingsController extends AbstractMvcController {
     }
 
     @ApiOperation("Palauttaa URL-propertyt javascript-muodossa.")
-    @RequestMapping(value  =  "/url-props.json", method  =  RequestMethod.GET, produces  =  "text/json")
+    @RequestMapping(value  =  "/url-props.js", method  =  RequestMethod.GET, produces  =  "application/javascript")
     @ResponseBody
     public String urlProperties() throws IOException {
         return "window.urls.addOverrides("+ ophProperties.frontPropertiesToJson()+")";
