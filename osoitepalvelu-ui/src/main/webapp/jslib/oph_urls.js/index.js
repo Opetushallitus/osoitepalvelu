@@ -15,17 +15,26 @@
  * * for main url window.url's first parameter: "service.info" from all configs
  * * baseUrl: "service.baseUrl" from all configs and "baseUrl" from all configs
  *
- * window.url_properties = {
+ * window.urls.addProperties( {
  *   "service.status": "/rest/status",
  *   "service.payment": "/rest/payment/$1",
  *   "service.order": "/rest/payment/$orderId"
- *   }
+ *   })
  *
  * window.urls.debug = true
  *
  */
 
 (function(exportDest) {
+    var version="1.2"
+
+    if(exportDest.urls) {
+        if(exportDest.urls.version !== version)   {
+            console.log("'Mismatching oph_urls.js. First loaded (and in use):", exportDest.urls.version, " second loaded (not in use): ", version)
+        }
+        return
+    }
+
     exportDest.urls = function() {
         var urls_config = {}
         var omitEmptyValuesFromQuerystring = false
@@ -130,6 +139,7 @@
         return ret
     }
 
+    exportDest.urls.version = version
     exportDest.urls.properties = {}
     exportDest.urls.defaults = {}
     exportDest.urls.override = {}
@@ -137,6 +147,26 @@
     exportDest.urls.debugLog = function() {
         exportDest.urls.debug = true;
         return this;
+    }
+    exportDest.urls.addProperties = function (props) {
+        mergePropertiesWithWarning(props, exportDest.urls.properties)
+    }
+    exportDest.urls.addDefaults = function (props) {
+        mergePropertiesWithWarning(props, exportDest.urls.defaults)
+    }
+    exportDest.urls.addOverrides = function (props) {
+        mergePropertiesWithWarning(props, exportDest.urls.override)
+    }
+    function mergePropertiesWithWarning(props, destProps) {
+        var existsAlready = Object.keys(props).filter(function (k) {
+            return k in destProps && destProps[k] !== props[k]
+        })
+        if(existsAlready.length == 0) {
+            merge(destProps, props)
+        } else {
+            console.log("Url properties already contains following keys:", existsAlready, "existing properties:", destProps, "new properties:", props)
+            alert("Url properties conflict. Check console log")
+        }
     }
 
     function debug() {

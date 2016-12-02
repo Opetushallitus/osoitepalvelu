@@ -18,7 +18,6 @@ package fi.vm.sade.osoitepalvelu.kooste.service.settings;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.UrlPropertiesDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.EmbeddedValueResolverAware;
@@ -49,9 +48,6 @@ public class DefaultAppSettingsService extends AbstractService implements AppSet
     @Resource(name  =  "uiEnvProperties")
     private Properties uiEnvProperties;
 
-    @Resource(name  =  "uiUrlProperties")
-    private Properties uiUrlProperties;
-
     private StringValueResolver resolver;
 
     @Override
@@ -64,15 +60,6 @@ public class DefaultAppSettingsService extends AbstractService implements AppSet
             settings.getApp().put(value.getKey().toString(), parseExpression(value.getValue()));
         }
         return settings;
-    }
-
-    @Override
-    public UrlPropertiesDto getUrlProperties() {
-        UrlPropertiesDto urlPropertiesDto = new UrlPropertiesDto();
-        for (Map.Entry<Object, Object> value : uiUrlProperties.entrySet()) {
-            urlPropertiesDto.getUrls().put(value.getKey().toString(), parseExpression(value.getValue()));
-        }
-        return urlPropertiesDto;
     }
 
     protected Object parseExpression(Object exp) {

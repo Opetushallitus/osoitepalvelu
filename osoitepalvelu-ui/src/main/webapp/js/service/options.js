@@ -50,11 +50,11 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
     };
 
     this.listTutkintotoimikuntas = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'tutkintotoimikuntas'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'tutkintotoimikuntas'), success, error);
     };
 
     this.listTutkintotoimikuntaRoolis = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'tutkintotoimikuntaRoolis'), function(data) {
+        _get(window.url('osoitekoostepalvelu.koodisto', 'tutkintotoimikuntaRoolis'), function(data) {
             if (data && data.length) {
                 angular.forEach(data, function(koodi) {
                     koodi.nimi = LocalisationService.t('tutkintotoimikunta_rooli_'+koodi.koodiId);
@@ -69,7 +69,7 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
     };
 
     this.listKoulutaRoolis = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'kayttoikeusryhma'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'kayttoikeusryhma'), success, error);
     };
 
     this.listAipalRoolis = function(success, error) {
@@ -78,56 +78,56 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
     };
 
     this.listOrganisaationKielis = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'opetuskieli'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'opetuskieli'), success, error);
     };
 
     this.listAvis = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'avi'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'avi'), success, error);
     };
 
     this.listMaakuntas = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'maakunta'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'maakunta'), success, error);
     };
 
     this.listKuntas = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'kunta'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'kunta'), success, error);
     };
 
     this.listOppilaitostyyppis = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'oppilaitostyyppi'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'oppilaitostyyppi'), success, error);
     };
 
     this.listOmistajatyyppis = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'omistajatyyppi'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'omistajatyyppi'), success, error);
     };
 
     this.listVuosiluokkas = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'vuosiluokka'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'vuosiluokka'), success, error);
     };
 
     this.listKoultuksenjarjestajas = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'koulutuksenjarjestaja'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'koulutuksenjarjestaja'), success, error);
     };
 
     this.listTutkintos = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'tutkinto'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'tutkinto'), success, error);
     };
 
     this.listKoulutusalas = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'koulutusala'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'koulutusala'), success, error);
     };
 
     this.listOpintoalas = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'opintoala'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'opintoala'), success, error);
     };
 
     this.listOpintoalasByKoulutusalas = function(koulutusalas, success, error) {
         if (!koulutusalas || koulutusalas.length < 1) {
-            _get(window.url('osoitepalvelu-service.koodisto', 'opintoala'), success, error);
+            _get(window.url('osoitekoostepalvelu.koodisto', 'opintoala'), success, error);
         } else {
             $log.info("Listing opintoalas by koulutusalas.");
             $log.info(koulutusalas);
-            _post(window.url('osoitepalvelu-service.koodisto', 'opintoala'), {koulutusala: koulutusalas}, success, error);
+            _post(window.url('osoitekoostepalvelu.koodisto', 'opintoala'), {koulutusala: koulutusalas}, success, error);
         }
     };
 
@@ -140,24 +140,24 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
             $log.info("Listing koulutus by opintoalas or tyyppis.");
             $log.info(opintoalas);
             $log.info(tyyppis);
-            _post(window.url('osoitepalvelu-service.koodisto', 'koulutus'), {opintoala: opintoalas, tyyppi: tyyppis}, success, error);
+            _post(window.url('osoitekoostepalvelu.koodisto', 'koulutus'), {opintoala: opintoalas, tyyppi: tyyppis}, success, error);
         }
     };
 
     this.listKoulutus = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'koulutus'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'koulutus'), success, error);
     };
 
     this.listKoulutusTyyppis = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'koulutustyyppi'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'koulutustyyppi'), success, error);
     };
 
     this.listKoulutusLajis = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'koulutuslaji'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'koulutuslaji'), success, error);
     };
 
     this.listKielis = function(success, error) {
-        _get(window.url('osoitepalvelu-service.koodisto', 'kieli'), success, error);
+        _get(window.url('osoitekoostepalvelu.koodisto', 'kieli'), success, error);
     };
 
 }]);

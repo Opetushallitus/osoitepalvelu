@@ -22,7 +22,7 @@ OsoiteKoostepalvelu.service('SavesService', ["$log", "$http", "SaveConverter", "
         function($log, $http, SaveConverter, commonErrorHandler) {
 
     this.listSearch = function(success, error) {
-        $http.get(window.url('osoitepalvelu-service.saves', '')).success(success).error(error ||commonErrorHandler);
+        $http.get(window.url('osoitekoostepalvelu.saves', '')).success(success).error(error ||commonErrorHandler);
     };
 
     this.saveSearch = function(save, success, error) {
@@ -30,25 +30,25 @@ OsoiteKoostepalvelu.service('SavesService', ["$log", "$http", "SaveConverter", "
         save = SaveConverter.toDomain(save);
         delete(save.id);
         $log.info(save);
-        $http.post(window.url('osoitepalvelu-service.saves', ''), save).success(success).error(error || commonErrorHandler);
+        $http.post(window.url('osoitekoostepalvelu.saves', ''), save).success(success).error(error || commonErrorHandler);
     };
 
     this.updateSearch = function(save, success, error) {
         $log.info("Updating search");
         save = SaveConverter.toDomain(save);
         $log.info(save);
-        $http.put(window.url('osoitepalvelu-service.saves', ''), save).success(success).error(error || commonErrorHandler);
+        $http.put(window.url('osoitekoostepalvelu.saves', ''), save).success(success).error(error || commonErrorHandler);
     };
 
     this.getSearch = function(id, success, error) {
-        $http.get(window.url('osoitepalvelu-service.saves', id)).success(function(data) {
+        $http.get(window.url('osoitekoostepalvelu.saves', id)).success(function(data) {
             success( SaveConverter.fromDomain(data) );
         }).error(error || commonErrorHandler);
     };
 
     this.deleteSearch = function(id, success, error) {
         $log.info("Deleting search: " + id);
-        $http.delete(window.url('osoitepalvelu-service.saves', id)).success(success).error(error || commonErrorHandler);
+        $http.delete(window.url('osoitekoostepalvelu.saves', id)).success(success).error(error || commonErrorHandler);
     };
 }]);
 
