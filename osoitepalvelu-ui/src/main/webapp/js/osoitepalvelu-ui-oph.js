@@ -1,4 +1,4 @@
-window.urls.addOverrides({
+window.urls.addProperties({
   "lokalisointi.localisation": "/lokalisointi/cxf/rest/v1/localisation",
   "lokalisointi.resource": "/lokalisointi/cxf/rest/v1/localisation/:id",
   "cas.me": "/cas/me",
