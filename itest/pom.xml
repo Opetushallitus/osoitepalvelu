@@ -21,6 +21,7 @@
         <artifactId>osoitepalvelu</artifactId>
         <groupId>fi.vm.sade.osoitepalvelu</groupId>
         <version>2015-05-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
