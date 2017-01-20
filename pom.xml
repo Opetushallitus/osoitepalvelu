@@ -28,8 +28,6 @@
 
         <camel.version>2.12.1</camel.version>
         <ehcache.version>2.5.0</ehcache.version>
-        <ehcache-jgroupsreplication.version>1.5</ehcache-jgroupsreplication.version>
-        <jgroups.version>2.10.0.GA</jgroups.version>
         <cas-client-core.version>3.1.12</cas-client-core.version>
         <spring.version>4.3.2.RELEASE</spring.version>
         <spring.security.version>3.2.9.RELEASE</spring.security.version>
@@ -445,21 +443,11 @@
                 <version>${spring.security.version}</version>
             </dependency>
 
-            <!-- CAS ticket cache replication -->
+            <!-- CAS ticket cache -->
             <dependency>
                 <groupId>net.sf.ehcache</groupId>
                 <artifactId>ehcache-core</artifactId>
                 <version>${ehcache.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.sf.ehcache</groupId>
-                <artifactId>ehcache-jgroupsreplication</artifactId>
-                <version>${ehcache-jgroupsreplication.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jgroups</groupId>
-                <artifactId>jgroups</artifactId>
-                <version>${jgroups.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jasig.cas.client</groupId>
