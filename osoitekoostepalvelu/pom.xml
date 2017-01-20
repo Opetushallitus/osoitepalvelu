@@ -536,18 +536,10 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!--CAS Ticket cache replication -->
+        <!--CAS Ticket cache -->
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-jgroupsreplication</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jgroups</groupId>
-            <artifactId>jgroups</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jasig.cas.client</groupId>
