@@ -37,7 +37,6 @@ activeMq.targetDestination.learningopportunityprovider.public=fi.vm.sade.learnin
 activeMq.targetDestination.organisaatio=fi.vm.sade.organisaatio.service
 activeMq.targetDestinationAdmin.tarjonta=fi.vm.sade.tarjonta.admin.service
 activeMq.targetDestinationPublic.tarjonta=fi.vm.sade.tarjonta.public.service
-aitu.rest.uri = https://${host.virkailija}/aitu/api
 authenticationService.kayttoikeusryhma.rest.url=https://${host.virkailija}/authentication-service/resources/kayttooikeusryhma
 authenticationService.henkilo.rest.url=https://${host.virkailija}/authentication-service/resources/henkilo
 cas.callback.organisaatio-app=http://{{ cluster_organisaatio_host | default("${server.name}") }}:{{ cluster_organisaatio_port | default("8301") }}/organisaatio-app
