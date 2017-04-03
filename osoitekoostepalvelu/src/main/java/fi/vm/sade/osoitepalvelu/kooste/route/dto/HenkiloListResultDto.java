@@ -34,7 +34,6 @@ public class HenkiloListResultDto implements Serializable {
     private String oppijanumero;
     private boolean passivoitu;
     private boolean duplicate;
-    private HenkiloKayttajatiedotDto kayttajatiedot;
 
     public String getEtunimet() {
         return etunimet;
@@ -98,13 +97,5 @@ public class HenkiloListResultDto implements Serializable {
 
     public void setDuplicate(boolean duplicate) {
         this.duplicate = duplicate;
-    }
-
-    public HenkiloKayttajatiedotDto getKayttajatiedot() {
-        return kayttajatiedot;
-    }
-
-    public void setKayttajatiedot(HenkiloKayttajatiedotDto kayttajatiedot) {
-        this.kayttajatiedot = kayttajatiedot;
     }
 }

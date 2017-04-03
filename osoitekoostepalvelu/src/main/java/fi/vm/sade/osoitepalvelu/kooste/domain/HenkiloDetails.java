@@ -16,7 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloKayttajatiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloKieliDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloYhteystietoRyhmaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
@@ -37,7 +36,6 @@ import java.util.Set;
  */
 @Document(collection = "henkilo")
 public class HenkiloDetails {
-    private Long id;
     @Id
     @Indexed(unique = true)
     private String oidHenkilo;
@@ -52,7 +50,6 @@ public class HenkiloDetails {
     @Indexed
     private Set<String> aktiivinenOrganisaatioOids = new HashSet<String>();
     private List<OrganisaatioHenkiloDto> organisaatiohenkilos = new ArrayList<OrganisaatioHenkiloDto>();
-    private HenkiloKayttajatiedotDto kayttajatiedot;
     private HenkiloKieliDto asiointiKieli;
     private List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma = new ArrayList<HenkiloYhteystietoRyhmaDto>();
 
@@ -118,22 +115,6 @@ public class HenkiloDetails {
 
     public void setDuplicate(boolean duplicate) {
         this.duplicate = duplicate;
-    }
-
-    public HenkiloKayttajatiedotDto getKayttajatiedot() {
-        return kayttajatiedot;
-    }
-
-    public void setKayttajatiedot(HenkiloKayttajatiedotDto kayttajatiedot) {
-        this.kayttajatiedot = kayttajatiedot;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public HenkiloKieliDto getAsiointiKieli() {

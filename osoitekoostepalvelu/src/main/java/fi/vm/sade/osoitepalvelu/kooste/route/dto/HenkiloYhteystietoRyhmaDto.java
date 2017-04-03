@@ -36,7 +36,7 @@ public class HenkiloYhteystietoRyhmaDto implements Serializable {
     private String ryhmaKuvaus;
     private String ryhmaAlkuperaTieto;
     private boolean readOnly;
-    private List<HenkiloYhteystietoDto> yhteystiedot = new ArrayList<HenkiloYhteystietoDto>();
+    private List<HenkiloYhteystietoDto> yhteystieto = new ArrayList<HenkiloYhteystietoDto>();
 
     public static final Function<HenkiloYhteystietoRyhmaDto, String> SAHKOPOSTI
             = new Function<HenkiloYhteystietoRyhmaDto, String>() {
@@ -77,16 +77,16 @@ public class HenkiloYhteystietoRyhmaDto implements Serializable {
         this.readOnly = readOnly;
     }
 
-    public List<HenkiloYhteystietoDto> getYhteystiedot() {
-        return yhteystiedot;
+    public List<HenkiloYhteystietoDto> getYhteystieto() {
+        return yhteystieto;
     }
 
-    public void setYhteystiedot(List<HenkiloYhteystietoDto> yhteystiedot) {
-        this.yhteystiedot = yhteystiedot;
+    public void setYhteystieto(List<HenkiloYhteystietoDto> yhteystieto) {
+        this.yhteystieto = yhteystieto;
     }
 
     public String findArvo(String yhteystietoTyyppi) {
-        for (HenkiloYhteystietoDto yhteystieto : this.yhteystiedot) {
+        for (HenkiloYhteystietoDto yhteystieto : this.yhteystieto) {
             if (yhteystietoTyyppi.equals(yhteystieto.getYhteystietoTyyppi())) {
                 return yhteystieto.getYhteystietoArvo();
             }

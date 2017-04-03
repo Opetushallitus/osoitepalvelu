@@ -34,7 +34,6 @@ public class HenkiloHakuResultDto implements Serializable {
 
     private static final long serialVersionUID  = -1L;
 
-    private Long id;
     @DtoConversion(path="oidHenkilo", withClass = HenkiloDetailsDto.class)
     private String henkiloOid;
     private String nimi;
@@ -66,14 +65,6 @@ public class HenkiloHakuResultDto implements Serializable {
         this.osoittees = osoittees;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public List<OrganisaatioHenkiloDto> getOrganisaatioHenkilos() {
         return organisaatioHenkilos;
     }
@@ -96,9 +87,6 @@ public class HenkiloHakuResultDto implements Serializable {
         if (henkiloOid != null ? !henkiloOid.equals(that.henkiloOid) : that.henkiloOid != null) {
             return false;
         }
-        if (id != null ? !id.equals(that.id) : that.id != null) {
-            return false;
-        }
         if (osoittees != null ? !osoittees.equals(that.osoittees) : that.osoittees != null) {
             return false;
         }
@@ -108,7 +96,7 @@ public class HenkiloHakuResultDto implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = 0;
         result = HASH_FACTOR * result + (henkiloOid != null ? henkiloOid.hashCode() : 0);
         return result;
     }

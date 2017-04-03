@@ -322,7 +322,6 @@ public class DefaultSearchServiceTest {
         henkiloKieliDto.setKieliTyyppi("suomi");
         henkiloDetailsDto.setAsiointiKieli(henkiloKieliDto);
 
-        henkiloDetailsDto.setId(1L);
         henkiloDetailsDto.setOidHenkilo("1.2.246.562.24.56640213476");
         henkiloDetailsDto.setEtunimet("Jaska");
         henkiloDetailsDto.setSukunimi("Jokunen");
@@ -331,7 +330,6 @@ public class DefaultSearchServiceTest {
         henkiloDetailsDto.setKasittelijaOid("1.2.246.562.24.56640214444");
         henkiloDetailsDto.setDuplicate(false);
         henkiloDetailsDto.setPassivoitu(false);
-        henkiloDetailsDto.setKayttajatiedot(new HenkiloKayttajatiedotDto(){{setUsername("jaska1");}});
 
         OrganisaatioHenkiloDto organisaatioHenkiloDto = new OrganisaatioHenkiloDto();
         organisaatioHenkiloDto.setId(2L);
@@ -353,7 +351,7 @@ public class DefaultSearchServiceTest {
         henkiloYhteystietoDto.setYhteystietoArvo("e@mail.com");
         List<HenkiloYhteystietoDto> henkiloYhteystietoDtos = new ArrayList<HenkiloYhteystietoDto>();
         henkiloYhteystietoDtos.add(henkiloYhteystietoDto);
-        henkiloYhteystietoRyhmaDto.setYhteystiedot(henkiloYhteystietoDtos);
+        henkiloYhteystietoRyhmaDto.setYhteystieto(henkiloYhteystietoDtos);
         List<HenkiloYhteystietoRyhmaDto> henkiloYhteystietoRyhmaDtos = new ArrayList<HenkiloYhteystietoRyhmaDto>();
         henkiloYhteystietoRyhmaDtos.add(henkiloYhteystietoRyhmaDto);
         henkiloDetailsDto.setYhteystiedotRyhma(henkiloYhteystietoRyhmaDtos);
@@ -381,7 +379,6 @@ public class DefaultSearchServiceTest {
         assertNotNull(results.getHenkilos());
         assertEquals(1, results.getHenkilos().size());
         HenkiloHakuResultDto firstResult  =  results.getHenkilos().get(0);
-        assertEquals(1L, (long)firstResult.getId());
         assertEquals("Jaska Jokunen", firstResult.getNimi());
         assertEquals("1.2.246.562.24.56640213476", firstResult.getHenkiloOid());
 

@@ -28,7 +28,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * User: ratamaa
@@ -44,7 +43,8 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     private static final long HENKILOLIST_TIMEOUT_MILLIS = 10L*60L*1000L;
     private static final long HENKILO_TIMEOUT_MILLIS = 30L*MILLIS_IN_SECOND;
 
-    private static final String SERVICE_CALL_POSTFIX = ".AuthenticationServiceCall";
+    private static final String OPPIJANUMEROREKISTERI_SERVICE_CALL_POSTFIX = ".OppijanumerorekisteriServiceCall";
+    private static final String KAYTTOOIKEUS_SERVICE_CALL_POSTFIX = ".KayttooikeusServiceCall";
 
     private static final String ROUTE_KAYTTOOIKESURYHMAS  =  "direct:findKayttoikeusryhmas";
 
@@ -74,48 +74,47 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     }
 
     protected void buildHenkilo() {
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_HENKILO + SERVICE_CALL_POSTFIX);
+        Debugger oppijanumerorekisteriCallInOutDebug  =  debug(ROUTE_HENKILO + OPPIJANUMEROREKISTERI_SERVICE_CALL_POSTFIX);
         headers(
             from(ROUTE_HENKILO),
             headers()
                 .get()
                 .casAuthenticationByAuthenticatedUser(
-                        urlConfiguration.getProperty("cas.service.authentication-service")
+                        urlConfiguration.getProperty("cas.service.oppijanumerorekisteri-service")
                 )
                 .retry(3)
         )
-        .process(authenticationCallInOutDebug)
-        .recipientList(simple(uri(urlConfiguration.getProperty("authentication-service.henkilo.byOid",
+        .process(oppijanumerorekisteriCallInOutDebug)
+        .recipientList(simple(uri(urlConfiguration.getProperty("oppijanumerorekisteri-service.henkilo.byOid",
             "$simple{in.body}"),
                 HENKILO_TIMEOUT_MILLIS)))
-        .process(authenticationCallInOutDebug)
+        .process(oppijanumerorekisteriCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<HenkiloDetailsDto>() {}));
     }
 
     protected void buildOrganisaatioHenkilos() {
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_ORGANISAATIOHENKILOS + SERVICE_CALL_POSTFIX);
+        Debugger kayttooikeusCallInOutDebug  =  debug(ROUTE_ORGANISAATIOHENKILOS + KAYTTOOIKEUS_SERVICE_CALL_POSTFIX);
         headers(
                 from(ROUTE_ORGANISAATIOHENKILOS),
                 headers()
                         .get()
                         .casAuthenticationByAuthenticatedUser(
-                                urlConfiguration.getProperty("cas.service.authentication-service")
+                                urlConfiguration.getProperty("cas.service.kayttooikeus-service")
                         )
                 .retry(3)
         )
-        .process(authenticationCallInOutDebug)
-        .recipientList(simple(uri(urlConfiguration.getProperty("authentication-service.henkilo.byOid.orgHenkilos",
+        .process(kayttooikeusCallInOutDebug)
+        .recipientList(simple(uri(urlConfiguration.getProperty("kayttooikeus-service.henkilo.byOid.orgHenkilos",
                 "$simple{in.body}"),
                     HENKILO_TIMEOUT_MILLIS)))
-        .process(authenticationCallInOutDebug)
+        .process(kayttooikeusCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<List<OrganisaatioHenkiloDto>>() {}));
     }
 
     protected void buildHenkiloList() {
-
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_HENKILOS + SERVICE_CALL_POSTFIX);
+        Debugger kayttooikeusCallInOutDebug  =  debug(ROUTE_HENKILOS + KAYTTOOIKEUS_SERVICE_CALL_POSTFIX);
         headers(
             from(ROUTE_HENKILOS),
             headers()
@@ -128,32 +127,32 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                     .param(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME).listFromHeader().toQuery()
                     .param(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME).optional().valueFromHeader().toQuery()
                 .casAuthenticationByAuthenticatedUser(
-                        urlConfiguration.getProperty("cas.service.authentication-service")
+                        urlConfiguration.getProperty("cas.service.kayttooikeus-service")
                 )
                 .retry(3)
         )
-        .process(authenticationCallInOutDebug)
-        .to(uri(urlConfiguration.getProperty("authentication-service.henkilo.virkailijasByOids"),
+        .process(kayttooikeusCallInOutDebug)
+        .to(uri(urlConfiguration.getProperty("kayttooikeus-service.henkilo.virkailijasByOids"),
                 HENKILOLIST_TIMEOUT_MILLIS)) // wait for 10 minutes maximum
-        .process(authenticationCallInOutDebug)
+        .process(kayttooikeusCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<List<HenkiloListResultDto>>() {}));
     }
 
     protected void buildKayttoOikeusryhmas() {
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_KAYTTOOIKESURYHMAS + SERVICE_CALL_POSTFIX);
+        Debugger kayttooikeusCallInOutDebug  =  debug(ROUTE_KAYTTOOIKESURYHMAS + KAYTTOOIKEUS_SERVICE_CALL_POSTFIX);
         headers(
                 from(ROUTE_KAYTTOOIKESURYHMAS),
                 headers()
                         .get()
                         .casAuthenticationByAuthenticatedUser(
-                                urlConfiguration.getProperty("cas.service.authentication-service")
+                                urlConfiguration.getProperty("cas.service.kayttooikeus-service")
                         )
                 .retry(3)
         )
-        .process(authenticationCallInOutDebug)
-        .to(uri(urlConfiguration.getProperty("authentication-service.kayttoikeusryhma")))
-        .process(authenticationCallInOutDebug)
+        .process(kayttooikeusCallInOutDebug)
+        .to(uri(urlConfiguration.getProperty("kayttooikeus-service.kayttoikeusryhma")))
+        .process(kayttooikeusCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
     }

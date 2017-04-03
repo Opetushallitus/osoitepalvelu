@@ -364,7 +364,6 @@ public class SearchResultTransformerServiceTest {
                                List<OrganisaatioHenkiloDto> organisaatioHenkilos,
                                List<HenkiloOsoiteDto> osoittees) {
         HenkiloHakuResultDto dto = new HenkiloHakuResultDto();
-        dto.setId(++id);
         dto.setHenkiloOid(oid);
         dto.setNimi(nimi);
         dto.setOrganisaatioHenkilos(organisaatioHenkilos);
