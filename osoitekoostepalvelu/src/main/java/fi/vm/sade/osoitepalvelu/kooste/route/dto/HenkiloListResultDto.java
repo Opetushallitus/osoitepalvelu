@@ -30,10 +30,6 @@ public class HenkiloListResultDto implements Serializable {
     private String kutsumanimi;
     private String sukunimi;
     private String oidHenkilo;
-    private String kasittelijaOid;
-    private String oppijanumero;
-    private boolean passivoitu;
-    private boolean duplicate;
 
     public String getEtunimet() {
         return etunimet;
@@ -65,37 +61,5 @@ public class HenkiloListResultDto implements Serializable {
 
     public void setOidHenkilo(String oidHenkilo) {
         this.oidHenkilo = oidHenkilo;
-    }
-
-    public String getKasittelijaOid() {
-        return kasittelijaOid;
-    }
-
-    public void setKasittelijaOid(String kasittelijaOid) {
-        this.kasittelijaOid = kasittelijaOid;
-    }
-
-    public String getOppijanumero() {
-        return oppijanumero;
-    }
-
-    public void setOppijanumero(String oppijanumero) {
-        this.oppijanumero = oppijanumero;
-    }
-
-    public boolean isPassivoitu() {
-        return passivoitu;
-    }
-
-    public void setPassivoitu(boolean passivoitu) {
-        this.passivoitu = passivoitu;
-    }
-
-    public boolean isDuplicate() {
-        return duplicate;
-    }
-
-    public void setDuplicate(boolean duplicate) {
-        this.duplicate = duplicate;
     }
 }

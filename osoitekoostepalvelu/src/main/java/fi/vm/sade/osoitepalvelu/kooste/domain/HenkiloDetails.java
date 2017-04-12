@@ -42,10 +42,6 @@ public class HenkiloDetails {
     private String etunimet;
     private String kutsunanimi;
     private String sukunimi;
-    private String kasittelijaOid;
-    private String oppijanumero;
-    private boolean passivoitu;
-    private boolean duplicate;
     private DateTime cachedAt = new DateTime();
     @Indexed
     private Set<String> aktiivinenOrganisaatioOids = new HashSet<String>();
@@ -83,38 +79,6 @@ public class HenkiloDetails {
 
     public void setOidHenkilo(String oidHenkilo) {
         this.oidHenkilo = oidHenkilo;
-    }
-
-    public String getKasittelijaOid() {
-        return kasittelijaOid;
-    }
-
-    public void setKasittelijaOid(String kasittelijaOid) {
-        this.kasittelijaOid = kasittelijaOid;
-    }
-
-    public String getOppijanumero() {
-        return oppijanumero;
-    }
-
-    public void setOppijanumero(String oppijanumero) {
-        this.oppijanumero = oppijanumero;
-    }
-
-    public boolean isPassivoitu() {
-        return passivoitu;
-    }
-
-    public void setPassivoitu(boolean passivoitu) {
-        this.passivoitu = passivoitu;
-    }
-
-    public boolean isDuplicate() {
-        return duplicate;
-    }
-
-    public void setDuplicate(boolean duplicate) {
-        this.duplicate = duplicate;
     }
 
     public HenkiloKieliDto getAsiointiKieli() {

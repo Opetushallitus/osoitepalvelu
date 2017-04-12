@@ -326,10 +326,6 @@ public class DefaultSearchServiceTest {
         henkiloDetailsDto.setEtunimet("Jaska");
         henkiloDetailsDto.setSukunimi("Jokunen");
         henkiloDetailsDto.setKutsumanimi("Jaska");
-        henkiloDetailsDto.setOppijanumero("1.2.246.562.24.56640213476");
-        henkiloDetailsDto.setKasittelijaOid("1.2.246.562.24.56640214444");
-        henkiloDetailsDto.setDuplicate(false);
-        henkiloDetailsDto.setPassivoitu(false);
 
         OrganisaatioHenkiloDto organisaatioHenkiloDto = new OrganisaatioHenkiloDto();
         organisaatioHenkiloDto.setId(2L);
