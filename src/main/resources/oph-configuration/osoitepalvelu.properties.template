@@ -51,8 +51,6 @@ cas.sendRenew=false
 cas.user-search-base=ou\=people
 cas.user-search-filter=(|(mail\={0})(uid\={0}))
 cas.service.aitu-service = https://${host.virkailija}/aitu/
-cas.service.oppijanumerorekisteri-service=https\://${host.virkailija}/oppijanumerorekisteri-service
-cas.service.kayttooikeus-service=https\://${host.virkailija}/kayttooikeus-service
 cas.service.organisaatio-app==https://${host.virkailija}/organisaatio-app
 cas.service.organisaatio-service=https\://${host.virkailija}/organisaatio-service
 cas.service.osoitekoostepalvelu=https://${host.virkailija}/osoitekoostepalvelu
