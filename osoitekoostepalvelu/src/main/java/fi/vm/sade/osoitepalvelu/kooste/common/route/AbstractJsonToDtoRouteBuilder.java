@@ -26,8 +26,6 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClien
 import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
 
 import org.apache.camel.*;
-import org.apache.camel.builder.BuilderSupport;
-import org.apache.camel.builder.SimpleBuilder;
 import org.apache.camel.component.http.HttpOperationFailedException;
 import org.apache.camel.model.ExpressionNode;
 import org.apache.camel.model.ProcessorDefinition;
@@ -59,7 +57,7 @@ import java.util.Map.Entry;
  * @see HeaderBuilder
  */
 public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
-    protected static final String CONTENT_TYPE_JSON  =  "application/json;charset = UTF-8";
+    protected static final String CONTENT_TYPE_JSON  =  "application/json;charset=UTF-8";
     protected static final int DEFAULT_RETRY_LIMIT  =  2;
     protected static final String CAS_TICKET_CACHE_PROPERTY  =  "CasTicketCache";
     protected static final String CAS_TICKET_CACHE_SERVICE_PROPERTY  =  "CasTicketCache.service";
@@ -780,7 +778,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
         }
 
         /**
-         * Sets the CONTENT_TYPE type to application/json;charset = UTF-8
+         * Sets the CONTENT_TYPE type to application/json;charset=UTF-8
          * and adds an ProcessDefinitionProcessor which marshals the
          * Message Body in the request as JSON.
          *

@@ -26,8 +26,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: ratamaa
@@ -53,7 +56,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     private static final String HENKILOS_PASSIVOITU_PARAM_NAME = "passivoitu";
     private static final String HENKILOS_DUPLIKAATTI_PARAM_NAME = "duplikaatti";
     private static final String HENKILOS_ORGANISAATIOOIDS_PARAM_NAME = "organisaatioOids";
-    private static final String HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME = "kayttoOikeusRyhmaNimi";
+    private static final String HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME = "kayttoOikeusRyhmaNimet";
     private static final String HENKILOS_HENKILOTYYPPI_PARAM = "tyyppi";
     private static final String HENKILOS_HENKILOTYYPPI_VIRKAILIJA = "VIRKAILIJA";
 
@@ -126,25 +129,19 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         headers(
             from(ROUTE_HENKILOS),
             headers()
-                 // TODO: Muuttumassa POST-pyynnöksi, jotta URL:n pituus saadaan riittämään.
-                 // Muuta silloin .get() -> .post() ja  .toQuery() -> .toBody()
-                .get()
-                    .param(HENKILOS_PASSIVOITU_PARAM_NAME).value(false).toQuery()
-                    .param(HENKILOS_DUPLIKAATTI_PARAM_NAME).value(false).toQuery()
-                    .param(HENKILOS_HENKILOTYYPPI_PARAM).value(HENKILOS_HENKILOTYYPPI_VIRKAILIJA).toQuery()
-                    .param(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME).listFromHeader().toQuery()
-                    .param(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME).optional().valueFromHeader().toQuery()
+                .post()
+                    .jsonRequstBody()
                 .casAuthenticationByAuthenticatedUser(
                         urlConfiguration.url("oppijanumerorekisteri-service.security-check")
                 )
                 .retry(3)
         )
         .process(kayttooikeusCallInOutDebug)
-        .to(uri(urlConfiguration.url("oppijanumerorekisteri-service.henkilo"),
+        .to(uri(urlConfiguration.url("oppijanumerorekisteri-service.henkilo.haku"),
                 HENKILOLIST_TIMEOUT_MILLIS)) // wait for 10 minutes maximum
         .process(kayttooikeusCallInOutDebug)
         .process(saveSession())
-        .process(jsonToDto(new TypeReference<OppijanumerorekisteriSlice<HenkiloListResultDto>>() {}));
+        .process(jsonToDto(new TypeReference<List<HenkiloListResultDto>>() {}));
     }
 
     protected void buildKayttoOikeusryhmas() {
@@ -188,36 +185,34 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     @Override
     public List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
         if (criteria.getOrganisaatioOids() == null || criteria.getOrganisaatioOids().isEmpty()) {
-            return findByKayttoOikeusRyhmas(criteria, headerValues(), requestContext);
+            return findByKayttoOikeusRyhmas(null, criteria.getKayttoOikeusRayhmas(), requestContext);
         }
 
         List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
         List<List<String>> oidChunks = CollectionHelper.split(criteria.getOrganisaatioOids(), MAX_OIDS_FOR_HENKILO_HAKU);
         for (List<String> oids : oidChunks) {
-            HeaderValueBuilder header = headerValues().add(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, oids);
-            results.addAll(findByKayttoOikeusRyhmas(criteria, header, requestContext));
+            results.addAll(findByKayttoOikeusRyhmas(oids, criteria.getKayttoOikeusRayhmas(), requestContext));
         }
 
         return results;
     }
 
-    protected List<HenkiloListResultDto> findByKayttoOikeusRyhmas(HenkiloCriteriaDto criteria, HeaderValueBuilder header,
+    protected List<HenkiloListResultDto> findByKayttoOikeusRyhmas(List<String> organisaatioOids, List<String> kayttoOikeusRyhmat,
                                                                   CamelRequestContext requestContext) {
-        List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
-        if (!criteria.getKayttoOikeusRayhmas().isEmpty()) {
-            for (String kor : criteria.getKayttoOikeusRayhmas()) {
-                @SuppressWarnings("unchecked")
-                OppijanumerorekisteriSlice<HenkiloListResultDto> korResults = sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_HENKILOS, "", header.copy()
-                        .add(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, kor).map(),
-                        requestContext, OppijanumerorekisteriSlice.class);
-                results.addAll(korResults.getResults());
-            }
-        } else {
-            @SuppressWarnings("unchecked")
-            OppijanumerorekisteriSlice<HenkiloListResultDto> searchResults =  sendBodyHeadersAndProperties(getCamelTemplate(),
-                    ROUTE_HENKILOS, "", header.map(), requestContext, OppijanumerorekisteriSlice.class);
-            results.addAll(searchResults.getResults());
-        }
-        return results;
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(HENKILOS_PASSIVOITU_PARAM_NAME, false);
+        body.put(HENKILOS_DUPLIKAATTI_PARAM_NAME, false);
+        body.put(HENKILOS_HENKILOTYYPPI_PARAM, HENKILOS_HENKILOTYYPPI_VIRKAILIJA);
+        body.put(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, emptyToNull(organisaatioOids));
+        body.put(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, emptyToNull(kayttoOikeusRyhmat));
+
+        @SuppressWarnings("unchecked")
+        List<HenkiloListResultDto> searchResults = sendBodyHeadersAndProperties(getCamelTemplate(),
+                ROUTE_HENKILOS, body, headerValues().map(), requestContext, List.class);
+        return searchResults;
+    }
+
+    private <T> Collection<T> emptyToNull(Collection<T> collection) {
+        return collection == null || collection.isEmpty() ? null : collection;
     }
 }
