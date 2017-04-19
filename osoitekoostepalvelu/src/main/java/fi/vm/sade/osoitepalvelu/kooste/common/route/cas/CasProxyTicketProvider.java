@@ -19,17 +19,15 @@ package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import fi.vm.sade.generic.ui.portlet.security.ProxyAuthenticator;
+import org.jasig.cas.client.validation.Assertion;
+import org.springframework.security.cas.authentication.CasAuthenticationToken;
 
 /**
- * Provides the CAS authentication headers using ProxyAuthenticator by default.
- * @see ProxyAuthenticator that uses an internal ticket cache
+ * Provides the CAS authentication headers.
  *
  * However, if "dev" authMode is used and the Spring Security's context contains a
  * UsernamePasswordAuthenticationToken, which is the case for the basic authentication
@@ -45,8 +43,7 @@ import fi.vm.sade.generic.ui.portlet.security.ProxyAuthenticator;
  * Time: 5:15 PM
  */
 public class CasProxyTicketProvider extends AbstractCasTicketProvider {
-    private static final Logger logger = LoggerFactory.getLogger(CasProxyTicketProvider.class);
-    private ProxyAuthenticator proxyAuthenticator  =  new ProxyAuthenticator();
+
     private String casService;
     private String authMode;
 
@@ -68,26 +65,15 @@ public class CasProxyTicketProvider extends AbstractCasTicketProvider {
                     ""  +  token.getCredentials()).provideTicketHeaders(targetService);
         }
 
-        // In production we basically do this
-//        Authentication authentication  =  SecurityContextHolder.getContext().getAuthentication();
-//        Assertion assertion  =  ((CasAuthenticationToken) authentication).getAssertion();
-//        return assertion.getPrincipal().getProxyTicketFor(service);
-
-        // But for performance reasons, use a ticket cache implemented in ProxyAuthenticator (implementation might
-        // also change):
         final Map<String, Object> result  =  new HashMap<String, Object>();
-        proxyAuthenticator.proxyAuthenticate(targetService, "cas", new ProxyAuthenticator.Callback() {
-            @Override
-            public void setRequestHeader(String key, String value) {
-                logger.debug("Set CAS request header {}={}", key, value);
-                // Dirty callback solution, but the implementation is not asynchronous, so we are safe here:
-                result.put(key, value);
-            }
-            @Override
-            public void gotNewTicket(Authentication authentication, String proxyTicket) {
-                logger.debug("Got new authentication ticket for service={}", targetService);
-            }
-        });
+        Assertion assertion = ((CasAuthenticationToken) authentication).getAssertion();
+        String proxyTicket = assertion.getPrincipal().getProxyTicketFor(targetService);
+        if (proxyTicket == null) {
+            throw new NullPointerException(
+                    "obtainNewCasProxyTicket got null proxyticket, there must be something wrong with cas proxy authentication -scenario! check proxy callback works etc, targetService: "
+                            + targetService + ", user: " + authentication.getName());
+        }
+        result.put("CasSecurityTicket", proxyTicket);
         return result;
     }
 }
