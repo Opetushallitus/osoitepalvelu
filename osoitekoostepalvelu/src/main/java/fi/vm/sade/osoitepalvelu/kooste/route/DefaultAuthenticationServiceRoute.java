@@ -26,9 +26,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 /**
  * User: ratamaa
@@ -44,18 +46,19 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     private static final long HENKILOLIST_TIMEOUT_MILLIS = 10L*60L*1000L;
     private static final long HENKILO_TIMEOUT_MILLIS = 30L*MILLIS_IN_SECOND;
 
-    private static final String SERVICE_CALL_POSTFIX = ".AuthenticationServiceCall";
+    private static final String OPPIJANUMEROREKISTERI_SERVICE_CALL_POSTFIX = ".OppijanumerorekisteriServiceCall";
+    private static final String KAYTTOOIKEUS_SERVICE_CALL_POSTFIX = ".KayttooikeusServiceCall";
 
     private static final String ROUTE_KAYTTOOIKESURYHMAS  =  "direct:findKayttoikeusryhmas";
 
     private static final String ROUTE_HENKILOS  =  "direct:henkiloList";
 
-    private static final String HENKILOS_ORGANISAATIOOIDS_PARAM_NAME = "ooids";
-    private static final String HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME = "kor";
-    private static final String HENKILOS_HENKILOTYYPPI_PARAM = "ht";
+    private static final String HENKILOS_PASSIVOITU_PARAM_NAME = "passivoitu";
+    private static final String HENKILOS_DUPLIKAATTI_PARAM_NAME = "duplikaatti";
+    private static final String HENKILOS_ORGANISAATIOOIDS_PARAM_NAME = "organisaatioOids";
+    private static final String HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME = "kayttoOikeusRyhmaNimet";
+    private static final String HENKILOS_HENKILOTYYPPI_PARAM = "tyyppi";
     private static final String HENKILOS_HENKILOTYYPPI_VIRKAILIJA = "VIRKAILIJA";
-    private static final String HENKILOS_COUNT_PARAM = "count";
-    private static final String HENKILOS_INDEX_PARAM = "index";
 
     private static final String ROUTE_HENKILO = "direct:henkilo";
 
@@ -73,87 +76,88 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         buildHenkiloList();
     }
 
+    private String camelUrl(String key, String... params) {
+        String url = urlConfiguration.url(key);
+        for (int i = 0; i < params.length; ++i) {
+            url = url.replace("$" + (i + 1), params[i]);
+        }
+        return url;
+    }
+
     protected void buildHenkilo() {
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_HENKILO + SERVICE_CALL_POSTFIX);
+        Debugger oppijanumerorekisteriCallInOutDebug  =  debug(ROUTE_HENKILO + OPPIJANUMEROREKISTERI_SERVICE_CALL_POSTFIX);
         headers(
             from(ROUTE_HENKILO),
             headers()
                 .get()
                 .casAuthenticationByAuthenticatedUser(
-                        urlConfiguration.getProperty("cas.service.authentication-service")
+                        urlConfiguration.url("oppijanumerorekisteri-service.security-check")
                 )
                 .retry(3)
         )
-        .process(authenticationCallInOutDebug)
-        .recipientList(simple(uri(urlConfiguration.getProperty("authentication-service.henkilo.byOid",
+        .process(oppijanumerorekisteriCallInOutDebug)
+        .recipientList(simple(uri(camelUrl("oppijanumerorekisteri-service.henkilo.byOid",
             "$simple{in.body}"),
                 HENKILO_TIMEOUT_MILLIS)))
-        .process(authenticationCallInOutDebug)
+        .process(oppijanumerorekisteriCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<HenkiloDetailsDto>() {}));
     }
 
     protected void buildOrganisaatioHenkilos() {
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_ORGANISAATIOHENKILOS + SERVICE_CALL_POSTFIX);
+        Debugger kayttooikeusCallInOutDebug  =  debug(ROUTE_ORGANISAATIOHENKILOS + KAYTTOOIKEUS_SERVICE_CALL_POSTFIX);
         headers(
                 from(ROUTE_ORGANISAATIOHENKILOS),
                 headers()
                         .get()
                         .casAuthenticationByAuthenticatedUser(
-                                urlConfiguration.getProperty("cas.service.authentication-service")
+                                urlConfiguration.url("kayttooikeus-service.security-check")
                         )
                 .retry(3)
         )
-        .process(authenticationCallInOutDebug)
-        .recipientList(simple(uri(urlConfiguration.getProperty("authentication-service.henkilo.byOid.orgHenkilos",
+        .process(kayttooikeusCallInOutDebug)
+        .recipientList(simple(uri(camelUrl("kayttooikeus-service.henkilo.byOid.orgHenkilos",
                 "$simple{in.body}"),
                     HENKILO_TIMEOUT_MILLIS)))
-        .process(authenticationCallInOutDebug)
+        .process(kayttooikeusCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<List<OrganisaatioHenkiloDto>>() {}));
     }
 
     protected void buildHenkiloList() {
-
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_HENKILOS + SERVICE_CALL_POSTFIX);
+        Debugger kayttooikeusCallInOutDebug  =  debug(ROUTE_HENKILOS + OPPIJANUMEROREKISTERI_SERVICE_CALL_POSTFIX);
         headers(
             from(ROUTE_HENKILOS),
             headers()
-                 // TODO: Muuttumassa POST-pyynnöksi, jotta URL:n pituus saadaan riittämään.
-                 // Muuta silloin .get() -> .post() ja  .toQuery() -> .toBody()
-                .get()
-                    .param(HENKILOS_HENKILOTYYPPI_PARAM).value(HENKILOS_HENKILOTYYPPI_VIRKAILIJA).toQuery()
-                    .param(HENKILOS_COUNT_PARAM).value(0).toQuery()
-                    .param(HENKILOS_INDEX_PARAM).value(0).toQuery()
-                    .param(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME).listFromHeader().toQuery()
-                    .param(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME).optional().valueFromHeader().toQuery()
+                .post()
+                    .jsonRequstBody()
                 .casAuthenticationByAuthenticatedUser(
-                        urlConfiguration.getProperty("cas.service.authentication-service")
+                        urlConfiguration.url("oppijanumerorekisteri-service.security-check")
                 )
                 .retry(3)
         )
-        .process(authenticationCallInOutDebug)
-        .to(uri(urlConfiguration.getProperty("authentication-service.henkilo.virkailijasByOids"),
+        .process(kayttooikeusCallInOutDebug)
+        .to(uri(urlConfiguration.url("oppijanumerorekisteri-service.henkilo.haku"),
                 HENKILOLIST_TIMEOUT_MILLIS)) // wait for 10 minutes maximum
-        .process(authenticationCallInOutDebug)
+        .process(kayttooikeusCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<List<HenkiloListResultDto>>() {}));
     }
 
     protected void buildKayttoOikeusryhmas() {
-        Debugger authenticationCallInOutDebug  =  debug(ROUTE_KAYTTOOIKESURYHMAS + SERVICE_CALL_POSTFIX);
+        Debugger kayttooikeusCallInOutDebug  =  debug(ROUTE_KAYTTOOIKESURYHMAS + KAYTTOOIKEUS_SERVICE_CALL_POSTFIX);
         headers(
                 from(ROUTE_KAYTTOOIKESURYHMAS),
                 headers()
                         .get()
                         .casAuthenticationByAuthenticatedUser(
-                                urlConfiguration.getProperty("cas.service.authentication-service")
+                                urlConfiguration.url("kayttooikeus-service.security-check")
                         )
                 .retry(3)
         )
-        .process(authenticationCallInOutDebug)
-        .to(uri(urlConfiguration.getProperty("authentication-service.kayttoikeusryhma")))
-        .process(authenticationCallInOutDebug)
+        .process(kayttooikeusCallInOutDebug)
+        .to(uri(urlConfiguration.url("kayttooikeus-service.kayttoikeusryhma")))
+        .process(kayttooikeusCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
     }
@@ -181,37 +185,34 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     @Override
     public List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
         if (criteria.getOrganisaatioOids() == null || criteria.getOrganisaatioOids().isEmpty()) {
-            return findByKayttoOikeusRyhmas(criteria, headerValues(), requestContext);
+            return findByKayttoOikeusRyhmas(null, criteria.getKayttoOikeusRayhmas(), requestContext);
         }
 
         List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
         List<List<String>> oidChunks = CollectionHelper.split(criteria.getOrganisaatioOids(), MAX_OIDS_FOR_HENKILO_HAKU);
         for (List<String> oids : oidChunks) {
-            HeaderValueBuilder header = headerValues().add(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, oids);
-            results.addAll(findByKayttoOikeusRyhmas(criteria, header, requestContext));
+            results.addAll(findByKayttoOikeusRyhmas(oids, criteria.getKayttoOikeusRayhmas(), requestContext));
         }
 
         return results;
     }
 
-    protected List<HenkiloListResultDto> findByKayttoOikeusRyhmas(HenkiloCriteriaDto criteria, HeaderValueBuilder header,
+    protected List<HenkiloListResultDto> findByKayttoOikeusRyhmas(List<String> organisaatioOids, List<String> kayttoOikeusRyhmat,
                                                                   CamelRequestContext requestContext) {
-        List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
-        if (!criteria.getKayttoOikeusRayhmas().isEmpty()) {
-            for (String kor : criteria.getKayttoOikeusRayhmas()) {
-                @SuppressWarnings("unchecked")
-                List<HenkiloListResultDto> korResults = sendBodyHeadersAndProperties(
-                        getCamelTemplate(), ROUTE_HENKILOS, "", header.copy()
-                        .add(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, kor).map(),
-                        requestContext, List.class);
-                results.addAll(korResults);
-            }
-        } else {
-            @SuppressWarnings("unchecked")
-            List<HenkiloListResultDto> searchResults =  sendBodyHeadersAndProperties(getCamelTemplate(),
-                    ROUTE_HENKILOS, "", header.map(), requestContext, List.class);
-            results.addAll(searchResults);
-        }
-        return results;
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(HENKILOS_PASSIVOITU_PARAM_NAME, false);
+        body.put(HENKILOS_DUPLIKAATTI_PARAM_NAME, false);
+        body.put(HENKILOS_HENKILOTYYPPI_PARAM, HENKILOS_HENKILOTYYPPI_VIRKAILIJA);
+        body.put(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, emptyToNull(organisaatioOids));
+        body.put(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, emptyToNull(kayttoOikeusRyhmat));
+
+        @SuppressWarnings("unchecked")
+        List<HenkiloListResultDto> searchResults = sendBodyHeadersAndProperties(getCamelTemplate(),
+                ROUTE_HENKILOS, body, headerValues().map(), requestContext, List.class);
+        return searchResults;
+    }
+
+    private <T> Collection<T> emptyToNull(Collection<T> collection) {
+        return collection == null || collection.isEmpty() ? null : collection;
     }
 }

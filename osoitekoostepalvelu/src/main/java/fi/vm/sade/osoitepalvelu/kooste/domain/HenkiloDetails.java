@@ -16,7 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloKayttajatiedotDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloKieliDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloYhteystietoRyhmaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
@@ -37,22 +36,16 @@ import java.util.Set;
  */
 @Document(collection = "henkilo")
 public class HenkiloDetails {
-    private Long id;
     @Id
     @Indexed(unique = true)
     private String oidHenkilo;
     private String etunimet;
     private String kutsunanimi;
     private String sukunimi;
-    private String kasittelijaOid;
-    private String oppijanumero;
-    private boolean passivoitu;
-    private boolean duplicate;
     private DateTime cachedAt = new DateTime();
     @Indexed
     private Set<String> aktiivinenOrganisaatioOids = new HashSet<String>();
     private List<OrganisaatioHenkiloDto> organisaatiohenkilos = new ArrayList<OrganisaatioHenkiloDto>();
-    private HenkiloKayttajatiedotDto kayttajatiedot;
     private HenkiloKieliDto asiointiKieli;
     private List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma = new ArrayList<HenkiloYhteystietoRyhmaDto>();
 
@@ -86,54 +79,6 @@ public class HenkiloDetails {
 
     public void setOidHenkilo(String oidHenkilo) {
         this.oidHenkilo = oidHenkilo;
-    }
-
-    public String getKasittelijaOid() {
-        return kasittelijaOid;
-    }
-
-    public void setKasittelijaOid(String kasittelijaOid) {
-        this.kasittelijaOid = kasittelijaOid;
-    }
-
-    public String getOppijanumero() {
-        return oppijanumero;
-    }
-
-    public void setOppijanumero(String oppijanumero) {
-        this.oppijanumero = oppijanumero;
-    }
-
-    public boolean isPassivoitu() {
-        return passivoitu;
-    }
-
-    public void setPassivoitu(boolean passivoitu) {
-        this.passivoitu = passivoitu;
-    }
-
-    public boolean isDuplicate() {
-        return duplicate;
-    }
-
-    public void setDuplicate(boolean duplicate) {
-        this.duplicate = duplicate;
-    }
-
-    public HenkiloKayttajatiedotDto getKayttajatiedot() {
-        return kayttajatiedot;
-    }
-
-    public void setKayttajatiedot(HenkiloKayttajatiedotDto kayttajatiedot) {
-        this.kayttajatiedot = kayttajatiedot;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public HenkiloKieliDto getAsiointiKieli() {

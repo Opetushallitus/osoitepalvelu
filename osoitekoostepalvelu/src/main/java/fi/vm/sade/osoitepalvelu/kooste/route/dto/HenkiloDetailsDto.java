@@ -35,18 +35,9 @@ import java.util.Set;
 public class HenkiloDetailsDto extends HenkiloListResultDto implements Serializable {
     private static final long serialVersionUID = 501895048885418517L;
     
-    private Long id;
     private HenkiloKieliDto asiointiKieli;
     private List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma = new ArrayList<HenkiloYhteystietoRyhmaDto>();
     private List<OrganisaatioHenkiloDto> organisaatioHenkilos = new ArrayList<OrganisaatioHenkiloDto>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public HenkiloKieliDto getAsiointiKieli() {
         return asiointiKieli;

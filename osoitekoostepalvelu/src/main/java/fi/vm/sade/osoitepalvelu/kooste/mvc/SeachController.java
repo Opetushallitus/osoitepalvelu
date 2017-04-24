@@ -48,6 +48,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.http.MediaType;
 
 /**
  * User: ratamaa
@@ -83,7 +84,9 @@ public class SeachController extends AbstractMvcController implements Serializab
      * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.TooFewSearchConditionsForKoulutusException
      * @throws fi.vm.sade.osoitepalvelu.kooste.service.search.OrganisaatioTyyppiMissingForOrganisaatiosException
      */
-    @ApiOperation("Palauttaa osoitteet annetuilla hakuehdoilla.")
+    @ApiOperation(value = "Palauttaa osoitteet annetuilla hakuehdoilla.",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping(value = "list.json", method  =  RequestMethod.POST)
     @ResponseBody
     public SearchResultsPresentationDto list(@RequestBody FilteredSearchParametersDto searchParameters,
