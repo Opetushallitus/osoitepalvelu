@@ -18,14 +18,12 @@ package fi.vm.sade.osoitepalvelu.kooste.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -63,7 +61,6 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     private static final String ROUTE_HENKILO = "direct:henkilo";
 
     private static final String ROUTE_ORGANISAATIOHENKILOS  =  "direct:organisaatioHenkilos";
-    private static final int MAX_OIDS_FOR_HENKILO_HAKU = 50;
 
     @Autowired
     private UrlConfiguration urlConfiguration;
@@ -184,27 +181,12 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
 
     @Override
     public List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
-        if (criteria.getOrganisaatioOids() == null || criteria.getOrganisaatioOids().isEmpty()) {
-            return findByKayttoOikeusRyhmas(null, criteria.getKayttoOikeusRayhmas(), requestContext);
-        }
-
-        List<HenkiloListResultDto> results = new ArrayList<HenkiloListResultDto>();
-        List<List<String>> oidChunks = CollectionHelper.split(criteria.getOrganisaatioOids(), MAX_OIDS_FOR_HENKILO_HAKU);
-        for (List<String> oids : oidChunks) {
-            results.addAll(findByKayttoOikeusRyhmas(oids, criteria.getKayttoOikeusRayhmas(), requestContext));
-        }
-
-        return results;
-    }
-
-    protected List<HenkiloListResultDto> findByKayttoOikeusRyhmas(List<String> organisaatioOids, List<String> kayttoOikeusRyhmat,
-                                                                  CamelRequestContext requestContext) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(HENKILOS_PASSIVOITU_PARAM_NAME, false);
         body.put(HENKILOS_DUPLIKAATTI_PARAM_NAME, false);
         body.put(HENKILOS_HENKILOTYYPPI_PARAM, HENKILOS_HENKILOTYYPPI_VIRKAILIJA);
-        body.put(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, emptyToNull(organisaatioOids));
-        body.put(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, emptyToNull(kayttoOikeusRyhmat));
+        body.put(HENKILOS_ORGANISAATIOOIDS_PARAM_NAME, emptyToNull(criteria.getOrganisaatioOids()));
+        body.put(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, emptyToNull(criteria.getKayttoOikeusRayhmas()));
 
         @SuppressWarnings("unchecked")
         List<HenkiloListResultDto> searchResults = sendBodyHeadersAndProperties(getCamelTemplate(),
