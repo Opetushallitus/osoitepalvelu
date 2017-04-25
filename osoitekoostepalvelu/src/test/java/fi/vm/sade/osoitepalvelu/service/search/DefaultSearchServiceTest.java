@@ -310,6 +310,9 @@ public class DefaultSearchServiceTest {
             OrganisaatioTyyppiMissingForOrganisaatiosException {
         // Set just to avoid null pointer exception
         HenkiloListResultDto henkiloListResultDto = new HenkiloListResultDto();
+        henkiloListResultDto.setEtunimet("Jaska");
+        henkiloListResultDto.setKutsumanimi("Jaska");
+        henkiloListResultDto.setSukunimi("Jokunen");
         henkiloListResultDto.setOidHenkilo("1.2.246.562.24.56640213476");
         List<HenkiloListResultDto> henkiloListResultDtos = new ArrayList<HenkiloListResultDto>();
         henkiloListResultDtos.add(henkiloListResultDto);
@@ -317,10 +320,6 @@ public class DefaultSearchServiceTest {
 
         // Mock single henkilö
         HenkiloDetailsDto henkiloDetailsDto = new HenkiloDetailsDto();
-        HenkiloKieliDto henkiloKieliDto = new HenkiloKieliDto();
-        henkiloKieliDto.setKieliKoodi("fi");
-        henkiloKieliDto.setKieliTyyppi("suomi");
-        henkiloDetailsDto.setAsiointiKieli(henkiloKieliDto);
 
         henkiloDetailsDto.setOidHenkilo("1.2.246.562.24.56640213476");
         henkiloDetailsDto.setEtunimet("Jaska");
@@ -335,6 +334,7 @@ public class DefaultSearchServiceTest {
         List<OrganisaatioHenkiloDto> organisaatioHenkiloDtos = new ArrayList<OrganisaatioHenkiloDto>();
         organisaatioHenkiloDtos.add(organisaatioHenkiloDto);
         henkiloDetailsDto.setOrganisaatioHenkilos(organisaatioHenkiloDtos);
+        this.henkiloServiceMock.setOrganisaatiot(organisaatioHenkiloDtos);
 
         HenkiloYhteystietoRyhmaDto henkiloYhteystietoRyhmaDto = new HenkiloYhteystietoRyhmaDto();
         henkiloYhteystietoRyhmaDto.setId(4062588L);
@@ -342,7 +342,6 @@ public class DefaultSearchServiceTest {
         henkiloYhteystietoRyhmaDto.setRyhmaKuvaus(HenkiloYhteystietoRyhmaDto.TYOOSOITE_KUVAUS);
         henkiloYhteystietoRyhmaDto.setRyhmaAlkuperaTieto("alkupera3");
         HenkiloYhteystietoDto henkiloYhteystietoDto = new HenkiloYhteystietoDto();
-        henkiloYhteystietoDto.setId(40625889L);
         henkiloYhteystietoDto.setYhteystietoTyyppi(HenkiloYhteystietoDto.YHTESYTIETO_SAHKOPOSTI);
         henkiloYhteystietoDto.setYhteystietoArvo("e@mail.com");
         List<HenkiloYhteystietoDto> henkiloYhteystietoDtos = new ArrayList<HenkiloYhteystietoDto>();
@@ -351,6 +350,7 @@ public class DefaultSearchServiceTest {
         List<HenkiloYhteystietoRyhmaDto> henkiloYhteystietoRyhmaDtos = new ArrayList<HenkiloYhteystietoRyhmaDto>();
         henkiloYhteystietoRyhmaDtos.add(henkiloYhteystietoRyhmaDto);
         henkiloDetailsDto.setYhteystiedotRyhma(henkiloYhteystietoRyhmaDtos);
+        henkiloListResultDto.setYhteystiedotRyhma(henkiloYhteystietoRyhmaDtos);
 
         this.henkiloServiceMock.setHenkiloTiedot(henkiloDetailsDto);
 

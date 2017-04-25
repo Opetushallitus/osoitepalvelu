@@ -16,7 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloKieliDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloYhteystietoRyhmaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
 import org.joda.time.DateTime;
@@ -46,7 +45,6 @@ public class HenkiloDetails {
     @Indexed
     private Set<String> aktiivinenOrganisaatioOids = new HashSet<String>();
     private List<OrganisaatioHenkiloDto> organisaatiohenkilos = new ArrayList<OrganisaatioHenkiloDto>();
-    private HenkiloKieliDto asiointiKieli;
     private List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma = new ArrayList<HenkiloYhteystietoRyhmaDto>();
 
     public String getEtunimet() {
@@ -79,14 +77,6 @@ public class HenkiloDetails {
 
     public void setOidHenkilo(String oidHenkilo) {
         this.oidHenkilo = oidHenkilo;
-    }
-
-    public HenkiloKieliDto getAsiointiKieli() {
-        return asiointiKieli;
-    }
-
-    public void setAsiointiKieli(HenkiloKieliDto asiointiKieli) {
-        this.asiointiKieli = asiointiKieli;
     }
 
     public List<HenkiloYhteystietoRyhmaDto> getYhteystiedotRyhma() {

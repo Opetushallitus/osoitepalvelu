@@ -35,25 +35,7 @@ import java.util.Set;
 public class HenkiloDetailsDto extends HenkiloListResultDto implements Serializable {
     private static final long serialVersionUID = 501895048885418517L;
     
-    private HenkiloKieliDto asiointiKieli;
-    private List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma = new ArrayList<HenkiloYhteystietoRyhmaDto>();
     private List<OrganisaatioHenkiloDto> organisaatioHenkilos = new ArrayList<OrganisaatioHenkiloDto>();
-
-    public HenkiloKieliDto getAsiointiKieli() {
-        return asiointiKieli;
-    }
-
-    public void setAsiointiKieli(HenkiloKieliDto asiointiKieli) {
-        this.asiointiKieli = asiointiKieli;
-    }
-
-    public List<HenkiloYhteystietoRyhmaDto> getYhteystiedotRyhma() {
-        return yhteystiedotRyhma;
-    }
-
-    public void setYhteystiedotRyhma(List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma) {
-        this.yhteystiedotRyhma = yhteystiedotRyhma;
-    }
 
     public List<OrganisaatioHenkiloDto> getOrganisaatioHenkilos() {
         return organisaatioHenkilos;
@@ -96,7 +78,7 @@ public class HenkiloDetailsDto extends HenkiloListResultDto implements Serializa
 
     public List<HenkiloYhteystietoRyhmaDto> getTyoOsoitees() {
         List<HenkiloYhteystietoRyhmaDto> tyoOsoittees = new ArrayList<HenkiloYhteystietoRyhmaDto>();
-        for (HenkiloYhteystietoRyhmaDto ryhma: yhteystiedotRyhma) {
+        for (HenkiloYhteystietoRyhmaDto ryhma: getYhteystiedotRyhma()) {
             if (HenkiloYhteystietoRyhmaDto.TYOOSOITE_KUVAUS.equals(ryhma.getRyhmaKuvaus())) {
                 tyoOsoittees.add(ryhma);
             }

@@ -17,6 +17,8 @@
 package fi.vm.sade.osoitepalvelu.kooste.route.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: ratamaa
@@ -30,6 +32,7 @@ public class HenkiloListResultDto implements Serializable {
     private String kutsumanimi;
     private String sukunimi;
     private String oidHenkilo;
+    private List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma = new ArrayList<HenkiloYhteystietoRyhmaDto>();
 
     public String getEtunimet() {
         return etunimet;
@@ -62,4 +65,13 @@ public class HenkiloListResultDto implements Serializable {
     public void setOidHenkilo(String oidHenkilo) {
         this.oidHenkilo = oidHenkilo;
     }
+
+    public List<HenkiloYhteystietoRyhmaDto> getYhteystiedotRyhma() {
+        return yhteystiedotRyhma;
+    }
+
+    public void setYhteystiedotRyhma(List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma) {
+        this.yhteystiedotRyhma = yhteystiedotRyhma;
+    }
+
 }

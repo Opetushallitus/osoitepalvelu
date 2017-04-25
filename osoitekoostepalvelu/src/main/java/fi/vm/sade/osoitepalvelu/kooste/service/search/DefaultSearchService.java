@@ -412,7 +412,14 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         return new ArrayList<HenkiloDetailsDto>(Collections2.transform(henkilos,
                     new Function<HenkiloListResultDto, HenkiloDetailsDto>() {
             public HenkiloDetailsDto apply(HenkiloListResultDto result) {
-                return henkiloService.getHenkiloTiedot(result.getOidHenkilo(), context);
+                HenkiloDetailsDto dto = new HenkiloDetailsDto();
+                dto.setEtunimet(result.getEtunimet());
+                dto.setKutsumanimi(result.getKutsumanimi());
+                dto.setSukunimi(result.getSukunimi());
+                dto.setOidHenkilo(result.getOidHenkilo());
+                dto.setYhteystiedotRyhma(result.getYhteystiedotRyhma());
+                dto.setOrganisaatioHenkilos(henkiloService.getOrganisaatiot(result.getOidHenkilo(), context));
+                return dto;
             }
         }));
     }

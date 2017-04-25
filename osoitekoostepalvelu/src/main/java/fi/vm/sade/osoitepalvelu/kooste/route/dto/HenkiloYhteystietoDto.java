@@ -33,17 +33,8 @@ public class HenkiloYhteystietoDto implements Serializable {
     public static final String YHTEYSTIETO_KUNTA = "YHTEYSTIETO_KUNTA";
     public static final String YHTEYSTIETO_KAUPUNKI = "YHTEYSTIETO_KAUPUNKI";
 
-    private Long id;
     private String yhteystietoTyyppi;
     private String yhteystietoArvo;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getYhteystietoTyyppi() {
         return yhteystietoTyyppi;

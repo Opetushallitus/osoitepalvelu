@@ -171,12 +171,17 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         HenkiloDetailsDto details = sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_HENKILO, oid,
                 new HashMap<String, Object>(), requestContext, HenkiloDetailsDto.class);
 
+        details.setOrganisaatioHenkilos(getOrganisaatiot(oid, requestContext));
+
+        return details;
+    }
+
+    @Override
+    public List<OrganisaatioHenkiloDto> getOrganisaatiot(String oid, CamelRequestContext requestContext) {
         @SuppressWarnings("unchecked")
         List<OrganisaatioHenkiloDto> organisaatioHenkilos = sendBodyHeadersAndProperties(getCamelTemplate(),
                 ROUTE_ORGANISAATIOHENKILOS, oid, new HashMap<String, Object>(), requestContext, List.class);
-        details.setOrganisaatioHenkilos(organisaatioHenkilos);
-
-        return details;
+        return organisaatioHenkilos;
     }
 
     @Override
