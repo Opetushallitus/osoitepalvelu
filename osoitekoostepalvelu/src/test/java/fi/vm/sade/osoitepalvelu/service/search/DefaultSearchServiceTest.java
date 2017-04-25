@@ -326,16 +326,6 @@ public class DefaultSearchServiceTest {
         henkiloDetailsDto.setSukunimi("Jokunen");
         henkiloDetailsDto.setKutsumanimi("Jaska");
 
-        OrganisaatioHenkiloDto organisaatioHenkiloDto = new OrganisaatioHenkiloDto();
-        organisaatioHenkiloDto.setId(2L);
-        organisaatioHenkiloDto.setOrganisaatioOid("1.2.246.562.10.43202917118");
-        organisaatioHenkiloDto.setPassivoitu(false);
-        organisaatioHenkiloDto.setTehtavanimike("Harjoittelija");
-        List<OrganisaatioHenkiloDto> organisaatioHenkiloDtos = new ArrayList<OrganisaatioHenkiloDto>();
-        organisaatioHenkiloDtos.add(organisaatioHenkiloDto);
-        henkiloDetailsDto.setOrganisaatioHenkilos(organisaatioHenkiloDtos);
-        this.henkiloServiceMock.setOrganisaatiot(organisaatioHenkiloDtos);
-
         HenkiloYhteystietoRyhmaDto henkiloYhteystietoRyhmaDto = new HenkiloYhteystietoRyhmaDto();
         henkiloYhteystietoRyhmaDto.setId(4062588L);
         henkiloYhteystietoRyhmaDto.setReadOnly(false);
@@ -377,14 +367,6 @@ public class DefaultSearchServiceTest {
         HenkiloHakuResultDto firstResult  =  results.getHenkilos().get(0);
         assertEquals("Jaska Jokunen", firstResult.getNimi());
         assertEquals("1.2.246.562.24.56640213476", firstResult.getHenkiloOid());
-
-        List<OrganisaatioHenkiloDto> henkiloDtos = firstResult.getOrganisaatioHenkilos();
-        assertNotNull(henkiloDtos);
-        assertEquals(1, henkiloDtos.size());
-        assertEquals(2L, (long)henkiloDtos.get(0).getId());
-        assertEquals("1.2.246.562.10.43202917118", henkiloDtos.get(0).getOrganisaatioOid());
-        assertEquals("Harjoittelija", henkiloDtos.get(0).getTehtavanimike());
-        assertEquals(false, henkiloDtos.get(0).isPassivoitu());
 
         List<HenkiloOsoiteDto> henkiloOsoiteDtos = firstResult.getOsoittees();
         assertNotNull(henkiloOsoiteDtos);

@@ -60,8 +60,6 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
 
     private static final String ROUTE_HENKILO = "direct:henkilo";
 
-    private static final String ROUTE_ORGANISAATIOHENKILOS  =  "direct:organisaatioHenkilos";
-
     @Autowired
     private UrlConfiguration urlConfiguration;
 
@@ -69,7 +67,6 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     public void configure() {
         buildKayttoOikeusryhmas();
         buildHenkilo();
-        buildOrganisaatioHenkilos();
         buildHenkiloList();
     }
 
@@ -99,26 +96,6 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         .process(oppijanumerorekisteriCallInOutDebug)
         .process(saveSession())
         .process(jsonToDto(new TypeReference<HenkiloDetailsDto>() {}));
-    }
-
-    protected void buildOrganisaatioHenkilos() {
-        Debugger kayttooikeusCallInOutDebug  =  debug(ROUTE_ORGANISAATIOHENKILOS + KAYTTOOIKEUS_SERVICE_CALL_POSTFIX);
-        headers(
-                from(ROUTE_ORGANISAATIOHENKILOS),
-                headers()
-                        .get()
-                        .casAuthenticationByAuthenticatedUser(
-                                urlConfiguration.url("kayttooikeus-service.security-check")
-                        )
-                .retry(3)
-        )
-        .process(kayttooikeusCallInOutDebug)
-        .recipientList(simple(uri(camelUrl("kayttooikeus-service.henkilo.byOid.orgHenkilos",
-                "$simple{in.body}"),
-                    HENKILO_TIMEOUT_MILLIS)))
-        .process(kayttooikeusCallInOutDebug)
-        .process(saveSession())
-        .process(jsonToDto(new TypeReference<List<OrganisaatioHenkiloDto>>() {}));
     }
 
     protected void buildHenkiloList() {
@@ -170,18 +147,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     public HenkiloDetailsDto getHenkiloTiedot(String oid, CamelRequestContext requestContext) {
         HenkiloDetailsDto details = sendBodyHeadersAndProperties(getCamelTemplate(), ROUTE_HENKILO, oid,
                 new HashMap<String, Object>(), requestContext, HenkiloDetailsDto.class);
-
-        details.setOrganisaatioHenkilos(getOrganisaatiot(oid, requestContext));
-
         return details;
-    }
-
-    @Override
-    public List<OrganisaatioHenkiloDto> getOrganisaatiot(String oid, CamelRequestContext requestContext) {
-        @SuppressWarnings("unchecked")
-        List<OrganisaatioHenkiloDto> organisaatioHenkilos = sendBodyHeadersAndProperties(getCamelTemplate(),
-                ROUTE_ORGANISAATIOHENKILOS, oid, new HashMap<String, Object>(), requestContext, List.class);
-        return organisaatioHenkilos;
     }
 
     @Override

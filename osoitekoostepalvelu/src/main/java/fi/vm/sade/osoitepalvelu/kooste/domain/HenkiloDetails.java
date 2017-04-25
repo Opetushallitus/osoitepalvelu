@@ -17,16 +17,13 @@
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloYhteystietoRyhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * User: ratamaa
@@ -42,9 +39,6 @@ public class HenkiloDetails {
     private String kutsunanimi;
     private String sukunimi;
     private DateTime cachedAt = new DateTime();
-    @Indexed
-    private Set<String> aktiivinenOrganisaatioOids = new HashSet<String>();
-    private List<OrganisaatioHenkiloDto> organisaatiohenkilos = new ArrayList<OrganisaatioHenkiloDto>();
     private List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma = new ArrayList<HenkiloYhteystietoRyhmaDto>();
 
     public String getEtunimet() {
@@ -93,21 +87,5 @@ public class HenkiloDetails {
 
     public void setCachedAt(DateTime cachedAt) {
         this.cachedAt = cachedAt;
-    }
-
-    public Set<String> getAktiivinenOrganisaatioOids() {
-        return aktiivinenOrganisaatioOids;
-    }
-
-    public void setAktiivinenOrganisaatioOids(Set<String> aktiivinenOrganisaatioOids) {
-        this.aktiivinenOrganisaatioOids = aktiivinenOrganisaatioOids;
-    }
-
-    public List<OrganisaatioHenkiloDto> getOrganisaatiohenkilos() {
-        return organisaatiohenkilos;
-    }
-
-    public void setOrganisaatiohenkilos(List<OrganisaatioHenkiloDto> organisaatiohenkilos) {
-        this.organisaatiohenkilos = organisaatiohenkilos;
     }
 }

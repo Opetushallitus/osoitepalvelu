@@ -27,7 +27,6 @@ import fi.vm.sade.osoitepalvelu.kooste.route.AuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloListResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,11 +79,6 @@ public class DefaultHenkiloService extends AbstractService implements HenkiloSer
             logger.debug("Persisted henkilo {} to MongoDB cache.", oid);
         }
         return dto;
-    }
-
-    @Override
-    public List<OrganisaatioHenkiloDto> getOrganisaatiot(String oid, CamelRequestContext requestContext) {
-        return authenticationServiceRoute.getOrganisaatiot(oid, requestContext);
     }
 
     public void setAuthenticationServiceRoute(AuthenticationServiceRoute authenticationServiceRoute) {

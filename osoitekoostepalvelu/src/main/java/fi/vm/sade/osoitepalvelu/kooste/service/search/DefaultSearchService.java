@@ -418,7 +418,6 @@ public class DefaultSearchService extends AbstractService implements SearchServi
                 dto.setSukunimi(result.getSukunimi());
                 dto.setOidHenkilo(result.getOidHenkilo());
                 dto.setYhteystiedotRyhma(result.getYhteystiedotRyhma());
-                dto.setOrganisaatioHenkilos(henkiloService.getOrganisaatiot(result.getOidHenkilo(), context));
                 return dto;
             }
         }));

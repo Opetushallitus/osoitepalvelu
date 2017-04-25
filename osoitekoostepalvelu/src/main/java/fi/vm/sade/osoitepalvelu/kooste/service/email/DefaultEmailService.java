@@ -61,9 +61,6 @@ public class DefaultEmailService extends AbstractService implements EmailService
     @Value("${viestipalvelu.emailsend.email.sender:'Opetushallitus'}")
     private String emailSender;
 
-    @Value("${viestipalvelu.emailsend.email.organisaatioOid:''}")
-    private String defaultOrganisaatioOid;
-
     @Value("${viestipalvelu.emailsend.email.templateName:'osoitepalvelu_email'}")
     private String emailTemplateName;
 
@@ -102,8 +99,6 @@ public class DefaultEmailService extends AbstractService implements EmailService
                 .setOperaatio(OsoitepalveluOperation.EMAIL_SERVICE)
                 .message("EmailService: Send email details to viestintäpalvelu").build();
         audit.log(logMessage);
-        settings.getEmail().setOrganizationOid(
-                myHenkiloDetails.findFirstAktiivinenOrganisaatioOid().or(defaultOrganisaatioOid));
 
         settings.getEmail().setReplyTo(
                 CollectionHelper.first(myHenkiloDetails.getTyoOsoitees(), HenkiloYhteystietoRyhmaDto.SAHKOPOSTI)

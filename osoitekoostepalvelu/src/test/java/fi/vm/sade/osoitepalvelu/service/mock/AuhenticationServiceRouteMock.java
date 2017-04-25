@@ -22,7 +22,6 @@ import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloListResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,6 @@ public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute
     private List<KayttooikesuryhmaDto> kayttooikesuryhmas  =  new ArrayList<KayttooikesuryhmaDto>();
     private List<HenkiloListResultDto> henkilos  =  new ArrayList<HenkiloListResultDto>();
     private HenkiloDetailsDto henkiloDetails = null;
-    private List<OrganisaatioHenkiloDto> organisaatiot = new ArrayList<>();
 
     public AuhenticationServiceRouteMock(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
         this.kayttooikesuryhmas  =  kayttooikesuryhmas;
@@ -60,11 +58,6 @@ public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute
         return henkiloDetails;
     }
 
-    @Override
-    public List<OrganisaatioHenkiloDto> getOrganisaatiot(String oid, CamelRequestContext requestContext) {
-        return organisaatiot;
-    }
-
     public void setKayttooikesuryhmas(List<KayttooikesuryhmaDto> kayttooikesuryhmas) {
         this.kayttooikesuryhmas  =  kayttooikesuryhmas;
     }
@@ -79,9 +72,5 @@ public class AuhenticationServiceRouteMock implements AuthenticationServiceRoute
 
     public void setHenkiloDetails(HenkiloDetailsDto henkiloDetails) {
         this.henkiloDetails = henkiloDetails;
-    }
-
-    public void setOrganisaatiot(List<OrganisaatioHenkiloDto> organisaatiot) {
-        this.organisaatiot = organisaatiot;
     }
 }

@@ -16,16 +16,10 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.route.dto;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * User: ratamaa
@@ -34,38 +28,6 @@ import java.util.Set;
  */
 public class HenkiloDetailsDto extends HenkiloListResultDto implements Serializable {
     private static final long serialVersionUID = 501895048885418517L;
-    
-    private List<OrganisaatioHenkiloDto> organisaatioHenkilos = new ArrayList<OrganisaatioHenkiloDto>();
-
-    public List<OrganisaatioHenkiloDto> getOrganisaatioHenkilos() {
-        return organisaatioHenkilos;
-    }
-
-    public void setOrganisaatioHenkilos(List<OrganisaatioHenkiloDto> organisaatioHenkilos) {
-        this.organisaatioHenkilos = organisaatioHenkilos;
-    }
-
-    public Optional<String> findFirstAktiivinenOrganisaatioOid() {
-        for (OrganisaatioHenkiloDto organisaatioHenkiloDto : this.organisaatioHenkilos) {
-            if (!organisaatioHenkiloDto.isPassivoitu()) {
-                return Optional.fromNullable(organisaatioHenkiloDto.getOrganisaatioOid());
-            }
-        }
-        return Optional.absent();
-    }
-
-    public Set<String> getAktiivinenOrganisaatioOids() {
-        return new HashSet<String>(Collections2.transform(Collections2.filter(this.organisaatioHenkilos,
-                new Predicate<OrganisaatioHenkiloDto>() {
-            public boolean apply(OrganisaatioHenkiloDto organisaatiohenkilo) {
-                return !organisaatiohenkilo.isPassivoitu();
-            }
-        }), new Function<OrganisaatioHenkiloDto, String>() {
-            public String apply(OrganisaatioHenkiloDto organisatiohenkilo) {
-                return organisatiohenkilo.getOrganisaatioOid();
-            }
-        }));
-    }
 
     public String getNimi() {
         String kutsumanimi = getKutsumanimi();

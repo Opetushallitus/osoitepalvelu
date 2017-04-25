@@ -21,7 +21,6 @@ import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloListResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KayttooikesuryhmaDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -52,12 +51,5 @@ public interface AuthenticationServiceRoute extends Serializable {
      * @return the details of the henkilo for the oid
      */
     HenkiloDetailsDto getHenkiloTiedot(String oid, CamelRequestContext requestContext);
-
-    /**
-     * @param oid of the henkilo
-     * @param requestContext the context for HTTP request received by the application to operate in
-     * @return henkilon organisaatiot
-     */
-    List<OrganisaatioHenkiloDto> getOrganisaatiot(String oid, CamelRequestContext requestContext);
 
 }
