@@ -31,11 +31,4 @@
            timeToIdleSeconds="0" timeToLiveSeconds="18000"
            memoryStoreEvictionPolicy="LRU" />
 
-    <!-- Cache henkilöhaku for an hour -->
-    <cache name="henkiloHakuCache"
-           eternal="false" maxElementsInMemory="1000"
-           overflowToDisk="false" diskPersistent="false"
-           timeToIdleSeconds="0" timeToLiveSeconds="3600"
-           memoryStoreEvictionPolicy="LRU" />
-
 </ehcache>

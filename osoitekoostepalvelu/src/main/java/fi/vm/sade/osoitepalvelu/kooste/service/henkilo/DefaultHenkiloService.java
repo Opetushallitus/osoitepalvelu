@@ -16,8 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.henkilo;
 
-import com.googlecode.ehcache.annotations.Cacheable;
-import com.googlecode.ehcache.annotations.PartialCacheKey;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.route.AuthenticationServiceRoute;
@@ -41,9 +39,7 @@ public class DefaultHenkiloService extends AbstractService implements HenkiloSer
     private AuthenticationServiceRoute authenticationServiceRoute;
 
     @Override
-    @Cacheable(cacheName = "henkiloHakuCache")
-    public List<HenkiloDetailsDto> findHenkilos(
-            @PartialCacheKey HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
+    public List<HenkiloDetailsDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
         return authenticationServiceRoute.findHenkilos(criteria, requestContext);
     }
 
