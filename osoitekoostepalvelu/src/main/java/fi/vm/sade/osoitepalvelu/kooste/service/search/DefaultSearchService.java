@@ -408,19 +408,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
             throw new TooFewSearchConditionsForHenkilosException();
         }
 
-        List<HenkiloListResultDto> henkilos = henkiloService.findHenkilos(criteria, context);
-        return new ArrayList<HenkiloDetailsDto>(Collections2.transform(henkilos,
-                    new Function<HenkiloListResultDto, HenkiloDetailsDto>() {
-            public HenkiloDetailsDto apply(HenkiloListResultDto result) {
-                HenkiloDetailsDto dto = new HenkiloDetailsDto();
-                dto.setEtunimet(result.getEtunimet());
-                dto.setKutsumanimi(result.getKutsumanimi());
-                dto.setSukunimi(result.getSukunimi());
-                dto.setOidHenkilo(result.getOidHenkilo());
-                dto.setYhteystiedotRyhma(result.getYhteystiedotRyhma());
-                return dto;
-            }
-        }));
+        return henkiloService.findHenkilos(criteria, context);
     }
 
     // Combine fetched henkiloOids into single string and log what was fetched.

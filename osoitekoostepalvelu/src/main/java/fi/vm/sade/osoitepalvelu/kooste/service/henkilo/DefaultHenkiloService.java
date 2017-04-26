@@ -22,7 +22,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.route.AuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloCriteriaDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloListResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloDetailsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,7 @@ public class DefaultHenkiloService extends AbstractService implements HenkiloSer
 
     @Override
     @Cacheable(cacheName = "henkiloHakuCache")
-    public List<HenkiloListResultDto> findHenkilos(
+    public List<HenkiloDetailsDto> findHenkilos(
             @PartialCacheKey HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
         return authenticationServiceRoute.findHenkilos(criteria, requestContext);
     }

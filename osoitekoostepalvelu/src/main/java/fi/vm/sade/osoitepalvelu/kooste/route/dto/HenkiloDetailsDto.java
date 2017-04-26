@@ -26,8 +26,54 @@ import java.util.List;
  * Date: 3/26/14
  * Time: 1:48 PM
  */
-public class HenkiloDetailsDto extends HenkiloListResultDto implements Serializable {
+public class HenkiloDetailsDto implements Serializable {
     private static final long serialVersionUID = 501895048885418517L;
+
+    private String etunimet;
+    private String kutsumanimi;
+    private String sukunimi;
+    private String oidHenkilo;
+    private List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma = new ArrayList<HenkiloYhteystietoRyhmaDto>();
+
+    public String getEtunimet() {
+        return etunimet;
+    }
+
+    public void setEtunimet(String etunimet) {
+        this.etunimet = etunimet;
+    }
+
+    public String getKutsumanimi() {
+        return kutsumanimi;
+    }
+
+    public void setKutsumanimi(String kutsumanimi) {
+        this.kutsumanimi = kutsumanimi;
+    }
+
+    public String getSukunimi() {
+        return sukunimi;
+    }
+
+    public void setSukunimi(String sukunimi) {
+        this.sukunimi = sukunimi;
+    }
+
+    public String getOidHenkilo() {
+        return oidHenkilo;
+    }
+
+    public void setOidHenkilo(String oidHenkilo) {
+        this.oidHenkilo = oidHenkilo;
+    }
+
+    public List<HenkiloYhteystietoRyhmaDto> getYhteystiedotRyhma() {
+        return yhteystiedotRyhma;
+    }
+
+    public void setYhteystiedotRyhma(List<HenkiloYhteystietoRyhmaDto> yhteystiedotRyhma) {
+        this.yhteystiedotRyhma = yhteystiedotRyhma;
+    }
 
     public String getNimi() {
         String kutsumanimi = getKutsumanimi();
@@ -40,7 +86,7 @@ public class HenkiloDetailsDto extends HenkiloListResultDto implements Serializa
 
     public List<HenkiloYhteystietoRyhmaDto> getTyoOsoitees() {
         List<HenkiloYhteystietoRyhmaDto> tyoOsoittees = new ArrayList<HenkiloYhteystietoRyhmaDto>();
-        for (HenkiloYhteystietoRyhmaDto ryhma: getYhteystiedotRyhma()) {
+        for (HenkiloYhteystietoRyhmaDto ryhma: yhteystiedotRyhma) {
             if (HenkiloYhteystietoRyhmaDto.TYOOSOITE_KUVAUS.equals(ryhma.getRyhmaKuvaus())) {
                 tyoOsoittees.add(ryhma);
             }

@@ -308,16 +308,6 @@ public class DefaultSearchServiceTest {
             TooFewSearchConditionsForHenkilosException,
             TooFewSearchConditionsForKoulutusException,
             OrganisaatioTyyppiMissingForOrganisaatiosException {
-        // Set just to avoid null pointer exception
-        HenkiloListResultDto henkiloListResultDto = new HenkiloListResultDto();
-        henkiloListResultDto.setEtunimet("Jaska");
-        henkiloListResultDto.setKutsumanimi("Jaska");
-        henkiloListResultDto.setSukunimi("Jokunen");
-        henkiloListResultDto.setOidHenkilo("1.2.246.562.24.56640213476");
-        List<HenkiloListResultDto> henkiloListResultDtos = new ArrayList<HenkiloListResultDto>();
-        henkiloListResultDtos.add(henkiloListResultDto);
-        this.henkiloServiceMock.setHenkiloListResultDtos(henkiloListResultDtos);
-
         // Mock single henkilö
         HenkiloDetailsDto henkiloDetailsDto = new HenkiloDetailsDto();
 
@@ -340,7 +330,8 @@ public class DefaultSearchServiceTest {
         List<HenkiloYhteystietoRyhmaDto> henkiloYhteystietoRyhmaDtos = new ArrayList<HenkiloYhteystietoRyhmaDto>();
         henkiloYhteystietoRyhmaDtos.add(henkiloYhteystietoRyhmaDto);
         henkiloDetailsDto.setYhteystiedotRyhma(henkiloYhteystietoRyhmaDtos);
-        henkiloListResultDto.setYhteystiedotRyhma(henkiloYhteystietoRyhmaDtos);
+
+        this.henkiloServiceMock.setHenkiloDetailsDtos(Arrays.asList(henkiloDetailsDto));
 
         // Fill search terms and do the search
         SearchTermsDto terms  =  new SearchTermsDto();

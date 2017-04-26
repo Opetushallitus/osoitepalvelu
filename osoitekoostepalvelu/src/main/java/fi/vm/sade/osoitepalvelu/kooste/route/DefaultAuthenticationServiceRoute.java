@@ -115,7 +115,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
                 HENKILOLIST_TIMEOUT_MILLIS)) // wait for 10 minutes maximum
         .process(kayttooikeusCallInOutDebug)
         .process(saveSession())
-        .process(jsonToDto(new TypeReference<List<HenkiloListResultDto>>() {}));
+        .process(jsonToDto(new TypeReference<List<HenkiloDetailsDto>>() {}));
     }
 
     protected void buildKayttoOikeusryhmas() {
@@ -151,7 +151,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     }
 
     @Override
-    public List<HenkiloListResultDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
+    public List<HenkiloDetailsDto> findHenkilos(HenkiloCriteriaDto criteria, CamelRequestContext requestContext) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(HENKILOS_PASSIVOITU_PARAM_NAME, false);
         body.put(HENKILOS_DUPLIKAATTI_PARAM_NAME, false);
@@ -160,7 +160,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         body.put(HENKILOS_KAYTTOOIKEUSRYHMAS_PARAM_NAME, emptyToNull(criteria.getKayttoOikeusRayhmas()));
 
         @SuppressWarnings("unchecked")
-        List<HenkiloListResultDto> searchResults = sendBodyHeadersAndProperties(getCamelTemplate(),
+        List<HenkiloDetailsDto> searchResults = sendBodyHeadersAndProperties(getCamelTemplate(),
                 ROUTE_HENKILOS, body, headerValues().map(), requestContext, List.class);
         return searchResults;
     }
