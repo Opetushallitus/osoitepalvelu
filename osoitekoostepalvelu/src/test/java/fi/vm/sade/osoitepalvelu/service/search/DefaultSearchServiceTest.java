@@ -342,8 +342,6 @@ public class DefaultSearchServiceTest {
         henkiloDetailsDto.setYhteystiedotRyhma(henkiloYhteystietoRyhmaDtos);
         henkiloListResultDto.setYhteystiedotRyhma(henkiloYhteystietoRyhmaDtos);
 
-        this.henkiloServiceMock.setHenkiloTiedot(henkiloDetailsDto);
-
         // Fill search terms and do the search
         SearchTermsDto terms  =  new SearchTermsDto();
         List<SearchTargetGroupDto> targetGroups  =  new ArrayList<SearchTargetGroupDto>();
