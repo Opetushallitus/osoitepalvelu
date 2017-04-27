@@ -90,7 +90,6 @@ viestipalvelu.emailsend.calling.process=Osoitetietojarjestelma
 viestipalvelu.emailsend.email.templateName=osoitepalvelu_email
 viestipalvelu.emailsend.email.subject=
 viestipalvelu.emailsend.email.body=
-viestipalvelu.emailsend.email.organisaatioOid=1.2.246.562.10.00000000001
 vuosiluokka.used.for.oppilaitostyyppis=11,12,19
 web.url.cas=https\://${host.cas}/cas
 web.url.cas.aitu = ${web.url.cas}

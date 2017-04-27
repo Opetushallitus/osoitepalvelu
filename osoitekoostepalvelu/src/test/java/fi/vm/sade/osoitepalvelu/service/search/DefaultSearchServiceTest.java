@@ -308,33 +308,13 @@ public class DefaultSearchServiceTest {
             TooFewSearchConditionsForHenkilosException,
             TooFewSearchConditionsForKoulutusException,
             OrganisaatioTyyppiMissingForOrganisaatiosException {
-        // Set just to avoid null pointer exception
-        HenkiloListResultDto henkiloListResultDto = new HenkiloListResultDto();
-        henkiloListResultDto.setOidHenkilo("1.2.246.562.24.56640213476");
-        List<HenkiloListResultDto> henkiloListResultDtos = new ArrayList<HenkiloListResultDto>();
-        henkiloListResultDtos.add(henkiloListResultDto);
-        this.henkiloServiceMock.setHenkiloListResultDtos(henkiloListResultDtos);
-
         // Mock single henkilö
         HenkiloDetailsDto henkiloDetailsDto = new HenkiloDetailsDto();
-        HenkiloKieliDto henkiloKieliDto = new HenkiloKieliDto();
-        henkiloKieliDto.setKieliKoodi("fi");
-        henkiloKieliDto.setKieliTyyppi("suomi");
-        henkiloDetailsDto.setAsiointiKieli(henkiloKieliDto);
 
         henkiloDetailsDto.setOidHenkilo("1.2.246.562.24.56640213476");
         henkiloDetailsDto.setEtunimet("Jaska");
         henkiloDetailsDto.setSukunimi("Jokunen");
         henkiloDetailsDto.setKutsumanimi("Jaska");
-
-        OrganisaatioHenkiloDto organisaatioHenkiloDto = new OrganisaatioHenkiloDto();
-        organisaatioHenkiloDto.setId(2L);
-        organisaatioHenkiloDto.setOrganisaatioOid("1.2.246.562.10.43202917118");
-        organisaatioHenkiloDto.setPassivoitu(false);
-        organisaatioHenkiloDto.setTehtavanimike("Harjoittelija");
-        List<OrganisaatioHenkiloDto> organisaatioHenkiloDtos = new ArrayList<OrganisaatioHenkiloDto>();
-        organisaatioHenkiloDtos.add(organisaatioHenkiloDto);
-        henkiloDetailsDto.setOrganisaatioHenkilos(organisaatioHenkiloDtos);
 
         HenkiloYhteystietoRyhmaDto henkiloYhteystietoRyhmaDto = new HenkiloYhteystietoRyhmaDto();
         henkiloYhteystietoRyhmaDto.setId(4062588L);
@@ -342,7 +322,6 @@ public class DefaultSearchServiceTest {
         henkiloYhteystietoRyhmaDto.setRyhmaKuvaus(HenkiloYhteystietoRyhmaDto.TYOOSOITE_KUVAUS);
         henkiloYhteystietoRyhmaDto.setRyhmaAlkuperaTieto("alkupera3");
         HenkiloYhteystietoDto henkiloYhteystietoDto = new HenkiloYhteystietoDto();
-        henkiloYhteystietoDto.setId(40625889L);
         henkiloYhteystietoDto.setYhteystietoTyyppi(HenkiloYhteystietoDto.YHTESYTIETO_SAHKOPOSTI);
         henkiloYhteystietoDto.setYhteystietoArvo("e@mail.com");
         List<HenkiloYhteystietoDto> henkiloYhteystietoDtos = new ArrayList<HenkiloYhteystietoDto>();
@@ -352,7 +331,7 @@ public class DefaultSearchServiceTest {
         henkiloYhteystietoRyhmaDtos.add(henkiloYhteystietoRyhmaDto);
         henkiloDetailsDto.setYhteystiedotRyhma(henkiloYhteystietoRyhmaDtos);
 
-        this.henkiloServiceMock.setHenkiloTiedot(henkiloDetailsDto);
+        this.henkiloServiceMock.setHenkiloDetailsDtos(Arrays.asList(henkiloDetailsDto));
 
         // Fill search terms and do the search
         SearchTermsDto terms  =  new SearchTermsDto();
@@ -377,14 +356,6 @@ public class DefaultSearchServiceTest {
         HenkiloHakuResultDto firstResult  =  results.getHenkilos().get(0);
         assertEquals("Jaska Jokunen", firstResult.getNimi());
         assertEquals("1.2.246.562.24.56640213476", firstResult.getHenkiloOid());
-
-        List<OrganisaatioHenkiloDto> henkiloDtos = firstResult.getOrganisaatioHenkilos();
-        assertNotNull(henkiloDtos);
-        assertEquals(1, henkiloDtos.size());
-        assertEquals(2L, (long)henkiloDtos.get(0).getId());
-        assertEquals("1.2.246.562.10.43202917118", henkiloDtos.get(0).getOrganisaatioOid());
-        assertEquals("Harjoittelija", henkiloDtos.get(0).getTehtavanimike());
-        assertEquals(false, henkiloDtos.get(0).isPassivoitu());
 
         List<HenkiloOsoiteDto> henkiloOsoiteDtos = firstResult.getOsoittees();
         assertNotNull(henkiloOsoiteDtos);

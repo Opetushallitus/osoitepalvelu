@@ -41,7 +41,6 @@ public class SearchResultRowDto implements Serializable {
     private String nimi;
 
     @DtoConversion(path = "organisaatio.oid", with="organisaatioAggregate")
-    @DtoPath(value="organisaatioHenkilo.organisaatioOid", with="henkiloAggregate")
     private String organisaatioOid;
     @DtoConversion(path="organisaatio.kotikunta", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
@@ -88,7 +87,6 @@ public class SearchResultRowDto implements Serializable {
     })
     private String yhteystietoNimi;
     @DtoConversion(path="henkilo.nimike", with="organisaatioAggregate")
-    @DtoPath(value="organisaatioHenkilo.tehtavanimike", with="henkiloAggregate")
     private String nimike;
     @DtoConversion(path = "henkilo.email", with="organisaatioAggregate")
     @DtoPaths({

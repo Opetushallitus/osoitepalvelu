@@ -16,7 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
 
 import java.io.Serializable;
 
@@ -31,14 +30,11 @@ public class HenkiloResultAggregateDto implements Serializable {
     private static final long serialVersionUID  = -1L;
 
     private HenkiloHakuResultDto henkilo;
-    private OrganisaatioHenkiloDto organisaatioHenkilo;
     private HenkiloOsoiteDto osoite;
 
     public HenkiloResultAggregateDto(HenkiloHakuResultDto henkilo,
-                                     OrganisaatioHenkiloDto organisaatioHenkilo,
                                      HenkiloOsoiteDto osoite) {
         this.henkilo = henkilo;
-        this.organisaatioHenkilo = organisaatioHenkilo;
         this.osoite = osoite;
     }
 
@@ -46,16 +42,8 @@ public class HenkiloResultAggregateDto implements Serializable {
         return henkilo;
     }
 
-    public OrganisaatioHenkiloDto getOrganisaatioHenkilo() {
-        return organisaatioHenkilo;
-    }
-
     public void setHenkilo(HenkiloHakuResultDto henkilo) {
         this.henkilo = henkilo;
-    }
-
-    public void setOrganisaatioHenkilo(OrganisaatioHenkiloDto organisaatioHenkilo) {
-        this.organisaatioHenkilo = organisaatioHenkilo;
     }
 
     public HenkiloOsoiteDto getOsoite() {
@@ -80,9 +68,6 @@ public class HenkiloResultAggregateDto implements Serializable {
         if (!henkilo.equals(that.henkilo)) {
             return false;
         }
-        if (organisaatioHenkilo != null ? !organisaatioHenkilo.equals(that.organisaatioHenkilo) : that.organisaatioHenkilo != null) {
-            return false;
-        }
         if (osoite != null ? !osoite.equals(that.osoite) : that.osoite != null) {
             return false;
         }
@@ -93,7 +78,6 @@ public class HenkiloResultAggregateDto implements Serializable {
     @Override
     public int hashCode() {
         int result = henkilo.hashCode();
-        result = HASH_FACTOR * result + (organisaatioHenkilo != null ? organisaatioHenkilo.hashCode() : 0);
         result = HASH_FACTOR * result + (osoite != null ? osoite.hashCode() : 0);
         return result;
     }

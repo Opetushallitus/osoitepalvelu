@@ -18,7 +18,6 @@ package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
 
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.HenkiloDetailsDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHenkiloDto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,7 +36,6 @@ public class HenkiloHakuResultDto implements Serializable {
     @DtoConversion(path="oidHenkilo", withClass = HenkiloDetailsDto.class)
     private String henkiloOid;
     private String nimi;
-    private List<OrganisaatioHenkiloDto> organisaatioHenkilos = new ArrayList<OrganisaatioHenkiloDto>();
     @DtoConversion(path="tyoOsoitees", withClass = HenkiloDetailsDto.class)
     private List<HenkiloOsoiteDto> osoittees = new ArrayList<HenkiloOsoiteDto>();
 
@@ -63,14 +61,6 @@ public class HenkiloHakuResultDto implements Serializable {
 
     public void setOsoittees(List<HenkiloOsoiteDto> osoittees) {
         this.osoittees = osoittees;
-    }
-
-    public List<OrganisaatioHenkiloDto> getOrganisaatioHenkilos() {
-        return organisaatioHenkilos;
-    }
-
-    public void setOrganisaatioHenkilos(List<OrganisaatioHenkiloDto> organisaatioHenkilos) {
-        this.organisaatioHenkilos = organisaatioHenkilos;
     }
 
     @Override

@@ -298,10 +298,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
                     new Combiner.Creator<HenkiloResultAggregateDto>() {
                 public HenkiloResultAggregateDto create(Combiner.PullSource src) {
                     return new HenkiloResultAggregateDto(result,
-                            (OrganisaatioHenkiloDto)src.get(OrganisaatioHenkiloDto.class).orNull(),
                             (HenkiloOsoiteDto)src.get(HenkiloOsoiteDto.class).orNull());
                 }
-            }).combinedWith(OrganisaatioHenkiloDto.class, result.getOrganisaatioHenkilos())
+            })
                 .withRepeated(HenkiloOsoiteDto.class, result.getOsoittees())
                 .atLeastOne().to(henkiloAggregates);
         }
