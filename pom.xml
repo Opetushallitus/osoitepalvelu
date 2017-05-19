@@ -24,7 +24,7 @@
 
     <properties>
         <generic.version>9.4-SNAPSHOT</generic.version>
-        <log-client.version>5.0.0-SNAPSHOT</log-client.version>
+        <log-client.version>7.0.0-SNAPSHOT</log-client.version>
 
         <camel.version>2.12.1</camel.version>
         <ehcache.version>2.5.0</ehcache.version>
