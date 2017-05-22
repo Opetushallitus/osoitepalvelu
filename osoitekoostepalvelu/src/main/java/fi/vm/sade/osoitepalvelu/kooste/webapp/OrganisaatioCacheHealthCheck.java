@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.webapp;
 
 import java.util.LinkedHashMap;
 
+import fi.vm.sade.auditlog.Audit;
 import org.apache.camel.util.StopWatch;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;

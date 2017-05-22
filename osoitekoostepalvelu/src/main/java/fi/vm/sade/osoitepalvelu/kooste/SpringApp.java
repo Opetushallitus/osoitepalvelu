@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste;
 
+import fi.vm.sade.auditlog.ApplicationType;
+import fi.vm.sade.auditlog.Audit;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasProxyTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.config.MongoConfig;
@@ -59,5 +61,11 @@ public class SpringApp {
     @Bean
     public CasTicketProvider proxyTicketProvider() {
         return new CasProxyTicketProvider(casService, authMode);
+    }
+
+    @Bean
+    @Scope("singleton")
+    public Audit audit() {
+        return new Audit("osoitepalvelu", ApplicationType.VIRKAILIJA);
     }
 }

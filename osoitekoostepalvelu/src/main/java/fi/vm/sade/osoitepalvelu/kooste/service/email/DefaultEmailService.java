@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.email;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
+import fi.vm.sade.auditlog.Audit;
 import fi.vm.sade.auditlog.osoitepalvelu.LogMessage;
 import static fi.vm.sade.auditlog.osoitepalvelu.LogMessage.builder;
 
@@ -72,6 +73,9 @@ public class DefaultEmailService extends AbstractService implements EmailService
 
     @Autowired(required = false)
     private AuthenticationServiceRoute authenticationServiceRoute;
+
+    @Autowired
+    private Audit audit;
 
     @Override
     public EmailSendSettingsDto getEmailSendSettings(EmailSettingsParametersDto parameters) {

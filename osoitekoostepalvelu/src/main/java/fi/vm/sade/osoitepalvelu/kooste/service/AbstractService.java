@@ -16,9 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service;
 
-import fi.vm.sade.auditlog.ApplicationType;
-import fi.vm.sade.auditlog.Audit;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
@@ -40,8 +37,6 @@ public abstract class AbstractService {
     public static final int MILLIS_IN_SECOND = 1000;
 
     protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
-
-    protected Audit audit = new Audit("osoitepalvelu", ApplicationType.VIRKAILIJA);
 
     protected String getLoggedInUserOid() {
         Authentication auth  =  SecurityContextHolder.getContext().getAuthentication();

@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves;
 
+import fi.vm.sade.auditlog.Audit;
 import fi.vm.sade.auditlog.osoitepalvelu.OsoitepalveluOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
@@ -50,6 +51,9 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
 
     @Autowired(required = false)
     private SavedSearchRepository savedSearchRepository;
+
+    @Autowired
+    private Audit audit;
 
     @Override
     public List<SavedSearchListDto> findSavedSearchesForLoggedInUser() {
