@@ -26,11 +26,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 2:25 PM
- */
 public abstract class AbstractService {
     public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
     public static final int MILLIS_IN_SECOND = 1000;

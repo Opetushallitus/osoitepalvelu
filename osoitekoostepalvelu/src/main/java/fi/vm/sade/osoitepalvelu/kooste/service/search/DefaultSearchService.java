@@ -56,11 +56,6 @@ import fi.vm.sade.auditlog.osoitepalvelu.LogMessage;
 import java.util.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/**
- * User: ratamaa
- * Date: 3/14/14
- * Time: 2:22 PM
- */
 @Service
 @Qualifier("actual")
 public class DefaultSearchService extends AbstractService implements SearchService {

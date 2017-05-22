@@ -41,11 +41,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Set;
 
-/**
- * User: ratamaa
- * Date: 2/26/14
- * Time: 11:24 AM
- */
 @Service
 public class DefaultEmailService extends AbstractService implements EmailService {
     private static final long serialVersionUID = -4706566607303050449L;

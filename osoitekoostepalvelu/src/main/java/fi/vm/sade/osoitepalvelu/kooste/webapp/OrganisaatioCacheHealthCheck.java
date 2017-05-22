@@ -29,11 +29,6 @@ import fi.vm.sade.generic.healthcheck.HealthChecker;
 import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 
-/**
- * User: ratamaa
- * Date: 5/12/14
- * Time: 3:00 PM
- */
 @Component
 @HealthCheckerName("organisaatio-cache-status")
 public class OrganisaatioCacheHealthCheck extends AbstractService implements HealthChecker {

@@ -30,11 +30,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * User: ratamaa
- * Date: 3/18/14
- * Time: 12:55 PM
- */
 @Service
 public class DefaultAppSettingsService extends AbstractService implements AppSettingsService,
         EmbeddedValueResolverAware {

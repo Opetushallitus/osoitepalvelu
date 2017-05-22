@@ -36,9 +36,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ratamaa on 15.4.2014.
- */
 @Service
 public class DefaultAituService extends AbstractService implements AituService {
     private static final long serialVersionUID = 7522489326846677935L;

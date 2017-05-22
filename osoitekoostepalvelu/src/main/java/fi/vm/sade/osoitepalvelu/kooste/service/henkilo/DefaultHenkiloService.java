@@ -26,11 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 3/26/14
- * Time: 2:30 PM
- */
 @Service
 public class DefaultHenkiloService extends AbstractService implements HenkiloService {
     private static final long serialVersionUID = 2098849501877436535L;

@@ -21,10 +21,6 @@ import org.springframework.web.context.support.RequestHandledEvent;
 
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 
-/**
- * @author jsikio
- *
- */
 @Component
 public class RequestLogger extends AbstractService implements ApplicationListener<RequestHandledEvent> {
     @Override

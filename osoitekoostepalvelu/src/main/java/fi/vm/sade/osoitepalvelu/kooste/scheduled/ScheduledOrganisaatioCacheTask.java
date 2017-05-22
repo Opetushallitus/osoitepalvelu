@@ -37,10 +37,6 @@ import java.util.concurrent.Callable;
 
 /**
  * Keep organisaatios in cache.
- *
- * User: ratamaa
- * Date: 3/25/14
- * Time: 11:20 AM
  */
 @Service
 public class ScheduledOrganisaatioCacheTask extends AbstractService {

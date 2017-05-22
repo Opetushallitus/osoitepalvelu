@@ -37,11 +37,6 @@ import static fi.vm.sade.auditlog.osoitepalvelu.LogMessage.builder;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 2:09 PM
- */
 @Service
 public class DefaultSavedSearchService extends AbstractService implements SavedSearchService {
     private static final long serialVersionUID = -7200048189159586281L;
