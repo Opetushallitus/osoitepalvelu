@@ -98,4 +98,11 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
                 .build();
         audit.log(logMessage);
     }
+
+    protected <T> T found(T obj) throws NotFoundException {
+        if (obj == null) {
+            throw new NotFoundException("Entity not found by primary key.");
+        }
+        return obj;
+    }
 }

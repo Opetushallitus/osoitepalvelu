@@ -17,7 +17,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.service;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
-import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import org.slf4j.LoggerFactory;
@@ -52,13 +51,6 @@ public abstract class AbstractService {
             return null;
         }
         return auth.getName();
-    }
-
-    protected <T> T found(T obj) throws NotFoundException {
-        if (obj == null) {
-            throw new NotFoundException("Entity not found by primary key.");
-        }
-        return obj;
     }
 
     protected void ensureLoggedInUser(String ownerUsername) {
