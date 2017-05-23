@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.webapp;
 
 import java.util.LinkedHashMap;
 
+import fi.vm.sade.auditlog.Audit;
 import org.apache.camel.util.StopWatch;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,6 @@ import fi.vm.sade.generic.healthcheck.HealthChecker;
 import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 
-/**
- * User: ratamaa
- * Date: 5/12/14
- * Time: 3:00 PM
- */
 @Component
 @HealthCheckerName("organisaatio-cache-status")
 public class OrganisaatioCacheHealthCheck extends AbstractService implements HealthChecker {

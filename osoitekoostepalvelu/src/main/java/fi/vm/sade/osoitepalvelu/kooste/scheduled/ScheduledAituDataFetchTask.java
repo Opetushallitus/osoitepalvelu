@@ -30,9 +30,6 @@ import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.aitu.AituService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 
-/**
- * Created by ratamaa on 15.4.2014.
- */
 @Service
 public class ScheduledAituDataFetchTask extends AbstractService {
 

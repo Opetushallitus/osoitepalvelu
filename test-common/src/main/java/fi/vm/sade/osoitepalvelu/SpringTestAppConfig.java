@@ -19,6 +19,9 @@ package fi.vm.sade.osoitepalvelu;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
+import fi.vm.sade.auditlog.ApplicationType;
+import fi.vm.sade.auditlog.Audit;
+
 /**
  * User: ratamaa
  * Date: 12/30/13
@@ -40,6 +43,12 @@ public class SpringTestAppConfig {
         messageSource.setBasename("Messages");
         messageSource.setCacheSeconds(3600);
         return messageSource;
+    }
+
+    @Bean
+    @Scope("singleton")
+    public Audit audit() {
+        return new Audit("osoitepalvelu", ApplicationType.VIRKAILIJA);
     }
 
 }

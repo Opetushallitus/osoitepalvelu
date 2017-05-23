@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.service.email;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
+import fi.vm.sade.auditlog.Audit;
 import fi.vm.sade.auditlog.osoitepalvelu.LogMessage;
 import static fi.vm.sade.auditlog.osoitepalvelu.LogMessage.builder;
 
@@ -40,11 +41,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Set;
 
-/**
- * User: ratamaa
- * Date: 2/26/14
- * Time: 11:24 AM
- */
 @Service
 public class DefaultEmailService extends AbstractService implements EmailService {
     private static final long serialVersionUID = -4706566607303050449L;
@@ -72,6 +68,9 @@ public class DefaultEmailService extends AbstractService implements EmailService
 
     @Autowired(required = false)
     private AuthenticationServiceRoute authenticationServiceRoute;
+
+    @Autowired
+    private Audit audit;
 
     @Override
     public EmailSendSettingsDto getEmailSendSettings(EmailSettingsParametersDto parameters) {

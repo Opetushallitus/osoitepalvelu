@@ -33,11 +33,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/**
- * User: simok
- * Date: 3/23/15
- * Time: 3:29 PM
- */
 @Service
 public class DefaultTarjontaService extends AbstractService implements TarjontaService {
     private static final long serialVersionUID = 1L;

@@ -16,11 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service;
 
-import fi.vm.sade.auditlog.ApplicationType;
-import fi.vm.sade.auditlog.Audit;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
-import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import org.slf4j.LoggerFactory;
@@ -30,18 +26,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 2:25 PM
- */
 public abstract class AbstractService {
     public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
     public static final int MILLIS_IN_SECOND = 1000;
 
     protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
-
-    protected Audit audit = new Audit("osoitepalvelu", ApplicationType.VIRKAILIJA);
 
     protected String getLoggedInUserOid() {
         Authentication auth  =  SecurityContextHolder.getContext().getAuthentication();
@@ -57,13 +46,6 @@ public abstract class AbstractService {
             return null;
         }
         return auth.getName();
-    }
-
-    protected <T> T found(T obj) throws NotFoundException {
-        if (obj == null) {
-            throw new NotFoundException("Entity not found by primary key.");
-        }
-        return obj;
     }
 
     protected void ensureLoggedInUser(String ownerUsername) {

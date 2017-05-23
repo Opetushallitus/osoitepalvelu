@@ -20,6 +20,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.googlecode.ehcache.annotations.Cacheable;
 import com.googlecode.ehcache.annotations.PartialCacheKey;
+import fi.vm.sade.auditlog.Audit;
 import fi.vm.sade.auditlog.osoitepalvelu.OsoitepalveluOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.KoodiHelper;
@@ -55,11 +56,6 @@ import fi.vm.sade.auditlog.osoitepalvelu.LogMessage;
 import java.util.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/**
- * User: ratamaa
- * Date: 3/14/14
- * Time: 2:22 PM
- */
 @Service
 @Qualifier("actual")
 public class DefaultSearchService extends AbstractService implements SearchService {
@@ -82,6 +78,9 @@ public class DefaultSearchService extends AbstractService implements SearchServi
 
     @Autowired
     private SearchResultDtoConverter dtoConverter;
+
+    @Autowired
+    private Audit audit;
 
     @Override
     @Cacheable(cacheName  =  "osoitepalveluSearchResultsCache")

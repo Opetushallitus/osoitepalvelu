@@ -37,11 +37,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * User: ratamaa
- * Date: 3/25/14
- * Time: 11:38 AM
- */
 @Service
 public class DefaultOrganisaatioService extends AbstractService implements OrganisaatioService {
     private static final long serialVersionUID = 6255113288596549870L;

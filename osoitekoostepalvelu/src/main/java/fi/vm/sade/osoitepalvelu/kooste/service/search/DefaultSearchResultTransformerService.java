@@ -45,11 +45,6 @@ import java.util.*;
 
 import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
 
-/**
- * User: ratamaa
- * Date: 2/14/14
- * Time: 3:32 PM
- */
 @Service
 public class DefaultSearchResultTransformerService extends AbstractService
         implements SearchResultTransformerService {

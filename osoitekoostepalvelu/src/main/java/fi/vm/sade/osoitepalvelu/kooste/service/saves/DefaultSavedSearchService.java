@@ -16,6 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves;
 
+import fi.vm.sade.auditlog.Audit;
 import fi.vm.sade.auditlog.osoitepalvelu.OsoitepalveluOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
@@ -36,11 +37,6 @@ import static fi.vm.sade.auditlog.osoitepalvelu.LogMessage.builder;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 2:09 PM
- */
 @Service
 public class DefaultSavedSearchService extends AbstractService implements SavedSearchService {
     private static final long serialVersionUID = -7200048189159586281L;
@@ -50,6 +46,9 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
 
     @Autowired(required = false)
     private SavedSearchRepository savedSearchRepository;
+
+    @Autowired
+    private Audit audit;
 
     @Override
     public List<SavedSearchListDto> findSavedSearchesForLoggedInUser() {
@@ -93,5 +92,12 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
         LogMessage logMessage = builder().id(getLoggedInUserOid()).setOperaatio(OsoitepalveluOperation.UPDATE_SAVE)
                 .build();
         audit.log(logMessage);
+    }
+
+    protected <T> T found(T obj) throws NotFoundException {
+        if (obj == null) {
+            throw new NotFoundException("Entity not found by primary key.");
+        }
+        return obj;
     }
 }

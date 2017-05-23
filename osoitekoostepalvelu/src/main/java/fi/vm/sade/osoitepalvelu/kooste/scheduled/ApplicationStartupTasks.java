@@ -21,11 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-/**
- * User: ratamaa
- * Date: 5/12/14
- * Time: 1:48 PM
- */
 @Component("startupTasks")
 public class ApplicationStartupTasks extends AbstractService {
 
