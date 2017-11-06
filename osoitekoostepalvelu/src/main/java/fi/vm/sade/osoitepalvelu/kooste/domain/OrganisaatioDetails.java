@@ -43,7 +43,6 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
     
     private Long version;
     @Id
-    @Indexed(unique = true)
     private String oid;
     @Indexed
     private String parentOid;
