@@ -229,7 +229,7 @@ public class SearchResultTransformerServiceTest {
 
     @Test
     public void testProduceEmptyExcel() {
-        Workbook wb  =  new HSSFWorkbook();
+        HSSFWorkbook wb  =  new HSSFWorkbook();
         resultTranformerService.produceExcel(wb, new SearchResultsPresentationDto(new ArrayList<SearchResultRowDto>(),
                 new AllColumnsSearchResultPresentation()));
         assertEquals(1, wb.getNumberOfSheets());
@@ -249,7 +249,7 @@ public class SearchResultTransformerServiceTest {
                 organisaatioResults(Arrays.asList(organisaatio)),
                 presentation, new DefaultCamelRequestContext(), null);
 
-        Workbook wb  =  new HSSFWorkbook();
+        HSSFWorkbook wb  =  new HSSFWorkbook();
         resultTranformerService.produceExcel(wb, results);
         assertEquals(1, wb.getNumberOfSheets());
         assertEquals(1, wb.getSheetAt(0).getLastRowNum());
