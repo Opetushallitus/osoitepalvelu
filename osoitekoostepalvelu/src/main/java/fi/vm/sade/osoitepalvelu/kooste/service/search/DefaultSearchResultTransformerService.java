@@ -16,34 +16,74 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
+import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Ordering;
+
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.Combiner;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.*;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituJasenyysDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituOppilaitosResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituSopimusDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituToimikuntaResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituTutkintoDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsYhteystietoDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.AituOppilaitosVastuuhenkiloAggregateDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.AituToimikuntaJasenAggregateDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloOsoiteDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloResultAggregateDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultAggregateDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioYhteystietoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OsoitteistoDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultOsoiteDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto.SearchType;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SourceRegister;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-
-import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Service
 public class DefaultSearchResultTransformerService extends AbstractService
@@ -772,7 +812,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         String value = getMessage(localizationKey, locale);
         CellStyle style = cell.getSheet().getWorkbook().createCellStyle();
         Font font = cell.getSheet().getWorkbook().createFont();
-        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        font.setBold(true);
         style.setFont(font);
         cell.setCellStyle(style);
         if (value != null) {
