@@ -19,7 +19,6 @@ package fi.vm.sade.osoitepalvelu.kooste.service.search;
 import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Ordering;
 
@@ -108,16 +107,15 @@ public class DefaultSearchResultTransformerService extends AbstractService
     @Override
     public SearchResultsPresentationDto transformToResultRows(SearchResultsDto results,
                 final SearchResultPresentation presentation, CamelRequestContext context, SearchType searchType) {
-        List<SearchResultRowDto> transformedResults = new ArrayList<SearchResultRowDto>();
-        Set<SourceRegister> sourceRegisters = new HashSet<SourceRegister>();
+        Set<SourceRegister> sourceRegisters = new HashSet<>();
 
         List<SearchResultRowDto> organisaatioResults = transformOrganisaatios(results.getOrganisaatios(), presentation);
         if (!organisaatioResults.isEmpty()) {
             sourceRegisters.add(SourceRegister.opintopolku);
         }
-        transformedResults.addAll(organisaatioResults);
+        List<SearchResultRowDto> transformedResults = new ArrayList<>(organisaatioResults);
 
-        List<SearchResultRowDto> henkiloResults = transformHenkilos(results.getHenkilos(), presentation);
+        List<SearchResultRowDto> henkiloResults = transformHenkilos(results.getHenkilos());
         if (!henkiloResults.isEmpty()) {
             sourceRegisters.add(SourceRegister.opintopolku);
             // Can not distinguish results originating from Aipal wihtin the results from henkilopalvelu:
@@ -162,8 +160,8 @@ public class DefaultSearchResultTransformerService extends AbstractService
             List<SearchResultRowDto> rows) {
         if(searchType == SearchType.EMAIL) {
             // Kyseessä email-tyyppinen haku, joten nyt suodatetaan kaikki dublikaatti-emailit pois.
-            Set<String> emails = new TreeSet<String>();
-            List<SearchResultRowDto> filtteredTransformedResults = new ArrayList<SearchResultRowDto>();
+            Set<String> emails = new TreeSet<>();
+            List<SearchResultRowDto> filtteredTransformedResults = new ArrayList<>();
 
             if (presentation.isOrganisaatioEmailOnlyEmailIncluded()) {
                 for (SearchResultRowDto dto : rows) {
@@ -205,53 +203,25 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
     protected List<SearchResultRowDto> removeDeletedRows(final SearchResultPresentation presentation,
                                                          List<SearchResultRowDto> rows) {
-        return new ArrayList<SearchResultRowDto>(Collections2.filter(rows, new Predicate<SearchResultRowDto>() {
-            public boolean apply(SearchResultRowDto result) {
-                return presentation.isResultRowIncluded(result);
-            }
-        }));
+        return new ArrayList<>(Collections2.filter(rows, presentation::isResultRowIncluded));
     }
 
     protected List<SearchResultRowDto> removeDuplicatesByUniqueState(List<SearchResultRowDto> rows) {
-        final Set<EqualsHelper> states = new HashSet<EqualsHelper>();
-        return new ArrayList<SearchResultRowDto>(Collections2.filter(rows, new Predicate<SearchResultRowDto>() {
-            public boolean apply(SearchResultRowDto input) {
-                return states.add(input.uniqueState());
-            }
-        }));
+        final Set<EqualsHelper> states = new HashSet<>();
+        return new ArrayList<>(Collections2.filter(rows, input -> states.add(input.uniqueState())));
     }
 
     protected List<SearchResultRowDto> applyOrdering(List<SearchResultRowDto> transformedResults) {
         //
         return Ordering
                 .natural().nullsLast()
-                .onResultOf(new Function<SearchResultRowDto, String>() {
-                    @Override
-                    public String apply(SearchResultRowDto row) {
-                        return row.getNimi();
-                    }
-                })
+                .onResultOf((Function<SearchResultRowDto, String>) row -> row.getNimi())
         .compound(Ordering.natural().nullsFirst()
-                .onResultOf(new Function<SearchResultRowDto, String>() {
-                    @Override
-                    public String apply(SearchResultRowDto row) {
-                        return row.getOrganisaatioOid();
-                    }
-                }))
+                .onResultOf((Function<SearchResultRowDto, String>) row -> row.getOrganisaatioOid()))
         .compound(Ordering.natural().nullsFirst()
-                .onResultOf(new Function<SearchResultRowDto, String>() {
-                    @Override
-                    public String apply(SearchResultRowDto row) {
-                        return row.getYhteystietoNimi();
-                    }
-                }))
+                .onResultOf((Function<SearchResultRowDto, String>) row -> row.getYhteystietoNimi()))
         .compound(Ordering.natural().nullsFirst()
-                .onResultOf(new Function<SearchResultRowDto, String>() {
-                    @Override
-                    public String apply(SearchResultRowDto row) {
-                        return row.getHenkiloOid();
-                    }
-        })).sortedCopy(transformedResults);
+                .onResultOf((Function<SearchResultRowDto, String>) row -> row.getHenkiloOid())).sortedCopy(transformedResults);
     }
 
     /**
@@ -265,19 +235,15 @@ public class DefaultSearchResultTransformerService extends AbstractService
      */
     protected List<SearchResultRowDto> transformOrganisaatios(List<OrganisaatioResultDto> results,
                                         SearchResultPresentation presentation) {
-        List<SearchResultRowDto> transformedResults = new ArrayList<SearchResultRowDto>();
+        List<SearchResultRowDto> transformedResults = new ArrayList<>();
 
-        Set<OrganisaatioResultAggregateDto> organisaatioAggregates = new LinkedHashSet<OrganisaatioResultAggregateDto>();
+        Set<OrganisaatioResultAggregateDto> organisaatioAggregates = new LinkedHashSet<>();
         for (final OrganisaatioResultDto result : results) {
-            Combiner<OrganisaatioResultAggregateDto> combiner = new Combiner<OrganisaatioResultAggregateDto>(
-                    new Combiner.Creator<OrganisaatioResultAggregateDto>() {
-                public OrganisaatioResultAggregateDto create(Combiner.PullSource src) {
-                    return new OrganisaatioResultAggregateDto(result,
-                                (OrganisaatioYhteystietoDto)src.get(OrganisaatioYhteystietoDto.class).orNull(),
-                                (OsoitteistoDto)src.get(OsoitteistoDto.class).orNull(),
-                                (OsoitteistoDto)src.get(OsoitteistoDto.class).orNull());
-                }
-            });
+            Combiner<OrganisaatioResultAggregateDto> combiner = new Combiner<>(
+                src -> new OrganisaatioResultAggregateDto(result,
+                    src.get(OrganisaatioYhteystietoDto.class).orNull(),
+                    src.get(OsoitteistoDto.class).orNull(),
+                    src.get(OsoitteistoDto.class).orNull()));
             if (presentation.isPositosoiteIncluded()) {
                 combiner.combinedWith(OsoitteistoDto.class,
                         filterOsoites(result.getPostiosoite(), presentation.getLocale()));
@@ -286,7 +252,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                             filterOsoites(result.getKayntiosoite(), presentation.getLocale()));
                 }
             } else if (presentation.isKayntiosoiteIncluded()) {
-                combiner.with(OsoitteistoDto.class, new ArrayList<OsoitteistoDto>())
+                combiner.with(OsoitteistoDto.class, new ArrayList<>())
                     .combinedWith(OsoitteistoDto.class,
                         filterOsoites(result.getKayntiosoite(), presentation.getLocale()));
             }
@@ -307,7 +273,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (locale == null || osoites.size() < 1) {
             return osoites;
         }
-        List<OsoitteistoDto> filtered = new ArrayList<OsoitteistoDto>();
+        List<OsoitteistoDto> filtered = new ArrayList<>();
         for (OsoitteistoDto osoite : osoites) {
             if (LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(osoite.getKieli(), DEFAULT_LOCALE))) {
                 filtered.add(osoite);
@@ -323,19 +289,14 @@ public class DefaultSearchResultTransformerService extends AbstractService
         return filtered;
     }
 
-    protected List<SearchResultRowDto> transformHenkilos(List<HenkiloHakuResultDto> henkilos,
-                                             SearchResultPresentation presentation) {
-        List<SearchResultRowDto> results = new ArrayList<SearchResultRowDto>();
+    protected List<SearchResultRowDto> transformHenkilos(List<HenkiloHakuResultDto> henkilos) {
+        List<SearchResultRowDto> results = new ArrayList<>();
 
-        Set<HenkiloResultAggregateDto> henkiloAggregates = new LinkedHashSet<HenkiloResultAggregateDto>();
+        Set<HenkiloResultAggregateDto> henkiloAggregates = new LinkedHashSet<>();
         for (final HenkiloHakuResultDto result : henkilos) {
-            new Combiner<HenkiloResultAggregateDto>(
-                    new Combiner.Creator<HenkiloResultAggregateDto>() {
-                public HenkiloResultAggregateDto create(Combiner.PullSource src) {
-                    return new HenkiloResultAggregateDto(result,
-                            (HenkiloOsoiteDto)src.get(HenkiloOsoiteDto.class).orNull());
-                }
-            })
+            new Combiner<>(
+                src -> new HenkiloResultAggregateDto(result,
+                    src.get(HenkiloOsoiteDto.class).orNull()))
                 .withRepeated(HenkiloOsoiteDto.class, result.getOsoittees())
                 .atLeastOne().to(henkiloAggregates);
         }
@@ -348,17 +309,13 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
     protected List<SearchResultRowDto> transformToimikuntaJasens(List<AituToimikuntaResultDto> aituToimikuntas,
                                                                  SearchResultPresentation presentation) {
-        List<SearchResultRowDto> results = new ArrayList<SearchResultRowDto>();
+        List<SearchResultRowDto> results = new ArrayList<>();
 
-        Set<AituToimikuntaJasenAggregateDto> aggregates = new LinkedHashSet<AituToimikuntaJasenAggregateDto>();
+        Set<AituToimikuntaJasenAggregateDto> aggregates = new LinkedHashSet<>();
         for (final AituToimikuntaResultDto toimikunta : aituToimikuntas) {
-            new Combiner<AituToimikuntaJasenAggregateDto>(
-                new Combiner.Creator<AituToimikuntaJasenAggregateDto>() {
-                    public AituToimikuntaJasenAggregateDto create(Combiner.PullSource src) {
-                        return new AituToimikuntaJasenAggregateDto(toimikunta,
-                                (AituJasenyysDto)src.get(AituJasenyysDto.class).orNull());
-                }
-            }).combinedWith(AituJasenyysDto.class, toimikunta.getJasenyydet())
+            new Combiner<>(
+                src -> new AituToimikuntaJasenAggregateDto(toimikunta,
+                    src.get(AituJasenyysDto.class).orNull())).combinedWith(AituJasenyysDto.class, toimikunta.getJasenyydet())
                 .atLeastOne().to(aggregates);
         }
         for (AituToimikuntaJasenAggregateDto aggregate : aggregates) {
@@ -371,18 +328,14 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
     protected List<SearchResultRowDto> transformNayttotutkinonJarjestajaOrganisaatios(
             List<AituOppilaitosResultDto> aituOppilaitos, SearchResultPresentation presentation) {
-        List<SearchResultRowDto> results = new ArrayList<SearchResultRowDto>();
+        List<SearchResultRowDto> results = new ArrayList<>();
 
-        Set<AituOppilaitosVastuuhenkiloAggregateDto> aggregates = new LinkedHashSet<AituOppilaitosVastuuhenkiloAggregateDto>();
+        Set<AituOppilaitosVastuuhenkiloAggregateDto> aggregates = new LinkedHashSet<>();
         for (final AituOppilaitosResultDto oppilaitos : aituOppilaitos) {
-            Combiner<AituOppilaitosVastuuhenkiloAggregateDto> combiner = new Combiner<AituOppilaitosVastuuhenkiloAggregateDto>(
-                new Combiner.Creator<AituOppilaitosVastuuhenkiloAggregateDto>() {
-                    public AituOppilaitosVastuuhenkiloAggregateDto create(Combiner.PullSource src) {
-                        return new AituOppilaitosVastuuhenkiloAggregateDto(
-                                (AituOppilaitosResultDto)src.get(AituOppilaitosResultDto.class).get(),
-                                (AituTutkintoDto)src.get(AituTutkintoDto.class).orNull());
-                    }
-                }
+            Combiner<AituOppilaitosVastuuhenkiloAggregateDto> combiner = new Combiner<>(
+                src -> new AituOppilaitosVastuuhenkiloAggregateDto(
+                    src.get(AituOppilaitosResultDto.class).get(),
+                    src.get(AituTutkintoDto.class).orNull())
             ).withRepeated(AituOppilaitosResultDto.class, Arrays.asList(oppilaitos));
             if (presentation.isNayttotutkinnonJarjestajaVastuuhenkilosIncluded()) {
                 Collection<AituTutkintoDto> tutkintos = CollectionHelper.collect(oppilaitos.getSopimukset(),
@@ -413,7 +366,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (organisaatioService == null) {
             return;
         }
-        List<DetailCopier> copiers = new ArrayList<DetailCopier>();
+        List<DetailCopier> copiers = new ArrayList<>();
         if (presentation.isOrganisaationNimiIncluded()) {
             copiers.add(new DetailCopier() {
                 @Override
@@ -589,7 +542,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
     protected void copyDetails(List<SearchResultRowDto> results, CamelRequestContext context,
                                List<DetailCopier> copiers, Locale locale) {
-        Map<String, OrganisaatioDetailsDto> cache = new HashMap<String, OrganisaatioDetailsDto>();
+        Map<String, OrganisaatioDetailsDto> cache = new HashMap<>();
 
         if (copiers.isEmpty()) {
             return;
@@ -597,7 +550,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
         boolean newDetailsFetched = false;
         try {
-            Map<String,String> oidsByOppilaitosKoodi = new HashMap<String, String>();
+            Map<String,String> oidsByOppilaitosKoodi = new HashMap<>();
             // Go through each row and use all included copiers to check content. if content is missing add the details to the result.
             results: for (SearchResultRowDto result : results) {
                 String oid = result.getOrganisaatioOid();
