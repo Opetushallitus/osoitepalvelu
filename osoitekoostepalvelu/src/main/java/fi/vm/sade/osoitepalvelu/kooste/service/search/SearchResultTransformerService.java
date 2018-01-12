@@ -16,14 +16,13 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
-import java.io.Serializable;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto.SearchType;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
-import org.apache.poi.ss.usermodel.Workbook;
+import java.io.Serializable;
 
 /**
  * User: ratamaa
@@ -48,7 +47,7 @@ public interface SearchResultTransformerService extends Serializable {
      * @param workbook the excel workbook to produce the rows to
      * @param searchResults to produce to the workbook
      */
-    void produceExcel(Workbook workbook, SearchResultsPresentationDto searchResults);
+    void produceExcel(HSSFWorkbook workbook, SearchResultsPresentationDto searchResults);
 
     /**
      * @return the currently logged in user's OID.

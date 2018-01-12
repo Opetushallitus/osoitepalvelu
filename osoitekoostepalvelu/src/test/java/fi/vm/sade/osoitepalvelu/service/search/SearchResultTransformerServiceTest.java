@@ -69,12 +69,12 @@ public class SearchResultTransformerServiceTest {
         organisaatio2.setFaksinumero("fax");
         organisaatio2.setPuhelinnumero("org puh");
         organisaatio2.setKotikunta("kotikunta");
-        organisaatio2.setNimi(new HashMap<String, String>());
+        organisaatio2.setNimi(new HashMap<>());
         organisaatio2.getNimi().put("fi", "suomi");
         organisaatio2.getNimi().put("sv", "svenska");
         organisaatio2.setToimipistekoodi("toimipiste");
         organisaatio2.setOppilaitosKoodi("oppilaitoskoodi");
-        organisaatio2.setTyypit(new ArrayList<String>(Arrays.asList("Tyyppi1", "Tyyppi2")));
+        organisaatio2.setTyypit(new ArrayList<>(Arrays.asList("Tyyppi1", "Tyyppi2")));
         organisaatio2.setWwwOsoite("www");
         OrganisaatioYhteystietoDto yhteyshenkilo1  =  new OrganisaatioYhteystietoDto(),
                 yhteyshenkilo2  =  new OrganisaatioYhteystietoDto();
@@ -229,8 +229,8 @@ public class SearchResultTransformerServiceTest {
 
     @Test
     public void testProduceEmptyExcel() {
-        Workbook wb  =  new HSSFWorkbook();
-        resultTranformerService.produceExcel(wb, new SearchResultsPresentationDto(new ArrayList<SearchResultRowDto>(),
+        HSSFWorkbook wb  =  new HSSFWorkbook();
+        resultTranformerService.produceExcel(wb, new SearchResultsPresentationDto(new ArrayList<>(),
                 new AllColumnsSearchResultPresentation()));
         assertEquals(1, wb.getNumberOfSheets());
         assertEquals(0, wb.getSheetAt(0).getLastRowNum());
@@ -240,7 +240,7 @@ public class SearchResultTransformerServiceTest {
     @Test
     public void testProduceSingleLineNullExcel() {
         OrganisaatioResultDto organisaatio  =  new OrganisaatioResultDto();
-        HashMap<String, String> nimi  =  new HashMap<String, String>();
+        HashMap<String, String> nimi  = new HashMap<>();
         nimi.put("sv", "Organisations namnet");
         nimi.put("fi", "Organisaation nimi");
         organisaatio.setNimi(nimi);
@@ -249,7 +249,7 @@ public class SearchResultTransformerServiceTest {
                 organisaatioResults(Arrays.asList(organisaatio)),
                 presentation, new DefaultCamelRequestContext(), null);
 
-        Workbook wb  =  new HSSFWorkbook();
+        HSSFWorkbook wb  =  new HSSFWorkbook();
         resultTranformerService.produceExcel(wb, results);
         assertEquals(1, wb.getNumberOfSheets());
         assertEquals(1, wb.getSheetAt(0).getLastRowNum());
@@ -264,7 +264,7 @@ public class SearchResultTransformerServiceTest {
 
     @Test
     public void testEmptyResults() {
-        List<HenkiloHakuResultDto> list = new ArrayList<HenkiloHakuResultDto>();
+        List<HenkiloHakuResultDto> list = new ArrayList<>();
         SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(henkiloResults(list),
                 new AllColumnsSearchResultPresentation(new Locale("sv", "SE")),
                 new DefaultCamelRequestContext(),  null);
@@ -276,7 +276,7 @@ public class SearchResultTransformerServiceTest {
     public void testHenkiloResults() {
         List<HenkiloHakuResultDto> list = list(
             henkilo("henkilo1Oid", "Milla Makkonen",
-                    new ArrayList<HenkiloOsoiteDto>()),
+                new ArrayList<>()),
             // -> 1 result row
             henkilo("henkilo2Oid", "Matti MAkkonen",
                 list(
@@ -293,7 +293,7 @@ public class SearchResultTransformerServiceTest {
             ),
             // -> 2 result rows for each osoite with empty organisaatioHenkilö details
             henkilo("henkilo4Oid", "Matti Mikkonen",
-                    new ArrayList<HenkiloOsoiteDto>()
+                new ArrayList<>()
             )
             // -> 2 result rows for each organisaatiohenkilö with empty osoittees
         );
@@ -330,7 +330,7 @@ public class SearchResultTransformerServiceTest {
 
 
     protected<T> List<T> list(T...v) {
-        return new ArrayList<T>(Arrays.asList(v));
+        return new ArrayList<>(Arrays.asList(v));
     }
 
     private Long id=0L;
