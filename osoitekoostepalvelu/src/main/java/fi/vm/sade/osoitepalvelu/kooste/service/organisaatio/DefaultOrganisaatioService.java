@@ -70,66 +70,48 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
             // and can thus only search once:
             criteria.useAll();
             results = organisaatioRepository.findOrganisaatios(criteria, locale);
+        } else if (criteria.isOidUsed()) {
+            results = organisaatioRepository.findOrganisaatios(criteria, locale);
+            results = mergeParents(results, locale);
         } else {
             // Search is done so that only one condiction is on at the same time.
             boolean yTunnusUsed = criteria.isYtunnusUsed();
             boolean oppilaitostyyppiUsed = criteria.isOppilaitostyyppiUsed();
-            boolean oidListUsed = criteria.isOidUsed();
 
             criteria.setUseYtunnus(false);
             criteria.setUseOppilaitotyyppi(false);
-            criteria.setUseOid(false);
 
             // Order of search:
             // 1. YTunnus / koulutuksen järjestäjä
             // 2. Oppilaitostyyppi
-            // 3. Oid -list
-            // 4. Last round --> parents on
+            // 3. Last round --> parents on
 
             // First round
-            // One of these on: ytunnus, oppilaitostyyppi, oidlist
+            // One of these on: ytunnus, oppilaitostyyppi
             if (yTunnusUsed) {
-                // Three rounds possible (ytunnus, oppilaitostyyppi, oidlist)
+                // Two rounds possible (ytunnus, oppilaitostyyppi)
                 criteria.setUseYtunnus(true);
             }
             else if (oppilaitostyyppiUsed) {
-                // Two rounds possible (oppilaitostyyppi, oidlist)
+                // One round possible (oppilaitostyyppi)
                 criteria.setUseOppilaitotyyppi(true);
-            }
-            else if (oidListUsed) {
-                // One round possible (oidlist)
-                criteria.setUseOid(true);
             }
             results = organisaatioRepository.findOrganisaatios(criteria, locale);
 
             criteria.setUseYtunnus(false);
             criteria.setUseOppilaitotyyppi(false);
-            criteria.setUseOid(false);
 
             // Second round
-            // One of these on: oppilaitostyyppi, oidlist
+            // One of these on: oppilaitostyyppi
             if (yTunnusUsed && oppilaitostyyppiUsed) {
                 criteria.setUseOppilaitotyyppi(true);
-                results = mergeWithChildren(results, criteria, locale, false);
-            }
-            else if (oppilaitostyyppiUsed && oidListUsed) {
-                criteria.setUseOid(true);
                 results = mergeWithChildren(results, criteria, locale, false);
             }
 
             criteria.setUseYtunnus(false);
             criteria.setUseOppilaitotyyppi(false);
-            criteria.setUseOid(false);
-
-            // Third round
-            // One of these on: oidlist
-            if (yTunnusUsed && oppilaitostyyppiUsed && oidListUsed) {
-                criteria.setUseOid(true);
-                results = mergeWithChildren(results, criteria, locale, false);
-            }
 
             // Last round round --> include parents
-            criteria.setUseOid(false);
             results = mergeWithChildren(results, criteria, locale, true);
 
             // we need to merge parents to the search results as well:
