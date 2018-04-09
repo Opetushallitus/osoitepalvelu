@@ -26,7 +26,6 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClien
 import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
 
 import org.apache.camel.*;
-import org.apache.camel.component.http.HttpOperationFailedException;
 import org.apache.camel.model.ExpressionNode;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
@@ -45,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.apache.camel.component.http4.HttpOperationFailedException;
 
 /**
  * Abstrakti kantaluokka, joka tarjoaa peruspalvelut Camel-reittien luomiseen,
@@ -321,7 +321,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      */
     protected String uri(String url, long timeoutMillis) {
         if (url != null) {
-            url = url.trim();
+            url = url.trim().replaceFirst("http://", "http4://").replaceFirst("https://", "https4://");
             if (url.contains("?")) {
                 url = url + "&" + HTTP_CLIENT_TIMEOUT_PARAM_NAME + "=" + timeoutMillis;
             }
