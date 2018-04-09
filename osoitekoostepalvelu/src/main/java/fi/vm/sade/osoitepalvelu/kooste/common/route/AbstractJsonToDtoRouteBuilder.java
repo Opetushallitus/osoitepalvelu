@@ -44,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.camel.component.http4.HttpOperationFailedException;
+import org.apache.camel.http.common.HttpOperationFailedException;
 
 /**
  * Abstrakti kantaluokka, joka tarjoaa peruspalvelut Camel-reittien luomiseen,
@@ -62,8 +62,8 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected static final String CAS_TICKET_CACHE_PROPERTY  =  "CasTicketCache";
     protected static final String CAS_TICKET_CACHE_SERVICE_PROPERTY  =  "CasTicketCache.service";
     protected static final String URL_ENCODING = "UTF-8";
-    // According to http://camel.apache.org/http.html
-    protected static final String HTTP_CLIENT_TIMEOUT_PARAM_NAME = "httpClient.soTimeout";
+    // According to http://camel.apache.org/http4.html
+    protected static final String HTTP_CLIENT_TIMEOUT_PARAM_NAME = "httpClient.socketTimeout";
     protected static final long MILLIS_IN_SECOND = 1000L;
     protected static final long SECONDS_IN_MINUTE = 60L;
     protected static final long DEFAULT_HTTP_TIMEOUT_MILLIS = 15L*MILLIS_IN_SECOND;

@@ -40,7 +40,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.SocketTimeoutException;
 import java.util.Locale;
-import org.apache.camel.component.http4.HttpOperationFailedException;
+import org.apache.camel.http.common.HttpOperationFailedException;
 
 /**
  * User: ratamaa
