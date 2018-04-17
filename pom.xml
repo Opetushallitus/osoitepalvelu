@@ -26,7 +26,7 @@
         <generic.version>9.4-SNAPSHOT</generic.version>
         <log-client.version>7.0.0-SNAPSHOT</log-client.version>
 
-        <camel.version>2.12.1</camel.version>
+        <camel.version>2.21.0</camel.version>
         <ehcache.version>2.5.0</ehcache.version>
         <cas-client-core.version>3.1.12</cas-client-core.version>
         <spring.version>4.3.2.RELEASE</spring.version>
@@ -37,6 +37,7 @@
         <jetty.version>9.2.12.M0</jetty.version>
 
         <junit.version>4.12</junit.version>
+        <mockito.version>1.10.19</mockito.version>
 
         <run-itests>false</run-itests>
     </properties>
@@ -112,7 +113,7 @@
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
+                <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
             </dependency>
             <dependency>
@@ -250,7 +251,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>camel-http</artifactId>
+                <artifactId>camel-http4</artifactId>
                 <version>${camel.version}</version>
             </dependency>
             <dependency>
