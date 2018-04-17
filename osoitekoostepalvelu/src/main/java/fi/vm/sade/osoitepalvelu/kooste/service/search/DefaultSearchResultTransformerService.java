@@ -683,9 +683,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (presentation.isPuhelinnumeroIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_puhelinnumero");
         }
-        if (presentation.isFaksinumeroIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_faksinumero");
-        }
         if (presentation.isWwwOsoiteIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_www_osoite");
         }
@@ -764,9 +761,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
         if (presentation.isPuhelinnumeroIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getPuhelinnumero(), ophHssfCellStyles);
-        }
-        if (presentation.isFaksinumeroIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getFaksinumero(), ophHssfCellStyles);
         }
         if (presentation.isWwwOsoiteIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getWwwOsoite(), ophHssfCellStyles);

@@ -89,11 +89,6 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     }
 
     @Override
-    public boolean isFaksinumeroIncluded() {
-        return true;
-    }
-
-    @Override
     public boolean isWwwOsoiteIncluded() {
         return true;
     }

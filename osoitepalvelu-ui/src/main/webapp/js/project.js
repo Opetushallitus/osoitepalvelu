@@ -114,7 +114,6 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         {type: 'POSTIOSOITE',               name: LocalisationService.t('address_field_postiosoite')},
         {type: 'KAYNTIOSOITE',              name: LocalisationService.t('address_field_kayntiosoite')},
         {type: 'PUHELINNUMERO',             name: LocalisationService.t('address_field_puhelinnumero')},
-        {type: 'FAXINUMERO',                name: LocalisationService.t('address_field_faxinumero')},
         {type: 'INTERNET_OSOITE',           name: LocalisationService.t('address_field_internet_osoite')},
         {type: 'EMAIL_OSOITE',              name: LocalisationService.t('address_field_email_osoite')},
         //{type: 'VIRANOMAISTIEDOTUS_EMAIL',  name: LocalisationService.t('address_field_viranomaistiedotus_email')},

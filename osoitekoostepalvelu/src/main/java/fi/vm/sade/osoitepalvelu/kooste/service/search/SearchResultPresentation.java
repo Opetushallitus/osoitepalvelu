@@ -53,9 +53,6 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö puhelinnumerosaraketta")
     boolean isPuhelinnumeroIncluded();
 
-    @ApiModelProperty("Näytetäänkö faksinumerosaraketta.")
-    boolean isFaksinumeroIncluded();
-
     @ApiModelProperty("Näytetäänkö WWW-osoite-saraketta")
     boolean isWwwOsoiteIncluded();
 

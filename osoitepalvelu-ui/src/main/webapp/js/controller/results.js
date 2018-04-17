@@ -44,7 +44,6 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
         'kayntiosoitePostinumero':      'kayntiosoiteIncluded',
         'kayntiosoitePostitoimipaikka': 'kayntiosoiteIncluded',
         'puhelinnumero':                'puhelinnumeroIncluded',
-        'faksinumero':                  'faksinumeroIncluded',
         'wwwOsoite':                    'wwwOsoiteIncluded',
         'viranomaistiedotuksenEmail':   'viranomaistiedotuksenSahkopostiosoiteIncluded',
         'koulutusneuvonnanEmail':       'koulutusneuvonnanSahkopostiosoiteIncluded',

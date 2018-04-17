@@ -35,7 +35,6 @@ public class OrganisaatioResultDto implements Serializable {
     private String wwwOsoite;
     private Map<String, String> nimi  =  new HashMap<String, String>(); // Organisaation nimi lokaalin mukaan
     private String puhelinnumero;
-    private String faksinumero;
     private String emailOsoite;
     private List<String> tyypit;
     @DtoConversion
@@ -95,14 +94,6 @@ public class OrganisaatioResultDto implements Serializable {
 
     public void setPuhelinnumero(String puhelinnumero) {
         this.puhelinnumero  =  puhelinnumero;
-    }
-
-    public String getFaksinumero() {
-        return faksinumero;
-    }
-
-    public void setFaksinumero(String faksinumero) {
-        this.faksinumero  =  faksinumero;
     }
 
     public String getEmailOsoite() {

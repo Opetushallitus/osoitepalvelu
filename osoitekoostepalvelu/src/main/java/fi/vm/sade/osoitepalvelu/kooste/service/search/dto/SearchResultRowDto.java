@@ -58,9 +58,6 @@ public class SearchResultRowDto implements Serializable {
     @DtoConversion(path="organisaatio.tyypit", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private List<String> tyypit;
-    @DtoConversion(path="organisaatio.faksinumero", with="organisaatioAggregate")
-    @DtoSkipped(with="henkiloAggregate")
-    private String faksinumero;
     @DtoConversion(path="organisaatio.puhelinnumero", with="organisaatioAggregate")
     @DtoPath(value="osoite.puhelinnumero", with="henkiloAggregate")
     private String puhelinnumero;
@@ -148,14 +145,6 @@ public class SearchResultRowDto implements Serializable {
 
     public void setNimi(String nimi) {
         this.nimi  =  nimi;
-    }
-
-    public String getFaksinumero() {
-        return faksinumero;
-    }
-
-    public void setFaksinumero(String faksinumero) {
-        this.faksinumero  =  faksinumero;
     }
 
     public String getEmailOsoite() {
@@ -313,8 +302,7 @@ public class SearchResultRowDto implements Serializable {
                 this.kriisitiedotuksenEmail,
                 this.varhaiskasvatuksenYhteyshenkilo,
                 this.varhaiskasvatuksenEmail,
-                this.viranomaistiedotuksenEmail,
-                this.faksinumero
+                this.viranomaistiedotuksenEmail
         );
     }
 }

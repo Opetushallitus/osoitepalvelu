@@ -66,7 +66,6 @@ public class SearchResultTransformerServiceTest {
         organisaatio1.setOid("org1");
         organisaatio2.setOid("org2");
         organisaatio2.setEmailOsoite("org email");
-        organisaatio2.setFaksinumero("fax");
         organisaatio2.setPuhelinnumero("org puh");
         organisaatio2.setKotikunta("kotikunta");
         organisaatio2.setNimi(new HashMap<>());
