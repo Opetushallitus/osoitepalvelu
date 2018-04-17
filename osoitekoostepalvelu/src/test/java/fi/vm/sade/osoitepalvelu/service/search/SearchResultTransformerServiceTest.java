@@ -73,6 +73,7 @@ public class SearchResultTransformerServiceTest {
         organisaatio2.getNimi().put("sv", "svenska");
         organisaatio2.setToimipistekoodi("toimipiste");
         organisaatio2.setOppilaitosKoodi("oppilaitoskoodi");
+        organisaatio2.setYtunnus("ytunnus");
         organisaatio2.setTyypit(new ArrayList<>(Arrays.asList("Tyyppi1", "Tyyppi2")));
         organisaatio2.setWwwOsoite("www");
         OrganisaatioYhteystietoDto yhteyshenkilo1  =  new OrganisaatioYhteystietoDto(),
@@ -104,6 +105,7 @@ public class SearchResultTransformerServiceTest {
         assertEquals("kotikunta", rows.get(2).getKotikunta());
         assertEquals("toimipiste", rows.get(2).getToimipistekoodi());
         assertEquals("oppilaitoskoodi", rows.get(2).getOppilaitosKoodi());
+        assertEquals("ytunnus", rows.get(2).getYtunnus());
         assertEquals(2, rows.get(2).getTyypit().size());
         assertEquals("suomi", rows.get(2).getNimi());
         assertNull(rows.get(2).getHenkiloEmail());

@@ -38,6 +38,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings  =  new LinkedMultiValueMap<String, String>();
         fieldMappings.add("ORGANISAATIO_NIMI", "organisaationNimiIncluded");
         fieldMappings.add("ORGANISAATIO_TUNNISTE", "organisaatiotunnisteIncluded");
+        fieldMappings.add("YTUNNUS", "ytunnusIncluded");
         fieldMappings.add("YHTEYSHENKILO", "yhteyshenkiloIncluded");
         fieldMappings.add("POSTIOSOITE", "positosoiteIncluded");
         fieldMappings.add("KAYNTIOSOITE", "kayntiosoiteIncluded");
@@ -57,6 +58,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     private boolean organisaationNimiIncluded;
     private boolean organisaatiotunnisteIncluded;
+    private boolean ytunnusIncluded;
     private boolean yhteyshenkiloIncluded;
     private boolean yhteyshenkiloEmailIncluded;
     private boolean positosoiteIncluded;
@@ -157,6 +159,15 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     public void setOrganisaatiotunnisteIncluded(boolean organisaatiotunnisteIncluded) {
         this.organisaatiotunnisteIncluded  =  organisaatiotunnisteIncluded;
+    }
+
+    @Override
+    public boolean isYtunnusIncluded() {
+        return ytunnusIncluded;
+    }
+
+    public void setYtunnusIncluded(boolean ytunnusIncluded) {
+        this.ytunnusIncluded = ytunnusIncluded;
     }
 
     @Override

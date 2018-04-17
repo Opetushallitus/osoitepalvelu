@@ -52,6 +52,9 @@ public class SearchResultRowDto implements Serializable {
     @DtoPath(value="oppilaitos.oppilaitoskoodi", with = "aituOppilaitosAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String oppilaitosKoodi;
+    @DtoConversion(path="organisaatio.ytunnus", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String ytunnus;
     @DtoConversion(path="organisaatio.wwwOsoite", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String wwwOsoite;
@@ -129,6 +132,14 @@ public class SearchResultRowDto implements Serializable {
 
     public void setToimipistekoodi(String toimipistekoodi) {
         this.toimipistekoodi  =  toimipistekoodi;
+    }
+
+    public String getYtunnus() {
+        return ytunnus;
+    }
+
+    public void setYtunnus(String ytunnus) {
+        this.ytunnus = ytunnus;
     }
 
     public String getWwwOsoite() {
@@ -285,6 +296,7 @@ public class SearchResultRowDto implements Serializable {
         return new EqualsHelper(
                 this.organisaatioOid,
                 this.oppilaitosKoodi,
+                this.ytunnus,
                 this.emailOsoite,
                 this.henkiloOid,
                 this.henkiloEmail,

@@ -32,6 +32,7 @@ public class OrganisaatioResultDto implements Serializable {
     private String kotikunta;
     private String toimipistekoodi;
     private String oppilaitosKoodi;
+    private String ytunnus;
     private String wwwOsoite;
     private Map<String, String> nimi  =  new HashMap<String, String>(); // Organisaation nimi lokaalin mukaan
     private String puhelinnumero;
@@ -70,6 +71,14 @@ public class OrganisaatioResultDto implements Serializable {
 
     public void setToimipistekoodi(String toimipistekoodi) {
         this.toimipistekoodi  =  toimipistekoodi;
+    }
+
+    public String getYtunnus() {
+        return ytunnus;
+    }
+
+    public void setYtunnus(String ytunnus) {
+        this.ytunnus = ytunnus;
     }
 
     public String getWwwOsoite() {
