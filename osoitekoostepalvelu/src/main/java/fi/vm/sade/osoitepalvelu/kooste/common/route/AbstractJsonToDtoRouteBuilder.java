@@ -321,7 +321,8 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      */
     protected String uri(String url, long timeoutMillis) {
         if (url != null) {
-            url = url.trim().replaceFirst("http://", "http4://").replaceFirst("https://", "https4://");
+            // use camel-http4 component (http->http4)
+            url = url.trim().replaceFirst("^http(s?)://", "http$14://");
             if (url.contains("?")) {
                 url = url + "&" + HTTP_CLIENT_TIMEOUT_PARAM_NAME + "=" + timeoutMillis;
             }
