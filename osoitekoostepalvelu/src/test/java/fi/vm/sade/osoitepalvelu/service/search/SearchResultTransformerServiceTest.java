@@ -38,6 +38,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.*;
+import org.hamcrest.CoreMatchers;
 
 import static org.junit.Assert.*;
 
@@ -75,6 +76,7 @@ public class SearchResultTransformerServiceTest {
         organisaatio2.setOppilaitosKoodi("oppilaitoskoodi");
         organisaatio2.setYtunnus("ytunnus");
         organisaatio2.setYritysmuoto("yritysmuoto");
+        organisaatio2.setKieletUris(Arrays.asList("kieli1", "kieli2"));
         organisaatio2.setTyypit(new ArrayList<>(Arrays.asList("Tyyppi1", "Tyyppi2")));
         organisaatio2.setWwwOsoite("www");
         OrganisaatioYhteystietoDto yhteyshenkilo1  =  new OrganisaatioYhteystietoDto(),
@@ -108,6 +110,7 @@ public class SearchResultTransformerServiceTest {
         assertEquals("oppilaitoskoodi", rows.get(2).getOppilaitosKoodi());
         assertEquals("ytunnus", rows.get(2).getYtunnus());
         assertEquals("yritysmuoto", rows.get(2).getYritysmuoto());
+        assertThat(rows.get(2).getKieletUris(), CoreMatchers.hasItems("kieli1", "kieli2"));
         assertEquals(2, rows.get(2).getTyypit().size());
         assertEquals("suomi", rows.get(2).getNimi());
         assertNull(rows.get(2).getHenkiloEmail());

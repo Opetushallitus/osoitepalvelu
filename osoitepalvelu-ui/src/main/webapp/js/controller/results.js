@@ -36,6 +36,7 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
         'organisaatioTunniste':         'organisaatiotunnisteIncluded',
         'ytunnus':                      'ytunnusIncluded',
         'yritysmuoto':                  'yritysmuotoIncluded',
+        'opetuskieli':                  'opetuskieliIncluded',
         'yhteyshenkilonNimi':           'yhteyshenkiloIncluded',
         'henkiloEmail':                 'yhteyshenkiloEmailIncluded',
         'emailOsoite':                  'organisaatioEmailIncluded',

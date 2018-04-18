@@ -79,6 +79,11 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     }
 
     @Override
+    public boolean isOpetuskieliIncluded() {
+        return true;
+    }
+
+    @Override
     public boolean isYhteyshenkiloIncluded() {
         return true;
     }

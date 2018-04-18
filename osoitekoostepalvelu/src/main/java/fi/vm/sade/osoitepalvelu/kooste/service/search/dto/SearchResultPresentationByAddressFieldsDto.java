@@ -40,6 +40,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings.add("ORGANISAATIO_TUNNISTE", "organisaatiotunnisteIncluded");
         fieldMappings.add("YTUNNUS", "ytunnusIncluded");
         fieldMappings.add("YRITYSMUOTO", "yritysmuotoIncluded");
+        fieldMappings.add("OPETUSKIELI", "opetuskieliIncluded");
         fieldMappings.add("YHTEYSHENKILO", "yhteyshenkiloIncluded");
         fieldMappings.add("POSTIOSOITE", "positosoiteIncluded");
         fieldMappings.add("KAYNTIOSOITE", "kayntiosoiteIncluded");
@@ -61,6 +62,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean organisaatiotunnisteIncluded;
     private boolean ytunnusIncluded;
     private boolean yritysmuotoIncluded;
+    private boolean opetuskieliIncluded;
     private boolean yhteyshenkiloIncluded;
     private boolean yhteyshenkiloEmailIncluded;
     private boolean positosoiteIncluded;
@@ -179,6 +181,15 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     public void setYritysmuotoIncluded(boolean yritysmuotoIncluded) {
         this.yritysmuotoIncluded = yritysmuotoIncluded;
+    }
+
+    @Override
+    public boolean isOpetuskieliIncluded() {
+        return opetuskieliIncluded;
+    }
+
+    public void setOpetuskieliIncluded(boolean opetuskieliIncluded) {
+        this.opetuskieliIncluded = opetuskieliIncluded;
     }
 
     @Override

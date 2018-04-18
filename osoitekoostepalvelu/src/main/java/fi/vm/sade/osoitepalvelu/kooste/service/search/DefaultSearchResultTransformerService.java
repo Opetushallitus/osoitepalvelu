@@ -80,6 +80,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import static java.util.stream.Collectors.joining;
 
 @Service
 public class DefaultSearchResultTransformerService extends AbstractService
@@ -667,6 +668,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (presentation.isYritysmuotoIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_yritysmuoto");
         }
+        if (presentation.isOpetuskieliIncluded()) {
+            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_opetuskieli");
+        }
         if (presentation.isYhteyshenkiloIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_yhteyshenkilo");
         }
@@ -734,6 +738,12 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
         if (presentation.isYtunnusIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getYtunnus(), ophHssfCellStyles);
+        }
+        if (presentation.isOpetuskieliIncluded()) {
+            String opetuskielet = Optional.fromNullable(row.getKieletUris())
+                    .transform(kieletUris -> kieletUris.stream().collect(joining(",")))
+                    .orNull();
+            value(cell(sheet, rowNum, cellNum++), opetuskielet, ophHssfCellStyles);
         }
         if (presentation.isYritysmuotoIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getYritysmuoto(), ophHssfCellStyles);
