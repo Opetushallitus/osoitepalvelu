@@ -40,6 +40,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
     private String oppilaitosKoodi;
     private String toimipisteKoodi;
     private String ytunnus;
+    private String yritysmuoto;
     private List<OrganisaatioYhteysosoiteDto> postiosoite  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
     private List<OrganisaatioYhteysosoiteDto> kayntiosoite  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
     private String oppilaitosTyyppiUri; // esim. oppilaitostyyppi_21#1
@@ -129,6 +130,14 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
 
     public void setYtunnus(String ytunnus) {
         this.ytunnus = ytunnus;
+    }
+
+    public String getYritysmuoto() {
+        return yritysmuoto;
+    }
+
+    public void setYritysmuoto(String yritysmuoto) {
+        this.yritysmuoto = yritysmuoto;
     }
 
     public String getOppilaitosTyyppiUri() {

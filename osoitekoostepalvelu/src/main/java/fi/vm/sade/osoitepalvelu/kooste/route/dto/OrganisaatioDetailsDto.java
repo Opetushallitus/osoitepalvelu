@@ -51,11 +51,11 @@ public class OrganisaatioDetailsDto implements Serializable {
     private String kriisitiedotuksenEmail;
     private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos  =  new ArrayList<OrganisaatioYhteystietoElementtiDto>();
     private String ytunnus;
+    private String yritysmuoto;
     @DtoConversion
     private String alkuPvm;
     @DtoConversion
     private String lakkautusPvm;
-
 
     public Long getVersion() {
         return version;
@@ -207,6 +207,14 @@ public class OrganisaatioDetailsDto implements Serializable {
 
     public void setYtunnus(String ytunnus) {
         this.ytunnus = ytunnus;
+    }
+
+    public String getYritysmuoto() {
+        return yritysmuoto;
+    }
+
+    public void setYritysmuoto(String yritysmuoto) {
+        this.yritysmuoto = yritysmuoto;
     }
 
     public String getAlkuPvm() {

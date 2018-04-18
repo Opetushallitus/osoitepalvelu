@@ -111,6 +111,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         {type: 'ORGANISAATIO_NIMI',          name: LocalisationService.t('address_field_organisaatio_nimi')},
         {type: 'ORGANISAATIO_TUNNISTE',      name: LocalisationService.t('address_field_organisaatio_tunniste')},
         {type: 'YTUNNUS',                   name: LocalisationService.t('address_field_ytunnus')},
+        {type: 'YRITYSMUOTO',               name: LocalisationService.t('address_field_yritysmuoto')},
         //{type: 'YHTEYSHENKILO',             name: LocalisationService.t('address_field_yhteyshenkilo')},
         {type: 'POSTIOSOITE',               name: LocalisationService.t('address_field_postiosoite')},
         {type: 'KAYNTIOSOITE',              name: LocalisationService.t('address_field_kayntiosoite')},

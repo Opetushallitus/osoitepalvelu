@@ -74,6 +74,11 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     }
 
     @Override
+    public boolean isYritysmuotoIncluded() {
+        return true;
+    }
+
+    @Override
     public boolean isYhteyshenkiloIncluded() {
         return true;
     }

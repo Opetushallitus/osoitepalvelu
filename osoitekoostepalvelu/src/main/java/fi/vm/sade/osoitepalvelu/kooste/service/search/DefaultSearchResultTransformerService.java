@@ -664,6 +664,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (presentation.isYtunnusIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_ytunnus");
         }
+        if (presentation.isYritysmuotoIncluded()) {
+            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_yritysmuoto");
+        }
         if (presentation.isYhteyshenkiloIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_yhteyshenkilo");
         }
@@ -731,6 +734,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
         if (presentation.isYtunnusIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getYtunnus(), ophHssfCellStyles);
+        }
+        if (presentation.isYritysmuotoIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getYritysmuoto(), ophHssfCellStyles);
         }
         if (presentation.isYhteyshenkiloIncluded()) {
             value(cell(sheet, rowNum, cellNum++), join(" ", row.getYhteystietoNimi()), ophHssfCellStyles);

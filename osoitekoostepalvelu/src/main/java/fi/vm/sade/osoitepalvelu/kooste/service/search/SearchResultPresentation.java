@@ -44,6 +44,9 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö Y-tunnus -saraketta")
     boolean isYtunnusIncluded();
 
+    @ApiModelProperty("Näytetäänkö yritysmuotosaraketta")
+    boolean isYritysmuotoIncluded();
+
     @ApiModelProperty("Näytetäänkö yhteyshenkilösaraketta")
     boolean isYhteyshenkiloIncluded();
 

@@ -55,6 +55,9 @@ public class SearchResultRowDto implements Serializable {
     @DtoConversion(path="organisaatio.ytunnus", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String ytunnus;
+    @DtoConversion(path="organisaatio.yritysmuoto", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String yritysmuoto;
     @DtoConversion(path="organisaatio.wwwOsoite", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String wwwOsoite;
@@ -140,6 +143,14 @@ public class SearchResultRowDto implements Serializable {
 
     public void setYtunnus(String ytunnus) {
         this.ytunnus = ytunnus;
+    }
+
+    public String getYritysmuoto() {
+        return yritysmuoto;
+    }
+
+    public void setYritysmuoto(String yritysmuoto) {
+        this.yritysmuoto = yritysmuoto;
     }
 
     public String getWwwOsoite() {
@@ -297,6 +308,7 @@ public class SearchResultRowDto implements Serializable {
                 this.organisaatioOid,
                 this.oppilaitosKoodi,
                 this.ytunnus,
+                this.yritysmuoto,
                 this.emailOsoite,
                 this.henkiloOid,
                 this.henkiloEmail,

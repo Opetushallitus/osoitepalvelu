@@ -79,6 +79,7 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
             = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
     @Indexed
     private String ytunnus;
+    private String yritysmuoto;
     private LocalDate alkuPvm;
     @Indexed
     private LocalDate lakkautusPvm;
@@ -265,6 +266,14 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
 
     public void setYtunnus(String ytunnus) {
         this.ytunnus = ytunnus;
+    }
+
+    public String getYritysmuoto() {
+        return yritysmuoto;
+    }
+
+    public void setYritysmuoto(String yritysmuoto) {
+        this.yritysmuoto = yritysmuoto;
     }
 
     public LocalDate getAlkuPvm() {
