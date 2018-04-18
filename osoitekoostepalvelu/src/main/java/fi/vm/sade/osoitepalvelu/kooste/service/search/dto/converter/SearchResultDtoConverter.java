@@ -28,6 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
+import java.util.Objects;
+import static java.util.stream.Collectors.joining;
 
 /**
  * User: ratamaa
@@ -92,6 +94,14 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
             if (kuntaKoodi != null) {
                 to.setKotikunta(kuntaKoodi.getNimi());
             }
+        }
+        if (from.getKielet() != null) {
+            to.setKieletUris(from.getKielet());
+            to.setOpetuskieli(from.getKielet().stream()
+                    .map(koodi -> koodistoService.findOppilaitoksenOpetuskieliByKoodiUri(locale, koodi))
+                    .filter(Objects::nonNull)
+                    .map(UiKoodiItemDto::getNimi)
+                    .collect(joining(",")));
         }
         return to;
     }

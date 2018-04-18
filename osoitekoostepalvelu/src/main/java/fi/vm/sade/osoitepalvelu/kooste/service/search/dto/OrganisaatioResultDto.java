@@ -35,6 +35,7 @@ public class OrganisaatioResultDto implements Serializable {
     private String ytunnus;
     private String yritysmuoto;
     private List<String> kieletUris;
+    private String opetuskieli;
     private String wwwOsoite;
     private Map<String, String> nimi  =  new HashMap<String, String>(); // Organisaation nimi lokaalin mukaan
     private String puhelinnumero;
@@ -97,6 +98,14 @@ public class OrganisaatioResultDto implements Serializable {
 
     public void setKieletUris(List<String> kieletUris) {
         this.kieletUris = kieletUris;
+    }
+
+    public String getOpetuskieli() {
+        return opetuskieli;
+    }
+
+    public void setOpetuskieli(String opetuskieli) {
+        this.opetuskieli = opetuskieli;
     }
 
     public String getWwwOsoite() {

@@ -194,6 +194,16 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     }
 
     @Override
+    public UiKoodiItemDto findOppilaitoksenOpetuskieliByKoodiUri(Locale locale, String koodiUri) {
+        Iterator<UiKoodiItemDto> i  =  Collections2.filter(findOppilaitoksenOpetuskieliOptions(locale),
+                new UiKoodiItemByKoodiUriPredicate(koodiUri)).iterator();
+        if (i.hasNext()) {
+            return i.next();
+        }
+        return null;
+    }
+
+    @Override
     public List<UiKoodiItemDto> findKieliOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.KIELI);
     }
