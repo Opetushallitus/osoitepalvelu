@@ -61,6 +61,9 @@ public class SearchResultRowDto implements Serializable {
     @DtoConversion(path="organisaatio.kieletUris", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private List<String> kieletUris;
+    @DtoConversion(path="organisaatio.opetuskieli", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String opetuskieli;
     @DtoConversion(path="organisaatio.wwwOsoite", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String wwwOsoite;
@@ -162,6 +165,14 @@ public class SearchResultRowDto implements Serializable {
 
     public void setKieletUris(List<String> kieletUris) {
         this.kieletUris = kieletUris;
+    }
+
+    public String getOpetuskieli() {
+        return opetuskieli;
+    }
+
+    public void setOpetuskieli(String opetuskieli) {
+        this.opetuskieli = opetuskieli;
     }
 
     public String getWwwOsoite() {
@@ -321,6 +332,7 @@ public class SearchResultRowDto implements Serializable {
                 this.ytunnus,
                 this.yritysmuoto,
                 this.kieletUris,
+                this.opetuskieli,
                 this.emailOsoite,
                 this.henkiloOid,
                 this.henkiloEmail,
