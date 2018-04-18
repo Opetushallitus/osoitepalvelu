@@ -80,7 +80,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import static java.util.stream.Collectors.joining;
 
 @Service
 public class DefaultSearchResultTransformerService extends AbstractService
@@ -740,10 +739,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
             value(cell(sheet, rowNum, cellNum++), row.getYtunnus(), ophHssfCellStyles);
         }
         if (presentation.isOpetuskieliIncluded()) {
-            String opetuskielet = Optional.fromNullable(row.getKieletUris())
-                    .transform(kieletUris -> kieletUris.stream().collect(joining(",")))
-                    .orNull();
-            value(cell(sheet, rowNum, cellNum++), opetuskielet, ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getOpetuskieli(), ophHssfCellStyles);
         }
         if (presentation.isYritysmuotoIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getYritysmuoto(), ophHssfCellStyles);
