@@ -14,3 +14,4 @@ osoitepalvelu.iws
 phantomjsdriver.log
 phantomjsdriver.log.*
 **/pom.xml.versionsBackup
+*.iml
