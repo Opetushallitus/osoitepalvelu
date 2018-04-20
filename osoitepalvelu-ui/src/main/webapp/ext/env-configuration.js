@@ -33,7 +33,7 @@ window.CONFIG = {
         "root.organisaatio.oid":"1.2.246.562.10.00000000001",
         "ui.timeout.short": 10000,
         "ui.timeout.long": 60000,
-        "useCasMeUrl": true
+        "useCasMeUrl": false
     },
     "app" : {},
     "mode": 'dev-without-backend'

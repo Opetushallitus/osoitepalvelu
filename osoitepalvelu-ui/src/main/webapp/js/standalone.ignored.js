@@ -17,7 +17,7 @@
 /**
  * Created by ratamaa on 12/4/13.
  */
-
+/*
 OsoiteKoostepalvelu.factory('DummySaves', function() {
     return [
         {id: 12345,     name: 'Ruotsinkielisten lukioiden opot'},
@@ -292,3 +292,4 @@ OsoiteKoostepalvelu.service('OptionsService', [
         success([]);
     };
 }]);
+*/
