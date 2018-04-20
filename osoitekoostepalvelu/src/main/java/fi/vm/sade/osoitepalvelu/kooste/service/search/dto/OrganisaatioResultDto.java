@@ -46,6 +46,8 @@ public class OrganisaatioResultDto implements Serializable {
     private String viranomaistiedotuksenEmail;
     private String koulutusneuvonnanEmail;
     private String kriisitiedotuksenEmail;
+    private String varhaiskasvatuksenYhteyshenkilo;
+    private String varhaiskasvatuksenEmail;
 
     public String getOid() {
         return oid;
@@ -169,6 +171,22 @@ public class OrganisaatioResultDto implements Serializable {
 
     public void setKriisitiedotuksenEmail(String kriisitiedotuksenEmail) {
         this.kriisitiedotuksenEmail = kriisitiedotuksenEmail;
+    }
+
+    public String getVarhaiskasvatuksenYhteyshenkilo() {
+        return varhaiskasvatuksenYhteyshenkilo;
+    }
+
+    public void setVarhaiskasvatuksenYhteyshenkilo(String varhaiskasvatuksenYhteyshenkilo) {
+        this.varhaiskasvatuksenYhteyshenkilo = varhaiskasvatuksenYhteyshenkilo;
+    }
+
+    public String getVarhaiskasvatuksenEmail() {
+        return varhaiskasvatuksenEmail;
+    }
+
+    public void setVarhaiskasvatuksenEmail(String varhaiskasvatuksenEmail) {
+        this.varhaiskasvatuksenEmail = varhaiskasvatuksenEmail;
     }
 
     public String getOppilaitosKoodi() {

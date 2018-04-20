@@ -68,6 +68,12 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö kriisitiedotuksen sähköpostiosoite -saraketta")
     boolean isKriisitiedotuksenSahkopostiosoiteIncluded();
 
+    @ApiModelProperty("Näytetäänkö varhaiskasvatuksen yhteyshenkilö -saraketta")
+    boolean isVarhaiskasvatuksenYhteyshenkiloIncluded();
+
+    @ApiModelProperty("Näytetäänkö varhaiskasvatuksen sähköposti -saraketta")
+    boolean isVarhaiskasvatuksenEmailIncluded();
+
     @ApiModelProperty("Näytetäänkö organisaation sähköpostiosoite -saraketta")
     boolean isOrganisaatioEmailIncluded();
 

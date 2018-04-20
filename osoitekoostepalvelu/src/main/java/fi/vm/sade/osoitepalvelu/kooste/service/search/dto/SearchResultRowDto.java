@@ -76,6 +76,12 @@ public class SearchResultRowDto implements Serializable {
     @DtoConversion(path="organisaatio.kriisitiedotuksenEmail", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String kriisitiedotuksenEmail;
+    @DtoConversion(path="organisaatio.varhaiskasvatuksenYhteyshenkilo", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String varhaiskasvatuksenYhteyshenkilo;
+    @DtoConversion(path="organisaatio.varhaiskasvatuksenEmail", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String varhaiskasvatuksenEmail;
 
     @DtoConversion(path = "henkilo.yhteyshenkiloOid", with="organisaatioAggregate")
     @DtoPath(value="henkilo.henkiloOid", with="henkiloAggregate")
@@ -224,6 +230,20 @@ public class SearchResultRowDto implements Serializable {
         this.kriisitiedotuksenEmail  =  kriisitiedotuksenEmail;
     }
 
+    public String getVarhaiskasvatuksenYhteyshenkilo() { return varhaiskasvatuksenYhteyshenkilo; }
+
+    public void setVarhaiskasvatuksenYhteyshenkilo(String varhaiskasvatuksenYhteyshenkilo) {
+        this.varhaiskasvatuksenYhteyshenkilo = varhaiskasvatuksenYhteyshenkilo;
+    }
+
+    public String getVarhaiskasvatuksenEmail() {
+        return varhaiskasvatuksenEmail;
+    }
+
+    public void setVarhaiskasvatuksenEmail(String varhaiskasvatuksenEmail) {
+        this.varhaiskasvatuksenEmail = varhaiskasvatuksenEmail;
+    }
+
     public String getHenkiloOid() {
         return henkiloOid;
     }
@@ -291,6 +311,8 @@ public class SearchResultRowDto implements Serializable {
                 this.wwwOsoite,
                 this.koulutusneuvonnanEmail,
                 this.kriisitiedotuksenEmail,
+                this.varhaiskasvatuksenYhteyshenkilo,
+                this.varhaiskasvatuksenEmail,
                 this.viranomaistiedotuksenEmail,
                 this.faksinumero
         );

@@ -114,6 +114,12 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     }
 
     @Override
+    public boolean isVarhaiskasvatuksenYhteyshenkiloIncluded() { return true; }
+
+    @Override
+    public boolean isVarhaiskasvatuksenEmailIncluded() { return true; }
+
+    @Override
     public boolean isOrganisaatioEmailIncluded() {
         return true;
     }
