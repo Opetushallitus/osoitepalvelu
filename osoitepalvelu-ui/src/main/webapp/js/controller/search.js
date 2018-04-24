@@ -107,7 +107,6 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 //OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
                 $scope.options.tutkintotoimikuntaToimikausis = TutkintotoimikuntaToimikausis;
                 $scope.options.tutkintotoimikuntaKielis = Aitukielis;
-                $scope.options.tutkintotoimikuntaJasenKielis = Aitukielis;
             }
             $scope.terms = SearchService.getTerms();
             $scope.koulutusalasChanged();
@@ -178,10 +177,6 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         };
 
         $scope.isShowTutkintotoimikuntaKieliTerm = function() {
-            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1;
-        };
-
-        $scope.isShowTutkintotoimikuntaJasenKieliTerm = function() {
             return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1;
         };
 

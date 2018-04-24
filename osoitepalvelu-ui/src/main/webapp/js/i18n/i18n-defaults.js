@@ -104,7 +104,6 @@ angular.module("I18n", [], ["$provide", function($provider) {
         search_term_tutkintotoimikunta: 'tutkintotoimikunta',
         search_term_tutkintotoimikunta_toimikausi: 'tutkintotoimikunnan toimikausi',
         search_term_tutkintotoimikunta_kielis: 'tutkintotoimikunnan kielisyys',
-        search_term_tutkintotoimikunta_jasen_kielis: 'tutkintotoimikunnan jäsenen kielisyys',
         search_term_kayttooikeusryhma: 'käyttöoikeusryhmä',
         search_term_aipal_rooli: 'AIPAL-rooli',
         search_term_avi: 'AVI',
