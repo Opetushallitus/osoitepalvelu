@@ -17,9 +17,9 @@
 /**
  * Created by ratamaa on 12/4/13.
  */
-OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "TutkintotoimikuntaRoolis", "LocalisationService",
+OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "LocalisationService",
         "commonErrorHandler",
-        function($log, $http, TutkintotoimikuntaRoolis, LocalisationService, commonErrorHandler) {
+        function($log, $http, LocalisationService, commonErrorHandler) {
 
     // Cache here only means that user should refresh the page (or re-navigate to it) in order to referesh the options.
     // We can avoid a number of requests when going back to the search from the results.
@@ -51,21 +51,6 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "Tutkintotoimiku
 
     this.listTutkintotoimikuntas = function(success, error) {
         _get(window.url('osoitekoostepalvelu.koodisto', 'tutkintotoimikuntas'), success, error);
-    };
-
-    this.listTutkintotoimikuntaRoolis = function(success, error) {
-        _get(window.url('osoitekoostepalvelu.koodisto', 'tutkintotoimikuntaRoolis'), function(data) {
-            if (data && data.length) {
-                angular.forEach(data, function(koodi) {
-                    koodi.nimi = LocalisationService.t('tutkintotoimikunta_rooli_'+koodi.koodiId);
-                    koodi.lyhytNimi = LocalisationService.t('tutkintotoimikunta_rooli_'+koodi.koodiId);
-                });
-                success(data);
-            } else {
-                // Data not yet available:
-                success( TutkintotoimikuntaRoolis );
-            }
-        }, error);
     };
 
     this.listKoulutaRoolis = function(success, error) {

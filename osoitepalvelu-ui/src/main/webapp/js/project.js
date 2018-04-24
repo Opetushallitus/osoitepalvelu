@@ -63,7 +63,6 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
 .factory('EmptyTerms', function() {
     return {
         tutkintotoimikuntas: [],
-        tutkintotoimikuntaRoolis: [],
         tutkintotoimikuntaKielis: [],
         tutkintotoimikuntaJasenKielis: [],
         tutkintotoimikuntaToimikausis: [],

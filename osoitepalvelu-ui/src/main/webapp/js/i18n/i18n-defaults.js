@@ -105,7 +105,6 @@ angular.module("I18n", [], ["$provide", function($provider) {
         search_term_tutkintotoimikunta_toimikausi: 'tutkintotoimikunnan toimikausi',
         search_term_tutkintotoimikunta_kielis: 'tutkintotoimikunnan kielisyys',
         search_term_tutkintotoimikunta_jasen_kielis: 'tutkintotoimikunnan jäsenen kielisyys',
-        search_term_tutkintotoimikunta_rooli: 'rooli tutkintotoimikunnassa',
         search_term_kayttooikeusryhma: 'käyttöoikeusryhmä',
         search_term_aipal_rooli: 'AIPAL-rooli',
         search_term_avi: 'AVI',
@@ -174,14 +173,6 @@ angular.module("I18n", [], ["$provide", function($provider) {
         bad_request_error: 'Vihre: Käyttöliittymä suoritti virheellisen pyynnön: {1}',
         too_few_search_conditions_for_organisaatios: 'Hakua ei voida suorittaa, koska se johtaisi kaikkien organisaatioiden hakemiseen. Valitse vähintään yksi organisaatioita rajaava ehto.',
         too_few_search_conditions_for_henkilos: 'Hakua ei voida suorittaa, koska se johtaisi kaikkien Opintopolku-käyttäjien hakemiseen. Valitse vähintään yksi käyttäjiä tai organisaatioita koskeva rajausehto.',
-
-        tutkintotoimikunta_rooli_jasen: 'Jäsen',
-        tutkintotoimikunta_rooli_puheenjohtaja: 'Puheenjohtaja',
-        tutkintotoimikunta_rooli_varapuheenjohtaja: 'Varapuheenjohtaja',
-        tutkintotoimikunta_rooli_sihteeri: 'Sihteeri',
-        tutkintotoimikunta_rooli_ulkopuolinensihteeri: 'Ulkopuolinen sihteeri',
-        tutkintotoimikunta_rooli_asiantuntija: 'Asiantuntija',
-        tutkintotoimikunta_rooli_null: 'Ei tiedossa',
 
         tutkintoimikunta_toimikausi_voimassa: 'voimassa',
         tutkintoimikunta_toimikausi_tuleva: 'tuleva',
