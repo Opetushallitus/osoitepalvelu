@@ -41,6 +41,12 @@ import java.util.Map;
 public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio {
     private static final long serialVersionUID = 442147524555663558L;
 
+    /**
+     * Aikaleima jolloin organisaatiotietojen malli on viimeksi muuttunut.
+     * Jos organisaatiotiedot muuttuvat (tähän luokkaan esim. lisätään uusi kenttä),
+     * muuta tämä aikaleima nykyhetkeen jotta mongossa oleva välimuisti päivittyy
+     * asennuksen yhteydessä (muuten välimuisti päivittyy vasta yöllä).
+     */
     public static final DateTime MODEL_CHANGED_AT = new DateTime(2018, 4, 18, 9, 0);
 
     private Long version;
