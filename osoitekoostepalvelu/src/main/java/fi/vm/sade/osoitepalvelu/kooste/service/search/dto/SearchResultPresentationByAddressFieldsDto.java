@@ -48,6 +48,8 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings.add("VIRANOMAISTIEDOTUS_EMAIL", "viranomaistiedotuksenSahkopostiosoiteIncluded");
         fieldMappings.add("KOULUTUSNEUVONNAN_EMAIL", "koulutusneuvonnanSahkopostiosoiteIncluded");
         fieldMappings.add("KRIISITIEDOTUKSEN_EMAIL", "kriisitiedotuksenSahkopostiosoiteIncluded");
+        fieldMappings.add("VARHAISKASVATUKSEN_YHTEYSHENKILO", "varhaiskasvatuksenYhteyshenkiloIncluded");
+        fieldMappings.add("VARHAISKASVATUKSEN_YHTEYSHENKILO", "varhaiskasvatuksenEmailIncluded");
         fieldMappings.add("ORGANISAATIO_SIJAINTIKUNTA", "organisaationSijaintikuntaIncluded");
     }
     public static List<String> fieldMappingKeys() {
@@ -66,6 +68,8 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean viranomaistiedotuksenSahkopostiosoiteIncluded;
     private boolean koulutusneuvonnanSahkopostiosoiteIncluded;
     private boolean kriisitiedotuksenSahkopostiosoiteIncluded;
+    private boolean varhaiskasvatuksenYhteyshenkiloIncluded;
+    private boolean varhaiskasvatuksenEmailIncluded;
     private boolean organisaationSijaintikuntaIncluded;
     private boolean organisaatioEmailIncluded;
     private boolean nayttotutkinnonJarjestajaOrganisaatiosIncluded;
@@ -236,6 +240,20 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     public void setKoulutusneuvonnanSahkopostiosoiteIncluded(boolean koulutusneuvonnanSahkopostiosoiteIncluded) {
         this.koulutusneuvonnanSahkopostiosoiteIncluded  =  koulutusneuvonnanSahkopostiosoiteIncluded;
+    }
+
+    public boolean isVarhaiskasvatuksenYhteyshenkiloIncluded() {
+        return varhaiskasvatuksenYhteyshenkiloIncluded;
+    }
+
+    public void setVarhaiskasvatuksenYhteyshenkiloIncluded(boolean varhaiskasvatuksenYhteyshenkiloIncluded) {
+        this.varhaiskasvatuksenYhteyshenkiloIncluded = varhaiskasvatuksenYhteyshenkiloIncluded;
+    }
+
+    public boolean isVarhaiskasvatuksenEmailIncluded() { return varhaiskasvatuksenEmailIncluded; }
+
+    public void setVarhaiskasvatuksenEmailIncluded(boolean varhaiskasvatuksenEmailIncluded) {
+        this.varhaiskasvatuksenEmailIncluded = varhaiskasvatuksenEmailIncluded;
     }
 
     @Override

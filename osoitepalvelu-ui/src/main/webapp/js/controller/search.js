@@ -324,7 +324,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 for(var i in $scope.addressFields) {
                     var addressfield = $scope.addressFields[i];
                     // kriisitiedotuksen_sähköpostiosoite can only be used with Koulutustoimijas
-                    if(addressfield.type === 'KRIISITIEDOTUKSEN_EMAIL' && addressfield.selected) {
+                    if( (addressfield.type === 'KRIISITIEDOTUKSEN_EMAIL' || addressfield.type === 'VARHAISKASVATUKSEN_YHTEYSHENKILO') && addressfield.selected) {
                         return true;
                     }
                 }
@@ -334,7 +334,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
 
         // Logic when address fields are allowed to use.
         $scope.addressFieldDisableLogic = function(addressField) {
-            if(addressField.type === 'KRIISITIEDOTUKSEN_EMAIL'
+            if( (addressField.type === 'KRIISITIEDOTUKSEN_EMAIL' || addressField.type === 'VARHAISKASVATUKSEN_YHTEYSHENKILO')
                 && !($filter('filter')($scope.selectedTargetGroupTypes, 'JARJESTAJAT_YLLAPITAJAT')).length
                 && $scope.selectedTargetGroupTypes.length) {
                 return true;

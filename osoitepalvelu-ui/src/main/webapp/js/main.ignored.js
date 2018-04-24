@@ -94,7 +94,7 @@ function osoitepalveluInit() {
 
     if (window.url('cas.me')) {
         init_counter++;
-        jQuery.ajax(window.CONFIG.env.useCasMeUrl != "false" ? window.url('cas.me') : "cas_me_test.json", {
+        jQuery.ajax(window.CONFIG.env.useCasMeUrl === true ? window.url('cas.me') : "cas_me_test.json", {
             dataType: "json",
             crossDomain:true,
             complete: logRequest,

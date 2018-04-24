@@ -120,7 +120,8 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         //{type: 'VIRANOMAISTIEDOTUS_EMAIL',  name: LocalisationService.t('address_field_viranomaistiedotus_email')},
         //{type: 'KOULUTUSNEUVONNAN_EMAIL',   name: LocalisationService.t('address_field_koulutusneuvonnan_email')},
         {type: 'KRIISITIEDOTUKSEN_EMAIL',   name: LocalisationService.t('address_field_kriisitiedotuksen_email')},
-        {type: 'ORGANISAATIO_SIJAINTIKUNTA',name: LocalisationService.t('address_field_organisaatio_sijaintikunta')}
+        {type: 'ORGANISAATIO_SIJAINTIKUNTA',name: LocalisationService.t('address_field_organisaatio_sijaintikunta')},
+        {type: 'VARHAISKASVATUKSEN_YHTEYSHENKILO', name: LocalisationService.t('address_field_varhaiskasvatuksen_yhteyshenkilo')}
     ];
 }])
 .factory("TutkintotoimikuntaRoolis", ["LocalisationService", function(LocalisationService) {

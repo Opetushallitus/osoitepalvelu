@@ -36,11 +36,7 @@ import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituTutkintoDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
@@ -529,6 +525,45 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 }
             });
         }
+
+        if(presentation.isVarhaiskasvatuksenYhteyshenkiloIncluded()) {
+            copiers.add(new DetailCopier() {
+                @Override
+                public boolean isMissing(SearchResultRowDto from) { return from.getVarhaiskasvatuksenYhteyshenkilo() == null; }
+
+                @Override
+                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
+                    Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
+                            CollectionHelper.filter(from.getYhteystietoArvos(),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenYhteyshenkiloPredicate(locale),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenYhteyshenkiloPredicate(DEFAULT_LOCALE))
+                                    .iterator();
+                    if(yhteystietoArvos.hasNext()) {
+                        to.setVarhaiskasvatuksenYhteyshenkilo(yhteystietoArvos.next().getArvo());
+                    }
+                }
+            });
+        }
+
+        if(presentation.isVarhaiskasvatuksenEmailIncluded()) {
+            copiers.add(new DetailCopier() {
+                @Override
+                public boolean isMissing(SearchResultRowDto from) { return from.getVarhaiskasvatuksenEmail() == null; }
+
+                @Override
+                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
+                    Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
+                            CollectionHelper.filter(from.getYhteystietoArvos(),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenEmailPredicate(locale),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenEmailPredicate(DEFAULT_LOCALE))
+                                    .iterator();
+                    if(yhteystietoArvos.hasNext()) {
+                        to.setVarhaiskasvatuksenEmail(yhteystietoArvos.next().getArvo());
+                    }
+                }
+            });
+        }
+
         // TODO: viranomaistiedotuksenEmail, koulutusneuvonnanEmail
         copyDetails(results, context, copiers, presentation.getLocale());
     }
@@ -663,6 +698,12 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (presentation.isKriisitiedotuksenSahkopostiosoiteIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_kriisitiedotuksen_email");
         }
+        if (presentation.isVarhaiskasvatuksenYhteyshenkiloIncluded()) {
+            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_varhaiskasvatuksen_yhteyshenkilo");
+        }
+        if (presentation.isVarhaiskasvatuksenEmailIncluded()) {
+            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_varhaiskasvatuksen_email");
+        }
         if (presentation.isOrganisaationSijaintikuntaIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaation_sijaintikunta");
         }
@@ -738,6 +779,12 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
         if (presentation.isKriisitiedotuksenSahkopostiosoiteIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getKriisitiedotuksenEmail(), ophHssfCellStyles);
+        }
+        if(presentation.isVarhaiskasvatuksenYhteyshenkiloIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getVarhaiskasvatuksenYhteyshenkilo(), ophHssfCellStyles);
+        }
+        if(presentation.isVarhaiskasvatuksenEmailIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getVarhaiskasvatuksenEmail(), ophHssfCellStyles);
         }
         if (presentation.isOrganisaationSijaintikuntaIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getKotikunta(), ophHssfCellStyles);

@@ -49,7 +49,9 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
         'viranomaistiedotuksenEmail':   'viranomaistiedotuksenSahkopostiosoiteIncluded',
         'koulutusneuvonnanEmail':       'koulutusneuvonnanSahkopostiosoiteIncluded',
         'kriisitiedotuksenEmail':       'kriisitiedotuksenSahkopostiosoiteIncluded',
-        'kotikunta':                    'organisaationSijaintikuntaIncluded'
+        'kotikunta':                    'organisaationSijaintikuntaIncluded',
+        'varhaiskasvatuksenYhteyshenkilo': 'varhaiskasvatuksenYhteyshenkiloIncluded',
+        'varhaiskasvatuksenEmail': 'varhaiskasvatuksenEmailIncluded'
     };
     var columns = [];
     for( columnName in columnVisibilityMapping ) {
