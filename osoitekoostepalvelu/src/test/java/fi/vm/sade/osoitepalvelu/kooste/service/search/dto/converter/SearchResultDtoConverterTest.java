@@ -13,7 +13,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -44,6 +47,9 @@ public class SearchResultDtoConverterTest {
 
         assertThat(resultDto.getKieletUris(), CoreMatchers.hasItems("suomi", "ruotsi"));
         assertEquals("nimi/suomi,nimi/ruotsi", resultDto.getOpetuskieli());
+        verify(koodistoService).findOppilaitoksenOpetuskieliByKoodiUri(eq(Locale.ITALY), eq("suomi"));
+        verify(koodistoService).findOppilaitoksenOpetuskieliByKoodiUri(eq(Locale.ITALY), eq("ruotsi"));
+        verifyNoMoreInteractions(koodistoService);
     }
 
 }
