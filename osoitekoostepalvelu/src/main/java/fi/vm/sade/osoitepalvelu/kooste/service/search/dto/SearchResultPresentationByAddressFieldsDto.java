@@ -52,6 +52,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings.add("KRIISITIEDOTUKSEN_EMAIL", "kriisitiedotuksenSahkopostiosoiteIncluded");
         fieldMappings.add("VARHAISKASVATUKSEN_YHTEYSHENKILO", "varhaiskasvatuksenYhteyshenkiloIncluded");
         fieldMappings.add("VARHAISKASVATUKSEN_YHTEYSHENKILO", "varhaiskasvatuksenEmailIncluded");
+        fieldMappings.add("KOSKI_YHDYSHENKILO", "koskiYhdyshenkiloIncluded");
         fieldMappings.add("ORGANISAATIO_SIJAINTIKUNTA", "organisaationSijaintikuntaIncluded");
     }
     public static List<String> fieldMappingKeys() {
@@ -74,6 +75,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean kriisitiedotuksenSahkopostiosoiteIncluded;
     private boolean varhaiskasvatuksenYhteyshenkiloIncluded;
     private boolean varhaiskasvatuksenEmailIncluded;
+    private boolean koskiYhdyshenkiloIncluded;
     private boolean organisaationSijaintikuntaIncluded;
     private boolean organisaatioEmailIncluded;
     private boolean nayttotutkinnonJarjestajaOrganisaatiosIncluded;
@@ -276,6 +278,15 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     public void setVarhaiskasvatuksenEmailIncluded(boolean varhaiskasvatuksenEmailIncluded) {
         this.varhaiskasvatuksenEmailIncluded = varhaiskasvatuksenEmailIncluded;
+    }
+
+    @Override
+    public boolean isKoskiYhdyshenkiloIncluded() {
+        return koskiYhdyshenkiloIncluded;
+    }
+
+    public void setKoskiYhdyshenkiloIncluded(boolean koskiYhdyshenkiloIncluded) {
+        this.koskiYhdyshenkiloIncluded = koskiYhdyshenkiloIncluded;
     }
 
     @Override
