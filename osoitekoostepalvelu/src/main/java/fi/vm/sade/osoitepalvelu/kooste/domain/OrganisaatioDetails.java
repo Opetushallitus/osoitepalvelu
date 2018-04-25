@@ -40,7 +40,15 @@ import java.util.Map;
 @Document(collection = "organisaatio")
 public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio {
     private static final long serialVersionUID = 442147524555663558L;
-    
+
+    /**
+     * Aikaleima jolloin organisaatiotietojen malli on viimeksi muuttunut.
+     * Jos organisaatiotiedot muuttuvat (tähän luokkaan esim. lisätään uusi kenttä),
+     * muuta tämä aikaleima nykyhetkeen jotta mongossa oleva välimuisti päivittyy
+     * asennuksen yhteydessä (muuten välimuisti päivittyy vasta yöllä).
+     */
+    public static final DateTime MODEL_CHANGED_AT = new DateTime(2018, 4, 18, 9, 0);
+
     private Long version;
     @Id
     private String oid;
@@ -79,6 +87,7 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
             = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
     @Indexed
     private String ytunnus;
+    private String yritysmuoto;
     private LocalDate alkuPvm;
     @Indexed
     private LocalDate lakkautusPvm;
@@ -265,6 +274,14 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
 
     public void setYtunnus(String ytunnus) {
         this.ytunnus = ytunnus;
+    }
+
+    public String getYritysmuoto() {
+        return yritysmuoto;
+    }
+
+    public void setYritysmuoto(String yritysmuoto) {
+        this.yritysmuoto = yritysmuoto;
     }
 
     public LocalDate getAlkuPvm() {

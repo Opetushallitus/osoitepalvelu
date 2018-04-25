@@ -47,7 +47,6 @@ public class ApiToJsonTest {
         result.setNimi(nimi);
         result.setTyypit(tyypit);
         result.setEmailOsoite("organisaatio2@email.com");
-        result.setFaksinumero("09123123");
         result.setKotikunta("Helsinki");
         result.setOid("1.2.246.562.10.38898719687");
         result.setPuhelinnumero("0955544412");
@@ -96,7 +95,6 @@ public class ApiToJsonTest {
         nimi.put("fi", "Tre Korkeakoulu");
         result.setNimi(nimi);
         result.setEmailOsoite("esimerkki@email.com");
-        result.setFaksinumero("03123123");
         result.setKotikunta("Tampere");
         result.setOid("1.2.246.562.10.388987196872");
         result.setPuhelinnumero("03555666000");

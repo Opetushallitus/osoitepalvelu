@@ -41,6 +41,15 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö organisaatiotunnistesaraketta")
     boolean isOrganisaatiotunnisteIncluded();
 
+    @ApiModelProperty("Näytetäänkö Y-tunnus -saraketta")
+    boolean isYtunnusIncluded();
+
+    @ApiModelProperty("Näytetäänkö yritysmuotosaraketta")
+    boolean isYritysmuotoIncluded();
+
+    @ApiModelProperty("Näytetäänkö opetuskielisaraketta")
+    boolean isOpetuskieliIncluded();
+
     @ApiModelProperty("Näytetäänkö yhteyshenkilösaraketta")
     boolean isYhteyshenkiloIncluded();
 
@@ -52,9 +61,6 @@ public interface SearchResultPresentation {
 
     @ApiModelProperty("Näytetäänkö puhelinnumerosaraketta")
     boolean isPuhelinnumeroIncluded();
-
-    @ApiModelProperty("Näytetäänkö faksinumerosaraketta.")
-    boolean isFaksinumeroIncluded();
 
     @ApiModelProperty("Näytetäänkö WWW-osoite-saraketta")
     boolean isWwwOsoiteIncluded();

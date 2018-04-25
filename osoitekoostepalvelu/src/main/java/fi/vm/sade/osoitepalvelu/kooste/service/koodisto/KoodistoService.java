@@ -55,6 +55,8 @@ public interface KoodistoService extends Serializable {
 
     List<UiKoodiItemDto> findOppilaitoksenOpetuskieliOptions(Locale locale);
 
+    UiKoodiItemDto findOppilaitoksenOpetuskieliByKoodiUri(Locale locale, String koodiUri);
+
     List<UiKoodiItemDto> findKieliOptions(Locale locale);
 
     List<UiKoodiItemDto> findKoulutuksenKieliOptions(Locale locale);

@@ -38,11 +38,13 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings  =  new LinkedMultiValueMap<String, String>();
         fieldMappings.add("ORGANISAATIO_NIMI", "organisaationNimiIncluded");
         fieldMappings.add("ORGANISAATIO_TUNNISTE", "organisaatiotunnisteIncluded");
+        fieldMappings.add("YTUNNUS", "ytunnusIncluded");
+        fieldMappings.add("YRITYSMUOTO", "yritysmuotoIncluded");
+        fieldMappings.add("OPETUSKIELI", "opetuskieliIncluded");
         fieldMappings.add("YHTEYSHENKILO", "yhteyshenkiloIncluded");
         fieldMappings.add("POSTIOSOITE", "positosoiteIncluded");
         fieldMappings.add("KAYNTIOSOITE", "kayntiosoiteIncluded");
         fieldMappings.add("PUHELINNUMERO", "puhelinnumeroIncluded");
-        fieldMappings.add("FAXINUMERO", "faksinumeroIncluded");
         fieldMappings.add("INTERNET_OSOITE", "wwwOsoiteIncluded");
         fieldMappings.add("EMAIL_OSOITE", "organisaatioEmailIncluded");
         fieldMappings.add("VIRANOMAISTIEDOTUS_EMAIL", "viranomaistiedotuksenSahkopostiosoiteIncluded");
@@ -58,12 +60,14 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     private boolean organisaationNimiIncluded;
     private boolean organisaatiotunnisteIncluded;
+    private boolean ytunnusIncluded;
+    private boolean yritysmuotoIncluded;
+    private boolean opetuskieliIncluded;
     private boolean yhteyshenkiloIncluded;
     private boolean yhteyshenkiloEmailIncluded;
     private boolean positosoiteIncluded;
     private boolean kayntiosoiteIncluded;
     private boolean puhelinnumeroIncluded;
-    private boolean faksinumeroIncluded;
     private boolean wwwOsoiteIncluded;
     private boolean viranomaistiedotuksenSahkopostiosoiteIncluded;
     private boolean koulutusneuvonnanSahkopostiosoiteIncluded;
@@ -162,6 +166,33 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     @Override
+    public boolean isYtunnusIncluded() {
+        return ytunnusIncluded;
+    }
+
+    public void setYtunnusIncluded(boolean ytunnusIncluded) {
+        this.ytunnusIncluded = ytunnusIncluded;
+    }
+
+    @Override
+    public boolean isYritysmuotoIncluded() {
+        return yritysmuotoIncluded;
+    }
+
+    public void setYritysmuotoIncluded(boolean yritysmuotoIncluded) {
+        this.yritysmuotoIncluded = yritysmuotoIncluded;
+    }
+
+    @Override
+    public boolean isOpetuskieliIncluded() {
+        return opetuskieliIncluded;
+    }
+
+    public void setOpetuskieliIncluded(boolean opetuskieliIncluded) {
+        this.opetuskieliIncluded = opetuskieliIncluded;
+    }
+
+    @Override
     public boolean isYhteyshenkiloIncluded() {
         return yhteyshenkiloIncluded;
     }
@@ -204,15 +235,6 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     public void setPuhelinnumeroIncluded(boolean puhelinnumeroIncluded) {
         this.puhelinnumeroIncluded  =  puhelinnumeroIncluded;
-    }
-
-    @Override
-    public boolean isFaksinumeroIncluded() {
-        return faksinumeroIncluded;
-    }
-
-    public void setFaksinumeroIncluded(boolean faksinumeroIncluded) {
-        this.faksinumeroIncluded  =  faksinumeroIncluded;
     }
 
     @Override

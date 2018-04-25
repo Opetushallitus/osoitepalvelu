@@ -59,6 +59,7 @@ import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoTila;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoVersioDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHierarchyResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.UiKoodiItemByKoodiUriPredicate;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.UiKoodiItemByKoodiUriVersionPredicate;
 
 /**
  * Service, jonka kautta voidaan hakea koodiston eri arvojoukkoja.
@@ -191,6 +192,16 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
     @Override
     public List<UiKoodiItemDto> findOppilaitoksenOpetuskieliOptions(Locale locale) {
         return findKoodistoByTyyppi(locale, KoodistoTyyppi.OPPILAITOKSEN_OPETUSKIELI);
+    }
+
+    @Override
+    public UiKoodiItemDto findOppilaitoksenOpetuskieliByKoodiUri(Locale locale, String koodiUri) {
+        Iterator<UiKoodiItemDto> i  =  Collections2.filter(findOppilaitoksenOpetuskieliOptions(locale),
+                new UiKoodiItemByKoodiUriVersionPredicate(koodiUri)).iterator();
+        if (i.hasNext()) {
+            return i.next();
+        }
+        return null;
     }
 
     @Override

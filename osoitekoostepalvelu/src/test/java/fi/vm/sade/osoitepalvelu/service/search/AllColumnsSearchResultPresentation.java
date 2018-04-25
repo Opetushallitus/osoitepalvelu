@@ -69,6 +69,21 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     }
 
     @Override
+    public boolean isYtunnusIncluded() {
+        return true;
+    }
+
+    @Override
+    public boolean isYritysmuotoIncluded() {
+        return true;
+    }
+
+    @Override
+    public boolean isOpetuskieliIncluded() {
+        return true;
+    }
+
+    @Override
     public boolean isYhteyshenkiloIncluded() {
         return true;
     }
@@ -85,11 +100,6 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
 
     @Override
     public boolean isPuhelinnumeroIncluded() {
-        return true;
-    }
-
-    @Override
-    public boolean isFaksinumeroIncluded() {
         return true;
     }
 

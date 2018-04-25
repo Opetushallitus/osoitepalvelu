@@ -32,10 +32,13 @@ public class OrganisaatioResultDto implements Serializable {
     private String kotikunta;
     private String toimipistekoodi;
     private String oppilaitosKoodi;
+    private String ytunnus;
+    private String yritysmuoto;
+    private List<String> kieletUris;
+    private String opetuskieli;
     private String wwwOsoite;
     private Map<String, String> nimi  =  new HashMap<String, String>(); // Organisaation nimi lokaalin mukaan
     private String puhelinnumero;
-    private String faksinumero;
     private String emailOsoite;
     private List<String> tyypit;
     @DtoConversion
@@ -73,6 +76,38 @@ public class OrganisaatioResultDto implements Serializable {
         this.toimipistekoodi  =  toimipistekoodi;
     }
 
+    public String getYtunnus() {
+        return ytunnus;
+    }
+
+    public void setYtunnus(String ytunnus) {
+        this.ytunnus = ytunnus;
+    }
+
+    public String getYritysmuoto() {
+        return yritysmuoto;
+    }
+
+    public void setYritysmuoto(String yritysmuoto) {
+        this.yritysmuoto = yritysmuoto;
+    }
+
+    public List<String> getKieletUris() {
+        return kieletUris;
+    }
+
+    public void setKieletUris(List<String> kieletUris) {
+        this.kieletUris = kieletUris;
+    }
+
+    public String getOpetuskieli() {
+        return opetuskieli;
+    }
+
+    public void setOpetuskieli(String opetuskieli) {
+        this.opetuskieli = opetuskieli;
+    }
+
     public String getWwwOsoite() {
         return wwwOsoite;
     }
@@ -95,14 +130,6 @@ public class OrganisaatioResultDto implements Serializable {
 
     public void setPuhelinnumero(String puhelinnumero) {
         this.puhelinnumero  =  puhelinnumero;
-    }
-
-    public String getFaksinumero() {
-        return faksinumero;
-    }
-
-    public void setFaksinumero(String faksinumero) {
-        this.faksinumero  =  faksinumero;
     }
 
     public String getEmailOsoite() {

@@ -52,15 +52,24 @@ public class SearchResultRowDto implements Serializable {
     @DtoPath(value="oppilaitos.oppilaitoskoodi", with = "aituOppilaitosAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String oppilaitosKoodi;
+    @DtoConversion(path="organisaatio.ytunnus", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String ytunnus;
+    @DtoConversion(path="organisaatio.yritysmuoto", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String yritysmuoto;
+    @DtoConversion(path="organisaatio.kieletUris", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private List<String> kieletUris;
+    @DtoConversion(path="organisaatio.opetuskieli", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String opetuskieli;
     @DtoConversion(path="organisaatio.wwwOsoite", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String wwwOsoite;
     @DtoConversion(path="organisaatio.tyypit", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private List<String> tyypit;
-    @DtoConversion(path="organisaatio.faksinumero", with="organisaatioAggregate")
-    @DtoSkipped(with="henkiloAggregate")
-    private String faksinumero;
     @DtoConversion(path="organisaatio.puhelinnumero", with="organisaatioAggregate")
     @DtoPath(value="osoite.puhelinnumero", with="henkiloAggregate")
     private String puhelinnumero;
@@ -134,6 +143,38 @@ public class SearchResultRowDto implements Serializable {
         this.toimipistekoodi  =  toimipistekoodi;
     }
 
+    public String getYtunnus() {
+        return ytunnus;
+    }
+
+    public void setYtunnus(String ytunnus) {
+        this.ytunnus = ytunnus;
+    }
+
+    public String getYritysmuoto() {
+        return yritysmuoto;
+    }
+
+    public void setYritysmuoto(String yritysmuoto) {
+        this.yritysmuoto = yritysmuoto;
+    }
+
+    public List<String> getKieletUris() {
+        return kieletUris;
+    }
+
+    public void setKieletUris(List<String> kieletUris) {
+        this.kieletUris = kieletUris;
+    }
+
+    public String getOpetuskieli() {
+        return opetuskieli;
+    }
+
+    public void setOpetuskieli(String opetuskieli) {
+        this.opetuskieli = opetuskieli;
+    }
+
     public String getWwwOsoite() {
         return wwwOsoite;
     }
@@ -148,14 +189,6 @@ public class SearchResultRowDto implements Serializable {
 
     public void setNimi(String nimi) {
         this.nimi  =  nimi;
-    }
-
-    public String getFaksinumero() {
-        return faksinumero;
-    }
-
-    public void setFaksinumero(String faksinumero) {
-        this.faksinumero  =  faksinumero;
     }
 
     public String getEmailOsoite() {
@@ -296,6 +329,10 @@ public class SearchResultRowDto implements Serializable {
         return new EqualsHelper(
                 this.organisaatioOid,
                 this.oppilaitosKoodi,
+                this.ytunnus,
+                this.yritysmuoto,
+                this.kieletUris,
+                this.opetuskieli,
                 this.emailOsoite,
                 this.henkiloOid,
                 this.henkiloEmail,
@@ -313,8 +350,7 @@ public class SearchResultRowDto implements Serializable {
                 this.kriisitiedotuksenEmail,
                 this.varhaiskasvatuksenYhteyshenkilo,
                 this.varhaiskasvatuksenEmail,
-                this.viranomaistiedotuksenEmail,
-                this.faksinumero
+                this.viranomaistiedotuksenEmail
         );
     }
 }

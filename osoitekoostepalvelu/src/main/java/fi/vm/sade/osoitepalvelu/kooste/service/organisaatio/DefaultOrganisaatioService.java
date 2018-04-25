@@ -358,7 +358,8 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     }
 
     private boolean isCacheUsable(DateTime updatedAt, DateTime now) {
-        return updatedAt.plus(cacheTimeoutSeconds * MILLIS_IN_SECOND).compareTo(now) > 0;
+        return updatedAt.plus(cacheTimeoutSeconds * MILLIS_IN_SECOND).compareTo(now) > 0
+                && updatedAt.isAfter(OrganisaatioDetails.MODEL_CHANGED_AT);
     }
 
     private boolean isCacheUsed() {

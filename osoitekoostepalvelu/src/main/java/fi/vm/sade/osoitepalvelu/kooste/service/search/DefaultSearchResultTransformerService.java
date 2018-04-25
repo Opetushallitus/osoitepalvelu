@@ -661,6 +661,15 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (presentation.isOrganisaatiotunnisteIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaation_tunniste");
         }
+        if (presentation.isYtunnusIncluded()) {
+            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_ytunnus");
+        }
+        if (presentation.isYritysmuotoIncluded()) {
+            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_yritysmuoto");
+        }
+        if (presentation.isOpetuskieliIncluded()) {
+            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_opetuskieli");
+        }
         if (presentation.isYhteyshenkiloIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_yhteyshenkilo");
         }
@@ -682,9 +691,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
         if (presentation.isPuhelinnumeroIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_puhelinnumero");
-        }
-        if (presentation.isFaksinumeroIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_faksinumero");
         }
         if (presentation.isWwwOsoiteIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_www_osoite");
@@ -729,6 +735,15 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (presentation.isOrganisaatiotunnisteIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getOppilaitosKoodi(), ophHssfCellStyles);
         }
+        if (presentation.isYtunnusIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getYtunnus(), ophHssfCellStyles);
+        }
+        if (presentation.isOpetuskieliIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getOpetuskieli(), ophHssfCellStyles);
+        }
+        if (presentation.isYritysmuotoIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getYritysmuoto(), ophHssfCellStyles);
+        }
         if (presentation.isYhteyshenkiloIncluded()) {
             value(cell(sheet, rowNum, cellNum++), join(" ", row.getYhteystietoNimi()), ophHssfCellStyles);
         }
@@ -764,9 +779,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
         if (presentation.isPuhelinnumeroIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getPuhelinnumero(), ophHssfCellStyles);
-        }
-        if (presentation.isFaksinumeroIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getFaksinumero(), ophHssfCellStyles);
         }
         if (presentation.isWwwOsoiteIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getWwwOsoite(), ophHssfCellStyles);

@@ -38,6 +38,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.*;
+import org.hamcrest.CoreMatchers;
 
 import static org.junit.Assert.*;
 
@@ -66,7 +67,6 @@ public class SearchResultTransformerServiceTest {
         organisaatio1.setOid("org1");
         organisaatio2.setOid("org2");
         organisaatio2.setEmailOsoite("org email");
-        organisaatio2.setFaksinumero("fax");
         organisaatio2.setPuhelinnumero("org puh");
         organisaatio2.setKotikunta("kotikunta");
         organisaatio2.setNimi(new HashMap<>());
@@ -74,6 +74,9 @@ public class SearchResultTransformerServiceTest {
         organisaatio2.getNimi().put("sv", "svenska");
         organisaatio2.setToimipistekoodi("toimipiste");
         organisaatio2.setOppilaitosKoodi("oppilaitoskoodi");
+        organisaatio2.setYtunnus("ytunnus");
+        organisaatio2.setYritysmuoto("yritysmuoto");
+        organisaatio2.setKieletUris(Arrays.asList("kieli1", "kieli2"));
         organisaatio2.setTyypit(new ArrayList<>(Arrays.asList("Tyyppi1", "Tyyppi2")));
         organisaatio2.setWwwOsoite("www");
         OrganisaatioYhteystietoDto yhteyshenkilo1  =  new OrganisaatioYhteystietoDto(),
@@ -105,6 +108,9 @@ public class SearchResultTransformerServiceTest {
         assertEquals("kotikunta", rows.get(2).getKotikunta());
         assertEquals("toimipiste", rows.get(2).getToimipistekoodi());
         assertEquals("oppilaitoskoodi", rows.get(2).getOppilaitosKoodi());
+        assertEquals("ytunnus", rows.get(2).getYtunnus());
+        assertEquals("yritysmuoto", rows.get(2).getYritysmuoto());
+        assertThat(rows.get(2).getKieletUris(), CoreMatchers.hasItems("kieli1", "kieli2"));
         assertEquals(2, rows.get(2).getTyypit().size());
         assertEquals("suomi", rows.get(2).getNimi());
         assertNull(rows.get(2).getHenkiloEmail());
