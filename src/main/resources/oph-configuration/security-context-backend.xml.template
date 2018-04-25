@@ -40,28 +40,33 @@
     <http entry-point-ref="casEntryPoint" use-expressions="true" request-matcher="regex" pattern="/buildversion.txt.auth|/healthcheck.auth|/healthcheck.userinfo">
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <custom-filter position="CAS_FILTER" ref="casFilter" />
+        <headers disabled="true" />
         <csrf disabled="true"/>
     </http>
 
     <http entry-point-ref="forbiddenEntryPoint" use-expressions="true" request-matcher="regex"
     pattern="/buildversion.txt|/healthcheck|/swagger/.*|/api/docs.*">
         <intercept-url pattern="/**" access="permitAll"/>
+        <headers disabled="true" />
         <csrf disabled="true"/>
     </http>
 
     <!-- wsdl/xsd resources must be public -->
     <http entry-point-ref="forbiddenEntryPoint" use-expressions="true" request-matcher="regex" pattern="[\w/]*[.?]wsdl">
         <intercept-url pattern="/**" access="permitAll"/>
+        <headers disabled="true" />
         <csrf disabled="true"/>
     </http>
     <http entry-point-ref="forbiddenEntryPoint" use-expressions="true" request-matcher="regex" pattern="[\w/]*\?xsd=[\w/]*\.xsd">
         <intercept-url pattern="/**" access="permitAll"/>
+        <headers disabled="true" />
         <csrf disabled="true"/>
     </http>
 
     <http entry-point-ref="casEntryPoint" use-expressions="true" request-matcher="regex" pattern="/user/postLogin.*">
         <intercept-url pattern="/user/postLogin.*" access="isAuthenticated()"/> <!-- todo: -->
         <custom-filter position="CAS_FILTER" ref="casFilter" />
+        <headers disabled="true" />
         <csrf disabled="true"/>
     </http>
 
@@ -73,6 +78,7 @@
         <custom-filter ref="singleLogoutFilter" before="CAS_FILTER" />
         <custom-filter ref="casFilter" position="CAS_FILTER"/>
         <logout logout-success-url="/user/logout" logout-url="/j_spring_security_logout"/> <!-- huom! vain haku tarvitsee tata? -->
+        <headers disabled="true" />
         <csrf disabled="true"/>
     </http>
     <!--
@@ -81,11 +87,13 @@
     <http entry-point-ref="casEntryPoint" use-expressions="true" request-matcher="regex" pattern="/api/v1/download">
         <intercept-url pattern="/**" access="hasAnyRole('ROLE_APP_VALINTAPERUSTEET_CRUD_1.2.246.562.10.00000000001')"/>
         <custom-filter ref="casFilter" position="CAS_FILTER"/>
+        <headers disabled="true" />
         <csrf disabled="true"/>
     </http>
     <http entry-point-ref="casEntryPoint" use-expressions="true" request-matcher="regex" pattern="/api/v1/download/">
         <intercept-url pattern="/**" access="hasAnyRole('ROLE_APP_VALINTAPERUSTEET_CRUD_1.2.246.562.10.00000000001')"/>
         <custom-filter ref="casFilter" position="CAS_FILTER"/>
+        <headers disabled="true" />
         <csrf disabled="true"/>
     </http>
     <!--
@@ -104,6 +112,7 @@
         <intercept-url pattern="/**" access="${spring_security_default_access}"/>
         <custom-filter ref="casFilter" position="CAS_FILTER"/>
         <logout logout-success-url="/user/logout" logout-url="/j_spring_security_logout"/> <!-- huom! vain haku tarvitsee tata? -->
+        <headers disabled="true" />
         <csrf disabled="true"/>
     </http>
 
