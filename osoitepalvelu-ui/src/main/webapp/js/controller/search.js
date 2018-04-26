@@ -88,7 +88,6 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             if( updateOptions ) {
                 $scope.options = angular.copy(EmptyTerms);
                 OptionsService.listTutkintotoimikuntas(function(data) { $scope.options.tutkintotoimikuntas = data; });
-                OptionsService.listTutkintotoimikuntaRoolis(function(data) { $scope.options.tutkintotoimikuntaRoolis = data; });
                 OptionsService.listKoulutaRoolis(function(data) { $scope.options.koulutaRoolis = data; });
                 OptionsService.listAipalRoolis(function(data) { $scope.options.aipalRoolis = data; });
                 OptionsService.listOrganisaationKielis(function(data) { $scope.options.organisaationKielis = data; });
@@ -108,7 +107,6 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 //OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
                 $scope.options.tutkintotoimikuntaToimikausis = TutkintotoimikuntaToimikausis;
                 $scope.options.tutkintotoimikuntaKielis = Aitukielis;
-                $scope.options.tutkintotoimikuntaJasenKielis = Aitukielis;
             }
             $scope.terms = SearchService.getTerms();
             $scope.koulutusalasChanged();
@@ -178,15 +176,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 || $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
         };
 
-        $scope.isShowTutkintotoimikuntaRooliTerm = function() {
-            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1;
-        };
-
         $scope.isShowTutkintotoimikuntaKieliTerm = function() {
-            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1;
-        };
-
-        $scope.isShowTutkintotoimikuntaJasenKieliTerm = function() {
             return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1;
         };
 

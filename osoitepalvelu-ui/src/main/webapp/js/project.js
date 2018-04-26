@@ -63,9 +63,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
 .factory('EmptyTerms', function() {
     return {
         tutkintotoimikuntas: [],
-        tutkintotoimikuntaRoolis: [],
         tutkintotoimikuntaKielis: [],
-        tutkintotoimikuntaJasenKielis: [],
         tutkintotoimikuntaToimikausis: [],
         koulutaRoolis: [],
         organisaationKielis: [],
@@ -128,7 +126,6 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
 }])
 .factory("TutkintotoimikuntaRoolis", ["LocalisationService", function(LocalisationService) {
     return [
-        {type: 'JASENET', name: LocalisationService.t('target_gorup_option_jasenet')},
         {type: 'VIRANOMAIS_EMAIL', name: LocalisationService.t('target_group_option_viranomaissahkoposti'), selected: true}
         //,{type: 'TUTKINTOTOIMIKUNTA', name: LocalisationService.t('target_gorup_option_tutkintotoimikunta')}
 //        {type: 'PUHEENJOHTAJA', name: LocalisationService.t('target_group_option_puheenjohtaja')},
