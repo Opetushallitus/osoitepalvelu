@@ -12,8 +12,7 @@ describe("Application Components Test", function() {
         LocalisationService, Localisations;
 
     var SearchTypes, EmptyTerms, Osoitekielis,
-        Aitukielis, TutkintotoimikuntaToimikausis,
-        AddressFields, TutkintotoimikuntaRoolis,
+        AddressFields,
         TargetGroups;
 
     var searchController, savesPopupController,
@@ -56,10 +55,7 @@ describe("Application Components Test", function() {
             SearchTypes = $injector.get("SearchTypes");
             EmptyTerms = $injector.get("EmptyTerms");
             Osoitekielis = $injector.get("Osoitekielis");
-            Aitukielis = $injector.get("Aitukielis");
-            TutkintotoimikuntaToimikausis = $injector.get("TutkintotoimikuntaToimikausis");
             AddressFields = $injector.get("AddressFields");
-            TutkintotoimikuntaRoolis = $injector.get("TutkintotoimikuntaRoolis");
             TargetGroups = $injector.get("TargetGroups");
 
         });
@@ -112,10 +108,7 @@ describe("Application Components Test", function() {
         expect(SearchTypes).toBeDefined();
         expect(EmptyTerms).toBeDefined();
         expect(Osoitekielis).toBeDefined();
-        expect(Aitukielis).toBeDefined();
-        expect(TutkintotoimikuntaToimikausis).toBeDefined();
         expect(AddressFields).toBeDefined();
-        expect(TutkintotoimikuntaRoolis).toBeDefined();
         expect(TargetGroups).toBeDefined();
     });
 });

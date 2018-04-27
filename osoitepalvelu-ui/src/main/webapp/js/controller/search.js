@@ -21,11 +21,9 @@ var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu');
 OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", "$location", "$filter", "SearchService",
     "SearchTypes", "TargetGroups", "EmptyTerms", "FilterHelper", "ArrayHelper", "ExtractHelper", "KoodiHelper",
     "SavesService", "OptionsService", "LocalisationService", "Osoitekielis",
-    "TutkintotoimikuntaToimikausis", "Aitukielis",
     function($scope, $log, $modal, $location, $filter, SearchService,
     SearchTypes, TargetGroups, EmptyTerms, FilterHelper, ArrayHelper, ExtractHelper, KoodiHelper,
-    SavesService, OptionsService, LocalisationService, Osoitekielis,
-    TutkintotoimikuntaToimikausis, Aitukielis) {
+    SavesService, OptionsService, LocalisationService, Osoitekielis) {
         $scope.msg = function( key, params ) {
             return LocalisationService.t(key, params);
         };
@@ -87,7 +85,6 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
 
             if( updateOptions ) {
                 $scope.options = angular.copy(EmptyTerms);
-                OptionsService.listTutkintotoimikuntas(function(data) { $scope.options.tutkintotoimikuntas = data; });
                 OptionsService.listKoulutaRoolis(function(data) { $scope.options.koulutaRoolis = data; });
                 OptionsService.listAipalRoolis(function(data) { $scope.options.aipalRoolis = data; });
                 OptionsService.listOrganisaationKielis(function(data) { $scope.options.organisaationKielis = data; });
@@ -105,8 +102,6 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 OptionsService.listKielis(function(data) {$scope.options.kielis = data;});
                 //OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
                 //OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
-                $scope.options.tutkintotoimikuntaToimikausis = TutkintotoimikuntaToimikausis;
-                $scope.options.tutkintotoimikuntaKielis = Aitukielis;
             }
             $scope.terms = SearchService.getTerms();
             $scope.koulutusalasChanged();
@@ -165,29 +160,12 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             $scope.showExtraTerms = !$scope.showExtraTerms;
         };
 
-        $scope.isShowTutkintotoimikuntaTerm = function() {
-            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1
-                || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') !== -1;
-        };
-
         $scope.isShowTutkintohierarkiaTerms = function() {
-            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1
-                || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') !== -1
-                || $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
-        };
-
-        $scope.isShowTutkintotoimikuntaKieliTerm = function() {
-            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1;
-        };
-
-        $scope.isShowTutkintotoimikuntaToimikausiTerm = function() {
-            return $scope.selectedTargetGroupTypes.indexOf('TUTKINTOTOIMIKUNNAT') !== -1
-                || $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') !== -1;
+            return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
         };
 
         $scope.isShowKoulutusTyyppiTerm = function() {
-            return $scope.selectedTargetGroupTypes.indexOf('NAYTTOTUTKINNON_JARJESTAJAT') !== -1
-                || $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
+            return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
         };
 
         $scope.isShowKoulutusTerms = function() {
@@ -289,15 +267,6 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             // Palveluiden käyttäjä can't be combined to other targetgroups.
             if(($filter('filter')($scope.selectedTargetGroupTypes, 'KOULUTA_KAYTTAJAT')).length
             || typeToDisable == 'KOULUTA_KAYTTAJAT' && $scope.selectedTargetGroupTypes.length) {
-                return true;
-            }
-            // Näyttötutkinnon järjestäjät can't be combined to other targetgroups.
-            if(($filter('filter')($scope.selectedTargetGroupTypes, 'NAYTTOTUTKINNON_JARJESTAJAT')).length
-            || typeToDisable == 'NAYTTOTUTKINNON_JARJESTAJAT' && $scope.selectedTargetGroupTypes.length) {
-                return true;
-            }
-            if(($filter('filter')($scope.selectedTargetGroupTypes, 'TUTKINTOTOIMIKUNNAT')).length
-                || typeToDisable == 'TUTKINTOTOIMIKUNNAT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
             // Koulutuksen tarjoajat can't be combined to other targetgroups.
