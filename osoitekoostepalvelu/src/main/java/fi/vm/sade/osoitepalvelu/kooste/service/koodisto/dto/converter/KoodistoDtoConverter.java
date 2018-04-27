@@ -29,7 +29,6 @@ import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.DefaultKoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituToimikuntaResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KayttooikesuryhmaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiArvoDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiDto;
@@ -78,15 +77,6 @@ public class KoodistoDtoConverter extends AbstractDtoConverter {
         to.setKoodiUri(to.getKoodiId());
         to.setKoodistonTyyppi(KoodistoDto.KoodistoTyyppi.KAYTTOOIKEUSRYHMA);
         to.setLyhytNimi(to.getNimi());
-        return to;
-    }
-
-    public UiKoodiItemDto convert(AituToimikuntaResultDto from, UiKoodiItemDto to, Locale locale) {
-        to.setNimi(LocaleHelper.findLocalized(from.getNimi(), locale, DefaultKoodistoService.DEFAULT_LOCALE));
-        to.setLyhytNimi(to.getNimi());
-        to.setKoodiId(from.getId());
-        to.setKoodistonTyyppi(KoodistoDto.KoodistoTyyppi.TUTKINTOTOIMIKUNTA);
-        to.setKoodiUri(to.getKoodistonTyyppi().getUri()+"_"+to.getKoodiId());
         return to;
     }
 

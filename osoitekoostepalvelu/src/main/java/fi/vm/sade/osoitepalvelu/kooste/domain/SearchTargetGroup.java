@@ -34,10 +34,8 @@ public class SearchTargetGroup implements Serializable {
         OPETUSPISTEET("Opetuspiste", "Toimipiste"),
         OPPISOPIMUSTOIMPISTEET("Oppisopimustoimipiste"),
         MUUT_ORGANISAATIOT("Muu organisaatio"),
-        TUTKINTOTOIMIKUNNAT,
         KOULUTA_KAYTTAJAT,
         AIPAL_KAYTTAJAT,
-        NAYTTOTUTKINNON_JARJESTAJAT,
         KOULUTUKSEN_TARJOAJAT,
         TYOELAMAPALVELUT("Tyoelamajarjesto");
 
@@ -59,14 +57,12 @@ public class SearchTargetGroup implements Serializable {
         }
 
         public static GroupType[] getAnyHenkiloTypes() {
-            return new GroupType[] {KOULUTA_KAYTTAJAT, TUTKINTOTOIMIKUNNAT, KOULUTA_KAYTTAJAT, AIPAL_KAYTTAJAT,
-                    NAYTTOTUTKINNON_JARJESTAJAT};
+            return new GroupType[] {KOULUTA_KAYTTAJAT, KOULUTA_KAYTTAJAT, AIPAL_KAYTTAJAT};
         }
 
         public static GroupType[] getAnyOrganisaatioTypes() {
             return new GroupType[] {JARJESTAJAT_YLLAPITAJAT, OPPILAITOKSET, OPETUSPISTEET, OPPISOPIMUSTOIMPISTEET,
-                    MUUT_ORGANISAATIOT, TUTKINTOTOIMIKUNNAT, NAYTTOTUTKINNON_JARJESTAJAT, KOULUTUKSEN_TARJOAJAT,
-                    TYOELAMAPALVELUT};
+                    MUUT_ORGANISAATIOT, KOULUTUKSEN_TARJOAJAT, TYOELAMAPALVELUT};
         }
 
         public String[] getOrganisaatioPalveluTyyppiArvo() {
@@ -100,11 +96,8 @@ public class SearchTargetGroup implements Serializable {
         PUHEENJOHTAJA,
         SIHTEERI,
         JASENET,
-        TUTKINTOTOIMIKUNTA,
-        JARJESTAJA_ORGANISAATIO,
-        TUTKINTOVASTAAVA,
         TUNNUKSENHALTIJAT,
-        VIRANOMAIS_EMAIL;
+        ;
 
         private String[] organisaatioPalveluTyyppiArvo;
 
@@ -122,7 +115,6 @@ public class SearchTargetGroup implements Serializable {
                 PUHEENJOHTAJA,
                 SIHTEERI,
                 JASENET,
-                TUTKINTOVASTAAVA,
                 TUNNUKSENHALTIJAT
             };
         }
@@ -135,9 +127,6 @@ public class SearchTargetGroup implements Serializable {
                 TOIMIPISTE,
                 KRIISITIEDOTUS,
                 KOULUTUSNEVONTA,
-                TUTKINTOTOIMIKUNTA,
-                JARJESTAJA_ORGANISAATIO,
-                VIRANOMAIS_EMAIL
             };
         }
 

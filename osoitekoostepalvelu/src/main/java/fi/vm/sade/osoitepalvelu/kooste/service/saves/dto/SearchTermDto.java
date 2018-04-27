@@ -42,11 +42,6 @@ public class SearchTermDto implements Serializable {
     public static final String TERM_VUOSILUOKKAS = "vuosiluokkas";
     public static final String TERM_KOULTUKSENJARJESTAJAS = "koultuksenjarjestajas";
     public static final String TERM_KAYTTOOIKEUSRYHMAS = "koulutaRoolis";
-    public static final String TERM_TUTKINTOIMIKUNTA_ROOLIS = "tutkintotoimikuntaRoolis";
-    public static final String TERM_TUTKINTOIMIKUNTA = "tutkintotoimikuntas";
-    public static final String TERM_TUTKINTOIMIKUNTA_TOIMIKAUSIS = "tutkintotoimikuntaToimikausis";
-    public static final String TERM_TUTKINTOIMIKUNTA_KIELIS = "tutkintotoimikuntaKielis";
-    public static final String TERM_TUTKINTOIMIKUNTA_JASEN_KIELIS = "tutkintotoimikuntaJasenKielis";
     public static final String TERM_KOULUTUSALAS = "koulutusalas";
     public static final String TERM_OPINTOALAS = "opintoalas";
     public static final String TERM_KOULUTUS = "koulutus";

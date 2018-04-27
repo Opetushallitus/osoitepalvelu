@@ -18,8 +18,6 @@ ldap.manager.password={{ldap_manager_password}}
 ldap.manager-password={{ldap_manager_password}}
 ldap.manager.userdn={{ldap_manager_userdn}}
 mongodb.virkailija.uri=mongodb://{{mongodb_virkailija_auth}}@{{mongodb_virkailija_host}}:{{mongodb_virkailija_port}}
-osoitepalvelu.app.username.to.aituservice={{osoitepalvelu_app_username_to_aituservice}}
-osoitepalvelu.app.password.to.aituservice={{osoitepalvelu_app_password_to_aituservice}}
 server.name={{ansible_hostname}}
 
 # Oletusarvoja
@@ -50,7 +48,6 @@ cas.group-search-filter=(uniqueMember\={0})
 cas.sendRenew=false
 cas.user-search-base=ou\=people
 cas.user-search-filter=(|(mail\={0})(uid\={0}))
-cas.service.aitu-service = https://${host.virkailija}/aitu/
 cas.service.organisaatio-app==https://${host.virkailija}/organisaatio-app
 cas.service.organisaatio-service=https\://${host.virkailija}/organisaatio-service
 cas.service.osoitekoostepalvelu=https://${host.virkailija}/osoitekoostepalvelu
@@ -92,5 +89,4 @@ viestipalvelu.emailsend.email.subject=
 viestipalvelu.emailsend.email.body=
 vuosiluokka.used.for.oppilaitostyyppis=11,12,19
 web.url.cas=https\://${host.cas}/cas
-web.url.cas.aitu = ${web.url.cas}
 produce.error.message.stack.traces=false

@@ -20,7 +20,6 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.scheduled.ScheduledAituDataFetchTask;
 import fi.vm.sade.osoitepalvelu.kooste.scheduled.ScheduledOrganisaatioCacheTask;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
@@ -60,9 +59,6 @@ public class AppSettingsController extends AbstractMvcController {
 
     @Autowired
     private ScheduledOrganisaatioCacheTask organisaatioCacheTask;
-
-    @Autowired
-    private ScheduledAituDataFetchTask aituDataFetchTask;
 
     @Autowired
     private OrganisaatioService organisaatioService;
@@ -131,17 +127,6 @@ public class AppSettingsController extends AbstractMvcController {
     @ResponseBody
     public int updateYtunnusDetails() {
         organisaatioService.updateOrganisaatioYtunnusDetails(new DefaultCamelRequestContext());
-        return HttpStatus.SC_OK;
-    }
-
-    @ApiOperation("Noutaa tiedot AITU-palvelusta. Käytettävissä vain paikallisena pyyntönä kehityksen tukena. " +
-            "Normaalisti tätä ei ole tarpeen kutsua, sillä sovellus käy tiedot automaattisesti ajastetusti sekä " +
-            "käynnistymisen yhteydessä.")
-    @PreAuthorize("hasIpAddress('127.0.0.1/24')")
-    @RequestMapping(value = "/fetchAituData", method = RequestMethod.POST, produces = "text/plain")
-    @ResponseBody
-    public int fetchAituData() {
-        aituDataFetchTask.refreshAituData();
         return HttpStatus.SC_OK;
     }
 

@@ -38,20 +38,16 @@ import com.google.common.collect.Collections2;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
-import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.AituKielisyys;
-import fi.vm.sade.osoitepalvelu.kooste.dao.aitu.criteria.AituToimikuntaCriteria;
 import fi.vm.sade.osoitepalvelu.kooste.dao.cache.KoodistoCacheRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodiItem;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache.CacheKey;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
-import fi.vm.sade.osoitepalvelu.kooste.service.aitu.AituService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.converter.KoodistoDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.route.AuthenticationServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.KoodistoRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.OrganisaatioServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituToimikuntaResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KayttooikesuryhmaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto.KoodistoTyyppi;
@@ -78,9 +74,6 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
 
     @Autowired(required = false)
     private OrganisaatioServiceRoute organisaatioServiceRoute;
-
-    @Autowired
-    private AituService aituService;
 
     @Autowired
     private KoodistoDtoConverter dtoConverter;
@@ -372,55 +365,6 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
                 locale));
     }
 
-    // TODO: from koodisto (somewhere in the future)
-    @Override
-    public List<UiKoodiItemDto> findTutkintotoimikuntaRooliOptions(final Locale locale) {
-        return cached(new Cacheable<List<UiKoodiItemDto>>() {
-            @Override
-            public List<UiKoodiItemDto> get() {
-                List<UiKoodiItemDto> koodis = new ArrayList<UiKoodiItemDto>();
-                for (String rooli : aituService.findVoimassaOlevatRoolit()) {
-                    UiKoodiItemDto koodi = new UiKoodiItemDto();
-                    koodi.setKoodiId(rooli);
-                    koodi.setKoodiUri(KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS.getUri() + "_" + rooli);
-                    koodi.setNimi(rooli);
-                    koodi.setLyhytNimi(koodi.getNimi());
-                    koodi.setKoodistonTyyppi(KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS);
-                    koodis.add(koodi);
-                }
-                return koodis;
-            }
-        }, new KoodistoCache.CacheKey(KoodistoCache.KoodistoTyyppi.valueOf(KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS.name()),
-                locale));
-    }
-
-    @Override
-    public List<UiKoodiItemDto> findTutkintotoimikuntaOptions(final Locale locale) {
-        return cached(new Cacheable<List<UiKoodiItemDto>>() {
-            @Override
-            public List<UiKoodiItemDto> get() {
-                List<AituToimikuntaResultDto> toimikuntas = aituService.findToimikuntasWithMatchingJasens(
-                        new AituToimikuntaCriteria(), AituKielisyys.fromLocale(locale).or(AituKielisyys.kieli_fi));
-                return dtoConverter.convert(toimikuntas, new ArrayList<UiKoodiItemDto>(), UiKoodiItemDto.class,
-                        locale);
-            }
-        }, new KoodistoCache.CacheKey(KoodistoCache.KoodistoTyyppi.valueOf(KoodistoTyyppi.TUTKINTOTOIMIKUNTA.name()),
-                locale));
-    }
-
-    @Override
-    public void purgeTutkintotoimikuntaCaches() {
-        for (CacheKey key : new ArrayList<CacheKey>(memoryCache.keySet())) {
-            if (key.getTyyppi() == fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache.KoodistoTyyppi.TUTKINTOTOIMIKUNTA
-                    || key.getTyyppi() == fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache.KoodistoTyyppi.TUTKINTOTOIMIKUNTA_ROOLIS) {
-                memoryCache.remove(key);
-                if (koodistoCacheRepository != null) {
-                    koodistoCacheRepository.delete(key);
-                }
-            }
-        }
-    }
-
     protected interface Cacheable<T> {
         T get();
     }
@@ -609,7 +553,4 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
         this.organisaatioServiceRoute = organisaatioServiceRoute;
     }
 
-    public void setAituService(AituService aituService) {
-        this.aituService = aituService;
-    }
 }

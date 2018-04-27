@@ -25,6 +25,5 @@ package fi.vm.sade.osoitepalvelu.kooste.service.search.dto;
  */
 public enum SourceRegister {
     opintopolku,
-    aitu,
     aipal;
 }

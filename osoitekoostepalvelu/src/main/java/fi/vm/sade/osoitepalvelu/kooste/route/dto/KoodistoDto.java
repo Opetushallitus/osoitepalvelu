@@ -48,8 +48,7 @@ public class KoodistoDto implements Serializable {
         OPINTOALAOPH2002("opintoalaoph2002"),       // Koulutus ja Opintoala, nämä käytössä AITU:ssa
         ALUEHALLINTOVIRASTO("aluehallintovirasto"), // AluehallintoVIrasto (AVI)
         KAYTTOOIKEUSRYHMA("kayttoikeusryhma"),      // Ei Koodistosta, vaan auhtneitcation-servicestä
-        TUTKINTOTOIMIKUNTA_ROOLIS("tutkintoimikuntarooli"), // Ei Koodistosta, vielä
-        TUTKINTOTOIMIKUNTA("tutkintotoimikunta"); // Ei Koodistosta, vielä
+        ;
 
         private String uri; // Koodiston URI
 

@@ -92,9 +92,4 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö yhteyshenkilön sähköpostiosoite -saraketta")
     boolean isYhteyshenkiloEmailIncluded();
 
-    @ApiModelProperty("Onko haun kohderyhmissä näyttötutkinnon vastuuhenkilö")
-    boolean isNayttotutkinnonJarjestajaVastuuhenkilosIncluded();
-
-    @ApiModelProperty("Onko haun kohderyhmissä näyttötutkinnon järjestäjän organisaatio")
-    boolean isNayttotutkinnonJarjestajaOrganisaatiosIncluded();
 }

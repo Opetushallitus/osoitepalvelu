@@ -28,11 +28,6 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.Combiner;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituJasenyysDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituOppilaitosResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituSopimusDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituToimikuntaResultDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.AituTutkintoDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
@@ -41,8 +36,6 @@ import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.AituOppilaitosVastuuhenkiloAggregateDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.AituToimikuntaJasenAggregateDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloOsoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloResultAggregateDto;
@@ -69,8 +62,6 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -119,21 +110,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
             sourceRegisters.add(SourceRegister.aipal);
         }
         transformedResults.addAll(henkiloResults);
-
-        List<SearchResultRowDto> aituHenkiloResults = transformToimikuntaJasens(results.getAituToimikuntas(), presentation);
-        if (!aituHenkiloResults.isEmpty()) {
-            sourceRegisters.add(SourceRegister.aitu);
-        }
-        transformedResults.addAll(aituHenkiloResults);
-
-        List<SearchResultRowDto> aituOppilaitosResults = transformNayttotutkinonJarjestajaOrganisaatios(results
-                .getAituOppilaitos(), presentation);
-        if (!aituOppilaitosResults.isEmpty()) {
-            sourceRegisters.add(SourceRegister.aitu);
-            // The actual data about the oppilaitos organisaatios may originate from organisaatio-service:
-            sourceRegisters.add(SourceRegister.opintopolku);
-        }
-        transformedResults.addAll(aituOppilaitosResults);
 
         resolveMissingOrganisaatioRelatedDetails(transformedResults, presentation, context);
 
@@ -301,58 +277,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
             SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto());
             results.add(row);
         }
-        return results;
-    }
-
-    protected List<SearchResultRowDto> transformToimikuntaJasens(List<AituToimikuntaResultDto> aituToimikuntas,
-                                                                 SearchResultPresentation presentation) {
-        List<SearchResultRowDto> results = new ArrayList<>();
-
-        Set<AituToimikuntaJasenAggregateDto> aggregates = new LinkedHashSet<>();
-        for (final AituToimikuntaResultDto toimikunta : aituToimikuntas) {
-            new Combiner<>(
-                src -> new AituToimikuntaJasenAggregateDto(toimikunta,
-                    src.get(AituJasenyysDto.class).orNull())).combinedWith(AituJasenyysDto.class, toimikunta.getJasenyydet())
-                .atLeastOne().to(aggregates);
-        }
-        for (AituToimikuntaJasenAggregateDto aggregate : aggregates) {
-            SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto(), presentation.getLocale());
-            results.add(row);
-        }
-
-        return results;
-    }
-
-    protected List<SearchResultRowDto> transformNayttotutkinonJarjestajaOrganisaatios(
-            List<AituOppilaitosResultDto> aituOppilaitos, SearchResultPresentation presentation) {
-        List<SearchResultRowDto> results = new ArrayList<>();
-
-        Set<AituOppilaitosVastuuhenkiloAggregateDto> aggregates = new LinkedHashSet<>();
-        for (final AituOppilaitosResultDto oppilaitos : aituOppilaitos) {
-            Combiner<AituOppilaitosVastuuhenkiloAggregateDto> combiner = new Combiner<>(
-                src -> new AituOppilaitosVastuuhenkiloAggregateDto(
-                    src.get(AituOppilaitosResultDto.class).get(),
-                    src.get(AituTutkintoDto.class).orNull())
-            ).withRepeated(AituOppilaitosResultDto.class, Arrays.asList(oppilaitos));
-            if (presentation.isNayttotutkinnonJarjestajaVastuuhenkilosIncluded()) {
-                Collection<AituTutkintoDto> tutkintos = CollectionHelper.collect(oppilaitos.getSopimukset(),
-                        CollectionHelper.filter(AituSopimusDto.TUTKINNOT,
-                                AituTutkintoDto.WITH_VASTUUHENKILO));
-                if (!presentation.isNayttotutkinnonJarjestajaOrganisaatiosIncluded() && tutkintos.isEmpty()) {
-                    continue;
-                }
-                combiner.with(AituTutkintoDto.class, tutkintos);
-            }
-            if (presentation.isNayttotutkinnonJarjestajaOrganisaatiosIncluded()) {
-                combiner.atLeastOne();
-            }
-            combiner.to(aggregates);
-        }
-        for (AituOppilaitosVastuuhenkiloAggregateDto aggregate : aggregates) {
-            SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto(), presentation.getLocale());
-            results.add(row);
-        }
-
         return results;
     }
 
