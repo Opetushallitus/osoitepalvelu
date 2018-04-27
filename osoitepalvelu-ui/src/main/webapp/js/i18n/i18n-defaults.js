@@ -150,7 +150,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         column_kotikunta: 'Organisaation sijaintikunta',
         column_varhaiskasvatuksenYhteyshenkilo: 'Varhaiskasvatuksen yhteyshenkilö',
         column_varhaiskasvatuksenEmail: 'Varhaiskasvatuksen sähköposti',
-        column_koski_yhdyshenkilo: 'Koski yhdyshenkilö',
+        column_koskiYhdyshenkilo: 'Koski yhdyshenkilö',
 
         no_results: 'Osoitteita ei löytynyt. Tarkista hakuehdot.',
         remove_selected: 'Poista valitut',

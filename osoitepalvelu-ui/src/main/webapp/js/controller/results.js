@@ -54,7 +54,7 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
         'kotikunta':                    'organisaationSijaintikuntaIncluded',
         'varhaiskasvatuksenYhteyshenkilo': 'varhaiskasvatuksenYhteyshenkiloIncluded',
         'varhaiskasvatuksenEmail':      'varhaiskasvatuksenEmailIncluded',
-        'koskiyhdyshenkilo':            'koskiYhdyshenkiloIncluded'
+        'koskiYhdyshenkilo':            'koskiYhdyshenkiloIncluded'
     };
     var columns = [];
     for( columnName in columnVisibilityMapping ) {
