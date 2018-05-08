@@ -310,15 +310,31 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 || typeToDisable == 'TYOELAMAPALVELUT' && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
-            if($scope.searchType === 'CONTACT' && typeToDisable !== 'JARJESTAJAT_YLLAPITAJAT') {
-                for(var i in $scope.addressFields) {
-                    var addressfield = $scope.addressFields[i];
-                    // kriisitiedotuksen_sähköpostiosoite can only be used with Koulutustoimijas
-                    if( (addressfield.type === 'KRIISITIEDOTUKSEN_EMAIL' || addressfield.type === 'VARHAISKASVATUKSEN_YHTEYSHENKILO') && addressfield.selected) {
-                        return true;
+            if($scope.searchType === 'CONTACT') {
+
+                if(typeToDisable !== 'JARJESTAJAT_YLLAPITAJAT') {
+                    for(var i in $scope.addressFields) {
+                        var addressfield = $scope.addressFields[i];
+                        // kriisitiedotuksen_sähköpostiosoite can only be used with Koulutustoimijas
+                        if( (addressfield.type === 'KRIISITIEDOTUKSEN_EMAIL' || addressfield.type === 'VARHAISKASVATUKSEN_YHTEYSHENKILO') && addressfield.selected) {
+                            return true;
+                        }
                     }
                 }
+
+                if(typeToDisable !== 'OPPILAITOKSET') {
+                    for(var i in $scope.addressFields) {
+                        var addressfield = $scope.addressFields[i];
+                        if( (addressfield.type === 'KOSKI_YHDYSHENKILO') && addressfield.selected) {
+                            return true;
+                        }
+                    }
+                }
+
             }
+
+            if($scope.searchType === '')
+
             return false;
         };
 
@@ -326,6 +342,11 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
         $scope.addressFieldDisableLogic = function(addressField) {
             if( (addressField.type === 'KRIISITIEDOTUKSEN_EMAIL' || addressField.type === 'VARHAISKASVATUKSEN_YHTEYSHENKILO')
                 && !($filter('filter')($scope.selectedTargetGroupTypes, 'JARJESTAJAT_YLLAPITAJAT')).length
+                && $scope.selectedTargetGroupTypes.length) {
+                return true;
+            }
+            if( (addressField.type === 'KOSKI_YHDYSHENKILO')
+                && !($filter('filter')($scope.selectedTargetGroupTypes, 'OPPILAITOKSET')).length
                 && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }

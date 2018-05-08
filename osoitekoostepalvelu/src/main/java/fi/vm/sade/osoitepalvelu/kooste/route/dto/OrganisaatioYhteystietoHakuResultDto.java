@@ -47,6 +47,7 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
     private String kriisitiedotuksenEmail;
     private String varhaiskasvatuksenYhteyshenkilo;
     private String varhaiskasvatuksenEmail;
+    private String koskiYhdyshenkilo;
 
     @Override
     public String getOid() {
@@ -170,5 +171,13 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
 
     public void setVarhaiskasvatuksenEmail(String varhaiskasvatuksenEmail) {
         this.varhaiskasvatuksenEmail = varhaiskasvatuksenEmail;
+    }
+
+    public String getKoskiYhdyshenkilo() {
+        return koskiYhdyshenkilo;
+    }
+
+    public void setKoskiYhdyshenkilo(String koskiYhdyshenkilo) {
+        this.koskiYhdyshenkilo = koskiYhdyshenkilo;
     }
 }

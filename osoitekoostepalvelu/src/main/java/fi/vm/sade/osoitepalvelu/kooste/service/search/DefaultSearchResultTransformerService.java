@@ -564,6 +564,25 @@ public class DefaultSearchResultTransformerService extends AbstractService
             });
         }
 
+        if(presentation.isKoskiYhdyshenkiloIncluded()) {
+            copiers.add(new DetailCopier() {
+                @Override
+                public boolean isMissing(SearchResultRowDto from) { return from.getKoskiYhdyshenkilo() == null; }
+
+                @Override
+                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
+                    Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
+                            CollectionHelper.filter(from.getYhteystietoArvos(),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate(locale),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate(DEFAULT_LOCALE))
+                            .iterator();
+                    if(yhteystietoArvos.hasNext()) {
+                        to.setKoskiYhdyshenkilo(yhteystietoArvos.next().getArvo());
+                    }
+                }
+            });
+        }
+
         // TODO: viranomaistiedotuksenEmail, koulutusneuvonnanEmail
         copyDetails(results, context, copiers, presentation.getLocale());
     }
@@ -710,6 +729,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if (presentation.isVarhaiskasvatuksenEmailIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_varhaiskasvatuksen_email");
         }
+        if(presentation.isKoskiYhdyshenkiloIncluded()) {
+            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_koski_yhdyshenkilo");
+        }
         if (presentation.isOrganisaationSijaintikuntaIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaation_sijaintikunta");
         }
@@ -797,6 +819,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
         if(presentation.isVarhaiskasvatuksenEmailIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getVarhaiskasvatuksenEmail(), ophHssfCellStyles);
+        }
+        if(presentation.isKoskiYhdyshenkiloIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getKoskiYhdyshenkilo(), ophHssfCellStyles);
         }
         if (presentation.isOrganisaationSijaintikuntaIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getKotikunta(), ophHssfCellStyles);

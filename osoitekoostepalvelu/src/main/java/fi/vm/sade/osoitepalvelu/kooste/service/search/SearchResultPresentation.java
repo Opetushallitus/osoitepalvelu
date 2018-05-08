@@ -80,6 +80,9 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö varhaiskasvatuksen sähköposti -saraketta")
     boolean isVarhaiskasvatuksenEmailIncluded();
 
+    @ApiModelProperty("Näytetäänkö koski yhdyshenkilö -saraketta")
+    boolean isKoskiYhdyshenkiloIncluded();
+
     @ApiModelProperty("Näytetäänkö organisaation sähköpostiosoite -saraketta")
     boolean isOrganisaatioEmailIncluded();
 

@@ -91,6 +91,9 @@ public class SearchResultRowDto implements Serializable {
     @DtoConversion(path="organisaatio.varhaiskasvatuksenEmail", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String varhaiskasvatuksenEmail;
+    @DtoConversion(path="organisaatio.koskiYhdyshenkilo", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String koskiYhdyshenkilo;
 
     @DtoConversion(path = "henkilo.yhteyshenkiloOid", with="organisaatioAggregate")
     @DtoPath(value="henkilo.henkiloOid", with="henkiloAggregate")
@@ -275,6 +278,14 @@ public class SearchResultRowDto implements Serializable {
 
     public void setVarhaiskasvatuksenEmail(String varhaiskasvatuksenEmail) {
         this.varhaiskasvatuksenEmail = varhaiskasvatuksenEmail;
+    }
+
+    public String getKoskiYhdyshenkilo() {
+        return koskiYhdyshenkilo;
+    }
+
+    public void setKoskiYhdyshenkilo(String koskiYhdyshenkilo) {
+        this.koskiYhdyshenkilo = koskiYhdyshenkilo;
     }
 
     public String getHenkiloOid() {
