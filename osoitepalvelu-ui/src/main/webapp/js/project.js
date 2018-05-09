@@ -62,9 +62,6 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
 }])
 .factory('EmptyTerms', function() {
     return {
-        tutkintotoimikuntas: [],
-        tutkintotoimikuntaKielis: [],
-        tutkintotoimikuntaToimikausis: [],
         koulutaRoolis: [],
         organisaationKielis: [],
         avis: [],
@@ -89,21 +86,6 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         {code: 'en', name: LocalisationService.t('kieli_en')}
     ];
 }])
-.factory('Aitukielis', ["LocalisationService", function(LocalisationService) {
-    return [
-        {code: 'fi', name: LocalisationService.t('kieli_fi')},
-        {code: 'sv', name: LocalisationService.t('kieli_sv')},
-        {code: '2k', name: LocalisationService.t('kieli_2k')},
-        {code: 'en', name: LocalisationService.t('kieli_en')}
-    ];
-}])
-.factory('TutkintotoimikuntaToimikausis', ['LocalisationService', function(LocalisationService) {
-    return [
-        {type: 'voimassa', nimi: LocalisationService.t('tutkintoimikunta_toimikausi_voimassa')},
-        {type: 'tuleva', nimi: LocalisationService.t('tutkintoimikunta_toimikausi_tuleva')},
-        {type: 'mennyt', nimi: LocalisationService.t('tutkintoimikunta_toimikausi_mennyt')}
-    ];
-}])
 .factory('AddressFields', ["LocalisationService", function(LocalisationService) {
     return [
         {type: 'ORGANISAATIO_NIMI',          name: LocalisationService.t('address_field_organisaatio_nimi')},
@@ -125,17 +107,8 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         {type: 'KOSKI_YHDYSHENKILO', name: LocalisationService.t('address_field_koski_yhdyshenkilo')}
     ];
 }])
-.factory("TutkintotoimikuntaRoolis", ["LocalisationService", function(LocalisationService) {
-    return [
-        {type: 'VIRANOMAIS_EMAIL', name: LocalisationService.t('target_group_option_viranomaissahkoposti'), selected: true}
-        //,{type: 'TUTKINTOTOIMIKUNTA', name: LocalisationService.t('target_gorup_option_tutkintotoimikunta')}
-//        {type: 'PUHEENJOHTAJA', name: LocalisationService.t('target_group_option_puheenjohtaja')},
-//        {type: 'SIHTEERI',      name: LocalisationService.t('target_group_option_sihteeri')},
-//        {type: 'JASENET',       name: LocalisationService.t('target_gorup_option_jasenet')}
-    ];
-}])
-.factory('TargetGroups', ["LocalisationService", "TutkintotoimikuntaRoolis",
-        function(LocalisationService, TutkintotoimikuntaRoolis) {
+.factory('TargetGroups', ["LocalisationService",
+        function(LocalisationService) {
     return [
         {type: 'JARJESTAJAT_YLLAPITAJAT',   name: LocalisationService.t('target_group_jarjestajat_yllapitajat'),
             options: [
@@ -180,17 +153,6 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
                 {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat')}
             ]
         },*/
-        {type: 'TUTKINTOTOIMIKUNNAT',       name: LocalisationService.t('target_group_tutkintotoimikunnat'),
-            options: angular.copy(TutkintotoimikuntaRoolis),
-            hideOptions: false
-        },
-        {type: 'NAYTTOTUTKINNON_JARJESTAJAT', name: LocalisationService.t("target_group_nayttotutkinnon_jarjestajat"),
-            options: [
-                {type: 'JARJESTAJA_ORGANISAATIO', name: LocalisationService.t("target_group_option_jarjestajaorganisaatio"),
-                selected: true},
-                {type: 'TUTKINTOVASTAAVA',  name: LocalisationService.t('target_group_option_tutkintovastaava')}
-            ]
-        },
         {type: 'KOULUTA_KAYTTAJAT',         name: LocalisationService.t('target_group_kayttajat'),
             options: [
                 {type: 'TUNNUKSENHALTIJAT', name: LocalisationService.t('target_group_option_tunnuksenhaltijat'),

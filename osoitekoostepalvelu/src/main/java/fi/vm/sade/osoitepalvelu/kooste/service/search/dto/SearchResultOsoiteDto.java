@@ -32,20 +32,15 @@ import java.io.Serializable;
 public class SearchResultOsoiteDto implements Serializable {
     private static final long serialVersionUID = -870758978839602041L;
 
-    @DtoSkipped(with = "aituOppilaitosResult")
     private String kieli;
     @DtoPath("osoiteTyyppi")
-    @DtoSkipped(with = "aituOppilaitosResult")
     private String tyyppi;
     @DtoConversion(skip = true, withClass = HenkiloOsoiteDto.class)
-    @DtoSkipped(with = "aituOppilaitosResult")
     private String yhteystietoOid;
     private String osoite;
-    @DtoSkipped(with = "aituOppilaitosResult")
     private String postilokero;
     private String postinumero;
     private String postitoimipaikka;
-    @DtoSkipped(with = "aituOppilaitosResult")
     private String extraRivi;
 
     public String getKieli() {
