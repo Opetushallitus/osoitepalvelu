@@ -84,7 +84,7 @@
         </dependency>
         <dependency>
             <groupId>fi.vm.sade.java-utils</groupId>
-            <artifactId>kayttooikeusclient</artifactId>
+            <artifactId>opintopolku-user-details-service</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
