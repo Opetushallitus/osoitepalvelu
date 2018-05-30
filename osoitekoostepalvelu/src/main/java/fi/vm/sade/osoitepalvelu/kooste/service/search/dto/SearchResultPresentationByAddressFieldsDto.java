@@ -53,6 +53,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings.add("VARHAISKASVATUKSEN_YHTEYSHENKILO", "varhaiskasvatuksenYhteyshenkiloIncluded");
         fieldMappings.add("VARHAISKASVATUKSEN_YHTEYSHENKILO", "varhaiskasvatuksenEmailIncluded");
         fieldMappings.add("KOSKI_YHDYSHENKILO", "koskiYhdyshenkiloIncluded");
+        fieldMappings.add("MOVE_YHTEYSHENKILO", "moveYhteyshenkiloIncluded");
         fieldMappings.add("ORGANISAATIO_SIJAINTIKUNTA", "organisaationSijaintikuntaIncluded");
     }
     public static List<String> fieldMappingKeys() {
@@ -76,6 +77,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean varhaiskasvatuksenYhteyshenkiloIncluded;
     private boolean varhaiskasvatuksenEmailIncluded;
     private boolean koskiYhdyshenkiloIncluded;
+    private boolean moveYhteyshenkiloIncluded;
     private boolean organisaationSijaintikuntaIncluded;
     private boolean organisaatioEmailIncluded;
     private boolean koulutuksenTarjoajatIncluded;
@@ -277,6 +279,15 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     public void setKoskiYhdyshenkiloIncluded(boolean koskiYhdyshenkiloIncluded) {
         this.koskiYhdyshenkiloIncluded = koskiYhdyshenkiloIncluded;
+    }
+
+    @Override
+    public boolean isMoveYhteyshenkiloIncluded() {
+        return moveYhteyshenkiloIncluded;
+    }
+
+    public void setMoveYhteyshenkiloIncluded(boolean moveYhteyshenkiloIncluded) {
+        this.moveYhteyshenkiloIncluded = moveYhteyshenkiloIncluded;
     }
 
     @Override

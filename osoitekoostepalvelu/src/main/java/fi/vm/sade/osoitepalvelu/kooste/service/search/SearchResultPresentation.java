@@ -83,6 +83,9 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö koski yhdyshenkilö -saraketta")
     boolean isKoskiYhdyshenkiloIncluded();
 
+    @ApiModelProperty("Näytetäänkö MOVE!-yhteyshenkilö -saraketta")
+    boolean isMoveYhteyshenkiloIncluded();
+
     @ApiModelProperty("Näytetäänkö organisaation sähköpostiosoite -saraketta")
     boolean isOrganisaatioEmailIncluded();
 

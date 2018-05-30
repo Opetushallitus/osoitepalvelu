@@ -93,6 +93,8 @@ public class SearchResultRowDto implements Serializable {
     @DtoConversion(path="organisaatio.koskiYhdyshenkilo", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String koskiYhdyshenkilo;
+    @DtoSkipped(with = {"organisaatioAggregate", "henkiloAggregate"})
+    private String moveYhteyshenkilo;
 
     @DtoConversion(path = "henkilo.yhteyshenkiloOid", with="organisaatioAggregate")
     @DtoPath(value="henkilo.henkiloOid", with="henkiloAggregate")
@@ -284,6 +286,14 @@ public class SearchResultRowDto implements Serializable {
         this.koskiYhdyshenkilo = koskiYhdyshenkilo;
     }
 
+    public String getMoveYhteyshenkilo() {
+        return moveYhteyshenkilo;
+    }
+
+    public void setMoveYhteyshenkilo(String moveYhteyshenkilo) {
+        this.moveYhteyshenkilo = moveYhteyshenkilo;
+    }
+
     public String getHenkiloOid() {
         return henkiloOid;
     }
@@ -357,6 +367,7 @@ public class SearchResultRowDto implements Serializable {
                 this.kriisitiedotuksenEmail,
                 this.varhaiskasvatuksenYhteyshenkilo,
                 this.varhaiskasvatuksenEmail,
+                this.moveYhteyshenkilo,
                 this.viranomaistiedotuksenEmail
         );
     }

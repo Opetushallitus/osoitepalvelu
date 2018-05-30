@@ -507,6 +507,27 @@ public class DefaultSearchResultTransformerService extends AbstractService
             });
         }
 
+        if (presentation.isMoveYhteyshenkiloIncluded()) {
+            copiers.add(new DetailCopier() {
+                @Override
+                public boolean isMissing(SearchResultRowDto from) {
+                    return from.getMoveYhteyshenkilo() == null;
+                }
+
+                @Override
+                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
+                    Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
+                            CollectionHelper.filter(from.getYhteystietoArvos(),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate(locale),
+                                    new OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate(DEFAULT_LOCALE))
+                            .iterator();
+                    if (yhteystietoArvos.hasNext()) {
+                        to.setMoveYhteyshenkilo(yhteystietoArvos.next().getArvo());
+                    }
+                }
+            });
+        }
+
         // TODO: viranomaistiedotuksenEmail, koulutusneuvonnanEmail
         copyDetails(results, context, copiers, presentation.getLocale());
     }
@@ -656,6 +677,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
         if(presentation.isKoskiYhdyshenkiloIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_koski_yhdyshenkilo");
         }
+        if (presentation.isMoveYhteyshenkiloIncluded()) {
+            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_move_yhteyshenkilo");
+        }
         if (presentation.isOrganisaationSijaintikuntaIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaation_sijaintikunta");
         }
@@ -746,6 +770,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
         if(presentation.isKoskiYhdyshenkiloIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getKoskiYhdyshenkilo(), ophHssfCellStyles);
+        }
+        if (presentation.isMoveYhteyshenkiloIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getMoveYhteyshenkilo(), ophHssfCellStyles);
         }
         if (presentation.isOrganisaationSijaintikuntaIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getKotikunta(), ophHssfCellStyles);

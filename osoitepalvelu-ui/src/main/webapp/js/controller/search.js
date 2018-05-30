@@ -294,7 +294,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 if(typeToDisable !== 'OPPILAITOKSET') {
                     for(var i in $scope.addressFields) {
                         var addressfield = $scope.addressFields[i];
-                        if( (addressfield.type === 'KOSKI_YHDYSHENKILO') && addressfield.selected) {
+                        if( (addressfield.type === 'KOSKI_YHDYSHENKILO' || addressfield.type === 'MOVE_YHTEYSHENKILO') && addressfield.selected) {
                             return true;
                         }
                     }
@@ -314,7 +314,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 && $scope.selectedTargetGroupTypes.length) {
                 return true;
             }
-            if( (addressField.type === 'KOSKI_YHDYSHENKILO')
+            if( (addressField.type === 'KOSKI_YHDYSHENKILO' || addressField.type === 'MOVE_YHTEYSHENKILO')
                 && !($filter('filter')($scope.selectedTargetGroupTypes, 'OPPILAITOKSET')).length
                 && $scope.selectedTargetGroupTypes.length) {
                 return true;
