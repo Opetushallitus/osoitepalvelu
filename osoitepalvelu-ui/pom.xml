@@ -39,7 +39,7 @@
                 <plugin>
                     <groupId>com.samaxes.maven</groupId>
                     <artifactId>minify-maven-plugin</artifactId>
-                    <version>1.7.2</version>
+                    <version>1.7.6</version>
                 </plugin>
                 <plugin>
                     <groupId>com.google.code.maven-replacer-plugin</groupId>
@@ -90,7 +90,6 @@
             <plugin>
                 <groupId>com.samaxes.maven</groupId>
                 <artifactId>minify-maven-plugin</artifactId>
-                <version>1.7.2</version>
                 <executions>
                     <execution>
                         <id>default-minify</id>
