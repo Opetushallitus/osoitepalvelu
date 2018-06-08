@@ -43,11 +43,7 @@ public interface SearchResultTransformerService extends Serializable {
                                                        CamelRequestContext requestContext,
                                                        SearchType searchType);
 
-    /**
-     * @param workbook the excel workbook to produce the rows to
-     * @param searchResults to produce to the workbook
-     */
-    void produceExcel(HSSFWorkbook workbook, SearchResultsPresentationDto searchResults);
+
 
     /**
      * @return the currently logged in user's OID.

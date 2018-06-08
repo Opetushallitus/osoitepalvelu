@@ -101,4 +101,8 @@ public final class LocaleHelper {
         }
         return null;
     }
+
+    public static String localized(Map<String, String> nimi, Locale preferredLocale, Locale defaultLocale) {
+        return LocaleHelper.findLocalized(nimi, preferredLocale, defaultLocale);
+    }
 }

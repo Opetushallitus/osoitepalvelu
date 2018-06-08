@@ -25,6 +25,7 @@ package fi.vm.sade.osoitepalvelu.service.search;
 import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.DefaultSearchResultTransformerService;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchExcelService;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.SearchResultPresentation;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.*;
 import junit.framework.Assert;
@@ -48,6 +49,9 @@ public class SearchResultTransformerServiceTest {
 
     @Autowired
     private DefaultSearchResultTransformerService resultTranformerService;
+
+    @Autowired
+    private SearchExcelService searchExcelService;
 
     @Before
     public void init() {
@@ -236,7 +240,7 @@ public class SearchResultTransformerServiceTest {
     @Test
     public void testProduceEmptyExcel() {
         HSSFWorkbook wb  =  new HSSFWorkbook();
-        resultTranformerService.produceExcel(wb, new SearchResultsPresentationDto(new ArrayList<>(),
+        searchExcelService.produceExcel(wb, new SearchResultsPresentationDto(new ArrayList<>(),
                 new AllColumnsSearchResultPresentation()));
         assertEquals(1, wb.getNumberOfSheets());
         assertEquals(0, wb.getSheetAt(0).getLastRowNum());
@@ -256,7 +260,7 @@ public class SearchResultTransformerServiceTest {
                 presentation, new DefaultCamelRequestContext(), null);
 
         HSSFWorkbook wb  =  new HSSFWorkbook();
-        resultTranformerService.produceExcel(wb, results);
+        searchExcelService.produceExcel(wb, results);
         assertEquals(1, wb.getNumberOfSheets());
         assertEquals(1, wb.getSheetAt(0).getLastRowNum());
         assertEquals("Organisaation nimi", wb.getSheetAt(0).getRow(1).getCell(0).getStringCellValue());
