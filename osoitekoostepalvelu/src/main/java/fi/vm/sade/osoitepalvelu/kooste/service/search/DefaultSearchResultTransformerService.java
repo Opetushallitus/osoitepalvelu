@@ -311,6 +311,10 @@ public class DefaultSearchResultTransformerService extends AbstractService
             copiers.add(new KoskiYhdyshenkiloCopier());
         }
 
+        if(presentation.isMoveYhteyshenkiloIncluded()) {
+            copiers.add(new MoveYhteyshenkiloCopier());
+        }
+
         // TODO: viranomaistiedotuksenEmail, koulutusneuvonnanEmail
         copyDetails(results, context, copiers, presentation.getLocale());
     }
