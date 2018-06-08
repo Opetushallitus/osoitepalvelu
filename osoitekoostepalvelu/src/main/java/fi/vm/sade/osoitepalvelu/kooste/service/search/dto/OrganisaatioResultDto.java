@@ -51,6 +51,7 @@ public class OrganisaatioResultDto implements Serializable {
     private String kriisitiedotuksenEmail;
     private String varhaiskasvatuksenYhteyshenkilo;
     private String varhaiskasvatuksenEmail;
+    private String koskiYhdyshenkilo;
 
     public String getOid() {
         return oid;
@@ -214,6 +215,14 @@ public class OrganisaatioResultDto implements Serializable {
 
     public void setVarhaiskasvatuksenEmail(String varhaiskasvatuksenEmail) {
         this.varhaiskasvatuksenEmail = varhaiskasvatuksenEmail;
+    }
+
+    public String getKoskiYhdyshenkilo() {
+        return koskiYhdyshenkilo;
+    }
+
+    public void setKoskiYhdyshenkilo(String koskiYhdyshenkilo) {
+        this.koskiYhdyshenkilo = koskiYhdyshenkilo;
     }
 
     public String getOppilaitosKoodi() {

@@ -52,6 +52,8 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings.add("KRIISITIEDOTUKSEN_EMAIL", "kriisitiedotuksenSahkopostiosoiteIncluded");
         fieldMappings.add("VARHAISKASVATUKSEN_YHTEYSHENKILO", "varhaiskasvatuksenYhteyshenkiloIncluded");
         fieldMappings.add("VARHAISKASVATUKSEN_YHTEYSHENKILO", "varhaiskasvatuksenEmailIncluded");
+        fieldMappings.add("KOSKI_YHDYSHENKILO", "koskiYhdyshenkiloIncluded");
+        fieldMappings.add("MOVE_YHTEYSHENKILO", "moveYhteyshenkiloIncluded");
         fieldMappings.add("ORGANISAATIO_SIJAINTIKUNTA", "organisaationSijaintikuntaIncluded");
     }
     public static List<String> fieldMappingKeys() {
@@ -74,10 +76,10 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean kriisitiedotuksenSahkopostiosoiteIncluded;
     private boolean varhaiskasvatuksenYhteyshenkiloIncluded;
     private boolean varhaiskasvatuksenEmailIncluded;
+    private boolean koskiYhdyshenkiloIncluded;
+    private boolean moveYhteyshenkiloIncluded;
     private boolean organisaationSijaintikuntaIncluded;
     private boolean organisaatioEmailIncluded;
-    private boolean nayttotutkinnonJarjestajaOrganisaatiosIncluded;
-    private boolean nayttotutkinnonJarjestajaVastuuhenkilosIncluded;
     private boolean koulutuksenTarjoajatIncluded;
     private Locale locale;
     private Set<OidAndTyyppiPair> nonIncludedOids;
@@ -90,12 +92,6 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
                         SearchTargetGroup.TargetType.allHenkiloTypes()),
                 organisaatioTypesIncluded = searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyOrganisaatioTypes(),
                         SearchTargetGroup.TargetType.allOrganisaatioTypes());
-            this.nayttotutkinnonJarjestajaOrganisaatiosIncluded = searchTerms.containsAnyTargetGroup(
-                    new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.NAYTTOTUTKINNON_JARJESTAJAT},
-                        SearchTargetGroup.TargetType.JARJESTAJA_ORGANISAATIO);
-            this.nayttotutkinnonJarjestajaVastuuhenkilosIncluded = searchTerms.containsAnyTargetGroup(
-                    new SearchTargetGroup.GroupType[]{SearchTargetGroup.GroupType.NAYTTOTUTKINNON_JARJESTAJAT},
-                        SearchTargetGroup.TargetType.TUTKINTOVASTAAVA);
             this.koulutuksenTarjoajatIncluded = searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getKoulutusHakuTypes());
 
             switch (searchTerms.getSearchType()) {
@@ -109,9 +105,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
                     setYhteyshenkiloIncluded(henkiloTypesIncluded);
                     setYhteyshenkiloEmailIncluded(henkiloTypesIncluded);
                     setOrganisaatioEmailIncluded(searchTerms.containsAnyTargetGroup(SearchTargetGroup.GroupType.getAnyOrganisaatioTypes(),
-                                    SearchTargetGroup.TargetType.ORGANISAATIO,
-                                    SearchTargetGroup.TargetType.JARJESTAJA_ORGANISAATIO,
-                                    SearchTargetGroup.TargetType.VIRANOMAIS_EMAIL) || koulutuksenTarjoajatIncluded);
+                                    SearchTargetGroup.TargetType.ORGANISAATIO) || koulutuksenTarjoajatIncluded);
                     break;
                 case LETTER:
                 case SEND_LETTER:
@@ -279,6 +273,24 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     }
 
     @Override
+    public boolean isKoskiYhdyshenkiloIncluded() {
+        return koskiYhdyshenkiloIncluded;
+    }
+
+    public void setKoskiYhdyshenkiloIncluded(boolean koskiYhdyshenkiloIncluded) {
+        this.koskiYhdyshenkiloIncluded = koskiYhdyshenkiloIncluded;
+    }
+
+    @Override
+    public boolean isMoveYhteyshenkiloIncluded() {
+        return moveYhteyshenkiloIncluded;
+    }
+
+    public void setMoveYhteyshenkiloIncluded(boolean moveYhteyshenkiloIncluded) {
+        this.moveYhteyshenkiloIncluded = moveYhteyshenkiloIncluded;
+    }
+
+    @Override
     public boolean isKriisitiedotuksenSahkopostiosoiteIncluded() {
         return kriisitiedotuksenSahkopostiosoiteIncluded;
     }
@@ -294,24 +306,6 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     public void setOrganisaationSijaintikuntaIncluded(boolean organisaationSijaintikuntaIncluded) {
         this.organisaationSijaintikuntaIncluded  =  organisaationSijaintikuntaIncluded;
-    }
-
-    @Override
-    public boolean isNayttotutkinnonJarjestajaOrganisaatiosIncluded() {
-        return nayttotutkinnonJarjestajaOrganisaatiosIncluded;
-    }
-
-    public void setNayttotutkinnonJarjestajaOrganisaatiosIncluded(boolean nayttotutkinnonJarjestajaOrganisaatiosIncluded) {
-        this.nayttotutkinnonJarjestajaOrganisaatiosIncluded = nayttotutkinnonJarjestajaOrganisaatiosIncluded;
-    }
-
-    @Override
-    public boolean isNayttotutkinnonJarjestajaVastuuhenkilosIncluded() {
-        return nayttotutkinnonJarjestajaVastuuhenkilosIncluded;
-    }
-
-    public void setNayttotutkinnonJarjestajaVastuuhenkilosIncluded(boolean nayttotutkinnonJarjestajaVastuuhenkilosIncluded) {
-        this.nayttotutkinnonJarjestajaVastuuhenkilosIncluded = nayttotutkinnonJarjestajaVastuuhenkilosIncluded;
     }
 
     @Override

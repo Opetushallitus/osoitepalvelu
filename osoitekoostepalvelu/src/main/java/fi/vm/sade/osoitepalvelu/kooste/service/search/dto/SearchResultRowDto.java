@@ -49,7 +49,6 @@ public class SearchResultRowDto implements Serializable {
     @DtoSkipped(with="henkiloAggregate")
     private String toimipistekoodi;
     @DtoConversion(path="organisaatio.oppilaitosKoodi", with="organisaatioAggregate")
-    @DtoPath(value="oppilaitos.oppilaitoskoodi", with = "aituOppilaitosAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String oppilaitosKoodi;
     @DtoConversion(path="organisaatio.ytunnus", with="organisaatioAggregate")
@@ -91,22 +90,25 @@ public class SearchResultRowDto implements Serializable {
     @DtoConversion(path="organisaatio.varhaiskasvatuksenEmail", with="organisaatioAggregate")
     @DtoSkipped(with="henkiloAggregate")
     private String varhaiskasvatuksenEmail;
+    @DtoConversion(path="organisaatio.koskiYhdyshenkilo", with="organisaatioAggregate")
+    @DtoSkipped(with="henkiloAggregate")
+    private String koskiYhdyshenkilo;
+    @DtoSkipped(with = {"organisaatioAggregate", "henkiloAggregate"})
+    private String moveYhteyshenkilo;
 
     @DtoConversion(path = "henkilo.yhteyshenkiloOid", with="organisaatioAggregate")
     @DtoPath(value="henkilo.henkiloOid", with="henkiloAggregate")
     private String henkiloOid;
     @DtoConversions({
         @DtoConversion(path="henkilo.nimi", with="organisaatioAggregate"),
-        @DtoConversion(path="henkilo.nimi", with="henkiloAggregate"),
-        @DtoConversion(path="tutkinto.vastuuhenkilo", with = "aituOppilaitosAggregate")
+        @DtoConversion(path="henkilo.nimi", with="henkiloAggregate")
     })
     private String yhteystietoNimi;
     @DtoConversion(path="henkilo.nimike", with="organisaatioAggregate")
     private String nimike;
     @DtoConversion(path = "henkilo.email", with="organisaatioAggregate")
     @DtoPaths({
-        @DtoPath(value = "osoite.henkiloEmail", with="henkiloAggregate"),
-        @DtoPath(value="tutkinto.sahkoposti_vastuuhenkilo",  with = "aituOppilaitosAggregate")
+        @DtoPath(value = "osoite.henkiloEmail", with="henkiloAggregate")
     })
     private String henkiloEmail;
     @DtoConversion(path = "osoite", with="henkiloAggregate")
@@ -114,7 +116,6 @@ public class SearchResultRowDto implements Serializable {
     private SearchResultOsoiteDto kayntiosoite;
     @DtoConversion(path = "osoite", with="henkiloAggregate")
     @DtoPaths({
-        @DtoPath(value="oppilaitos", with = "aituOppilaitosAggregate"),
         @DtoPath(value = "postiosoite", with="organisaatioAggregate")
     })
     private SearchResultOsoiteDto postiosoite;
@@ -277,6 +278,22 @@ public class SearchResultRowDto implements Serializable {
         this.varhaiskasvatuksenEmail = varhaiskasvatuksenEmail;
     }
 
+    public String getKoskiYhdyshenkilo() {
+        return koskiYhdyshenkilo;
+    }
+
+    public void setKoskiYhdyshenkilo(String koskiYhdyshenkilo) {
+        this.koskiYhdyshenkilo = koskiYhdyshenkilo;
+    }
+
+    public String getMoveYhteyshenkilo() {
+        return moveYhteyshenkilo;
+    }
+
+    public void setMoveYhteyshenkilo(String moveYhteyshenkilo) {
+        this.moveYhteyshenkilo = moveYhteyshenkilo;
+    }
+
     public String getHenkiloOid() {
         return henkiloOid;
     }
@@ -350,6 +367,7 @@ public class SearchResultRowDto implements Serializable {
                 this.kriisitiedotuksenEmail,
                 this.varhaiskasvatuksenYhteyshenkilo,
                 this.varhaiskasvatuksenEmail,
+                this.moveYhteyshenkilo,
                 this.viranomaistiedotuksenEmail
         );
     }

@@ -80,6 +80,12 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö varhaiskasvatuksen sähköposti -saraketta")
     boolean isVarhaiskasvatuksenEmailIncluded();
 
+    @ApiModelProperty("Näytetäänkö koski yhdyshenkilö -saraketta")
+    boolean isKoskiYhdyshenkiloIncluded();
+
+    @ApiModelProperty("Näytetäänkö MOVE!-yhteyshenkilö -saraketta")
+    boolean isMoveYhteyshenkiloIncluded();
+
     @ApiModelProperty("Näytetäänkö organisaation sähköpostiosoite -saraketta")
     boolean isOrganisaatioEmailIncluded();
 
@@ -89,9 +95,4 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö yhteyshenkilön sähköpostiosoite -saraketta")
     boolean isYhteyshenkiloEmailIncluded();
 
-    @ApiModelProperty("Onko haun kohderyhmissä näyttötutkinnon vastuuhenkilö")
-    boolean isNayttotutkinnonJarjestajaVastuuhenkilosIncluded();
-
-    @ApiModelProperty("Onko haun kohderyhmissä näyttötutkinnon järjestäjän organisaatio")
-    boolean isNayttotutkinnonJarjestajaOrganisaatiosIncluded();
 }

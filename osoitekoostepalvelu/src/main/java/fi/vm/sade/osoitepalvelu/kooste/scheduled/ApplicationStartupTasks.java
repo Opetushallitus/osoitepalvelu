@@ -27,9 +27,6 @@ public class ApplicationStartupTasks extends AbstractService {
     @Autowired
     private ScheduledOrganisaatioCacheTask organisaatioCacheTask;
 
-    @Autowired
-    private ScheduledAituDataFetchTask aituDataFetchTask;
-
     // Only once (can not use ContextRefreshedEvent since it would block the startup)
     @Scheduled(fixedRate = Long.MAX_VALUE)
     public void afterStartup() {
@@ -38,11 +35,6 @@ public class ApplicationStartupTasks extends AbstractService {
             organisaatioCacheTask.ensureOrganisaatioCacheFresh();
         } catch(Exception e) {
             logger.error("Failed to ensure Organisaatio cache state: " + e.getMessage());
-        }
-        try {
-            aituDataFetchTask.refreshAituData();
-        } catch(Exception e) {
-            logger.error("Failed to fetch AITU data: " + e.getMessage());
         }
         logger.info("STATRUP tasks END");
     }

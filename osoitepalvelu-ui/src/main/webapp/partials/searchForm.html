@@ -117,7 +117,7 @@
                 <div class="radioOptionsContainer">
                     <span class="radioOptions" ng-repeat="opt in osoitekielis">
                         <input id="osoitekieli_{{::opt.code}}" name="osoitekieli" group="osoitekieli"
-                               type="radio" ng-model="osoitekieli" ng-value="opt.code" />
+                               type="radio" ng-model="$parent.$parent.osoitekieli" ng-value="opt.code" />
                         <label for="osoitekieli_{{::opt.code}}">{{::opt.name}}</label>
                     </span>
                 </div>
@@ -130,17 +130,6 @@
             </div>
             <!-- tutkintotoimikuntien kriteerit-->
             <div class="field-cell">
-                <div class="term" ng-if="isShowTutkintotoimikuntaTerm()" title="{{::msg('search_term_tutkintotoimikunta')}}">
-                    <!--tutkintotoimikunta term-->
-                    <ui-select multiple id="tutkintotoimikuntas" ng-model="terms.tutkintotoimikuntas"
-                                theme="select2" select-all="false" clear-all="true">
-                        <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta')}}">{{$item.nimi}}</ui-select-match>
-                        <ui-select-choices position='down' repeat="opt.koodiUri as opt in options.tutkintotoimikuntas | filter: $select.search track by $index">
-                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="term-separator" ng-if="isShowKoulutusTerms() && isShowTutkintotoimikuntaTerm()"></div>
                 <div class="term" ng-if="isShowKoulutusTerms()" title="{{::msg('search_term_koulutuslaji')}}">
                     <ui-select multiple allow-clear id="koulutuslajis" ng-model="terms.koulutuslajis"
                                 theme="select2" select-all="true" clear-all="true">
@@ -160,7 +149,7 @@
                        </ui-select-choices>
                    </ui-select>
                 </div>
-                <div class="term-separator" ng-if="isShowTutkintotoimikuntaTerm() || isShowKoulutusTerms()"></div>
+                <div class="term-separator" ng-if="isShowKoulutusTerms()"></div>
                 <div class="term" ng-if="isShowTutkintohierarkiaTerms()" title="{{::msg('search_term_koulutusala')}}">
                     <!--Koulutusala term-->
                     <ui-select multiple id="koulutusalas" ng-model="terms.koulutusalas"
@@ -201,29 +190,7 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
-                <div class="term-separator" ng-if="isShowKoulutusTyyppiTerm() || (isShowTutkintotoimikuntaTerm() && options.koulutus)"></div>
-                <div class="term" ng-if="isShowTutkintotoimikuntaKieliTerm()" title="{{::msg('search_term_tutkintotoimikunta_kielis')}}">
-                    <!--tutkintotoimikunnan kielisyys term-->
-                    <ui-select multiple id="tutkintotoimikuntaKielis" ng-model="terms.tutkintotoimikuntaKielis"
-                                 theme="select2" select-all="true" clear-all="true">
-                        <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_kielis')}}">{{$item.name}}</ui-select-match>
-                        <ui-select-choices position='down' repeat="opt.code as opt in options.tutkintotoimikuntaKielis | filter: $select.search track by $index">
-                            <div ng-bind-html="opt.name | highlight : $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="term-separator" ng-if="isShowTutkintotoimikuntaKieliTerm()"></div>
-                <div class="term" ng-if="isShowTutkintotoimikuntaToimikausiTerm()" title="{{::msg('search_term_tutkintotoimikunta_toimikausi')}}">
-                    <!--tutkintotoimikunnan toimikausi term-->
-                    <ui-select multiple id="tutkintotoimikuntaToimikausis" ng-model="terms.tutkintotoimikuntaToimikausis"
-                                 theme="select2" select-all="true" clear-all="true">
-                        <ui-select-match placeholder="{{::msg('search_term_tutkintotoimikunta_toimikausi')}}">{{$item.nimi}}</ui-select-match>
-                        <ui-select-choices position='down' repeat="opt.type as opt in options.tutkintotoimikuntaToimikausis | filter: $select.search track by $index">
-                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="term-separator" ng-if="isShowTutkintotoimikuntaTerm()"></div>
+                <div class="term-separator" ng-if="isShowKoulutusTyyppiTerm()"></div>
                 <div class="term" ng-if="isShowPalveluidenKayttajat()" title="{{::msg('search_term_kayttooikeusryhma')}}">
                     <!--käyttöoikeusryhmä term-->
                     <ui-select multiple id="koulutaRoolis" ng-model="terms.koulutaRoolis"

@@ -91,6 +91,7 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
     private LocalDate alkuPvm;
     @Indexed
     private LocalDate lakkautusPvm;
+    private String koskiYhdyshenkilo;
 
     public Long getVersion() {
         return version;
@@ -274,6 +275,14 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
 
     public void setYtunnus(String ytunnus) {
         this.ytunnus = ytunnus;
+    }
+
+    public String getKoskiYhdyshenkilo() {
+        return koskiYhdyshenkilo;
+    }
+
+    public void setKoskiYhdyshenkilo(String koskiYhdyshenkilo) {
+        this.koskiYhdyshenkilo = koskiYhdyshenkilo;
     }
 
     public String getYritysmuoto() {

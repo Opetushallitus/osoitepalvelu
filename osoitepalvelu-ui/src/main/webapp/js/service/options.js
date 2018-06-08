@@ -49,10 +49,6 @@ OsoiteKoostepalvelu.service('OptionsService', ["$log", "$http", "LocalisationSer
         }
     };
 
-    this.listTutkintotoimikuntas = function(success, error) {
-        _get(window.url('osoitekoostepalvelu.koodisto', 'tutkintotoimikuntas'), success, error);
-    };
-
     this.listKoulutaRoolis = function(success, error) {
         _get(window.url('osoitekoostepalvelu.koodisto', 'kayttoikeusryhma'), success, error);
     };

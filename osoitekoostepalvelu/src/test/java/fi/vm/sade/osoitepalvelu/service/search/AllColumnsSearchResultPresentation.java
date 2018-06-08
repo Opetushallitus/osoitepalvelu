@@ -127,7 +127,15 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     public boolean isVarhaiskasvatuksenYhteyshenkiloIncluded() { return true; }
 
     @Override
+    public boolean isKoskiYhdyshenkiloIncluded() { return true; }
+
+    @Override
     public boolean isVarhaiskasvatuksenEmailIncluded() { return true; }
+
+    @Override
+    public boolean isMoveYhteyshenkiloIncluded() {
+        return true;
+    }
 
     @Override
     public boolean isOrganisaatioEmailIncluded() {
@@ -142,16 +150,6 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     @Override
     public boolean isYhteyshenkiloEmailIncluded() {
         return withYhteyshenkiloEmail;
-    }
-
-    @Override
-    public boolean isNayttotutkinnonJarjestajaVastuuhenkilosIncluded() {
-        return true;
-    }
-
-    @Override
-    public boolean isNayttotutkinnonJarjestajaOrganisaatiosIncluded() {
-        return true;
     }
 
     public AllColumnsSearchResultPresentation withoutYhteyshenkiloEmail() {
