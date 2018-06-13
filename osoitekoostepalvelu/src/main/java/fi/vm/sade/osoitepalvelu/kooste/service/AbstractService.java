@@ -27,8 +27,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public abstract class AbstractService {
-    public static final Locale DEFAULT_LOCALE  =  new Locale("fi", "FI");
     public static final int MILLIS_IN_SECOND = 1000;
+    public static final Locale DEFAULT_LOCALE = new Locale("fi", "FI");
 
     protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -53,9 +53,5 @@ public abstract class AbstractService {
             throw new AuthorizationException("Authenticated user "  +  getLoggedInUserOid()
                      +  " does not have access right to given entity.");
         }
-    }
-
-    protected String localized(Map<String, String> nimi, Locale preferredLocale, Locale defaultLocale) {
-        return LocaleHelper.findLocalized(nimi, preferredLocale, defaultLocale);
     }
 }

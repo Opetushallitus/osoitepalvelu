@@ -16,26 +16,18 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
-import static fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper.join;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Ordering;
 
-import fi.vm.sade.javautils.poi.OphCellStyles;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.common.util.CollectionHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.Combiner;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsYhteystietoDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
-import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
+import fi.vm.sade.osoitepalvelu.kooste.service.search.detailcopier.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloOsoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloResultAggregateDto;
@@ -43,28 +35,18 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultAggr
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OsoitteistoDto;
-import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultOsoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto.SearchType;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SourceRegister;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Font;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -72,25 +54,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+
 @Service
 public class DefaultSearchResultTransformerService extends AbstractService
         implements SearchResultTransformerService {
 
     private static final long serialVersionUID = -5456950030215538503L;
 
-    private static final Locale DEFAULT_LOCALE = new Locale("fi", "FI");
-
     @Autowired
     private SearchResultDtoConverter dtoConverter;
 
     @Autowired
-    private MessageSource messageSource;
+    private MessageService messageService;
 
     @Autowired(required = false)
     private OrganisaatioService organisaatioService;
-
-    @Autowired
-    private KoodistoService koodistoService;
 
     @Override
     public SearchResultsPresentationDto transformToResultRows(SearchResultsDto results,
@@ -236,7 +214,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
         for (OrganisaatioResultAggregateDto aggregate : organisaatioAggregates) {
             SearchResultRowDto row = dtoConverter.convert(aggregate, new SearchResultRowDto());
-            row.setNimi(localized(aggregate.getOrganisaatio().getNimi(), presentation.getLocale(), DEFAULT_LOCALE));
+            row.setNimi(LocaleHelper.localized(aggregate.getOrganisaatio().getNimi(), presentation.getLocale(), DEFAULT_LOCALE));
             transformedResults.add(row);
         }
         return transformedResults;
@@ -288,256 +266,57 @@ public class DefaultSearchResultTransformerService extends AbstractService
             return;
         }
         List<DetailCopier> copiers = new ArrayList<>();
-        if (presentation.isOrganisaationNimiIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) {
-                    return from.getNimi() == null;
-                }
 
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    to.setNimi(localized(from.getNimi(), locale, DEFAULT_LOCALE));
-                }
-            });
+        if (presentation.isOrganisaationNimiIncluded()) {
+            copiers.add(new OrganisaationNimiCopier());
         }
 
         if (presentation.isKayntiosoiteIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) {
-                    return from.getKayntiosoite() == null;
-                }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    to.setKayntiosoite(dtoConverter.convert(from.getKayntiosoite(), new SearchResultOsoiteDto(), locale));
-                    if (to.getKayntiosoite() != null && from.getKayntiosoite() != null
-                            && from.getKayntiosoite().getPostinumeroUri() != null) {
-                        UiKoodiItemDto postinumeroKoodi  =  koodistoService
-                                .findPostinumeroByKoodiUri(locale, from.getKayntiosoite().getPostinumeroUri());
-                        if (postinumeroKoodi != null) {
-                            to.getKayntiosoite().setPostinumero(postinumeroKoodi.getKoodiId());
-                            to.getKayntiosoite().setPostitoimipaikka(postinumeroKoodi.getNimi());
-                        }
-                    }
-                }
-            });
+            copiers.add(new KayntiosoiteCopier());
         }
 
         if (presentation.isOrganisaationSijaintikuntaIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) {
-                    return from.getKotikunta() == null;
-                }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    if (from.getKotipaikkaUri() != null) {
-                        UiKoodiItemDto kuntaKoodi = koodistoService.findKuntaByKoodiUri(locale, from.getKotipaikkaUri());
-                        if (kuntaKoodi != null) {
-                            to.setKotikunta(kuntaKoodi.getNimi());
-                        }
-                    }
-                }
-            });
+            copiers.add(new OrganisaationSijaintikuntaCopier());
         }
 
         if (presentation.isOrganisaatiotunnisteIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) {
-                    return from.getOppilaitosKoodi() == null;
-                }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    to.setOppilaitosKoodi(from.getOppilaitosKoodi());
-                }
-            });
+            copiers.add(new OrganisaatiotunnisteCopier());
         }
 
         if (presentation.isWwwOsoiteIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) {
-                    return from.getWwwOsoite() == null;
-                }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    Iterator<OrganisaatioYhteystietoElementtiDto> elementtis =
-                            CollectionHelper.filter(from.getYhteystietoArvos(),
-                                new OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate("Www", locale),
-                                new OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate("Www", DEFAULT_LOCALE))
-                                .iterator();
-                    if (elementtis.hasNext()) {
-                        to.setWwwOsoite(elementtis.next().getArvo());
-                    }
-                    Iterator<OrganisaatioDetailsYhteystietoDto> yhteystietos =
-                            CollectionHelper.filter(from.getYhteystiedot(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate(locale),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByWwwPredicate(DEFAULT_LOCALE))
-                                    .iterator();
-                    if (yhteystietos.hasNext()) {
-                        to.setWwwOsoite(yhteystietos.next().getWww());
-                    }
-                }
-            });
+            copiers.add(new WwwOsoiteCopier());
         }
 
         if (presentation.isOrganisaatioEmailIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) {
-                    return from.getEmailOsoite() == null;
-                }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    Iterator<OrganisaatioDetailsYhteystietoDto> yhteystietos =
-                            CollectionHelper.filter(from.getYhteystiedot(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(locale),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(DEFAULT_LOCALE))
-                                    .iterator();
-                    if (yhteystietos.hasNext()) {
-                        to.setEmailOsoite(yhteystietos.next().getEmail());
-                    }
-                }
-            });
+            copiers.add(new OrganisaatioEmailCopier());
         }
 
         if (presentation.isPuhelinnumeroIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) {
-                    return from.getPuhelinnumero() == null;
-                }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    Iterator<OrganisaatioDetailsYhteystietoDto> yhteystietos =
-                            CollectionHelper.filter(from.getYhteystiedot(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate(locale),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByPuhelinPreidcate(DEFAULT_LOCALE))
-                                    .iterator();
-                    if (yhteystietos.hasNext()) {
-                        to.setPuhelinnumero(yhteystietos.next().getNumero());
-                    }
-                }
-            });
+            copiers.add(new PuhelinnumeroCopier());
         }
 
         if(presentation.isKriisitiedotuksenSahkopostiosoiteIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) {
-                    return from.getKriisitiedotuksenEmail() == null;
-                }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
-                            CollectionHelper.filter(from.getYhteystietoArvos(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate(locale),
-                                    new OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate(DEFAULT_LOCALE))
-                                    .iterator();
-                    if(yhteystietoArvos.hasNext()) {
-                        to.setKriisitiedotuksenEmail(yhteystietoArvos.next().getArvo());
-                    }
-                }
-            });
+            copiers.add(new KriisitiedotuksenSahkopostiosoiteCopier());
         }
 
         if(presentation.isVarhaiskasvatuksenYhteyshenkiloIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) { return from.getVarhaiskasvatuksenYhteyshenkilo() == null; }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
-                            CollectionHelper.filter(from.getYhteystietoArvos(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenYhteyshenkiloPredicate(locale),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenYhteyshenkiloPredicate(DEFAULT_LOCALE))
-                                    .iterator();
-                    if(yhteystietoArvos.hasNext()) {
-                        to.setVarhaiskasvatuksenYhteyshenkilo(yhteystietoArvos.next().getArvo());
-                    }
-                }
-            });
+            copiers.add(new VarhaiskasvatuksenYhteyshenkiloCopier());
         }
 
         if(presentation.isVarhaiskasvatuksenEmailIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) { return from.getVarhaiskasvatuksenEmail() == null; }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
-                            CollectionHelper.filter(from.getYhteystietoArvos(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenEmailPredicate(locale),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenEmailPredicate(DEFAULT_LOCALE))
-                                    .iterator();
-                    if(yhteystietoArvos.hasNext()) {
-                        to.setVarhaiskasvatuksenEmail(yhteystietoArvos.next().getArvo());
-                    }
-                }
-            });
+            copiers.add(new VarhaiskasvatuksenEmailCopier());
         }
 
         if(presentation.isKoskiYhdyshenkiloIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) { return from.getKoskiYhdyshenkilo() == null; }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
-                            CollectionHelper.filter(from.getYhteystietoArvos(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate(locale),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate(DEFAULT_LOCALE))
-                            .iterator();
-                    if(yhteystietoArvos.hasNext()) {
-                        to.setKoskiYhdyshenkilo(yhteystietoArvos.next().getArvo());
-                    }
-                }
-            });
+            copiers.add(new KoskiYhdyshenkiloCopier());
         }
 
-        if (presentation.isMoveYhteyshenkiloIncluded()) {
-            copiers.add(new DetailCopier() {
-                @Override
-                public boolean isMissing(SearchResultRowDto from) {
-                    return from.getMoveYhteyshenkilo() == null;
-                }
-
-                @Override
-                public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
-                    Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
-                            CollectionHelper.filter(from.getYhteystietoArvos(),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate(locale),
-                                    new OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate(DEFAULT_LOCALE))
-                            .iterator();
-                    if (yhteystietoArvos.hasNext()) {
-                        to.setMoveYhteyshenkilo(yhteystietoArvos.next().getArvo());
-                    }
-                }
-            });
+        if(presentation.isMoveYhteyshenkiloIncluded()) {
+            copiers.add(new MoveYhteyshenkiloCopier());
         }
 
         // TODO: viranomaistiedotuksenEmail, koulutusneuvonnanEmail
         copyDetails(results, context, copiers, presentation.getLocale());
-    }
-
-    protected interface DetailCopier {
-
-        boolean isMissing(SearchResultRowDto from);
-
-        void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale);
-
     }
 
     protected void copyDetails(List<SearchResultRowDto> results, CamelRequestContext context,
@@ -560,7 +339,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                         try {
                             oid = organisaatioService.findOidByOppilaitoskoodi(result.getOppilaitosKoodi());
                         } catch(Exception e) {
-                            result.setNimi(getMessage("organisaatio_oid_not_found_by_oppilaitoskoodi", locale, result.getOppilaitosKoodi()));
+                            result.setNimi(this.messageService.getMessage("organisaatio_oid_not_found_by_oppilaitoskoodi", locale, result.getOppilaitosKoodi()));
                             continue results;
                         }
                         oidsByOppilaitosKoodi.put(result.getOppilaitosKoodi(), oid);
@@ -577,7 +356,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
                                 try {
                                     details = organisaatioService.getdOrganisaatioByOid(oid, context);
                                 } catch(Exception e) {
-                                    result.setNimi(getMessage("orgnisaatio_not_found_by_oid", locale, oid));
+                                    result.setNimi(this.messageService.getMessage("orgnisaatio_not_found_by_oid", locale, oid));
                                     continue results;
                                 }
                                 if (context.getRequestCount() != rc) {
@@ -601,228 +380,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
     @Override
     public String getLoggeInUserOid() {
         return super.getLoggedInUserOid();
-    }
-
-    @Override
-    public void produceExcel(HSSFWorkbook workbook, SearchResultsPresentationDto searchResults) {
-        HSSFSheet sheet = workbook.createSheet();
-
-        int rowNum = 0;
-        int maxColumn = produceHeader(sheet, rowNum, 0, searchResults.getPresentation());
-        OphCellStyles.OphHssfCellStyles ophHssfCellStyles = new OphCellStyles.OphHssfCellStyles(workbook);
-        for (SearchResultRowDto row : searchResults.getRows()) {
-            produceRow(searchResults.getPresentation(), sheet, ++rowNum, row, ophHssfCellStyles);
-        }
-        for (int i = 0; i < maxColumn; ++i) {
-            sheet.autoSizeColumn(i);
-        }
-    }
-
-    protected int produceHeader(HSSFSheet sheet, int rowNum, int cellNum, SearchResultPresentation presentation) {
-        if (presentation.isOrganisaationNimiIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaatio_nimi");
-        }
-        if (presentation.isOrganisaatiotunnisteIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaation_tunniste");
-        }
-        if (presentation.isYtunnusIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_ytunnus");
-        }
-        if (presentation.isYritysmuotoIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_yritysmuoto");
-        }
-        if (presentation.isOpetuskieliIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_opetuskieli");
-        }
-        if (presentation.isYhteyshenkiloIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_yhteyshenkilo");
-        }
-        if (presentation.isYhteyshenkiloEmailIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_yhteyshenkilo_email");
-        }
-        if (presentation.isOrganisaatioEmailIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaatio_email");
-        }
-        if (presentation.isPositosoiteIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_postiosoite");
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_postiosoite_postinumero");
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_postiosoite_postitoimipaikka");
-        }
-        if (presentation.isKayntiosoiteIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_kayntiosoite");
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_kayntiosoite_postinumero");
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_kayntiosoite_postitoimipaikka");
-        }
-        if (presentation.isPuhelinnumeroIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_puhelinnumero");
-        }
-        if (presentation.isWwwOsoiteIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_www_osoite");
-        }
-        if (presentation.isViranomaistiedotuksenSahkopostiosoiteIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_viranomaistiedotuksen_email");
-        }
-        if (presentation.isKoulutusneuvonnanSahkopostiosoiteIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_koulutusneuvonnan_email");
-        }
-        if (presentation.isKriisitiedotuksenSahkopostiosoiteIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_kriisitiedotuksen_email");
-        }
-        if (presentation.isVarhaiskasvatuksenYhteyshenkiloIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_varhaiskasvatuksen_yhteyshenkilo");
-        }
-        if (presentation.isVarhaiskasvatuksenEmailIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_varhaiskasvatuksen_email");
-        }
-        if(presentation.isKoskiYhdyshenkiloIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_koski_yhdyshenkilo");
-        }
-        if (presentation.isMoveYhteyshenkiloIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_move_yhteyshenkilo");
-        }
-        if (presentation.isOrganisaationSijaintikuntaIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaation_sijaintikunta");
-        }
-        return cellNum - 1;
-    }
-
-    private String osoite(SearchResultOsoiteDto osoite) {
-        if (osoite == null) {
-            return "";
-        }
-        return join(" ",
-                osoite.getOsoite(),
-                osoite.getExtraRivi()//,
-                //join(" ", osoite.getPostinumero(), osoite.getPostitoimipaikka())
-        );
-    }
-
-    private void produceRow(SearchResultPresentation presentation, HSSFSheet sheet, int rowNum, SearchResultRowDto row, OphCellStyles.OphHssfCellStyles ophHssfCellStyles) {
-        int cellNum = 0;
-        if (presentation.isOrganisaationNimiIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getNimi(), ophHssfCellStyles);
-        }
-        if (presentation.isOrganisaatiotunnisteIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getOppilaitosKoodi(), ophHssfCellStyles);
-        }
-        if (presentation.isYtunnusIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getYtunnus(), ophHssfCellStyles);
-        }
-        if (presentation.isOpetuskieliIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getOpetuskieli(), ophHssfCellStyles);
-        }
-        if (presentation.isYritysmuotoIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getYritysmuoto(), ophHssfCellStyles);
-        }
-        if (presentation.isYhteyshenkiloIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), join(" ", row.getYhteystietoNimi()), ophHssfCellStyles);
-        }
-        if (presentation.isYhteyshenkiloEmailIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getHenkiloEmail(), ophHssfCellStyles);
-        }
-        if (presentation.isOrganisaatioEmailIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getEmailOsoite(), ophHssfCellStyles);
-        }
-        if (presentation.isPositosoiteIncluded()) {
-            SearchResultOsoiteDto osoite = row.getPostiosoite();
-            value(cell(sheet, rowNum, cellNum++), osoite(osoite), ophHssfCellStyles);
-            String postinumero = null,
-                    postitoimipaikka = null;
-            if (osoite != null) {
-                postinumero = osoite.getPostinumero();
-                postitoimipaikka = osoite.getPostitoimipaikka();
-            }
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or(""), ophHssfCellStyles);
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or(""), ophHssfCellStyles);
-        }
-        if (presentation.isKayntiosoiteIncluded()) {
-            SearchResultOsoiteDto osoite = row.getKayntiosoite();
-            value(cell(sheet, rowNum, cellNum++), osoite(osoite), ophHssfCellStyles);
-            String postinumero = null,
-                    postitoimipaikka = null;
-            if (osoite != null) {
-                postinumero = osoite.getPostinumero();
-                postitoimipaikka = osoite.getPostitoimipaikka();
-            }
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or(""), ophHssfCellStyles);
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or(""), ophHssfCellStyles);
-        }
-        if (presentation.isPuhelinnumeroIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getPuhelinnumero(), ophHssfCellStyles);
-        }
-        if (presentation.isWwwOsoiteIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getWwwOsoite(), ophHssfCellStyles);
-        }
-        if (presentation.isViranomaistiedotuksenSahkopostiosoiteIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getViranomaistiedotuksenEmail(), ophHssfCellStyles);
-        }
-        if (presentation.isKoulutusneuvonnanSahkopostiosoiteIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getKoulutusneuvonnanEmail(), ophHssfCellStyles);
-        }
-        if (presentation.isKriisitiedotuksenSahkopostiosoiteIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getKriisitiedotuksenEmail(), ophHssfCellStyles);
-        }
-        if(presentation.isVarhaiskasvatuksenYhteyshenkiloIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getVarhaiskasvatuksenYhteyshenkilo(), ophHssfCellStyles);
-        }
-        if(presentation.isVarhaiskasvatuksenEmailIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getVarhaiskasvatuksenEmail(), ophHssfCellStyles);
-        }
-        if(presentation.isKoskiYhdyshenkiloIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getKoskiYhdyshenkilo(), ophHssfCellStyles);
-        }
-        if (presentation.isMoveYhteyshenkiloIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getMoveYhteyshenkilo(), ophHssfCellStyles);
-        }
-        if (presentation.isOrganisaationSijaintikuntaIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getKotikunta(), ophHssfCellStyles);
-        }
-
-    }
-
-    protected HSSFCell value(HSSFCell cell, String value, OphCellStyles.OphHssfCellStyles ophHssfCellStyles) {
-        if (value != null) {
-            cell.setCellValue(value);
-        }
-        ophHssfCellStyles.apply(cell);
-        return cell;
-    }
-
-    protected String getMessage(String key, Locale locale, Object... params) {
-        try {
-            return messageSource.getMessage(key, params, locale);
-        } catch (NoSuchMessageException e) {
-            return messageSource.getMessage(key, params, DEFAULT_LOCALE);
-        }
-    }
-
-    protected Cell header(HSSFCell cell, SearchResultPresentation presentation, String localizationKey) {
-        Locale locale = presentation.getLocale();
-        if (locale == null) {
-            locale = DEFAULT_LOCALE;
-        }
-        String value = getMessage(localizationKey, locale);
-        OphCellStyles.OphHssfCellStyles ophCellStyles = new OphCellStyles.OphHssfCellStyles(cell.getSheet().getWorkbook());
-        Font font = cell.getSheet().getWorkbook().createFont();
-        font.setBold(true);
-        ophCellStyles.visit(hssfCellStyle -> hssfCellStyle.setFont(font));
-        if (value != null) {
-            cell.setCellValue(value);
-        }
-        ophCellStyles.apply(cell);
-        return cell;
-    }
-
-    protected HSSFCell cell(HSSFSheet sheet, int rowNum, int colNum) {
-        HSSFRow row = sheet.getRow(rowNum);
-        if (row == null) {
-            row = sheet.createRow(rowNum);
-        }
-        HSSFCell cell = row.getCell(colNum);
-        if (cell == null) {
-            cell = row.createCell(colNum);
-        }
-        return cell;
     }
 
     public void setOrganisaatioService(OrganisaatioService organisaatioService) {

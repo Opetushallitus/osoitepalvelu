@@ -68,6 +68,9 @@ public class SeachController extends AbstractMvcController implements Serializab
     private SearchService searchService;
 
     @Autowired
+    private SearchExcelService searchExcelService;
+
+    @Autowired
     private SearchResultTransformerService resultTransformerService;
 
     private AtomicInteger i  =  new AtomicInteger(0);
@@ -169,7 +172,7 @@ public class SeachController extends AbstractMvcController implements Serializab
             protected void buildExcelDocument(Map<String, Object> model, HSSFWorkbook workbook, HttpServletRequest request,
                                               HttpServletResponse response) {
                 response.setHeader("Content-Disposition", "attachment;filename=\"osoitteet.xls\"");
-                resultTransformerService.produceExcel(workbook, searchResults);
+                searchExcelService.produceExcel(workbook, searchResults);
             }
         };
     }
