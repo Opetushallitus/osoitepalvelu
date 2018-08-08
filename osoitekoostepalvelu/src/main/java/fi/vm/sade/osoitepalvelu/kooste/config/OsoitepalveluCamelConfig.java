@@ -28,6 +28,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import org.apache.camel.component.http4.HttpComponent;
 
 
 /**
@@ -38,6 +39,9 @@ import javax.annotation.PostConstruct;
         "fi.vm.sade.osoitepalvelu.kooste.route"
 })
 public class OsoitepalveluCamelConfig {
+
+    private static final long HTTP_CLIENT_CONNECTION_TIME_TO_LIVE_MILLIS = 60 * 1000;
+
     @Value("${ignore.self.signed.certificates:false}")
     private boolean ignoreSelfSignedCertificates=false;
     private ProducerTemplate producerTemplate;
@@ -55,6 +59,8 @@ public class OsoitepalveluCamelConfig {
             context.addRoutes(route);
         }
         context.setAutoStartup(true);
+        HttpComponent httpComponent = context.getComponent("http4", HttpComponent.class);
+        httpComponent.setConnectionTimeToLive(HTTP_CLIENT_CONNECTION_TIME_TO_LIVE_MILLIS);
         return context;
     }
 
