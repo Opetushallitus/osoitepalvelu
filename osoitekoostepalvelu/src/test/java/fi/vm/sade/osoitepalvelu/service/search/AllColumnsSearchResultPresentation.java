@@ -94,11 +94,6 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     }
 
     @Override
-    public boolean isKayntiosoiteIncluded() {
-        return true;
-    }
-
-    @Override
     public boolean isPuhelinnumeroIncluded() {
         return true;
     }

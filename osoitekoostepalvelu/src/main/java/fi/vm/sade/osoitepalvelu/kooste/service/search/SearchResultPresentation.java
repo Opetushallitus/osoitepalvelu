@@ -56,9 +56,6 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näyteätänkö postiosoitetta")
     boolean isPositosoiteIncluded();
 
-    @ApiModelProperty("Näytetäänkö käyntiosoitetta")
-    boolean isKayntiosoiteIncluded();
-
     @ApiModelProperty("Näytetäänkö puhelinnumerosaraketta")
     boolean isPuhelinnumeroIncluded();
 

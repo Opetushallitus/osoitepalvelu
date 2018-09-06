@@ -45,7 +45,6 @@ public class OrganisaatioDetailsDto implements Serializable {
     private String kotipaikkaUri; // esim. kunta_405
     private String maaUri; // esim. maatjavaltiot1_fin
     private OrganisaatioOsoiteDto postiosoite;
-    private OrganisaatioOsoiteDto kayntiosoite;
     private List<OrganisaatioDetailsYhteystietoDto> yhteystiedot  =  new ArrayList<OrganisaatioDetailsYhteystietoDto>();
     private List<String> vuosiluokat  =  new ArrayList<String>();
     private String kriisitiedotuksenEmail;
@@ -191,14 +190,6 @@ public class OrganisaatioDetailsDto implements Serializable {
 
     public void setYhteystiedot(List<OrganisaatioDetailsYhteystietoDto> yhteystiedot) {
         this.yhteystiedot  =  yhteystiedot;
-    }
-
-    public OrganisaatioOsoiteDto getKayntiosoite() {
-        return kayntiosoite;
-    }
-
-    public void setKayntiosoite(OrganisaatioOsoiteDto kayntiosoite) {
-        this.kayntiosoite = kayntiosoite;
     }
 
     public String getYtunnus() {

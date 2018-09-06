@@ -57,15 +57,6 @@ public class ApiToJsonTest {
         result.setKoulutusneuvonnanEmail("Koulutusneuvonta@email.com");
         result.setKriisitiedotuksenEmail("kriisitiedotus@email.com");
         
-        OsoitteistoDto kayntiosoite  =  new OsoitteistoDto();
-        kayntiosoite.setKieli("fi");
-        kayntiosoite.setOsoite("Mannerheiminkatu 48B");
-        kayntiosoite.setOsoiteTyyppi("kaynti");
-        kayntiosoite.setPostinumero("00100");
-        kayntiosoite.setPostitoimipaikka("Helsinki");
-        kayntiosoite.setYhteystietoOid("1.2.246.562.5.95913959722");
-        result.addKayntiosoite(kayntiosoite);
-        
         OsoitteistoDto postiosoite  =  new OsoitteistoDto();
         postiosoite.setKieli("fi");
         postiosoite.setPostilokero("PL 3");
@@ -105,15 +96,6 @@ public class ApiToJsonTest {
         result.setKoulutusneuvonnanEmail("kouutus@email.com");
         result.setKriisitiedotuksenEmail("kriisi@email.com");
 
-        kayntiosoite  =  new OsoitteistoDto();
-        kayntiosoite.setKieli("fi");
-        kayntiosoite.setOsoite("Yliopistonkatu 58 B");
-        kayntiosoite.setOsoiteTyyppi("kaynti");
-        kayntiosoite.setPostinumero("33100");
-        kayntiosoite.setPostitoimipaikka("Tampere");
-        kayntiosoite.setYhteystietoOid("1.2.246.562.5.95913959724");
-        result.addKayntiosoite(kayntiosoite);
-        
         postiosoite  =  new OsoitteistoDto();
         postiosoite.setKieli("fi");
         postiosoite.setPostilokero("PL 231");

@@ -112,9 +112,6 @@ public class SearchResultRowDto implements Serializable {
     })
     private String henkiloEmail;
     @DtoConversion(path = "osoite", with="henkiloAggregate")
-    @DtoPath(value = "kayntiosoite", with="organisaatioAggregate")
-    private SearchResultOsoiteDto kayntiosoite;
-    @DtoConversion(path = "osoite", with="henkiloAggregate")
     @DtoPaths({
         @DtoPath(value = "postiosoite", with="organisaatioAggregate")
     })
@@ -310,14 +307,6 @@ public class SearchResultRowDto implements Serializable {
         this.oppilaitosKoodi  =  oppilaitosKoodi;
     }
 
-    public SearchResultOsoiteDto getKayntiosoite() {
-        return kayntiosoite;
-    }
-
-    public void setKayntiosoite(SearchResultOsoiteDto kayntiosoite) {
-        this.kayntiosoite = kayntiosoite;
-    }
-
     public SearchResultOsoiteDto getPostiosoite() {
         return postiosoite;
     }
@@ -358,7 +347,6 @@ public class SearchResultRowDto implements Serializable {
                 this.nimike,
                 this.tyypit,
                 this.postiosoite != null ? this.postiosoite.uniqueState() : null,
-                this.kayntiosoite != null ? this.kayntiosoite.uniqueState() : null,
                 this.toimipistekoodi,
                 this.puhelinnumero,
                 this.kotikunta,

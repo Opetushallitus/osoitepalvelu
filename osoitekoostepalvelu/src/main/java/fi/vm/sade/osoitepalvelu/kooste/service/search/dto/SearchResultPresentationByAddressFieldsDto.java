@@ -43,7 +43,6 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings.add("OPETUSKIELI", "opetuskieliIncluded");
         fieldMappings.add("YHTEYSHENKILO", "yhteyshenkiloIncluded");
         fieldMappings.add("POSTIOSOITE", "positosoiteIncluded");
-        fieldMappings.add("KAYNTIOSOITE", "kayntiosoiteIncluded");
         fieldMappings.add("PUHELINNUMERO", "puhelinnumeroIncluded");
         fieldMappings.add("INTERNET_OSOITE", "wwwOsoiteIncluded");
         fieldMappings.add("EMAIL_OSOITE", "organisaatioEmailIncluded");
@@ -68,7 +67,6 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean yhteyshenkiloIncluded;
     private boolean yhteyshenkiloEmailIncluded;
     private boolean positosoiteIncluded;
-    private boolean kayntiosoiteIncluded;
     private boolean puhelinnumeroIncluded;
     private boolean wwwOsoiteIncluded;
     private boolean viranomaistiedotuksenSahkopostiosoiteIncluded;
@@ -211,15 +209,6 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     public void setPositosoiteIncluded(boolean positosoiteIncluded) {
         this.positosoiteIncluded  =  positosoiteIncluded;
-    }
-
-    @Override
-    public boolean isKayntiosoiteIncluded() {
-        return kayntiosoiteIncluded;
-    }
-
-    public void setKayntiosoiteIncluded(boolean kayntiosoiteIncluded) {
-        this.kayntiosoiteIncluded = kayntiosoiteIncluded;
     }
 
     @Override

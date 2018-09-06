@@ -193,19 +193,10 @@ public class DefaultSearchResultTransformerService extends AbstractService
             Combiner<OrganisaatioResultAggregateDto> combiner = new Combiner<>(
                 src -> new OrganisaatioResultAggregateDto(result,
                     src.get(OrganisaatioYhteystietoDto.class).orNull(),
-                    src.get(OsoitteistoDto.class).orNull(),
                     src.get(OsoitteistoDto.class).orNull()));
             if (presentation.isPositosoiteIncluded()) {
                 combiner.combinedWith(OsoitteistoDto.class,
                         filterOsoites(result.getPostiosoite(), presentation.getLocale()));
-                if (presentation.isKayntiosoiteIncluded()) {
-                    combiner.withRepeated(OsoitteistoDto.class,
-                            filterOsoites(result.getKayntiosoite(), presentation.getLocale()));
-                }
-            } else if (presentation.isKayntiosoiteIncluded()) {
-                combiner.with(OsoitteistoDto.class, new ArrayList<>())
-                    .combinedWith(OsoitteistoDto.class,
-                        filterOsoites(result.getKayntiosoite(), presentation.getLocale()));
             }
             if (presentation.isYhteyshenkiloIncluded() || presentation.isYhteyshenkiloEmailIncluded()) {
                 combiner.combinedWith(OrganisaatioYhteystietoDto.class, result.getYhteyshenkilot());
@@ -269,10 +260,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
 
         if (presentation.isOrganisaationNimiIncluded()) {
             copiers.add(new OrganisaationNimiCopier());
-        }
-
-        if (presentation.isKayntiosoiteIncluded()) {
-            copiers.add(new KayntiosoiteCopier());
         }
 
         if (presentation.isOrganisaationSijaintikuntaIncluded()) {

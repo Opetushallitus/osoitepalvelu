@@ -32,15 +32,13 @@ public class OrganisaatioResultAggregateDto implements Serializable {
     
     private OrganisaatioResultDto organisaatio;
     private OrganisaatioYhteystietoDto henkilo;
-    private OsoitteistoDto kayntiosoite;
     private OsoitteistoDto postiosoite;
 
     public OrganisaatioResultAggregateDto(OrganisaatioResultDto organisaatio, OrganisaatioYhteystietoDto henkilo,
-                                          OsoitteistoDto postiosoite, OsoitteistoDto kayntiosoite) {
+                                          OsoitteistoDto postiosoite) {
         this.organisaatio  =  organisaatio;
         this.henkilo  =  henkilo;
         this.postiosoite  =  postiosoite;
-        this.kayntiosoite = kayntiosoite;
     }
 
     public OrganisaatioResultDto getOrganisaatio() {
@@ -49,14 +47,6 @@ public class OrganisaatioResultAggregateDto implements Serializable {
 
     public OrganisaatioYhteystietoDto getHenkilo() {
         return henkilo;
-    }
-
-    public OsoitteistoDto getKayntiosoite() {
-        return kayntiosoite;
-    }
-
-    public void setKayntiosoite(OsoitteistoDto kayntiosoite) {
-        this.kayntiosoite = kayntiosoite;
     }
 
     public OsoitteistoDto getPostiosoite() {
@@ -73,8 +63,6 @@ public class OrganisaatioResultAggregateDto implements Serializable {
         result  =  HASH_FACTOR * result + (henkilo != null && henkilo.getEmail() != null ? henkilo.getEmail().hashCode() : 0);
         result  =  HASH_FACTOR * result  +  (postiosoite != null && postiosoite.getYhteystietoOid() != null
                 ? postiosoite.getYhteystietoOid().hashCode() : 0);
-        result  =  HASH_FACTOR * result  +  (kayntiosoite != null && kayntiosoite.getYhteystietoOid() != null
-                ? kayntiosoite.getYhteystietoOid().hashCode() : 0);
         return result;
     }
 
@@ -103,13 +91,6 @@ public class OrganisaatioResultAggregateDto implements Serializable {
                         EqualsHelper.areEquals(postiosoite.getYhteystietoOid(), that.postiosoite.getYhteystietoOid()))
                         && EqualsHelper.areEquals(postiosoite.getKieli(), that.postiosoite.getKieli())
                   )) {
-            return false;
-        }
-        if (EqualsHelper.differentNulls(kayntiosoite, that.kayntiosoite)
-                || (EqualsHelper.notNulls(kayntiosoite, that.kayntiosoite)
-                && !(
-                EqualsHelper.areEquals(kayntiosoite.getYhteystietoOid(), that.kayntiosoite.getYhteystietoOid()))
-                && EqualsHelper.areEquals(kayntiosoite.getKieli(), that.kayntiosoite.getKieli()))) {
             return false;
         }
         return true;

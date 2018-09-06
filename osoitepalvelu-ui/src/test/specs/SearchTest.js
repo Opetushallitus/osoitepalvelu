@@ -24,16 +24,6 @@ describe("Search Test", function() {
              "yhteystietoNimi":null,
              "nimike":null,
              "henkiloEmail":null,
-             "kayntiosoite":{
-                "kieli":null,
-                "tyyppi":"kaynti",
-                "yhteystietoOid":"1.2.3.4.5.6",
-                "osoite":"Tampereen tie 5",
-                "postilokero":null,
-                "postinumero":"TAMPERE",
-                "postitoimipaikka":"TAMPERE",
-                "extraRivi":null
-             },
              "postiosoite":{
                 "kieli":null,
                 "tyyppi":null,
@@ -68,16 +58,6 @@ describe("Search Test", function() {
              "yhteystietoNimi":null,
              "nimike":null,
              "henkiloEmail":null,
-             "kayntiosoite":{
-                "kieli":null,
-                "tyyppi":"kaynti",
-                "yhteystietoOid":"1.2.3.4.5.7",
-                "osoite":"Rantatie 1",
-                "postilokero":null,
-                "postinumero":"33520",
-                "postitoimipaikka":"TAMPERE",
-                "extraRivi":null
-             },
              "postiosoite":{
                 "kieli":null,
                 "tyyppi":null,
@@ -101,7 +81,6 @@ describe("Search Test", function() {
           "yhteyshenkiloIncluded":false,
           "yhteyshenkiloEmailIncluded":false,
           "positosoiteIncluded":true,
-          "kayntiosoiteIncluded":true,
           "puhelinnumeroIncluded":true,
           "wwwOsoiteIncluded":true,
           "viranomaistiedotuksenSahkopostiosoiteIncluded":false,

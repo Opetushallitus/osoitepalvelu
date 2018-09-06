@@ -42,8 +42,6 @@ public class OrganisaatioDtoConverter extends AbstractDtoConverter {
             List<OrganisaatioYhteysosoiteDto> target = null;
             if (yhteystieto.getOsoiteTyyppi() != null && yhteystieto.getOsoiteTyyppi().endsWith("posti")) {
                 target = to.getPostiosoite();
-            } else if (yhteystieto.getOsoiteTyyppi() != null && yhteystieto.getOsoiteTyyppi().endsWith("kaynti")) {
-                target = to.getKayntiosoite();
             }
             if (target != null) {
                 OrganisaatioYhteysosoiteDto yhteystietoTargetDto = convert(yhteystieto, new OrganisaatioYhteysosoiteDto());
