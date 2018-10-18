@@ -396,7 +396,7 @@
     <repositories>
         <repository>
             <id>oph-sade-artifactory-snapshots</id>
-            <url>https://artifactory.oph.ware.fi/artifactory/oph-sade-snapshot-local</url>
+            <url>https://artifactory.opintopolku.fi/artifactory/oph-sade-snapshot-local</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -406,7 +406,7 @@
         </repository>
         <repository>
             <id>oph-sade-artifactory-releases</id>
-            <url>https://artifactory.oph.ware.fi/artifactory/oph-sade-release-local</url>
+            <url>https://artifactory.opintopolku.fi/artifactory/oph-sade-release-local</url>
             <releases>
                 <enabled>true</enabled>
             </releases>

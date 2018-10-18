@@ -1,0 +1,36 @@
+sudo: required
+language: java
+jdk:
+  - oraclejdk8
+services:
+  - docker
+cache:
+  directories:
+    - $HOME/.m2
+env:
+  global:
+    # AWS_ACCESS_KEY_ID
+    - secure: "b+xwBbl5+lSak48e1/ZTfITjAcxsauzti/twWzAig0DI+GTtocnVl9Ws5QQiqYbTmKNiEF9e4tvSvq5v2MNSf/hsk18X4/YbEc6uOsb1ZuEnfu3rhy0Tlup2zEk8F5AGtUBXTUYOZOhNlEqGgj5tb/kX7DtTh1ed9GEjuXkouVA="
+    # AWS_SECRET_ACCESS_KEY
+    - secure: "JiHTBEH9jnCjc7BH1cojdcqIBv4M2TDWM+J1Y3jqGO5WtiRyREzRArIcea5NndJHbJ+GHMufGuYOmHOP7ETjprweNE/nJVTMEBWuVTjXBdxWScm1IHiaUB4nNLsHkn4bHaO/CC+64C24rq83tjDTbNElkwEQlU6dIZ0I/r47NfM="
+
+install:
+  - git clone https://github.com/Opetushallitus/ci-tools.git
+  - source ci-tools/common/setup-tools.sh
+  - export ARTIFACT_NAME="osoitepalvelu"
+
+script:
+  - mvn clean install -B -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
+
+  - mv osoitekoostepalvelu/target/osoitekoostepalvelu.war $DOCKER_BUILD_DIR/artifact/osoitekoostepalvelu.war
+  - cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
+
+  - export BASE_IMAGE="base-legacy:0.1"
+  - ./ci-tools/common/pull-image.sh
+  - ./ci-tools/build/build-war.sh $ARTIFACT_NAME
+
+deploy:
+  - provider: script
+    script: ./ci-tools/build/upload-image.sh $ARTIFACT_NAME
+    on:
+      all_branches: true
