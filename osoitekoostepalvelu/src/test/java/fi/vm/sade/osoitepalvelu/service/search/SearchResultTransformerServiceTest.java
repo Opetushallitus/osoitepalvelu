@@ -136,10 +136,7 @@ public class SearchResultTransformerServiceTest {
 
         OsoitteistoDto osoite1  =  new OsoitteistoDto(),
                 osoite2  =  new OsoitteistoDto(),
-                osoite3  =  new OsoitteistoDto(),
-                kayntiosoite1 = new OsoitteistoDto(),
-                kayntiosoite2 = new OsoitteistoDto(),
-                kayntiosoite3 = new OsoitteistoDto();
+                osoite3  =  new OsoitteistoDto();
         osoite1.setYhteystietoOid("yht1");
         osoite1.setExtraRivi("extra");
         osoite1.setKieli("sv");
@@ -151,21 +148,12 @@ public class SearchResultTransformerServiceTest {
         osoite2.setKieli("sv");
         osoite3.setYhteystietoOid("yht3");
         osoite3.setKieli("fi");
-        kayntiosoite1.setYhteystietoOid("kaynti1");
-        kayntiosoite1.setKieli("sv");
-        kayntiosoite2.setYhteystietoOid("kaynti2");
-        kayntiosoite2.setKieli("sv");
-        kayntiosoite3.setYhteystietoOid("kaynti3_ei_palauteta");
-        kayntiosoite3.setKieli("fi");
         organisaatio1.getPostiosoite().add(osoite1);
         organisaatio1.getPostiosoite().add(osoite2);
         organisaatio1.getPostiosoite().add(osoite3);
         organisaatio2.getPostiosoite().add(osoite1);
         organisaatio2.getPostiosoite().add(osoite2);
         organisaatio2.getPostiosoite().add(osoite3);
-        organisaatio1.getKayntiosoite().add(kayntiosoite1);
-        organisaatio1.getKayntiosoite().add(kayntiosoite2);
-        organisaatio1.getKayntiosoite().add(kayntiosoite3);
 
         List<OrganisaatioResultDto> list  =  Arrays.asList(organisaatio1, organisaatio2);
         SearchResultsPresentationDto results  =  resultTranformerService.transformToResultRows(organisaatioResults(list),
@@ -197,12 +185,6 @@ public class SearchResultTransformerServiceTest {
         assertEquals("yht2", rows.get(5).getPostiosoite().getYhteystietoOid());
         assertNull(rows.get(5).getHenkiloEmail());
 
-        assertEquals("kaynti1", rows.get(0).getKayntiosoite().getYhteystietoOid());
-        assertEquals("kaynti2", rows.get(1).getKayntiosoite().getYhteystietoOid());
-        assertEquals("kaynti1", rows.get(2).getKayntiosoite().getYhteystietoOid());
-        assertEquals("kaynti2", rows.get(3).getKayntiosoite().getYhteystietoOid());
-        assertNull(rows.get(4).getKayntiosoite());
-        assertNull(rows.get(5).getKayntiosoite());
     }
 
     @Test

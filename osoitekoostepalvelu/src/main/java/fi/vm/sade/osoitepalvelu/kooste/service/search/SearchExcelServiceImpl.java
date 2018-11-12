@@ -72,11 +72,6 @@ public class SearchExcelServiceImpl extends AbstractService implements SearchExc
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_postiosoite_postinumero");
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_postiosoite_postitoimipaikka");
         }
-        if (presentation.isKayntiosoiteIncluded()) {
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_kayntiosoite");
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_kayntiosoite_postinumero");
-            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_kayntiosoite_postitoimipaikka");
-        }
         if (presentation.isPuhelinnumeroIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_puhelinnumero");
         }
@@ -149,18 +144,6 @@ public class SearchExcelServiceImpl extends AbstractService implements SearchExc
         }
         if (presentation.isPositosoiteIncluded()) {
             SearchResultOsoiteDto osoite = row.getPostiosoite();
-            value(cell(sheet, rowNum, cellNum++), osoite(osoite), ophHssfCellStyles);
-            String postinumero = null,
-                    postitoimipaikka = null;
-            if (osoite != null) {
-                postinumero = osoite.getPostinumero();
-                postitoimipaikka = osoite.getPostitoimipaikka();
-            }
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or(""), ophHssfCellStyles);
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or(""), ophHssfCellStyles);
-        }
-        if (presentation.isKayntiosoiteIncluded()) {
-            SearchResultOsoiteDto osoite = row.getKayntiosoite();
             value(cell(sheet, rowNum, cellNum++), osoite(osoite), ophHssfCellStyles);
             String postinumero = null,
                     postitoimipaikka = null;

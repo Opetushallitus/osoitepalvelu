@@ -95,7 +95,6 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         {type: 'OPETUSKIELI',               name: LocalisationService.t('address_field_opetuskieli')},
         //{type: 'YHTEYSHENKILO',             name: LocalisationService.t('address_field_yhteyshenkilo')},
         {type: 'POSTIOSOITE',               name: LocalisationService.t('address_field_postiosoite')},
-        {type: 'KAYNTIOSOITE',              name: LocalisationService.t('address_field_kayntiosoite')},
         {type: 'PUHELINNUMERO',             name: LocalisationService.t('address_field_puhelinnumero')},
         {type: 'INTERNET_OSOITE',           name: LocalisationService.t('address_field_internet_osoite')},
         {type: 'EMAIL_OSOITE',              name: LocalisationService.t('address_field_email_osoite')},

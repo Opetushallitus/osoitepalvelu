@@ -96,7 +96,6 @@ public class DefaultSearchServiceTest {
         osoite.setPostinumero("12345");
         osoite.setOsoiteTyyppi(OrganisaatioYhteysosoiteDto.OsoiteTyyppi.kaynti);
         osoittees.add(osoite);
-        yhteystieto.setKayntiosoite(osoittees);
         yhteystieto.setPostiosoite(new ArrayList<OrganisaatioYhteysosoiteDto>());
         yhteystietos.add(yhteystieto);
         organisaatioRouteMock.setOrganisaatioYhteystietoResults(yhteystietos);
@@ -120,9 +119,6 @@ public class DefaultSearchServiceTest {
         assertEquals("OID", firstResult.getOid());
         assertEquals("OPKOODI", firstResult.getOppilaitosKoodi());
         assertEquals(nimi, firstResult.getNimi());
-        assertEquals(1, firstResult.getKayntiosoite().size());
-        assertEquals("Oppijankuja 6", firstResult.getKayntiosoite().get(0).getOsoite());
-        assertEquals("kaynti", firstResult.getKayntiosoite().get(0).getOsoiteTyyppi());
 
         targetGroup.setOptions(Arrays.asList(new SearchTargetGroup.TargetType[0]));
         results = this.defaultSearchService.find(terms, new DefaultCamelRequestContext());
