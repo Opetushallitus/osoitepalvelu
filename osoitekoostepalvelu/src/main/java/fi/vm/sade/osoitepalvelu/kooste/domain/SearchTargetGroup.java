@@ -37,7 +37,9 @@ public class SearchTargetGroup implements Serializable {
         KOULUTA_KAYTTAJAT,
         AIPAL_KAYTTAJAT,
         KOULUTUKSEN_TARJOAJAT,
-        TYOELAMAPALVELUT("Tyoelamajarjesto");
+        TYOELAMAPALVELUT("Tyoelamajarjesto"),
+        VARHAISKASVATUKSEN_JARJESTAJA("Varhaiskasvatuksen jarjestaja"),
+        VARHAISKASVATUKSEN_TOIMIPAIKKA("Varhaiskasvatuksen toimipaikka");
 
         private String[] organisaatioPalveluTyyppiArvo;
 

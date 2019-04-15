@@ -162,7 +162,19 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         {type: 'TYOELAMAPALVELUT', name: LocalisationService.t('target_group_tyoelamapalvelut'),
             options: [
                 {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio'),
-                    hide: true}
+                 hide: true}
+            ]
+        },
+        {type: 'VARHAISKASVATUKSEN_TOIMIPAIKKA', name: LocalisationService.t('target_group_varhaiskasvatuksen_toimipaikka'),
+            options: [
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio'),
+                 hide: true}
+            ]
+        },
+        {type: 'VARHAISKASVATUKSEN_JARJESTAJA', name: LocalisationService.t('target_group_varhaiskasvatuksen_jarjestaja'),
+            options: [
+                {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio'),
+                 hide: true}
             ]
         }
     ];

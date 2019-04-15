@@ -194,6 +194,16 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             return $scope.selectedTargetGroupTypes.indexOf('TYOELAMAPALVELUT') !== -1;
         };
 
+        // Varhaiskasvatuksen toimipaikka
+        $scope.isShowVarhaiskasvatuksentoimipaikka = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('VARHAISKASVATUKSEN_TOIMIPAIKKA') !== -1;
+        };
+
+        // Varhaiskasvatuksen jarjestaja
+        $scope.isShowVarhaiskasvatuksenjarjestaja = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('VARHAISKASVATUKSEN_JARJESTAJA') !== -1;
+        };
+
         // Vuosiluokka term which is shown when certain oppilaitostyyppi(s) are selected.
         $scope.isShowVuosiluokkaTerm = function() {
             if($scope.selectedTargetGroupTypes.indexOf('OPPISOPIMUSTOIMPISTEET') !== -1) {

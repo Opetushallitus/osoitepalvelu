@@ -84,6 +84,8 @@ angular.module("I18n", [], ["$provide", function($provider) {
         target_group_muut_organisaatiot: 'Muut organisaatiot',
         target_group_kayttajat: 'Palveluiden käyttäjät',
         target_group_tyoelamapalvelut: 'Työelämäpalvelut',
+        target_group_varhaiskasvatuksen_toimipaikka: "Varhaiskasvatuksen toimipaikka",
+        target_group_varhaiskasvatuksen_jarjestaja: "Varhaiskasvatuksen jarjesta",
 
         target_group_option_organisaatio: 'organisaatio',
         target_group_option_yhteyshenkilo: 'yhteyshenkilö',
