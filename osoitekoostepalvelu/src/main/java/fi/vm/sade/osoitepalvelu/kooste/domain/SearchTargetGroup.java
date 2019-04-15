@@ -64,7 +64,8 @@ public class SearchTargetGroup implements Serializable {
 
         public static GroupType[] getAnyOrganisaatioTypes() {
             return new GroupType[] {JARJESTAJAT_YLLAPITAJAT, OPPILAITOKSET, OPETUSPISTEET, OPPISOPIMUSTOIMPISTEET,
-                    MUUT_ORGANISAATIOT, KOULUTUKSEN_TARJOAJAT, TYOELAMAPALVELUT};
+                    MUUT_ORGANISAATIOT, KOULUTUKSEN_TARJOAJAT, TYOELAMAPALVELUT, VARHAISKASVATUKSEN_JARJESTAJA,
+                    VARHAISKASVATUKSEN_TOIMIPAIKKA};
         }
 
         public String[] getOrganisaatioPalveluTyyppiArvo() {

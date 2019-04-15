@@ -204,7 +204,8 @@
                 <!-- organisaatiokriteerit-->
                 <div class="term-separator" ng-if="isShowKoulutaTerm()"></div>
                 <div class="term term-full-width" ng-if="isShowOppilaitoksetToimipisteet()
-                || isShowKoulutustoimijaOppisopimustoimisto() || isShowTyoelamajarjesto()"
+                || isShowKoulutustoimijaOppisopimustoimisto() || isShowTyoelamajarjesto()
+                || isShowVarhaiskasvatuksentoimipaikka() || isShowVarhaiskasvatuksenjarjestaja()"
                      title="{{::msg('search_term_organisaation_kieli')}}">
                     <ui-select multiple id="organisaationKielis" ng-model="terms.organisaationKielis"
                                  theme="select2" select-all="true" clear-all="true">
@@ -216,8 +217,9 @@
                 </div>
                 <div class="term-separator"></div>
                 <!--Maakunta term-->
-                <div class="term" ng-if="isShowOppilaitoksetToimipisteet() || isShowKoulutustoimijaOppisopimustoimisto()
-                || isShowTyoelamajarjesto()"
+                <div class="term" ng-if="isShowOppilaitoksetToimipisteet()
+                || isShowKoulutustoimijaOppisopimustoimisto() || isShowTyoelamajarjesto()
+                || isShowVarhaiskasvatuksentoimipaikka() || isShowVarhaiskasvatuksenjarjestaja()"
                      title="{{::msg('search_term_maakunta')}}">
                     <ui-select multiple id="maakunta" ng-model="terms.maakuntas"
                                  theme="select2" select-all="true" clear-all="true">
@@ -227,8 +229,9 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
-                <div class="term" ng-if="isShowOppilaitoksetToimipisteet() || isShowKoulutustoimijaOppisopimustoimisto()
-                || isShowTyoelamajarjesto()"
+                <div class="term" ng-if="isShowOppilaitoksetToimipisteet()
+                || isShowKoulutustoimijaOppisopimustoimisto() || isShowTyoelamajarjesto()
+                || isShowVarhaiskasvatuksentoimipaikka() || isShowVarhaiskasvatuksenjarjestaja()"
                      title="{{::msg('search_term_kunta')}}">
                     <!--kunta term-->
                     <ui-select multiple id="kunta" ng-model="terms.kuntas"
