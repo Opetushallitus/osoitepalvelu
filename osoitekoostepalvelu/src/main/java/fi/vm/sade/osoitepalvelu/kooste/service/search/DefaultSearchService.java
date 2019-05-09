@@ -200,6 +200,7 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         organisaatioCriteria.setOppilaitostyyppiList(terms.findTerms(SearchTermDto.TERM_OPPILAITOSTYYPPIS));
         organisaatioCriteria.setVuosiluokkaList(terms.findTerms(SearchTermDto.TERM_VUOSILUOKKAS));
         organisaatioCriteria.setYtunnusList(terms.findTerms(SearchTermDto.TERM_KOULTUKSENJARJESTAJAS));
+        organisaatioCriteria.setKoulutuslupaList(terms.findTerms(SearchTermDto.TERM_KOULUTUSLUPAS));
         return organisaatioCriteria;
     }
 

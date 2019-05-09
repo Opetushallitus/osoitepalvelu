@@ -99,6 +99,9 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         if (organisaatioCriteria.isYtunnusUsed()) {
             conditions.add(new Criteria("ytunnus").in(organisaatioCriteria.getYtunnusList()));
         }
+        if (organisaatioCriteria.isKoulutuslupaUsed()) {
+            conditions.add(new Criteria("koulutusluvat").in(organisaatioCriteria.getKoulutuslupaList()));
+        }
         if (organisaatioCriteria.isOpetusKieliUsed()) {
             conditions.add(CriteriaHelper.inAnyKoodiVersion(new Criteria(), "kieletUris",
                     organisaatioCriteria.getKieliList()));
