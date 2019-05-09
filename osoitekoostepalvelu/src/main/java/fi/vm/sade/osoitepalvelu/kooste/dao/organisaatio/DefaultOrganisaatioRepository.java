@@ -17,12 +17,10 @@
 package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 
 import com.google.common.collect.Collections2;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
-import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
-
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +34,7 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * User: ratamaa
@@ -175,5 +170,11 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
             return null;
         }
         return oids.get(0);
+    }
+
+    @Override
+    public Optional<OrganisaatioDetails> findByYtunnus(String ytunnus) {
+        Criteria criteria = Criteria.where("ytunnus").is(ytunnus);
+        return Optional.ofNullable(mongoOperations.findOne(Query.query(criteria), OrganisaatioDetails.class));
     }
 }
