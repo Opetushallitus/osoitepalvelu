@@ -101,7 +101,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 OptionsService.listKoulutusLajis(function(data) {$scope.options.koulutuslajis = data;});
                 OptionsService.listKielis(function(data) {$scope.options.kielis = data;});
                 //OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
-                //OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
+                OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
             }
             $scope.terms = SearchService.getTerms();
             $scope.koulutusalasChanged();
@@ -170,6 +170,11 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
 
         $scope.isShowKoulutusTerms = function() {
             return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
+        };
+
+        // Koulutustoimija
+        $scope.isShowKoulutustoimija = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('JARJESTAJAT_YLLAPITAJAT') !== -1;
         };
 
         // Oppilaitos or toimipiste
