@@ -75,6 +75,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
         opetusKielis: [],
         oppilaitostyyppis: [],
         omistajatyyppis: [],
+        koulutuslupaExists: [],
         vuosiluokkas: [],
         koultuksenjarjestajas: []
     };

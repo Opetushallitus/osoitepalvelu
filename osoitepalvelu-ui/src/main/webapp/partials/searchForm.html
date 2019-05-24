@@ -259,6 +259,35 @@
                 <!--koulutuslupa term-->
                 <div class="term term-full-width" ng-if="isShowKoulutustoimija()"
                      title="{{::msg('search_term_koulutuslupa')}}">
+                    <div class="radioOptionsContainer">
+                        <span class="radioOptions">
+                            <input id="koulutuslupa_kaikki" name="koulutuslupa"
+                                   type="radio"
+                                   value="null"
+                                   ng-model="$parent.$parent.koulutuslupaExists"
+                                   ng-change="koulutuslupaChanged()" />
+                            <label for="koulutuslupa_kaikki">{{::msg('select_all')}}</label>
+                        </span>
+                        <span class="radioOptions">
+                            <input id="koulutuslupa_kylla" name="koulutuslupa"
+                                   type="radio"
+                                   value="true"
+                                   ng-model="$parent.$parent.koulutuslupaExists"
+                                   ng-change="koulutuslupaChanged()" />
+                            <label for="koulutuslupa_kylla">{{::msg('confirm_yes')}}</label>
+                        </span>
+                        <span class="radioOptions">
+                            <input id="koulutuslupa_ei" name="koulutuslupa"
+                                   type="radio"
+                                   value="false"
+                                   ng-model="$parent.$parent.koulutuslupaExists"
+                                   ng-change="koulutuslupaChanged()" />
+                            <label for="koulutuslupa_ei">{{::msg('confirm_no')}}</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="term term-full-width" ng-if="isShowKoulutustoimija()"
+                     title="{{::msg('search_term_koulutuslupa')}}">
                     <ui-select multiple id="koulutuslupa" ng-model="terms.koulutuslupas"
                                theme="select2" select-all="false" clear-all="true">
                         <ui-select-match placeholder="{{::msg('search_term_koulutuslupa')}}">{{$item.nimi}}</ui-select-match>

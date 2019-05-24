@@ -61,6 +61,8 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
 
         $scope.osoitekielis = Osoitekielis;
 
+        $scope.koulutuslupaExists = "null";
+
         $scope.updateTerms = function(updateOptions) {
             if( updateOptions === undefined ) {
                 updateOptions = true;
@@ -104,6 +106,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
             }
             $scope.terms = SearchService.getTerms();
+            $scope.koulutuslupaExists = $scope.terms.koulutuslupaExists.length > 0 ? $scope.terms.koulutuslupaExists[0] : "null";
             $scope.koulutusalasChanged();
 
             $log.info($scope.terms);
@@ -145,6 +148,15 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
             $log.info($scope.terms.koulutustyyppis);
             OptionsService.listKoulutusByOpintoalasOrTyyppis($scope.effectiveSelectedOpintoalas(),
                 $scope.terms.koulutustyyppis, function(data) {$scope.options.koulutus = data;});
+        };
+
+        $scope.koulutuslupaChanged = function() {
+            var value = $scope.koulutuslupaExists;
+            if (value === "null") {
+                $scope.terms.koulutuslupaExists = [];
+            } else {
+                $scope.terms.koulutuslupaExists = [value];
+            }
         };
 
         $scope.updateTerms();
