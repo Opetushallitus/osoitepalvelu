@@ -36,6 +36,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+import static java.util.Collections.emptyList;
+
 /**
  * User: ratamaa
  * Date: 3/25/14
@@ -98,6 +100,13 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         }
         if (organisaatioCriteria.isYtunnusUsed()) {
             conditions.add(new Criteria("ytunnus").in(organisaatioCriteria.getYtunnusList()));
+        }
+        if (organisaatioCriteria.isKoulutuslupaExistsUsed()) {
+            if (organisaatioCriteria.getKoulutusLupaExists()) {
+                conditions.add(new Criteria("koulutusluvat").exists(true).ne(emptyList()));
+            } else {
+                conditions.add(new Criteria("koulutusluvat").exists(true).size(0));
+            }
         }
         if (organisaatioCriteria.isKoulutuslupaUsed()) {
             conditions.add(new Criteria("koulutusluvat").in(organisaatioCriteria.getKoulutuslupaList()));

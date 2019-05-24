@@ -200,6 +200,10 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         organisaatioCriteria.setOppilaitostyyppiList(terms.findTerms(SearchTermDto.TERM_OPPILAITOSTYYPPIS));
         organisaatioCriteria.setVuosiluokkaList(terms.findTerms(SearchTermDto.TERM_VUOSILUOKKAS));
         organisaatioCriteria.setYtunnusList(terms.findTerms(SearchTermDto.TERM_KOULTUKSENJARJESTAJAS));
+        List<Boolean> koulutuslupaExists = terms.findTermsAsBoolean(SearchTermDto.TERM_KOULUTUSLUPA_EXISTS);
+        if (!koulutuslupaExists.isEmpty()) {
+            organisaatioCriteria.setKoulutusLupaExists(koulutuslupaExists.stream().allMatch(Boolean.TRUE::equals));
+        }
         organisaatioCriteria.setKoulutuslupaList(terms.findTerms(SearchTermDto.TERM_KOULUTUSLUPAS));
         return organisaatioCriteria;
     }
