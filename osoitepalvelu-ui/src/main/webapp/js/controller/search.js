@@ -61,7 +61,7 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
 
         $scope.osoitekielis = Osoitekielis;
 
-        $scope.koulutuslupaExists = "null";
+        $scope.koulutuslupa = {"kylla": false, "ei": false};
 
         $scope.updateTerms = function(updateOptions) {
             if( updateOptions === undefined ) {
@@ -106,7 +106,10 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
             }
             $scope.terms = SearchService.getTerms();
-            $scope.koulutuslupaExists = $scope.terms.koulutuslupaExists.length > 0 ? $scope.terms.koulutuslupaExists[0] : "null";
+            if ($scope.terms.koulutuslupaExists.length > 0) {
+                $scope.koulutuslupa["kylla"] = $scope.terms.koulutuslupaExists.indexOf("true") > -1;
+                $scope.koulutuslupa["ei"] = $scope.terms.koulutuslupaExists.indexOf("false") > -1;
+            }
             $scope.koulutusalasChanged();
 
             $log.info($scope.terms);
@@ -150,14 +153,23 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 $scope.terms.koulutustyyppis, function(data) {$scope.options.koulutus = data;});
         };
 
-        $scope.koulutuslupaChanged = function() {
-            var value = $scope.koulutuslupaExists;
-            if (value === "null") {
-                $scope.terms.koulutuslupaExists = [];
+        $scope.koulutuslupaKyllaChanged = function() {
+            $scope.koulutuslupa["ei"] = false;
+            if ($scope.koulutuslupa["kylla"]) {
+                $scope.terms.koulutuslupaExists = ["true"];
             } else {
-                $scope.terms.koulutuslupaExists = [value];
+                $scope.terms.koulutuslupaExists = [];
             }
         };
+
+        $scope.koulutuslupaEiChanged = function () {
+            $scope.koulutuslupa["kylla"] = false;
+            if ($scope.koulutuslupa["ei"]) {
+                $scope.terms.koulutuslupaExists = ["false"];
+            } else {
+                $scope.terms.koulutuslupaExists = [];
+            }
+        }
 
         $scope.updateTerms();
 
