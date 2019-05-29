@@ -506,7 +506,7 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
      * @see HeaderBuilder
      */
     protected HeaderBuilder headers() {
-        return new HeaderBuilder();
+        return new HeaderBuilder().add("Caller-Id", constant("osoitekoostepalvelu"));
     }
 
     /**
