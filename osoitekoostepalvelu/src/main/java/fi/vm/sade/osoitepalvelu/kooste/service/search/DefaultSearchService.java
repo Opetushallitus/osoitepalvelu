@@ -21,16 +21,18 @@ import com.google.common.collect.Collections2;
 import com.googlecode.ehcache.annotations.Cacheable;
 import com.googlecode.ehcache.annotations.PartialCacheKey;
 import fi.vm.sade.auditlog.Audit;
-import fi.vm.sade.auditlog.osoitepalvelu.OsoitepalveluOperation;
+import fi.vm.sade.auditlog.Changes;
+import fi.vm.sade.auditlog.Target;
+import fi.vm.sade.osoitepalvelu.kooste.OsoitepalveluOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.henkilo.HenkiloService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTargetGroupDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SearchTermDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.HenkiloHakuResultDto;
@@ -39,15 +41,14 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter.SearchResultDtoConverter;
 import fi.vm.sade.osoitepalvelu.kooste.service.tarjonta.TarjontaService;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import static fi.vm.sade.auditlog.osoitepalvelu.LogMessage.builder;
-import fi.vm.sade.auditlog.osoitepalvelu.LogMessage;
-
 import java.util.*;
-import org.apache.commons.lang.builder.ToStringBuilder;
+
+import static fi.vm.sade.osoitepalvelu.kooste.common.util.AuditHelper.getUser;
 
 @Service
 @Qualifier("actual")
@@ -294,9 +295,9 @@ public class DefaultSearchService extends AbstractService implements SearchServi
         for (HenkiloDetailsDto henkiloDetails : henkiloDetailsList) {
             henkiloOids += henkiloDetails.getOidHenkilo() + ";";
         }
-        LogMessage logMessage = builder().id(getLoggedInUserOidOrNull()).henkiloOidList(henkiloOids)
-                .setOperaatio(OsoitepalveluOperation.HENKILO_HAKU).build();
-        audit.log(logMessage);
+        Target target = new Target.Builder().setField("henkiloOidList", henkiloOids).build();
+        Changes changes = new Changes.Builder().build();
+        audit.log(getUser(), OsoitepalveluOperation.HENKILO_HAKU, target, changes);
     }
 
     protected List<String> resolveKuntaKoodis(SearchTermsDto terms) {
