@@ -47,7 +47,7 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
      * muuta tämä aikaleima nykyhetkeen jotta mongossa oleva välimuisti päivittyy
      * asennuksen yhteydessä (muuten välimuisti päivittyy vasta yöllä).
      */
-    public static final DateTime MODEL_CHANGED_AT = new DateTime(2018, 4, 18, 9, 0);
+    public static final DateTime MODEL_CHANGED_AT = new DateTime(2019, 5, 9, 7, 35);
 
     private Long version;
     @Id
@@ -91,6 +91,9 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
     @Indexed
     private LocalDate lakkautusPvm;
     private String koskiYhdyshenkilo;
+
+    @Indexed
+    private List<String> koulutusluvat = new ArrayList<>(); // koodisto "koulutus" (oiva)
 
     public Long getVersion() {
         return version;
@@ -298,6 +301,14 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
 
     public void setLakkautusPvm(LocalDate lakkautusPvm) {
         this.lakkautusPvm = lakkautusPvm;
+    }
+
+    public List<String> getKoulutusluvat() {
+        return koulutusluvat;
+    }
+
+    public void setKoulutusluvat(List<String> koulutusluvat) {
+        this.koulutusluvat = koulutusluvat;
     }
 
     @Transient

@@ -42,6 +42,8 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     private List<String> oppilaitostyyppiList  =  new ArrayList<String>();
     private List<String> vuosiluokkaList  =  new ArrayList<String>();
     private List<String> ytunnusList  =  new ArrayList<String>();
+    private Boolean koulutusLupaExists = null;
+    private List<String> koulutuslupaList = new ArrayList<>();
     private List<String> organisaatioTyyppis = new ArrayList<String>();
     private Integer limit  = HIGH_LIMIT_VALUE; // Integer.MAX_VALUE seems to result in 500 error on the remote end
     private boolean vainAktiiviset = true;
@@ -50,6 +52,8 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     private boolean useKieli=true;
     private boolean useKunta=true;
     private boolean useVuosiluokka=true;
+    private boolean useKoulutuslupaExists=true;
+    private boolean useKoulutuslupa=true;
     private boolean useOrganisaatioTyyppi=true;
     private boolean useOid=true;
 
@@ -110,6 +114,24 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
     }
 
     @JsonIgnore
+    public Boolean getKoulutusLupaExists() {
+        return koulutusLupaExists;
+    }
+
+    public void setKoulutusLupaExists(Boolean koulutusLupaExists) {
+        this.koulutusLupaExists = koulutusLupaExists;
+    }
+
+    @JsonIgnore
+    public List<String> getKoulutuslupaList() {
+        return koulutuslupaList;
+    }
+
+    public void setKoulutuslupaList(List<String> koulutuslupaList) {
+        this.koulutuslupaList = koulutuslupaList;
+    }
+
+    @JsonIgnore
     public List<String> getOrganisaatioTyyppis() {
         return organisaatioTyyppis;
     }
@@ -153,6 +175,16 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         return useYtunnus && this.ytunnusList != null && !this.ytunnusList.isEmpty();
     }
 
+    @JsonIgnore
+    public boolean isKoulutuslupaExistsUsed() {
+        return useKoulutuslupaExists && this.koulutusLupaExists != null;
+    }
+
+    @JsonIgnore
+    public boolean isKoulutuslupaUsed() {
+        return useKoulutuslupa && this.koulutuslupaList != null && !this.koulutuslupaList.isEmpty();
+    }
+
     public void setUseYtunnus(boolean useYtunnus) {
         this.useYtunnus = useYtunnus;
     }
@@ -177,6 +209,14 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         this.useVuosiluokka = useVuosiluokka;
     }
 
+    public void setUseKoulutuslupaExists(boolean useKoulutuslupaExists) {
+        this.useKoulutuslupaExists = useKoulutuslupaExists;
+    }
+
+    public void setUseKoulutuslupa(boolean useKoulutuslupa) {
+        this.useKoulutuslupa = useKoulutuslupa;
+    }
+
     public void setUseOrganisaatioTyyppi(boolean useOrganisaatioTyyppi) {
         this.useOrganisaatioTyyppi = useOrganisaatioTyyppi;
     }
@@ -197,6 +237,8 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         setUseOid(true);
         setUseKunta(true);
         setUseKieli(true);
+        setUseKoulutuslupaExists(true);
+        setUseKoulutuslupa(true);
         setUseOrganisaatioTyyppi(true);
     }
 
@@ -208,6 +250,8 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
                 + (isOidUsed() ? 1 : 0)
                 + (isKuntaUsed() ? 1 : 0)
                 + (isOppilaitostyyppiUsed() ? 1 : 0)
+                + (isKoulutuslupaExistsUsed() ? 1 : 0)
+                + (isKoulutuslupaUsed() ? 1 : 0)
                 + (isOrganisaatioTyyppiUsed() ? 1 : 0);
     }
 
@@ -251,6 +295,13 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         if (ytunnusList != null ? !ytunnusList.equals(that.ytunnusList) : that.ytunnusList != null) {
             return false;
         }
+        if (koulutusLupaExists != null ? !koulutusLupaExists.equals(that.koulutusLupaExists) : that.koulutusLupaExists != null) {
+            return false;
+        }
+        if (koulutuslupaList != null
+                ? !koulutuslupaList.equals(that.koulutuslupaList) : that.koulutuslupaList != null) {
+            return false;
+        }
 
         return true;
     }
@@ -263,6 +314,8 @@ public class OrganisaatioYhteystietoCriteriaDto implements Serializable {
         result = HASH_FACTOR * result + (oppilaitostyyppiList != null ? oppilaitostyyppiList.hashCode() : 0);
         result = HASH_FACTOR * result + (vuosiluokkaList != null ? vuosiluokkaList.hashCode() : 0);
         result = HASH_FACTOR * result + (ytunnusList != null ? ytunnusList.hashCode() : 0);
+        result = HASH_FACTOR * result + (koulutusLupaExists != null ? koulutusLupaExists.hashCode() : 0);
+        result = HASH_FACTOR * result + (koulutuslupaList != null ? koulutuslupaList.hashCode() : 0);
         result = HASH_FACTOR * result + (organisaatioTyyppis != null ? organisaatioTyyppis.hashCode() : 0);
         result = HASH_FACTOR * result + (limit != null ? limit.hashCode() : 0);
         result = HASH_FACTOR * result + (vainAktiiviset ? 1 : 0);

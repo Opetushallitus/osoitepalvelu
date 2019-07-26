@@ -16,35 +16,31 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketCache;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.LazyCasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.UsernamePasswordCasClientTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.StringHelper;
-
 import org.apache.camel.*;
+import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.camel.model.ExpressionNode;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.apache.camel.util.ExchangeHelper;
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.Charset;
+import java.util.*;
 import java.util.Map.Entry;
-import org.apache.camel.http.common.HttpOperationFailedException;
 
 /**
  * Abstrakti kantaluokka, joka tarjoaa peruspalvelut Camel-reittien luomiseen,
@@ -818,6 +814,12 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
          */
         public HeaderBuilder casAuthenticationBySystemUser(String service, String username, String password) {
             return add(casBydSystemUser(service, username, password));
+        }
+
+        public HeaderBuilder basicAuth(String username, String password) {
+            String credentials = String.format("%s:%s", username, password);
+            String base64encoded = Base64.getEncoder().encodeToString(credentials.getBytes(Charset.forName("UTF-8")));
+            return add("Authorization", constant(String.format("Basic %s", base64encoded)));
         }
 
         @Override

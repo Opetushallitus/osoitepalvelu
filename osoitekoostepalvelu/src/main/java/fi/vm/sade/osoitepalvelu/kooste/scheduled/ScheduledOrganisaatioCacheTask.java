@@ -19,11 +19,14 @@ package fi.vm.sade.osoitepalvelu.kooste.scheduled;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasDisabledCasTicketProvider;
+import fi.vm.sade.osoitepalvelu.kooste.common.util.DateHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
-import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
-import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
+import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.route.OivaRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import org.apache.camel.RuntimeCamelException;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -33,6 +36,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
 /**
@@ -52,6 +56,9 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
 
     @Autowired
     private OrganisaatioServiceRoute organisaatioServiceRoute;
+
+    @Autowired
+    private OivaRoute oivaRoute;
 
     @Autowired
     private OrganisaatioRepository organisaatioRepository;
@@ -102,6 +109,8 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
             organisaatioService.updateOrganisaatioYtunnusDetails(context);
             logger.debug("DONE UPDATING y-tunnus details");
         }
+
+        updateFromOiva(context);
 
         logger.info("END SCHEDULED refreshOrganisaatioCache.");
     }
@@ -171,6 +180,10 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
             }
         }
 
+        if (infoUpdated) {
+            updateFromOiva(context);
+        }
+
         logger.info("END SCHEDULED ensureOrganisaatioCacheFresh.");
     }
 
@@ -180,6 +193,29 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
             logger.info("Oldest cache entry: {}", oldestEntry);
         } else {
             logger.info("No cache entries found.");
+        }
+    }
+
+    private void updateFromOiva(CamelRequestContext context) {
+        try {
+            logger.info("Updating from Oiva.");
+            LocalDate date = LocalDate.now();
+            oivaRoute.listKoulutuslupa(context).stream()
+                    .filter(koulutuslupa -> DateHelper.isBetweenInclusive(date, koulutuslupa.getAlkupvm(), koulutuslupa.getLoppupvm()))
+                    .forEach(koulutuslupa -> {
+                        String jarjestajaYtunnus = koulutuslupa.getJarjestajaYtunnus();
+                        Optional<OrganisaatioDetails> organisaatioOptional = organisaatioRepository.findByYtunnus(jarjestajaYtunnus);
+                        if (organisaatioOptional.isPresent()) {
+                            OrganisaatioDetails organisaatioDetails = organisaatioOptional.get();
+                            organisaatioDetails.setKoulutusluvat(koulutuslupa.getKoulutukset());
+                            organisaatioRepository.save(organisaatioDetails);
+                        } else {
+                            logger.info("Cannot find organisaatio with y-tunnus {}", jarjestajaYtunnus);
+                        }
+                    });
+            logger.info("Updating from Oiva finished.");
+        } catch (Exception e) {
+            logger.error("Updating from Oiva failed.", e);
         }
     }
 

@@ -17,12 +17,10 @@
 package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 
 import com.google.common.collect.Collections2;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.util.CriteriaHelper;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
-import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
-
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +34,9 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+
+import static java.util.Collections.emptyList;
 
 /**
  * User: ratamaa
@@ -103,6 +100,16 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
         }
         if (organisaatioCriteria.isYtunnusUsed()) {
             conditions.add(new Criteria("ytunnus").in(organisaatioCriteria.getYtunnusList()));
+        }
+        if (organisaatioCriteria.isKoulutuslupaExistsUsed()) {
+            if (organisaatioCriteria.getKoulutusLupaExists()) {
+                conditions.add(new Criteria("koulutusluvat").exists(true).ne(emptyList()));
+            } else {
+                conditions.add(new Criteria("koulutusluvat").exists(true).size(0));
+            }
+        }
+        if (organisaatioCriteria.isKoulutuslupaUsed()) {
+            conditions.add(new Criteria("koulutusluvat").in(organisaatioCriteria.getKoulutuslupaList()));
         }
         if (organisaatioCriteria.isOpetusKieliUsed()) {
             conditions.add(CriteriaHelper.inAnyKoodiVersion(new Criteria(), "kieletUris",
@@ -175,5 +182,11 @@ public class DefaultOrganisaatioRepository extends SimpleMongoRepository<Organis
             return null;
         }
         return oids.get(0);
+    }
+
+    @Override
+    public Optional<OrganisaatioDetails> findByYtunnus(String ytunnus) {
+        Criteria criteria = Criteria.where("ytunnus").is(ytunnus);
+        return Optional.ofNullable(mongoOperations.findOne(Query.query(criteria), OrganisaatioDetails.class));
     }
 }

@@ -103,6 +103,7 @@ option.placeholder {
     display: inline;
     margin-right: 10px;
 }
+.radioOptions input[type="checkbox"],
 .radioOptions input[type="radio"] {
     top: -2px;
     margin-right: 2px;

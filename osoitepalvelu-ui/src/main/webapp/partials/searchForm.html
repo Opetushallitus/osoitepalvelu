@@ -256,6 +256,40 @@
                     </ui-select>
                 </div>
                 <div class="term-separator"></div>
+                <!--koulutuslupa term-->
+                <div class="term" ng-if="isShowKoulutustoimija()"
+                     title="{{::msg('search_term_koulutuslupa')}}">
+                    <div>{{::msg('search_term_koulutuslupa')}}</div>
+                    <div class="radioOptionsContainer">
+                        <span class="radioOptions">
+                            <input id="koulutuslupa_kylla" name="koulutuslupa"
+                                   type="checkbox"
+                                   value="true"
+                                   ng-model="$parent.$parent.koulutuslupa.kylla"
+                                   ng-change="koulutuslupaKyllaChanged()" />
+                            <label for="koulutuslupa_kylla">{{::msg('confirm_yes')}}</label>
+                        </span>
+                        <span class="radioOptions">
+                            <input id="koulutuslupa_ei" name="koulutuslupa"
+                                   type="checkbox"
+                                   value="false"
+                                   ng-model="$parent.$parent.koulutuslupa.ei"
+                                   ng-change="koulutuslupaEiChanged()" />
+                            <label for="koulutuslupa_ei">{{::msg('confirm_no')}}</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="term" ng-if="isShowKoulutustoimija()"
+                     title="{{::msg('search_term_koulutuslupa')}}">
+                    <ui-select multiple id="koulutuslupa" ng-model="terms.koulutuslupas"
+                               theme="select2" select-all="false" clear-all="true">
+                        <ui-select-match placeholder="{{::msg('search_term_koulutuslupa')}}">{{$item.nimi}}</ui-select-match>
+                        <ui-select-choices position='down' repeat="opt.koodiId as opt in options.koulutus | filter: $select.search track by $index">
+                            <div ng-bind-html="opt.nimi | highlight : $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="term-separator"></div>
 
                 <!--perusopetuksen vuosiluokkatieto term-->
                 <div class="term" ng-if="(isShowKoulutustoimijaOppisopimustoimisto() || isShowOppilaitoksetToimipisteet()

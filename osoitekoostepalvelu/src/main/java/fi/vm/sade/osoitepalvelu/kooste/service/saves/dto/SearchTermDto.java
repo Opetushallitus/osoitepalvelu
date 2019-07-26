@@ -48,6 +48,8 @@ public class SearchTermDto implements Serializable {
     public static final String TERM_KOULUTUSTYYPPIS = "koulutustyyppis";
     public static final String TERM_KOULUTUSLAJIS = "koulutuslajis";
     public static final String TERM_OPETUSKIELIS = "opetusKielis";
+    public static final String TERM_KOULUTUSLUPA_EXISTS = "koulutuslupaExists";
+    public static final String TERM_KOULUTUSLUPAS = "koulutuslupas";
 
     @ApiModelProperty("Rajausehtotyyppi")
     private String type;

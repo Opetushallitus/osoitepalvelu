@@ -109,6 +109,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         search_term_opintoala: 'opintoala',
         search_term_tutkinto: 'tutkinto',
         search_term_koulutustyyppi: 'tutkinnon tyyppi',
+        search_term_koulutuslupa: 'koulutuslupa',
 
         show_more_terms: 'enemmän rajausehtoja',
         hide_extra_terms: 'vähemmän rajausehtoja',

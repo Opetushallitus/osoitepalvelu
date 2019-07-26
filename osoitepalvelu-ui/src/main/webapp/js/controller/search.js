@@ -61,6 +61,8 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
 
         $scope.osoitekielis = Osoitekielis;
 
+        $scope.koulutuslupa = {"kylla": false, "ei": false};
+
         $scope.updateTerms = function(updateOptions) {
             if( updateOptions === undefined ) {
                 updateOptions = true;
@@ -101,9 +103,13 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 OptionsService.listKoulutusLajis(function(data) {$scope.options.koulutuslajis = data;});
                 OptionsService.listKielis(function(data) {$scope.options.kielis = data;});
                 //OptionsService.listTutkintos(function(data) {$scope.options.tutkintos = data;});
-                //OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
+                OptionsService.listKoulutus(function(data) {$scope.options.koulutus = data});
             }
             $scope.terms = SearchService.getTerms();
+            if ($scope.terms.koulutuslupaExists.length > 0) {
+                $scope.koulutuslupa["kylla"] = $scope.terms.koulutuslupaExists.indexOf("true") > -1;
+                $scope.koulutuslupa["ei"] = $scope.terms.koulutuslupaExists.indexOf("false") > -1;
+            }
             $scope.koulutusalasChanged();
 
             $log.info($scope.terms);
@@ -147,6 +153,24 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
                 $scope.terms.koulutustyyppis, function(data) {$scope.options.koulutus = data;});
         };
 
+        $scope.koulutuslupaKyllaChanged = function() {
+            $scope.koulutuslupa["ei"] = false;
+            if ($scope.koulutuslupa["kylla"]) {
+                $scope.terms.koulutuslupaExists = ["true"];
+            } else {
+                $scope.terms.koulutuslupaExists = [];
+            }
+        };
+
+        $scope.koulutuslupaEiChanged = function () {
+            $scope.koulutuslupa["kylla"] = false;
+            if ($scope.koulutuslupa["ei"]) {
+                $scope.terms.koulutuslupaExists = ["false"];
+            } else {
+                $scope.terms.koulutuslupaExists = [];
+            }
+        }
+
         $scope.updateTerms();
 
         $scope.clear = function() {
@@ -170,6 +194,11 @@ OsoiteKoostepalvelu.controller('SearchController', ["$scope", "$log", "$modal", 
 
         $scope.isShowKoulutusTerms = function() {
             return $scope.selectedTargetGroupTypes.indexOf('KOULUTUKSEN_TARJOAJAT') !== -1;
+        };
+
+        // Koulutustoimija
+        $scope.isShowKoulutustoimija = function() {
+            return $scope.selectedTargetGroupTypes.indexOf('JARJESTAJAT_YLLAPITAJAT') !== -1;
         };
 
         // Oppilaitos or toimipiste

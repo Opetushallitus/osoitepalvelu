@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * User: ratamaa
  * Date: 2/17/14
@@ -125,6 +127,13 @@ public class SearchTermsDto implements Serializable {
             }
         }
         return new ArrayList<String>();
+    }
+
+    public List<Boolean> findTermsAsBoolean(String type) {
+        return this.terms.stream()
+                .filter(term -> type.equals(term.getType()))
+                .flatMap(term -> term.getValues().stream().map(Boolean::valueOf))
+                .collect(toList());
     }
 
     @Override
