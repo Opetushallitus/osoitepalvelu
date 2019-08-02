@@ -27,7 +27,7 @@ var OsoiteKoostepalvelu = angular.module('OsoiteKoostepalvelu',
             'localisation', 'auth', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'ng.shims.placeholder']);
 
 OsoiteKoostepalvelu.run(function($http, $cookies) {
-    $http.defaults.headers.common['clientSubSystemCode'] = "osoitekoostepalvelu.osoitepalvelu-ui.frontend";
+    $http.defaults.headers.common['Caller-Id'] = "1.2.246.562.10.00000000001.osoitepalvelu-ui";
     if($cookies['CSRF']) {
         $http.defaults.headers.common['CSRF'] = $cookies['CSRF'];
     }
