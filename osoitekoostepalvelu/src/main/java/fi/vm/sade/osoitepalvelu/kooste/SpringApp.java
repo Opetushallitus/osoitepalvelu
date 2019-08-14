@@ -22,6 +22,8 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasProxyTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.config.MongoConfig;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -42,6 +44,9 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 @ImportResource("classpath:spring/application-context.xml")
 @Import(value  =  {MongoConfig.class, OsoitepalveluCamelConfig.class })
 public class SpringApp {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringApp.class);
+
     private static final int SECONDS_IN_HOUR = 3600;
 
     @Value("${web.url.cas}")
@@ -66,6 +71,6 @@ public class SpringApp {
     @Bean
     @Scope("singleton")
     public Audit audit() {
-        return new Audit("osoitepalvelu", ApplicationType.VIRKAILIJA);
+        return new Audit(LOGGER::info, "osoitepalvelu", ApplicationType.VIRKAILIJA);
     }
 }

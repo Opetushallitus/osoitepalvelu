@@ -16,6 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
@@ -37,6 +39,8 @@ import fi.vm.sade.auditlog.Audit;
 @PropertySource({"classpath:/osoitekoostepalvelu.properties", "classpath:/test.properties" })
 public class SpringTestAppConfig {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringTestAppConfig.class);
+
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource  =  new ResourceBundleMessageSource();
@@ -48,7 +52,7 @@ public class SpringTestAppConfig {
     @Bean
     @Scope("singleton")
     public Audit audit() {
-        return new Audit("osoitepalvelu", ApplicationType.VIRKAILIJA);
+        return new Audit(LOGGER::info, "osoitepalvelu", ApplicationType.VIRKAILIJA);
     }
 
 }
