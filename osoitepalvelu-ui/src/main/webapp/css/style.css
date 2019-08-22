@@ -244,3 +244,26 @@ div > div.title > span {
     font-size:150%;
     font-weight:bold;
 }
+
+div#ajax-loader {
+    position:fixed;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+}
+
+div#ajax-loader div.frame {
+    position: absolute;
+    margin-left:50%;
+    width:50%;
+    height:100%;
+}
+
+div#ajax-loader div.frame img.spinner {
+    position:absolute;
+    left:-16px;
+    bottom:55%;
+    display:block;
+}
+
