@@ -18,7 +18,6 @@ log4j.appender.FILE.MaxFileSize=10MB
 log4j.appender.FILE.MaxBackupIndex=20
 {% endraw %}
 # By default hide these spammers by default
-log4j.logger.org.apache.cxf=ERROR
 log4j.logger.org.springframework=ERROR
 log4j.logger.org.vaadin=ERROR
 log4j.logger.javax.sql=ERROR
