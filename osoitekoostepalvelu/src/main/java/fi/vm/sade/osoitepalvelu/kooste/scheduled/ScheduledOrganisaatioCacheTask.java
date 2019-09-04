@@ -88,8 +88,8 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
         removeCachedDeletedOrganisaatios(oids);
 
         logger.info("Found {} organisaatios to refresh.", oids.size());
+        int i = 0;
         try {
-            int i = 0;
             for (final String oid : oids) {
                 ++i;
                 // This will purge the possibly cached organisaatio from both method level memory based EH cache and
@@ -105,9 +105,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 logger.debug("Updated organisaatio {} (Total: {} / {})", new Object[]{oid, i, oids.size()});
             }
         } finally {
-            logger.debug("UPDATING y-tunnus details...");
-            organisaatioService.updateOrganisaatioYtunnusDetails(context);
-            logger.debug("DONE UPDATING y-tunnus details");
+            logger.debug("Updated count {}", i);
         }
 
         updateFromOiva(context);
@@ -153,8 +151,8 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
 
         logger.info("Found {} organisaatios to ensure cache.", oids.size());
         boolean infoUpdated = false;
+        int i = 0;
         try {
-            int i = 0;
             for (final String oid : oids) {
                 ++i;
                 // ...and renew the cache:
@@ -173,11 +171,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                 }
             }
         } finally {
-            if (infoUpdated) {
-                logger.debug("UPDATING y-tunnus details...");
-                organisaatioService.updateOrganisaatioYtunnusDetails(context);
-                logger.debug("DONE UPDATING y-tunnus details");
-            }
+            logger.debug("Updated count {}", i);
         }
 
         if (infoUpdated) {

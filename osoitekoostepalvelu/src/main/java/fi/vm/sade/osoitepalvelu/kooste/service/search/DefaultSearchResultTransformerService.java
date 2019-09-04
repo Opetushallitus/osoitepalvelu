@@ -314,7 +314,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
             return;
         }
 
-        boolean newDetailsFetched = false;
         try {
             Map<String,String> oidsByOppilaitosKoodi = new HashMap<>();
             // Go through each row and use all included copiers to check content. if content is missing add the details to the result.
@@ -346,9 +345,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
                                     result.setNimi(this.messageService.getMessage("orgnisaatio_not_found_by_oid", locale, oid));
                                     continue results;
                                 }
-                                if (context.getRequestCount() != rc) {
-                                    newDetailsFetched = true;
-                                }
                                 cache.put(oid, details);
                             }
                             copier.copy(details, result, locale);
@@ -358,9 +354,6 @@ public class DefaultSearchResultTransformerService extends AbstractService
                 }
             }
         } finally {
-            if (newDetailsFetched)  {
-                organisaatioService.updateOrganisaatioYtunnusDetails(context);
-            }
         }
     }
 

@@ -16,20 +16,19 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
-import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.scheduled.ScheduledOrganisaatioCacheTask;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.AppSettingsService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.vm.sade.properties.OphProperties;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.apache.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -115,18 +114,6 @@ public class AppSettingsController extends AbstractMvcController {
     @ResponseBody
     public int purgeKoodistoCaches() {
         koodistoService.purgeCaches();
-        return HttpStatus.SC_OK;
-    }
-
-    @ApiOperation("Käy uudelleen Y-tunnustiedot organisaatioille hierarkiahaun kautta. " +
-        "Käytettävissä vain paikallisena pyyntönä kehityksen tukena. Normaalisti tätä ei ole tarpeen kutsua, sillä " +
-        "operaatio suoritetaan automaattisesti ajastettuna organisaatiovälimuistin päivittämisen yhteydessä ja " +
-        "sovelluksen käynnistymisen yhteydessä.")
-    @PreAuthorize("hasIpAddress('127.0.0.1/24')")
-    @RequestMapping(value = "/updateOrganisaatioYtunnusDetails", method = RequestMethod.POST, produces = "text/plain")
-    @ResponseBody
-    public int updateYtunnusDetails() {
-        organisaatioService.updateOrganisaatioYtunnusDetails(new DefaultCamelRequestContext());
         return HttpStatus.SC_OK;
     }
 

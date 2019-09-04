@@ -59,11 +59,6 @@ public class OrganisaatioServiceRouteMock implements OrganisaatioServiceRoute {
         return hierarchyResults;
     }
 
-    @Override
-    public OrganisaatioHierarchyResultsDto findOrganisaatioHierachy(CamelRequestContext requestContext) {
-        return hierarchyResults;
-    }
-
     public void setOids(List<String> oids) {
         this.oids = oids;
     }

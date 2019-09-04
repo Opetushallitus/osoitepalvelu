@@ -55,13 +55,6 @@ public interface OrganisaatioService extends Serializable {
     void purgeOrganisaatioByOidCache(String oid);
 
     /**
-     * Updates the ytunnus details for all aktiivinen organisaatios.
-     *
-     * @param requestContext the context for HTTP request received by the application to operate in
-     */
-    void updateOrganisaatioYtunnusDetails(CamelRequestContext requestContext);
-
-    /**
      * @return all organisaatios in cache
      */
     List<String> findAllOidsOfCachedOrganisaatios();
