@@ -55,6 +55,7 @@ public class OsoitepalveluCamelConfig {
     @Bean
     public CamelContext getCamelContext(RoutesBuilder[] builders, ApplicationContext appContext) throws Exception {
         SpringCamelContext context  =  new SpringCamelContext(appContext);
+        context.disableJMX();
         for (RoutesBuilder route : builders) {
             context.addRoutes(route);
         }
