@@ -331,10 +331,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     @Override
     @TriggersRemove(cacheName = "organisaatioByOidCache")
     public void purgeOrganisaatioByOidCache(@PartialCacheKey String oid) {
-        OrganisaatioDetails details = organisaatioRepository.findOne(oid);
-        if (details != null) {
-            organisaatioRepository.delete(details);
-        }
+        organisaatioRepository.delete(oid);
     }
 
     private boolean isCacheUsable(DateTime updatedAt, DateTime now) {
