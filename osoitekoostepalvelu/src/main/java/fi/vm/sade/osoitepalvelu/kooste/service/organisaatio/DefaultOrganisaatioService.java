@@ -298,8 +298,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     }
 
     @Override
-    @Cacheable(cacheName = "organisaatioByOidCache")
-    public OrganisaatioDetailsDto getdOrganisaatioByOid(@PartialCacheKey String oid, CamelRequestContext requestContext) {
+    public OrganisaatioDetailsDto getdOrganisaatioByOid(String oid, CamelRequestContext requestContext) {
         if (isCacheUsed()) {
             OrganisaatioDetails details = organisaatioRepository.findOne(oid);
             if (details != null && isCacheUsable(details.getCachedAt(), requestContext.getCacheCheckMoment())) {
@@ -329,8 +328,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     }
 
     @Override
-    @TriggersRemove(cacheName = "organisaatioByOidCache")
-    public void purgeOrganisaatioByOidCache(@PartialCacheKey String oid) {
+    public void purgeOrganisaatioByOidCache(String oid) {
         organisaatioRepository.delete(oid);
     }
 
