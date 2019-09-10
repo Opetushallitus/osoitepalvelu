@@ -127,11 +127,11 @@ public class SearchExcelServiceImpl extends AbstractService implements SearchExc
         if (presentation.isYtunnusIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getYtunnus(), ophHssfCellStyles);
         }
-        if (presentation.isOpetuskieliIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getOpetuskieli(), ophHssfCellStyles);
-        }
         if (presentation.isYritysmuotoIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getYritysmuoto(), ophHssfCellStyles);
+        }
+        if (presentation.isOpetuskieliIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getOpetuskieli(), ophHssfCellStyles);
         }
         if (presentation.isYhteyshenkiloIncluded()) {
             value(cell(sheet, rowNum, cellNum++), join(" ", row.getYhteystietoNimi()), ophHssfCellStyles);
