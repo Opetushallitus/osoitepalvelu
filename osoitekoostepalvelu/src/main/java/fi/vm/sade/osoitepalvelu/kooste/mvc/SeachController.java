@@ -32,7 +32,7 @@ import fi.vm.sade.security.SimpleCache;
 
 import org.apache.http.HttpStatus;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.exolab.castor.types.DateTime;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;

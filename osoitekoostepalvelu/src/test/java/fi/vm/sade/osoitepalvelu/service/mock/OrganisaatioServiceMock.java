@@ -17,10 +17,10 @@
 package fi.vm.sade.osoitepalvelu.service.mock;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoHakuResultDto;
+import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +49,6 @@ public class OrganisaatioServiceMock implements OrganisaatioService {
 
     @Override
     public void purgeOrganisaatioByOidCache(String oid) {
-    }
-
-    @Override
-    public void updateOrganisaatioYtunnusDetails(CamelRequestContext requestContext) {
     }
 
     @Override

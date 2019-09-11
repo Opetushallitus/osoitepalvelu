@@ -2,11 +2,12 @@ package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.dto.converter;
 
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoHakuResultDto;
-import static java.util.Arrays.asList;
 import org.hamcrest.CoreMatchers;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertThat;
 
 public class OrganisaatioDtoConverterTest {
 

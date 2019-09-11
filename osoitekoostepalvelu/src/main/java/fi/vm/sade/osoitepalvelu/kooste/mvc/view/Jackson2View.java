@@ -18,15 +18,13 @@ package fi.vm.sade.osoitepalvelu.kooste.mvc.view;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.util.Map;
 
@@ -55,7 +53,7 @@ public class Jackson2View implements View {
 
     @Override
     public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setStatus(HttpStatus.OK_200);
+        response.setStatus(HttpStatus.OK.value());
         response.setCharacterEncoding("UTF-8");
         response.setContentType(getContentType());
         response.setHeader("Cache-Control", "no-cache");
@@ -67,7 +65,7 @@ public class Jackson2View implements View {
             }
         } catch (JsonProcessingException e) {
             logger.error("Error prosessing JSON: " + e.getMessage(), e);
-            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         } finally {
             response.getWriter().close();
         }

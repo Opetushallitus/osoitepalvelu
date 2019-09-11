@@ -26,10 +26,12 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.AndPredicateAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.KoodiHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.route.OrganisaatioServiceRoute;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.dto.converter.OrganisaatioDtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.route.OrganisaatioServiceRoute;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -286,14 +288,6 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     }
 
     @Override
-    public void updateOrganisaatioYtunnusDetails(CamelRequestContext requestContext) {
-        OrganisaatioHierarchyResultsDto results = organisaatioServiceRoute.findOrganisaatioHierachy(requestContext);
-        logger.debug("UPDATING organisaatio's ytunnus details.");
-        int count = updateYtunnusResults(results.getOrganisaatiot());
-        logger.debug("UPDATED " + count + " organisaatio's ytunnus details.");
-    }
-
-    @Override
     public List<String> findAllOidsOfCachedOrganisaatios() {
         return organisaatioRepository.findAllOids();
     }
@@ -303,23 +297,8 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
         return organisaatioRepository.findOidByOppilaitoskoodi(oppilaitosKoodi);
     }
 
-    private int updateYtunnusResults(List<OrganisaatioHierarchyDto> organisaatiot) {
-        int updated = 0;
-        for (OrganisaatioHierarchyDto organisaatio : organisaatiot) {
-            OrganisaatioDetails details = organisaatioRepository.findOne(organisaatio.getOid());
-            if (details != null && organisaatio.getYtunnus() != null) {
-                details.setYtunnus(organisaatio.getYtunnus());
-                organisaatioRepository.save(details);
-                updated++;
-            }
-            updated += updateYtunnusResults(organisaatio.getChildren());
-        }
-        return updated;
-    }
-
     @Override
-    @Cacheable(cacheName = "organisaatioByOidCache")
-    public OrganisaatioDetailsDto getdOrganisaatioByOid(@PartialCacheKey String oid, CamelRequestContext requestContext) {
+    public OrganisaatioDetailsDto getdOrganisaatioByOid(String oid, CamelRequestContext requestContext) {
         if (isCacheUsed()) {
             OrganisaatioDetails details = organisaatioRepository.findOne(oid);
             if (details != null && isCacheUsable(details.getCachedAt(), requestContext.getCacheCheckMoment())) {
@@ -349,12 +328,8 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     }
 
     @Override
-    @TriggersRemove(cacheName = "organisaatioByOidCache")
-    public void purgeOrganisaatioByOidCache(@PartialCacheKey String oid) {
-        OrganisaatioDetails details = organisaatioRepository.findOne(oid);
-        if (details != null) {
-            organisaatioRepository.delete(details);
-        }
+    public void purgeOrganisaatioByOidCache(String oid) {
+        organisaatioRepository.delete(oid);
     }
 
     private boolean isCacheUsable(DateTime updatedAt, DateTime now) {
