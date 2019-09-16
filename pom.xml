@@ -33,7 +33,7 @@
         <spring-security.version>4.2.13.RELEASE</spring-security.version>
         <spring-data.version>Ingalls-SR23</spring-data.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <jackson.version>2.7.3</jackson.version>
+        <jackson.version>2.10.0.pr2</jackson.version>
         <jetty.version>9.4.9.v20180320</jetty.version>
 
         <junit.version>4.12</junit.version>
