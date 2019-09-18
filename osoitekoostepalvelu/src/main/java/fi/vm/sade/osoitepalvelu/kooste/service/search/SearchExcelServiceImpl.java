@@ -6,12 +6,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultOsoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,21 +23,21 @@ public class SearchExcelServiceImpl extends AbstractService implements SearchExc
     private MessageService messageService;
 
     @Override
-    public void produceExcel(HSSFWorkbook workbook, SearchResultsPresentationDto searchResults) {
-        HSSFSheet sheet = workbook.createSheet();
+    public void produceExcel(Workbook workbook, SearchResultsPresentationDto searchResults) {
+        Sheet sheet = workbook.createSheet();
 
         int rowNum = 0;
         int maxColumn = produceHeader(sheet, rowNum, 0, searchResults.getPresentation());
-        OphCellStyles.OphHssfCellStyles ophHssfCellStyles = new OphCellStyles.OphHssfCellStyles(workbook);
+        OphCellStyles ophCellStyles = new OphCellStyles(workbook);
         for (SearchResultRowDto row : searchResults.getRows()) {
-            produceRow(searchResults.getPresentation(), sheet, ++rowNum, row, ophHssfCellStyles);
+            produceRow(searchResults.getPresentation(), sheet, ++rowNum, row, ophCellStyles);
         }
         for (int i = 0; i < maxColumn; ++i) {
             sheet.autoSizeColumn(i);
         }
     }
 
-    protected int produceHeader(HSSFSheet sheet, int rowNum, int cellNum, SearchResultPresentation presentation) {
+    protected int produceHeader(Sheet sheet, int rowNum, int cellNum, SearchResultPresentation presentation) {
         if (presentation.isOrganisaationNimiIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaatio_nimi");
         }
@@ -116,95 +111,78 @@ public class SearchExcelServiceImpl extends AbstractService implements SearchExc
         );
     }
 
-    private void produceRow(SearchResultPresentation presentation, HSSFSheet sheet, int rowNum, SearchResultRowDto row, OphCellStyles.OphHssfCellStyles ophHssfCellStyles) {
+    private void produceRow(SearchResultPresentation presentation, Sheet sheet, int rowNum, SearchResultRowDto row, OphCellStyles ophCellStyles) {
         int cellNum = 0;
         if (presentation.isOrganisaationNimiIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getNimi(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getNimi(), ophCellStyles);
         }
         if (presentation.isOrganisaatiotunnisteIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getOppilaitosKoodi(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getOppilaitosKoodi(), ophCellStyles);
         }
         if (presentation.isYtunnusIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getYtunnus(), ophHssfCellStyles);
-        }
-        if (presentation.isOpetuskieliIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getOpetuskieli(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getYtunnus(), ophCellStyles);
         }
         if (presentation.isYritysmuotoIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getYritysmuoto(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getYritysmuoto(), ophCellStyles);
+        }
+        if (presentation.isOpetuskieliIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getOpetuskieli(), ophCellStyles);
         }
         if (presentation.isYhteyshenkiloIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), join(" ", row.getYhteystietoNimi()), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), join(" ", row.getYhteystietoNimi()), ophCellStyles);
         }
         if (presentation.isYhteyshenkiloEmailIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getHenkiloEmail(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getHenkiloEmail(), ophCellStyles);
         }
         if (presentation.isOrganisaatioEmailIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getEmailOsoite(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getEmailOsoite(), ophCellStyles);
         }
         if (presentation.isPositosoiteIncluded()) {
             SearchResultOsoiteDto osoite = row.getPostiosoite();
-            value(cell(sheet, rowNum, cellNum++), osoite(osoite), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), osoite(osoite), ophCellStyles);
             String postinumero = null,
                     postitoimipaikka = null;
             if (osoite != null) {
                 postinumero = osoite.getPostinumero();
                 postitoimipaikka = osoite.getPostitoimipaikka();
             }
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or(""), ophHssfCellStyles);
-            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or(""), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postinumero).or(""), ophCellStyles);
+            value(cell(sheet, rowNum, cellNum++), Optional.fromNullable(postitoimipaikka).or(""), ophCellStyles);
         }
         if (presentation.isPuhelinnumeroIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getPuhelinnumero(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getPuhelinnumero(), ophCellStyles);
         }
         if (presentation.isWwwOsoiteIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getWwwOsoite(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getWwwOsoite(), ophCellStyles);
         }
         if (presentation.isViranomaistiedotuksenSahkopostiosoiteIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getViranomaistiedotuksenEmail(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getViranomaistiedotuksenEmail(), ophCellStyles);
         }
         if (presentation.isKoulutusneuvonnanSahkopostiosoiteIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getKoulutusneuvonnanEmail(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getKoulutusneuvonnanEmail(), ophCellStyles);
         }
         if (presentation.isKriisitiedotuksenSahkopostiosoiteIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getKriisitiedotuksenEmail(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getKriisitiedotuksenEmail(), ophCellStyles);
         }
         if(presentation.isVarhaiskasvatuksenYhteyshenkiloIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getVarhaiskasvatuksenYhteyshenkilo(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getVarhaiskasvatuksenYhteyshenkilo(), ophCellStyles);
         }
         if(presentation.isVarhaiskasvatuksenEmailIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getVarhaiskasvatuksenEmail(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getVarhaiskasvatuksenEmail(), ophCellStyles);
         }
         if(presentation.isKoskiYhdyshenkiloIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getKoskiYhdyshenkilo(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getKoskiYhdyshenkilo(), ophCellStyles);
         }
         if (presentation.isMoveYhteyshenkiloIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getMoveYhteyshenkilo(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getMoveYhteyshenkilo(), ophCellStyles);
         }
         if (presentation.isOrganisaationSijaintikuntaIncluded()) {
-            value(cell(sheet, rowNum, cellNum++), row.getKotikunta(), ophHssfCellStyles);
+            value(cell(sheet, rowNum, cellNum++), row.getKotikunta(), ophCellStyles);
         }
 
     }
 
-    protected HSSFCell value(HSSFCell cell, String value, OphCellStyles.OphHssfCellStyles ophHssfCellStyles) {
-        if (value != null) {
-            cell.setCellValue(value);
-        }
-        ophHssfCellStyles.apply(cell);
-        return cell;
-    }
-
-    protected Cell header(HSSFCell cell, SearchResultPresentation presentation, String localizationKey) {
-        Locale locale = presentation.getLocale();
-        if (locale == null) {
-            locale = DEFAULT_LOCALE;
-        }
-        String value = this.messageService.getMessage(localizationKey, locale);
-        OphCellStyles.OphHssfCellStyles ophCellStyles = new OphCellStyles.OphHssfCellStyles(cell.getSheet().getWorkbook());
-        Font font = cell.getSheet().getWorkbook().createFont();
-        font.setBold(true);
-        ophCellStyles.visit(hssfCellStyle -> hssfCellStyle.setFont(font));
+    protected Cell value(Cell cell, String value, OphCellStyles ophCellStyles) {
         if (value != null) {
             cell.setCellValue(value);
         }
@@ -212,12 +190,29 @@ public class SearchExcelServiceImpl extends AbstractService implements SearchExc
         return cell;
     }
 
-    protected HSSFCell cell(HSSFSheet sheet, int rowNum, int colNum) {
-        HSSFRow row = sheet.getRow(rowNum);
+    protected Cell header(Cell cell, SearchResultPresentation presentation, String localizationKey) {
+        Locale locale = presentation.getLocale();
+        if (locale == null) {
+            locale = DEFAULT_LOCALE;
+        }
+        String value = this.messageService.getMessage(localizationKey, locale);
+        OphCellStyles ophCellStyles = new OphCellStyles(cell.getSheet().getWorkbook());
+        Font font = cell.getSheet().getWorkbook().createFont();
+        font.setBold(true);
+        ophCellStyles.visit(cellStyle -> cellStyle.setFont(font));
+        if (value != null) {
+            cell.setCellValue(value);
+        }
+        ophCellStyles.apply(cell);
+        return cell;
+    }
+
+    protected Cell cell(Sheet sheet, int rowNum, int colNum) {
+        Row row = sheet.getRow(rowNum);
         if (row == null) {
             row = sheet.createRow(rowNum);
         }
-        HSSFCell cell = row.getCell(colNum);
+        Cell cell = row.getCell(colNum);
         if (cell == null) {
             cell = row.createCell(colNum);
         }

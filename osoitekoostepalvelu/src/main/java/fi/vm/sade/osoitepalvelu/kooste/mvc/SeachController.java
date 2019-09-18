@@ -19,7 +19,6 @@ package fi.vm.sade.osoitepalvelu.kooste.mvc;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
@@ -29,26 +28,24 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentati
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
 import fi.vm.sade.security.SimpleCache;
-
 import org.apache.http.HttpStatus;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.document.AbstractExcelView;
+import org.springframework.web.servlet.view.document.AbstractXlsView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.springframework.http.MediaType;
 
 /**
  * User: ratamaa
@@ -167,9 +164,9 @@ public class SeachController extends AbstractMvcController implements Serializab
                 searchParameters.getNonIncludedOrganisaatioOids());
         final SearchResultsPresentationDto searchResults  =  resultTransformerService
                 .transformToResultRows(results, presentation, context, searchParameters.getSearchTerms().getSearchType());
-        return new AbstractExcelView() {
+        return new AbstractXlsView() {
             @Override
-            protected void buildExcelDocument(Map<String, Object> model, HSSFWorkbook workbook, HttpServletRequest request,
+            protected void buildExcelDocument(Map<String, Object> model, Workbook workbook, HttpServletRequest request,
                                               HttpServletResponse response) {
                 response.setHeader("Content-Disposition", "attachment;filename=\"osoitteet.xls\"");
                 searchExcelService.produceExcel(workbook, searchResults);
