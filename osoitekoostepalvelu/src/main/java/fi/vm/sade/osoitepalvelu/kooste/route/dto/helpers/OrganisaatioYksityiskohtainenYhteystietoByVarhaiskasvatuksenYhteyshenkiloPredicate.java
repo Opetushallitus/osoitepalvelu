@@ -5,13 +5,14 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
 
 import java.util.Locale;
+import java.util.Set;
 
 public class OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenYhteyshenkiloPredicate implements Predicate<OrganisaatioYhteystietoElementtiDto> {
 
-    private Locale locale;
+    private final Set<String> kielet;
 
-    public OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenYhteyshenkiloPredicate(Locale locale) {
-        this.locale = locale;
+    public OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenYhteyshenkiloPredicate(Set<String> kielet) {
+        this.kielet = kielet;
     }
 
     @Override
@@ -19,7 +20,8 @@ public class OrganisaatioYksityiskohtainenYhteystietoByVarhaiskasvatuksenYhteysh
         return "Varhaiskasvatuksen yhteyshenkilö".equals(yhteystietoArvo.getTyyppiNimi())
                 && yhteystietoArvo.getElementtiTyyppi().equals("Nimi")
                 && yhteystietoArvo.getArvo() != null
-                && LocaleHelper.languageEquals(locale,LocaleHelper.parseLocale(yhteystietoArvo.getKieli(),null ));
+                && yhteystietoArvo.getKieli() != null
+                && kielet.stream().anyMatch(kieli -> yhteystietoArvo.getKieli().startsWith(kieli));
     }
 
 }

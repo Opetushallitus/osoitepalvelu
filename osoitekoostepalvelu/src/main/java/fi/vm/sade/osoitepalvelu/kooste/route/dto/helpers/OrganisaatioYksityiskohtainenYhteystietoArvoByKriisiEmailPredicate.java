@@ -21,19 +21,21 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
 
 import java.util.Locale;
+import java.util.Set;
 
 public class OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate
             implements Predicate<OrganisaatioYhteystietoElementtiDto> {
-    private Locale locale;
+    private final Set<String> kielet;
 
-    public OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate(Locale locale) {
-        this.locale  =  locale;
+    public OrganisaatioYksityiskohtainenYhteystietoArvoByKriisiEmailPredicate(Set<String> kielet) {
+        this.kielet = kielet;
     }
 
     @Override
     public boolean apply(OrganisaatioYhteystietoElementtiDto yhteystietoArvo) {
         return  ("Kriisitiedotuksen sähköpostiosoite".equals(yhteystietoArvo.getTyyppiNimi())
                 && yhteystietoArvo.getArvo() != null)
-            && LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(yhteystietoArvo.getKieli(), null));
+                && yhteystietoArvo.getKieli() != null
+                && kielet.stream().anyMatch(kieli -> yhteystietoArvo.getKieli().startsWith(kieli));
     }
 }

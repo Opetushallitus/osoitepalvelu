@@ -21,6 +21,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
 
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * User: ratamaa
@@ -30,16 +31,17 @@ import java.util.Locale;
 public class OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate
         implements Predicate<OrganisaatioYhteystietoElementtiDto> {
     private String tyyppi;
-    private Locale locale;
+    private Set<String> kielet;
 
-    public OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate(String tyyppi, Locale locale) {
+    public OrganisaatioYhteystietoElementtiByElementtiTyyppiAndKieliPreidcate(String tyyppi, Set<String> kielet) {
         this.tyyppi  =  tyyppi;
-        this.locale  =  locale;
+        this.kielet  =  kielet;
     }
 
     @Override
     public boolean apply(OrganisaatioYhteystietoElementtiDto elementti) {
         return tyyppi.equals(elementti.getElementtiTyyppi())
-                && LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(elementti.getKieli(), null));
+                && elementti.getKieli() != null
+                && kielet.stream().anyMatch(kieli -> elementti.getKieli().startsWith(kieli));
     }
 }
