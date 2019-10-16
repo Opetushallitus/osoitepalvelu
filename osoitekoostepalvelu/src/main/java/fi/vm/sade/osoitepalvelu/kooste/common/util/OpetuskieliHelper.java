@@ -1,16 +1,22 @@
 package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
 
 public final class OpetuskieliHelper {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpetuskieliHelper.class);
 
     private OpetuskieliHelper() {
     }
@@ -29,7 +35,8 @@ public final class OpetuskieliHelper {
             case "oppilaitoksenopetuskieli_9#1": // muu
                 return singleton("kieli_en");
             default:
-                throw new IllegalArgumentException(opetuskieli);
+                LOGGER.warn("Tuntematon opetuskieli {}", opetuskieli);
+                return emptySet();
         }
     }
 
