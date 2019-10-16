@@ -9,7 +9,9 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
 import java.util.Iterator;
 import java.util.Locale;
 
-import static fi.vm.sade.osoitepalvelu.kooste.service.AbstractService.DEFAULT_LOCALE;
+import static fi.vm.sade.osoitepalvelu.kooste.common.util.OpetuskieliHelper.opetuskieletToKielet;
+import static fi.vm.sade.osoitepalvelu.kooste.service.AbstractService.DEFAULT_OPETUSKIELI;
+import static java.util.Collections.singleton;
 
 public class MoveYhteyshenkiloCopier implements DetailCopier {
     @Override
@@ -21,8 +23,8 @@ public class MoveYhteyshenkiloCopier implements DetailCopier {
     public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
         Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
                 CollectionHelper.filter(from.getYhteystietoArvos(),
-                        new OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate(locale),
-                        new OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate(DEFAULT_LOCALE))
+                        new OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate(opetuskieletToKielet(from.getKieletUris())),
+                        new OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate(singleton(DEFAULT_OPETUSKIELI)))
                         .iterator();
         if (yhteystietoArvos.hasNext()) {
             to.setMoveYhteyshenkilo(yhteystietoArvos.next().getArvo());

@@ -9,7 +9,9 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
 import java.util.Iterator;
 import java.util.Locale;
 
-import static fi.vm.sade.osoitepalvelu.kooste.service.AbstractService.DEFAULT_LOCALE;
+import static fi.vm.sade.osoitepalvelu.kooste.common.util.OpetuskieliHelper.opetuskieletToKielet;
+import static fi.vm.sade.osoitepalvelu.kooste.service.AbstractService.DEFAULT_OPETUSKIELI;
+import static java.util.Collections.singleton;
 
 public class KoskiYhdyshenkiloCopier implements DetailCopier {
     @Override
@@ -19,8 +21,8 @@ public class KoskiYhdyshenkiloCopier implements DetailCopier {
     public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
         Iterator<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos =
                 CollectionHelper.filter(from.getYhteystietoArvos(),
-                        new OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate(locale),
-                        new OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate(DEFAULT_LOCALE))
+                        new OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate(opetuskieletToKielet(from.getKieletUris())),
+                        new OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate(singleton(DEFAULT_OPETUSKIELI)))
                         .iterator();
         if(yhteystietoArvos.hasNext()) {
             to.setKoskiYhdyshenkilo(yhteystietoArvos.next().getArvo());

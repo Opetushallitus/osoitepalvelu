@@ -9,7 +9,9 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
 import java.util.Iterator;
 import java.util.Locale;
 
-import static fi.vm.sade.osoitepalvelu.kooste.service.AbstractService.DEFAULT_LOCALE;
+import static fi.vm.sade.osoitepalvelu.kooste.common.util.OpetuskieliHelper.opetuskieletToKielet;
+import static fi.vm.sade.osoitepalvelu.kooste.service.AbstractService.DEFAULT_OPETUSKIELI;
+import static java.util.Collections.singleton;
 
 public class OrganisaatioEmailCopier implements DetailCopier {
     @Override
@@ -21,8 +23,8 @@ public class OrganisaatioEmailCopier implements DetailCopier {
     public void copy(OrganisaatioDetailsDto from, SearchResultRowDto to, Locale locale) {
         Iterator<OrganisaatioDetailsYhteystietoDto> yhteystietos =
                 CollectionHelper.filter(from.getYhteystiedot(),
-                        new OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(locale),
-                        new OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(DEFAULT_LOCALE))
+                        new OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(opetuskieletToKielet(from.getKieletUris())),
+                        new OrganisaatioYksityiskohtainenYhteystietoByEmailPreidcate(singleton(DEFAULT_OPETUSKIELI)))
                         .iterator();
         if (yhteystietos.hasNext()) {
             to.setEmailOsoite(yhteystietos.next().getEmail());

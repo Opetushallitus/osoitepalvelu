@@ -1,23 +1,24 @@
 package fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers;
 
 import com.google.common.base.Predicate;
-import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
-import java.util.Locale;
+
+import java.util.Set;
 
 public class OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate implements Predicate<OrganisaatioYhteystietoElementtiDto> {
 
-    private final Locale locale;
+    private final Set<String> kielet;
 
-    public OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate(Locale locale) {
-        this.locale = locale;
+    public OrganisaatioYksityiskohtainenYhteystietoByMoveYhteyshenkiloPredicate(Set<String> kielet) {
+        this.kielet = kielet;
     }
 
     @Override
     public boolean apply(OrganisaatioYhteystietoElementtiDto input) {
         return "MOVE!-yhteyshenkilö/mittaustulosten syöttäjä".equals(input.getTyyppiNimi())
                 && input.getArvo() != null
-                && LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(input.getKieli(), null));
+                && input.getKieli() != null
+                && kielet.stream().anyMatch(kieli -> input.getKieli().startsWith(kieli));
     }
 
 }

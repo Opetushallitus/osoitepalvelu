@@ -18,17 +18,16 @@ package fi.vm.sade.osoitepalvelu.kooste.service;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
-import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Locale;
-import java.util.Map;
 
 public abstract class AbstractService {
     public static final int MILLIS_IN_SECOND = 1000;
     public static final Locale DEFAULT_LOCALE = new Locale("fi", "FI");
+    public static final String DEFAULT_OPETUSKIELI = "oppilaitoksenopetuskieli_1#1";
 
     protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 

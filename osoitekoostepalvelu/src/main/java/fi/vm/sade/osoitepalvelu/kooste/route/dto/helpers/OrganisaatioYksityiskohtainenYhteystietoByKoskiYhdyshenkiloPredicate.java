@@ -1,23 +1,23 @@
 package fi.vm.sade.osoitepalvelu.kooste.route.dto.helpers;
 
 import com.google.common.base.Predicate;
-import fi.vm.sade.osoitepalvelu.kooste.common.util.LocaleHelper;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
 
-import java.util.Locale;
+import java.util.Set;
 
 public class OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate implements Predicate<OrganisaatioYhteystietoElementtiDto> {
 
-    private Locale locale;
+    private final Set<String> kielet;
 
-    public OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate(Locale locale) {
-        this.locale = locale;
+    public OrganisaatioYksityiskohtainenYhteystietoByKoskiYhdyshenkiloPredicate(Set<String> kielet) {
+        this.kielet = kielet;
     }
 
     @Override
     public boolean apply(OrganisaatioYhteystietoElementtiDto yhteystietoArvo) {
         return "KOSKI-palvelun omien tietojen virheilmoituksen sähköpostiosoite".equals(yhteystietoArvo.getTyyppiNimi())
                 && yhteystietoArvo.getArvo() != null
-                && LocaleHelper.languageEquals(locale,LocaleHelper.parseLocale(yhteystietoArvo.getKieli(),null ));
+                && yhteystietoArvo.getKieli() != null
+                && kielet.stream().anyMatch(kieli -> yhteystietoArvo.getKieli().startsWith(kieli));
     }
 }
