@@ -98,7 +98,7 @@ public class SeachController extends AbstractMvcController implements Serializab
         CamelRequestContext context  =  new DefaultCamelRequestContext();
         searchParameters.getSearchTerms().setLocale(parseLocale(lang));
         SearchResultsDto results = searchService.find(searchParameters.getSearchTerms(), context);
-        SearchResultPresentation presentation  =  new SearchResultPresentationByAddressFieldsDto(
+        SearchResultPresentation presentation = new SearchResultPresentationByAddressFieldsDto(
                 searchParameters.getSearchTerms(),
                 searchParameters.getNonIncludedOrganisaatioOids());
         return resultTransformerService.transformToResultRows(results, presentation, context, searchParameters.getSearchTerms().getSearchType());

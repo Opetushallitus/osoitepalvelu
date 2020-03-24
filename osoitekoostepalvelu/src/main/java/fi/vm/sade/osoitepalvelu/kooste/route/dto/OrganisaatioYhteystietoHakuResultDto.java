@@ -19,10 +19,7 @@ package fi.vm.sade.osoitepalvelu.kooste.route.dto;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: ratamaa
@@ -34,8 +31,8 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
     
     private String oid;
     private Map<String, String> nimi  =  new HashMap<String, String>(); // short lowercase lang code  = > value pairs
-    private List<String> tyypit  =  new ArrayList<String>();
-    private List<String> kielet  =  new ArrayList<String>(); // koodiarvot
+    private Set<String> tyypit;
+    private Set<String> kielet; // koodiarvot
     private String kotipaikka;
     private String oppilaitosKoodi;
     private String toimipisteKoodi;
@@ -66,20 +63,20 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
     }
 
     @Override
-    public List<String> getTyypit() {
+    public Set<String> getTyypit() {
         return tyypit;
     }
 
-    public void setTyypit(List<String> tyypit) {
+    public void setTyypit(Set<String> tyypit) {
         this.tyypit  =  tyypit;
     }
 
     @Override
-    public List<String> getKielet() {
+    public Set<String> getKielet() {
         return kielet;
     }
 
-    public void setKielet(List<String> kielet) {
+    public void setKielet(Set<String> kielet) {
         this.kielet  =  kielet;
     }
 

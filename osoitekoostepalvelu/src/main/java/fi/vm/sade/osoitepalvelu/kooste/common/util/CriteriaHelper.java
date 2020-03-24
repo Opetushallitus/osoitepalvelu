@@ -12,7 +12,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
- */
+
 
 package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
@@ -26,11 +26,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * User: ratamaa
- * Date: 5/12/14
- * Time: 10:25 AM
- */
 public final class CriteriaHelper {
 
     private static final Pattern KOODI_WITH_VERSION = Pattern.compile("(.+?)#(\\d+)");
@@ -104,3 +99,4 @@ public final class CriteriaHelper {
         }
     }
 }
+*/

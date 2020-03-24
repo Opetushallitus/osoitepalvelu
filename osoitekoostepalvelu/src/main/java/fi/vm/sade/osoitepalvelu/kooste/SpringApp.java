@@ -20,19 +20,15 @@ import fi.vm.sade.auditlog.ApplicationType;
 import fi.vm.sade.auditlog.Audit;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasProxyTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
-import fi.vm.sade.osoitepalvelu.kooste.config.MongoConfig;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 1:09 PM
- */
 @Configuration
 @ComponentScan(basePackages  =  {
         "fi.vm.sade.osoitepalvelu.kooste.common",
@@ -42,7 +38,8 @@ import org.springframework.context.support.ResourceBundleMessageSource;
         "fi.vm.sade.osoitepalvelu.kooste.webapp"
 })
 @ImportResource("classpath:spring/application-context.xml")
-@Import(value  =  {MongoConfig.class, OsoitepalveluCamelConfig.class })
+@Import(value  =  { OsoitepalveluCamelConfig.class })
+@SpringBootApplication
 public class SpringApp {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringApp.class);
@@ -73,4 +70,9 @@ public class SpringApp {
     public Audit audit() {
         return new Audit(LOGGER::info, "osoitepalvelu", ApplicationType.VIRKAILIJA);
     }
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringApp.class, args);
+    }
+
 }

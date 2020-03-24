@@ -24,11 +24,6 @@ import fi.vm.sade.osoitepalvelu.kooste.route.dto.KayttooikesuryhmaDto;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 3/12/14
- * Time: 3:13 PM
- */
 public interface AuthenticationServiceRoute extends Serializable {
 
     /**

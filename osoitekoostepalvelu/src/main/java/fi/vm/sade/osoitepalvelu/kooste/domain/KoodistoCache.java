@@ -18,19 +18,12 @@ package fi.vm.sade.osoitepalvelu.kooste.domain;
 
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * User: ratamaa
- * Date: 12/17/13
- * Time: 8:58 AM
- */
-@Document(collection  =  "koodistoCache")
 public class KoodistoCache implements Serializable {
     private static final long serialVersionUID  =  4351568551821745238L;
 

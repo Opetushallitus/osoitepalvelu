@@ -19,7 +19,9 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import org.joda.time.DateTime;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.jdbc.repository.query.Query;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -27,12 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-/**
- * User: ratamaa
- * Date: 3/25/14
- * Time: 11:32 AM
- */
-public interface OrganisaatioRepository extends MongoRepository<OrganisaatioDetails, String>, Serializable {
+public interface OrganisaatioRepository extends Serializable, CrudRepository<OrganisaatioDetails, Long> {
 
     List<OrganisaatioDetails> findOrganisaatios(OrganisaatioYhteystietoCriteriaDto criteria,
                                                 Locale orderByLocale);
@@ -43,11 +40,15 @@ public interface OrganisaatioRepository extends MongoRepository<OrganisaatioDeta
                                            OrganisaatioYhteystietoCriteriaDto organisaatioCriteria,
                                            Locale orderByLocale);
 
+    @Query(value = "SELECT cachedAt FROM organisaatiodetails ORDER BY cachedAt asc LIMIT 1")
     DateTime findOldestCachedEntry();
 
+    @Query(value = "SELECT oid FROM organisaatiodetails")
     List<String> findAllOids();
 
-    String findOidByOppilaitoskoodi(String oppilaitosKoodi);
+    @Query(value = "SELECT oid FROM organisaatiodetails WHERE oppilaitoskoodi = :oppilaitosKoodi LIMIT 1")
+    String findOidByOppilaitoskoodi(@Param("oppilaitosKoodi") String oppilaitosKoodi);
 
-    Optional<OrganisaatioDetails> findByYtunnus(String ytunnus);
+    @Query(value = "SELECT * FROM organisaatiodetails WHERE ytunnus = :yTunnus LIMIT 1")
+    Optional<OrganisaatioDetails> findByYtunnus(@Param("yTunnus") String yTunnus);
 }

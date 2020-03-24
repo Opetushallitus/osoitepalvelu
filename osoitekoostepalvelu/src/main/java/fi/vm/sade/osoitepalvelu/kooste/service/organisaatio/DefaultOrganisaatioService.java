@@ -71,9 +71,9 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
             // We can use these now because no other conditions are used (that would result in search by parent/children)
             // and can thus only search once:
             criteria.useAll();
-            results = organisaatioRepository.findOrganisaatios(criteria, locale);
+            results = new ArrayList<>(); //organisaatioRepository.findOrganisaatios(criteria, locale);
         } else if (criteria.isOidUsed()) {
-            results = organisaatioRepository.findOrganisaatios(criteria, locale);
+            results = new ArrayList<>(); //organisaatioRepository.findOrganisaatios(criteria, locale);
             results = mergeParents(results, locale);
         } else {
             // Search is done so that only one condiction is on at the same time.
@@ -98,7 +98,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
                 // One round possible (oppilaitostyyppi)
                 criteria.setUseOppilaitotyyppi(true);
             }
-            results = organisaatioRepository.findOrganisaatios(criteria, locale);
+            results = new ArrayList<>(); //organisaatioRepository.findOrganisaatios(criteria, locale);
 
             criteria.setUseYtunnus(false);
             criteria.setUseOppilaitotyyppi(false);
@@ -193,8 +193,8 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
      */
     private List<OrganisaatioDetails> mergeWithChildren(List<OrganisaatioDetails> results,
                     OrganisaatioYhteystietoCriteriaDto criteria, Locale locale, boolean includeParents) {
-        List<OrganisaatioDetails> allChildren = organisaatioRepository.findChildren(Collections2.transform(results,
-                FilterableOrganisaatio.GET_OID), criteria, locale);
+        List<OrganisaatioDetails> allChildren = new ArrayList<OrganisaatioDetails>(); // organisaatioRepository.findChildren(Collections2.transform(results,
+                // FilterableOrganisaatio.GET_OID), criteria, locale);
 
         Set<String> added = new TreeSet<String>();
         Map<String,List<OrganisaatioDetails>> childrenByAllParents = new TreeMap<String, List<OrganisaatioDetails>>();
@@ -237,8 +237,8 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
      * inheritance order
      */
     private List<OrganisaatioDetails> mergeParents(List<OrganisaatioDetails> results, Locale locale) {
-        List<OrganisaatioDetails> allParents = organisaatioRepository.findOrganisaatiosByOids(extractParentOids(results),
-                locale);
+        List<OrganisaatioDetails> allParents = new ArrayList<>(); // organisaatioRepository.findOrganisaatiosByOids(extractParentOids(results),
+        //        locale);
         Map<String,OrganisaatioDetails> byOids = new TreeMap<String, OrganisaatioDetails>();
         for (OrganisaatioDetails parent : allParents) {
             byOids.put(parent.getOid(), parent);
@@ -299,8 +299,9 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
 
     @Override
     public OrganisaatioDetailsDto getdOrganisaatioByOid(String oid, CamelRequestContext requestContext) {
+        /*
         if (isCacheUsed()) {
-            OrganisaatioDetails details = organisaatioRepository.findOne(oid);
+            OrganisaatioDetails details = organisaatioRepository.findById(oid).orElse(null);
             if (details != null && isCacheUsable(details.getCachedAt(), requestContext.getCacheCheckMoment())) {
                 logger.debug("MongoDB cached organisaatio {}", oid);
                 OrganisaatioDetailsDto detailsDto = dtoConverter.convert(details, new OrganisaatioDetailsDto());
@@ -313,7 +314,9 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
                 return detailsDto;
             }
         }
+        */
         OrganisaatioDetailsDto dto = organisaatioServiceRoute.getdOrganisaatioByOid(oid, requestContext);
+        /*
         if (isCacheUsed()) {
             OrganisaatioDetails details = dtoConverter.convert(dto, new OrganisaatioDetails());
 //            if (!details.isLakkautettu()) {
@@ -323,13 +326,13 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
 //                organisaatioRepository.delete(details.getOid());
 //                logger.info("Ensure deleted lakkautettu organisaatio {} from MongoDB.", oid);
 //            }
-        }
+        }*/
         return dto;
     }
 
     @Override
     public void purgeOrganisaatioByOidCache(String oid) {
-        organisaatioRepository.delete(oid);
+        // organisaatioRepository.deleteById(oid);
     }
 
     private boolean isCacheUsable(DateTime updatedAt, DateTime now) {
@@ -338,7 +341,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     }
 
     private boolean isCacheUsed() {
-        return organisaatioRepository != null && cacheTimeoutSeconds >= 0;
+        return false; //organisaatioRepository != null && cacheTimeoutSeconds >= 0;
     }
 
     public long getCacheTimeoutSeconds() {

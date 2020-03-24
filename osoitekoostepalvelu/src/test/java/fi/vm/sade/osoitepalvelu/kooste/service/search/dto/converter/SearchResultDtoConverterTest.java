@@ -34,7 +34,7 @@ public class SearchResultDtoConverterTest {
     public void opetuskieli() {
         when(koodistoService.findOppilaitoksenOpetuskieliByKoodiUri(any(), any()))
                 .thenAnswer((InvocationOnMock invocation) -> {
-                    String koodi = invocation.getArgumentAt(1, String.class);
+                    String koodi = invocation.getArgument(1);
                     UiKoodiItemDto uiKoodiItemDto = new UiKoodiItemDto();
                     uiKoodiItemDto.setKoodiUri(koodi);
                     uiKoodiItemDto.setNimi("nimi/" + koodi);

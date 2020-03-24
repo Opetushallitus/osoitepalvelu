@@ -16,27 +16,20 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.sequence;
 
-import fi.vm.sade.osoitepalvelu.kooste.domain.Sequence;
+// import fi.vm.sade.osoitepalvelu.kooste.domain.Sequence;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-/**
- * User: ratamaa
- * Date: 12/12/13
- * Time: 6:38 PM
- */
 @Repository
-public class DefaultSequenceRepository implements SequenceRepository {
+public class SequenceRepositoryImpl implements SequenceRepository {
     private static final long serialVersionUID = -8315391466293877817L;
 
     private static final String SAVED_SEARCH_ID_SEQUENCE_NAME  =  "savedSearch";
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
     public long getNextSavedSearchIdSequence() {
@@ -44,6 +37,14 @@ public class DefaultSequenceRepository implements SequenceRepository {
     }
 
     public long increaseCounter(String sequenceName) {
+        String sqlUpdate = "UPDATE sequence SET sequence = sequence + 1 where name = :sequencename";
+        String sqlFind = "SELECT sequence FROM sequence where name = :sequencename";
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("sequencename", sequenceName);
+
+        namedParameterJdbcTemplate.update(sqlUpdate, mapSqlParameterSource);
+        return namedParameterJdbcTemplate.query(sqlFind, mapSqlParameterSource);
+        /*
         Query query  =  new Query(Criteria.where("name").is(sequenceName));
         Update update  =  new Update().inc("sequence", 1);
         Sequence seq  =  mongoTemplate.findAndModify(query, update, Sequence.class);
@@ -54,5 +55,6 @@ public class DefaultSequenceRepository implements SequenceRepository {
             mongoTemplate.save(seq);
         }
         return seq.getSequence();
+        */
     }
 }

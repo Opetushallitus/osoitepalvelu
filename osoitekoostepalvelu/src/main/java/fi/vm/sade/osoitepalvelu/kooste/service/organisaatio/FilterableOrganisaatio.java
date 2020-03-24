@@ -17,6 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio;
 
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.Function;
 
@@ -29,9 +30,9 @@ public interface FilterableOrganisaatio {
 
     String getOid();
 
-    List<String> getTyypit();
+    Set<String> getTyypit();
 
-    List<String> getKielet();
+    Set<String> getKielet();
 
     String getKotipaikka();
 

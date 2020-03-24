@@ -22,17 +22,10 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 1:23 PM
- */
-@Document(collection  =  "savedSearches")
+
 public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     private static final long serialVersionUID  =  4164512181923649287L;
     private static final int HASH_FACTOR = 31;
@@ -47,7 +40,7 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     @Id
     private Long id;
     private String name;
-    @Indexed
+    // index
     private String ownerUserOid;
     private SaveType searchType;
     private DateTime createdAt = new DateTime();

@@ -35,6 +35,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.core.env.Environment;
+import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
@@ -52,7 +53,7 @@ import java.io.IOException;
         "fi.vm.sade.osoitepalvelu.kooste.dao"
 })
 @PropertySource({"classpath:/test.properties" })
-public class MongoTestConfig extends AbstractMongoConfiguration {
+public abstract class MongoTestConfig extends AbstractMongoConfiguration {
     private static Logger logger = LoggerFactory.getLogger(MongoTestConfig.class);
 
     private static final int DEFAULT_MONGO_DB_PORT  =  23456;
@@ -131,24 +132,20 @@ public class MongoTestConfig extends AbstractMongoConfiguration {
     }
 
     @Bean
-    @Override
-    public MongoTemplate mongoTemplate() throws Exception {
+    public MongoTemplate mongoTemplate() {
         MongoTemplate mongoTemplate  =  new MongoTemplate(mongoDbFactory());
         return mongoTemplate;
     }
 
-    @Bean
-    @Override
-    public SimpleMongoDbFactory mongoDbFactory() throws Exception {
-        initMongo();
-        return new SimpleMongoDbFactory(new MongoClient(hostAndPort()), getDatabaseName());
-    }
 
     @Bean
-    @Override
-    public Mongo mongo() throws Exception {
-        initMongo();
-        return new Mongo(hostAndPort());
+    public MongoDbFactory mongoDbFactory() {
+        try {
+            initMongo();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new SimpleMongoDbFactory(new MongoClient(hostAndPort()), getDatabaseName());
     }
 
     @Override

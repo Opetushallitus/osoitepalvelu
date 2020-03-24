@@ -18,11 +18,6 @@ package fi.vm.sade.osoitepalvelu.kooste.domain;
 
 import java.io.Serializable;
 
-/**
- * User: ratamaa
- * Date: 3/12/14
- * Time: 10:11 AM
- */
 public class Organisaatioviite implements Serializable {
     private static final long serialVersionUID = 7965399008018056620L;
     

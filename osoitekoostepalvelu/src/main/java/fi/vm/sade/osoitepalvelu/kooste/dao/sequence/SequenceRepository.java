@@ -18,11 +18,6 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.sequence;
 
 import java.io.Serializable;
 
-/**
- * User: ratamaa
- * Date: 12/12/13
- * Time: 6:41 PM
- */
 public interface SequenceRepository extends Serializable {
 
     long getNextSavedSearchIdSequence();

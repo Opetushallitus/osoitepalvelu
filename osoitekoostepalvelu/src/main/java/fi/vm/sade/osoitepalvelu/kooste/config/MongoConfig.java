@@ -12,7 +12,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
- */
+
 
 package fi.vm.sade.osoitepalvelu.kooste.config;
 
@@ -24,27 +24,24 @@ import com.mongodb.MongoException;
 import com.mongodb.MongoURI;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 2:16 PM
- */
 @Configuration
-public class MongoConfig extends AbstractMongoConfiguration {
+public abstract class MongoConfig extends AbstractMongoConfiguration {
 
     @Value("${osoitepalvelu.mongodb.dbname}")
     protected String dbName;
 
     @Value("${osoitepalvelu.mongodb.uri}")
     protected String mongoUri;
-
+    /*
     @Bean
     @Override
     public MongoTemplate mongoTemplate() throws MongoException, UnknownHostException {
@@ -53,13 +50,13 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
     @Bean
     @Override
-    public SimpleMongoDbFactory mongoDbFactory() throws MongoException, UnknownHostException {
-        return new SimpleMongoDbFactory(new MongoURI(new MongoClientURI(mongoUri)));
+    public SimpleMongoDbFactory mongoDbFactory() throws MongoException {
+        return new SimpleMongoDbFactory(new MongoClientURI(mongoUri));
     }
 
     @Bean
     @Override
-    public Mongo mongo() throws UnknownHostException {
+    public Mongo mongo() {
         return new Mongo(new MongoURI(new MongoClientURI(mongoUri)));
     }
 
@@ -67,9 +64,27 @@ public class MongoConfig extends AbstractMongoConfiguration {
     public String getDatabaseName() {
         return dbName;
     }
-
     @Bean
-    public MongoRepositoryFactory mongoRepositoryFactory() throws MongoException, UnknownHostException {
+    public MongoRepositoryFactory mongoRepositoryFactory() {
         return new MongoRepositoryFactory(mongoTemplate());
     }
+
+    @Bean
+    public MongoDbFactory mongoDbFactory() {
+        return new SimpleMongoDbFactory(new MongoClientURI(mongoUri));
+    }
+
+    @Bean
+    public MongoTemplate mongoTemplate() {
+        MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory());
+
+        return mongoTemplate;
+
+    }
+    @Override
+    public String getDatabaseName() {
+        return dbName;
+    }
 }
+
+*/

@@ -30,11 +30,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 3/14/14
- * Time: 1:54 PM
- */
 @Service
 public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuilder
             implements  OrganisaatioServiceRoute {

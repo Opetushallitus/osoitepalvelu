@@ -34,8 +34,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static fi.vm.sade.osoitepalvelu.kooste.common.util.AuditHelper.getUser;
 
@@ -54,23 +56,22 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
 
     @Override
     public List<SavedSearchListDto> findSavedSearchesForLoggedInUser() {
-        return dtoConverter.convert(savedSearchRepository.findByOwnerUsername(getLoggedInUserOid(),
-                        new Sort(Sort.Direction.ASC, "name")),
+        return dtoConverter.convert(savedSearchRepository.findByOwnerUsername(getLoggedInUserOid()),
                         new ArrayList<SavedSearchListDto>(), SavedSearchListDto.class);
     }
 
     @Override
     public SavedSearchViewDto getSaveById(long id) throws NotFoundException, AuthorizationException {
-        SavedSearch save  =  found(savedSearchRepository.findOne(id));
+        SavedSearch save = savedSearchRepository.findById(id).orElseThrow(() -> new NotFoundException("Entity not found by primary key."));
         ensureLoggedInUser(save.getOwnerUserOid());
         return dtoConverter.convert(save, new SavedSearchViewDto());
     }
 
     @Override
     public void deleteSavedSearch(long id) throws NotFoundException, AuthorizationException {
-        SavedSearch save  =  found(savedSearchRepository.findOne(id));
+        SavedSearch save = savedSearchRepository.findById(id).orElseThrow(() -> new NotFoundException("Entity not found by primary key."));
         ensureLoggedInUser(save.getOwnerUserOid());
-        savedSearchRepository.delete(id);
+        savedSearchRepository.deleteById(save.getId());
         Target target = new Target.Builder().setField("id", String.valueOf(id)).build();
         Changes changes = new Changes.Builder().build();
         audit.log(getUser(), OsoitepalveluOperation.DELETE_SAVE, target, changes);
@@ -80,7 +81,7 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     public long saveSearch(SavedSearchSaveDto dto) {
         SavedSearch search  =  dtoConverter.convert(dto, new SavedSearch());
         search.setOwnerUserOid(getLoggedInUserOid());
-        Long id = savedSearchRepository.saveNew(search).getId();
+        Long id = savedSearchRepository.saveNew(search);
         Target target = new Target.Builder().setField("id", String.valueOf(id)).build();
         Changes changes = new Changes.Builder().build();
         audit.log(getUser(), OsoitepalveluOperation.NEW_SAVE, target, changes);
@@ -89,18 +90,11 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
 
     @Override
     public void updateSavedSearch(SavedSearchEditDto dto) throws NotFoundException, AuthorizationException {
-        SavedSearch save  =  found(savedSearchRepository.findOne(dto.getId()));
+        SavedSearch save = savedSearchRepository.findById(dto.getId()).orElseThrow(() -> new NotFoundException("Entity not found by primary key."));
         dtoConverter.convert(dto, save);
         savedSearchRepository.save(save);
         Target target = new Target.Builder().setField("id", String.valueOf(dto.getId())).build();
         Changes changes = new Changes.Builder().build();
         audit.log(getUser(), OsoitepalveluOperation.UPDATE_SAVE, target, changes);
-    }
-
-    protected <T> T found(T obj) throws NotFoundException {
-        if (obj == null) {
-            throw new NotFoundException("Entity not found by primary key.");
-        }
-        return obj;
     }
 }

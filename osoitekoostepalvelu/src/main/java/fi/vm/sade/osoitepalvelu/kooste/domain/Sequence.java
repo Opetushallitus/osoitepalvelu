@@ -16,16 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.domain;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
 
-/**
- * User: ratamaa
- * Date: 12/12/13
- * Time: 6:37 PM
- */
-@Document(collection  =  "sequence")
 public class Sequence implements Serializable {
     private static final long serialVersionUID  =  -984175757901146908L;
     

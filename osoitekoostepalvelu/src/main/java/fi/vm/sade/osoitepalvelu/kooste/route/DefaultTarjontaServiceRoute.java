@@ -30,11 +30,6 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * User: simok
- * Date: 3/23/15
- * Time: 3:29 PM
- */
 @Component
 public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
         implements TarjontaServiceRoute {

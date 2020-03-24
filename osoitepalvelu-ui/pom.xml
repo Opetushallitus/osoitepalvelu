@@ -21,15 +21,12 @@
     <parent>
         <artifactId>osoitepalvelu</artifactId>
         <groupId>fi.vm.sade.osoitepalvelu</groupId>
-        <version>2015-05-SNAPSHOT</version>
-        <relativePath>..</relativePath>
+        <version>2020-03-SNAPSHOT</version>
     </parent>
     
-    <groupId>fi.vm.sade.osoitepalvelu</groupId>
     <artifactId>osoitepalvelu-ui</artifactId>
     <name>Osoitepalvelu :: UI</name>
-    <version>2015-05-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <version>2020-03-SNAPSHOT</version>
 
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -69,21 +66,6 @@
                                 </echo>
                             </target>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.0.1</version>
-                <executions>
-                    <execution>
-                        <id>prepare-war</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>exploded</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -187,13 +169,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
-                    <webDriverCapabilities>
-                        <capability>
-                            <name>phantomjs.binary.path</name>
-                            <value>${phantomjs.binary}</value>
-                        </capability>
-                    </webDriverCapabilities>
                     <preloadSources>
                         <source>jslib/oph_urls.js/index.js</source>
                         <source>jslib/jquery-1.10.1/jquery-1.10.1.min.js</source>

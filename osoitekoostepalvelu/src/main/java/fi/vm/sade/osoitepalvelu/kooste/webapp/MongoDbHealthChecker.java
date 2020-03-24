@@ -1,3 +1,4 @@
+/*
 package fi.vm.sade.osoitepalvelu.kooste.webapp;
 
 import fi.vm.sade.generic.healthcheck.HealthChecker;
@@ -16,9 +17,9 @@ import java.util.LinkedHashMap;
  * User: ratamaa
  * Date: 2/26/14
  * Time: 3:43 PM
- */
-@Component
-@HealthCheckerName("database")
+
+//@Component
+//@HealthCheckerName("database")
 public class MongoDbHealthChecker implements HealthChecker {
 
     @Autowired
@@ -38,3 +39,4 @@ public class MongoDbHealthChecker implements HealthChecker {
         } };
     }
 }
+*/

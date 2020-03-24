@@ -23,21 +23,19 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.With;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Embedded;
+
+import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-/**
- * User: ratamaa
- * Date: 3/25/14
- * Time: 11:25 AM
- */
-@Document(collection = "organisaatio")
 public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio {
     private static final long serialVersionUID = 442147524555663558L;
 
@@ -50,50 +48,57 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
     public static final DateTime MODEL_CHANGED_AT = new DateTime(2019, 5, 9, 7, 35);
 
     private Long version;
-    @Id
     private String oid;
-    @Indexed
+    //index
     private String parentOid;
-    @Indexed
-    private DateTime cachedAt = new DateTime();
-    private List<String> parentOidPath = new ArrayList<String>();
-    private Map<String, String> nimi = new HashMap<String, String>();
-    @Indexed
-    private List<String> tyypit = new ArrayList<String>();
-    @Indexed
-    private List<String> kieletUris = new ArrayList<String>(); // opetuskieliUis, esim. oppilaitoksenopetuskieli_1#1
-    @Indexed
+    //index
+    private DateTime cachedAt;
+    private Set<String> parentOidPath;
+
+    private Map<String, String> nimi;
+
+    private Set<String> tyypit;
+
+    private Set<String> kieletUris; // opetuskieliUis, esim. oppilaitoksenopetuskieli_1#1
+
+    //index
     private String oppilaitosTyyppiUri; // esim. oppilaitostyyppi_21#1
-    @Indexed
+
+    //index
     private String oppilaitosKoodi; // esim. 10107
-    @DtoConversion(path="toimipisteKoodi", withClass = OrganisaatioYhteystietoHakuResultDto.class)
+
+    //@DtoConversion(path="toimipisteKoodi", withClass = OrganisaatioYhteystietoHakuResultDto.class)
     private String toimipistekoodi;
-    @Indexed
-    @DtoConversion(path="kotipaikka", withClass = OrganisaatioYhteystietoHakuResultDto.class)
+
+    //@DtoConversion(path="kotipaikka", withClass = OrganisaatioYhteystietoHakuResultDto.class)
+    //@Column //index
     private String kotipaikkaUri; // esim. kunta_405
+
     private String maaUri; // esim. maatjavaltiot1_fin
+
     private OrganisaatioOsoiteDto postiosoite;
+
     private List<OrganisaatioDetailsYhteystietoDto> yhteystiedot
             = new ArrayList<OrganisaatioDetailsYhteystietoDto>();
-    @Indexed
-    private List<String> vuosiluokat = new ArrayList<String>();
+    private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos
+            = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
+    // index
+    private Set<String> vuosiluokat;
 
     private String kriisitiedotuksenEmail;
 
     private String varhaiskasvatuksenYhteyshenkilo;
     private String varhaiskasvatuksenEmail;
-    private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos
-            = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
-    @Indexed
+    // index
     private String ytunnus;
     private String yritysmuoto;
     private LocalDate alkuPvm;
-    @Indexed
+    // index
     private LocalDate lakkautusPvm;
     private String koskiYhdyshenkilo;
 
-    @Indexed
-    private List<String> koulutusluvat = new ArrayList<>(); // koodisto "koulutus" (oiva)
+    // index
+    private Set<String> koulutusluvat; // koodisto "koulutus" (oiva)
 
     public Long getVersion() {
         return version;
@@ -128,11 +133,11 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
         this.cachedAt = cachedAt;
     }
 
-    public List<String> getParentOidPath() {
+    public Set<String> getParentOidPath() {
         return parentOidPath;
     }
 
-    public void setParentOidPath(List<String> parentOidPath) {
+    public void setParentOidPath(Set<String> parentOidPath) {
         this.parentOidPath = parentOidPath;
     }
 
@@ -145,12 +150,12 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
     }
 
     @Override
-    public List<String> getTyypit() {
+    public Set<String> getTyypit() {
         return tyypit;
     }
 
     @Override
-    public List<String> getKielet() {
+    public Set<String> getKielet() {
         return getKieletUris();
     }
 
@@ -159,15 +164,15 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
         return getKotipaikkaUri();
     }
 
-    public void setTyypit(List<String> tyypit) {
+    public void setTyypit(Set<String> tyypit) {
         this.tyypit = tyypit;
     }
 
-    public List<String> getKieletUris() {
+    public Set<String> getKieletUris() {
         return kieletUris;
     }
 
-    public void setKieletUris(List<String> kieletUris) {
+    public void setKieletUris(Set<String> kieletUris) {
         this.kieletUris = kieletUris;
     }
 
@@ -227,11 +232,11 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
         this.yhteystiedot = yhteystiedot;
     }
 
-    public List<String> getVuosiluokat() {
+    public Set<String> getVuosiluokat() {
         return vuosiluokat;
     }
 
-    public void setVuosiluokat(List<String> vuosiluokat) {
+    public void setVuosiluokat(Set<String> vuosiluokat) {
         this.vuosiluokat = vuosiluokat;
     }
 
@@ -303,11 +308,11 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
         this.lakkautusPvm = lakkautusPvm;
     }
 
-    public List<String> getKoulutusluvat() {
+    public Set<String> getKoulutusluvat() {
         return koulutusluvat;
     }
 
-    public void setKoulutusluvat(List<String> koulutusluvat) {
+    public void setKoulutusluvat(Set<String> koulutusluvat) {
         this.koulutusluvat = koulutusluvat;
     }
 

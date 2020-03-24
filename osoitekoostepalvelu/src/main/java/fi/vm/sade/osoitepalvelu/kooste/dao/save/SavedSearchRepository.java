@@ -18,21 +18,18 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.save;
 
 import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
 
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.jdbc.repository.query.Query;
 
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 1:28 PM
- */
-public interface SavedSearchRepository extends MongoRepository<SavedSearch, Long>, Serializable {
 
-    List<SavedSearch> findByOwnerUsername(String ownerUsername, Sort order);
+public interface SavedSearchRepository extends Serializable, CrudRepository<SavedSearch, Long> {
+    @Query(value = "SELECT * FROM savedsearch WHERE ownerUserOid = :ownerUsername ORDER BY name asc")
+    List<SavedSearch> findByOwnerUsername(@Param("ownerUsername") String ownerUsername);
 
-    SavedSearch saveNew(SavedSearch savedSearch);
+    Long saveNew(SavedSearch savedSearch);
 
 }

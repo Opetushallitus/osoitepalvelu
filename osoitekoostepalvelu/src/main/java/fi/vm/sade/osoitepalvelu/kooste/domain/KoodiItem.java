@@ -19,11 +19,6 @@ package fi.vm.sade.osoitepalvelu.kooste.domain;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 12/17/13
- * Time: 9:05 AM
- */
 public class KoodiItem implements Serializable {
     private static final long serialVersionUID  =  -6732834870766631012L;
     

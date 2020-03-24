@@ -20,11 +20,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 1:34 PM
- */
 public class SearchTargetGroup implements Serializable {
     private static final long serialVersionUID  =  -1439905791723850160L;
 

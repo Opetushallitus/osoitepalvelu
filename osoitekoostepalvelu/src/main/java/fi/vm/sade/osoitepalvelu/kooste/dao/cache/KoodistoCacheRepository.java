@@ -18,16 +18,10 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
 
 import java.io.Serializable;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
+import org.springframework.data.repository.CrudRepository;
 
-/**
- * User: ratamaa
- * Date: 12/17/13
- * Time: 9:08 AM
- */
-public interface KoodistoCacheRepository extends MongoRepository<KoodistoCache, KoodistoCache.CacheKey>, Serializable {
+public interface KoodistoCacheRepository extends Serializable, CrudRepository<KoodistoCache, KoodistoCache.CacheKey> {
 
     KoodistoCache findCacheByTypeAndLocale(KoodistoCache.CacheKey key);
 

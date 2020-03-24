@@ -4,13 +4,14 @@ import fi.vm.sade.osoitepalvelu.kooste.route.dto.BaseDto;
 import org.joda.time.LocalDate;
 
 import java.util.List;
+import java.util.Set;
 
 public class KoulutuslupaDto extends BaseDto {
 
     private String jarjestajaYtunnus;
     private LocalDate alkupvm;
     private LocalDate loppupvm;
-    private List<String> koulutukset; // koodisto "koulutus"
+    private Set<String> koulutukset; // koodisto "koulutus"
 
     public String getJarjestajaYtunnus() {
         return jarjestajaYtunnus;
@@ -36,11 +37,11 @@ public class KoulutuslupaDto extends BaseDto {
         this.loppupvm = loppupvm;
     }
 
-    public List<String> getKoulutukset() {
+    public Set<String> getKoulutukset() {
         return koulutukset;
     }
 
-    public void setKoulutukset(List<String> koulutukset) {
+    public void setKoulutukset(Set<String> koulutukset) {
         this.koulutukset = koulutukset;
     }
 

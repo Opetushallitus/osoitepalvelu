@@ -17,10 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
-import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
-import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
@@ -31,23 +28,12 @@ import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
  * Time: 9:11 AM
  */
 @Repository
-public class DefaultKoodistoCacheRepository extends SimpleMongoRepository<KoodistoCache, KoodistoCache.CacheKey>
-        implements KoodistoCacheRepository {
+public class KoodistoCacheRepositoryImpl implements KoodistoCacheRepository {
 
     private static final long serialVersionUID = 643999863968770488L;
 
-    public DefaultKoodistoCacheRepository(MongoEntityInformation<KoodistoCache, KoodistoCache.CacheKey> metadata,
-            MongoOperations mongoOperations) {
-        super(metadata, mongoOperations);
-    }
-
-    @Autowired
-    public DefaultKoodistoCacheRepository(MongoRepositoryFactory factory, MongoOperations mongoOperations) {
-        this(factory.<KoodistoCache, KoodistoCache.CacheKey>getEntityInformation(KoodistoCache.class), mongoOperations);
-    }
-
     @Override
     public KoodistoCache findCacheByTypeAndLocale(KoodistoCache.CacheKey key) {
-        return findOne(key);
+        return findById(key).orElse(null);
     }
 }
