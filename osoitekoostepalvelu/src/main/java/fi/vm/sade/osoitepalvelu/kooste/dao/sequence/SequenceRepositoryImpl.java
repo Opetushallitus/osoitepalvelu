@@ -43,7 +43,7 @@ public class SequenceRepositoryImpl implements SequenceRepository {
         mapSqlParameterSource.addValue("sequencename", sequenceName);
 
         namedParameterJdbcTemplate.update(sqlUpdate, mapSqlParameterSource);
-        return namedParameterJdbcTemplate.query(sqlFind, mapSqlParameterSource);
+        return namedParameterJdbcTemplate.queryForObject(sqlFind, mapSqlParameterSource, Long.class);
         /*
         Query query  =  new Query(Criteria.where("name").is(sequenceName));
         Update update  =  new Update().inc("sequence", 1);

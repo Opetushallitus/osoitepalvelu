@@ -400,7 +400,7 @@ public class DefaultKoodistoService extends AbstractService implements KoodistoS
             // Hit memory cache:
             return holder.getItems();
         }
-        KoodistoCache cache = koodistoCacheRepository.findCacheByTypeAndLocale(key);
+        KoodistoCache cache = koodistoCacheRepository.findOne(key);
         boolean refresh = cache == null || !isCacheUsable(cache.getUpdatedAt());
         if (cache == null) {
             cache = new KoodistoCache();

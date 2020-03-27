@@ -1,0 +1,27 @@
+server:
+  forward-headers-strategy: native
+  port: 8080
+  servlet:
+    context-path: /osoitepalvelu
+    session:
+      timeout: 1d
+      tracking-modes: cookie
+      cookie:
+        http-only: true
+        max-age: 1d
+spring:
+  main:
+    banner-mode: "off"
+  datasource:
+    url: jdbc:postgresql://localhost:5432/osoitepalvelu
+    username: app
+    password: ophoph
+  flyway:
+    out-of-order: true
+  resources:
+    cache:
+      cachecontrol:
+        no-store: true
+  session:
+    store-type: jdbc
+

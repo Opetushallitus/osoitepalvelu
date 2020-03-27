@@ -83,12 +83,12 @@ public class DefaultSearchServiceTest {
         yhteystieto.setOid("OID");
         yhteystieto.setOppilaitosKoodi("OPKOODI");
         yhteystieto.setKotipaikka("Jurmala");
-        yhteystieto.setKielet(Arrays.asList(new String[]{"fi", "sv"}));
+        yhteystieto.setKielet(new HashSet<>(Arrays.asList(new String[]{"fi", "sv"})));
         Map<String, String> nimi  =  new HashMap<String, String>();
         nimi.put("fi", "Koulu");
         nimi.put("sv", "Skolan");
         yhteystieto.setNimi(nimi);
-        yhteystieto.setTyypit(Arrays.asList(new String[]{"Oppilaitos"}));
+        yhteystieto.setTyypit(new HashSet<>(Arrays.asList(new String[]{"Oppilaitos"})));
         List<OrganisaatioYhteysosoiteDto> osoittees  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
         OrganisaatioYhteysosoiteDto osoite  =  new OrganisaatioYhteysosoiteDto();
         osoite.setKieli("fi");

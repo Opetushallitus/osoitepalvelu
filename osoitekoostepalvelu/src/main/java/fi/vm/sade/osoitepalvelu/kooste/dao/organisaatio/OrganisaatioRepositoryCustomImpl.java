@@ -32,8 +32,7 @@ import java.util.*;
 
 import static java.util.Collections.emptyList;
 
-@Repository
-public class OrganisaatioRepositoryImpl implements OrganisaatioRepository {
+public class OrganisaatioRepositoryCustomImpl implements OrganisaatioRepositoryCustom {
     private static final long serialVersionUID = 3725230640750779168L;
 
     @Autowired
@@ -47,7 +46,7 @@ public class OrganisaatioRepositoryImpl implements OrganisaatioRepository {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         filterByCriteria(organisaatioCriteria, sql, mapSqlParameterSource);
 
-        return namedParameterJdbcTemplate.query(sql, mapSqlParameterSource);
+        return namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource, OrganisaatioDetails.class);
         //return mongoOperations.find(Query.query(conditions.applyTo(new Criteria())).with(Sort.by("nimi."
         //                +orderByLocale.getLanguage().toLowerCase())), OrganisaatioDetails.class);
     }
@@ -62,7 +61,7 @@ public class OrganisaatioRepositoryImpl implements OrganisaatioRepository {
                 + orderByLocale.getLanguage().toLowerCase();
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("oidit", oids);
-        return namedParameterJdbcTemplate.query(sql, mapSqlParameterSource);
+        return namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource, OrganisaatioDetails.class);
 
         //return mongoOperations.find(Query.query(new Criteria("oid").in(oids)).with(Sort.by("nimi."
          //       +orderByLocale.getLanguage().toLowerCase())), OrganisaatioDetails.class);
@@ -137,7 +136,7 @@ public class OrganisaatioRepositoryImpl implements OrganisaatioRepository {
         String sql = "SELECT * FROM organisaatiodetails where " + parentOidSql;
         filterByCriteria(organisaatioCriteria, sql, mapSqlParameterSource);
 
-       return namedParameterJdbcTemplate.query(sql, mapSqlParameterSource);
+       return namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource, OrganisaatioDetails.class);
 
         //conditions.add(CriteriaHelper.inParentOids(new Criteria(), "parentOidPath", parentOids));
 
@@ -177,10 +176,6 @@ public class OrganisaatioRepositoryImpl implements OrganisaatioRepository {
         }
         return oids.get(0);
     }
-    @Override
-    public Optional<OrganisaatioDetails> findByYtunnus(String ytunnus) {
-        Criteria criteria = Criteria.where("ytunnus").is(ytunnus);
-        return Optional.ofNullable(mongoOperations.findById(Query.query(criteria), OrganisaatioDetails.class));
-    }
     */
+
 }

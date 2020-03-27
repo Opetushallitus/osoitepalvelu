@@ -6,6 +6,8 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashSet;
+
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThat;
 
@@ -21,7 +23,7 @@ public class OrganisaatioDtoConverterTest {
     @Test
     public void kieletUris() {
         OrganisaatioDetails details = new OrganisaatioDetails();
-        details.setKieletUris(asList("suomi", "ruotsi"));
+        details.setKieletUris(new HashSet<>(asList("suomi", "ruotsi")));
 
         OrganisaatioYhteystietoHakuResultDto hakuResultDto = converter.convert(details, new OrganisaatioYhteystietoHakuResultDto());
 

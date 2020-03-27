@@ -23,6 +23,7 @@ import fi.vm.sade.osoitepalvelu.kooste.OsoitepalveluOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.AuthorizationException;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.dao.save.SavedSearchRepository;
+import fi.vm.sade.osoitepalvelu.kooste.dao.sequence.SequenceRepository;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
 import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SavedSearchEditDto;
@@ -50,6 +51,9 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
 
     @Autowired(required = false)
     private SavedSearchRepository savedSearchRepository;
+
+    @Autowired(required = false)
+    private SequenceRepository sequenceRepository;
 
     @Autowired
     private Audit audit;
@@ -81,7 +85,9 @@ public class DefaultSavedSearchService extends AbstractService implements SavedS
     public long saveSearch(SavedSearchSaveDto dto) {
         SavedSearch search  =  dtoConverter.convert(dto, new SavedSearch());
         search.setOwnerUserOid(getLoggedInUserOid());
-        Long id = savedSearchRepository.saveNew(search);
+        Long id = sequenceRepository.getNextSavedSearchIdSequence();
+        search.setId(id);
+        savedSearchRepository.save(search);
         Target target = new Target.Builder().setField("id", String.valueOf(id)).build();
         Changes changes = new Changes.Builder().build();
         audit.log(getUser(), OsoitepalveluOperation.NEW_SAVE, target, changes);

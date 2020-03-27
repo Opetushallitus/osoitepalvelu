@@ -27,9 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @RunWith(JUnit4.class)
 public class ApiToJsonTest {
@@ -39,7 +37,7 @@ public class ApiToJsonTest {
         List<OrganisaatioResultDto> results  =  new ArrayList<OrganisaatioResultDto>();
         
         OrganisaatioResultDto result  =  new OrganisaatioResultDto();
-        List<String> tyypit  =  new ArrayList<String>();
+        Set<String> tyypit  =  new HashSet<>();
         tyypit.add("Opetuspiste");
         HashMap<String, String> nimi  =  new HashMap<String, String>();
         nimi.put("sv", "Svenska text");
@@ -78,7 +76,7 @@ public class ApiToJsonTest {
         results.add(result);
         
         result  =  new OrganisaatioResultDto();
-        tyypit  =  new ArrayList<String>();
+        tyypit  =  new HashSet<>();
         tyypit.add("Toimipiste");
         result.setTyypit(tyypit);
         nimi  =  new HashMap<String, String>();

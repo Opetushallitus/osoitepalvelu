@@ -79,8 +79,8 @@ public class SearchResultTransformerServiceTest {
         organisaatio2.setOppilaitosKoodi("oppilaitoskoodi");
         organisaatio2.setYtunnus("ytunnus");
         organisaatio2.setYritysmuoto("yritysmuoto");
-        organisaatio2.setKieletUris(Arrays.asList("kieli1", "kieli2"));
-        organisaatio2.setTyypit(new ArrayList<>(Arrays.asList("Tyyppi1", "Tyyppi2")));
+        organisaatio2.setKieletUris(new HashSet<>(Arrays.asList("kieli1", "kieli2")));
+        organisaatio2.setTyypit(new HashSet<>(Arrays.asList("Tyyppi1", "Tyyppi2")));
         organisaatio2.setWwwOsoite("www");
         OrganisaatioYhteystietoDto yhteyshenkilo1  =  new OrganisaatioYhteystietoDto(),
                 yhteyshenkilo2  =  new OrganisaatioYhteystietoDto();

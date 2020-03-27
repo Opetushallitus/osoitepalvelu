@@ -20,10 +20,7 @@ import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OrganisaatioResultDto implements Serializable {
     private static final long serialVersionUID  =  -3235512233762738508L;
@@ -34,13 +31,13 @@ public class OrganisaatioResultDto implements Serializable {
     private String oppilaitosKoodi;
     private String ytunnus;
     private String yritysmuoto;
-    private List<String> kieletUris;
+    private Set<String> kieletUris;
     private String opetuskieli;
     private String wwwOsoite;
     private Map<String, String> nimi  =  new HashMap<String, String>(); // Organisaation nimi lokaalin mukaan
     private String puhelinnumero;
     private String emailOsoite;
-    private List<String> tyypit;
+    private Set<String> tyypit;
     @DtoConversion
     private List<OsoitteistoDto> postiosoite  =  new ArrayList<OsoitteistoDto>();
     private List<OrganisaatioYhteystietoDto> yhteyshenkilot  =  new ArrayList<OrganisaatioYhteystietoDto>();
@@ -91,11 +88,11 @@ public class OrganisaatioResultDto implements Serializable {
         this.yritysmuoto = yritysmuoto;
     }
 
-    public List<String> getKieletUris() {
+    public Set<String> getKieletUris() {
         return kieletUris;
     }
 
-    public void setKieletUris(List<String> kieletUris) {
+    public void setKieletUris(Set<String> kieletUris) {
         this.kieletUris = kieletUris;
     }
 
@@ -139,11 +136,11 @@ public class OrganisaatioResultDto implements Serializable {
         this.emailOsoite  =  emailOsoite;
     }
     
-    public List<String> getTyypit() {
+    public Set<String> getTyypit() {
         return tyypit;
     }
     
-    public void setTyypit(List<String> tyypit) {
+    public void setTyypit(Set<String> tyypit) {
         this.tyypit  =  tyypit;
     }
 

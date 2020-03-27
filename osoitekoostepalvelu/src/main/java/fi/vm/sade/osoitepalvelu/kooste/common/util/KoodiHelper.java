@@ -18,6 +18,7 @@ package fi.vm.sade.osoitepalvelu.kooste.common.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: ratamaa
@@ -60,7 +61,7 @@ public final class KoodiHelper {
         return koodiArvo.replaceAll("(.*)#(\\d+)", "$1");
     }
 
-    public static List<String> removeVersion(List<String> koodiArvos) {
+    public static List<String> removeVersion(Set<String> koodiArvos) {
         if (koodiArvos == null) {
             return new ArrayList<String>();
         }

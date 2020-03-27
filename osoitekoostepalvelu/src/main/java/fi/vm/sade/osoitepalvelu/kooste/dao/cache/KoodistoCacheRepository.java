@@ -19,10 +19,13 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.cache;
 import java.io.Serializable;
 
 import fi.vm.sade.osoitepalvelu.kooste.domain.KoodistoCache;
+import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 public interface KoodistoCacheRepository extends Serializable, CrudRepository<KoodistoCache, KoodistoCache.CacheKey> {
 
-    KoodistoCache findCacheByTypeAndLocale(KoodistoCache.CacheKey key);
+    KoodistoCache findOne(KoodistoCache.CacheKey key);
 
 }

@@ -19,9 +19,9 @@ package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import org.joda.time.DateTime;
+import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
@@ -30,20 +30,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+public interface OrganisaatioRepositoryCustom {
 
-@Repository
-public interface OrganisaatioRepository extends CrudRepository<OrganisaatioDetails, Long>, Serializable, OrganisaatioRepositoryCustom{
+    List<OrganisaatioDetails> findOrganisaatios(OrganisaatioYhteystietoCriteriaDto criteria,
+                                                Locale orderByLocale);
 
-    @Query(value = "SELECT cachedAt FROM organisaatiodetails ORDER BY cachedAt asc LIMIT 1")
-    DateTime findOldestCachedEntry();
+    List<OrganisaatioDetails> findOrganisaatiosByOids(List<String> oids, Locale orderByLocale);
 
-    @Query(value = "SELECT oid FROM organisaatiodetails")
-    List<String> findAllOids();
-
-    @Query(value = "SELECT oid FROM organisaatiodetails WHERE oppilaitoskoodi = :oppilaitosKoodi LIMIT 1")
-    String findOidByOppilaitoskoodi(@Param("oppilaitosKoodi") String oppilaitosKoodi);
-
-    @Query(value = "SELECT * FROM organisaatiodetails WHERE ytunnus = :yTunnus LIMIT 1")
-    Optional<OrganisaatioDetails> findByYtunnus(@Param("yTunnus") String yTunnus);
-
+    List<OrganisaatioDetails> findChildren(Collection<String> parentOids,
+                                           OrganisaatioYhteystietoCriteriaDto organisaatioCriteria,
+                                           Locale orderByLocale);
 }

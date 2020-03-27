@@ -5,6 +5,7 @@ import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Locale;
 import org.hamcrest.CoreMatchers;
 import static org.junit.Assert.assertEquals;
@@ -41,7 +42,7 @@ public class SearchResultDtoConverterTest {
                     return uiKoodiItemDto;
                 });
         OrganisaatioYhteystietoHakuResultDto hakuResultDto = new OrganisaatioYhteystietoHakuResultDto();
-        hakuResultDto.setKielet(Arrays.asList("suomi", "ruotsi"));
+        hakuResultDto.setKielet(new HashSet<>(Arrays.asList("suomi", "ruotsi")));
 
         OrganisaatioResultDto resultDto = converter.convert(hakuResultDto, new OrganisaatioResultDto(), Locale.ITALY);
 

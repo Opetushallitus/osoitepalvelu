@@ -30,6 +30,4 @@ public interface SavedSearchRepository extends Serializable, CrudRepository<Save
     @Query(value = "SELECT * FROM savedsearch WHERE ownerUserOid = :ownerUsername ORDER BY name asc")
     List<SavedSearch> findByOwnerUsername(@Param("ownerUsername") String ownerUsername);
 
-    Long saveNew(SavedSearch savedSearch);
-
 }
