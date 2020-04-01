@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class KoodistoCache implements Serializable {
     private static final long serialVersionUID  =  4351568551821745238L;
@@ -149,7 +150,7 @@ public class KoodistoCache implements Serializable {
     @Id
     private CacheKey key;
     private DateTime updatedAt  =  new DateTime();
-    private List<KoodiItem> items  =  new ArrayList<KoodiItem>();
+    private Set<KoodiItem> items;
 
     public CacheKey getKey() {
         return key;
@@ -167,11 +168,11 @@ public class KoodistoCache implements Serializable {
         this.updatedAt  =  updatedAt;
     }
 
-    public List<KoodiItem> getItems() {
+    public Set<KoodiItem> getItems() {
         return items;
     }
 
-    public void setItems(List<KoodiItem> items) {
+    public void setItems(Set<KoodiItem> items) {
         this.items  =  items;
     }
 }

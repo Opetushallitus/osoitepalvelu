@@ -25,11 +25,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * User: ratamaa
- * Date: 3/25/14
- * Time: 11:37 AM
- */
 public interface OrganisaatioService extends Serializable {
 
     /**

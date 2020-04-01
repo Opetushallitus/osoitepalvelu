@@ -19,6 +19,7 @@ package fi.vm.sade.osoitepalvelu.kooste.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
@@ -43,10 +44,10 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
     // index
     private String ownerUserOid;
     private SaveType searchType;
-    private DateTime createdAt = new DateTime();
-    private List<String> addressFields  =  new ArrayList<String>();
-    private List<SearchTargetGroup> targetGroups  =  new ArrayList<SearchTargetGroup>();
-    private List<SearchTerm> terms  =  new ArrayList<SearchTerm>();
+    private DateTime createdAt;
+    private Set<String> addressFields;
+    private Set<SearchTargetGroup> targetGroups;
+    private Set<SearchTerm> terms;
     private String lang;
 
     public Long getId() {
@@ -65,27 +66,27 @@ public class SavedSearch implements Serializable, Comparable<SavedSearch> {
         this.ownerUserOid  =  ownerUserOid;
     }
 
-    public List<String> getAddressFields() {
+    public Set<String> getAddressFields() {
         return addressFields;
     }
 
-    public void setAddressFields(List<String> addressFields) {
+    public void setAddressFields(Set<String> addressFields) {
         this.addressFields  =  addressFields;
     }
 
-    public List<SearchTargetGroup> getTargetGroups() {
+    public Set<SearchTargetGroup> getTargetGroups() {
         return targetGroups;
     }
 
-    public void setTargetGroups(List<SearchTargetGroup> targetGroups) {
+    public void setTargetGroups(Set<SearchTargetGroup> targetGroups) {
         this.targetGroups  =  targetGroups;
     }
 
-    public List<SearchTerm> getTerms() {
+    public Set<SearchTerm> getTerms() {
         return terms;
     }
 
-    public void setTerms(List<SearchTerm> terms) {
+    public void setTerms(Set<SearchTerm> terms) {
         this.terms  =  terms;
     }
 

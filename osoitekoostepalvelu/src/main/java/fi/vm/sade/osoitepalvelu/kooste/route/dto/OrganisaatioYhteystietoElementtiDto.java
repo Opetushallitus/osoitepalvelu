@@ -20,11 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-/**
- * User: ratamaa
- * Date: 3/20/14
- * Time: 4:15 PM
- */
 public class OrganisaatioYhteystietoElementtiDto implements Serializable {
     private static final long serialVersionUID = 3038635054979904682L;
     

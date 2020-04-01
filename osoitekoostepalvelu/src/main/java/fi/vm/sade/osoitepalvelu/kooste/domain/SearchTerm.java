@@ -19,12 +19,13 @@ package fi.vm.sade.osoitepalvelu.kooste.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class SearchTerm implements Serializable {
     private static final long serialVersionUID  =  7817695731755786307L;
     
     private String type;
-    private List<String> values  =  new ArrayList<String>();
+    private Set<String> values;
 
     public String getType() {
         return type;
@@ -34,11 +35,11 @@ public class SearchTerm implements Serializable {
         this.type  =  type;
     }
 
-    public List<String> getValues() {
+    public Set<String> getValues() {
         return values;
     }
 
-    public void setValues(List<String> values) {
+    public void setValues(Set<String> values) {
         this.values  =  values;
     }
 }

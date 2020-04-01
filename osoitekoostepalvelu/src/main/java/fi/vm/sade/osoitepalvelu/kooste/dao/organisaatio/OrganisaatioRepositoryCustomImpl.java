@@ -17,7 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 
 import com.google.common.collect.Collections2;
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.domain.Organisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.FilterableOrganisaatio;
 import org.joda.time.DateTime;
@@ -40,24 +40,24 @@ public class OrganisaatioRepositoryCustomImpl implements OrganisaatioRepositoryC
 
 
     @Override
-    public List<OrganisaatioDetails> findOrganisaatios(OrganisaatioYhteystietoCriteriaDto organisaatioCriteria,
+    public List<Organisaatio> findOrganisaatios(OrganisaatioYhteystietoCriteriaDto organisaatioCriteria,
                                                        Locale orderByLocale) {
         String sql = "SELECT * FROM organisaatiodetails where";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         filterByCriteria(organisaatioCriteria, sql, mapSqlParameterSource);
 
-        return namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource, OrganisaatioDetails.class);
+        return namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource, Organisaatio.class);
         //return mongoOperations.find(Query.query(conditions.applyTo(new Criteria())).with(Sort.by("nimi."
         //                +orderByLocale.getLanguage().toLowerCase())), OrganisaatioDetails.class);
     }
 
     @Override
-    public List<OrganisaatioDetails> findOrganisaatiosByOids(List<String> oids, Locale orderByLocale) {
+    public List<Organisaatio> findOrganisaatiosByOids(List<String> oids, Locale orderByLocale) {
         if (oids == null || oids.isEmpty()) {
-            return new ArrayList<OrganisaatioDetails>();
+            return new ArrayList<Organisaatio>();
         }
 
-        String sql = "SELECT * FROM organisaatiodetails where oid In (:oidit) ORDER BY nimi."
+        String sql = "SELECT * FROM organisaatio where oid In (:oidit) ORDER BY nimi."
                 + orderByLocale.getLanguage().toLowerCase();
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("oidit", oids);
@@ -133,7 +133,7 @@ public class OrganisaatioRepositoryCustomImpl implements OrganisaatioRepositoryC
             mapSqlParameterSource.addValue("oid"+(i++), oid);
         }
 
-        String sql = "SELECT * FROM organisaatiodetails where " + parentOidSql;
+        String sql = "SELECT * FROM organisaatio where " + parentOidSql;
         filterByCriteria(organisaatioCriteria, sql, mapSqlParameterSource);
 
        return namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource, OrganisaatioDetails.class);

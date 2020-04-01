@@ -36,7 +36,7 @@ import java.util.Set;
 import java.io.Serializable;
 import java.util.*;
 
-public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio {
+public class Organisaatio implements Serializable, FilterableOrganisaatio {
     private static final long serialVersionUID = 442147524555663558L;
 
     /**
@@ -67,10 +67,10 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
     //index
     private String oppilaitosKoodi; // esim. 10107
 
-    //@DtoConversion(path="toimipisteKoodi", withClass = OrganisaatioYhteystietoHakuResultDto.class)
+    @DtoConversion(path="toimipisteKoodi", withClass = OrganisaatioYhteystietoHakuResultDto.class)
     private String toimipistekoodi;
 
-    //@DtoConversion(path="kotipaikka", withClass = OrganisaatioYhteystietoHakuResultDto.class)
+    @DtoConversion(path="kotipaikka", withClass = OrganisaatioYhteystietoHakuResultDto.class)
     //@Column //index
     private String kotipaikkaUri; // esim. kunta_405
 
@@ -78,10 +78,8 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
 
     private OrganisaatioOsoiteDto postiosoite;
 
-    private List<OrganisaatioDetailsYhteystietoDto> yhteystiedot
-            = new ArrayList<OrganisaatioDetailsYhteystietoDto>();
-    private List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos
-            = new ArrayList<OrganisaatioYhteystietoElementtiDto>();
+    private Set<OrganisaatioDetailsYhteystietoDto> yhteystiedot;
+    private Set<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos;
     // index
     private Set<String> vuosiluokat;
 
@@ -224,11 +222,11 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
         this.postiosoite = postiosoite;
     }
 
-    public List<OrganisaatioDetailsYhteystietoDto> getYhteystiedot() {
+    public Set<OrganisaatioDetailsYhteystietoDto> getYhteystiedot() {
         return yhteystiedot;
     }
 
-    public void setYhteystiedot(List<OrganisaatioDetailsYhteystietoDto> yhteystiedot) {
+    public void setYhteystiedot(Set<OrganisaatioDetailsYhteystietoDto> yhteystiedot) {
         this.yhteystiedot = yhteystiedot;
     }
 
@@ -260,11 +258,11 @@ public class OrganisaatioDetails implements Serializable, FilterableOrganisaatio
         this.varhaiskasvatuksenEmail = varhaiskasvatuksenEmail;
     }
 
-    public List<OrganisaatioYhteystietoElementtiDto> getYhteystietoArvos() {
+    public Set<OrganisaatioYhteystietoElementtiDto> getYhteystietoArvos() {
         return yhteystietoArvos;
     }
 
-    public void setYhteystietoArvos(List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos) {
+    public void setYhteystietoArvos(Set<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos) {
         this.yhteystietoArvos = yhteystietoArvos;
     }
 

@@ -18,11 +18,6 @@ package fi.vm.sade.osoitepalvelu.kooste.route.dto;
 
 import java.io.Serializable;
 
-/**
- * User: ratamaa
- * Date: 3/20/14
- * Time: 4:33 PM
- */
 public class OrganisaatioDetailsYhteystietoDto implements Serializable {
     private static final long serialVersionUID = -2943781431830246991L;
     
