@@ -150,7 +150,7 @@ public class KoodistoCache implements Serializable {
     @Id
     private CacheKey key;
     private DateTime updatedAt  =  new DateTime();
-    private Set<KoodiItem> items;
+    private List<KoodiItem> items;
 
     public CacheKey getKey() {
         return key;
@@ -168,11 +168,11 @@ public class KoodistoCache implements Serializable {
         this.updatedAt  =  updatedAt;
     }
 
-    public Set<KoodiItem> getItems() {
+    public List<KoodiItem> getItems() {
         return items;
     }
 
-    public void setItems(Set<KoodiItem> items) {
+    public void setItems(List<KoodiItem> items) {
         this.items  =  items;
     }
 }

@@ -61,7 +61,7 @@ public class OrganisaatioRepositoryCustomImpl implements OrganisaatioRepositoryC
                 + orderByLocale.getLanguage().toLowerCase();
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("oidit", oids);
-        return namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource, OrganisaatioDetails.class);
+        return namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource, Organisaatio.class);
 
         //return mongoOperations.find(Query.query(new Criteria("oid").in(oids)).with(Sort.by("nimi."
          //       +orderByLocale.getLanguage().toLowerCase())), OrganisaatioDetails.class);
@@ -119,10 +119,10 @@ public class OrganisaatioRepositoryCustomImpl implements OrganisaatioRepositoryC
     }
 
     @Override
-    public List<OrganisaatioDetails> findChildren(Collection<String> parentOids,
+    public List<Organisaatio> findChildren(Collection<String> parentOids,
                       OrganisaatioYhteystietoCriteriaDto organisaatioCriteria, Locale orderByLocale) {
         if (parentOids == null || parentOids.isEmpty()) {
-            return new ArrayList<OrganisaatioDetails>();
+            return new ArrayList<Organisaatio>();
         }
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         String parentOidSql = "";
@@ -136,7 +136,7 @@ public class OrganisaatioRepositoryCustomImpl implements OrganisaatioRepositoryC
         String sql = "SELECT * FROM organisaatio where " + parentOidSql;
         filterByCriteria(organisaatioCriteria, sql, mapSqlParameterSource);
 
-       return namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource, OrganisaatioDetails.class);
+       return namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource, Organisaatio.class);
 
         //conditions.add(CriteriaHelper.inParentOids(new Criteria(), "parentOidPath", parentOids));
 

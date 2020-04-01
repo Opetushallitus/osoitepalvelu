@@ -16,7 +16,7 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio;
 
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.domain.Organisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import org.joda.time.DateTime;
 import org.springframework.data.jdbc.repository.query.Query;
@@ -32,12 +32,12 @@ import java.util.Optional;
 
 public interface OrganisaatioRepositoryCustom {
 
-    List<OrganisaatioDetails> findOrganisaatios(OrganisaatioYhteystietoCriteriaDto criteria,
+    List<Organisaatio> findOrganisaatios(OrganisaatioYhteystietoCriteriaDto criteria,
                                                 Locale orderByLocale);
 
-    List<OrganisaatioDetails> findOrganisaatiosByOids(List<String> oids, Locale orderByLocale);
+    List<Organisaatio> findOrganisaatiosByOids(List<String> oids, Locale orderByLocale);
 
-    List<OrganisaatioDetails> findChildren(Collection<String> parentOids,
+    List<Organisaatio> findChildren(Collection<String> parentOids,
                                            OrganisaatioYhteystietoCriteriaDto organisaatioCriteria,
                                            Locale orderByLocale);
 }

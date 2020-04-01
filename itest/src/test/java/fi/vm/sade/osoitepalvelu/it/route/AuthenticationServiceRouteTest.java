@@ -46,7 +46,7 @@ import static org.junit.Assert.assertTrue;
  * Time: 3:30 PM
  */
 @Ignore // No specified username/password pairs in Bamboo for system user
-@Category(IntegrationTest.class)
+@Category(value = { IntegrationTest.class } )
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes  =  { SpringItestConfig.class, OsoitepalveluCamelConfig.class })
 public class AuthenticationServiceRouteTest {

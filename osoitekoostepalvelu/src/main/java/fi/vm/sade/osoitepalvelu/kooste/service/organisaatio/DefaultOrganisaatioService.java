@@ -25,7 +25,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.AndPredicateAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.KoodiHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.domain.Organisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
@@ -60,7 +60,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     public List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
             @PartialCacheKey OrganisaatioYhteystietoCriteriaDto criteria,
             @PartialCacheKey Locale locale, CamelRequestContext requestContext) {
-        List<OrganisaatioDetails> results;
+        List<Organisaatio> results;
         // Disabling the conditions that should not effect searches by parent/children relation
         // These are only applied in the end results:
         criteria.setUseKieli(false);
@@ -123,7 +123,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
         // restore to defaults:
         criteria.useAll();
 
-        results = new ArrayList<OrganisaatioDetails>(Collections2.filter(results, createResultAfterFilter(criteria)));
+        results = new ArrayList<Organisaatio>(Collections2.filter(results, createResultAfterFilter(criteria)));
 
         return dtoConverter.convert(results, new ArrayList<OrganisaatioYhteystietoHakuResultDto>(),
                 OrganisaatioYhteystietoHakuResultDto.class);
@@ -172,9 +172,9 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
         return predicate;
     }
 
-    private List<String> extractParentOids(List<OrganisaatioDetails> organisaatios) {
+    private List<String> extractParentOids(List<Organisaatio> organisaatios) {
         List<String> allParents = new ArrayList<String>();
-        for (OrganisaatioDetails organisaatio : organisaatios) {
+        for (Organisaatio organisaatio : organisaatios) {
             allParents.addAll(parseParentOidPath(organisaatio));
         }
         return allParents;
@@ -191,34 +191,34 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
      * @return the results (given includeParents is true) and their children so that children are inserted after
      * their parents.
      */
-    private List<OrganisaatioDetails> mergeWithChildren(List<OrganisaatioDetails> results,
+    private List<Organisaatio> mergeWithChildren(List<Organisaatio> results,
                     OrganisaatioYhteystietoCriteriaDto criteria, Locale locale, boolean includeParents) {
-        List<OrganisaatioDetails> allChildren = new ArrayList<OrganisaatioDetails>(); // organisaatioRepository.findChildren(Collections2.transform(results,
+        List<Organisaatio> allChildren = new ArrayList<Organisaatio>(); // organisaatioRepository.findChildren(Collections2.transform(results,
                 // FilterableOrganisaatio.GET_OID), criteria, locale);
 
         Set<String> added = new TreeSet<String>();
-        Map<String,List<OrganisaatioDetails>> childrenByAllParents = new TreeMap<String, List<OrganisaatioDetails>>();
-        for (OrganisaatioDetails child : allChildren) {
+        Map<String,List<Organisaatio>> childrenByAllParents = new TreeMap<String, List<Organisaatio>>();
+        for (Organisaatio child : allChildren) {
             List<String> parentOids = parseParentOidPath(child);
             for (String parentOid : parentOids) {
-                List<OrganisaatioDetails> parentsChildren = childrenByAllParents.get(parentOid);
+                List<Organisaatio> parentsChildren = childrenByAllParents.get(parentOid);
                 if (parentsChildren == null) {
-                    parentsChildren = new ArrayList<OrganisaatioDetails>();
+                    parentsChildren = new ArrayList<Organisaatio>();
                     childrenByAllParents.put(parentOid, parentsChildren);
                 }
                 parentsChildren.add(child);
             }
         }
 
-        List<OrganisaatioDetails> mergedResults = new ArrayList<OrganisaatioDetails>();
-        for (OrganisaatioDetails result : results) {
+        List<Organisaatio> mergedResults = new ArrayList<Organisaatio>();
+        for (Organisaatio result : results) {
             if (includeParents && !added.contains(result.getOid())) {
                 mergedResults.add(result);
                 added.add(result.getOid());
             }
-            List<OrganisaatioDetails> parentsChildren = childrenByAllParents.get(result.getOid());
+            List<Organisaatio> parentsChildren = childrenByAllParents.get(result.getOid());
             if (parentsChildren != null) {
-                for (OrganisaatioDetails child : parentsChildren) {
+                for (Organisaatio child : parentsChildren) {
                     if (!added.contains(child.getOid())) {
                         mergedResults.add(child);
                         added.add(child.getOid());
@@ -236,20 +236,20 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
      * @return results with all their possible parents so that parents are inserted before their children in
      * inheritance order
      */
-    private List<OrganisaatioDetails> mergeParents(List<OrganisaatioDetails> results, Locale locale) {
-        List<OrganisaatioDetails> allParents = new ArrayList<>(); // organisaatioRepository.findOrganisaatiosByOids(extractParentOids(results),
+    private List<Organisaatio> mergeParents(List<Organisaatio> results, Locale locale) {
+        List<Organisaatio> allParents = new ArrayList<>(); // organisaatioRepository.findOrganisaatiosByOids(extractParentOids(results),
         //        locale);
-        Map<String,OrganisaatioDetails> byOids = new TreeMap<String, OrganisaatioDetails>();
-        for (OrganisaatioDetails parent : allParents) {
+        Map<String,Organisaatio> byOids = new TreeMap<String, Organisaatio>();
+        for (Organisaatio parent : allParents) {
             byOids.put(parent.getOid(), parent);
         }
 
         Set<String> added = new TreeSet<String>();
-        List<OrganisaatioDetails> mergedResults = new ArrayList<OrganisaatioDetails>();
-        for (OrganisaatioDetails result : results) {
+        List<Organisaatio> mergedResults = new ArrayList<Organisaatio>();
+        for (Organisaatio result : results) {
             List<String> parentOids = parseParentOidPath(result);
             for (String parentOid : parentOids) {
-                OrganisaatioDetails parent = byOids.get(parentOid);
+                Organisaatio parent = byOids.get(parentOid);
                 if (parent != null && !added.contains(parent.getOid())) {
                     mergedResults.add(parent);
                     added.add(parent.getOid());
@@ -272,7 +272,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
      * @param child
      * @return the parentOidPath of child as an array of single OIDs
      */
-    private List<String> parseParentOidPath(OrganisaatioDetails child) {
+    private List<String> parseParentOidPath(Organisaatio child) {
         List<String> parentOids = new ArrayList<String>();
         for (String pathPart : child.getParentOidPath()) {
             List<String> pathParts = new ArrayList<String>(Arrays.asList(pathPart.split("\\|")));
@@ -337,7 +337,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
 
     private boolean isCacheUsable(DateTime updatedAt, DateTime now) {
         return updatedAt.plus(cacheTimeoutSeconds * MILLIS_IN_SECOND).compareTo(now) > 0
-                && updatedAt.isAfter(OrganisaatioDetails.MODEL_CHANGED_AT);
+                && updatedAt.isAfter(Organisaatio.MODEL_CHANGED_AT);
     }
 
     private boolean isCacheUsed() {

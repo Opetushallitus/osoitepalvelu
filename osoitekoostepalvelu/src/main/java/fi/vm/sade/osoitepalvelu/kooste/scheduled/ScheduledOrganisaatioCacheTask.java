@@ -21,7 +21,7 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasDisabledCasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.DateHelper;
 import fi.vm.sade.osoitepalvelu.kooste.dao.organisaatio.OrganisaatioRepository;
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.domain.Organisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.route.OivaRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.OrganisaatioServiceRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
@@ -198,9 +198,9 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
                     .filter(koulutuslupa -> DateHelper.isBetweenInclusive(date, koulutuslupa.getAlkupvm(), koulutuslupa.getLoppupvm()))
                     .forEach(koulutuslupa -> {
                         String jarjestajaYtunnus = koulutuslupa.getJarjestajaYtunnus();
-                        Optional<OrganisaatioDetails> organisaatioOptional = organisaatioRepository.findByYtunnus(jarjestajaYtunnus);
+                        Optional<Organisaatio> organisaatioOptional = organisaatioRepository.findByYtunnus(jarjestajaYtunnus);
                         if (organisaatioOptional.isPresent()) {
-                            OrganisaatioDetails organisaatioDetails = organisaatioOptional.get();
+                            Organisaatio organisaatioDetails = organisaatioOptional.get();
                             organisaatioDetails.setKoulutusluvat(koulutuslupa.getKoulutukset());
                             organisaatioRepository.save(organisaatioDetails);
                         } else {

@@ -78,8 +78,8 @@ public class Organisaatio implements Serializable, FilterableOrganisaatio {
 
     private OrganisaatioOsoiteDto postiosoite;
 
-    private Set<OrganisaatioDetailsYhteystietoDto> yhteystiedot;
-    private Set<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos;
+    private Set<OrganisaatioDetailsYhteystietoDto> yhteystiedot = new HashSet<>();
+    private Set<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos = new HashSet<>();
     // index
     private Set<String> vuosiluokat;
 

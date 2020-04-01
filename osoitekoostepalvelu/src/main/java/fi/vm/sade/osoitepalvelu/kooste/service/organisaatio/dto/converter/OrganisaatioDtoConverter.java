@@ -17,7 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.dto.converter;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.dtoconverter.AbstractDtoConverter;
-import fi.vm.sade.osoitepalvelu.kooste.domain.OrganisaatioDetails;
+import fi.vm.sade.osoitepalvelu.kooste.domain.Organisaatio;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsYhteystietoDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteysosoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoElementtiDto;
@@ -26,17 +26,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 3/25/14
- * Time: 11:40 AM
- */
 @Component
 public class OrganisaatioDtoConverter extends AbstractDtoConverter {
     private static final long serialVersionUID = -3701212052731186195L;
 
     // Custom converter in order to map yhteystieto and yhteystietoarvo fields.
-    public OrganisaatioYhteystietoHakuResultDto convert(OrganisaatioDetails from, OrganisaatioYhteystietoHakuResultDto to) {
+    public OrganisaatioYhteystietoHakuResultDto convert(Organisaatio from, OrganisaatioYhteystietoHakuResultDto to) {
         convertValue(from, to);
         for (OrganisaatioDetailsYhteystietoDto yhteystieto : from.getYhteystiedot()) {
             List<OrganisaatioYhteysosoiteDto> target = null;
