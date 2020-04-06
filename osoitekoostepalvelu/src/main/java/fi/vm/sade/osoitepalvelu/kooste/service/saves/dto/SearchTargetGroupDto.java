@@ -16,20 +16,15 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
-import com.wordnik.swagger.annotations.ApiModel;
-import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SearchTargetGroup;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 1:34 PM
- */
 @DtoConversion @ApiModel("Osoitepalvelun haun kohderyhmä")
 public class SearchTargetGroupDto implements Serializable {
     private static final long serialVersionUID  =  191054363453587812L;

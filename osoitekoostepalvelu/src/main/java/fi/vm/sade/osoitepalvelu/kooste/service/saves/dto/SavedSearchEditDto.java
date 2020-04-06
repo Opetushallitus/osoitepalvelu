@@ -16,20 +16,15 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
-import com.wordnik.swagger.annotations.ApiModel;
-import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.ratamaa.dtoconverter.annotation.DtoNotExported;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 12/11/13
- * Time: 4:40 PM
- */
 @DtoConversion
 @ApiModel("Tallennetun haun muokkaustiedot")
 public class SavedSearchEditDto {

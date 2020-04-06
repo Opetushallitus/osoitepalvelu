@@ -12,7 +12,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
- */
 
 package fi.vm.sade.osoitepalvelu.kooste.config.swagger;
 
@@ -40,7 +39,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * User: ratamaa
  * Date: 7/21/14
  * Time: 2:30 PM
- */
+
 @Configuration
 public class CustomSwaggerConfig extends SpringSwaggerConfig {
 
@@ -123,3 +122,4 @@ public class CustomSwaggerConfig extends SpringSwaggerConfig {
         return new CustomJacksonSwaggerSupport();
     }
 }
+ */

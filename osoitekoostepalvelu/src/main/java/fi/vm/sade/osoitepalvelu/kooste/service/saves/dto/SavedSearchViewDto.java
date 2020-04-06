@@ -16,22 +16,17 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.saves.dto;
 
-import com.wordnik.swagger.annotations.ApiModel;
-import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.ratamaa.dtoconverter.annotation.DtoConversion;
 import fi.ratamaa.dtoconverter.annotation.DtoNotExported;
 import fi.vm.sade.osoitepalvelu.kooste.domain.SavedSearch;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 1:23 PM
- */
 @DtoConversion
 @DtoNotExported
 @ApiModel("Tallennetun haun yksityiskohtaiset tiedot")

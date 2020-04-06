@@ -16,9 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.mvc.dto;
 
-import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OidAndTyyppiPair;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchTermsDto;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Set;

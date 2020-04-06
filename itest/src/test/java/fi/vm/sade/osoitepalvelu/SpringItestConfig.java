@@ -39,7 +39,7 @@ import java.util.Map;
  */
 @Configuration
 @PropertySource({"classpath:/test.properties" })
-@Import(value = {SpringTestAppConfig.class, MongoTestConfig.class})
+@Import(value = { SpringTestAppConfig.class })
 public class SpringItestConfig {
 
     @Autowired

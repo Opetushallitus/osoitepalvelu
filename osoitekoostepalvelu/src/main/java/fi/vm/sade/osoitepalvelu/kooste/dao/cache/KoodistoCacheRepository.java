@@ -26,6 +26,4 @@ import org.springframework.stereotype.Repository;
 
 public interface KoodistoCacheRepository extends Serializable, CrudRepository<KoodistoCache, KoodistoCache.CacheKey> {
 
-    KoodistoCache findOne(KoodistoCache.CacheKey key);
-
 }

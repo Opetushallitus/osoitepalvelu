@@ -16,11 +16,12 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.route;
 
+import fi.vm.sade.properties.OphProperties;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.*;
 import com.fasterxml.jackson.core.type.TypeReference;
+import fi.vm.sade.properties.OphProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,11 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * User: ratamaa
- * Date: 3/11/14
- * Time: 2:56 PM
- */
+
 @Component
 public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBuilder
         implements AuthenticationServiceRoute {
@@ -61,7 +58,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     private static final String ROUTE_HENKILO = "direct:henkilo";
 
     @Autowired
-    private UrlConfiguration urlConfiguration;
+    private OphProperties urlConfiguration;
 
     @Override
     public void configure() {

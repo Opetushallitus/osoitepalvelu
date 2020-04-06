@@ -16,9 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.mvc.dto;
 
-import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.vm.sade.osoitepalvelu.kooste.service.email.dto.MyInformationDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SourceRegister;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.HashSet;

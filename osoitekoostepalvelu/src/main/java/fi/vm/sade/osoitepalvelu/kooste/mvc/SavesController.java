@@ -16,10 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiResponse;
-
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.SavedSearchService;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SavedSearchEditDto;
@@ -27,6 +23,9 @@ import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SavedSearchListDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SavedSearchSaveDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.saves.dto.SavedSearchViewDto;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,11 +35,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 2:32 PM
- */
 @Api(value="saves", description = "Tarjoaa REST:n mukaiset CRUD-operaatiot käyttäjän omille " +
         "tallennetuille hauille.")
 @Controller

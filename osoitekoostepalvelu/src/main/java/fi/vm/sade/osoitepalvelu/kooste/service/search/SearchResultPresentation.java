@@ -16,8 +16,8 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.service.search;
 
-import com.wordnik.swagger.annotations.ApiModelProperty;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultRowDto;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Locale;
 

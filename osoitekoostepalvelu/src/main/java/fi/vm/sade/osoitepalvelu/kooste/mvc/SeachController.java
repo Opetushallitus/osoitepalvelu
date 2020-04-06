@@ -16,9 +16,6 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiResponse;
 import fi.vm.sade.osoitepalvelu.kooste.common.exception.NotFoundException;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.DefaultCamelRequestContext;
@@ -28,6 +25,9 @@ import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultPresentati
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.SearchResultsPresentationDto;
 import fi.vm.sade.security.SimpleCache;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import org.apache.http.HttpStatus;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.joda.time.DateTime;

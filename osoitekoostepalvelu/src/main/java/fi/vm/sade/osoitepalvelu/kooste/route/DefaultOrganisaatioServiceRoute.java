@@ -19,13 +19,14 @@ package fi.vm.sade.osoitepalvelu.kooste.route;
 import com.fasterxml.jackson.core.type.TypeReference;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHierarchyResultsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import fi.vm.sade.properties.OphProperties;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,7 @@ public class DefaultOrganisaatioServiceRoute extends AbstractJsonToDtoRouteBuild
     private static final long HAKU_TIMEOUT_MINUTES = 10L;
 
     @Autowired
-    private UrlConfiguration urlConfiguration;
+    private OphProperties urlConfiguration;
 
     @Override
     public void configure() {

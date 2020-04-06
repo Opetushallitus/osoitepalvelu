@@ -17,8 +17,6 @@
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
 import fi.vm.sade.osoitepalvelu.kooste.common.ObjectMapperProvider;
 import fi.vm.sade.osoitepalvelu.kooste.scheduled.ScheduledOrganisaatioCacheTask;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
@@ -26,6 +24,8 @@ import fi.vm.sade.osoitepalvelu.kooste.service.organisaatio.OrganisaatioService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.AppSettingsService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
 import fi.vm.sade.properties.OphProperties;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -72,7 +72,7 @@ public class AppSettingsController extends AbstractMvcController {
     @RequestMapping(value  =  "/settings.js", method  =  RequestMethod.GET, produces  =  "text/javascript")
     @ResponseBody
     public String settingsJs() throws IOException {
-        AppSettingsDto settings  =  appSettingsService.getUiSettings();
+        AppSettingsDto settings  =  new AppSettingsDto(); //appSettingsService.getUiSettings();
         ObjectMapper mapper  =  objectMapperProvider.getContext(ObjectMapper.class);
         return "window.CONFIG  =  "  +  mapper.writeValueAsString(settings)  +  ";";
     }

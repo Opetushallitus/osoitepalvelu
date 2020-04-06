@@ -12,7 +12,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
- */
+
 
 package fi.vm.sade.osoitepalvelu.kooste.config.swagger;
 
@@ -32,11 +32,6 @@ import org.springframework.context.ApplicationContext;
 import javax.annotation.PostConstruct;
 import java.util.Map;
 
-/**
- * User: ratamaa
- * Date: 7/21/14
- * Time: 3:48 PM
- */
 public class CustomJacksonSwaggerSupport extends JacksonSwaggerSupport {
     @Autowired
     private ObjectMapper objectMapper;
@@ -75,3 +70,5 @@ public class CustomJacksonSwaggerSupport extends JacksonSwaggerSupport {
         return module;
     }
 }
+
+*/

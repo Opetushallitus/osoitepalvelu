@@ -18,10 +18,10 @@ spring:
     password: ophoph
   flyway:
     out-of-order: true
-  resources:
-    cache:
-      cachecontrol:
-        no-store: true
   session:
     store-type: jdbc
+web:
+  url:
+    cas: https://virkailija.untuvaopintopolku.fi/cas
+
 

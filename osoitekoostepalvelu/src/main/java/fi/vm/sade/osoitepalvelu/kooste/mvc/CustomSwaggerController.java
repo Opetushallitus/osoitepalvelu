@@ -12,7 +12,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
- */
 
 package fi.vm.sade.osoitepalvelu.kooste.mvc;
 
@@ -38,8 +37,7 @@ import java.util.Map;
  * User: ratamaa
  * Date: 7/21/14
  * Time: 4:58 PM
- */
-@Controller
+
 public class CustomSwaggerController extends AbstractMvcController {
     public static final String DOCUMENTATION_BASE_PATH = "/docs";
 
@@ -95,3 +93,4 @@ public class CustomSwaggerController extends AbstractMvcController {
         return resourceListing;
     }
 }
+ */

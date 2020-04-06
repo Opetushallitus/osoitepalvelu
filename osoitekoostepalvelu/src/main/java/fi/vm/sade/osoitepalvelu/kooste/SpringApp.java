@@ -21,13 +21,19 @@ import fi.vm.sade.auditlog.Audit;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasProxyTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.config.SpringMvcApp;
+import fi.vm.sade.properties.OphProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
+import java.nio.file.Paths;
 
 @Configuration
 @ComponentScan(basePackages  =  {
@@ -37,8 +43,9 @@ import org.springframework.context.support.ResourceBundleMessageSource;
         "fi.vm.sade.osoitepalvelu.kooste.service",
         "fi.vm.sade.osoitepalvelu.kooste.webapp"
 })
-@ImportResource("classpath:spring/application-context.xml")
-@Import(value  =  { OsoitepalveluCamelConfig.class })
+// @ImportResource("classpath:spring/application-context.xml")
+@Import(value  =  { OsoitepalveluCamelConfig.class, SpringMvcApp.class})
+@PropertySource("classpath:osoitekoostepalvelu.properties")
 @SpringBootApplication
 public class SpringApp {
 
@@ -51,6 +58,16 @@ public class SpringApp {
 
     @Value("${auth.mode:'cas'}")
     private String authMode;
+
+    @Bean
+    public OphProperties properties() {
+        OphProperties properties = new OphProperties("/osoitekoostepalvelu-oph.properties");
+        properties.addOptionalFiles("/osoitekoostepalvelu.properties");
+        properties.addOptionalFiles(Paths.get(System.getProperties().getProperty("user.home"), "/oph-configuration/common.properties").toString());
+        properties.addOptionalFiles("/ui.app.properties");
+        properties.addOptionalFiles("/ui.env.properties");
+        return properties;
+    }
 
     @Bean
     public ResourceBundleMessageSource messageSource() {

@@ -17,7 +17,7 @@
 package fi.vm.sade.osoitepalvelu.kooste.route;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
-import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
+import fi.vm.sade.properties.OphProperties;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto.KoodistoTyyppi;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoVersioDto;
@@ -42,7 +42,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     private static final String REITTI_SIALTYY_ALAKOODIS  =  "direct:sisaltyAlakoodis";
 
     @Autowired
-    private UrlConfiguration urlConfiguration;
+    private OphProperties urlConfiguration;
 
     // For cache testing:
     private boolean findCounterUsed  =  false;

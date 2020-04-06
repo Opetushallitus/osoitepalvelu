@@ -16,9 +16,9 @@
 
 package fi.vm.sade.osoitepalvelu.kooste.route;
 
+import fi.vm.sade.properties.OphProperties;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilder;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
-import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoulutusCriteriaDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.TarjontaKoulutusHakuResultDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -48,7 +48,7 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
     private static final long TIMEOUT_MINUTES = 30L;
 
     @Autowired
-    private UrlConfiguration urlConfiguration;
+    private OphProperties properties;
 
     @Override
     public void configure() {
@@ -71,7 +71,7 @@ public class DefaultTarjontaServiceRoute extends AbstractJsonToDtoRouteBuilder
                 .retry(2)
         )
         .process(tarjontaCallInOutDebug)
-        .to(uri(urlConfiguration.getProperty("tarjonta-service.koulutus.search"),
+        .to(uri(properties.getProperty("tarjonta-service.koulutus.search"),
                 TIMEOUT_MINUTES*SECONDS_IN_MINUTE*MILLIS_IN_SECOND))
         .process(tarjontaCallInOutDebug)
         .process(jsonToDto(new TypeReference<TarjontaKoulutusHakuResultDto>() {}));

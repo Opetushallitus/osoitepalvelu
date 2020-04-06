@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
+import fi.vm.sade.osoitepalvelu.kooste.config.swagger.SwaggerTwoConfig;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,31 +30,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
-import com.mangofactory.swagger.models.alternates.AlternateTypeRule;
-import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
-import com.wordnik.swagger.model.ApiInfo;
+// import fi.vm.sade.osoitepalvelu.kooste.config.swagger.CustomSwaggerConfig;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import springfox.documentation.service.ApiInfo;
 
-import fi.vm.sade.osoitepalvelu.kooste.config.swagger.CustomSwaggerConfig;
 
-/**
- * User: ratamaa
- * Date: 12/10/13
- * Time: 1:16 PM
- */
 @Configuration
 @ComponentScan(basePackages  =  {
     "fi.vm.sade.osoitepalvelu.kooste.mvc",
     "fi.vm.sade.osoitepalvelu.kooste.scheduled"
 })
 @ImportResource("classpath:spring/spring-mvc.xml")
-@Import(CustomSwaggerConfig.class) // Swagger
+@Import(SwaggerTwoConfig.class) // Swagger
 public class SpringMvcApp {
-
+    /*
     private SpringSwaggerConfig springSwaggerConfig;
-
     @Autowired
     public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
         this.springSwaggerConfig = springSwaggerConfig;
@@ -76,17 +67,6 @@ public class SpringMvcApp {
                 );
     }
 
-    protected ApiInfo apiInfo() {
-        return new ApiInfo(
-                "Osoitepalvelu", /* title */
-                "Osoitepalvelu on Opetushallituksen työntekijöille tarkoitettu osoitetietojen hakemista varten." +
-                        "Palvelussa on käyttöliittymä, jonka avulla työntekijä voi hakea osoitetietoja eri" +
-                        " hakukriteereillä. Hakukriteerit voi myös tallentaa haluamalleen nimelle myöhempää " +
-                        "tarvetta varten. Tiedot koostetaan muista palveluista.",
-                null, /* TOS URL */
-                null, /* Contact */
-                "EUPL", /* license */
-                "http://www.osor.eu/eupl/" /* license URL */
-        );
     }
+    */
 }

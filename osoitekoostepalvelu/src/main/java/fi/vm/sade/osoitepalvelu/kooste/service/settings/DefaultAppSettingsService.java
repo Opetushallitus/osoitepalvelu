@@ -37,10 +37,8 @@ public class DefaultAppSettingsService extends AbstractService implements AppSet
 
     private static final Pattern EXPRESSION  =  Pattern.compile("\\$\\{(.*?)\\}");
 
-    @Resource(name  =  "uiAppProperties")
     private Properties uiAppProperties;
 
-    @Resource(name  =  "uiEnvProperties")
     private Properties uiEnvProperties;
 
     private StringValueResolver resolver;

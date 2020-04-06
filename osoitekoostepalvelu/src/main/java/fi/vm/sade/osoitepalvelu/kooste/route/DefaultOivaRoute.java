@@ -5,7 +5,11 @@ import fi.vm.sade.osoitepalvelu.kooste.common.route.AbstractJsonToDtoRouteBuilde
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.oiva.KoulutuslupaDto;
+import fi.vm.sade.properties.OphProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import fi.vm.sade.properties.OphProperties;
+
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,11 +20,8 @@ public class DefaultOivaRoute extends AbstractJsonToDtoRouteBuilder implements O
 
     private static final String KOULUTUSLUPA_LIST =  "direct:koulutuslupaList";
 
-    private final UrlConfiguration urlConfiguration;
-
-    public DefaultOivaRoute(UrlConfiguration urlConfiguration) {
-        this.urlConfiguration = urlConfiguration;
-    }
+    @Autowired
+    private OphProperties urlConfiguration;
 
     @Override
     public void configure() throws Exception {

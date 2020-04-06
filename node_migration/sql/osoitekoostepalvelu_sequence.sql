@@ -3,8 +3,3 @@ CREATE TABLE "sequence" (
     "name" TEXT,
     "sequence" BIGINT,
 );
-
-INSERT INTO "sequence" ("id", "name", "sequence")
-    VALUES
-        (0, 'savedSearch', 3);
-
