@@ -18,8 +18,7 @@ package fi.vm.sade.osoitepalvelu.it.route;
 
 import fi.vm.sade.osoitepalvelu.IntegrationTest;
 import fi.vm.sade.osoitepalvelu.SpringItestConfig;
-import fi.vm.sade.osoitepalvelu.SpringTestAppConfig;
-import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.configuration.OsoitepalveluCamelConfig;
 import fi.vm.sade.osoitepalvelu.kooste.route.DefaultKoodistoRoute;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodiDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoDto.KoodistoTyyppi;
@@ -28,7 +27,6 @@ import fi.vm.sade.osoitepalvelu.kooste.route.dto.KoodistoVersioDto;
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.component.http.HttpOperationFailedException;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;

@@ -16,7 +16,7 @@
     <ctx:property-placeholder
             location="classpath:osoitekoostepalvelu.properties, classpath:osoitekoostepalvelu-oph.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/osoitekoostepalvelu.properties, file:///${user.home:''}/oph-configuration/hakuparametrit.properties, file:///${user.home:''}/oph-configuration/override.properties"
             ignore-resource-not-found="true" properties-ref="defaultProps"/>
-
+    <!--
     <bean id="uiEnvProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
             <list>
@@ -32,7 +32,7 @@
             </list>
         </property>
     </bean>
-
+    -->
     <bean id="defaultProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="properties">
             <util:properties local-override="true">
@@ -45,9 +45,10 @@
         </property>
     </bean>
 
-    <bean class="fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration"/>
+    <!-- <bean class="fi.vm.sade.osoitepalvelu.kooste.config.UrlConfiguration"/>
 
     <import resource="file:///${user.home:''}/oph-configuration/security-context-backend.xml"/>
+    -->
 
     <ehcache:annotation-driven cache-manager="ehCacheManager" />
 

@@ -20,18 +20,16 @@ import fi.vm.sade.auditlog.ApplicationType;
 import fi.vm.sade.auditlog.Audit;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasProxyTicketProvider;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.cas.CasTicketProvider;
-import fi.vm.sade.osoitepalvelu.kooste.config.OsoitepalveluCamelConfig;
-import fi.vm.sade.osoitepalvelu.kooste.config.SpringMvcApp;
+import fi.vm.sade.osoitepalvelu.kooste.configuration.OsoitepalveluCamelConfig;
+import fi.vm.sade.osoitepalvelu.kooste.configuration.SpringMvcApp;
 import fi.vm.sade.properties.OphProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import java.nio.file.Paths;
 
@@ -43,7 +41,7 @@ import java.nio.file.Paths;
         "fi.vm.sade.osoitepalvelu.kooste.service",
         "fi.vm.sade.osoitepalvelu.kooste.webapp"
 })
-// @ImportResource("classpath:spring/application-context.xml")
+@ImportResource("classpath:spring/application-context.xml")
 @Import(value  =  { OsoitepalveluCamelConfig.class, SpringMvcApp.class})
 @PropertySource("classpath:osoitekoostepalvelu.properties")
 @SpringBootApplication
@@ -82,11 +80,6 @@ public class SpringApp {
         return new CasProxyTicketProvider(casService, authMode);
     }
 
-    @Bean
-    @Scope("singleton")
-    public Audit audit() {
-        return new Audit(LOGGER::info, "osoitepalvelu", ApplicationType.VIRKAILIJA);
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(SpringApp.class, args);

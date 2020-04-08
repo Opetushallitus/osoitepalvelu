@@ -11,14 +11,6 @@
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <mvc:annotation-driven content-negotiation-manager="contenNegotiationManager"/>
-    <!-- Fix mvc on spring 3.2 update. -->
-    <bean id="contenNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-        <!-- Turn off working out content type based on URL file extension,
-        should fall back to looking at the Accept headers -->
-        <property name="favorPathExtension" value="false" />
-    </bean>
-
     <task:annotation-driven executor="taskExecutor"/>
     <task:executor id="taskExecutor" pool-size="1" queue-capacity="10"/>
 

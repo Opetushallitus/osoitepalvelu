@@ -1,4 +1,4 @@
-package fi.vm.sade.osoitepalvelu.kooste.config.swagger;
+package fi.vm.sade.osoitepalvelu.kooste.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

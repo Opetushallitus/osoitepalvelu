@@ -1,11 +1,8 @@
-package fi.vm.sade.osoitepalvelu.kooste.config;
+package fi.vm.sade.osoitepalvelu.kooste.configuration;
 
 import fi.vm.sade.properties.OphProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.util.StringUtils;
 
 import java.nio.file.Paths;
 

@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-package fi.vm.sade.osoitepalvelu.kooste.config;
+package fi.vm.sade.osoitepalvelu.kooste.configuration;
 
 import fi.vm.sade.osoitepalvelu.kooste.common.util.IgnorantTrustManager;
 import org.apache.camel.CamelContext;
