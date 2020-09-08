@@ -127,7 +127,7 @@ function osoitepalveluInit() {
         console.log("** Loading localisation info; from: ", localisationUrl);
         init_counter++;
         jQuery.ajax(localisationUrl, {
-          dataType: "json",
+            dataType: "json",
             crossDomain:true,
             complete: logRequest,
             success: function(xhr, status) {
