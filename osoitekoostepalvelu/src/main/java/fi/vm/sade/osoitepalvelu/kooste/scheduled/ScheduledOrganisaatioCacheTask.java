@@ -71,7 +71,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
 
 
     // Every working day night at 3 AM
-    @Scheduled(cron = "0 0 3 * * MON-FRI")
+    @Scheduled(cron = "0 */10 * * * MON-FRI")
     public void refreshOrganisaatioCache() {
         logger.info("BEGIN SCHEDULED refreshOrganisaatioCache.");
         showCacheState();
