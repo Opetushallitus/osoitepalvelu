@@ -69,3 +69,4 @@ viestipalvelu.emailsend.email.body=
 vuosiluokka.used.for.oppilaitostyyppis=11,12,19
 web.url.cas=https\://${host.cas}/cas
 produce.error.message.stack.traces=false
+logging.level.org.springframework.data.mongodb.core.MongoTemplate=DEBUG
