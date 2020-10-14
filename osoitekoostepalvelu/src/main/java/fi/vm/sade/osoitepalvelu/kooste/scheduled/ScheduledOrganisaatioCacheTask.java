@@ -118,7 +118,7 @@ public class ScheduledOrganisaatioCacheTask extends AbstractService {
         List<String> cachedObsoleteOids = organisaatioService.findAllOidsOfCachedOrganisaatios();
         logger.info("all cached organisations listed");
         cachedObsoleteOids.removeAll(oids);
-        logger.info("Cache obsolete oids deleted,starting thel loop")
+        logger.info("Cache obsolete oids deleted,starting thel loop");
         for (String oid : cachedObsoleteOids) {
             organisaatioService.purgeOrganisaatioByOidCache(oid);
         }
