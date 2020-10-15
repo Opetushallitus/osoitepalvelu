@@ -19,7 +19,8 @@ log4j.appender.FILE.MaxBackupIndex=20
 {% endraw %}
 # By default hide these spammers by default
 log4j.logger.org.apache.camel.component.http4.HttpComponent=WARN
-log4j.logger.org.springframework=ERROR
+# all logs for debug reasons
+log4j.logger.org.springframework=ALL
 log4j.logger.org.vaadin=ERROR
 log4j.logger.javax.sql=ERROR
 # cas session + singlelogout tracing
