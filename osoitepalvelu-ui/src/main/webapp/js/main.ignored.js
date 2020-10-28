@@ -33,6 +33,10 @@ OsoiteKoostepalvelu.run(function($http, $cookies) {
     }
 });
 
+jQuery.ajaxSetup({
+  headers: { 'Caller-Id': '1.2.246.562.10.00000000001.osoitepalvelu-ui'},
+});
+
 OsoiteKoostepalvelu.factory('SearchResultProvider', ["$http", "LocalisationService",
         function($http, LocalisationService) {
     return function(details) {
