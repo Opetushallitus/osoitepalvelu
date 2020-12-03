@@ -69,6 +69,11 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
     }
 
     @Override
+    public boolean isOrganisaatioOidIncluded() {
+        return true;
+    }
+
+    @Override
     public boolean isYtunnusIncluded() {
         return true;
     }
