@@ -136,6 +136,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
                 //{type: "KOULUTUSNEVONTA",   name: LocalisationService.t('target_group_option_koulutusneuvonta')}
             ]
         },
+        /* 
         {type: 'KOULUTUKSEN_TARJOAJAT', name: LocalisationService.t("target_group_koulutuksen_tarjoajat"),
             options: [
                 {type: 'KOULUTUSTOIMIJA', name: LocalisationService.t("target_group_option_koulutustoimija"), selected: true},
@@ -143,6 +144,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
                 {type: 'TOIMIPISTE',  name: LocalisationService.t('target_group_option_toimipiste'), selected: true}
             ]
         },
+        */
         {type: 'OPPISOPIMUSTOIMPISTEET',    name: LocalisationService.t('target_group_oppisopimustoimistot'),
             options: [
                 {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio'),
