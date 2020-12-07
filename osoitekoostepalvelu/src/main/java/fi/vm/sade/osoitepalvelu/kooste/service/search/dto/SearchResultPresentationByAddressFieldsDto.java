@@ -25,11 +25,6 @@ import org.springframework.util.MultiValueMap;
 import java.io.Serializable;
 import java.util.*;
 
-/**
- * User: ratamaa
- * Date: 2/17/14
- * Time: 10:31 AM
- */
 public class SearchResultPresentationByAddressFieldsDto implements SearchResultPresentation, Serializable {
     private static final long serialVersionUID  =  -9202420166871480974L;
 
@@ -38,6 +33,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings  =  new LinkedMultiValueMap<String, String>();
         fieldMappings.add("ORGANISAATIO_NIMI", "organisaationNimiIncluded");
         fieldMappings.add("ORGANISAATIO_TUNNISTE", "organisaatiotunnisteIncluded");
+        fieldMappings.add("ORGANISAATIO_OID", "organisaatioOidIncluded");
         fieldMappings.add("YTUNNUS", "ytunnusIncluded");
         fieldMappings.add("YRITYSMUOTO", "yritysmuotoIncluded");
         fieldMappings.add("OPETUSKIELI", "opetuskieliIncluded");
@@ -61,6 +57,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
 
     private boolean organisaationNimiIncluded;
     private boolean organisaatiotunnisteIncluded;
+    private boolean organisaatioOidIncluded;
     private boolean ytunnusIncluded;
     private boolean yritysmuotoIncluded;
     private boolean opetuskieliIncluded;
@@ -80,6 +77,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean organisaatioEmailIncluded;
     private boolean koulutuksenTarjoajatIncluded;
     private Locale locale;
+
     private Set<OidAndTyyppiPair> nonIncludedOids;
     private SearchTermsDto.SearchType searchType;
 
@@ -95,6 +93,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
             switch (searchTerms.getSearchType()) {
                 case CONTACT:
                     setOrganisaationNimiIncluded(organisaatioTypesIncluded);
+                    isOrganisaatioOidIncluded(organisaatioTypesIncluded);
                     setYhteyshenkiloIncluded(henkiloTypesIncluded);
                     includeAddressFields(searchTerms.getAddressFields());
                     break;
@@ -156,6 +155,16 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     public void setOrganisaatiotunnisteIncluded(boolean organisaatiotunnisteIncluded) {
         this.organisaatiotunnisteIncluded  =  organisaatiotunnisteIncluded;
     }
+
+    @Override
+    public boolean isOrganisaatioOidIncluded() {
+        return organisaatioOidIncluded;
+    }
+
+    public void isOrganisaatioOidIncluded(boolean organisaatioOidIncluded) {
+        this.organisaatioOidIncluded = organisaatioOidIncluded;
+    }
+
 
     @Override
     public boolean isYtunnusIncluded() {

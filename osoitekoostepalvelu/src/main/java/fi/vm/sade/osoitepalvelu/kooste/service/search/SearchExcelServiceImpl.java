@@ -41,6 +41,9 @@ public class SearchExcelServiceImpl extends AbstractService implements SearchExc
         if (presentation.isOrganisaationNimiIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaatio_nimi");
         }
+        if (presentation.isOrganisaatioOidIncluded()) {
+            header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaatio_oid");
+        }
         if (presentation.isOrganisaatiotunnisteIncluded()) {
             header(cell(sheet, rowNum, cellNum++), presentation, "result_excel_organisaation_tunniste");
         }
@@ -118,6 +121,9 @@ public class SearchExcelServiceImpl extends AbstractService implements SearchExc
         }
         if (presentation.isOrganisaatiotunnisteIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getOppilaitosKoodi(), ophCellStyles);
+        }
+        if (presentation.isOrganisaatioOidIncluded()) {
+            value(cell(sheet, rowNum, cellNum++), row.getOrganisaatioOid(), ophCellStyles);
         }
         if (presentation.isYtunnusIncluded()) {
             value(cell(sheet, rowNum, cellNum++), row.getYtunnus(), ophCellStyles);

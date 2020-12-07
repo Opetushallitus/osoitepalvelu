@@ -187,13 +187,13 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
+                   <!-- <webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
                     <webDriverCapabilities>
                         <capability>
                             <name>phantomjs.binary.path</name>
                             <value>${phantomjs.binary}</value>
                         </capability>
-                    </webDriverCapabilities>
+                    </webDriverCapabilities> -->
                     <preloadSources>
                         <source>jslib/oph_urls.js/index.js</source>
                         <source>jslib/jquery-1.10.1/jquery-1.10.1.min.js</source>

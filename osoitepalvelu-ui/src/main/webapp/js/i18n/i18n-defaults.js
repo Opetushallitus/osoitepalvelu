@@ -45,6 +45,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         address_fields: 'Esitettävät tiedot',
         address_field_organisaatio_nimi: 'Organisaation nimi',
         address_field_organisaatio_tunniste: 'Organisaatiotunniste',
+        address_field_organisaatio_oid: 'Organisaation OID',
         address_field_ytunnus: 'Y-tunnus',
         address_field_yritysmuoto: 'Yritysmuoto',
         address_field_opetuskieli: 'Opetuskieli',

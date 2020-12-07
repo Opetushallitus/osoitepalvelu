@@ -41,6 +41,9 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö organisaatiotunnistesaraketta")
     boolean isOrganisaatiotunnisteIncluded();
 
+    @ApiModelProperty("Näytetäänkö organisaation oid -saraketta")
+    boolean isOrganisaatioOidIncluded();
+
     @ApiModelProperty("Näytetäänkö Y-tunnus -saraketta")
     boolean isYtunnusIncluded();
 

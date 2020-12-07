@@ -34,6 +34,7 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
     var columnVisibilityMapping = {
         'nimi':                         'organisaationNimiIncluded',
         'organisaatioTunniste':         'organisaatiotunnisteIncluded',
+        'organisaatioOid':              'organisaatioOidIncluded',
         'ytunnus':                      'ytunnusIncluded',
         'yritysmuoto':                  'yritysmuotoIncluded',
         'opetuskieli':                  'opetuskieliIncluded',

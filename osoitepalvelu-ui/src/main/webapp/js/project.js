@@ -91,6 +91,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
     return [
         {type: 'ORGANISAATIO_NIMI',          name: LocalisationService.t('address_field_organisaatio_nimi')},
         {type: 'ORGANISAATIO_TUNNISTE',      name: LocalisationService.t('address_field_organisaatio_tunniste')},
+        {type: 'ORGANISAATIO_OID',          name: LocalisationService.t('address_field_organisaatio_oid')},
         {type: 'YTUNNUS',                   name: LocalisationService.t('address_field_ytunnus')},
         {type: 'YRITYSMUOTO',               name: LocalisationService.t('address_field_yritysmuoto')},
         {type: 'OPETUSKIELI',               name: LocalisationService.t('address_field_opetuskieli')},
@@ -135,6 +136,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
                 //{type: "KOULUTUSNEVONTA",   name: LocalisationService.t('target_group_option_koulutusneuvonta')}
             ]
         },
+        /* 
         {type: 'KOULUTUKSEN_TARJOAJAT', name: LocalisationService.t("target_group_koulutuksen_tarjoajat"),
             options: [
                 {type: 'KOULUTUSTOIMIJA', name: LocalisationService.t("target_group_option_koulutustoimija"), selected: true},
@@ -142,6 +144,7 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
                 {type: 'TOIMIPISTE',  name: LocalisationService.t('target_group_option_toimipiste'), selected: true}
             ]
         },
+        */
         {type: 'OPPISOPIMUSTOIMPISTEET',    name: LocalisationService.t('target_group_oppisopimustoimistot'),
             options: [
                 {type: "ORGANISAATIO",      name: LocalisationService.t('target_group_option_organisaatio'),
