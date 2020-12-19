@@ -26,14 +26,14 @@
         <generic.version>9.4-SNAPSHOT</generic.version>
         <log-client.version>8.3.0-SNAPSHOT</log-client.version>
 
-        <camel.version>2.21.0</camel.version>
+        <camel.version>3.0.0</camel.version>
         <ehcache.version>2.5.0</ehcache.version>
-        <cas-client-core.version>3.1.12</cas-client-core.version>
+        <cas-client-core.version>3.6.2</cas-client-core.version>
         <spring.version>4.3.25.RELEASE</spring.version>
         <spring-security.version>4.2.13.RELEASE</spring-security.version>
         <spring-data.version>Ingalls-SR23</spring-data.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <jackson.version>2.7.3</jackson.version>
+        <jackson.version>2.10.0.pr1</jackson.version>
         <jetty.version>9.4.9.v20180320</jetty.version>
 
         <junit.version>4.12</junit.version>
