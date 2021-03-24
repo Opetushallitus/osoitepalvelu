@@ -152,6 +152,11 @@ public class AllColumnsSearchResultPresentation implements SearchResultPresentat
         return withYhteyshenkiloEmail;
     }
 
+    @Override
+    public boolean isKayntiosoiteIncluded() {
+        return true;
+    }
+
     public AllColumnsSearchResultPresentation withoutYhteyshenkiloEmail() {
         this.withYhteyshenkiloEmail = false;
         return this;

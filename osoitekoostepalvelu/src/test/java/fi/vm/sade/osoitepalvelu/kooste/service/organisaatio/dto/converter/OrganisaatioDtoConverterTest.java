@@ -64,8 +64,6 @@ public class OrganisaatioDtoConverterTest {
 
     @Test
     public void resolveKriisitiedoituksenEmailFound() {
-
-
         OrganisaatioDetails details = new OrganisaatioDetails();
         details.setYhteystietoArvos(Arrays.asList(
                 createYhteystietoArvo("tyyppi", "Kriisitiedotuksen sähköpostiosoite", "foo@bar.qux")

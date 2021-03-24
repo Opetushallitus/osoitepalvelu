@@ -44,7 +44,7 @@ public class OrganisaatioResultDto implements Serializable {
     @DtoConversion
     private List<OsoitteistoDto> postiosoite  =  new ArrayList<>();
     @DtoConversion
-    private List<OsoitteistoDto> kayntiosoite  =  new ArrayList<>();
+    private List<KayntiosoitteistoDto> kayntiosoite  =  new ArrayList<>();
     private List<OrganisaatioYhteystietoDto> yhteyshenkilot  =  new ArrayList<OrganisaatioYhteystietoDto>();
     private String viranomaistiedotuksenEmail;
     private String koulutusneuvonnanEmail;
@@ -157,11 +157,11 @@ public class OrganisaatioResultDto implements Serializable {
         this.postiosoite.add(postiosoite);
     }
 
-    public List<OsoitteistoDto> getKayntiosoite() {
+    public List<KayntiosoitteistoDto> getKayntiosoite() {
         return kayntiosoite;
     }
 
-    public void setKayntiosoite(List<OsoitteistoDto> kayntiosoite) {
+    public void setKayntiosoite(List<KayntiosoitteistoDto> kayntiosoite) {
         this.kayntiosoite = kayntiosoite;
     }
 
