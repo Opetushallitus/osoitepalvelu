@@ -1,25 +1,27 @@
 package fi.vm.sade.osoitepalvelu.kooste.service.search.dto.converter;
 
+import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteysosoiteDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoHakuResultDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.KoodistoService;
 import fi.vm.sade.osoitepalvelu.kooste.service.koodisto.dto.UiKoodiItemDto;
 import fi.vm.sade.osoitepalvelu.kooste.service.search.dto.OrganisaatioResultDto;
-import java.util.Arrays;
-import java.util.Locale;
 import org.hamcrest.CoreMatchers;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SearchResultDtoConverterTest {
@@ -52,4 +54,34 @@ public class SearchResultDtoConverterTest {
         verifyNoMoreInteractions(koodistoService);
     }
 
+    @Test
+    public void testConvert() {
+
+        List<OrganisaatioYhteystietoHakuResultDto> fixture = Arrays.asList(
+                new OrganisaatioYhteystietoHakuResultDto()
+        );
+
+        List<OrganisaatioResultDto> results = converter.convert(
+                fixture, new ArrayList<>(),
+                OrganisaatioResultDto.class, Locale.ITALY);
+
+        assertEquals(1, results.size());
+        assertTrue(results.get(0).getKayntiosoite().isEmpty());
+    }
+
+    @Test
+    public void testConvertWithKayntiosoite() {
+
+        OrganisaatioYhteystietoHakuResultDto dto = new OrganisaatioYhteystietoHakuResultDto();
+        dto.getKayntiosoite().add(new OrganisaatioYhteysosoiteDto());
+
+        List<OrganisaatioYhteystietoHakuResultDto> fixture = Arrays.asList(dto);
+
+        List<OrganisaatioResultDto> results = converter.convert(
+                fixture, new ArrayList<>(),
+                OrganisaatioResultDto.class, Locale.ITALY);
+
+        assertEquals(1, results.size());
+        assertFalse(results.get(0).getKayntiosoite().isEmpty());
+    }
 }
