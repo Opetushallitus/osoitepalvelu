@@ -33,15 +33,16 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
     private static final long serialVersionUID = 2642158081723050787L;
     
     private String oid;
-    private Map<String, String> nimi  =  new HashMap<String, String>(); // short lowercase lang code  = > value pairs
-    private List<String> tyypit  =  new ArrayList<String>();
-    private List<String> kielet  =  new ArrayList<String>(); // koodiarvot
+    private Map<String, String> nimi  =  new HashMap<>(); // short lowercase lang code  = > value pairs
+    private List<String> tyypit  =  new ArrayList<>();
+    private List<String> kielet  =  new ArrayList<>(); // koodiarvot
     private String kotipaikka;
     private String oppilaitosKoodi;
     private String toimipisteKoodi;
     private String ytunnus;
     private String yritysmuoto;
-    private List<OrganisaatioYhteysosoiteDto> postiosoite  =  new ArrayList<OrganisaatioYhteysosoiteDto>();
+    private List<OrganisaatioYhteysosoiteDto> postiosoite  =  new ArrayList<>();
+    private List<OrganisaatioYhteysosoiteDto> kayntiosoite  =  new ArrayList<>();
     private String oppilaitosTyyppiUri; // esim. oppilaitostyyppi_21#1
     private String kriisitiedotuksenEmail;
     private String varhaiskasvatuksenYhteyshenkilo;
@@ -106,6 +107,14 @@ public class OrganisaatioYhteystietoHakuResultDto implements Serializable, Filte
 
     public void setPostiosoite(List<OrganisaatioYhteysosoiteDto> postiosoite) {
         this.postiosoite  =  postiosoite;
+    }
+
+    public List<OrganisaatioYhteysosoiteDto> getKayntiosoite() {
+        return kayntiosoite;
+    }
+
+    public void setKayntiosoite(List<OrganisaatioYhteysosoiteDto> kayntiosoite) {
+        this.kayntiosoite = kayntiosoite;
     }
 
     public String getToimipisteKoodi() {
