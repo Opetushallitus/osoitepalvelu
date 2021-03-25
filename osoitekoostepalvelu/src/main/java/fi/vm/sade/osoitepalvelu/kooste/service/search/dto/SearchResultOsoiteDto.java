@@ -22,6 +22,9 @@ import fi.ratamaa.dtoconverter.annotation.DtoSkipped;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * User: ratamaa
@@ -105,6 +108,16 @@ public class SearchResultOsoiteDto implements Serializable {
 
     public void setExtraRivi(String extraRivi) {
         this.extraRivi = extraRivi;
+    }
+
+    public String getOneliner() {
+        return Arrays.asList(
+                getOsoite(),
+                getPostinumero(),
+                getPostitoimipaikka()
+        ).stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining(", "));
     }
 
     public EqualsHelper uniqueState() {
