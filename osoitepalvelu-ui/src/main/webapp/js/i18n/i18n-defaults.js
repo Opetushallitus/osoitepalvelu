@@ -141,7 +141,9 @@ angular.module("I18n", [], ["$provide", function($provider) {
         column_koskiYhdyshenkilo: 'Koski yhdyshenkilö',
         column_moveYhteyshenkilo: 'MOVE!-yhteyshenkilö',
         column_organisaatioOid: 'OID',
-        column_kayntiosoite: 'Käyntiosoite',
+        column_kayntiosoiteOsoite: 'Käyntiosoite',
+        column_kayntiosoitePostinumero: 'Postinumero',
+        column_kayntiosoitePostitoimipaikka: 'Postitoimipaikka',
 
         no_results: 'Osoitteita ei löytynyt. Tarkista hakuehdot.',
         remove_selected: 'Poista valitut',

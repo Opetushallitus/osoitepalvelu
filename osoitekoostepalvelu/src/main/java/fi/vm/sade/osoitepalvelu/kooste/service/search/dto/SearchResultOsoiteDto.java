@@ -110,16 +110,6 @@ public class SearchResultOsoiteDto implements Serializable {
         this.extraRivi = extraRivi;
     }
 
-    public String getOneliner() {
-        return Arrays.asList(
-                getOsoite(),
-                getPostinumero(),
-                getPostitoimipaikka()
-        ).stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.joining(", "));
-    }
-
     public EqualsHelper uniqueState() {
         return new EqualsHelper(
                 this.yhteystietoOid,

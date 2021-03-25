@@ -207,7 +207,6 @@ public class SearchResultTransformerServiceTest {
         List<SearchResultRowDto> rows = results.getRows();
         assertEquals(1, rows.size());
         assertEquals("KATUOSOITE", rows.get(0).getKayntiosoite().getOsoite());
-        assertEquals("KATUOSOITE, 00000, POSTITOIMIPAIKKA", rows.get(0).getKayntiosoite().getOneliner());
     }
 
     @Test
