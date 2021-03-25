@@ -198,15 +198,15 @@ public class DefaultSearchResultTransformerService extends AbstractService
     }
 
     protected List<KayntiosoitteistoDto> filterKayntiosoites(List<KayntiosoitteistoDto> osoites, Locale locale) {
-        return filterOsoites(osoites.stream().map(OsoitteistoDto.class::cast).collect(Collectors.toList()), locale).stream().map(KayntiosoitteistoDto.class::cast).collect(Collectors.toList());
+        return filterOsoites(osoites, locale);
     }
 
-    protected List<OsoitteistoDto> filterOsoites(List<OsoitteistoDto> osoites, Locale locale) {
+    protected <T extends OsoitteistoDto> List<T> filterOsoites(List<T> osoites, Locale locale) {
         if (locale == null || osoites.size() < 1) {
             return osoites;
         }
-        List<OsoitteistoDto> filtered = new ArrayList<>();
-        for (OsoitteistoDto osoite : osoites) {
+        List<T> filtered = new ArrayList<>();
+        for (T osoite : osoites) {
             if (LocaleHelper.languageEquals(locale, LocaleHelper.parseLocale(osoite.getKieli(), DEFAULT_LOCALE))) {
                 filtered.add(osoite);
             }
