@@ -89,24 +89,20 @@ OsoiteKoostepalvelu.config(["$routeProvider", "$provide", function($routeProvide
 }])
 .factory('AddressFields', ["LocalisationService", function(LocalisationService) {
     return [
-        {type: 'ORGANISAATIO_NIMI',          name: LocalisationService.t('address_field_organisaatio_nimi')},
-        {type: 'ORGANISAATIO_TUNNISTE',      name: LocalisationService.t('address_field_organisaatio_tunniste')},
+        {type: 'ORGANISAATIO_NIMI',         name: LocalisationService.t('address_field_organisaatio_nimi')},
+        {type: 'ORGANISAATIO_TUNNISTE',     name: LocalisationService.t('address_field_organisaatio_tunniste')},
         {type: 'ORGANISAATIO_OID',          name: LocalisationService.t('address_field_organisaatio_oid')},
         {type: 'YTUNNUS',                   name: LocalisationService.t('address_field_ytunnus')},
         {type: 'YRITYSMUOTO',               name: LocalisationService.t('address_field_yritysmuoto')},
         {type: 'OPETUSKIELI',               name: LocalisationService.t('address_field_opetuskieli')},
-        //{type: 'YHTEYSHENKILO',             name: LocalisationService.t('address_field_yhteyshenkilo')},
         {type: 'POSTIOSOITE',               name: LocalisationService.t('address_field_postiosoite')},
         {type: 'PUHELINNUMERO',             name: LocalisationService.t('address_field_puhelinnumero')},
         {type: 'INTERNET_OSOITE',           name: LocalisationService.t('address_field_internet_osoite')},
         {type: 'EMAIL_OSOITE',              name: LocalisationService.t('address_field_email_osoite')},
-        //{type: 'VIRANOMAISTIEDOTUS_EMAIL',  name: LocalisationService.t('address_field_viranomaistiedotus_email')},
-        //{type: 'KOULUTUSNEUVONNAN_EMAIL',   name: LocalisationService.t('address_field_koulutusneuvonnan_email')},
         {type: 'KRIISITIEDOTUKSEN_EMAIL',   name: LocalisationService.t('address_field_kriisitiedotuksen_email')},
         {type: 'ORGANISAATIO_SIJAINTIKUNTA',name: LocalisationService.t('address_field_organisaatio_sijaintikunta')},
-        {type: 'VARHAISKASVATUKSEN_YHTEYSHENKILO', name: LocalisationService.t('address_field_varhaiskasvatuksen_yhteyshenkilo')},
-        {type: 'KOSKI_YHDYSHENKILO', name: LocalisationService.t('address_field_koski_yhdyshenkilo')},
-        {type: 'MOVE_YHTEYSHENKILO', name: LocalisationService.t('address_field_move_yhteyshenkilo')},
+        {type: 'KAYNTIOSOITE',              name: LocalisationService.t('address_field_kayntiosoite')},
+        {type: 'KOSKI_YHDYSHENKILO',        name: LocalisationService.t('address_field_koski_yhdyshenkilo')},
     ];
 }])
 .factory('TargetGroups', ["LocalisationService",

@@ -54,6 +54,7 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
         'varhaiskasvatuksenEmail':      'varhaiskasvatuksenEmailIncluded',
         'koskiYhdyshenkilo':            'koskiYhdyshenkiloIncluded',
         'moveYhteyshenkilo':            'moveYhteyshenkiloIncluded',
+        'kayntiosoite':                 'kayntiosoiteIncluded',
     };
     var columns = [];
     for( columnName in columnVisibilityMapping ) {
@@ -77,7 +78,6 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
             $scope.sourceRegisters = data.sourceRegisters;
             angular.forEach($scope.customColumnDefs, function(colDef) {
                 colDef.visible = isColumnVisible(colDef.field, data.presentation);
-                //$log.info("Column " + colDef.field + " visibility="+colDef.visible);
             });
             $scope.results = data.rows;
             $scope.searchDone = true;
@@ -125,7 +125,12 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
     };
     $log.info("SHOWING GRID.");
     var colOverrides = {
-        'organisaatioTunniste': {} /*..*/
+        'kayntiosoite': {
+            cellTemplate: '' +
+                '<div class="ngCellText ng-scope col3 colt3" ng-class="col.colIndex()">' +
+                '   <span ng-cell-text="" class="ng-binding">{{row.entity[col.field].oneliner}}</span>' +
+                '</div>'
+        }
     };
 
     angular.forEach(columns, function(c) {

@@ -62,6 +62,7 @@ angular.module("I18n", [], ["$provide", function($provider) {
         address_field_varhaiskasvatuksen_yhteyshenkilo: 'Varhaiskasvatuksen yhteyshenkilö',
         address_field_koski_yhdyshenkilo: 'Koski yhdyshenkilö',
         address_field_move_yhteyshenkilo: 'MOVE!-yhteyshenkilö',
+        address_field_kayntiosoite: 'Käyntiosoite',
         receiver_fields: 'Vastaanottaja',
         receiver_field_organisaatio: 'Organisaatio',
         receiver_field_yhteyshenkilo: 'Yhteyshenkilö',
@@ -139,6 +140,8 @@ angular.module("I18n", [], ["$provide", function($provider) {
         column_varhaiskasvatuksenEmail: 'Varhaiskasvatuksen sähköposti',
         column_koskiYhdyshenkilo: 'Koski yhdyshenkilö',
         column_moveYhteyshenkilo: 'MOVE!-yhteyshenkilö',
+        column_organisaatioOid: 'OID',
+        column_kayntiosoite: 'Käyntiosoite',
 
         no_results: 'Osoitteita ei löytynyt. Tarkista hakuehdot.',
         remove_selected: 'Poista valitut',
