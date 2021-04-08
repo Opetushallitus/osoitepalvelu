@@ -69,6 +69,10 @@ public class SearchResultDtoConverter extends AbstractDtoConverter {
         return to;
     }
 
+    public OsoitteistoDto convert(OrganisaatioYhteysosoiteDto from, KayntiosoitteistoDto to, Locale locale) {
+        return convert(from, (OsoitteistoDto)to, locale);
+    }
+
     public OsoitteistoDto convert(OrganisaatioYhteysosoiteDto from, OsoitteistoDto to, Locale locale) {
         convertValue(from, to, locale);
         if (from.getPostinumero() != null) {

@@ -57,6 +57,9 @@ OsoiteKoostepalvelu.service('SearchService', ["$log", "$filter", "$http", "$loca
         v.postiosoitePostinumero = v.postiosoite ? (v.postiosoite.postinumero || "") : "";
         v.postiosoitePostitoimipaikka = v.postiosoite ? (v.postiosoite.postitoimipaikka || "") : "";
         v.postiosoite = _osoite(v.postiosoite);
+        v.kayntiosoiteOsoite = v.kayntiosoite ? ( v.kayntiosoite.osoite || "") : "";
+        v.kayntiosoitePostinumero = v.kayntiosoite ? ( v.kayntiosoite.postinumero || "") : "";
+        v.kayntiosoitePostitoimipaikka = v.kayntiosoite ? ( v.kayntiosoite.postitoimipaikka || "") : "";
     };
 
     this.getTerms = function() {return _terms;};

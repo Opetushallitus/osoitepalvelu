@@ -50,6 +50,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
         fieldMappings.add("KOSKI_YHDYSHENKILO", "koskiYhdyshenkiloIncluded");
         fieldMappings.add("MOVE_YHTEYSHENKILO", "moveYhteyshenkiloIncluded");
         fieldMappings.add("ORGANISAATIO_SIJAINTIKUNTA", "organisaationSijaintikuntaIncluded");
+        fieldMappings.add("KAYNTIOSOITE", "organisaationKayntiosoiteIncluded");
     }
     public static List<String> fieldMappingKeys() {
         return new ArrayList<String>(fieldMappings.keySet());
@@ -76,6 +77,7 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     private boolean organisaationSijaintikuntaIncluded;
     private boolean organisaatioEmailIncluded;
     private boolean koulutuksenTarjoajatIncluded;
+    private boolean organisaationKayntiosoiteIncluded;
     private Locale locale;
 
     private Set<OidAndTyyppiPair> nonIncludedOids;
@@ -205,6 +207,15 @@ public class SearchResultPresentationByAddressFieldsDto implements SearchResultP
     @Override
     public boolean isYhteyshenkiloEmailIncluded() {
         return yhteyshenkiloEmailIncluded;
+    }
+
+    public void setOrganisaationKayntiosoiteIncluded(boolean organisaationKayntiosoiteIncluded) {
+        this.organisaationKayntiosoiteIncluded = organisaationKayntiosoiteIncluded;
+    }
+
+    @Override
+    public boolean isKayntiosoiteIncluded() {
+        return organisaationKayntiosoiteIncluded;
     }
 
     public void setYhteyshenkiloEmailIncluded(boolean yhteyshenkiloEmailIncluded) {

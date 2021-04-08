@@ -25,38 +25,36 @@ import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoHakuResu
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * User: ratamaa
- * Date: 3/25/14
- * Time: 11:40 AM
- */
 @Component
 public class OrganisaatioDtoConverter extends AbstractDtoConverter {
     private static final long serialVersionUID = -3701212052731186195L;
 
-    // Custom converter in order to map yhteystieto and yhteystietoarvo fields.
     public OrganisaatioYhteystietoHakuResultDto convert(OrganisaatioDetails from, OrganisaatioYhteystietoHakuResultDto to) {
         convertValue(from, to);
-        for (OrganisaatioDetailsYhteystietoDto yhteystieto : from.getYhteystiedot()) {
-            List<OrganisaatioYhteysosoiteDto> target = null;
-            if (yhteystieto.getOsoiteTyyppi() != null && yhteystieto.getOsoiteTyyppi().endsWith("posti")) {
-                target = to.getPostiosoite();
-            }
-            if (target != null) {
-                OrganisaatioYhteysosoiteDto yhteystietoTargetDto = convert(yhteystieto, new OrganisaatioYhteysosoiteDto());
-                target.add(yhteystietoTargetDto);
-            }
-        }
-        for (OrganisaatioYhteystietoElementtiDto yhteystietoArvoElementtiDto : from.getYhteystietoArvos()) {
-            // Kriisiviestintä
-            if(yhteystietoArvoElementtiDto.getElementtiTyyppi() != null
-                    && yhteystietoArvoElementtiDto.getTyyppiNimi().endsWith("Kriisitiedotuksen sähköpostiosoite")
-                    && yhteystietoArvoElementtiDto.getArvo() != null) {
-                to.setKriisitiedotuksenEmail(yhteystietoArvoElementtiDto.getArvo());
-            }
-        }
+        to.setPostiosoite(resolveAddresses(OrganisaatioYhteysosoiteDto.OsoiteTyyppi.posti.name(), from.getYhteystiedot()));
+        to.setKayntiosoite(resolveAddresses(OrganisaatioYhteysosoiteDto.OsoiteTyyppi.kaynti.name(), from.getYhteystiedot()));
+        to.setKriisitiedotuksenEmail(resolveKriisitiedoituksenEmail(from.getYhteystietoArvos()));
         return to;
     }
 
+    private List<OrganisaatioYhteysosoiteDto> resolveAddresses(String osoitetyyppi, List<OrganisaatioDetailsYhteystietoDto> yhteystiedot) {
+        return yhteystiedot
+                .stream()
+                .filter(yhteystieto -> osoitetyyppi.equals(yhteystieto.getOsoiteTyyppi()))
+                .map(yhteystieto -> convert(yhteystieto, new OrganisaatioYhteysosoiteDto()))
+                .collect(Collectors.toList());
+    }
+
+    private String resolveKriisitiedoituksenEmail(List<OrganisaatioYhteystietoElementtiDto> yhteystietoArvos) {
+        return yhteystietoArvos
+                .stream()
+                .filter(yhteystietoArvo -> yhteystietoArvo.getElementtiTyyppi() != null)
+                .filter(yhteystietoArvo -> yhteystietoArvo.getElementtiTyyppi() != null)
+                .filter(yhteystietoArvo -> "Kriisitiedotuksen sähköpostiosoite".equals(yhteystietoArvo.getTyyppiNimi()))
+                .findFirst()
+                .map(yhteystietoArvo -> yhteystietoArvo.getArvo())
+                .orElseGet(() -> null);
+    }
 }

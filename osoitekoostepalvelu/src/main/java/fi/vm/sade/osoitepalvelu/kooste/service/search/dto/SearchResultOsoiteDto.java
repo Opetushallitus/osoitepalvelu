@@ -22,6 +22,9 @@ import fi.ratamaa.dtoconverter.annotation.DtoSkipped;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.EqualsHelper;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * User: ratamaa

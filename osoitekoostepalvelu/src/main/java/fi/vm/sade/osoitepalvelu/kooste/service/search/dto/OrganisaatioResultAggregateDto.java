@@ -28,17 +28,19 @@ import java.io.Serializable;
 public class OrganisaatioResultAggregateDto implements Serializable {
     private static final int HASH_FACTOR = 31;
 
-    private static final long serialVersionUID  =  1483746476279296389L;
-    
+    private static final long serialVersionUID = 1483746476279296389L;
+
     private OrganisaatioResultDto organisaatio;
     private OrganisaatioYhteystietoDto henkilo;
     private OsoitteistoDto postiosoite;
+    private OsoitteistoDto kayntiosoite;
 
     public OrganisaatioResultAggregateDto(OrganisaatioResultDto organisaatio, OrganisaatioYhteystietoDto henkilo,
-                                          OsoitteistoDto postiosoite) {
-        this.organisaatio  =  organisaatio;
-        this.henkilo  =  henkilo;
-        this.postiosoite  =  postiosoite;
+                                          OsoitteistoDto postiosoite, KayntiosoitteistoDto kayntiosoite) {
+        this.organisaatio = organisaatio;
+        this.henkilo = henkilo;
+        this.postiosoite = postiosoite;
+        this.kayntiosoite = kayntiosoite;
     }
 
     public OrganisaatioResultDto getOrganisaatio() {
@@ -57,11 +59,19 @@ public class OrganisaatioResultAggregateDto implements Serializable {
         this.postiosoite = postiosoite;
     }
 
+    public OsoitteistoDto getKayntiosoite() {
+        return kayntiosoite;
+    }
+
+    public void setKayntiosoite(OsoitteistoDto kayntiosoite) {
+        this.kayntiosoite = kayntiosoite;
+    }
+
     @Override
     public int hashCode() {
-        int result  =  (organisaatio != null && organisaatio.getOid() != null ? organisaatio.getOid().hashCode() : 0);
-        result  =  HASH_FACTOR * result + (henkilo != null && henkilo.getEmail() != null ? henkilo.getEmail().hashCode() : 0);
-        result  =  HASH_FACTOR * result  +  (postiosoite != null && postiosoite.getYhteystietoOid() != null
+        int result = (organisaatio != null && organisaatio.getOid() != null ? organisaatio.getOid().hashCode() : 0);
+        result = HASH_FACTOR * result + (henkilo != null && henkilo.getEmail() != null ? henkilo.getEmail().hashCode() : 0);
+        result = HASH_FACTOR * result + (postiosoite != null && postiosoite.getYhteystietoOid() != null
                 ? postiosoite.getYhteystietoOid().hashCode() : 0);
         return result;
     }
@@ -74,23 +84,23 @@ public class OrganisaatioResultAggregateDto implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        OrganisaatioResultAggregateDto that  =  (OrganisaatioResultAggregateDto) o;
+        OrganisaatioResultAggregateDto that = (OrganisaatioResultAggregateDto) o;
         if (EqualsHelper.differentNulls(organisaatio, that.organisaatio)
                 || (EqualsHelper.notNulls(organisaatio, that.organisaatio)
-                    && !EqualsHelper.areEquals(organisaatio.getOid(), that.organisaatio))) {
+                && !EqualsHelper.areEquals(organisaatio.getOid(), that.organisaatio))) {
             return false;
         }
         if (EqualsHelper.differentNulls(henkilo, that.henkilo)
                 || (EqualsHelper.notNulls(henkilo, that.henkilo)
-                    && !EqualsHelper.areEquals(henkilo.getEmail(), that.henkilo.getEmail()))) {
+                && !EqualsHelper.areEquals(henkilo.getEmail(), that.henkilo.getEmail()))) {
             return false;
         }
         if (EqualsHelper.differentNulls(postiosoite, that.postiosoite)
                 || (EqualsHelper.notNulls(postiosoite, that.postiosoite)
-                    && !(
-                        EqualsHelper.areEquals(postiosoite.getYhteystietoOid(), that.postiosoite.getYhteystietoOid()))
-                        && EqualsHelper.areEquals(postiosoite.getKieli(), that.postiosoite.getKieli())
-                  )) {
+                && !(
+                EqualsHelper.areEquals(postiosoite.getYhteystietoOid(), that.postiosoite.getYhteystietoOid()))
+                && EqualsHelper.areEquals(postiosoite.getKieli(), that.postiosoite.getKieli())
+        )) {
             return false;
         }
         return true;

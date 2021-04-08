@@ -54,6 +54,10 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
         'varhaiskasvatuksenEmail':      'varhaiskasvatuksenEmailIncluded',
         'koskiYhdyshenkilo':            'koskiYhdyshenkiloIncluded',
         'moveYhteyshenkilo':            'moveYhteyshenkiloIncluded',
+        'kayntiosoiteOsoite':           'kayntiosoiteIncluded',
+        'kayntiosoitePostinumero':      'kayntiosoiteIncluded',
+        'kayntiosoitePostitoimipaikka': 'kayntiosoiteIncluded',
+
     };
     var columns = [];
     for( columnName in columnVisibilityMapping ) {
@@ -77,7 +81,6 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
             $scope.sourceRegisters = data.sourceRegisters;
             angular.forEach($scope.customColumnDefs, function(colDef) {
                 colDef.visible = isColumnVisible(colDef.field, data.presentation);
-                //$log.info("Column " + colDef.field + " visibility="+colDef.visible);
             });
             $scope.results = data.rows;
             $scope.searchDone = true;
@@ -125,7 +128,6 @@ OsoiteKoostepalvelu.controller('ResultsController', ["$scope", "$log", "$locatio
     };
     $log.info("SHOWING GRID.");
     var colOverrides = {
-        'organisaatioTunniste': {} /*..*/
     };
 
     angular.forEach(columns, function(c) {

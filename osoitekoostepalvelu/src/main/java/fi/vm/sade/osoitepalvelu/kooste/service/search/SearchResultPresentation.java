@@ -95,4 +95,6 @@ public interface SearchResultPresentation {
     @ApiModelProperty("Näytetäänkö yhteyshenkilön sähköpostiosoite -saraketta")
     boolean isYhteyshenkiloEmailIncluded();
 
+    @ApiModelProperty("Näytetäänkö käyntiosoite -saraketta")
+    boolean isKayntiosoiteIncluded();
 }
