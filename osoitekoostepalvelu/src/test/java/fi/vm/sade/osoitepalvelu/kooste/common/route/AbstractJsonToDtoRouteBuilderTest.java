@@ -1,9 +1,11 @@
 package fi.vm.sade.osoitepalvelu.kooste.common.route;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
-import org.junit.Test;
-import org.junit.Before;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.spy;
 
 public class AbstractJsonToDtoRouteBuilderTest {
@@ -42,4 +44,11 @@ public class AbstractJsonToDtoRouteBuilderTest {
         assertThat(uri, startsWith("ftp://virkailija.opintopolku.fi?target=http://opintopolku.fi"));
     }
 
+    @Test
+    public void hasOpintopolkuHeaders() {
+        AbstractJsonToDtoRouteBuilder.HeaderBuilder headerBuilder = builder.headers();
+        assertTrue("Caller-Id header missing", headerBuilder.headers.containsKey("Caller-Id"));
+        assertTrue("CSRF header missing", headerBuilder.headers.containsKey("CSRF"));
+        assertTrue("CSRF cookie missing", headerBuilder.headers.containsKey("Cookie"));
+    }
 }
