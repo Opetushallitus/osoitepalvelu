@@ -41,6 +41,8 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     private static final String REITTI_SIALTYY_YLAKOODIS  =  "direct:sisaltyYlakoodis";
     private static final String REITTI_SIALTYY_ALAKOODIS  =  "direct:sisaltyAlakoodis";
 
+    private static final long KOODISTO_TIMEOUT = 5L * SECONDS_IN_MINUTE * MILLIS_IN_SECOND;
+
     @Autowired
     private UrlConfiguration urlConfiguration;
 
@@ -62,7 +64,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         fromHttpGetToDtosWithRecipientList(
                 REITTI_HAE_KOODISTON_VERSIOT,
                 uri(urlConfiguration.getProperty("koodisto-service.byUri",
-                        "$simple{in.headers.koodistoTyyppi}")),
+                        "$simple{in.headers.koodistoTyyppi}"), KOODISTO_TIMEOUT),
                 headers().retry(3),
                 new TypeReference<List<KoodistoVersioDto>>() { }
         );
@@ -73,7 +75,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         fromHttpGetToDtosWithRecipientList(
                 REITTI_HAE_KOODISTO_VERSION_KOODIT,
                 uri(urlConfiguration.getProperty("koodisto-service.byUri.koodi",
-                        "$simple{in.headers.koodistoTyyppi}")),
+                        "$simple{in.headers.koodistoTyyppi}"), KOODISTO_TIMEOUT),
                 headers()
                         .query("koodistoVersio = ${in.headers.koodistoVersio}")
                         .retry(3),
@@ -86,7 +88,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
         fromHttpGetToDtosWithRecipientList(
                 REITTI_HAE_KOODISTON_KOODIT,
                 uri(urlConfiguration.getProperty("koodisto-service.byUri.koodi",
-                        "$simple{in.headers.koodistoTyyppi}")),
+                        "$simple{in.headers.koodistoTyyppi}"), KOODISTO_TIMEOUT),
                 headers().retry(3),
                 new TypeReference<List<KoodiDto>>() { }
         );
@@ -95,7 +97,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     protected void buildSisaltyyYlakoodis() {
         fromHttpGetToDtosWithRecipientList(REITTI_SIALTYY_YLAKOODIS,
                 uri(urlConfiguration.getProperty("koodisto-service.relaatio.ylakoodi.byUri",
-                        "$simple{in.headers.koodiUri}")),
+                        "$simple{in.headers.koodiUri}"), KOODISTO_TIMEOUT),
                 headers().retry(3),
                 new TypeReference<List<KoodiDto>>() { });
     }
@@ -103,7 +105,7 @@ public class DefaultKoodistoRoute extends AbstractJsonToDtoRouteBuilder implemen
     protected void buildSisaltyyAlakoodis() {
         fromHttpGetToDtosWithRecipientList(REITTI_SIALTYY_ALAKOODIS,
                 uri(urlConfiguration.getProperty("koodisto-service.relaatio.alakoodi.byUri",
-                        "$simple{in.headers.koodiUri}")),
+                        "$simple{in.headers.koodiUri}"), KOODISTO_TIMEOUT),
                 headers().retry(3),
                 new TypeReference<List<KoodiDto>>() { });
     }
