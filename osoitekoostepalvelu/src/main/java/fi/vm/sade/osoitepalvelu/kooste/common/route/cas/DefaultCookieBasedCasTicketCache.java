@@ -17,9 +17,9 @@
 package fi.vm.sade.osoitepalvelu.kooste.common.route.cas;
 
 import java.net.HttpCookie;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * User: ratamaa
@@ -29,25 +29,35 @@ import java.util.Map;
 public class DefaultCookieBasedCasTicketCache implements CasTicketCache {
     public static final String SET_COOKIE_HEADER = "Set-Cookie";
     public static final String COOKIE_HEADER = "Cookie";
-    private Map<String, Map<String, Object>> store  =  new HashMap<String, Map<String, Object>>();
+    private final Map<String, Map<String, Object>> store = new ConcurrentHashMap<>();
 
     @Override
     public Map<String, Object> get(String service) {
-        return this.store.get(service);
+        return this.store.getOrDefault(service, Collections.EMPTY_MAP);
     }
 
     @Override
     public void store(String service, Map<String, Object> headers) {
-        Object cookieHeader = headers.get(SET_COOKIE_HEADER);
-        if (cookieHeader != null) {
-            if (cookieHeader instanceof String) {
-                List<HttpCookie> cookies = HttpCookie.parse((String)cookieHeader);
-                Map<String, Object> storeHeaders = new HashMap<String, Object>();
-                for (HttpCookie cookie : cookies) {
-                    storeHeaders.put(COOKIE_HEADER, cookie.toString());
-                    this.store.put(service, storeHeaders);
-                }
-            }
+        String cookies = generateCookieString(getCookies(headers));
+        if ( !cookies.isEmpty() ) {
+            this.store.put(service, Map.of(COOKIE_HEADER, cookies));
         }
+    }
+
+    protected String generateCookieString(List<String> headers) {
+        return headers
+                .stream()
+                .map(cookie -> HttpCookie.parse(cookie).stream().findFirst())
+                .map(Optional::get)
+                .map(HttpCookie::toString)
+                .collect(Collectors.joining(";"));
+    }
+
+    protected List<String> getCookies(Map<String, Object> headers) {
+        Object cookieHeader = headers.getOrDefault(SET_COOKIE_HEADER, Collections.EMPTY_LIST);
+        if (cookieHeader instanceof String) {
+            return Arrays.asList((String) cookieHeader);
+        }
+        return (List<String>) cookieHeader;
     }
 }
