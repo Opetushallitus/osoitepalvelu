@@ -40,7 +40,7 @@ public class DefaultCookieBasedCasTicketCache implements CasTicketCache {
     public void store(String service, Map<String, Object> headers) {
         String cookies = generateCookieString(getCookies(headers));
         if ( !cookies.isEmpty() ) {
-            this.store.put(service, Map.of(COOKIE_HEADER, cookies));
+            this.store.put(service, Map.of(COOKIE_HEADER, cookies + ";CSRF=CSRF"));
         }
     }
 
@@ -49,6 +49,7 @@ public class DefaultCookieBasedCasTicketCache implements CasTicketCache {
                 .stream()
                 .map(cookie -> HttpCookie.parse(cookie).stream().findFirst())
                 .map(Optional::get)
+                .filter(cookie -> !cookie.getName().equalsIgnoreCase("CSRF"))
                 .map(HttpCookie::toString)
                 .collect(Collectors.joining(";"));
     }

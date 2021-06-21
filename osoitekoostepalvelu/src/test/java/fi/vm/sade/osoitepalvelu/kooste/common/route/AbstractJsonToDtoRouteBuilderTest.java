@@ -49,6 +49,5 @@ public class AbstractJsonToDtoRouteBuilderTest {
         AbstractJsonToDtoRouteBuilder.HeaderBuilder headerBuilder = builder.headers();
         assertTrue("Caller-Id header missing", headerBuilder.headers.containsKey("Caller-Id"));
         assertTrue("CSRF header missing", headerBuilder.headers.containsKey("CSRF"));
-        assertTrue("CSRF cookie missing", headerBuilder.headers.containsKey("Cookie"));
     }
 }

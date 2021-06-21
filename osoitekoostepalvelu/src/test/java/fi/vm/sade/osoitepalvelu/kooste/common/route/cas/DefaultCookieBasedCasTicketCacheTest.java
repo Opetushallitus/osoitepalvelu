@@ -26,7 +26,7 @@ public class DefaultCookieBasedCasTicketCacheTest {
     public void happyPath() {
         Map<String, Object> headers = Map.of(DefaultCookieBasedCasTicketCache.SET_COOKIE_HEADER, CAS_COOKIE);
         cache.store(SERVICE, headers);
-        assertEquals("Unexpected cookie value", CAS_COOKIE, cache.get(SERVICE).get(DefaultCookieBasedCasTicketCache.COOKIE_HEADER));
+        assertEquals("Unexpected cookie value", String.join(";", Arrays.asList(CAS_COOKIE, CSRF_COOKIE)), cache.get(SERVICE).get(DefaultCookieBasedCasTicketCache.COOKIE_HEADER));
     }
 
     @Test

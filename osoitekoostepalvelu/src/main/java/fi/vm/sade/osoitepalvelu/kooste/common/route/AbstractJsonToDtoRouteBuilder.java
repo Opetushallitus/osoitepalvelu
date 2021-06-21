@@ -504,7 +504,6 @@ public abstract class AbstractJsonToDtoRouteBuilder extends SpringRouteBuilder {
     protected HeaderBuilder headers() {
         HeaderBuilder builder = new HeaderBuilder();
         builder = builder.add("Caller-Id", constant("1.2.246.562.10.00000000001.osoitekoostepalvelu"));
-        builder = builder.add("Cookie", constant("CSRF=CSRF"));
         builder = builder.add("CSRF", constant("CSRF"));
         return builder;
     }
