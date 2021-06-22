@@ -32,8 +32,7 @@ public class DefaultCookieBasedCasTicketCacheTest {
     @Test
     public void noCookies() {
         cache.store(SERVICE, Collections.EMPTY_MAP);
-        assertNotNull("Cookies should not be null", cache.get(SERVICE));
-        assertNull("Cookies should be empty", cache.get(SERVICE).get(DefaultCookieBasedCasTicketCache.COOKIE_HEADER));
+        assertNull("Cookies should not be null", cache.get(SERVICE));
     }
 
     @Test

@@ -33,7 +33,7 @@ public class DefaultCookieBasedCasTicketCache implements CasTicketCache {
 
     @Override
     public Map<String, Object> get(String service) {
-        return this.store.getOrDefault(service, Collections.EMPTY_MAP);
+        return this.store.get(service);
     }
 
     @Override
