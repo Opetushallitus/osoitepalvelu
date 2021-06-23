@@ -42,7 +42,7 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
     private static final long serialVersionUID = -5752885878113285232L;
 
     private static final long HENKILOLIST_TIMEOUT_MILLIS = 10L*60L*1000L;
-    private static final long HENKILO_TIMEOUT_MILLIS = 30L*MILLIS_IN_SECOND;
+    private static final long HENKILO_TIMEOUT_MILLIS = 60L*MILLIS_IN_SECOND;
 
     private static final String OPPIJANUMEROREKISTERI_SERVICE_CALL_POSTFIX = ".OppijanumerorekisteriServiceCall";
     private static final String KAYTTOOIKEUS_SERVICE_CALL_POSTFIX = ".KayttooikeusServiceCall";
