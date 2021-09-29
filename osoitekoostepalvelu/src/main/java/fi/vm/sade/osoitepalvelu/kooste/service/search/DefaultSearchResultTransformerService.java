@@ -51,6 +51,9 @@ public class DefaultSearchResultTransformerService extends AbstractService
     @Autowired(required = false)
     private OrganisaatioService organisaatioService;
 
+    @Autowired
+    private OrganisaationSijaintikuntaCopier organisaationSijaintikuntaCopier;
+
     @Override
     public SearchResultsPresentationDto transformToResultRows(SearchResultsDto results,
                                                               final SearchResultPresentation presentation, CamelRequestContext context, SearchType searchType) {
@@ -252,7 +255,7 @@ public class DefaultSearchResultTransformerService extends AbstractService
         }
 
         if (presentation.isOrganisaationSijaintikuntaIncluded()) {
-            copiers.add(new OrganisaationSijaintikuntaCopier());
+            copiers.add(organisaationSijaintikuntaCopier);
         }
 
         if (presentation.isOrganisaatiotunnisteIncluded()) {
