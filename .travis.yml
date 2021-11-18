@@ -34,7 +34,7 @@ install:
   - export ARTIFACT_NAME="osoitepalvelu"
 
 script:
-  - mvn clean install sonar:sonar -B -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
+  - mvn clean install sonar:sonar -Dsonar.projectKey=Opetushallitus_osoitepalvelu -B -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
 
   - mv osoitekoostepalvelu/target/osoitekoostepalvelu.war $DOCKER_BUILD_DIR/artifact/osoitekoostepalvelu.war
   - cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
