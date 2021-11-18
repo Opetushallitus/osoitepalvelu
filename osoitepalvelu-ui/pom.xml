@@ -31,6 +31,12 @@
     <version>2021-01-SNAPSHOT</version>
     <packaging>war</packaging>
 
+    <properties>
+        <sonar.language>js,css</sonar.language>
+        <sonar.sources>src/main/</sonar.sources>
+        <sonar.test.sources>src/test</sonar.test.sources>
+    </properties>
+
     <build>
         <finalName>${project.artifactId}</finalName>
 
