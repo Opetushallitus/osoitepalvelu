@@ -35,6 +35,7 @@
         <sonar.language>js,css</sonar.language>
         <sonar.sources>src/main/</sonar.sources>
         <sonar.test.sources>src/test</sonar.test.sources>
+        <sonar.exclusions>src/main/webapp/jslib/</sonar.exclusions>
     </properties>
 
     <build>

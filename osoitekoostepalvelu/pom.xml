@@ -30,7 +30,7 @@
     <packaging>war</packaging>
     <name>Osoitepalvelu :: Osoitekoostepalvelu</name>
     <properties>
-        <sonar.sources>src/main/</sonar.sources>
+        <sonar.sources>src/main/java</sonar.sources>
         <sonar.test.sources>src/test</sonar.test.sources>
     </properties>
 
