@@ -29,7 +29,14 @@
 
     <name>Osoitepalvelu :: Test Common</name>
     <artifactId>test-common</artifactId>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
     <dependencies>
         <dependency>
             <groupId>fi.vm.sade</groupId>

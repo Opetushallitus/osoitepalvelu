@@ -29,6 +29,10 @@
     <groupId>fi.vm.sade.osoitepalvelu</groupId>
     <packaging>war</packaging>
     <name>Osoitepalvelu :: Osoitekoostepalvelu</name>
+    <properties>
+        <sonar.sources>src/main/java</sonar.sources>
+        <sonar.test.sources>src/test</sonar.test.sources>
+    </properties>
 
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -49,6 +53,10 @@
                 <configuration>
                     <attachClasses>true</attachClasses>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

@@ -1,4 +1,8 @@
-sudo: required
+git:
+  depth: false
+branches:
+  only:
+    - master
 language: java
 jdk:
   - openjdk11
@@ -10,9 +14,19 @@ cache:
 env:
   global:
     # AWS_ACCESS_KEY_ID
-    - secure: "Sj09OtFspYxXf669tIgEWB5a1BGdTtaK6ns45VQZ6MdNf+qh7wXQmmvj5U/w7kAwf3KFfBoT0cPu8hTWX/qpwcl9o9G3qFkaRF/4bwQo9fBGc4L0G87bmiSpho9YNdZFClm/I8DDeqBfbEcGYiXcXVUWPR12bWHGncD7ZHbGW+U="
+    - secure: "Ubvup3FdIQFY0HG11zlPzjuJPNO3nokxUf0OJMjl9wiY2t+d2y1sAF3guXyC2xJlke6Dk+wvYy50edsgV2w7sL7ijUwJzdHfvd6wusG5m34sOq1PjfoLMZeTVlqvR1L9mZOMQbieKodvVvv55ypq5nHSmx/T2JhomF2DNYvZKCA="
     # AWS_SECRET_ACCESS_KEY
-    - secure: "M95B8EHBAj+FW95BD2AUG3NdDcyElRUKCTVc57Vc98EjXACM6bjsghhTVTBPkk02KzmxaVRQmzogmbLAYANouj8I/FCXfolK2VnlDAQoguQViJ0UBnp3KAeg/3+Gq2RddHOeneFlhdTTo/R0ZbBv8sO8o1iWmjH7TyfOq7jqo3w="
+    - secure: "JDQfofuzqRowoDmBQSbKda8nxn18tDAegBWwe55x7Gu2mfHQhEbQ3alDnPq9nap/ibjYpWVFeR+i2epTCParf6kMChiAZdEYZ2eNl9+C1q/kFCNEv3R1Yvofx56YjMrUm+IlEeFdgB2JvF1Rcx4OWdQWDv7BMSxBxnxnilhhyjw="
+
+addons:
+  sonarcloud:
+    organization: "opetushallitus"
+    token:
+      secure: "fDt22itogE3dM0s7jJORLnyRbwwOo/WHlA0NHg+WzF58y88ZjW8WrKQEvcHZYfpoH/bVouB+ebgjH3sOJ67JZDXz0YnWi6qM64jws8u8HIOzYzvAsD3AKXrbpaHSWTL006C6pBGjfF4BpKwm4cSE7oserf8bdKxl/+SmGkFjoRk="
+
+before_install:
+  - nvm install 12.18.1
+  - nvm use 12.18.1
 
 install:
   - git clone https://github.com/Opetushallitus/ci-tools.git
@@ -20,7 +34,7 @@ install:
   - export ARTIFACT_NAME="osoitepalvelu"
 
 script:
-  - mvn clean install -B -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
+  - mvn clean install sonar:sonar -Dsonar.projectKey=Opetushallitus_osoitepalvelu -B -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
 
   - mv osoitekoostepalvelu/target/osoitekoostepalvelu.war $DOCKER_BUILD_DIR/artifact/osoitekoostepalvelu.war
   - cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
