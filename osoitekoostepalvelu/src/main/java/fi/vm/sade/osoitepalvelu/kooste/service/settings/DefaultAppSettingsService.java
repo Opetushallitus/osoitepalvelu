@@ -20,6 +20,8 @@ import fi.vm.sade.osoitepalvelu.kooste.service.AbstractService;
 import fi.vm.sade.osoitepalvelu.kooste.service.settings.dto.AppSettingsDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.EmbeddedValueResolverAware;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringValueResolver;
@@ -37,10 +39,12 @@ public class DefaultAppSettingsService extends AbstractService implements AppSet
 
     private static final Pattern EXPRESSION  =  Pattern.compile("\\$\\{(.*?)\\}");
 
-    @Resource(name  =  "uiAppProperties")
+    @Autowired
+    @Qualifier("uiAppProperties")
     private Properties uiAppProperties;
 
-    @Resource(name  =  "uiEnvProperties")
+    @Autowired
+    @Qualifier("uiEnvProperties")
     private Properties uiEnvProperties;
 
     private StringValueResolver resolver;
