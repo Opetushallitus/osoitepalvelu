@@ -18,6 +18,7 @@
             ignore-resource-not-found="true" properties-ref="defaultProps"/>
 
     <bean id="uiEnvProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <qualifier value="uiEnvProperties" />
         <property name="locations">
             <list>
                 <value>classpath:ui.env.properties</value>
@@ -26,6 +27,7 @@
     </bean>
 
     <bean id="uiAppProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <qualifier value="uiAppProperties" />
         <property name="locations">
             <list>
                 <value>classpath:ui.app.properties</value>

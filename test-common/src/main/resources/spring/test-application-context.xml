@@ -15,6 +15,7 @@
     <ctx:property-placeholder location="classpath:osoitekoostepalvelu.properties" ignore-resource-not-found="true"/>
 
     <bean id="uiEnvProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <qualifier value="uiEnvProperties" />
         <property name="locations">
             <list>
             </list>
@@ -22,6 +23,7 @@
     </bean>
 
     <bean id="uiAppProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <qualifier value="uiAppProperties" />
         <property name="locations">
             <list>
             </list>
