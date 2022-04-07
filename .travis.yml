@@ -39,7 +39,7 @@ script:
   - mv osoitekoostepalvelu/target/osoitekoostepalvelu.war $DOCKER_BUILD_DIR/artifact/osoitekoostepalvelu.war
   - cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
 
-  - export BASE_IMAGE="baseimage-war-openjdk11:master"
+  - export BASE_IMAGE="baseimage-war-tomcat8-openjdk11:master"
   - ./ci-tools/common/pull-image.sh
   - ./ci-tools/build/build-war.sh $ARTIFACT_NAME
   - ./ci-tools/build/upload-image.sh $ARTIFACT_NAME
