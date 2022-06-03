@@ -44,12 +44,6 @@ public class OrganisaatioServiceRouteMock implements OrganisaatioServiceRoute {
     }
 
     @Override
-    public List<OrganisaatioYhteystietoHakuResultDto>
-            findOrganisaatioYhteystietos(OrganisaatioYhteystietoCriteriaDto criteria, CamelRequestContext requestContext) {
-        return yhteystietoResults;
-    }
-
-    @Override
     public OrganisaatioDetailsDto getdOrganisaatioByOid(String oid, CamelRequestContext requestContext) {
         return details;
     }

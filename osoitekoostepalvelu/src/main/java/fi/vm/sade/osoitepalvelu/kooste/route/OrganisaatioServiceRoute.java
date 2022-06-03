@@ -19,8 +19,6 @@ package fi.vm.sade.osoitepalvelu.kooste.route;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioDetailsDto;
 import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioHierarchyResultsDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoCriteriaDto;
-import fi.vm.sade.osoitepalvelu.kooste.route.dto.OrganisaatioYhteystietoHakuResultDto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -38,24 +36,15 @@ public interface OrganisaatioServiceRoute extends Serializable {
     List<String> findAllOrganisaatioOids(CamelRequestContext requestContext);
 
     /**
-     * @param criteria for organisaatios' yhteystietos
-     * @param requestContext the context for HTTP request received by the application to operate in
-     * @return the yhteystietos for the organisaatios matching the search criteria
-     */
-    List<OrganisaatioYhteystietoHakuResultDto> findOrganisaatioYhteystietos(
-            OrganisaatioYhteystietoCriteriaDto criteria,
-            CamelRequestContext requestContext);
-
-    /**
-     * @param oid of the organisaatio
+     * @param oid            of the organisaatio
      * @param requestContext the context for HTTP request received by the application to operate in
      * @return details for the organisaatio
      */
     OrganisaatioDetailsDto getdOrganisaatioByOid(String oid,
-                                 CamelRequestContext requestContext);
+                                                 CamelRequestContext requestContext);
 
     /**
-     * @param tyyppi the organisaatio's tyyppi to search for.
+     * @param tyyppi         the organisaatio's tyyppi to search for.
      * @param requestContext the context for HTTP request received by the application to operate in
      * @return organisaatio hierarchy results containing only active results
      */
