@@ -20,7 +20,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.googlecode.ehcache.annotations.Cacheable;
 import com.googlecode.ehcache.annotations.PartialCacheKey;
-import com.googlecode.ehcache.annotations.TriggersRemove;
 import fi.vm.sade.osoitepalvelu.kooste.common.route.CamelRequestContext;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.AndPredicateAdapter;
 import fi.vm.sade.osoitepalvelu.kooste.common.util.KoodiHelper;
@@ -93,8 +92,7 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
             if (yTunnusUsed) {
                 // Two rounds possible (ytunnus, oppilaitostyyppi)
                 criteria.setUseYtunnus(true);
-            }
-            else if (oppilaitostyyppiUsed) {
+            } else if (oppilaitostyyppiUsed) {
                 // One round possible (oppilaitostyyppi)
                 criteria.setUseOppilaitotyyppi(true);
             }
@@ -130,9 +128,9 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
     }
 
     private Predicate<FilterableOrganisaatio> createResultAfterFilter(OrganisaatioYhteystietoCriteriaDto criteria) {
-        AndPredicateAdapter<FilterableOrganisaatio> predicate  = new AndPredicateAdapter<FilterableOrganisaatio>();
+        AndPredicateAdapter<FilterableOrganisaatio> predicate = new AndPredicateAdapter<FilterableOrganisaatio>();
 
-        final List<String> organisaatioTyyppis  = criteria.getOrganisaatioTyyppis();
+        final List<String> organisaatioTyyppis = criteria.getOrganisaatioTyyppis();
         if (!organisaatioTyyppis.isEmpty()) {
             predicate = predicate.and(new Predicate<FilterableOrganisaatio>() {
                 public boolean apply(FilterableOrganisaatio result) {
@@ -184,20 +182,20 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
      * Searches for children for which any of their parents is included in the given results and the given criteria
      * applies.
      *
-     * @param results to search children for
-     * @param criteria to search children with
-     * @param locale to order the results by (localization locale for the name)
+     * @param results        to search children for
+     * @param criteria       to search children with
+     * @param locale         to order the results by (localization locale for the name)
      * @param includeParents if true, results should include the given results (parents for the searched children)
      * @return the results (given includeParents is true) and their children so that children are inserted after
      * their parents.
      */
     private List<OrganisaatioDetails> mergeWithChildren(List<OrganisaatioDetails> results,
-                    OrganisaatioYhteystietoCriteriaDto criteria, Locale locale, boolean includeParents) {
+                                                        OrganisaatioYhteystietoCriteriaDto criteria, Locale locale, boolean includeParents) {
         List<OrganisaatioDetails> allChildren = organisaatioRepository.findChildren(Collections2.transform(results,
                 FilterableOrganisaatio.GET_OID), criteria, locale);
 
         Set<String> added = new TreeSet<String>();
-        Map<String,List<OrganisaatioDetails>> childrenByAllParents = new TreeMap<String, List<OrganisaatioDetails>>();
+        Map<String, List<OrganisaatioDetails>> childrenByAllParents = new TreeMap<String, List<OrganisaatioDetails>>();
         for (OrganisaatioDetails child : allChildren) {
             List<String> parentOids = parseParentOidPath(child);
             for (String parentOid : parentOids) {
@@ -232,14 +230,14 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
 
     /**
      * @param results to merge parents for
-     * @param locale for ordering the results (localization locale for the name)
+     * @param locale  for ordering the results (localization locale for the name)
      * @return results with all their possible parents so that parents are inserted before their children in
      * inheritance order
      */
     private List<OrganisaatioDetails> mergeParents(List<OrganisaatioDetails> results, Locale locale) {
         List<OrganisaatioDetails> allParents = organisaatioRepository.findOrganisaatiosByOids(extractParentOids(results),
                 locale);
-        Map<String,OrganisaatioDetails> byOids = new TreeMap<String, OrganisaatioDetails>();
+        Map<String, OrganisaatioDetails> byOids = new TreeMap<String, OrganisaatioDetails>();
         for (OrganisaatioDetails parent : allParents) {
             byOids.put(parent.getOid(), parent);
         }
@@ -279,8 +277,8 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
             if (pathParts.size() > 1 && "".equals(pathParts.get(0))) {
                 pathParts.remove(0);
             }
-            if (pathParts.size() > 1 && "".equals(pathParts.get(pathParts.size()-1))) {
-                pathParts.remove(pathParts.get(pathParts.size()-1));
+            if (pathParts.size() > 1 && "".equals(pathParts.get(pathParts.size() - 1))) {
+                pathParts.remove(pathParts.get(pathParts.size() - 1));
             }
             parentOids.addAll(pathParts);
         }
@@ -304,25 +302,14 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
             if (details != null && isCacheUsable(details.getCachedAt(), requestContext.getCacheCheckMoment())) {
                 logger.debug("MongoDB cached organisaatio {}", oid);
                 OrganisaatioDetailsDto detailsDto = dtoConverter.convert(details, new OrganisaatioDetailsDto());
-                // Voitaisiin tehdä näin, jos saataisiin jostain lista vain aktiivista organisaatioista, mutta nyt
-                // täytyy pitää kaikki muistissa, koska muuten jouduttaisiin aina hakemaan lakkautettujen tiedot:
-//                if (details.isLakkautettu()) {
-//                    organisaatioRepository.delete(details.getOid());
-//                    logger.info("Deleted lakkautettu organisaatio {} from MongoDB.", oid);
-//                }
                 return detailsDto;
             }
         }
         OrganisaatioDetailsDto dto = organisaatioServiceRoute.getdOrganisaatioByOid(oid, requestContext);
         if (isCacheUsed()) {
             OrganisaatioDetails details = dtoConverter.convert(dto, new OrganisaatioDetails());
-//            if (!details.isLakkautettu()) {
-                organisaatioRepository.save(details);
-                logger.debug("Persisted organisaatio {} to MongoDB cache.", oid);
-//            } else {
-//                organisaatioRepository.delete(details.getOid());
-//                logger.info("Ensure deleted lakkautettu organisaatio {} from MongoDB.", oid);
-//            }
+            organisaatioRepository.save(details);
+            logger.debug("Persisted organisaatio {} to MongoDB cache.", oid);
         }
         return dto;
     }
@@ -339,13 +326,5 @@ public class DefaultOrganisaatioService extends AbstractService implements Organ
 
     private boolean isCacheUsed() {
         return organisaatioRepository != null && cacheTimeoutSeconds >= 0;
-    }
-
-    public long getCacheTimeoutSeconds() {
-        return cacheTimeoutSeconds;
-    }
-
-    public void setCacheTimeoutSeconds(long cacheTimeoutSeconds) {
-        this.cacheTimeoutSeconds = cacheTimeoutSeconds;
     }
 }
