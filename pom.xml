@@ -37,7 +37,7 @@
         <jackson.version>2.9.4</jackson.version>
         <jetty.version>10.0.9</jetty.version>
 
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <mockito.version>1.10.19</mockito.version>
 
         <run-itests>false</run-itests>
