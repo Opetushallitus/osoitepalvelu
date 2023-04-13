@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fi.vm.sade.osoitepalvelu</groupId>
@@ -26,7 +25,7 @@
         <generic.version>9.4-SNAPSHOT</generic.version>
         <log-client.version>8.3.0-SNAPSHOT</log-client.version>
 
-        <camel.version>2.21.0</camel.version>
+        <camel.version>2.25.4</camel.version>
         <ehcache.version>2.5.0</ehcache.version>
         <cas-client-core.version>3.1.12</cas-client-core.version>
         <spring.version>5.3.18</spring.version>
@@ -34,10 +33,11 @@
         <spring-data.version>Ingalls-SR23</spring-data.version>
         <hibernate.version>5.4.2.Final</hibernate.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <jackson.version>2.9.4</jackson.version>
+        <jackson.version>2.9.10</jackson.version>
+        <jackson-databind.version>2.9.10.8</jackson-databind.version>
         <jetty.version>10.0.9</jetty.version>
 
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.2</junit.version>
         <mockito.version>1.10.19</mockito.version>
 
         <run-itests>false</run-itests>
@@ -64,7 +64,7 @@
                 <configuration>
                     <scanIntervalSeconds>0</scanIntervalSeconds>
                     <httpConnector>
-                            <port>8180</port>
+                        <port>8180</port>
                     </httpConnector>
                     <stopKey>stop</stopKey>
                     <stopPort>18180</stopPort>
