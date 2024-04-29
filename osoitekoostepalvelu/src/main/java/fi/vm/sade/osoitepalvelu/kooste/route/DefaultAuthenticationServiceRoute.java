@@ -94,7 +94,6 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
             "$simple{in.body}"),
                 HENKILO_TIMEOUT_MILLIS)))
         .process(oppijanumerorekisteriCallInOutDebug)
-        .process(saveSession())
         .process(jsonToDto(new TypeReference<HenkiloDetailsDto>() {}));
     }
 
@@ -114,7 +113,6 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         .to(uri(urlConfiguration.url("oppijanumerorekisteri-service.henkilo.haku"),
                 HENKILOLIST_TIMEOUT_MILLIS)) // wait for 10 minutes maximum
         .process(kayttooikeusCallInOutDebug)
-        .process(saveSession())
         .process(jsonToDto(new TypeReference<List<HenkiloDetailsDto>>() {}));
     }
 
@@ -132,7 +130,6 @@ public class DefaultAuthenticationServiceRoute extends AbstractJsonToDtoRouteBui
         .process(kayttooikeusCallInOutDebug)
         .to(uri(urlConfiguration.url("kayttooikeus-service.kayttoikeusryhma")))
         .process(kayttooikeusCallInOutDebug)
-        .process(saveSession())
         .process(jsonToDto(new TypeReference<List<KayttooikesuryhmaDto>>() {}));
     }
 
