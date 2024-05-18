@@ -34,7 +34,7 @@
         <hibernate.version>5.4.2.Final</hibernate.version>
         <slf4j.version>1.7.25</slf4j.version>
         <jackson.version>2.9.10</jackson.version>
-        <jackson-databind.version>2.9.10.8</jackson-databind.version>
+        <jackson-databind.version>2.17.0</jackson-databind.version>
         <jetty.version>10.0.9</jetty.version>
 
         <junit.version>4.13.2</junit.version>
