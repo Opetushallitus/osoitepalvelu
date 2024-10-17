@@ -1,3 +1,5 @@
+# 💀 Osoitepalvelu on siirretty osaksi [Organisaatiopalvelun käyttöliittymää](https://github.com/Opetushallitus/organisaatio/tree/master/organisaatio-ui) 💀
+
 osoitepalvelu
 =============
 
@@ -32,7 +34,7 @@ Contents can be copied from one of the existing environments.
 * security-context-backend.xml
 * common.properties
 
-After configurations are in place, run following commands at at project root: 
+After configurations are in place, run following commands at at project root:
 1. `mvn clean install`
 2. `cd osoitekoostepalvelu`
 3. `mvn jetty:run`
